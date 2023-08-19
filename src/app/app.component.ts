@@ -22,7 +22,7 @@ export class AppComponent {
 
   public menuItemsPortfolio = [
     {
-      link: '/porfolio',
+      link: '/portfolio-overview',
       icon: '/icons/portfolioOverviewIcon.svg',
       title: 'Portfolio Overview'
     },

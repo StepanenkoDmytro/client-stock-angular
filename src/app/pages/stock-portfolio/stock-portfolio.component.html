@@ -1,31 +1,358 @@
-<section>
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 250px"></th>
-                <th style="width: 100px"></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><h4>Total balance:</h4></td>
-                <td id='stock-wallet-info'>
-                    <h4>1000$</h4>
-                </td>
-            </tr>
-            <tr>
-                <td><p>Unused USD:</p></td>
-                <td id='stock-wallet-info'><p>500$</p></td>
-            </tr>
-            <tr>
-                <td><p>Account type:</p></td>
-                <td id='stock-wallet-info'><p>StockWallet</p></td>
-            </tr>
-            <tr>
-                <td><p>The riskiness of portfolio:</p></td>
-                <td id='stock-wallet-info'><p>Aggresive</p> </td>
-            </tr>
-        </tbody>
-    </table>
-</section>
+<div class="page-container">
+    <section class="flex">
+        <div class="info-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 250px"></th>
+                        <th style="width: 100px"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <h4>Total balance:</h4>
+                        </td>
+                        <td id='stock-wallet-info'>
+                            <h4>1000$</h4>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>Unused USD:</p>
+                        </td>
+                        <td id='stock-wallet-info'>
+                            <p>500$</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>Account type:</p>
+                        </td>
+                        <td id='stock-wallet-info'>
+                            <p>StockWallet</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>The riskiness of portfolio:</p>
+                        </td>
+                        <td id='stock-wallet-info'>
+                            <p>Aggresive</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
+        <div class="info-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 150px"> </th>
+                        <th style="width: 100px"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <p>Day profit:</p>
+                        </td>
+                        <td id='stock-profit-positive'>
+                            <p>10$</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>Week profit:</p>
+                        </td>
+                        <td id='stock-profit-negative'>
+                            <p>-100$</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>Month profit:</p>
+                        </td>
+                        <td id='stock-profit-positive'>
+                            <p>200$</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>Total profit:</p>
+                        </td>
+                        <td id='stock-profit-positive'>
+                            <p>1200$</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <hr />
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>Received dividend:</p>
+                        </td>
+                        <td id='stock-profit-positive'>
+                            <p>20$</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>Forecast dividend</p>
+                        </td>
+                        <td id='stock-profit-positive'>
+                            <p>120$</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="info-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 150px"></th>
+                        <th style="width: 100px"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <p>USD:</p>
+                        </td>
+                        <td id='stock-profit-positive'>
+                            <p>100$</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>EUR:</p>
+                        </td>
+                        <td id='stock-profit-negative'>
+                            <p>89.57€</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>UAH:</p>
+                        </td>
+                        <td id='stock-profit-positive'>
+                            <p>200₴</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section>
+        <div class="info-container">
+            <div class='table-assets'>
+                <table class='table'>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Count</th>
+                            <th>Entry price</th>
+                            <th>Price</th>
+                            <th>Cost</th>
+                            <th>Sector</th>
+                            <th>Dividends</th>
+                            <th>Share</th>
+                            <th>Profit</th>
+                            <th>Growth</th>
+                            <th>Currency</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr key={stock.symbol}>
+                            <td>
+                                Tesla Inc
+                            </td>
+                            <td>10</td>
+                            <td>260.02$</td>
+                            <td>
+                                <mat-icon>south_west</mat-icon>
+                                215.49
+                            </td>
+                            <td>100$</td>
+                            <td>
+                                MANUFACTURING
+                            </td>
+                            <td>0.03</td>
+                            <td>32.60%</td>
+                            <td>
+                                <mat-icon>south_west</mat-icon>
+                                -287.00
+                            </td>
+                            <td>
+                                <mat-icon>south_west</mat-icon>
+                                -8.97%
+                            </td>
+                            <td>USD</td>
+                        </tr>
+                        <tr key={stock.symbol}>
+                            <td>
+                                Tesla Inc
+                            </td>
+                            <td>10</td>
+                            <td>260.02$</td>
+                            <td>
+                                <mat-icon>south_west</mat-icon>
+                                215.49
+                            </td>
+                            <td>100$</td>
+                            <td>
+                                MANUFACTURING
+                            </td>
+                            <td>0.03</td>
+                            <td>32.60%</td>
+                            <td>
+                                <mat-icon>south_west</mat-icon>
+                                -287.00
+                            </td>
+                            <td>
+                                <mat-icon>south_west</mat-icon>
+                                -8.97%
+                            </td>
+                            <td>USD</td>
+                        </tr>
+                        <tr key={stock.symbol}>
+                            <td>
+                                Tesla Inc
+                            </td>
+                            <td>10</td>
+                            <td>260.02$</td>
+                            <td>
+                                <mat-icon>south_west</mat-icon>
+                                215.49
+                            </td>
+                            <td>100$</td>
+                            <td>
+                                MANUFACTURING
+                            </td>
+                            <td>0.03</td>
+                            <td>32.60%</td>
+                            <td>
+                                <mat-icon>south_west</mat-icon>
+                                -287.00
+                            </td>
+                            <td>
+                                <mat-icon>south_west</mat-icon>
+                                -8.97%
+                            </td>
+                            <td>USD</td>
+                        </tr>
+                        <tr key={stock.symbol}>
+                            <td>
+                                Tesla Inc
+                            </td>
+                            <td>10</td>
+                            <td>260.02$</td>
+                            <td>
+                                <mat-icon>south_west</mat-icon>
+                                215.49
+                            </td>
+                            <td>100$</td>
+                            <td>
+                                MANUFACTURING
+                            </td>
+                            <td>0.03</td>
+                            <td>32.60%</td>
+                            <td>
+                                <mat-icon>south_west</mat-icon>
+                                -287.00
+                            </td>
+                            <td>
+                                <mat-icon>south_west</mat-icon>
+                                -8.97%
+                            </td>
+                            <td>USD</td>
+                        </tr>
+                        <tr key={stock.symbol}>
+                            <td>
+                                Tesla Inc
+                            </td>
+                            <td>10</td>
+                            <td>260.02$</td>
+                            <td>
+                                <mat-icon>south_west</mat-icon>
+                                215.49
+                            </td>
+                            <td>100$</td>
+                            <td>
+                                MANUFACTURING
+                            </td>
+                            <td>0.03</td>
+                            <td>32.60%</td>
+                            <td>
+                                <mat-icon>south_west</mat-icon>
+                                -287.00
+                            </td>
+                            <td>
+                                <mat-icon>south_west</mat-icon>
+                                -8.97%
+                            </td>
+                            <td>USD</td>
+                        </tr>
+                        <tr key={stock.symbol}>
+                            <td>
+                                Tesla Inc
+                            </td>
+                            <td>10</td>
+                            <td>260.02$</td>
+                            <td>
+                                <mat-icon>south_west</mat-icon>
+                                215.49
+                            </td>
+                            <td>100$</td>
+                            <td>
+                                MANUFACTURING
+                            </td>
+                            <td>0.03</td>
+                            <td>32.60%</td>
+                            <td>
+                                <mat-icon>south_west</mat-icon>
+                                -287.00
+                            </td>
+                            <td>
+                                <mat-icon>south_west</mat-icon>
+                                -8.97%
+                            </td>
+                            <td>USD</td>
+                        </tr>
+                        <tr key={stock.symbol}>
+                            <td>
+                                Tesla Inc
+                            </td>
+                            <td>10</td>
+                            <td>260.02$</td>
+                            <td>
+                                <mat-icon>south_west</mat-icon>
+                                215.49
+                            </td>
+                            <td>100$</td>
+                            <td>
+                                MANUFACTURING
+                            </td>
+                            <td>0.03</td>
+                            <td>32.60%</td>
+                            <td>
+                                <mat-icon>south_west</mat-icon>
+                                -287.00
+                            </td>
+                            <td>
+                                <mat-icon>south_west</mat-icon>
+                                -8.97%
+                            </td>
+                            <td>USD</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>

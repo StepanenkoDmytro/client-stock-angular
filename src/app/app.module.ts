@@ -6,15 +6,19 @@ import { AppComponent } from './app.component';
 import { StockPortfolioComponent } from './pages/stock-portfolio/stock-portfolio.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {MatSidenavModule} from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
+import { PortfolioComponent } from './pages/portfolio/portfolio.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     StockPortfolioComponent,
+    PortfolioComponent,
   ],
   imports: [
     BrowserModule,
     MatSidenavModule,
+    MatIconModule,
     AppRoutingModule,
     NoopAnimationsModule
   ],
