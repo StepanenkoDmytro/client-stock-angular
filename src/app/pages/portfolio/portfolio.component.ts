@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { DepositWalletComponent } from 'src/app/dialog/deposit-wallet/deposit-wallet.component';
+
 
 @Component({
   selector: 'app-portfolio',
@@ -7,4 +10,17 @@ import { Component } from '@angular/core';
 })
 export class PortfolioComponent {
 
+  constructor(
+    public dialogService: MatDialog
+  ) {}
+
+  openDialog(): void {
+    const config = new MatDialogConfig();
+    config.autoFocus = true;
+    config.disableClose = true;
+    config.hasBackdrop = true;
+    // config.maxWidth = 1100;
+    // config.minHeight = 1100;
+     this.dialogService.open(DepositWalletComponent, config);
+  }
 }

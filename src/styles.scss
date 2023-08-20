@@ -1,14 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
 
 html,
 body {
-    background: rgb(16,16,16);
+    background-color: rgb(16,16,16);
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+
+   .mat-drawer-container {
+    background-color:  rgb(16,16,16);
+   }
 }
 
-body {
-    // margin: 0;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
-}
+// body {
+//     // margin: 0;
+//     // background: rgb(16,16,16);
+//     font-family: Roboto, "Helvetica Neue", sans-serif;
+//     // .mat-drawer-container {
+//     //     background-color: rgb(16,16,16);
+//     // }
+// }
+
 
 :root {
     --primary-color: #dc3545;
@@ -41,8 +52,6 @@ ul {
     box-shadow: -5px 5px 10px -5px rgb(16, 16, 16);
     background-color: rgb(16, 16, 16);
     border-radius: 10px;
-    // width: auto;
-    // height: auto;
     color: var(--light-color);
 }
 
@@ -52,8 +61,10 @@ ul {
     table {
         thead {
             color: rgb(160, 159, 162);
+            tr {
+                border-bottom: rgb(16, 16, 16) solid 10px;
+            }
         }
-
         tbody {
             color: rgb(249, 250, 254);
             height: auto;
@@ -62,10 +73,6 @@ ul {
                 border-radius: 10px;
                 background-color: rgb(30, 30, 32);
             }
-        }
-
-        tr {
-            border-bottom: rgb(16, 16, 16) solid 10px;
         }
     }
 
