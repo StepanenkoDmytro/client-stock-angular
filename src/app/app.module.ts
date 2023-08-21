@@ -19,6 +19,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { StockMarketComponent } from './pages/stock-market/stock-market.component';
 import { TradeStockDialogComponent } from './dialog/trade-stock.dialog/trade-stock.dialog.component';
 import { MatTableModule } from '@angular/material/table';
+import { DonatChartComponent } from './d3/donat-chart/donat-chart.component';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import { MatTableModule } from '@angular/material/table';
     DepositWalletComponent,
     StockMarketComponent,
     TradeStockDialogComponent,
+    DonatChartComponent,
   ],
   imports: [
     BrowserModule,

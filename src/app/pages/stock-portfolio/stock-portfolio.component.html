@@ -1,12 +1,12 @@
 <div class="page-container">
     <section class="flex">
-        <div class="info-container">
+        <!-- <div class="info-container">
             <mat-dialog-actions>
                 <button mat-flat-button (click)="openDialog()">
                     Deposit
                 </button>
-            </mat-dialog-actions>
-            <table>
+            </mat-dialog-actions> -->
+            <!-- <table>
                 <thead>
                     <tr>
                         <th style="width: 250px"></th>
@@ -47,8 +47,16 @@
                         </td>
                     </tr>
                 </tbody>
-            </table>
-        </div>
+            </table> -->
+        <!-- </div> -->
+
+        <div class="info-container" style="display: block; width: 400px; height: 400px;">
+            <mat-label style="font-size: 16px;">Wallet info:</mat-label>
+            <!-- <hr> -->
+            
+            <app-donat-chart>
+            </app-donat-chart>
+    </div>
 
         <div class="info-container">
             <table>
@@ -153,7 +161,7 @@
     </section>
 
     <section>
-
+        
         <!-- <div class="info-container">
 
             <div class='table-assets'>
