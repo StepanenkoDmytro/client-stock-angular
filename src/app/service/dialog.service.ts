@@ -12,13 +12,7 @@ export class DialogService {
   constructor(private dialog: MatDialog) { }
 
   openDepositDialog(): void {
-    // this.dialog.open(DepositWalletComponent);
-   
-    const dialogRef = this.dialog.open(TradeStockDialogComponent);
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
-    });
+    this.dialog.open(DepositWalletComponent);
   }
 
   openBuyOrSellStockDialog(): void {

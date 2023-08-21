@@ -5,3 +5,21 @@ hr {
     border-top: .5px solid var(--light-color);
     opacity: .15;
 }
+
+.table-assets {
+
+    th,
+    td:not(:first-child) {
+        text-align: center;
+    }
+
+    .mat-mdc-header-row,
+    .mat-mdc-row  {
+        color: var(--light-color);
+        // border-bottom: var(--black-color) solid 10px;
+    }   
+
+    .mat-mdc-table {
+        background: var(--black-color);
+    }
+}

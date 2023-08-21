@@ -44,3 +44,4 @@ export const ACCOUNTS_MOCK: IAccount[] = [
         stocks: []
     }
 ]
+

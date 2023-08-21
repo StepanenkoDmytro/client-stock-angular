@@ -18,6 +18,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
 import { StockMarketComponent } from './pages/stock-market/stock-market.component';
 import { TradeStockDialogComponent } from './dialog/trade-stock.dialog/trade-stock.dialog.component';
+import { MatTableModule } from '@angular/material/table';
+
 
 @NgModule({
   declarations: [
@@ -38,6 +40,7 @@ import { TradeStockDialogComponent } from './dialog/trade-stock.dialog/trade-sto
     MatInputModule,
     MatButtonModule,
     MatTabsModule,
+    MatTableModule,
     AppRoutingModule,
     NoopAnimationsModule,
     ReactiveFormsModule
