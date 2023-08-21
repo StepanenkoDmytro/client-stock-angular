@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { DepositWalletComponent } from 'src/app/dialog/deposit-wallet/deposit-wallet.component';
+import { DepositWalletComponent } from 'src/app/dialog/deposit-wallet.dialog/deposit-wallet.component';
+import { DialogService } from 'src/app/service/dialog.service';
 
 @Component({
   selector: 'app-stock-portfolio',
@@ -9,10 +10,10 @@ import { DepositWalletComponent } from 'src/app/dialog/deposit-wallet/deposit-wa
 })
 export class StockPortfolioComponent {
   constructor(
-    public dialogService: MatDialog
+    public dialogService: DialogService
   ) {}
 
   openDialog(): void {
-    this.dialogService.open(DepositWalletComponent);
+    this.dialogService.openDepositDialog();
   }
 }

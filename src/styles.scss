@@ -25,7 +25,8 @@ body {
     --primary-color: #dc3545;
     --dark-color: rgb(30, 30, 32);
     --light-color: #f4f4f4;
-    --accept-color: rgba(17, 192, 104, 0.726);
+    --accept-color: #26a69a;
+    --decline-color: #db2d3e;
 }
 
 ul {
@@ -84,4 +85,8 @@ ul {
         text-decoration: none;
         color: rgb(249, 250, 254);
     }
+}
+
+.btn-confirm {
+    background: var(--accept-color) !important;
 }

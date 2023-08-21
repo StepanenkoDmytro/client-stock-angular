@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { DepositWalletComponent } from 'src/app/dialog/deposit-wallet/deposit-wallet.component';
+import { DepositWalletComponent } from 'src/app/dialog/deposit-wallet.dialog/deposit-wallet.component';
 
 
 @Component({
