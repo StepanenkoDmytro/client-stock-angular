@@ -1,5 +1,47 @@
 .sidenav-container {
-    width: auto;
+    // width: auto;
+    display: flex;
     background-color: var(--dark-color);
     padding: 10px 10px;
+    color: rgb(249, 250, 254);
+    position: fixed;
+
+
+    p {
+        color: rgb(160, 159, 162);
+    }
+
+    a {
+        text-decoration: none;
+        color: var(--light-color);
+    }
+
+    mat-list-item:hover {
+        border-radius: 10px;
+        background: rgb(56, 59, 67);
+    }
+
+    mat-list-item.active {
+        border-radius: 10px;
+        background: rgb(56, 59, 67);
+    }
+
+
+}
+
+.center-button {
+    &--left {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: -15px;
+    }
+
+    &--right {
+        color: rgb(249, 250, 254);
+        position: fixed;
+        top: 50%;
+        transform: translateY(-50%);
+        left: -15px;
+    }
 }

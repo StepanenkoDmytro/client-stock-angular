@@ -7,7 +7,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'archiveAssets';
 
   public menuItemsMarkets = [
     {
@@ -53,4 +52,9 @@ export class AppComponent {
     }
   ]
 
+  sidenavOpened = true;
+
+    toggleSidenav() {
+        this.sidenavOpened = !this.sidenavOpened;
+    }
 }

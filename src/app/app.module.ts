@@ -19,7 +19,9 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { StockMarketComponent } from './pages/stock-market/stock-market.component';
 import { TradeStockDialogComponent } from './dialog/trade-stock.dialog/trade-stock.dialog.component';
 import { MatTableModule } from '@angular/material/table';
+import { MatListModule } from '@angular/material/list';
 import { DonatChartComponent } from './d3/donat-chart/donat-chart.component';
+import { AreaChartComponent } from './d3/area-chart/area-chart.component';
 
 
 @NgModule({
@@ -31,6 +33,7 @@ import { DonatChartComponent } from './d3/donat-chart/donat-chart.component';
     StockMarketComponent,
     TradeStockDialogComponent,
     DonatChartComponent,
+    AreaChartComponent,
   ],
   imports: [
     BrowserModule,
@@ -43,6 +46,7 @@ import { DonatChartComponent } from './d3/donat-chart/donat-chart.component';
     MatButtonModule,
     MatTabsModule,
     MatTableModule,
+    MatListModule,
     AppRoutingModule,
     NoopAnimationsModule,
     ReactiveFormsModule
