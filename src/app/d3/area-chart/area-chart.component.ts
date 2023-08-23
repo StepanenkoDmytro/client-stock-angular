@@ -1,5 +1,6 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { BehaviorSubject, fromEvent, map, switchMap, tap } from 'rxjs';
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ScaleLinear, ScaleTime } from 'd3';
+import { BehaviorSubject, Observable, Subscription, fromEvent, map, switchMap, tap } from 'rxjs';
 import { D3Service } from 'src/app/service/d3.service';
 
 export interface DataModel {
@@ -12,7 +13,7 @@ export interface DataModel {
   templateUrl: './area-chart.component.html',
   styleUrls: ['./area-chart.component.scss']
 })
-export class AreaChartComponent implements OnInit {
+export class AreaChartComponent implements OnInit, OnDestroy {
 
   @Input('data') private data: DataModel[] = [
     { date: this.d3.d3.timeParse('%Y-%m-%d')('2013-04-28')!, value: 135.98 },
@@ -44,10 +45,14 @@ export class AreaChartComponent implements OnInit {
     { date: this.d3.d3.timeParse('%Y-%m-%d')('2013-05-24')!, value: 133.85 },
     { date: this.d3.d3.timeParse('%Y-%m-%d')('2013-05-25')!, value: 133.22 }
   ];
+
   private margin = { top: 10, right: 30, bottom: 30, left: 50 };
   private width = 460 - this.margin.left - this.margin.right;
   private height = 400 - this.margin.top - this.margin.bottom;
   private svg: any;
+  private moveMouse$: any;
+  private areaContainer: any;
+  private verticalLineVisible = false;
 
   constructor(
     private d3: D3Service
@@ -56,7 +61,13 @@ export class AreaChartComponent implements OnInit {
   ngOnInit(): void {
     this.createSvg();
     this.loadData(this.data);
+  }
 
+  ngOnDestroy(): void {
+    if (this.moveMouse$) {
+      this.moveMouse$.unsubscribe;
+      console.log(this.moveMouse$);
+    }
   }
 
   private createSvg(): void {
@@ -69,27 +80,73 @@ export class AreaChartComponent implements OnInit {
   }
 
   private loadData(data: DataModel[]): void {
-    const x = this.d3.d3.scaleTime()
-      .domain(this.d3.d3.extent(data, (d: DataModel) => d.date) as [Date, Date])
-      .range([0, this.width]);
+    this.setupAxes(data);
+    this.setupCircles(data);
+    this.setupPathAndLine(data);
+
+    const verticalLine = this.setupVerticalLine(data);
+
+    const svgContainerElement = this.areaContainer.node();
+
+    if (svgContainerElement instanceof Element) {
+
+      const react = svgContainerElement.getBoundingClientRect();
+      this.moveMouse$ = fromEvent<MouseEvent>(svgContainerElement, "mousemove")
+        .pipe(
+          map(e => (
+            e.clientX - react.left 
+          ))
+        );
+        
+      this.moveMouse$.subscribe((pos: any) => {
+        
+        verticalLine
+          .attr("stroke-width", 1)
+          .attr("x1", pos)
+          .attr("x2", pos);
+
+        this.updateCircles(data, pos);
+      });
+    }
+  }
+
+  private setupAxes(data: DataModel[]): void {
+    const x = this.setupXScale(data);
+    const y = this.setupYScale(data);
+
     this.svg.append("g")
       .attr("transform", "translate(0," + (this.height + 5) + ")")
       .call(this.d3.d3.axisBottom(x).ticks(5).tickSizeOuter(0));
 
-    const y = this.d3.d3.scaleLinear()
-      .domain(this.d3.d3.extent(data, (d: DataModel) => d.value) as [number, number])
-      .range([this.height, 0]);
-
     this.svg.append("g")
       .attr("transform", "translate(-5,0)")
       .call(this.d3.d3.axisLeft(y).tickSizeOuter(0));
+  }
+
+  private setupCircles(data: DataModel[]): void {
+    const x = this.setupXScale(data);
+    const y = this.setupYScale(data);
+
+    this.svg.selectAll("myCircles")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("fill", "#69b3a2")
+      .attr("cx", (d: DataModel) => x(d.date))
+      .attr("cy", (d: DataModel) => y(d.value))
+      .attr("r", 3);
+  }
+
+  private setupPathAndLine(data: DataModel[]): void {
+    const x = this.setupXScale(data);
+    const y = this.setupYScale(data);
 
     const area = this.d3.d3.area<DataModel>()
       .x((d: DataModel) => x(d.date))
       .y0(this.height)
       .y1((d: DataModel) => y(d.value));
 
-    this.svg.append("path")
+    this.areaContainer = this.svg.append("path")
       .datum(data)
       .attr("fill", "#69b3a2")
       .attr("fill-opacity", .3)
@@ -106,95 +163,37 @@ export class AreaChartComponent implements OnInit {
       .attr("stroke", "#69b3a2")
       .attr("stroke-width", 2)
       .attr("d", line);
+  }
 
-    this.svg.selectAll("myCircles")
-      .data(data)
-      .enter()
-      .append("circle")
-      .attr("fill", "#69b3a2")
-      .attr("cx", (d: DataModel) => x(d.date))
-      .attr("cy", (d: DataModel) => y(d.value))
-      .attr("r", 3);
-
-    const verticalLine = this.svg.append("line")
+  private setupVerticalLine(data: DataModel[]): any {
+    return this.svg.append("line")
       .attr("class", "vertical-line")
       .attr("stroke", "blue")
       .attr("stroke-width", 0)
       .attr("y1", 0)
       .attr("y2", this.height);
-
-    this.svg
-      .on("mousemove", (event: MouseEvent, d: DataModel) => {
-        const areaContainer = this.d3.d3.select('#my_dataviz');
-        const svgContainerElement = areaContainer.node();
-
-        this.mouseMove$.subscribe((pos) => {
-          if (svgContainerElement instanceof Element) {
-
-            const svgRect = svgContainerElement.getBoundingClientRect();
-            const offsetX = pos.x - svgRect.left - this.margin.left;
-
-            verticalLine
-              .attr("stroke-width", 1)
-              .attr("x1", offsetX)
-              .attr("x2", offsetX);
-
-            this.svg.selectAll("circle")
-              .attr("fill", (d: DataModel) => {
-                const circleX = x(d.date);
-                const range = 5;
-                if (Math.abs(circleX - offsetX) < range) {
-                  return "blue";
-                } else {
-                  return "#69b3a2";
-                }
-              })
-              .attr("stroke", (d: DataModel) => {
-                const circleX = x(d.date);
-                const range = 5;
-                if (Math.abs(circleX - offsetX) < range) {
-                  return "white";
-                } else {
-                  return "none";
-                }
-              })
-              .attr("stroke-width", (d: DataModel) => {
-                const circleX = x(d.date);
-                const range = 5;
-                if (Math.abs(circleX - offsetX) < range) {
-                  return 6;
-                } else {
-                  return 0;
-                }
-              })
-              .attr("stroke-opacity", (d: DataModel) => {
-                const circleX = x(d.date);
-                const range = 5;
-                if (Math.abs(circleX - offsetX) < range) {
-                  return 0.3;
-                } else {
-                  return 0;
-                }
-              })
-              .attr("r", (d: DataModel) => {
-                const circleX = x(d.date);
-                const range = 5;
-                if (Math.abs(circleX - offsetX) < range) {
-                  return 6;
-                } else {
-                  return 3;
-                }
-              })
-          }
-        })
-      });
   }
-  private mouseMove$ = fromEvent<MouseEvent>(document, 'mousemove')
-    .pipe(
-      map(event => ({
-        x: event.clientX,
-        y: event.clientY,
-      })),
-    );
 
+  private updateCircles(data: DataModel[], offsetX: number) {
+    const x = this.setupXScale(data);
+    const range = 5;
+    this.svg.selectAll("circle")
+      .attr("fill", (d: DataModel) => Math.abs(x(d.date) - offsetX) < range ? "blue" : "#69b3a2")
+      .attr("stroke", (d: DataModel) => Math.abs(x(d.date) - offsetX) < range ? "white" : "none")
+      .attr("stroke-width", (d: DataModel) => Math.abs(x(d.date) - offsetX) < range ? 6 : 0)
+      .attr("stroke-opacity", (d: DataModel) => Math.abs(x(d.date) - offsetX) < range ? 0.3 : 0)
+      .attr("r", (d: DataModel) => Math.abs(x(d.date) - offsetX) < range ? 6 : 3);
+  };
+
+  private setupXScale(data: DataModel[]): ScaleTime<number, number> {
+    return this.d3.d3.scaleTime()
+      .domain(this.d3.d3.extent(data, (d: DataModel) => d.date) as [Date, Date])
+      .range([0, this.width]);
+  }
+
+  private setupYScale(data: DataModel[]): ScaleLinear<number, number> {
+    return this.d3.d3.scaleLinear()
+      .domain(this.d3.d3.extent(data, (d: DataModel) => d.value) as [number, number])
+      .range([this.height, 0]);
+  }
 }
