@@ -12,10 +12,7 @@ import { DialogService } from 'src/app/service/dialog.service';
 })
 export class StockMarketComponent {
 
-  public displayedColumns: string[] = [ 'name', 'countStocks', 'price', 'sector', 'dividendYield', 'currency'];
-  public dataSource: MatTableDataSource<IAccountStock>;
-
-  public accounts: IAccount[] = ACCOUNTS_MOCK;
+  
 
   public tradeForm!: FormGroup;
   public accountCtrl!: FormControl;
@@ -30,7 +27,7 @@ export class StockMarketComponent {
   constructor(
     private dialogService: DialogService
   ) {
-    this.dataSource = new MatTableDataSource(ACCOUNT_STOCKS_MOCK);
+    
   }
 
   openDialog() {

@@ -24,6 +24,7 @@ import { MatListModule } from '@angular/material/list';
 import { DonatChartComponent } from './d3/donat-chart/donat-chart.component';
 import { AreaChartComponent } from './d3/area-chart/area-chart.component';
 import { StockDetailsComponent } from './pages/stock-market/stock-details/stock-details.component';
+import { StockPickComponent } from './pages/stock-market/stock-pick/stock-pick.component';
 
 
 @NgModule({
@@ -37,6 +38,7 @@ import { StockDetailsComponent } from './pages/stock-market/stock-details/stock-
     DonatChartComponent,
     AreaChartComponent,
     StockDetailsComponent,
+    StockPickComponent,
   ],
   imports: [
     BrowserModule,
