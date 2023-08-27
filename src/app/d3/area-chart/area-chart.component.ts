@@ -66,7 +66,7 @@ export class AreaChartComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.moveMouse$) {
       this.moveMouse$.unsubscribe;
-      console.log(this.moveMouse$);
+      // console.log(this.moveMouse$);
     }
   }
 

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { fromEvent, map } from 'rxjs';
 import { D3Service } from 'src/app/service/d3.service';
 
@@ -8,12 +8,19 @@ export interface SimpleDataModel {
   color?: string;
 }
 
+const customColors = [
+  '#c32f0ddd', '#0493c3', '#832174', '#02a02f', '#d7a502',
+  '#c1014e', '#0071d4', '#c87800', '#01b48a', '#782814',
+  '#206273', '#b8784e', '#66FF33', '#48653c', '#00BBFF',
+  '#FF3399', '#33FF66', '#FFCC00', '#00FF99', '#a74300'
+];
+
 @Component({
   selector: 'app-donat-chart',
   templateUrl: './donat-chart.component.html',
   styleUrls: ['./donat-chart.component.scss']
 })
-export class DonatChartComponent {
+export class DonatChartComponent implements OnInit, OnDestroy {
   @Input('data') private data: SimpleDataModel[] = [
     { name: 'Tesla Inc', value: '20%' },
     { name: 'Banc of America', value: '40%' },
@@ -28,12 +35,78 @@ export class DonatChartComponent {
   private svg: any;
   private colors: any;
   private radius = Math.min(this.width, this.height) / 2 - this.margin.left;
+
+  private mouseMove$: any;
+
   constructor(private d3: D3Service) { }
 
   ngOnInit(): void {
     this.createSvg();
     this.createColors(this.data);
     this.drawChart();
+    this.clientAction();
+  }
+
+  ngOnDestroy(): void {
+    if (this.mouseMove$) {
+      this.mouseMove$.unsubscribe;
+    }
+  }
+
+  private clientAction(): void {
+    const tooltip = this.d3.d3.select('#tooltip');
+
+    const svgContainerElement = this.svg.node();
+    if (svgContainerElement instanceof Element) {
+
+      this.mouseMove$ = fromEvent<MouseEvent>(svgContainerElement, 'mousemove');
+      // .pipe(
+      //   map(event => ({
+      //     curData: event.target.__data__.data,
+      //     index: event.target.__data__.index + 1,
+
+      //     offsetX: event.offsetX,
+      //     offsetY: event.offsetY,
+      //   }))
+      // );
+
+      this.mouseMove$.subscribe((event: any) => {
+
+        if (event.target.__data__) {
+          const curData = event.target.__data__.data;
+          const index = event.target.__data__.index + 1;
+
+          const offsetX = event.offsetX;
+          const offsetY = event.offsetY;
+
+
+          this.svg.selectAll('path')
+            .style('opacity', 0.5)
+            .on('mouseout', () => {
+              this.svg.selectAll('path')
+                .style('opacity', 0.7);
+
+              tooltip
+                .style('display', 'none');
+
+              this.svg.select(`path:nth-child(${index})`)
+                .attr('stroke', 'var(--black-color)')
+                .style('stroke-width', '10');
+            });
+
+          this.svg.select(`path:nth-child(${index})`)
+            .style('opacity', 1)
+            .attr('stroke', 'var(--stroke-color)')
+            .style('stroke-width', '10');
+
+          tooltip
+            .style('display', 'block')
+            .html(`${curData.name}: ${curData.value}`)
+            .style('left', `${offsetX}px`)
+            .style('top', `${offsetY}px`);
+        }
+      });
+    }
   }
 
   private createSvg(): void {
@@ -49,12 +122,7 @@ export class DonatChartComponent {
   }
 
   private createColors(data: any): void {
-    const customColors = [
-      '#c32f0ddd', '#0493c3', '#832174', '#02a02f', '#d7a502',
-      '#c1014e', '#0071d4', '#c87800', '#01b48a', '#782814',
-      '#206273', '#b8784e', '#66FF33', '#48653c', '#00BBFF',
-      '#FF3399', '#33FF66', '#FFCC00', '#00FF99', '#a74300'
-    ];
+
 
     this.colors = this.d3.d3.scaleOrdinal<string>()
       .domain(data.map((d: any) => d.name))
@@ -80,8 +148,8 @@ export class DonatChartComponent {
       .innerRadius(this.radius * 0.9)
       .outerRadius(this.radius * 0.9);
 
-    const tooltip = this.d3.d3.select('#tooltip');
-    const donutContainer = this.d3.d3.select('#donut');
+    // const tooltip = this.d3.d3.select('#tooltip');
+    // const donutContainer = this.d3.d3.select('#donut');
 
 
     this.svg
@@ -93,43 +161,7 @@ export class DonatChartComponent {
       .attr('fill', (d: any, i: number) => this.colors(i.toString()))
       .attr('stroke', 'var(--black-color)')
       .style('stroke-width', '10')
-      .style('opacity', 0.7)
-      .on('mouseover', (event: any, d: any) => {
-        this.svg.selectAll('path')
-          .style('opacity', 0.5);
-        this.svg.select(`path:nth-child(${d.index + 1})`)
-          .style('opacity', 1)
-          .attr('stroke', 'var(--stroke-color)')
-          .style('stroke-width', '10');
-
-        tooltip
-          .style('display', 'block')
-          .html(`${d.data.name}: ${d.data.value}`);
-
-        this.mouseMove$.subscribe((pos) => {
-          const svgContainerElement = donutContainer.node();
-          if (svgContainerElement instanceof Element) {
-            const svgRect = svgContainerElement.getBoundingClientRect();
-
-            const offsetX = pos.x - svgRect.left;
-            const offsetY = pos.y - svgRect.top;
-
-            tooltip
-              .style('left', `${offsetX}px`)
-              .style('top', `${offsetY}px`);
-          }
-        });
-      })
-      .on('mouseout', (event: any, d: any) => {
-        this.svg.selectAll('path')
-          .style('opacity', 0.7);
-        tooltip
-          .style('display', 'none');
-
-        this.svg.select(`path:nth-child(${d.index + 1})`)
-          .attr('stroke', 'var(--black-color)')
-          .style('stroke-width', '10');
-      });
+      .style('opacity', 0.7);
 
     const text = this.svg.append('text')
       .attr('alignment-baseline', 'middle')
@@ -160,13 +192,4 @@ export class DonatChartComponent {
       .attr('fill', 'var(--decline-color)')
       .text('Aggresive');
   }
-
-  private mouseMove$ = fromEvent<MouseEvent>(document, 'mousemove')
-    .pipe(
-      map(event => ({
-        x: event.clientX,
-        y: event.clientY,
-      }))
-    );
-
 }
