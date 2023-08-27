@@ -10,7 +10,7 @@ export interface PurchaseData {
 }
 
 @Component({
-  selector: 'app-trade-stock.dialog',
+  selector: 'app-trade-stock',
   templateUrl: './trade-stock.dialog.component.html',
   styleUrls: ['./trade-stock.dialog.component.scss']
 })
@@ -33,11 +33,10 @@ export class TradeStockDialogComponent implements OnInit {
 
   public tabChanged(event: any) {
     this.tradeTypeCtrl.setValue(!event.index);
-    // console.log(this.tradeTypeCtrl.value);
   }
 
   ngOnInit(): void {
-    this.accountCtrl = new FormControl('');
+    this.accountCtrl = new FormControl(this.accounts[0].id);
     this.amountCtrl = new FormControl('');
     this.tradeTypeCtrl = new FormControl(false);
     this.typePriceCtrl = new FormControl(this.typeOfTradePrice[0]);

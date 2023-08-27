@@ -16,12 +16,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { StockMarketComponent } from './pages/stock-market/stock-market.component';
 import { TradeStockDialogComponent } from './dialog/trade-stock.dialog/trade-stock.dialog.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatListModule } from '@angular/material/list';
 import { DonatChartComponent } from './d3/donat-chart/donat-chart.component';
 import { AreaChartComponent } from './d3/area-chart/area-chart.component';
+import { StockDetailsComponent } from './pages/stock-market/stock-details/stock-details.component';
 
 
 @NgModule({
@@ -34,6 +36,7 @@ import { AreaChartComponent } from './d3/area-chart/area-chart.component';
     TradeStockDialogComponent,
     DonatChartComponent,
     AreaChartComponent,
+    StockDetailsComponent,
   ],
   imports: [
     BrowserModule,
@@ -47,6 +50,7 @@ import { AreaChartComponent } from './d3/area-chart/area-chart.component';
     MatTabsModule,
     MatTableModule,
     MatListModule,
+    MatButtonToggleModule,
     AppRoutingModule,
     NoopAnimationsModule,
     ReactiveFormsModule

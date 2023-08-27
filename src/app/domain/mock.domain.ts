@@ -32,6 +32,26 @@ export const ACCOUNT_STOCKS_MOCK: IAccountStock[] = [
         sector: "MANUFACTURING",
         dividendYield: 0.0426,
     },
+    {
+        symbol: "BAC",
+        assetType: "COMMON STOCKS",
+        name: "Bank of America",
+        currency: "USD",
+        buyPrice: 31.98,
+        countStocks: 100,
+        sector: "FINANCE",
+        dividendYield: 0.03,
+    },
+    {
+        symbol: "F",
+        assetType: "COMMON STOCKS",
+        name: "Ford Motor Company",
+        currency: "USD",
+        buyPrice: 13.26,
+        countStocks: 200,
+        sector: "MANUFACTURING",
+        dividendYield: 0.0426,
+    },
 ];
 
 export const ACCOUNT_TRANSACTION_MOCK: ITransact[] = [
