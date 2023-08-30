@@ -28,3 +28,15 @@
     border-radius: 10px;
     background-color: rgb(16, 16, 16);
 }
+
+.total-info {
+    flex:none;
+    display: block;
+    width: 400px;
+    height: 400px;
+}
+
+.chart-info {
+    width: 100%;
+    height: auto;
+}

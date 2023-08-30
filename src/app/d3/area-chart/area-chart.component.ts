@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ScaleLinear, ScaleTime } from 'd3';
 import { BehaviorSubject, Observable, Subscription, fromEvent, map, switchMap, tap } from 'rxjs';
 import { D3Service } from 'src/app/service/d3.service';
@@ -13,7 +13,7 @@ export interface DataModel {
   templateUrl: './area-chart.component.html',
   styleUrls: ['./area-chart.component.scss']
 })
-export class AreaChartComponent implements OnInit, OnDestroy {
+export class AreaChartComponent implements OnInit, AfterViewInit,OnDestroy {
 
   @Input('data') private data: DataModel[] = [
     { date: this.d3.d3.timeParse('%Y-%m-%d')('2013-04-28')!, value: 135.98 },
@@ -45,10 +45,11 @@ export class AreaChartComponent implements OnInit, OnDestroy {
     { date: this.d3.d3.timeParse('%Y-%m-%d')('2013-05-24')!, value: 133.85 },
     { date: this.d3.d3.timeParse('%Y-%m-%d')('2013-05-25')!, value: 133.22 }
   ];
+  @ViewChild('chartContainer', { static: true }) chartContainer!: ElementRef;
 
   private margin = { top: 10, right: 30, bottom: 30, left: 50 };
-  private width = 460 - this.margin.left - this.margin.right;
-  private height = 400 - this.margin.top - this.margin.bottom;
+  private width!: number;
+  private height = 370 - this.margin.top - this.margin.bottom;
   private svg: any;
   private moveMouse$: any;
   private areaContainer: any;
@@ -59,14 +60,19 @@ export class AreaChartComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    this.width = this.chartContainer.nativeElement.clientWidth - this.margin.left - this.margin.right;
+    
     this.createSvg();
     this.loadData(this.data);
+  }
+
+  ngAfterViewInit(): void {
+    
   }
 
   ngOnDestroy(): void {
     if (this.moveMouse$) {
       this.moveMouse$.unsubscribe;
-      // console.log(this.moveMouse$);
     }
   }
 
