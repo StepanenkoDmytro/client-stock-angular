@@ -1,50 +1,50 @@
-<div style="display: flex; justify-content: space-between;">
+<div class="title-details">
     <h2>Detail:</h2>
     <h2>TSLA</h2>
 </div>
+
 <div class="table-assets">
-    
     <table>
         <tbody>
             <tr>
                 <td>Symbol: </td>
-                <td>{{ stock.symbol }}</td>
+                <td>{{ activeStock.symbol }}</td>
             </tr>
             <tr>
                 <td>Name:</td>
-                <td>{{ stock.name }}</td>
+                <td>{{ activeStock.name }}</td>
             </tr>
             <tr>
                 <td>Currency:</td>
-                <td>{{ stock.currency }}</td>
+                <td>{{ activeStock.currency }}</td>
             </tr>
             <tr>
                 <td>Country:</td>
-                <td>USA</td>
+                <td>{{activeStock.country}}</td>
             </tr>
             <tr>
                 <td>Sector:</td>
-                <td>{{ stock.sector }}</td>
+                <td>{{ activeStock.sector }}</td>
             </tr>
             <tr>
                 <td>Industry:</td>
-                <td>FINANCE</td>
+                <td>{{ activeStock.industry }}</td>
             </tr>
             <tr>
                 <td>Market Capitalization</td>
-                <td>1000000000$</td>
+                <td>{{ activeStock.market_capitalization }}$</td>
             </tr>
             <tr>
                 <td>Dividend Yield:</td>
-                <td>{{ stock.dividendYield }}</td>
+                <td>{{ activeStock.dividend_yield }}</td>
             </tr>
             <tr>
                 <td>Dividend Date:</td>
-                <td>10-20-12</td>
+                <td>{{ activeStock.dividend_date }}</td>
             </tr>
             <tr>
                 <td>Last Dividend Date:</td>
-                <td>10-20-12</td>
+                <td>{{ activeStock.ex_dividend_date }}</td>
             </tr>
         </tbody>
     </table>

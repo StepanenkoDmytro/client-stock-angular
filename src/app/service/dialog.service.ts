@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DepositWalletComponent } from '../dialog/deposit-wallet.dialog/deposit-wallet.component';
-import { TradeStockDialogComponent } from '../dialog/trade-stock.dialog/trade-stock.dialog.component';
 
 
 @Injectable({
@@ -13,13 +12,5 @@ export class DialogService {
 
   openDepositDialog(): void {
     this.dialog.open(DepositWalletComponent);
-  }
-
-  openBuyOrSellStockDialog(): void {
-    const dialogRef = this.dialog.open(TradeStockDialogComponent);
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
-    });
   }
 }

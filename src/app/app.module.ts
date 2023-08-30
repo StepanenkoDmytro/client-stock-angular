@@ -18,13 +18,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { StockMarketComponent } from './pages/stock-market/stock-market.component';
-import { TradeStockDialogComponent } from './dialog/trade-stock.dialog/trade-stock.dialog.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatListModule } from '@angular/material/list';
 import { DonatChartComponent } from './d3/donat-chart/donat-chart.component';
 import { AreaChartComponent } from './d3/area-chart/area-chart.component';
 import { StockDetailsComponent } from './pages/stock-market/stock-details/stock-details.component';
 import { StockPickComponent } from './pages/stock-market/stock-pick/stock-pick.component';
+import { HoldingsStockComponent } from './pages/stock-portfolio/holdings-stock/holdings-stock.component';
+import { TradeStockComponent } from './pages/stock-market/trade-stock/trade-stock.component';
 
 
 @NgModule({
@@ -34,11 +35,12 @@ import { StockPickComponent } from './pages/stock-market/stock-pick/stock-pick.c
     PortfolioComponent,
     DepositWalletComponent,
     StockMarketComponent,
-    TradeStockDialogComponent,
     DonatChartComponent,
     AreaChartComponent,
     StockDetailsComponent,
     StockPickComponent,
+    HoldingsStockComponent,
+    TradeStockComponent,
   ],
   imports: [
     BrowserModule,

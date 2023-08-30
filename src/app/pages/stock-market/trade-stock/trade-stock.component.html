@@ -1,20 +1,16 @@
-<div class="dialog-container">
-    <div mat-dialog-title
-         class="title-container">
-        <h2 class="text-right">Tesla Inc.</h2> 
-        <h2 class="text-left">216.46</h2>
-    </div>
-    <form [formGroup]="tradeForm" mat-dialog-content>
+<div class="title-container">
+    <h2 class="text-right">Tesla Inc.</h2>
+    <h2 class="text-left">216.46</h2>
+</div>
+
+<div class="trade-container">
+    <form [formGroup]="tradeForm">
         <div class="custom-checkbox">
-            <input id="status" 
-                   type="checkbox" 
-                   name="status">
-                <label for="status">
-                    <div class="status-switch"
-                        data-unchecked="Buy"
-                        data-checked="Sell">
-                    </div>
-                </label>
+            <input id="status" type="checkbox" name="status">
+            <label for="status">
+                <div class="status-switch" data-unchecked="Buy" data-checked="Sell">
+                </div>
+            </label>
         </div>
 
         <section>
@@ -24,8 +20,7 @@
                 </div>
                 <mat-form-field class="custom-form-field">
                     <mat-select formControlName="account">
-                        <mat-option *ngFor="let account of accounts" 
-                                    [value]="account.id">
+                        <mat-option *ngFor="let account of accounts" [value]="account.id">
                             {{ account.accountName }}
                         </mat-option>
                     </mat-select>
@@ -38,8 +33,7 @@
                 </div>
                 <mat-form-field>
                     <mat-select formControlName="typePrice">
-                        <mat-option *ngFor="let typePrice of typeOfTradePrice" 
-                                    [value]="typePrice">
+                        <mat-option *ngFor="let typePrice of typeOfTradePrice" [value]="typePrice">
                             {{ typePrice }}
                         </mat-option>
                     </mat-select>

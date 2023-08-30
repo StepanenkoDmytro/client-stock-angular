@@ -50,6 +50,7 @@ ul {
 
 .table-assets {
     font-size: small;
+    padding: 0px 10px 0px 10px;
 
     th,
     td:not(:first-child) {
@@ -59,7 +60,6 @@ ul {
     .mat-mdc-header-row,
     .mat-mdc-row {
         color: var(--light-color);
-        // border-bottom: var(--black-color) solid 10px;
     }
 
     .mat-mdc-table {
@@ -109,7 +109,6 @@ ul {
     max-width: 100px;
 }
 
-// .table-assets {
-
- 
-// }
+.scroll {
+    overflow: scroll;
+}

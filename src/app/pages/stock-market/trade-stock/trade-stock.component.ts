@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ACCOUNTS_MOCK, IAccount } from 'src/app/domain/account.domain';
 
+
 export interface PurchaseData {
   countStocks: number,
   accountID: number,
@@ -11,10 +12,10 @@ export interface PurchaseData {
 
 @Component({
   selector: 'app-trade-stock',
-  templateUrl: './trade-stock.dialog.component.html',
-  styleUrls: ['./trade-stock.dialog.component.scss']
+  templateUrl: './trade-stock.component.html',
+  styleUrls: ['./trade-stock.component.scss']
 })
-export class TradeStockDialogComponent implements OnInit {
+export class TradeStockComponent implements OnInit {
   public accounts: IAccount[] = ACCOUNTS_MOCK;
 
   public tradeForm!: FormGroup;
@@ -54,5 +55,3 @@ export class TradeStockDialogComponent implements OnInit {
     console.log(formData); 
   }
 }
-
-

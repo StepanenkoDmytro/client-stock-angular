@@ -52,7 +52,7 @@ export class AppComponent {
     }
   ]
 
-  sidenavOpened = true;
+  sidenavOpened = false;
 
     toggleSidenav() {
         this.sidenavOpened = !this.sidenavOpened;

@@ -1,9 +1,5 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { MatTableDataSource } from '@angular/material/table';
-import { ACCOUNTS_MOCK, IAccount, IAccountStock } from 'src/app/domain/account.domain';
-import { ACCOUNT_STOCKS_MOCK } from 'src/app/domain/mock.domain';
-import { DialogService } from 'src/app/service/dialog.service';
 
 @Component({
   selector: 'app-stock-market',
@@ -11,8 +7,6 @@ import { DialogService } from 'src/app/service/dialog.service';
   styleUrls: ['./stock-market.component.scss']
 })
 export class StockMarketComponent {
-
-  
 
   public tradeForm!: FormGroup;
   public accountCtrl!: FormControl;
@@ -24,13 +18,4 @@ export class StockMarketComponent {
     "Market price", "Custom price"
    ]
 
-  constructor(
-    private dialogService: DialogService
-  ) {
-    
-  }
-
-  openDialog() {
-    this.dialogService.openBuyOrSellStockDialog();
-  }
 }

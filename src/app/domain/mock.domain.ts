@@ -1,4 +1,5 @@
 import { IAccountStock } from "./account.domain";
+import { IStock } from "./assets.domain";
 import { ITransact } from "./transact.domain";
 
 export const ACCOUNT_STOCKS_MOCK: IAccountStock[] = [
@@ -76,3 +77,14 @@ export const ACCOUNT_TRANSACTION_MOCK: ITransact[] = [
         created: new Date("2023-07-22 08:43:59"),
     },
 ];
+
+export const STOCK_MOCK: IStock = {
+    symbol: "TSLA",
+    name: "Tesla Inc.",
+    currency: "USD",
+    country: "USA",
+    sector: "MANUFACTURING",
+    industry: "FINANCE",
+    market_capitalization: 1000000000,
+    dividend_yield: 0
+}
