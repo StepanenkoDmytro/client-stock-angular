@@ -1,51 +1,20 @@
 <div class="title-details">
-    <h2>Detail:</h2>
+    <h2>Details:</h2>
     <h2>TSLA</h2>
 </div>
 
 <div class="table-assets">
-    <table>
-        <tbody>
-            <tr>
-                <td>Symbol: </td>
-                <td>{{ activeStock.symbol }}</td>
-            </tr>
-            <tr>
-                <td>Name:</td>
-                <td>{{ activeStock.name }}</td>
-            </tr>
-            <tr>
-                <td>Currency:</td>
-                <td>{{ activeStock.currency }}</td>
-            </tr>
-            <tr>
-                <td>Country:</td>
-                <td>{{activeStock.country}}</td>
-            </tr>
-            <tr>
-                <td>Sector:</td>
-                <td>{{ activeStock.sector }}</td>
-            </tr>
-            <tr>
-                <td>Industry:</td>
-                <td>{{ activeStock.industry }}</td>
-            </tr>
-            <tr>
-                <td>Market Capitalization</td>
-                <td>{{ activeStock.market_capitalization }}$</td>
-            </tr>
-            <tr>
-                <td>Dividend Yield:</td>
-                <td>{{ activeStock.dividend_yield }}</td>
-            </tr>
-            <tr>
-                <td>Dividend Date:</td>
-                <td>{{ activeStock.dividend_date }}</td>
-            </tr>
-            <tr>
-                <td>Last Dividend Date:</td>
-                <td>{{ activeStock.ex_dividend_date }}</td>
-            </tr>
-        </tbody>
+    <table mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="property">
+            <th mat-header-cell *matHeaderCellDef>Property</th>
+            <td mat-cell *matCellDef="let element" class="text-left">{{ element.property }}</td>
+          </ng-container>
+        
+          <ng-container matColumnDef="value">
+            <th mat-header-cell *matHeaderCellDef>Value</th>
+            <td mat-cell *matCellDef="let element" class="text-right">{{ element.value }}</td>
+          </ng-container>
+        
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
 </div>

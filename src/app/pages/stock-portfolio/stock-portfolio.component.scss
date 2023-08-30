@@ -13,6 +13,7 @@
     }
 
     .mdc-tab-indicator--active {
+        width: 80%;
         background-color: var(--black-color) !important;
     }
 
@@ -24,7 +25,6 @@
 }
 
 .change-section {
-    border: 2px solid var(--black-color);
     border-radius: 10px;
     background-color: rgb(16, 16, 16);
 }

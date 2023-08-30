@@ -2,21 +2,35 @@
     width: auto;
     height: 315px;
     overflow: scroll;
+    
 
     table {
         tbody {
             tr {
                 height: 52px;
             }
+
             td {
                 padding: 0px 16px 0px 16px;
             }
+            
+        }
+        td:not(:first-child) {
+            text-align: right;
         }
     }
 }
 
 .title-details {
-    display: flex; 
-    justify-content: space-between; 
+    display: flex;
+    justify-content: space-between;
     padding: 0px 20px 0px 20px;
 }
+
+// .text-left {
+//     text-align: left;
+// }
+
+// .text-right {
+//     margin-right: auto;
+// }
