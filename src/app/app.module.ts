@@ -26,6 +26,7 @@ import { StockDetailsComponent } from './pages/stock-market/stock-details/stock-
 import { StockPickComponent } from './pages/stock-market/stock-pick/stock-pick.component';
 import { HoldingsStockComponent } from './pages/stock-portfolio/holdings-stock/holdings-stock.component';
 import { TradeStockComponent } from './pages/stock-market/trade-stock/trade-stock.component';
+import { ExpandedInfoComponent } from './pages/stock-portfolio/holdings-stock/expanded-info/expanded-info.component';
 
 
 @NgModule({
@@ -41,6 +42,7 @@ import { TradeStockComponent } from './pages/stock-market/trade-stock/trade-stoc
     StockPickComponent,
     HoldingsStockComponent,
     TradeStockComponent,
+    ExpandedInfoComponent,
   ],
   imports: [
     BrowserModule,
