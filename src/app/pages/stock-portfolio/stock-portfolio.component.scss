@@ -1,36 +1,54 @@
-::ng-deep {
+.info-account {
+    display: flex;
+    justify-content: space-between;
 
-    .mat-mdc-tab.mdc-tab {
-        justify-content: flex-start;
-    }
-
-    .mdc-tab-indicator__content--underline {
-        border-color: transparent !important;
-    }
-
-    .mat-mdc-tab-labels .mdc-tab {
-        background-color: var(--dark-color);
-    }
-
-    .mdc-tab-indicator--active {
-        width: 80%;
-        background-color: var(--black-color) !important;
-    }
-
-    .mat-mdc-tab:not(.mat-mdc-tab-disabled).mdc-tab--active .mdc-tab__text-label,
-    .mat-mdc-tab-link:not(.mat-mdc-tab-disabled).mdc-tab--active,
-    .mdc-tab__text-label {
-        color: var(--light-color) !important;
+    mat-label {
+        font-size: 16px;
     }
 }
 
-.change-section {
+.section-border {
     border-radius: 10px;
     background-color: rgb(16, 16, 16);
+
+    ::ng-deep {
+        .mat-mdc-tab.mdc-tab {
+            justify-content: flex-start;
+            --mat-tab-header-inactive-label-text-color: var(--light-color);
+            --mat-tab-header-active-label-text-color: var(--light-color);
+            --mat-tab-header-active-hover-label-text-color: var(--light-color);
+            --mat-tab-header-inactive-hover-label-text-color: var(--light-color);
+            --mat-tab-header-active-focus-label-text-color: var(--light-color);
+            --mat-tab-header-inactive-focus-label-text-color: var(--light-color);
+        }
+
+        .mdc-tab .mdc-tab-indicator {
+            display: none;
+        }
+
+        .mat-mdc-tab-labels .mdc-tab {
+            color: var(--light-color);
+            background-color: var(--black-color);
+
+            .mdc-tab-indicator {
+                display: flex;
+
+                .mdc-tab-indicator__content {
+                    &--underline {
+                        --mdc-tab-indicator-active-indicator-color: var(--accept-color);
+                        --mat-tab-header-active-focus-indicator-color: var(--accept-color);
+                        --mat-tab-header-active-hover-indicator-color: var(--accept-color);
+                        border-top-width: 1px;
+                    }
+                }
+            }
+        }
+
+    }
 }
 
 .total-info {
-    flex:none;
+    flex: none;
     display: block;
     width: 400px;
     height: 400px;

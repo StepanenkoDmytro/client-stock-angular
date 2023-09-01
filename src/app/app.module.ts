@@ -27,6 +27,8 @@ import { StockPickComponent } from './pages/stock-market/stock-pick/stock-pick.c
 import { HoldingsStockComponent } from './pages/stock-portfolio/holdings-stock/holdings-stock.component';
 import { TradeStockComponent } from './pages/stock-market/trade-stock/trade-stock.component';
 import { ExpandedInfoComponent } from './pages/stock-portfolio/holdings-stock/expanded-info/expanded-info.component';
+import { DateFormatPipe } from './pipe/date-format.pipe';
+import { MatCardModule } from '@angular/material/card';
 
 
 @NgModule({
@@ -43,6 +45,7 @@ import { ExpandedInfoComponent } from './pages/stock-portfolio/holdings-stock/ex
     HoldingsStockComponent,
     TradeStockComponent,
     ExpandedInfoComponent,
+    DateFormatPipe,
   ],
   imports: [
     BrowserModule,
@@ -57,6 +60,7 @@ import { ExpandedInfoComponent } from './pages/stock-portfolio/holdings-stock/ex
     MatTableModule,
     MatListModule,
     MatButtonToggleModule,
+    MatCardModule,
     AppRoutingModule,
     NoopAnimationsModule,
     ReactiveFormsModule

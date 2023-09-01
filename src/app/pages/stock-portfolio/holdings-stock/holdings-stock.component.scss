@@ -6,8 +6,10 @@ tr.expand-row {
     height: 0;
 }
 
-.element-row td {
-    border-bottom-width: 0;
+.element-row {
+    td {
+        border-bottom-width: 0;
+    }
 }
 
 .element-detail {
@@ -16,6 +18,6 @@ tr.expand-row {
 }
 
 .expanded-component {
-    border: 1px solid red;
     padding: 20px 0px 20px 0px;
+    width: 100%;
 }

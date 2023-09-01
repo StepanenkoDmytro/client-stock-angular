@@ -19,6 +19,7 @@ body {
     --accept-color: #26a69a;
     --decline-color: #db2d3e;
     --stroke-color: #9bc8e235;
+    --stroke-color-50: #aabbc51d;
 }
 
 ul {
@@ -35,6 +36,10 @@ ul {
 
 .flex {
     display: flex;
+}
+
+.sp-bw {
+    justify-content: space-between;
 }
 
 .info-container {
@@ -111,4 +116,8 @@ ul {
 
 .scroll {
     overflow: scroll;
+}
+
+.p-20 {
+    padding: 20px;
 }

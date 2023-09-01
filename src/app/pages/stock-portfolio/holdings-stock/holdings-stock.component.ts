@@ -20,11 +20,12 @@ import { ACCOUNT_STOCKS_MOCK } from 'src/app/domain/mock.domain';
 export class HoldingsStockComponent implements OnInit {
   
   public displayedColumns: string[] = [ 'name', 'countStocks', 'buyPrice', 'price', 'coast', 'sector', 'dividendYield', 'share', 'profit', 'growth', 'currency'];
-  columnsToDisplayWithExpand = [...this.displayedColumns, 'expand'];
-  expandedElement: IStock | null = null;
+  public columnsToDisplayWithExpand = [...this.displayedColumns, 'expand'];
+  public expandedElement: IStock | null = null;
   public dataSource!: MatTableDataSource<IAccountStock>;
 
   ngOnInit(): void {
+    console.log(this.expandedElement);
     this.dataSource = new MatTableDataSource(ACCOUNT_STOCKS_MOCK);
   }
 }
