@@ -4,7 +4,7 @@ import { IStock } from 'src/app/domain/assets.domain';
 import { STOCK_MOCK } from 'src/app/domain/mock.domain';
 
 
-interface ElementTable {
+export interface ElementTable {
   property: string,
   value: string | number | Date
 }

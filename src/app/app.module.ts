@@ -29,6 +29,8 @@ import { TradeStockComponent } from './pages/stock-market/trade-stock/trade-stoc
 import { ExpandedInfoComponent } from './pages/stock-portfolio/holdings-stock/expanded-info/expanded-info.component';
 import { DateFormatPipe } from './pipe/date-format.pipe';
 import { MatCardModule } from '@angular/material/card';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 @NgModule({
@@ -59,8 +61,10 @@ import { MatCardModule } from '@angular/material/card';
     MatTabsModule,
     MatTableModule,
     MatListModule,
+    MatCheckboxModule,
     MatButtonToggleModule,
     MatCardModule,
+    MatMenuModule,
     AppRoutingModule,
     NoopAnimationsModule,
     ReactiveFormsModule

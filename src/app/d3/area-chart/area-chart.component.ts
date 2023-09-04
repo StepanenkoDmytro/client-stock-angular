@@ -1,7 +1,8 @@
-import { AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { ScaleLinear, ScaleTime } from 'd3';
-import { BehaviorSubject, Observable, Subscription, fromEvent, map, switchMap, tap } from 'rxjs';
+import { fromEvent, map } from 'rxjs';
 import { D3Service } from 'src/app/service/d3.service';
+
 
 export interface DataModel {
   date: Date,
@@ -13,7 +14,7 @@ export interface DataModel {
   templateUrl: './area-chart.component.html',
   styleUrls: ['./area-chart.component.scss']
 })
-export class AreaChartComponent implements OnInit, AfterViewInit,OnDestroy {
+export class AreaChartComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input('data') private data: DataModel[] = [
     { date: this.d3.d3.timeParse('%Y-%m-%d')('2013-04-28')!, value: 135.98 },
@@ -47,27 +48,38 @@ export class AreaChartComponent implements OnInit, AfterViewInit,OnDestroy {
   ];
   @ViewChild('chartContainer', { static: true }) chartContainer!: ElementRef;
 
+  @Input()
+  public width: number = 0;
+  @Input()
+  public height: number = 0;
+
   private margin = { top: 10, right: 30, bottom: 30, left: 50 };
-  private width!: number;
-  private height = 370 - this.margin.top - this.margin.bottom;
   private svg: any;
   private moveMouse$: any;
   private areaContainer: any;
-  private verticalLineVisible = false;
 
   constructor(
     private d3: D3Service
   ) { }
 
   ngOnInit(): void {
-    this.width = this.chartContainer.nativeElement.clientWidth - this.margin.left - this.margin.right;
-    
+    this.d3.d3.select("#my_dataviz").selectChildren('*').remove();
     this.createSvg();
     this.loadData(this.data);
   }
 
-  ngAfterViewInit(): void {
-    
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['width']) {
+      this.width = changes['width'].currentValue - this.margin.left - this.margin.right - 30;
+    }
+
+    if (changes['height']) {
+      this.height = changes['height'].currentValue - this.margin.top - this.margin.bottom - 65;
+    }
+
+    this.d3.d3.select("#my_dataviz").selectChildren('*').remove();
+    this.createSvg();
+    this.loadData(this.data);
   }
 
   ngOnDestroy(): void {
@@ -77,12 +89,14 @@ export class AreaChartComponent implements OnInit, AfterViewInit,OnDestroy {
   }
 
   private createSvg(): void {
+
     this.svg = this.d3.d3.select("#my_dataviz")
       .append("svg")
       .attr("width", this.width + this.margin.left + this.margin.right)
       .attr("height", this.height + this.margin.top + this.margin.bottom)
       .append("g")
       .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
+
   }
 
   private loadData(data: DataModel[]): void {
@@ -100,12 +114,12 @@ export class AreaChartComponent implements OnInit, AfterViewInit,OnDestroy {
       this.moveMouse$ = fromEvent<MouseEvent>(svgContainerElement, "mousemove")
         .pipe(
           map(e => (
-            e.clientX - react.left 
+            e.clientX - react.left
           ))
         );
-        
+
       this.moveMouse$.subscribe((pos: any) => {
-        
+
         verticalLine
           .attr("stroke-width", 1)
           .attr("x1", pos)
