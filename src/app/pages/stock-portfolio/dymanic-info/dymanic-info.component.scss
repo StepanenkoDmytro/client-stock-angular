@@ -1,121 +1,107 @@
-.info-account {
-    display: flex;
-    justify-content: space-between;
-}
-
-.grid-wrapper {
-    width: 100%;
+.dynamic-info {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: 310px 250px 190px;
+    grid-template-columns: auto 300px;
+    grid-template-areas: "dynamic aside";
 
-    .chart-info {
-        grid-column: span 2;
-        grid-row: span 2;
-    }
+    .dynamic-block {
+        grid-area: dynamic;
 
-    .primary-visible-width {
-        grid-column: span 3;
-    }
-    .primary-visible-height {
-        grid-row: span 3;
-    }
-
-    .indexes-grid-element {
-        grid-column: span 3;
-    }
-
-    .expanded-table {
-        grid-column: span 1;
-        max-width: 260px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr) 280px 340px;
+        grid-template-rows: 280px 280px auto;
 
         tr {
             height: 50px;
+
             td {
                 font-size: 12px;
             }
         }
 
-        &--profit {
-            tr {
-                height: 50px;
-                td {
-                    font-size: 12px;
+        .mdc-data-table__row:last-child .mat-mdc-cell {
+            border-bottom: 10px solid var(--black-color);
+        }
+
+        .chart-info {
+            grid-column: span 3;
+            grid-row: span 2;
+        }
+
+        .primary-visible-height {
+            grid-row: span 1;
+        }
+
+        .primary-visible-width {
+            grid-column: span 4;
+        }
+
+        .indexes-grid-element {
+            grid-column: span 4;
+            height: 125px;
+        }
+
+        .expanded-table {
+            grid-column: span 1;
+            max-width: 260px;
+
+            &--commodities {
+                p {
+                    font-size: 14px;
                 }
-            }
-            height: 250px;
-            .mdc-data-table__row:last-child .mat-mdc-cell {
-                border-bottom: 10px solid var(--black-color);
             }
         }
 
-        &--calculator {
-            tr {
-                height: 50px;
-                td {
-                    font-size: 12px;
-                }
-            }
-            height: 190px;
-            .mdc-data-table__row:last-child .mat-mdc-cell {
-                border-bottom: 10px solid var(--black-color);
-            }
+        .index-info {
+            display: grid;
+            grid-gap: 10px;
+            grid-template-columns: repeat(3, 1fr);
         }
-
         
+        .settings {
+            color: #6c7aa3cc;
+        }
+        
+        .settings:hover {
+            color: #6c7aa3e2;
+            transform: rotate(10deg);
+        }
+        
+        .index-card {
+            margin-top: 10px;
+            padding: 10px 10px 5px 5px;
+            text-align: center;
+            font-size: 18px;
+        
+            border: 1px solid var(--accept-color);
+            border-radius: 5px;
+        
+            &--content {
+                display: flex;
+                font-size: 16px;
+                justify-content: space-around;
+        
+                p {
+                    text-align: center;
+                }
+            }
+        }
+
+        .visible {
+            display: none;
+        }
     }
 
-    .visible {
-        display: none;
-    }
-}
+    .total-info {
+        grid-area: aside;
+        padding: 0;
 
-.index-info {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 10px;
-}
-
-mat-label {
-    font-size: 16px;
-}
-
-.total-info {
-    flex: none;
-    display: block;
-    width: 300px;
-    height: 690px;
-}
-
-.settings {
-    color: #6c7aa3cc;
-}
-
-.settings:hover {
-    color: #6c7aa3e2;
-    transform: rotate(10deg);
-}
-
-.index-card {
-    display: flex;
-    justify-content: center;
-    width: 180px;
-    background: var(--dark-color);
-    border-radius: 10px;
-    padding: 10px 10px 0px 10px;
-    box-shadow: 0px 2px 4px var(--light-color-100);
-
-    &--title {
-        margin-bottom: 10px;
-        text-align: center
+        .label {
+            align-self: center;
+            margin: 20px;
+        }
     }
 
-    &--content {
-        display: flex;
-        justify-content: space-around;
+    mat-label {
+        font-size: 16px;
     }
-}
-
-.index-card:not(:first-child) {
-    margin-left: 20px;
 }

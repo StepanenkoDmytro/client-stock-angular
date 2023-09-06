@@ -1,12 +1,16 @@
 <mat-sidenav-container>
-  <mat-sidenav mode="side" opened="{{ sidenavOpened }}" class="sidenav-container">
+  <mat-sidenav mode="side" 
+               opened="{{ sidenavOpened }}" 
+               class="sidenav-container">
 
     <p>Markets:</p>
     <mat-list>
       <mat-list-item *ngFor="let itemMarket of menuItemsMarkets" 
                      role="listitem"
                      routerLinkActive="active">
-        <a routerLink={{itemMarket.link}}>{{ itemMarket.title }}</a>
+        <a routerLink={{itemMarket.link}}>
+          {{ itemMarket.title }}
+        </a>
       </mat-list-item>
     </mat-list>
 
@@ -15,7 +19,9 @@
       <mat-list-item *ngFor="let itemPortfolio of menuItemsPortfolio" 
                      role="listitem"
                      routerLinkActive="active">
-        <a routerLink={{itemPortfolio.link}}>{{ itemPortfolio.title }}</a>
+        <a routerLink={{itemPortfolio.link}}>
+          {{ itemPortfolio.title }}
+        </a>
       </mat-list-item>
     </mat-list>
 

@@ -1,3 +1,4 @@
+import { ICommodityTable } from "../pages/stock-portfolio/dymanic-info/dymanic-info.component";
 import { IAccountStock } from "./account.domain";
 import { IStock } from "./assets.domain";
 import { ITransact } from "./transact.domain";
@@ -128,3 +129,30 @@ export const STOCK_MOCK: IStock = {
     market_capitalization: 1000000000,
     dividend_yield: 0
 }
+
+export const COMMODITY_MOCKS: ICommodityTable[] = [
+    {
+      commodity: 'Crude Oil(WTI)',
+      price: 76.83,
+      change: 1.18,
+      percentageChange: '1.56%'
+    },
+    {
+        commodity: 'Crude Oil(Brent)',
+        price: 80.89,
+        change: 1.25,
+        percentageChange: '1.57%'
+      },
+      {
+        commodity: 'Natural Gas',
+        price: 2.724,
+        change: 0.033,
+        percentageChange: '1.20%'
+      },
+      {
+        commodity: 'Gold',
+        price: 1963.90,
+        change: 7.00,
+        percentageChange: '0.36%'
+      }
+  ]

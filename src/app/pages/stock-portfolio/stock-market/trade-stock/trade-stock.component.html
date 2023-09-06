@@ -6,9 +6,13 @@
 <div class="trade-container">
     <form [formGroup]="tradeForm">
         <div class="custom-checkbox">
-            <input id="status" type="checkbox" name="status">
+            <input id="status" 
+                   type="checkbox" 
+                   name="status">
             <label for="status">
-                <div class="status-switch" data-unchecked="Buy" data-checked="Sell">
+                <div class="status-switch" 
+                     data-unchecked="Buy" 
+                     data-checked="Sell">
                 </div>
             </label>
         </div>
@@ -20,7 +24,8 @@
                 </div>
                 <mat-form-field class="custom-form-field">
                     <mat-select formControlName="account">
-                        <mat-option *ngFor="let account of accounts" [value]="account.id">
+                        <mat-option *ngFor="let account of accounts" 
+                                    [value]="account.id">
                             {{ account.accountName }}
                         </mat-option>
                     </mat-select>
@@ -41,7 +46,10 @@
             </div>
 
             <div class="form">
-                <input formControlName="amount" type="number" matInput placeholder="0">
+                <input formControlName="amount" 
+                       type="number" 
+                       matInput 
+                       placeholder="0">
                 <button mat-flat-button class="btn-max">max</button>
             </div>
         </section>
