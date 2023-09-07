@@ -33,22 +33,20 @@
 
         .primary-visible-width {
             grid-column: span 4;
+            grid-row: span 1;
         }
 
         .indexes-grid-element {
+            display: none;
             grid-column: span 4;
             height: 125px;
         }
 
-        .expanded-table {
+        .additional-table {
             grid-column: span 1;
-            max-width: 260px;
-
-            &--commodities {
-                p {
-                    font-size: 14px;
-                }
-            }
+            display: none;
+            height: 220px;
+            font-size: 14px;
         }
 
         .index-info {
@@ -56,38 +54,25 @@
             grid-gap: 10px;
             grid-template-columns: repeat(3, 1fr);
         }
-        
-        .settings {
-            color: #6c7aa3cc;
-        }
-        
-        .settings:hover {
-            color: #6c7aa3e2;
-            transform: rotate(10deg);
-        }
-        
+
         .index-card {
             margin-top: 10px;
             padding: 10px 10px 5px 5px;
             text-align: center;
             font-size: 18px;
-        
+
             border: 1px solid var(--accept-color);
             border-radius: 5px;
-        
+
             &--content {
                 display: flex;
                 font-size: 16px;
                 justify-content: space-around;
-        
+
                 p {
                     text-align: center;
                 }
             }
-        }
-
-        .visible {
-            display: none;
         }
     }
 
@@ -95,13 +80,98 @@
         grid-area: aside;
         padding: 0;
 
+        &--header {
+            display: flex;
+            justify-content: space-between;
+            height: 50px;
+        }
+
+        .settings {
+            color: #6c7aa3cc;
+        }
+
+        .settings:hover {
+            color: #6c7aa3e2;
+            transform: rotate(10deg);
+        }
+
         .label {
             align-self: center;
             margin: 20px;
+        }
+
+        &--primary {
+            display: flex;
+            justify-content: space-between;
+            margin: 0px 30px 0px 20px;
+            font-size: 15px;
+        }
+
+        &-riskness {
+            padding-top: 10px;
+            border: 1px solid var(--accept-color);
+            border-radius: 5px;
+
+            &--row {
+                display: flex;
+                justify-content: space-between;
+                margin: 0px 15px 0px 15px;
+            }
+        }
+
+        .deposit-btn {
+            background: var(--accept-color);
+            width: 200px;
+            margin: 0px 30px 0px 30px;
+        }
+
+        .expanded-panel {
+            display: none;
+            position: absolute;
+            z-index: 2;
+            width: 280px;
+
+            .mat-icon {
+                color: var(--light-color);
+            }
+
+            .mat-expansion-panel {
+                color: var(--light-color);
+                background-color: var(--black-color);
+                margin: 0;
+            }
+
+            .mat-expansion-panel:not([class*=mat-elevation-z]) {
+                box-shadow: none;
+            }
+
+            .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:not([aria-disabled=true]):hover {
+                background-color: var(--black-color);
+            }
+
+            ::ng-deep .mat-expansion-panel-body {
+                padding: 0 0px 16px;
+            }
         }
     }
 
     mat-label {
         font-size: 16px;
     }
+}
+
+.visible {
+    display: block !important;
+}
+
+.height-total-min {
+    grid-template-rows: 400px;
+
+    .dynamic-block {
+        grid-template-rows: 400px;
+    }
+}
+
+.height-total-max {
+    grid-template-rows: 465px;
 }

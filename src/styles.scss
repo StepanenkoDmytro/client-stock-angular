@@ -38,8 +38,16 @@ ul {
     display: flex;
 }
 
+.d-n {
+    display: none;
+}
+
 .sp-bw {
     justify-content: space-between;
+}
+
+.jc-c {
+    justify-content: center;
 }
 
 .info-container {
@@ -120,6 +128,30 @@ ul {
 
 .p-20 {
     padding: 20px;
+}
+
+.p-0 {
+    padding: 0;
+}
+
+.p-0-20-20-20 {
+    padding: 0px 20px 20px 20px;
+}
+
+.m-0-30-0-30 {
+    margin: 0px 30px 0px 30px;
+}
+
+.f-s-15 {
+    font-size: 15px;
+}
+
+.h-22 {
+    height: 220px;
+}
+
+.h-5 {
+    height: 50px;
 }
 
 .m-t-10 {

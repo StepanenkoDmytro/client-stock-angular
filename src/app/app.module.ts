@@ -31,6 +31,8 @@ import { DateFormatPipe } from './pipe/date-format.pipe';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatExpansionModule } from '@angular/material/expansion';
+
 import { DymanicInfoComponent } from './pages/stock-portfolio/dymanic-info/dymanic-info.component';
 
 
@@ -67,6 +69,7 @@ import { DymanicInfoComponent } from './pages/stock-portfolio/dymanic-info/dyman
     MatButtonToggleModule,
     MatCardModule,
     MatMenuModule,
+    MatExpansionModule,
     AppRoutingModule,
     NoopAnimationsModule,
     ReactiveFormsModule
