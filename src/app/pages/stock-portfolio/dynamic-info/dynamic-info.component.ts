@@ -14,12 +14,13 @@ export interface ICommodityTable {
 }
 
 @Component({
-  selector: 'app-dymanic-info',
-  templateUrl: './dymanic-info.component.html',
-  styleUrls: ['./dymanic-info.component.scss']
+  selector: 'app-dynamic-info',
+  templateUrl: './dynamic-info.component.html',
+  styleUrls: ['./dynamic-info.component.scss']
 })
 export class DymanicInfoComponent implements OnInit, OnDestroy {
-  wallet = new FormControl('bla');
+  // wallet = new FormControl('bla');
+  public panelOpenState: boolean = false;
 
   public toppings!: FormGroup;
   public indexDisplayCtrl: FormControl = new FormControl(true);
@@ -49,8 +50,6 @@ export class DymanicInfoComponent implements OnInit, OnDestroy {
 
   @ViewChild('chartContainer', { static: true })
   chartContainer!: ElementRef;
-  @ViewChild('aside', {static: true})
-  asideContainer!: ElementRef;
 
   constructor(private formBuilder: FormBuilder,
     private cdRef: ChangeDetectorRef,
@@ -82,7 +81,6 @@ export class DymanicInfoComponent implements OnInit, OnDestroy {
 
     this.resizeObserver = new ResizeObserver(entries => {
       for (const entry of entries) {
-        // console.log(entry);
         this.width = entry.target.clientWidth;
         this.height = entry.target.clientHeight;
 
@@ -103,27 +101,14 @@ export class DymanicInfoComponent implements OnInit, OnDestroy {
     this.isPrimaryVisibleHeight = [this.commodityDisplayCtrl, this.profitDisplayCtrl
     ].some(control => control.value === false);
 
-    // console.log('initNewView isPrimaryVisibleWidth',this.isPrimaryVisibleWidth);
-    // console.log('initNewView indexDisplayCtrl',this.indexDisplayCtrl.value);
-    // console.log('check indexDisplayCtrl.value || !isPrimaryVisibleWidth', !this.indexDisplayCtrl.value || !this.isPrimaryVisibleWidth)
-
     this.isPrimaryVisibleWidth = [this.commodityDisplayCtrl, this.profitDisplayCtrl
     ].every(control => control.value === false);
 
     this.isVisibleRiskness = ![this.indexDisplayCtrl.value, this.commodityDisplayCtrl.value, this.profitDisplayCtrl.value].some(control => control === false);
     
-
-    // this.isVisibleAccountAction = !(!this.indexDisplayCtrl.value && this.isPrimaryVisibleHeight);
     this.isVisibleAccountAction = !this.isPrimaryVisibleHeight;
-    // console.log('this.isVisibleAccountAction', this.isVisibleAccountAction);
-    // console.log('!this.indexDisplayCtrl.value', !this.indexDisplayCtrl.value);
-    // console.log('this.isPrimaryVisibleHeight', this.isPrimaryVisibleHeight);
 
     this.isPrimaryInfoVisible = this.checkVisibleTotalPrimaryInfo();
-    
-    // console.log('isPrimaryInfoVisible', this.isPrimaryInfoVisible);
-    // console.log('!this.indexDisplayCtrl.value', this.indexDisplayCtrl.value);
-    // console.log('this.isPrimaryVisibleHeight', this.isPrimaryVisibleHeight);
 
     this.isMaxHeight = this.indexDisplayCtrl.value && this.isPrimaryVisibleHeight;
     this.isMinHeight = !this.indexDisplayCtrl.value && this.isPrimaryVisibleHeight;

@@ -33,7 +33,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
 
-import { DymanicInfoComponent } from './pages/stock-portfolio/dymanic-info/dymanic-info.component';
+import { DymanicInfoComponent } from './pages/stock-portfolio/dynamic-info/dynamic-info.component';
+import { TotalInfoWrapperComponent } from './pages/stock-portfolio/dynamic-info/total-info-wrapper/total-info-wrapper.component';
 
 
 @NgModule({
@@ -52,6 +53,7 @@ import { DymanicInfoComponent } from './pages/stock-portfolio/dymanic-info/dyman
     ExpandedInfoComponent,
     DateFormatPipe,
     DymanicInfoComponent,
+    TotalInfoWrapperComponent,
   ],
   imports: [
     BrowserModule,
