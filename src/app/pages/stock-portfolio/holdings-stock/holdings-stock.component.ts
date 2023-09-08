@@ -1,5 +1,5 @@
 import { state, style, trigger } from '@angular/animations';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnChanges, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { IAccountStock } from 'src/app/domain/account.domain';
 import { IStock } from 'src/app/domain/assets.domain';

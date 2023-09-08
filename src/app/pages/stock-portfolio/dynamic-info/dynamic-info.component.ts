@@ -1,7 +1,6 @@
-import { AfterContentChecked, AfterContentInit, AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, DoCheck, ElementRef, OnChanges, OnDestroy, OnInit, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
-import { tap } from 'rxjs';
 import { ElementTable } from '../stock-market/stock-details/stock-details.component';
 import { COMMODITY_MOCKS } from 'src/app/domain/mock.domain';
 
@@ -52,8 +51,7 @@ export class DymanicInfoComponent implements OnInit, OnDestroy {
   chartContainer!: ElementRef;
 
   constructor(private formBuilder: FormBuilder,
-    private cdRef: ChangeDetectorRef,
-    private renderer: Renderer2) { }
+    private cdRef: ChangeDetectorRef) { }
 
   ngOnInit(): void {
 

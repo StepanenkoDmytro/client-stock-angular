@@ -60,25 +60,14 @@ export class DonatChartComponent implements OnInit, OnDestroy {
     if (svgContainerElement instanceof Element) {
 
       this.mouseMove$ = fromEvent<MouseEvent>(svgContainerElement, 'mousemove');
-      // .pipe(
-      //   map(event => ({
-      //     curData: event.target.__data__.data,
-      //     index: event.target.__data__.index + 1,
-
-      //     offsetX: event.offsetX,
-      //     offsetY: event.offsetY,
-      //   }))
-      // );
 
       this.mouseMove$.subscribe((event: any) => {
-
         if (event.target.__data__) {
           const curData = event.target.__data__.data;
           const index = event.target.__data__.index + 1;
 
-          const offsetX = event.offsetX;
-          const offsetY = event.offsetY;
-
+          const offsetX = event.clientX - 120;
+          const offsetY = event.clientY;
 
           this.svg.selectAll('path')
             .style('opacity', 0.5)
@@ -147,10 +136,6 @@ export class DonatChartComponent implements OnInit, OnDestroy {
       .arc()
       .innerRadius(this.radius * 0.9)
       .outerRadius(this.radius * 0.9);
-
-    // const tooltip = this.d3.d3.select('#tooltip');
-    // const donutContainer = this.d3.d3.select('#donut');
-
 
     this.svg
       .selectAll('allSlices')

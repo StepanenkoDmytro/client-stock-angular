@@ -14,7 +14,7 @@ export interface DataModel {
   templateUrl: './area-chart.component.html',
   styleUrls: ['./area-chart.component.scss']
 })
-export class AreaChartComponent implements OnInit, OnDestroy, OnChanges {
+export class AreaChartComponent implements  OnDestroy, OnChanges {
 
   @Input('data') private data: DataModel[] = [
     { date: this.d3.d3.timeParse('%Y-%m-%d')('2013-04-28')!, value: 135.98 },
@@ -49,9 +49,9 @@ export class AreaChartComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild('chartContainer', { static: true }) chartContainer!: ElementRef;
 
   @Input()
-  public width: number = 0;
+  public width: number = 200;
   @Input()
-  public height: number = 0;
+  public height: number = 200;
 
   private margin = { top: 10, right: 30, bottom: 30, left: 50 };
   private svg: any;
@@ -62,24 +62,21 @@ export class AreaChartComponent implements OnInit, OnDestroy, OnChanges {
     private d3: D3Service
   ) { }
 
-  ngOnInit(): void {
-    this.d3.d3.select("#my_dataviz").selectChildren('*').remove();
-    this.createSvg();
-    this.loadData(this.data);
-  }
-
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['width']) {
-      this.width = changes['width'].currentValue - this.margin.left - this.margin.right - 30;
-    }
 
-    if (changes['height']) {
-      this.height = changes['height'].currentValue - this.margin.top - this.margin.bottom - 65;
-    }
+    if (this.width && this.height) {
+      if (changes['width'].currentValue) {
+        this.width = changes['width'].currentValue - this.margin.left - this.margin.right - 30;
+      }
 
-    this.d3.d3.select("#my_dataviz").selectChildren('*').remove();
-    this.createSvg();
-    this.loadData(this.data);
+      if (changes['height'].currentValue) {
+        this.height = changes['height'].currentValue - this.margin.top - this.margin.bottom - 65;
+      }
+
+      this.d3.d3.select("#my_dataviz").selectChildren('*').remove();
+      this.createSvg();
+      this.loadData(this.data);
+    }
   }
 
   ngOnDestroy(): void {
