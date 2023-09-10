@@ -83,6 +83,7 @@ export class DymanicInfoComponent implements OnInit, OnDestroy {
         this.height = entry.target.clientHeight;
 
         this.cdRef.detectChanges();
+        console.log('dynamin-block',this.width, this.height);
       }
     });
     this.resizeObserver.observe(this.chartContainer.nativeElement);

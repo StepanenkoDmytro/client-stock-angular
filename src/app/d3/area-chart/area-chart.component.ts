@@ -65,14 +65,14 @@ export class AreaChartComponent implements  OnDestroy, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
 
     if (this.width && this.height) {
-      if (changes['width'].currentValue) {
+      if (changes['width']) {
         this.width = changes['width'].currentValue - this.margin.left - this.margin.right - 30;
       }
 
-      if (changes['height'].currentValue) {
+      if (changes['height']) {
         this.height = changes['height'].currentValue - this.margin.top - this.margin.bottom - 65;
       }
-
+      console.log('area-chart',this.width, this.height);
       this.d3.d3.select("#my_dataviz").selectChildren('*').remove();
       this.createSvg();
       this.loadData(this.data);
