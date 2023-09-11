@@ -1,57 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { ACCOUNTS_MOCK, IAccount } from 'src/app/domain/account.domain';
+import { TradePriceType } from 'src/app/domain/trade.domain';
 
-
-export interface PurchaseData {
-  countStocks: number,
-  accountID: number,
-  tradeType: boolean,
-  typeCtrl: string
-}
 
 @Component({
   selector: 'app-trade-stock',
   templateUrl: './trade-stock.component.html',
   styleUrls: ['./trade-stock.component.scss']
 })
-export class TradeStockComponent implements OnInit {
+export class TradeStockComponent {
+
   public accounts: IAccount[] = ACCOUNTS_MOCK;
 
-  public tradeForm!: FormGroup;
-  public accountCtrl!: FormControl;
-  public amountCtrl!: FormControl;
-  public tradeTypeCtrl!: FormControl;
-  public typePriceCtrl!: FormControl;
+  public typePriceCtrl: FormControl<TradePriceType | null>  = new FormControl(TradePriceType.MarketPrice);
+  public accountCtrl: FormControl<IAccount | null>  = new FormControl(this.accounts[0]);
 
-  public typeOfTradePrice: string[] = [
-    "Market price", "Custom price"
-   ]
-
-  constructor(
-    private formBuilder: FormBuilder
-  ) {}
-
-  public tabChanged(event: any) {
-    this.tradeTypeCtrl.setValue(!event.index);
-  }
-
-  ngOnInit(): void {
-    this.accountCtrl = new FormControl(this.accounts[0].id);
-    this.amountCtrl = new FormControl('');
-    this.tradeTypeCtrl = new FormControl(false);
-    this.typePriceCtrl = new FormControl(this.typeOfTradePrice[0]);
-
-    this.tradeForm = this.formBuilder.group({
-      account: this.accountCtrl,
-      amount: this.amountCtrl,
-      tradeType: this.tradeTypeCtrl,
-      typePrice: this.typePriceCtrl,
-    });
-  }
-
-  public onSubmit() {
-    const formData = this.tradeForm.value as PurchaseData;
-    console.log(formData); 
-  }
+  public typeOfTradePrice: TradePriceType[] = [
+    TradePriceType.MarketPrice,
+    TradePriceType.CustomPrice,
+  ];
 }

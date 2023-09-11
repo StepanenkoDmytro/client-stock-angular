@@ -1,7 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
-import { ACCOUNT_TRANSACTION_MOCK } from 'src/app/domain/mock.domain';
-import { ITransact } from 'src/app/domain/transact.domain';
+import { Component } from '@angular/core';
+
 
 @Component({
   selector: 'app-expanded-info',

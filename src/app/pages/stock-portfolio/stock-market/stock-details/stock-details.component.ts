@@ -3,7 +3,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { IStock } from 'src/app/domain/assets.domain';
 import { STOCK_MOCK } from 'src/app/domain/mock.domain';
 
-
+//хз как назвать, куда переместить такую шнягу)
 export interface ElementTable {
   property: string,
   value: string | number | Date
@@ -15,15 +15,14 @@ export interface ElementTable {
   styleUrls: ['./stock-details.component.scss']
 })
 export class StockDetailsComponent implements OnInit {
-  public activeStock!: IStock;
+  public activeStock: IStock = STOCK_MOCK;
 
   public displayedColumns: string[] = ['property', 'value'];
-  public dataSource!: MatTableDataSource<ElementTable>;
+  public dataSource: MatTableDataSource<ElementTable> = new MatTableDataSource<ElementTable>([]);
 
   ngOnInit(): void {
-    this.activeStock = STOCK_MOCK;
-
-    const stockProperties: ElementTable[] = [
+    const mapStockToElementTable: ElementTable[] = [
+      //хз как переделать
       { property: 'Symbol', value: this.activeStock.symbol },
       { property: 'Name', value: this.activeStock.name },
       { property: 'Currency', value: this.activeStock.currency },
@@ -36,6 +35,6 @@ export class StockDetailsComponent implements OnInit {
       { property: 'Last Dividend Date', value: this.activeStock.ex_dividend_date !== undefined ? this.activeStock.ex_dividend_date.toString() : 'None' }
     ];
 
-    this.dataSource = new MatTableDataSource(stockProperties);
+    this.dataSource = new MatTableDataSource(mapStockToElementTable);
   }
 }

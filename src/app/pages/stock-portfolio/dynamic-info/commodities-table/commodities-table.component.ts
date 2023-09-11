@@ -1,7 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { ICommodityTable } from '../dynamic-info.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { COMMODITY_MOCKS } from 'src/app/domain/mock.domain';
+
 
 @Component({
   selector: 'app-commodities-table',

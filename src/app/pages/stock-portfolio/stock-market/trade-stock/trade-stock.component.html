@@ -1,11 +1,12 @@
-<div class="title-container">
+<!-- спросить у Лешки, нормально ли, что у меня в начале header и потом в форме тоже header -->
+<header class="title-container">
     <h2>Tesla Inc.</h2>
     <h2>216.46</h2>
-</div>
+</header>
 
 <div class="trade-container">
-    <form [formGroup]="tradeForm">
-        <div class="custom-checkbox">
+    <form>
+        <header class="custom-checkbox">
             <input id="status" 
                    type="checkbox" 
                    name="status">
@@ -15,7 +16,7 @@
                      data-checked="Sell">
                 </div>
             </label>
-        </div>
+        </header>
 
         <section>
             <div class="form">
@@ -23,9 +24,9 @@
                     <h3>Account: </h3>
                 </div>
                 <mat-form-field class="custom-form-field">
-                    <mat-select formControlName="account">
+                    <mat-select [formControl]="accountCtrl">
                         <mat-option *ngFor="let account of accounts" 
-                                    [value]="account.id">
+                                    [value]="accountCtrl.value">
                             {{ account.accountName }}
                         </mat-option>
                     </mat-select>
@@ -37,12 +38,13 @@
                     <h3>Price: </h3>
                 </div>
                 <mat-form-field>
-                    <mat-select formControlName="typePrice">
-                        <mat-option *ngFor="let typePrice of typeOfTradePrice" [value]="typePrice">
-                            {{ typePrice }}
-                        </mat-option>
+                    <mat-select [formControl]="typePriceCtrl">
+                      <mat-option *ngFor="let typePrice of typeOfTradePrice" [value]="typePriceCtrl.value">
+                        {{ typePrice }}
+                      </mat-option>
                     </mat-select>
-                </mat-form-field>
+                  </mat-form-field>
+                  
             </div>
 
             <div class="form">

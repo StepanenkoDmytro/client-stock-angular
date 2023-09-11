@@ -7,15 +7,4 @@ import { FormControl, FormGroup } from '@angular/forms';
   styleUrls: ['./stock-market.component.scss']
 })
 export class StockMarketComponent {
-
-  public tradeForm!: FormGroup;
-  public accountCtrl!: FormControl;
-  public amountCtrl!: FormControl;
-  public tradeTypeCtrl!: FormControl;
-  public typePriceCtrl!: FormControl;
-
-  public typeOfTradePrice: string[] = [
-    "Market price", "Custom price"
-   ]
-
 }

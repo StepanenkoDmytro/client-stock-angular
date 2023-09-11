@@ -9,12 +9,12 @@ import { FormControl } from '@angular/forms';
 })
 export class TotalInfoWrapperComponent {
 
-  wallet = new FormControl('bla');
+  public wallet = new FormControl('bla');
 
   @Input()
-  isPrimaryInfoVisible: boolean | null = null;
+  public isPrimaryInfoVisible: boolean | null = null;
   @Input()
-  isVisibleRiskness: boolean | null = null;
+  public isVisibleRiskness: boolean | null = null;
   @Input()
-  isVisibleAccountAction: boolean | null = null;
+  public isVisibleAccountAction: boolean | null = null;
 }

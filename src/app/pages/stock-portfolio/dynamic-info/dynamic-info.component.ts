@@ -1,8 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { MatTableDataSource } from '@angular/material/table';
-import { ElementTable } from '../stock-market/stock-details/stock-details.component';
-import { COMMODITY_MOCKS } from 'src/app/domain/mock.domain';
 
 
 export interface ICommodityTable {
@@ -32,25 +29,22 @@ export class DymanicInfoComponent implements OnInit, OnDestroy {
 
   public isVisibleAccountAction = true;
 
-  
-  
-
   public width!: number;
   public height!: number;
 
-  resizeObserver!: ResizeObserver;
+  private resizeObserver!: ResizeObserver;
 
   public isMaxHeight = false;
   public isMinHeight = false;
 
 
   @ViewChild('chartContainer', { static: true })
-  chartContainer!: ElementRef;
+  private chartContainer!: ElementRef;
 
   constructor(private formBuilder: FormBuilder,
     private cdRef: ChangeDetectorRef) { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
 
     this.toppings = this.formBuilder.group({
       indexDisplayCtrl: this.indexDisplayCtrl,
@@ -74,13 +68,13 @@ export class DymanicInfoComponent implements OnInit, OnDestroy {
     this.resizeObserver.observe(this.chartContainer.nativeElement);
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     if (this.resizeObserver) {
       this.resizeObserver.unobserve(this.chartContainer.nativeElement);
     }
   }
 
-  initNewView(): void {
+  private initNewView(): void {
     //TODO написати булеан змінні для всіх випадків
     this.isPrimaryVisibleHeight = [this.commodityDisplayCtrl, this.profitDisplayCtrl
     ].some(control => control.value === false);
@@ -98,7 +92,7 @@ export class DymanicInfoComponent implements OnInit, OnDestroy {
     this.isMinHeight = !this.indexDisplayCtrl.value && this.isPrimaryVisibleHeight;
   }
 
-  checkVisibleTotalPrimaryInfo(): boolean {
+  private checkVisibleTotalPrimaryInfo(): boolean {
     const index = this.indexDisplayCtrl.value;
     const commodity = this.commodityDisplayCtrl.value;
     const profit = this.profitDisplayCtrl.value;

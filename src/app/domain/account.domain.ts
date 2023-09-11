@@ -43,5 +43,11 @@ export const ACCOUNTS_MOCK: IAccount[] = [
         coins: [],
         stocks: []
     }
-]
+];
 
+export interface PurchaseData {
+    countStocks: number,
+    accountID: number,
+    tradeType: boolean,
+    typeCtrl: string
+  };
