@@ -1,4 +1,5 @@
 import { ICommodityTable } from "../pages/stock-portfolio/dynamic-info/dynamic-info.component";
+import { ElementTable } from "../pages/stock-portfolio/stock-market/stock-details/stock-details.component";
 import { IAccountStock } from "./account.domain";
 import { IStock } from "./assets.domain";
 import { ITransact } from "./transact.domain";
@@ -155,4 +156,11 @@ export const COMMODITY_MOCKS: ICommodityTable[] = [
         change: 7.00,
         percentageChange: '0.36%'
       }
-  ]
+  ];
+
+  export const PROFITS_VALUE_MOCK: ElementTable[] = [
+    { property: 'Day', value: '10' },
+    { property: 'Month', value: '100' },
+    { property: 'Received Dividend', value: '100' },
+    { property: 'Forecast Dividend', value: '50' },
+  ];

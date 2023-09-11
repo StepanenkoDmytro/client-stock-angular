@@ -1,54 +1,72 @@
-<div class="d-n" [class.visible]="isPrimaryInfoVisible">
+<div class="d-none fs-6" [class.visible]="isPrimaryInfoVisible">
     <div class="total-info--primary">
-        <div><p>Total contribution: </p></div>
-        <div><p>1000$</p></div>
+            <p>Total contribution: </p>
+            <p>1000$</p>
     </div>
 
     <div class="total-info--primary">
-        <div><p>Total profit: </p></div>
-        <div><p>1000$</p></div>
-    </div> 
-</div>
-
-<div class="p-0-20-20-20 d-n"
-     [class.visible]="isVisibleRiskness">
-    <p class="f-s-15">Reskness of portfolio:</p>
-    <div class="total-info-riskness">
-        
-        <div class="total-info-riskness--row">
-            <div><p>Variance & Standard deviation: </p></div>
-            <div><p>1.2</p></div>
-        </div>
-
-        <div class="total-info-riskness--row">
-            <div><p>Reskness by betta:</p></div>
-            <div><p>1.1</p></div>
-        </div>
+            <p>Total profit: </p>
+            <p>1000$</p>
+    </div>
+    <div class="total-info--primary">
+        <p>Reskness of portfolio:</p>
+    </div>
     
+</div>
+
+<div class="d-none pt-0 ps-3 pb-3 pe-3" [class.visible]="isVisibleRiskness">
+    <div class="total-info-riskness">
         <div class="total-info-riskness--row">
-            <div><p>Value at Risk (VaR):</p></div>
-            <div><p>0.96</p></div>
+            <div>
+                <p>Variance & Standard deviation: </p>
+            </div>
+            <div>
+                <p>1.2</p>
+            </div>
+        </div>
+
+        <div class="total-info-riskness--row">
+            <div>
+                <p>Reskness by betta:</p>
+            </div>
+            <div>
+                <p>1.1</p>
+            </div>
+        </div>
+
+        <div class="total-info-riskness--row">
+            <div>
+                <p>Value at Risk (VaR):</p>
+            </div>
+            <div>
+                <p>0.96</p>
+            </div>
 
         </div>
         <div class="total-info-riskness--row">
-            <div><p>Risk-Reward Ratio:</p></div>
-            <div><p>1.02</p></div>
+            <div>
+                <p>Risk-Reward Ratio:</p>
+            </div>
+            <div>
+                <p>1.02</p>
+            </div>
 
         </div>
     </div>
 </div>
 
-<div class="d-n" [class.visible]="isVisibleAccountAction">
-    <mat-form-field class="m-0-30-0-30">
-        <mat-label>Account:</mat-label>
-        <mat-select [formControl]="wallet">
-            <mat-option value="bla">
-                Stock Wallet
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
-    <div class="flex jc-c">
-        <button type="button" mat-button class="deposit-btn">
+<div class="d-none" [class.visible]="isVisibleAccountAction">
+    <div class="d-flex flex-column  mx-4 my-3">
+        <mat-form-field>
+            <mat-label>Account:</mat-label>
+            <mat-select [formControl]="wallet">
+                <mat-option value="bla">
+                    Stock Wallet
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <button type="button" mat-button class="deposit-btn align-self-center">
             Deposit account
         </button>
     </div>

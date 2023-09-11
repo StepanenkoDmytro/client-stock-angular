@@ -10,14 +10,6 @@
         grid-template-columns: repeat(2, 1fr) 280px 340px;
         grid-template-rows: 280px 280px auto;
 
-        tr {
-            height: 50px;
-
-            td {
-                font-size: 12px;
-            }
-        }
-
         .mdc-data-table__row:last-child .mat-mdc-cell {
             border-bottom: 10px solid var(--black-color);
         }
@@ -47,32 +39,6 @@
             display: none;
             height: 220px;
             font-size: 14px;
-        }
-
-        .index-info {
-            display: grid;
-            grid-gap: 10px;
-            grid-template-columns: repeat(3, 1fr);
-        }
-
-        .index-card {
-            margin-top: 10px;
-            padding: 10px 10px 5px 5px;
-            text-align: center;
-            font-size: 18px;
-
-            border: 1px solid var(--accept-color);
-            border-radius: 5px;
-
-            &--content {
-                display: flex;
-                font-size: 16px;
-                justify-content: space-around;
-
-                p {
-                    text-align: center;
-                }
-            }
         }
     }
 
@@ -134,10 +100,6 @@
                 padding: 0 0px 16px;
             }
         }
-    }
-
-    mat-label {
-        font-size: 16px;
     }
 }
 

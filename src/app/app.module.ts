@@ -35,6 +35,11 @@ import { MatExpansionModule } from '@angular/material/expansion';
 
 import { DymanicInfoComponent } from './pages/stock-portfolio/dynamic-info/dynamic-info.component';
 import { TotalInfoWrapperComponent } from './pages/stock-portfolio/dynamic-info/total-info-wrapper/total-info-wrapper.component';
+import { CommoditiesTableComponent } from './pages/stock-portfolio/dynamic-info/commodities-table/commodities-table.component';
+import { ProfitTableComponent } from './pages/stock-portfolio/dynamic-info/profit-table/profit-table.component';
+import { IndexCardComponent } from './pages/stock-portfolio/dynamic-info/index-card/index-card.component';
+import { TransactionsHistoryComponent } from './pages/stock-portfolio/holdings-stock/expanded-info/transactions-history/transactions-history.component';
+import { OverviewCompanyComponent } from './pages/stock-portfolio/holdings-stock/expanded-info/overview-company/overview-company.component';
 
 
 @NgModule({
@@ -54,6 +59,11 @@ import { TotalInfoWrapperComponent } from './pages/stock-portfolio/dynamic-info/
     DateFormatPipe,
     DymanicInfoComponent,
     TotalInfoWrapperComponent,
+    CommoditiesTableComponent,
+    ProfitTableComponent,
+    IndexCardComponent,
+    TransactionsHistoryComponent,
+    OverviewCompanyComponent,
   ],
   imports: [
     BrowserModule,

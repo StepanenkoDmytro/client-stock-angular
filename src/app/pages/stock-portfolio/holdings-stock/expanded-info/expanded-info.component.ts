@@ -8,12 +8,5 @@ import { ITransact } from 'src/app/domain/transact.domain';
   templateUrl: './expanded-info.component.html',
   styleUrls: ['./expanded-info.component.scss']
 })
-export class ExpandedInfoComponent implements OnInit {
-
-  public displayedColumns: string[] = [ 'created', 'transactionType', 'quantity', 'price', 'amount', 'status', 'source'];
-  public dataSource!: MatTableDataSource<ITransact>;
-
-  public ngOnInit(): void {
-    this.dataSource = new MatTableDataSource(ACCOUNT_TRANSACTION_MOCK);
-  }
+export class ExpandedInfoComponent {
 }

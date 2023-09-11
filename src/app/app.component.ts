@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { INavItem, MENU_MARKET_ITEMS, MENU_PORTFOLIO_ITEMS } from './domain/app-shared.domain';
 
 
 @Component({
@@ -8,53 +9,12 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 
-  public menuItemsMarkets = [
-    {
-      link: '/coin-market',
-      title: 'Coin Market'
-    },
-    {
-      link: '/stock-market',
-      title: 'Stock Market'
-    }
-  ];
+  public isSidenavOpened = false;
 
-  public menuItemsPortfolio = [
-    {
-      link: '/portfolio-overview',
-      icon: '/icons/portfolioOverviewIcon.svg',
-      title: 'Portfolio Overview'
-    },
-    {
-      link: '/crypto-portfolio',
-      icon: '/icons/cryptoPortfolioIcon.svg',
-      title: 'Crypto Portfolio'
-    },
-    {
-      link: '/stock-portfolio',
-      icon: '/icons/stockPortfolioIcon.svg',
-      title: 'Stock Portfolio'
-    },
-    // {
-    //     link: '/account/transfer',
-    //     icon: '/icons/transfersMoneyIcon.svg',
-    //     title: 'Transfers Money'
-    // },
-    {
-      link: '/transactions-portfolio',
-      icon: '/icons/transactionsIcon.svg',
-      title: 'Transactions'
-    },
-    {
-      link: '/user-portfolio',
-      icon: '/icons/userSettingsIcon.svg',
-      title: 'User Settings'
-    }
-  ]
+  public menuItemsMarkets: INavItem[] = MENU_MARKET_ITEMS;
+  public menuItemsPortfolio: INavItem[] = MENU_PORTFOLIO_ITEMS;
 
-  sidenavOpened = false;
-
-    toggleSidenav() {
-        this.sidenavOpened = !this.sidenavOpened;
-    }
+  public switchToggleSidenav() {
+    this.isSidenavOpened = !this.isSidenavOpened;
+  }
 }

@@ -1,158 +1,18 @@
-<mat-tab-group mat-stretch-tabs="false" class="tab-expanded" realignInkBar="white">
+<mat-tab-group mat-stretch-tabs="false" 
+               class="tab-expanded" 
+               realignInkBar="white">
+
     <mat-tab label="Overview">
-        <div class="overview-info">
 
-            <div class="p-20">
-                <img mat-card-image
-                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Tesla_T_symbol.svg/1200px-Tesla_T_symbol.svg.png"
-                    alt="icon-company" 
-                    width="100px">
-                <h2>Tesla Inc.</h2>
-            </div>
+        <app-overview-company>
+        </app-overview-company>
 
-            <mat-card class="card-company">
-                <mat-card-header>
-                    <mat-card-title>Riskness:</mat-card-title>
-                </mat-card-header>
-                <mat-card-content>
-                    <hr>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>Variance & Standard deviation:</td>
-                                <td>0.6</td>
-                            </tr>
-                            <tr>
-                                <td>Reskness by betta:</td>
-                                <td>1.6</td>
-                            </tr>
-                            <tr>
-                                <td>Value at Risk (VaR):</td>
-                                <td>1.5</td>
-                            </tr>
-                            <tr>
-                                <td>Risk-Reward Ratio:</td>
-                                <td>1.2</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </mat-card-content>
-            </mat-card>
-
-            <mat-card class="card-company">
-                <mat-card-header>
-                    <mat-card-title>Statistics:</mat-card-title>
-                </mat-card-header>
-                <mat-card-content>
-                    <hr>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>Market Cap (intraday):</td>
-                                <td>815.40B</td>
-                            </tr>
-                            <tr>
-                                <td>Enterprise Value:</td>
-                                <td>798.14B</td>
-                            </tr>
-                            <tr>
-                                <td>Trailing P/E:</td>
-                                <td>73.19</td>
-                            </tr>
-                            <tr>
-                                <td>Forward P/E:</td>
-                                <td>75.19</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </mat-card-content>
-            </mat-card>
-
-            <mat-card class="card-company">
-                <mat-card-header>
-                    <mat-card-title>Dividends & Splits:</mat-card-title>
-                </mat-card-header>
-                <mat-card-content>
-                    <hr>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>Dividend Date:</td>
-                                <td>N/A</td>
-                            </tr>
-                            <tr>
-                                <td>Ex-Dividend Date:</td>
-                                <td>N/A</td>
-                            </tr>
-                            <tr>
-                                <td>Last Split Factor:</td>
-                                <td>3:1</td>
-                            </tr>
-                            <tr>
-                                <td>Last Split Date:</td>
-                                <td>Aug 24, 2022</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </mat-card-content>
-            </mat-card>
-        </div>
     </mat-tab>
+
     <mat-tab label="Transactions">
-        <div class="transaction-info">
-            <table mat-table [dataSource]="dataSource">
-                <ng-container matColumnDef="created">
-                    <th mat-header-cell *matHeaderCellDef>Time</th>
-                    <td mat-cell *matCellDef="let element" title="{{element.created}}">
-                        {{element.created | date: 'dd-MM-yy HH:mm'}}
-                    </td>
-                </ng-container>
 
-                <ng-container matColumnDef="transactionType">
-                    <th mat-header-cell *matHeaderCellDef>Transaction</th>
-                    <td mat-cell *matCellDef="let element">
-                        {{element.transactionType | titlecase}}
-                    </td>
-                </ng-container>
+        <app-transactions-history> 
+        </app-transactions-history>
 
-                <ng-container matColumnDef="quantity">
-                    <th mat-header-cell *matHeaderCellDef>Quantity</th>
-                    <td mat-cell *matCellDef="let element">
-                        2
-                    </td>
-                </ng-container>
-
-                <ng-container matColumnDef="price">
-                    <th mat-header-cell *matHeaderCellDef>Price</th>
-                    <td mat-cell *matCellDef="let element">
-                        200
-                    </td>
-                </ng-container>
-
-                <ng-container matColumnDef="amount">
-                    <th mat-header-cell *matHeaderCellDef>Amount</th>
-                    <td mat-cell *matCellDef="let element">
-                        {{element.amount}}
-                    </td>
-                </ng-container>
-
-                <ng-container matColumnDef="status">
-                    <th mat-header-cell *matHeaderCellDef>Status</th>
-                    <td mat-cell *matCellDef="let element">
-                        {{element.status}}
-                    </td>
-                </ng-container>
-
-                <ng-container matColumnDef="source">
-                    <th mat-header-cell *matHeaderCellDef>Source</th>
-                    <td mat-cell *matCellDef="let element">
-                        {{element.source}}
-                    </td>
-                </ng-container>
-                
-                <tr mat-header-row *matHeaderRowDef="displayedColumns" class="transaction-info--header"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            </table>
-        </div>
     </mat-tab>
 </mat-tab-group>

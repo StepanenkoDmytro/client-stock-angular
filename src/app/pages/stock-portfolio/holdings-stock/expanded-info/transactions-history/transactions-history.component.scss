@@ -1,0 +1,19 @@
+.transaction-info {
+    height: 210px;
+    padding: 0px 20px 20px 20px;
+    text-align: center;
+
+    &--header {
+        position: sticky;
+        top: 0;
+        background: var(--black-color);
+    }
+
+    .mdc-data-table__cell {
+        text-align: center;
+    }
+
+    .mdc-data-table__row:last-child .mat-mdc-cell {
+        border-bottom: 10px solid var(--black-color);
+    }
+}

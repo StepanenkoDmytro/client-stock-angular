@@ -32,11 +32,8 @@ export class DymanicInfoComponent implements OnInit, OnDestroy {
 
   public isVisibleAccountAction = true;
 
-  public displayedColumns: string[] = ['property', 'value'];
-  public displayedColumnsCommodity: string[] = ['commodity', 'price', 'change', 'percentageChange'];
-
-  public dataSourceProfit!: MatTableDataSource<ElementTable>;
-  public dataSourceCommodity!: MatTableDataSource<ICommodityTable>;
+  
+  
 
   public width!: number;
   public height!: number;
@@ -55,17 +52,6 @@ export class DymanicInfoComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.dataSourceCommodity = new MatTableDataSource(COMMODITY_MOCKS);
-
-    const profitsProperties: ElementTable[] = [
-      { property: 'Day', value: '10' },
-      { property: 'Month', value: '100' },
-      { property: 'Received Dividend', value: '100' },
-      { property: 'Forecast Dividend', value: '50' },
-    ];
-    this.dataSourceProfit = new MatTableDataSource(profitsProperties);
-
-
     this.toppings = this.formBuilder.group({
       indexDisplayCtrl: this.indexDisplayCtrl,
       commodityDisplayCtrl: this.commodityDisplayCtrl,
@@ -83,7 +69,6 @@ export class DymanicInfoComponent implements OnInit, OnDestroy {
         this.height = entry.target.clientHeight;
 
         this.cdRef.detectChanges();
-        console.log('dynamin-block',this.width, this.height);
       }
     });
     this.resizeObserver.observe(this.chartContainer.nativeElement);

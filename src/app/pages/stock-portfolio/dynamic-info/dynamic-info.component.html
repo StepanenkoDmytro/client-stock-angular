@@ -11,103 +11,28 @@
             </app-area-chart>
         </div>
 
-        <div class="info-container additional-table" 
-             [class.visible]="commodityDisplayCtrl.value">
+        
+        <app-commodities-table class="info-container additional-table" 
+                               [class.visible]="commodityDisplayCtrl.value">
+        </app-commodities-table>
 
-            <mat-label>Commodities info:</mat-label>
-            <div class="table-assets m-t-10 p-0">
-                <table mat-table [dataSource]="dataSourceCommodity">
-                    <ng-container matColumnDef="commodity">
-                        <th mat-header-cell *matHeaderCellDef></th>
-                        <td mat-cell *matCellDef="let element">
-                            {{ element.commodity }}
-                        </td>
-                    </ng-container>
-                    <ng-container matColumnDef="price">
-                        <th mat-header-cell *matHeaderCellDef></th>
-                        <td mat-cell *matCellDef="let element">
-                            {{ element.price }}
-                        </td>
-                    </ng-container>
-                    <ng-container matColumnDef="change">
-                        <th mat-header-cell *matHeaderCellDef></th>
-                        <td mat-cell *matCellDef="let element">
-                            {{ element.change }}
-                        </td>
-                    </ng-container>
-                    <ng-container matColumnDef="percentageChange">
-                        <th mat-header-cell *matHeaderCellDef></th>
-                        <td mat-cell *matCellDef="let element">
-                            {{ element.percentageChange }}
-                        </td>
-                    </ng-container>
+        <app-profit-table class="info-container additional-table"
+                          [class.visible]="profitDisplayCtrl.value">   
+        </app-profit-table>
 
-                    <tr mat-row *matRowDef="let row; columns: displayedColumnsCommodity;"></tr>
-                </table>
-            </div>
-        </div>
-
-        <div class="info-container additional-table"
-             [class.visible]="profitDisplayCtrl.value">
-            <mat-label>Profits:</mat-label>
-            <div class="table-assets m-t-10">
-
-                <table mat-table [dataSource]="dataSourceProfit">
-                    <ng-container matColumnDef="property">
-                        <th mat-header-cell *matHeaderCellDef>Property</th>
-                        <td mat-cell *matCellDef="let element">
-                            {{ element.property }}
-                        </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="value">
-                        <th mat-header-cell *matHeaderCellDef>Value</th>
-                        <td mat-cell *matCellDef="let element">
-                            {{ element.value }}
-                        </td>
-                    </ng-container>
-
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                </table>
-            </div>
-        </div>
-
-        <div class="info-container indexes-grid-element" 
-             [class.visible]="indexDisplayCtrl.value">
-            <mat-label>Index info:</mat-label>
-            <div class="index-info">
-
-                <div class="index-card">
-                    <p>S&P 500 Index</p>
-                    <div class="index-card--content">
-                        <p style="color: blue">4536.34</p>
-                        <p style="color: green">0.03%</p>
-                    </div>
-                </div>
-
-                <div class="index-card">
-                    <p>NASDAQ Index</p>
-                    <div class="index-card--content">
-                        <p style="color: blue">4536.34</p>
-                        <p style="color: green">0.03%</p>
-                    </div>
-                </div>
-
-                <div class="index-card">
-                    <p>Dow Jones Index</p>
-                    <div class="index-card--content">
-                        <p style="color: blue">4536.34</p>
-                        <p style="color: green">0.03%</p>
-                    </div>
-                </div>
-
-            </div>
-        </div>
+        <app-index-card class="info-container indexes-grid-element" 
+                        [class.visible]="indexDisplayCtrl.value">
+        </app-index-card>
     </section>
 
 
-    <aside #aside class="total-info info-container">
-        <div class="total-info--header">
+    <aside class="total-info info-container">
+        <!-- 
+            TODO: как лучше переделать єту часть? Внутри враппера отслеживать controls и outputʼами 
+            передавать значение включенніх фукций или в єтом компоненте их отслеживать и пробрасівать 
+            внутрь? Учесть TODO ниже...
+        -->
+        <header class="total-info--header">
             <div class="label">
                 <mat-label>Wallet info:</mat-label>
             </div>
@@ -127,7 +52,7 @@
                     <mat-checkbox formControlName="profitDisplayCtrl">Profit</mat-checkbox>
                 </mat-menu>
             </div>
-        </div>
+        </header>
         <div>
             <app-donat-chart>
             </app-donat-chart>
@@ -142,10 +67,14 @@
         <div class="expanded-panel"
              [class.visible]="!indexDisplayCtrl.value || isPrimaryVisibleHeight"
              [class.expanded-panel--header]="panelOpenState">
+             <!-- 
+                TODO: наверное и mat-accordion в отдельній компонент, и как тогда пробрасівать 
+                controls?        
+            -->
             <mat-accordion>
                 <mat-expansion-panel [(expanded)]="panelOpenState">
                 <mat-expansion-panel-header>
-                    <mat-panel-title class="jc-c">
+                    <mat-panel-title class="justify-content-center">
                         <mat-icon *ngIf="!panelOpenState">keyboard_double_arrow_down</mat-icon>
                     </mat-panel-title>
                 </mat-expansion-panel-header>               
@@ -155,7 +84,7 @@
                                         [isVisibleRiskness]="!isVisibleRiskness">
                 </app-total-info-wrapper>
 
-                    <div class="flex jc-c m-t-10">
+                    <div class="d-flex justify-content-center mt-1">
                     <mat-icon *ngIf="panelOpenState" (click)="panelOpenState = false">keyboard_double_arrow_up</mat-icon>
                 </div>
                 </mat-expansion-panel>

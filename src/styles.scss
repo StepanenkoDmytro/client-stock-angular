@@ -8,6 +8,10 @@ body {
     .mat-drawer-container {
         background-color: rgb(16, 16, 16);
     }
+
+    mat-label {
+        font-size: 16px;
+    }
 }
 
 :root {
@@ -32,22 +36,6 @@ ul {
     margin-top: 10px;
     margin-left: 10px;
     padding: 10px;
-}
-
-.flex {
-    display: flex;
-}
-
-.d-n {
-    display: none;
-}
-
-.sp-bw {
-    justify-content: space-between;
-}
-
-.jc-c {
-    justify-content: center;
 }
 
 .info-container {
@@ -80,6 +68,14 @@ ul {
     }
 
     table {
+        tr {
+            height: 50px;
+        
+            td {
+                font-size: 12px;
+            }
+        }
+        
         thead {
 
             tr {
@@ -109,6 +105,10 @@ ul {
         text-decoration: none;
         color: rgb(249, 250, 254);
     }
+
+    .mdc-data-table__row:last-child .mat-mdc-cell {
+        border-bottom: 10px solid var(--black-color);
+    }
 }
 
 .btn-confirm {
@@ -128,36 +128,4 @@ ul {
 
 .scroll {
     overflow: scroll;
-}
-
-.p-20 {
-    padding: 20px;
-}
-
-.p-0 {
-    padding: 0;
-}
-
-.p-0-20-20-20 {
-    padding: 0px 20px 20px 20px;
-}
-
-.m-0-30-0-30 {
-    margin: 0px 30px 0px 30px;
-}
-
-.f-s-15 {
-    font-size: 15px;
-}
-
-.h-22 {
-    height: 220px;
-}
-
-.h-5 {
-    height: 50px;
-}
-
-.m-t-10 {
-    margin-top: 10px;
 }

@@ -1,0 +1,36 @@
+.overview-info {
+    display: flex;
+    padding: 20px;
+    justify-content: space-around;
+    height: 190px;
+
+    hr {
+        border-color: var(--accept-color);
+    }
+
+    .mat-mdc-card-title {
+        color: var(--accept-color);
+    }
+}
+
+.card-company {
+    background: var(--dark-color);
+    border-radius: 10px;
+    width: 300px;
+
+    table {
+        width: 100%;
+
+        td {
+            border-bottom: 10px;
+        }
+
+        td:not(:first-child) {
+            text-align: right;
+        }
+    }
+
+    #static-text {
+        color: var(--accept-color);
+    }
+}

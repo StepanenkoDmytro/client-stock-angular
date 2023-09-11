@@ -1,6 +1,7 @@
 <mat-sidenav-container>
+  <!-- Отдельній компонент (app-side-nav-header) -->
   <mat-sidenav mode="side" 
-               opened="{{ sidenavOpened }}" 
+               opened="{{ isSidenavOpened }}" 
                class="sidenav-container">
 
     <p>Markets:</p>
@@ -27,8 +28,8 @@
 
     <button mat-icon-button class="center-button--left" 
             aria-label="expand row" 
-            (click)="toggleSidenav()">
-      <mat-icon *ngIf="sidenavOpened">keyboard_arrow_left</mat-icon>
+            (click)="switchToggleSidenav()">
+      <mat-icon *ngIf="isSidenavOpened">keyboard_arrow_left</mat-icon>
       
     </button>
   </mat-sidenav>
@@ -36,8 +37,8 @@
   <mat-sidenav-content>
     <button mat-icon-button class="center-button--right" 
             aria-label="expand row" 
-            (click)="toggleSidenav()">
-      <mat-icon *ngIf="!sidenavOpened">keyboard_arrow_right</mat-icon>
+            (click)="switchToggleSidenav()">
+      <mat-icon *ngIf="!isSidenavOpened">keyboard_arrow_right</mat-icon>
     </button>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
