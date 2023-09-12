@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { DashboardStateService } from 'src/app/service/dashboard-state.service';
 
 
@@ -9,6 +10,8 @@ import { DashboardStateService } from 'src/app/service/dashboard-state.service';
 })
 export class TotalInfoWrapperComponent {
   public isHiddenTotalInfoOpen: boolean = false;
+
+  public wallet = new FormControl('stockWallet');
 
   constructor(
     public stateService: DashboardStateService

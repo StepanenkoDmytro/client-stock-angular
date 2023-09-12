@@ -1,3 +1,29 @@
+.settings {
+    display: flex;
+    justify-content: end;
+    height: 40px;
+
+    &--icon {
+        color: #6c7aa3cc;
+    }
+    
+    &--icon:hover {
+        color: #6c7aa3e2;
+        transform: rotate(10deg);
+    }
+}
+
+
+
+.changeable-section {
+    display: flex;
+
+    .total-info {
+        margin-left: auto;
+        padding: 0;
+    }
+}
+
 .section-border {
     border-radius: 10px;
     background-color: rgb(16, 16, 16);

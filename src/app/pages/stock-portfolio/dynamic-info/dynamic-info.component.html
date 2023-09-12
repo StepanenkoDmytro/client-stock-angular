@@ -1,33 +1,25 @@
-<section class="dynamic-info"
-         [class.height-total-min]="stateService.minContent"
-         [class.height-total-max]="stateService.maxContent">
+<section class="dynamic-block">
+    
+    <div class="info-container chart-info"
+         [class.primary-visible-height]="stateService.chartHasMinHeight && !stateService.chartHasMaxWidth"
+         [class.primary-visible-width]="stateService.chartHasMaxWidth">
+         
+        <mat-label>Portfolio Performance Chart:</mat-label>
+        <app-area-chart>
+        </app-area-chart>
+    </div>
 
-    <section class="dynamic-block">
-        <div class="info-container chart-info"
-            [class.primary-visible-height]="stateService.chartHasMinHeight && !stateService.chartHasMaxWidth"
-            [class.primary-visible-width]="stateService.chartHasMaxWidth">
-            <mat-label>Portfolio Performance Chart:</mat-label>
-            <app-area-chart>
-            </app-area-chart>
-        </div>
+    <app-commodities-table *ngIf="stateService.commodityContainerVisible" 
+                           class="info-container additional-table">
+    </app-commodities-table>
 
-        <app-commodities-table *ngIf="stateService.commodityContainerVisible" 
-                               class="info-container additional-table">
-        </app-commodities-table>
+    <app-profit-table *ngIf="stateService.profitContainerVisible" 
+                      class="info-container additional-table">
+    </app-profit-table>
 
-        <app-profit-table *ngIf="stateService.profitContainerVisible" 
-                          class="info-container additional-table">   
-        </app-profit-table>
-
-        <!-- TODO: rename: Index info -->
-        <app-index-card *ngIf="stateService.indexContainerVisible"
-                        class="info-container indexes-grid-element">
-        </app-index-card>
-    </section>
-
-
-    <aside class="total-info info-container">
-        <app-total-info-wrapper class="total-info">
-        </app-total-info-wrapper>
-    </aside>
+    <!-- TODO: rename: Index info -->
+    <app-index-card *ngIf="stateService.indexContainerVisible" 
+                    class="info-container indexes-grid-element">
+    </app-index-card>
+    
 </section>

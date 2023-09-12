@@ -1,61 +1,38 @@
-.dynamic-info {
-    display: grid;
-    grid-template-columns: auto 300px;
-    grid-template-areas: "dynamic aside";
+ .dynamic-block {
 
-    .dynamic-block {
-        grid-area: dynamic;
+     display: grid;
+     grid-template-columns: repeat(2, 1fr) 280px 340px;
+     grid-template-rows: repeat(auto);
 
-        display: grid;
-        grid-template-columns: repeat(2, 1fr) 280px 340px;
-        grid-template-rows: repeat(auto);
+     .mdc-data-table__row:last-child .mat-mdc-cell {
+         border-bottom: 10px solid var(--black-color);
+     }
 
-        .mdc-data-table__row:last-child .mat-mdc-cell {
-            border-bottom: 10px solid var(--black-color);
-        }
+     .chart-info {
+         grid-column: span 3;
+         grid-row: span 2;
+     }
 
-        .chart-info {
-            grid-column: span 3;
-            grid-row: span 2;
-        }
+     .primary-visible-height {
+         grid-row: span 1;
+     }
 
-        .primary-visible-height {
-            grid-row: span 1;
-        }
+     .primary-visible-width {
+         grid-column: span 4;
+         grid-row: span 1;
+     }
 
-        .primary-visible-width {
-            grid-column: span 4;
-            grid-row: span 1;
-        }
+     .indexes-grid-element {
+         display: block;
+         grid-column: span 4;
+         height: 150px;
+     }
 
-        .indexes-grid-element {
-            display: block;
-            grid-column: span 4;
-            height: 150px;
-        }
-
-        .additional-table {
-            grid-column: span 1;
-            display: block;
-            font-size: 14px;
-            height: 260px;
-        }
-    }
-
-    .total-info {
-        grid-area: aside;
-        padding: 0;
-    }
-}
-
-.height-total-min {
-    grid-template-rows: 400px;
-
-    // .dynamic-block {
-    //     grid-template-rows: 400px;
-    // }
-}
-
-.height-total-max {
-    grid-template-rows: 500px;
-}
+     .additional-table {
+         grid-column: span 1;
+         display: block;
+         font-size: 14px;
+         height: 260px;
+     }
+ }
+ 

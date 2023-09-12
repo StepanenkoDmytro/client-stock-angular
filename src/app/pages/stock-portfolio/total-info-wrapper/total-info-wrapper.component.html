@@ -1,0 +1,80 @@
+<section class="total-info">
+    <div class="label">
+        <mat-label>Wallet info:</mat-label>
+    </div>
+
+    <app-donat-chart>
+    </app-donat-chart>
+
+    <div class="fs-6">
+        <div class="total-info--primary">
+            <p>Total contribution: </p>
+            <p>1000$</p>
+        </div>
+    
+        <div class="total-info--primary">
+            <p>Total profit: </p>
+            <p>1000$</p>
+        </div>
+        <div class="total-info--primary">
+            <p>Reskness of portfolio:</p>
+        </div>
+    
+    </div>
+    
+    <div class="pt-0 ps-3 pb-3 pe-3">
+        <div class="total-info-riskness">
+            <div class="total-info-riskness--row">
+                <div>
+                    <p>Variance & Standard deviation: </p>
+                </div>
+                <div>
+                    <p>1.2</p>
+                </div>
+            </div>
+    
+            <div class="total-info-riskness--row">
+                <div>
+                    <p>Reskness by betta:</p>
+                </div>
+                <div>
+                    <p>1.1</p>
+                </div>
+            </div>
+    
+            <div class="total-info-riskness--row">
+                <div>
+                    <p>Value at Risk (VaR):</p>
+                </div>
+                <div>
+                    <p>0.96</p>
+                </div>
+    
+            </div>
+            <div class="total-info-riskness--row">
+                <div>
+                    <p>Risk-Reward Ratio:</p>
+                </div>
+                <div>
+                    <p>1.02</p>
+                </div>
+    
+            </div>
+        </div>
+    </div>
+    
+    <div class="d-flex flex-column  mx-4 mb-3">
+        <mat-form-field>
+            <mat-label>Account:</mat-label>
+            <mat-select [formControl]="wallet">
+                <mat-option value="stockWallet">
+                    Stock Wallet
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    
+        <button type="button" mat-button class="deposit-btn align-self-center">
+            Deposit account
+        </button>
+    </div>
+</section>
