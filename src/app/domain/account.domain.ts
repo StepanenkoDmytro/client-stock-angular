@@ -1,5 +1,13 @@
+export interface IUser {
+    id: number;
+    username: string;
+    email: string;
+    imageID?: number;
+    accounts: IAccount[];
+}
+
 export interface IAccount {
-    id: number,
+    accountID: number,
     accountName: string,
     accountType: string,
     balance: number,
@@ -26,28 +34,9 @@ export interface IAccountStock {
     dividendYield: number,
 }
 
-export const ACCOUNTS_MOCK: IAccount[] = [
-    {
-        id: 1,
-        accountName: 'My Coin Wallet Agrresive',
-        accountType: 'CoinWallet',
-        balance: 2000,
-        coins: [],
-        stocks: []
-    },
-    {
-        id: 2,
-        accountName: 'My Stock Wallet Conservative',
-        accountType: 'StockWallet',
-        balance: 4000,
-        coins: [],
-        stocks: []
-    }
-];
-
 export interface PurchaseData {
     countStocks: number,
     accountID: number,
     tradeType: boolean,
     typeCtrl: string
-  };
+  }

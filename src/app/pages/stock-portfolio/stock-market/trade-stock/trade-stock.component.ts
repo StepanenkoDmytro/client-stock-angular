@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { ACCOUNTS_MOCK, IAccount } from 'src/app/domain/account.domain';
+import { IAccount } from 'src/app/domain/account.domain';
+import { ACCOUNTS_MOCK } from 'src/app/domain/mock.domain';
 import { TradePriceType } from 'src/app/domain/trade.domain';
 
 

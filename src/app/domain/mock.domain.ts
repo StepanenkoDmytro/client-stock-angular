@@ -1,8 +1,27 @@
 import { ElementTable } from "../pages/stock-portfolio/stock-market/stock-details/stock-details.component";
-import { IAccountStock } from "./account.domain";
+import { IAccount, IAccountStock, IUser } from "./account.domain";
 import { IStock } from "./assets.domain";
 import { ITransact } from "./transact.domain";
 import { ICommodityTable } from "./widget.domain";
+
+export const ACCOUNTS_MOCK: IAccount[] = [
+    {
+        accountID: 1,
+        accountName: 'My Coin Wallet Agrresive',
+        accountType: 'CoinWallet',
+        balance: 2000,
+        coins: [],
+        stocks: []
+    },
+    {
+        accountID: 2,
+        accountName: 'My Stock Wallet Conservative',
+        accountType: 'StockWallet',
+        balance: 4000,
+        coins: [],
+        stocks: []
+    }
+];
 
 export const ACCOUNT_STOCKS_MOCK: IAccountStock[] = [
     {
@@ -164,3 +183,99 @@ export const COMMODITY_MOCKS: ICommodityTable[] = [
     { property: 'Received Dividend', value: '100' },
     { property: 'Forecast Dividend', value: '50' },
   ];
+
+  export const USER_MOCK: IUser = {
+    id: 1,
+    username: 'Dima',
+    email: 'user@',
+    accounts: [
+        {
+            accountID: 1,
+            accountName: 'My Coin Wallet Agrresive',
+            accountType: 'CoinWallet',
+            balance: 2000,
+            coins: [],
+            stocks: [
+                {
+                    symbol: "TSLA",
+                    assetType: "COMMON STOCKS",
+                    name: "Tesla Inc",
+                    currency: "USD",
+                    buyPrice: 260.02,
+                    countStocks: 10,
+                    sector: "MANUFACTURING",
+                    dividendYield: 0,
+                },
+                {
+                    symbol: "BAC",
+                    assetType: "COMMON STOCKS",
+                    name: "Bank of America",
+                    currency: "USD",
+                    buyPrice: 31.98,
+                    countStocks: 100,
+                    sector: "FINANCE",
+                    dividendYield: 0.03,
+                },
+                {
+                    symbol: "F",
+                    assetType: "COMMON STOCKS",
+                    name: "Ford Motor Company",
+                    currency: "USD",
+                    buyPrice: 13.26,
+                    countStocks: 200,
+                    sector: "MANUFACTURING",
+                    dividendYield: 0.0426,
+                },
+                {
+                    symbol: "BAC",
+                    assetType: "COMMON STOCKS",
+                    name: "Bank of America",
+                    currency: "USD",
+                    buyPrice: 31.98,
+                    countStocks: 100,
+                    sector: "FINANCE",
+                    dividendYield: 0.03,
+                },
+                {
+                    symbol: "F",
+                    assetType: "COMMON STOCKS",
+                    name: "Ford Motor Company",
+                    currency: "USD",
+                    buyPrice: 13.26,
+                    countStocks: 200,
+                    sector: "MANUFACTURING",
+                    dividendYield: 0.0426,
+                }
+            ]
+        },
+        {
+            accountID: 2,
+            accountName: 'My Stock Wallet Conservative',
+            accountType: 'StockWallet',
+            balance: 4000,
+            coins: [],
+            stocks: [
+                {
+                    symbol: "BAC",
+                    assetType: "COMMON STOCKS",
+                    name: "Bank of America",
+                    currency: "USD",
+                    buyPrice: 31.98,
+                    countStocks: 100,
+                    sector: "FINANCE",
+                    dividendYield: 0.03,
+                },
+                {
+                    symbol: "TSLA",
+                    assetType: "COMMON STOCKS",
+                    name: "Tesla Inc",
+                    currency: "USD",
+                    buyPrice: 260.02,
+                    countStocks: 10,
+                    sector: "MANUFACTURING",
+                    dividendYield: 0,
+                },
+            ]
+        }
+    ]
+  }

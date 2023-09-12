@@ -6,7 +6,7 @@
         <mat-form-field class="test" *ngIf="accounts">
             <mat-label>Select account</mat-label>
             <mat-select>
-                <mat-option *ngFor="let account of accounts" [value]="account.id">
+                <mat-option *ngFor="let account of accounts" [value]="account.accountID">
                     {{ account.accountName }}
                 </mat-option>
             </mat-select>

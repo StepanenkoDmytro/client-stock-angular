@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { ACCOUNTS_MOCK, IAccount, IAccountStock } from 'src/app/domain/account.domain';
-import { ACCOUNT_STOCKS_MOCK } from 'src/app/domain/mock.domain';
+import { IAccount, IAccountStock } from 'src/app/domain/account.domain';
+import { ACCOUNTS_MOCK, ACCOUNT_STOCKS_MOCK } from 'src/app/domain/mock.domain';
 
 @Component({
   selector: 'app-stock-pick',
