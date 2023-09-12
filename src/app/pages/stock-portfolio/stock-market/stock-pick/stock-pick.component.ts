@@ -11,7 +11,7 @@ import { ACCOUNT_STOCKS_MOCK } from 'src/app/domain/mock.domain';
 export class StockPickComponent {
   
   public displayedColumns: string[] = [ 'name', 'countStocks', 'price', 'sector', 'dividendYield', 'currency'];
-  public dataSource: MatTableDataSource<IAccountStock> = new MatTableDataSource(ACCOUNT_STOCKS_MOCK);
+  public profitDataSource: MatTableDataSource<IAccountStock> = new MatTableDataSource(ACCOUNT_STOCKS_MOCK);
 
   public accounts: IAccount[] = ACCOUNTS_MOCK;
 }

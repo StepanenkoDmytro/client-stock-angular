@@ -29,14 +29,14 @@
         }
 
         .indexes-grid-element {
-            display: none;
+            display: block;
             grid-column: span 4;
             height: 150px;
         }
 
         .additional-table {
             grid-column: span 1;
-            display: none;
+            display: block;
             font-size: 14px;
             height: 260px;
         }

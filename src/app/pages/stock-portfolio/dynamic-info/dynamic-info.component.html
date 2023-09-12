@@ -11,17 +11,17 @@
             </app-area-chart>
         </div>
 
-        
-        <app-commodities-table class="info-container additional-table" 
-                               [class.visible]="stateService.commodityContainerVisible">
+        <app-commodities-table *ngIf="stateService.commodityContainerVisible" 
+                               class="info-container additional-table">
         </app-commodities-table>
 
-        <app-profit-table class="info-container additional-table"
-                          [class.visible]="stateService.profitContainerVisible">   
+        <app-profit-table *ngIf="stateService.profitContainerVisible" 
+                          class="info-container additional-table">   
         </app-profit-table>
 
-        <app-index-card class="info-container indexes-grid-element" 
-                        [class.visible]="stateService.indexContainerVisible">
+        <!-- TODO: rename: Index info -->
+        <app-index-card *ngIf="stateService.indexContainerVisible"
+                        class="info-container indexes-grid-element">
         </app-index-card>
     </section>
 

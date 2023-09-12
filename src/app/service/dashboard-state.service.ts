@@ -67,6 +67,14 @@ export class DashboardStateService {
     return isMinContent;
   }
 
+  public get isDataChanged(): boolean {
+    const isDataChanged = [this._isIndexContainerVisible, 
+                                this._isProfitContainerVisible, 
+                                this._isCommodityContainerVisible]
+                                  .some(control => control === false);
+    return isDataChanged;
+  }
+
   public set indexContainerVisible(isVisible: boolean) {
     this._isIndexContainerVisible = isVisible;
   }

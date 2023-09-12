@@ -11,6 +11,6 @@ import { ICommodityTable } from 'src/app/domain/widget.domain';
 })
 export class CommoditiesTableComponent {
 
-  public displayedColumnsCommodity: string[] = ['commodity', 'price', 'change', 'percentageChange'];
-  public dataSourceCommodity: MatTableDataSource<ICommodityTable> = new MatTableDataSource(COMMODITY_MOCKS);
+  public displayedCommodityColumns: string[] = ['commodity', 'price', 'change', 'percentageChange'];
+  public commodityDataSource: MatTableDataSource<ICommodityTable> = new MatTableDataSource(COMMODITY_MOCKS);
 }

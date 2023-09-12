@@ -14,9 +14,9 @@
             <mat-menu #menu="matMenu">
                 <h3>Display blocks:</h3>
                 <!-- TODO: додати кнопку select all -->
-                <mat-checkbox [(ngModel)]="indexCtrl" (ngModelChange)="updateAllControls()">Index</mat-checkbox>
-                <mat-checkbox [(ngModel)]="commodityCtrl" (ngModelChange)="updateAllControls()">Commodities</mat-checkbox>
-                <mat-checkbox [(ngModel)]="profitCtrl" (ngModelChange)="updateAllControls()">Profit</mat-checkbox>
+                <mat-checkbox [(ngModel)]="stateService.indexContainerVisible">Index</mat-checkbox>
+                <mat-checkbox [(ngModel)]="stateService.commodityContainerVisible">Commodities</mat-checkbox>
+                <mat-checkbox [(ngModel)]="stateService.profitContainerVisible">Profit</mat-checkbox>
             </mat-menu>
         </div>
     </header>
@@ -32,7 +32,7 @@
     </app-total-info>
 
     <div class="expanded-panel"
-        [class.visible]="stateService.chartHasMinHeight"
+        *ngIf="stateService.isDataChanged"
         [class.expanded-panel--header]="isHiddenTotalInfoOpen">
         <!-- 
             TODO: наверное и mat-accordion в отдельній компонент, и как тогда пробрасівать 
