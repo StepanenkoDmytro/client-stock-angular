@@ -3,12 +3,11 @@
          [class.height-total-max]="stateService.maxContent">
 
     <section class="dynamic-block">
-        <div #chartContainer class="info-container chart-info"
+        <div class="info-container chart-info"
             [class.primary-visible-height]="stateService.chartHasMinHeight && !stateService.chartHasMaxWidth"
             [class.primary-visible-width]="stateService.chartHasMaxWidth">
             <mat-label>Portfolio Performance Chart:</mat-label>
-            <app-area-chart [width]="width" 
-                            [height]="height">
+            <app-area-chart>
             </app-area-chart>
         </div>
 

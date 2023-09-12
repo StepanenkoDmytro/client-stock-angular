@@ -1,23 +1,19 @@
-import { Component, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ScaleLinear, ScaleTime } from 'd3';
 import { fromEvent, map } from 'rxjs';
+import { DataModel } from 'src/app/domain/widget.domain';
 import { D3Service } from 'src/app/service/d3.service';
 
-
-export interface DataModel {
-  date: Date,
-  value: number
-}
 
 @Component({
   selector: 'app-area-chart',
   templateUrl: './area-chart.component.html',
   styleUrls: ['./area-chart.component.scss']
 })
-export class AreaChartComponent implements  OnDestroy, OnChanges {
+export class AreaChartComponent implements OnInit, OnDestroy {
 
   @Input('data')
-   private data: DataModel[] = [
+  private data: DataModel[] = [
     { date: this.d3.d3.timeParse('%Y-%m-%d')('2013-04-28')!, value: 135.98 },
     { date: this.d3.d3.timeParse('%Y-%m-%d')('2013-04-29')!, value: 147.49 },
     { date: this.d3.d3.timeParse('%Y-%m-%d')('2013-04-30')!, value: 146.93 },
@@ -51,40 +47,45 @@ export class AreaChartComponent implements  OnDestroy, OnChanges {
   @ViewChild('chartContainer', { static: true })
   public chartContainer!: ElementRef;
 
-  @Input()
   public width: number = 200;
-
-  @Input()
   public height: number = 200;
 
   private margin = { top: 10, right: 30, bottom: 30, left: 50 };
   private svg: any;
   private moveMouse$: any;
   private areaContainer: any;
+  private resizechartContainer: ResizeObserver | null = null;
 
   constructor(
     private d3: D3Service
   ) { }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this.width && this.height) {
-      if (changes['width']) {
-        this.width = changes['width'].currentValue - this.margin.left - this.margin.right - 30;
-      }
+  ngOnInit(): void {
+    this.width = this.chartContainer.nativeElement.clientWidth - this.margin.left - this.margin.right;
+    this.height = this.chartContainer.nativeElement.clientHeight - this.margin.top - this.margin.bottom - 30;
+   
+    this.createSvg();
+    this.loadData(this.data);
 
-      if (changes['height']) {
-        this.height = changes['height'].currentValue - this.margin.top - this.margin.bottom - 65;
-      }
-      console.log('area-chart',this.width, this.height);
+    this.resizechartContainer = new ResizeObserver((entries) => {
+      this.width = entries[0].target.clientWidth - this.margin.left - this.margin.right;
+      this.height = entries[0].target.clientHeight - this.margin.top - this.margin.bottom - 30;
+
       this.d3.d3.select("#my_dataviz").selectChildren('*').remove();
       this.createSvg();
       this.loadData(this.data);
-    }
+    });
+
+    this.resizechartContainer.observe(this.chartContainer.nativeElement);
   }
 
   ngOnDestroy(): void {
     if (this.moveMouse$) {
       this.moveMouse$.unsubscribe;
+    }
+
+    if (this.resizechartContainer) {
+      this.resizechartContainer.unobserve(this.chartContainer.nativeElement);
     }
   }
 

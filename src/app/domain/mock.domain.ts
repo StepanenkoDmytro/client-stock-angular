@@ -1,8 +1,8 @@
-import { ICommodityTable } from "../pages/stock-portfolio/dynamic-info/dynamic-info.component";
 import { ElementTable } from "../pages/stock-portfolio/stock-market/stock-details/stock-details.component";
 import { IAccountStock } from "./account.domain";
 import { IStock } from "./assets.domain";
 import { ITransact } from "./transact.domain";
+import { ICommodityTable } from "./widget.domain";
 
 export const ACCOUNT_STOCKS_MOCK: IAccountStock[] = [
     {

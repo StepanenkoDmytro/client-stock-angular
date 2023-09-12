@@ -8,7 +8,7 @@
 
         display: grid;
         grid-template-columns: repeat(2, 1fr) 280px 340px;
-        grid-template-rows: 280px 280px auto;
+        grid-template-rows: repeat(auto);
 
         .mdc-data-table__row:last-child .mat-mdc-cell {
             border-bottom: 10px solid var(--black-color);
@@ -51,11 +51,11 @@
 .height-total-min {
     grid-template-rows: 400px;
 
-    .dynamic-block {
-        grid-template-rows: 400px;
-    }
+    // .dynamic-block {
+    //     grid-template-rows: 400px;
+    // }
 }
 
 .height-total-max {
-    grid-template-rows: 465px;
+    grid-template-rows: 500px;
 }
