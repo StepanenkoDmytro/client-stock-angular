@@ -1,73 +1,61 @@
-<div class="d-none fs-6" [class.visible]="isPrimaryInfoVisible">
-    <div class="total-info--primary">
-            <p>Total contribution: </p>
-            <p>1000$</p>
-    </div>
-
-    <div class="total-info--primary">
-            <p>Total profit: </p>
-            <p>1000$</p>
-    </div>
-    <div class="total-info--primary">
-        <p>Reskness of portfolio:</p>
-    </div>
-    
-</div>
-
-<div class="d-none pt-0 ps-3 pb-3 pe-3" [class.visible]="isVisibleRiskness">
-    <div class="total-info-riskness">
-        <div class="total-info-riskness--row">
-            <div>
-                <p>Variance & Standard deviation: </p>
-            </div>
-            <div>
-                <p>1.2</p>
-            </div>
+<section class="total-info">
+    <header class="total-info--header">
+        <div class="label">
+            <mat-label>Wallet info:</mat-label>
         </div>
 
-        <div class="total-info-riskness--row">
-            <div>
-                <p>Reskness by betta:</p>
-            </div>
-            <div>
-                <p>1.1</p>
-            </div>
-        </div>
+        <div>
+            <button mat-icon-button 
+                    [matMenuTriggerFor]="menu" 
+                    class="settings">
+                <mat-icon>settings</mat-icon>
+            </button>
 
-        <div class="total-info-riskness--row">
-            <div>
-                <p>Value at Risk (VaR):</p>
-            </div>
-            <div>
-                <p>0.96</p>
-            </div>
-
+            <mat-menu #menu="matMenu">
+                <h3>Display blocks:</h3>
+                <!-- TODO: додати кнопку select all -->
+                <mat-checkbox [(ngModel)]="indexCtrl" (ngModelChange)="updateAllControls()">Index</mat-checkbox>
+                <mat-checkbox [(ngModel)]="commodityCtrl" (ngModelChange)="updateAllControls()">Commodities</mat-checkbox>
+                <mat-checkbox [(ngModel)]="profitCtrl" (ngModelChange)="updateAllControls()">Profit</mat-checkbox>
+            </mat-menu>
         </div>
-        <div class="total-info-riskness--row">
-            <div>
-                <p>Risk-Reward Ratio:</p>
-            </div>
-            <div>
-                <p>1.02</p>
-            </div>
-
-        </div>
+    </header>
+    <div>
+        <app-donat-chart>
+        </app-donat-chart>
     </div>
-</div>
 
-<div class="d-none" [class.visible]="isVisibleAccountAction">
-    <div class="d-flex flex-column  mx-4 my-3">
-        <mat-form-field>
-            <mat-label>Account:</mat-label>
-            <mat-select [formControl]="wallet">
-                <mat-option value="bla">
-                    Stock Wallet
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
+    <app-total-info [primaryInfoCtrl]="stateService.primaryInfoVisible"
+                    [risknessInfoCtrl]="stateService.risknessVisible"
+                    [accountActionCtrl]="stateService.accountActionVisible">
 
-        <button type="button" mat-button class="deposit-btn align-self-center">
-            Deposit account
-        </button>
+    </app-total-info>
+
+    <div class="expanded-panel"
+        [class.visible]="stateService.chartHasMinHeight"
+        [class.expanded-panel--header]="isHiddenTotalInfoOpen">
+        <!-- 
+            TODO: наверное и mat-accordion в отдельній компонент, и как тогда пробрасівать 
+            controls?        
+        -->
+        <mat-accordion>
+            <mat-expansion-panel [(expanded)]="isHiddenTotalInfoOpen">
+            <mat-expansion-panel-header>
+                <mat-panel-title class="justify-content-center">
+                    <mat-icon *ngIf="!isHiddenTotalInfoOpen">keyboard_double_arrow_down</mat-icon>
+                </mat-panel-title>
+            </mat-expansion-panel-header>               
+            
+            <app-total-info [primaryInfoCtrl]="!stateService.primaryInfoVisible"
+                            [risknessInfoCtrl]="!stateService.risknessVisible"
+                            [accountActionCtrl]="!stateService.accountActionVisible">
+            </app-total-info>
+
+                <div class="d-flex justify-content-center mt-1">
+                <mat-icon *ngIf="isHiddenTotalInfoOpen" (click)="isHiddenTotalInfoOpen = false">keyboard_double_arrow_up</mat-icon>
+            </div>
+            </mat-expansion-panel>
+            
+        </mat-accordion> 
     </div>
-</div>
+</section>

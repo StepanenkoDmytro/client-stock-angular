@@ -1,0 +1,26 @@
+.total-info {
+    &--primary {
+        display: flex;
+        justify-content: space-between;
+        margin: 0px 30px 0px 20px;
+        // font-size: 15px;
+    }
+
+    &-riskness {
+        padding-top: 10px;
+        border: 1px solid var(--accept-color);
+        border-radius: 5px;
+
+        &--row {
+            display: flex;
+            justify-content: space-between;
+            margin: 0px 15px 0px 15px;
+        }
+    }
+}
+
+.deposit-btn {
+    background: var(--accept-color);
+    width: 200px;
+    // margin: 0px 30px 0px 30px;
+}

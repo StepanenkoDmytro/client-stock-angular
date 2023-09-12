@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
 import { ScaleLinear, ScaleTime } from 'd3';
 import { fromEvent, map } from 'rxjs';
 import { D3Service } from 'src/app/service/d3.service';
@@ -16,7 +16,8 @@ export interface DataModel {
 })
 export class AreaChartComponent implements  OnDestroy, OnChanges {
 
-  @Input('data') private data: DataModel[] = [
+  @Input('data')
+   private data: DataModel[] = [
     { date: this.d3.d3.timeParse('%Y-%m-%d')('2013-04-28')!, value: 135.98 },
     { date: this.d3.d3.timeParse('%Y-%m-%d')('2013-04-29')!, value: 147.49 },
     { date: this.d3.d3.timeParse('%Y-%m-%d')('2013-04-30')!, value: 146.93 },
@@ -46,10 +47,13 @@ export class AreaChartComponent implements  OnDestroy, OnChanges {
     { date: this.d3.d3.timeParse('%Y-%m-%d')('2013-05-24')!, value: 133.85 },
     { date: this.d3.d3.timeParse('%Y-%m-%d')('2013-05-25')!, value: 133.22 }
   ];
-  @ViewChild('chartContainer', { static: true }) chartContainer!: ElementRef;
+
+  @ViewChild('chartContainer', { static: true })
+  public chartContainer!: ElementRef;
 
   @Input()
   public width: number = 200;
+
   @Input()
   public height: number = 200;
 
@@ -63,7 +67,6 @@ export class AreaChartComponent implements  OnDestroy, OnChanges {
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
-
     if (this.width && this.height) {
       if (changes['width']) {
         this.width = changes['width'].currentValue - this.margin.left - this.margin.right - 30;

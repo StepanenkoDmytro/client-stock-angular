@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { DashboardStateService } from 'src/app/service/dashboard-state.service';
 
 
 export interface ICommodityTable {
@@ -15,47 +15,21 @@ export interface ICommodityTable {
   styleUrls: ['./dynamic-info.component.scss']
 })
 export class DymanicInfoComponent implements OnInit, OnDestroy {
-  // wallet = new FormControl('bla');
-  public panelOpenState: boolean = false;
-
-  public toppings!: FormGroup;
-  public indexDisplayCtrl: FormControl = new FormControl(true);
-  public commodityDisplayCtrl: FormControl = new FormControl(true);
-  public profitDisplayCtrl: FormControl = new FormControl(true);
-  public isPrimaryVisibleHeight = false;
-  public isPrimaryVisibleWidth = false;
-  public isVisibleRiskness = true;
-  public isPrimaryInfoVisible = true;
-
-  public isVisibleAccountAction = true;
 
   public width!: number;
   public height!: number;
 
   private resizeObserver!: ResizeObserver;
 
-  public isMaxHeight = false;
-  public isMinHeight = false;
-
-
   @ViewChild('chartContainer', { static: true })
   private chartContainer!: ElementRef;
 
-  constructor(private formBuilder: FormBuilder,
-    private cdRef: ChangeDetectorRef) { }
+  constructor(
+    public stateService: DashboardStateService,
+    private cdRef: ChangeDetectorRef
+  ) { }
 
   public ngOnInit(): void {
-
-    this.toppings = this.formBuilder.group({
-      indexDisplayCtrl: this.indexDisplayCtrl,
-      commodityDisplayCtrl: this.commodityDisplayCtrl,
-      profitDisplayCtrl: this.profitDisplayCtrl,
-    });
-
-    this.toppings.valueChanges
-      .subscribe(() => {
-        this.initNewView();
-      });
 
     this.resizeObserver = new ResizeObserver(entries => {
       for (const entry of entries) {
@@ -71,43 +45,6 @@ export class DymanicInfoComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     if (this.resizeObserver) {
       this.resizeObserver.unobserve(this.chartContainer.nativeElement);
-    }
-  }
-
-  private initNewView(): void {
-    //TODO написати булеан змінні для всіх випадків
-    this.isPrimaryVisibleHeight = [this.commodityDisplayCtrl, this.profitDisplayCtrl
-    ].some(control => control.value === false);
-
-    this.isPrimaryVisibleWidth = [this.commodityDisplayCtrl, this.profitDisplayCtrl
-    ].every(control => control.value === false);
-
-    this.isVisibleRiskness = ![this.indexDisplayCtrl.value, this.commodityDisplayCtrl.value, this.profitDisplayCtrl.value].some(control => control === false);
-    
-    this.isVisibleAccountAction = !this.isPrimaryVisibleHeight;
-
-    this.isPrimaryInfoVisible = this.checkVisibleTotalPrimaryInfo();
-
-    this.isMaxHeight = this.indexDisplayCtrl.value && this.isPrimaryVisibleHeight;
-    this.isMinHeight = !this.indexDisplayCtrl.value && this.isPrimaryVisibleHeight;
-  }
-
-  private checkVisibleTotalPrimaryInfo(): boolean {
-    const index = this.indexDisplayCtrl.value;
-    const commodity = this.commodityDisplayCtrl.value;
-    const profit = this.profitDisplayCtrl.value;
-
-
-    if(index && profit && commodity) {
-      return true;
-    } else if (!index && this.isPrimaryVisibleHeight) {
-      return false;
-    } else if (!index && this.isPrimaryVisibleWidth) {
-      return false;
-    } else if(index && commodity && profit) {
-      return true;
-    } else {
-      return true;
     }
   }
 }

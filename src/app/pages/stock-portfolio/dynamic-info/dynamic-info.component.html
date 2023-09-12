@@ -1,10 +1,11 @@
 <section class="dynamic-info"
-         [class.height-total-min]="isMinHeight"
-         [class.height-total-max]="isMaxHeight">
+         [class.height-total-min]="stateService.minContent"
+         [class.height-total-max]="stateService.maxContent">
+
     <section class="dynamic-block">
         <div #chartContainer class="info-container chart-info"
-            [class.primary-visible-height]="isPrimaryVisibleHeight && !isPrimaryVisibleWidth"
-            [class.primary-visible-width]="isPrimaryVisibleWidth">
+            [class.primary-visible-height]="stateService.chartHasMinHeight && !stateService.chartHasMaxWidth"
+            [class.primary-visible-width]="stateService.chartHasMaxWidth">
             <mat-label>Portfolio Performance Chart:</mat-label>
             <app-area-chart [width]="width" 
                             [height]="height">
@@ -13,83 +14,21 @@
 
         
         <app-commodities-table class="info-container additional-table" 
-                               [class.visible]="commodityDisplayCtrl.value">
+                               [class.visible]="stateService.commodityContainerVisible">
         </app-commodities-table>
 
         <app-profit-table class="info-container additional-table"
-                          [class.visible]="profitDisplayCtrl.value">   
+                          [class.visible]="stateService.profitContainerVisible">   
         </app-profit-table>
 
         <app-index-card class="info-container indexes-grid-element" 
-                        [class.visible]="indexDisplayCtrl.value">
+                        [class.visible]="stateService.indexContainerVisible">
         </app-index-card>
     </section>
 
 
     <aside class="total-info info-container">
-        <!-- 
-            TODO: как лучше переделать єту часть? Внутри враппера отслеживать controls и outputʼами 
-            передавать значение включенніх фукций или в єтом компоненте их отслеживать и пробрасівать 
-            внутрь? Учесть TODO ниже...
-        -->
-        <header class="total-info--header">
-            <div class="label">
-                <mat-label>Wallet info:</mat-label>
-            </div>
-
-            <div>
-                <button mat-icon-button 
-                        [matMenuTriggerFor]="menu" 
-                        class="settings">
-                    <mat-icon>settings</mat-icon>
-                </button>
-
-                <mat-menu #menu="matMenu" [formGroup]="toppings">
-                    <h3>Display blocks:</h3>
-                    <!-- TODO: додати кнопку select all -->
-                    <mat-checkbox formControlName="indexDisplayCtrl">Index</mat-checkbox>
-                    <mat-checkbox formControlName="commodityDisplayCtrl">Commodities</mat-checkbox>
-                    <mat-checkbox formControlName="profitDisplayCtrl">Profit</mat-checkbox>
-                </mat-menu>
-            </div>
-        </header>
-        <div>
-            <app-donat-chart>
-            </app-donat-chart>
-        </div>
-
-        <app-total-info-wrapper [isPrimaryInfoVisible]="isPrimaryInfoVisible"
-                                [isVisibleAccountAction]="isVisibleAccountAction"
-                                [isVisibleRiskness]="isVisibleRiskness">
-
+        <app-total-info-wrapper class="total-info">
         </app-total-info-wrapper>
-
-        <div class="expanded-panel"
-             [class.visible]="!indexDisplayCtrl.value || isPrimaryVisibleHeight"
-             [class.expanded-panel--header]="panelOpenState">
-             <!-- 
-                TODO: наверное и mat-accordion в отдельній компонент, и как тогда пробрасівать 
-                controls?        
-            -->
-            <mat-accordion>
-                <mat-expansion-panel [(expanded)]="panelOpenState">
-                <mat-expansion-panel-header>
-                    <mat-panel-title class="justify-content-center">
-                        <mat-icon *ngIf="!panelOpenState">keyboard_double_arrow_down</mat-icon>
-                    </mat-panel-title>
-                </mat-expansion-panel-header>               
-                
-                <app-total-info-wrapper [isPrimaryInfoVisible]="!isPrimaryInfoVisible"
-                                        [isVisibleAccountAction]="!isVisibleAccountAction"
-                                        [isVisibleRiskness]="!isVisibleRiskness">
-                </app-total-info-wrapper>
-
-                    <div class="d-flex justify-content-center mt-1">
-                    <mat-icon *ngIf="panelOpenState" (click)="panelOpenState = false">keyboard_double_arrow_up</mat-icon>
-                </div>
-                </mat-expansion-panel>
-                
-            </mat-accordion> 
-        </div>
     </aside>
 </section>

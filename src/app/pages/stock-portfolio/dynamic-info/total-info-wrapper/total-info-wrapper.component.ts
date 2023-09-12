@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component } from '@angular/core';
+import { DashboardStateService } from 'src/app/service/dashboard-state.service';
 
 
 @Component({
@@ -8,13 +8,19 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./total-info-wrapper.component.scss']
 })
 export class TotalInfoWrapperComponent {
+  public isHiddenTotalInfoOpen: boolean = false;
 
-  public wallet = new FormControl('bla');
+  indexCtrl: boolean = true;
+  profitCtrl: boolean = true;
+  commodityCtrl: boolean = true;
 
-  @Input()
-  public isPrimaryInfoVisible: boolean | null = null;
-  @Input()
-  public isVisibleRiskness: boolean | null = null;
-  @Input()
-  public isVisibleAccountAction: boolean | null = null;
+  constructor(
+    public stateService: DashboardStateService
+  ) { }
+
+  updateAllControls(): void {
+    this.stateService.indexContainerVisible = this.indexCtrl;
+    this.stateService.commodityContainerVisible = this.commodityCtrl;
+    this.stateService.profitContainerVisible = this.profitCtrl;
+  }
 }

@@ -31,75 +31,20 @@
         .indexes-grid-element {
             display: none;
             grid-column: span 4;
-            height: 125px;
+            height: 150px;
         }
 
         .additional-table {
             grid-column: span 1;
             display: none;
-            height: 220px;
             font-size: 14px;
+            height: 260px;
         }
     }
 
     .total-info {
         grid-area: aside;
         padding: 0;
-
-        &--header {
-            display: flex;
-            justify-content: space-between;
-            height: 50px;
-        }
-
-        .settings {
-            color: #6c7aa3cc;
-        }
-
-        .settings:hover {
-            color: #6c7aa3e2;
-            transform: rotate(10deg);
-        }
-
-        .label {
-            align-self: center;
-            margin: 20px;
-        }
-
-        .expanded-panel {
-            display: none;
-            position: absolute;
-            z-index: 2;
-            width: 280px;
-
-            &--header {
-                .mat-expansion-panel-header._mat-animation-noopable {
-                    height: 20px;
-                }
-            }
-
-            .mat-icon {
-                color: var(--light-color);
-            }
-
-            .mat-expansion-panel {
-                color: var(--light-color);
-                background-color: var(--black-color);
-                margin: 0;
-            }
-
-            .mat-expansion-panel:not([class*=mat-elevation-z]) {
-                box-shadow: none;
-            }
-
-            .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:not([aria-disabled=true]):hover {
-                background-color: var(--black-color);
-            }
-
-            ::ng-deep .mat-expansion-panel-body {
-                padding: 0 0px 16px;
-            }
-        }
     }
 }
 

@@ -14,7 +14,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { StockMarketComponent } from './pages/stock-portfolio/stock-market/stock-market.component';
@@ -40,6 +40,7 @@ import { ProfitTableComponent } from './pages/stock-portfolio/dynamic-info/profi
 import { IndexCardComponent } from './pages/stock-portfolio/dynamic-info/index-card/index-card.component';
 import { TransactionsHistoryComponent } from './pages/stock-portfolio/holdings-stock/expanded-info/transactions-history/transactions-history.component';
 import { OverviewCompanyComponent } from './pages/stock-portfolio/holdings-stock/expanded-info/overview-company/overview-company.component';
+import { TotalInfoComponent } from './pages/stock-portfolio/dynamic-info/total-info-wrapper/total-info/total-info.component';
 
 
 @NgModule({
@@ -64,9 +65,11 @@ import { OverviewCompanyComponent } from './pages/stock-portfolio/holdings-stock
     IndexCardComponent,
     TransactionsHistoryComponent,
     OverviewCompanyComponent,
+    TotalInfoComponent,
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     MatSidenavModule,
     MatIconModule,
     MatDialogModule,
