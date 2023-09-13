@@ -45,11 +45,10 @@ export class AreaChartComponent implements OnInit, OnDestroy {
   ];
 
   @ViewChild('chartContainer', { static: true })
-  public chartContainer!: ElementRef;
+  private chartContainer!: ElementRef;
 
-  public width: number = 200;
-  public height: number = 200;
-
+  private width: number = 0;
+  private height: number = 0;
   private margin = { top: 10, right: 30, bottom: 30, left: 50 };
   private svg: any;
   private moveMouse$: any;
@@ -60,13 +59,7 @@ export class AreaChartComponent implements OnInit, OnDestroy {
     private d3: D3Service
   ) { }
 
-  ngOnInit(): void {
-    this.width = this.chartContainer.nativeElement.clientWidth - this.margin.left - this.margin.right;
-    this.height = this.chartContainer.nativeElement.clientHeight - this.margin.top - this.margin.bottom - 30;
-   
-    this.createSvg();
-    this.loadData(this.data);
-
+  public ngOnInit(): void {
     this.resizechartContainer = new ResizeObserver((entries) => {
       this.width = entries[0].target.clientWidth - this.margin.left - this.margin.right;
       this.height = entries[0].target.clientHeight - this.margin.top - this.margin.bottom - 30;
@@ -79,7 +72,7 @@ export class AreaChartComponent implements OnInit, OnDestroy {
     this.resizechartContainer.observe(this.chartContainer.nativeElement);
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     if (this.moveMouse$) {
       this.moveMouse$.unsubscribe;
     }

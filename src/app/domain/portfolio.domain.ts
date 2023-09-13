@@ -3,19 +3,25 @@ export interface IUser {
     username: string;
     email: string;
     imageID?: number;
-    accounts: IAccount[];
+    accounts: IPortfolio[];
 }
 
-export interface IAccount {
+export interface IPortfolio extends IPortfolioBasic {
+    coins: IPortfolioCoin[],
+    stocks: IPortfolioStock[],
+}
+
+export interface IPortfolioBasic {
     accountID: number,
     accountName: string,
     accountType: string,
     balance: number,
-    coins: IAccountCoin[],
-    stocks: IAccountStock[],
+    contribution?: number,
+    profit?: number,
+    riskness?: string,
 }
 
-export interface IAccountCoin {
+export interface IPortfolioCoin {
     idCoin: string,
     name: string,
     symbol: string,
@@ -23,7 +29,7 @@ export interface IAccountCoin {
     avgPrice: number,
 }
 
-export interface IAccountStock {
+export interface IPortfolioStock {
     symbol: string,
     assetType: string,
     name: string,

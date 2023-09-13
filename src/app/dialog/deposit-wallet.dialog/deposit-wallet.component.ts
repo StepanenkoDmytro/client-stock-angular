@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { IAccount } from 'src/app/domain/account.domain';
+import { IPortfolio } from 'src/app/domain/portfolio.domain';
 import { ACCOUNTS_MOCK } from 'src/app/domain/mock.domain';
 
 
@@ -11,6 +11,6 @@ import { ACCOUNTS_MOCK } from 'src/app/domain/mock.domain';
 })
 export class DepositWalletComponent {
 
-  public accounts: IAccount[] = ACCOUNTS_MOCK;
+  public accounts: IPortfolio[] = ACCOUNTS_MOCK;
   public depositSumCtrl: FormControl = new FormControl(0, [Validators.required]);
 }

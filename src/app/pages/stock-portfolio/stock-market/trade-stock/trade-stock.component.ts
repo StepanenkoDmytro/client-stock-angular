@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { IAccount } from 'src/app/domain/account.domain';
+import { IPortfolio } from 'src/app/domain/portfolio.domain';
 import { ACCOUNTS_MOCK } from 'src/app/domain/mock.domain';
 import { TradePriceType } from 'src/app/domain/trade.domain';
 
@@ -12,10 +12,10 @@ import { TradePriceType } from 'src/app/domain/trade.domain';
 })
 export class TradeStockComponent {
 
-  public accounts: IAccount[] = ACCOUNTS_MOCK;
+  public accounts: IPortfolio[] = ACCOUNTS_MOCK;
 
   public typePriceCtrl: FormControl<TradePriceType | null>  = new FormControl(TradePriceType.MarketPrice);
-  public accountCtrl: FormControl<IAccount | null>  = new FormControl(this.accounts[0]);
+  public accountCtrl: FormControl<IPortfolio | null>  = new FormControl(this.accounts[0]);
 
   public typeOfTradePrice: TradePriceType[] = [
     TradePriceType.MarketPrice,

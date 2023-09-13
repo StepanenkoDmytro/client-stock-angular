@@ -1,10 +1,11 @@
 import { ElementTable } from "../pages/stock-portfolio/stock-market/stock-details/stock-details.component";
-import { IAccount, IAccountStock, IUser } from "./account.domain";
+import {  IPortfolio, IPortfolioStock, IUser } from "./portfolio.domain";
 import { IStock } from "./assets.domain";
 import { ITransact } from "./transact.domain";
 import { ICommodityTable } from "./widget.domain";
 
-export const ACCOUNTS_MOCK: IAccount[] = [
+
+export const ACCOUNTS_MOCK: IPortfolio[] = [
     {
         accountID: 1,
         accountName: 'My Coin Wallet Agrresive',
@@ -23,7 +24,7 @@ export const ACCOUNTS_MOCK: IAccount[] = [
     }
 ];
 
-export const ACCOUNT_STOCKS_MOCK: IAccountStock[] = [
+export const ACCOUNT_STOCKS_MOCK: IPortfolioStock[] = [
     {
         symbol: "TSLA",
         assetType: "COMMON STOCKS",
@@ -191,9 +192,12 @@ export const COMMODITY_MOCKS: ICommodityTable[] = [
     accounts: [
         {
             accountID: 1,
-            accountName: 'My Coin Wallet Agrresive',
-            accountType: 'CoinWallet',
+            accountName: 'Aggressive strategy',
+            accountType: 'StockWallet',
             balance: 2000,
+            contribution: 1500,
+            profit: 500,
+            riskness: 'Aggressive',
             coins: [],
             stocks: [
                 {
@@ -250,10 +254,13 @@ export const COMMODITY_MOCKS: ICommodityTable[] = [
         },
         {
             accountID: 2,
-            accountName: 'My Stock Wallet Conservative',
+            accountName: 'Stocks conservative',
             accountType: 'StockWallet',
             balance: 4000,
             coins: [],
+            contribution: 3800,
+            profit: 200,
+            riskness: 'Conservative',
             stocks: [
                 {
                     symbol: "BAC",
@@ -279,3 +286,4 @@ export const COMMODITY_MOCKS: ICommodityTable[] = [
         }
     ]
   }
+  

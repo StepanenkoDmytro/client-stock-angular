@@ -1,9 +1,8 @@
 import { state, style, trigger } from '@angular/animations';
-import { Component } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { IAccountStock } from 'src/app/domain/account.domain';
+import { IPortfolioStock } from 'src/app/domain/portfolio.domain';
 import { IStock } from 'src/app/domain/assets.domain';
-import { ACCOUNT_STOCKS_MOCK } from 'src/app/domain/mock.domain';
 
 
 @Component({
@@ -17,10 +16,19 @@ import { ACCOUNT_STOCKS_MOCK } from 'src/app/domain/mock.domain';
     ]),
   ],
 })
-export class HoldingsStockComponent {
+export class HoldingsStockComponent implements OnChanges {
+  
+  @Input()
+  public stocks: IPortfolioStock[] = [];
   
   public displayedColumns: string[] = [ 'name', 'countStocks', 'buyPrice', 'price', 'coast', 'sector', 'dividendYield', 'share', 'profit', 'growth', 'currency'];
   public columnsToDisplayWithExpand = [...this.displayedColumns, 'expand'];
   public expandedElement: IStock | null = null;
-  public dataSource: MatTableDataSource<IAccountStock> = new MatTableDataSource(ACCOUNT_STOCKS_MOCK);
+  public dataSource: MatTableDataSource<IPortfolioStock> | [] = [];
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    if(changes['stocks']) {
+      this.dataSource = new MatTableDataSource(changes['stocks'].currentValue);
+    }
+  }
 }
