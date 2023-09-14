@@ -6,7 +6,15 @@ export interface IUser {
     accounts: IPortfolio[];
 }
 
-export interface IPortfolio extends IPortfolioBasic {
+export interface IPortfolio {
+    accountID: number,
+    accountName: string,
+    accountType: string,
+    balance: number,
+    contribution?: number,
+    profit?: number,
+    riskness?: string,
+    isActive?: boolean,
     coins: IPortfolioCoin[],
     stocks: IPortfolioStock[],
 }

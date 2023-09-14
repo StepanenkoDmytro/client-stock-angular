@@ -1,5 +1,5 @@
-import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
-import { fromEvent } from 'rxjs';
+import { AfterViewInit, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { BehaviorSubject, Subscription, fromEvent } from 'rxjs';
 import { IPortfolio, IPortfolioStock } from 'src/app/domain/portfolio.domain';
 import { SimpleDataModel } from 'src/app/domain/widget.domain';
 import { D3Service } from 'src/app/service/d3.service';
@@ -17,11 +17,15 @@ const customColors = [
   templateUrl: './donat-chart.component.html',
   styleUrls: ['./donat-chart.component.scss']
 })
-export class DonatChartComponent implements OnChanges, OnDestroy {
+export class DonatChartComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Input()
-  public portfolio: IPortfolio | null = null;
+  public set portfolio(value: IPortfolio | null) {
+    this._portfolio$.next(value);
+  }
+  public donutID: string = 'donut';
 
+  private _portfolio$ = new BehaviorSubject<IPortfolio | null>(null)
   private data: SimpleDataModel[] = [];
   private totalBalance: number = 0;
   private riskness: string = '';
@@ -34,27 +38,42 @@ export class DonatChartComponent implements OnChanges, OnDestroy {
   private radius = Math.min(this.width, this.height) / 2 - this.margin.left;
 
   private mouseMove$: any;
+  private sub: Subscription | null = null;
 
   constructor(private d3: D3Service) { }
+  ngOnInit(): void {
+    this.donutID = this.donutID + this._portfolio$.value?.accountID;
+    this.sub = this._portfolio$.subscribe((portfolio) => {
+      if (portfolio) {
+        this.updateD3(portfolio);
+      }
+    });
+  }
 
-  public ngOnChanges(changes: SimpleChanges): void {
-    if (changes['portfolio']) {
-      this.totalBalance = this.portfolio?.balance ?? 0;
-      this.riskness = this.portfolio?.riskness ?? '';
-      this.data = this.mapStocksToSimpleDataModel(this.portfolio?.stocks);
+  ngAfterViewInit(): void {
+    if (this._portfolio$.value) {
+      this.updateD3(this._portfolio$.value);
+    }
+  }
 
-      this.d3.d3.select("#donut").selectChildren('*').remove();
+  private updateD3(portfolio: IPortfolio): void {
+    this.totalBalance = portfolio.balance ?? 0;
+      this.riskness = portfolio.riskness ?? '';
+      this.data = this.mapStocksToSimpleDataModel(portfolio.stocks);
+
+      this.d3.d3.select(`#${this.donutID}`).selectChildren('*').remove();
       this.createSvg();
       this.createColors(this.data);
       this.drawChart();
       this.clientAction();
-    }
   }
 
   public ngOnDestroy(): void {
     if (this.mouseMove$) {
       this.mouseMove$.unsubscribe;
     }
+
+    this.sub?.unsubscribe();
   }
 
   private mapStocksToSimpleDataModel(stocks: IPortfolioStock[] | undefined): SimpleDataModel[] {
@@ -114,7 +133,8 @@ export class DonatChartComponent implements OnChanges, OnDestroy {
 
   private createSvg(): void {
     this.svg = this.d3.d3
-      .select('div#donut')
+  
+      .select(`div#${this.donutID}`)
       .append('svg')
       .attr('viewBox', `0 0 ${this.width} ${this.height}`)
       .append('g')

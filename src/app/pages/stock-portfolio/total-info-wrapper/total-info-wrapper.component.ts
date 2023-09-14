@@ -12,15 +12,13 @@ import { PortfolioDataService } from 'src/app/service/portfolio-data.service';
   styleUrls: ['./total-info-wrapper.component.scss']
 })
 export class TotalInfoWrapperComponent implements OnInit, OnDestroy {
-  
-  public isHiddenTotalInfoOpen: boolean = false;
 
   public portfolioCtrl: FormControl<IPortfolioBasic> = new FormControl();
 
   public activePortfolio: IPortfolio | null = null;
-  public portfolios: IPortfolioBasic[] = [];
+  public portfolios: IPortfolio[] = [];
 
-  private portfolioSubscription: Subscription | undefined;
+  private portfoliosSubscription: Subscription | undefined;
 
   constructor(
     public stateService: DashboardStateService,
@@ -28,16 +26,11 @@ export class TotalInfoWrapperComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit(): void {
-    this.portfolioSubscription = this.portfolioService.activePortfolio$
-      .subscribe((portfolio) => {
-      this.activePortfolio = portfolio;
+    this.portfoliosSubscription = this.portfolioService.portfolios$.subscribe(portfolios => {
+      this.portfolios = portfolios;
 
-      if (this.activePortfolio) {
-        this.portfolioCtrl.setValue(this.activePortfolio);
-      }
+      this.activePortfolio = portfolios.find((portfolio: IPortfolio) => portfolio.isActive) || portfolios[0];
     });
-
-    this.portfolios = this.portfolioService.portfolios;
   }
 
   public changePortfolio(portfolioID: number): void {
@@ -45,8 +38,8 @@ export class TotalInfoWrapperComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    if (this.portfolioSubscription) {
-      this.portfolioSubscription.unsubscribe();
+    if (this.portfoliosSubscription) {
+      this.portfoliosSubscription.unsubscribe();
     }
   }
 }

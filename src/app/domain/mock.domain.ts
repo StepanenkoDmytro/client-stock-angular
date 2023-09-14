@@ -192,7 +192,7 @@ export const COMMODITY_MOCKS: ICommodityTable[] = [
     accounts: [
         {
             accountID: 1,
-            accountName: 'Aggressive strategy',
+            accountName: 'AggressiveStrategy',
             accountType: 'StockWallet',
             balance: 2000,
             contribution: 1500,
@@ -254,7 +254,7 @@ export const COMMODITY_MOCKS: ICommodityTable[] = [
         },
         {
             accountID: 2,
-            accountName: 'Stocks conservative',
+            accountName: 'StocksConservative',
             accountType: 'StockWallet',
             balance: 4000,
             coins: [],

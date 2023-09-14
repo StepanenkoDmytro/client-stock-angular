@@ -40,6 +40,7 @@ import { ProfitTableComponent } from './pages/stock-portfolio/dynamic-info/profi
 import { IndexCardComponent } from './pages/stock-portfolio/dynamic-info/index-card/index-card.component';
 import { TransactionsHistoryComponent } from './pages/stock-portfolio/holdings-stock/expanded-info/transactions-history/transactions-history.component';
 import { OverviewCompanyComponent } from './pages/stock-portfolio/holdings-stock/expanded-info/overview-company/overview-company.component';
+import { TotalInfoCardComponent } from './pages/stock-portfolio/total-info-wrapper/total-info-card/total-info-card.component';
 
 
 @NgModule({
@@ -64,6 +65,7 @@ import { OverviewCompanyComponent } from './pages/stock-portfolio/holdings-stock
     IndexCardComponent,
     TransactionsHistoryComponent,
     OverviewCompanyComponent,
+    TotalInfoCardComponent,
   ],
   imports: [
     BrowserModule,

@@ -23,7 +23,7 @@ export class StockPortfolioComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit(): void {
-    this.stocksSubscription = this.portfolioService.stockFromActivePortfolio$
+    this.stocksSubscription = this.portfolioService.stocksFromActivePortfolio$
       .subscribe((stocks) => {
       this.stocks = stocks;
     });

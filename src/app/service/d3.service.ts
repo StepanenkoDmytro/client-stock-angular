@@ -7,12 +7,9 @@ import * as d3 from 'd3';
 export class D3Service {
 
   public d3 = d3;
+  
   constructor() { }
   
-  /**
-   * Generates random letter string with specified length
-   * @param length: number
-   */
   public generateId(length: number): string {
     var result = '';
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
