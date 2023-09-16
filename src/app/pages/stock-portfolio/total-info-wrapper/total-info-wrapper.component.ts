@@ -17,6 +17,7 @@ export class TotalInfoWrapperComponent implements OnInit, OnDestroy {
 
   public activePortfolio: IPortfolio | null = null;
   public portfolios: IPortfolio[] = [];
+  public currentPortfolio: number = 0;
 
   private portfoliosSubscription: Subscription | undefined;
 
@@ -34,7 +35,12 @@ export class TotalInfoWrapperComponent implements OnInit, OnDestroy {
   }
 
   public changePortfolio(portfolioID: number): void {
-    this.portfolioService.setActiveAccount(portfolioID);
+    this.portfolioService.setActiveAccount(this.portfolios[portfolioID].accountID);
+
+    
+    this.currentPortfolio = portfolioID;
+    console.log(portfolioID);
+    
   }
 
   public ngOnDestroy(): void {
