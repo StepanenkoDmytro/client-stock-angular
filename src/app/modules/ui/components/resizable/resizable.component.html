@@ -1,0 +1,13 @@
+<section class="pz-resizable">
+  <div class="top" (mousedown)="handleVerticalResize($event, true)"></div>
+  <div class="right"></div>
+  <div class="bottom" (mousedown)="handleVerticalResize($event)"></div>
+  <div class="left"></div>
+
+  <div class="top-left"></div>
+  <div class="top-right"></div>
+  <div class="bottom-left"></div>
+  <div class="bottom-right"></div>
+
+  <ng-content class="pz-resizable--content"></ng-content>
+</section>

@@ -7,7 +7,7 @@ import { DashboardStateService } from 'src/app/service/dashboard-state.service';
   templateUrl: './dynamic-info.component.html',
   styleUrls: ['./dynamic-info.component.scss']
 })
-export class DymanicInfoComponent {
+export class DynamicInfoComponent {
 
   constructor(
     public stateService: DashboardStateService
