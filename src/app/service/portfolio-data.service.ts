@@ -22,7 +22,9 @@ export class PortfolioDataService {
 
     const defaultAccount = this._user.accounts[0];
     if(!!defaultAccount) {
+      
       this.setActiveAccount(defaultAccount.accountID);
+      
     }
   }
 

@@ -174,7 +174,7 @@ export class AreaChartComponent implements OnInit, OnDestroy {
     this.svg.append("path")
       .datum(data)
       .attr("fill", "none")
-      .attr("stroke", "#69b3a2")
+      .attr("stroke", "rgb(30, 30, 32)")
       .attr("stroke-width", 2)
       .attr("d", line);
   }

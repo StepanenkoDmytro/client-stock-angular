@@ -112,7 +112,7 @@ export class DonatChartComponent implements OnInit, AfterViewInit, OnDestroy {
                 .style('display', 'none');
 
               this.svg.select(`path:nth-child(${index})`)
-                .attr('stroke', 'var(--black-color)')
+                .attr('stroke', 'var(--dark-color)')
                 .style('stroke-width', '10');
             });
 
@@ -178,7 +178,7 @@ export class DonatChartComponent implements OnInit, AfterViewInit, OnDestroy {
       .append('path')
       .attr('d', arc)
       .attr('fill', (d: any, i: number) => this.colors(i.toString()))
-      .attr('stroke', 'var(--black-color)')
+      .attr('stroke', 'var(--dark-color)')
       .style('stroke-width', '10')
       .style('opacity', 0.7);
 
