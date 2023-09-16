@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { StockPortfolioComponent } from './pages/stock-portfolio/stock-portfolio.component';
@@ -32,8 +31,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
-
-import { DymanicInfoComponent } from './pages/stock-portfolio/dynamic-info/dynamic-info.component';
+import { DynamicInfoComponent } from './pages/stock-portfolio/dynamic-info/dynamic-info.component';
 import { TotalInfoWrapperComponent } from './pages/stock-portfolio/total-info-wrapper/total-info-wrapper.component';
 import { CommoditiesTableComponent } from './pages/stock-portfolio/dynamic-info/commodities-table/commodities-table.component';
 import { ProfitTableComponent } from './pages/stock-portfolio/dynamic-info/profit-table/profit-table.component';
@@ -41,6 +39,7 @@ import { IndexCardComponent } from './pages/stock-portfolio/dynamic-info/index-c
 import { TransactionsHistoryComponent } from './pages/stock-portfolio/holdings-stock/expanded-info/transactions-history/transactions-history.component';
 import { OverviewCompanyComponent } from './pages/stock-portfolio/holdings-stock/expanded-info/overview-company/overview-company.component';
 import { TotalInfoCardComponent } from './pages/stock-portfolio/total-info-wrapper/total-info-card/total-info-card.component';
+import { UiModule } from './modules/ui/ui.module';
 
 
 @NgModule({
@@ -58,7 +57,7 @@ import { TotalInfoCardComponent } from './pages/stock-portfolio/total-info-wrapp
     TradeStockComponent,
     ExpandedInfoComponent,
     DateFormatPipe,
-    DymanicInfoComponent,
+    DynamicInfoComponent,
     TotalInfoWrapperComponent,
     CommoditiesTableComponent,
     ProfitTableComponent,
@@ -87,7 +86,8 @@ import { TotalInfoCardComponent } from './pages/stock-portfolio/total-info-wrapp
     MatExpansionModule,
     AppRoutingModule,
     NoopAnimationsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    UiModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
