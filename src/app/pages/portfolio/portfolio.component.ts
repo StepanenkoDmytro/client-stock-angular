@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DepositWalletComponent } from 'src/app/dialog/deposit-wallet.dialog/deposit-wallet.component';
+import { Item } from 'src/app/modules/ui/components/carousel/carousel.component';
 
 
 @Component({
@@ -12,15 +13,32 @@ export class PortfolioComponent {
 
   constructor(
     public dialogService: MatDialog
-  ) {}
+  ) { }
+
+  public items: Item[] = [
+    {
+      id: 1,
+      isActive: true,
+    },
+    {
+      id: 2,
+      isActive: false,
+    },
+    // {
+    //   id: 3,
+    // isActive: false,
+    // },
+    // {
+    //   id: 4,
+    // isActive: false,
+    // },
+  ];
 
   openDialog(): void {
     const config = new MatDialogConfig();
     config.autoFocus = true;
     config.disableClose = true;
     config.hasBackdrop = true;
-    // config.maxWidth = 1100;
-    // config.minHeight = 1100;
-     this.dialogService.open(DepositWalletComponent, config);
+    this.dialogService.open(DepositWalletComponent, config);
   }
 }
