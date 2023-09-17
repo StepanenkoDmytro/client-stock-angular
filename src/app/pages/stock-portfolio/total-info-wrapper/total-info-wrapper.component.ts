@@ -31,6 +31,7 @@ export class TotalInfoWrapperComponent implements OnInit, OnDestroy {
       this.portfolios = portfolios;
 
       this.activePortfolio = portfolios.find((portfolio: IPortfolio) => portfolio.isActive) || portfolios[0];
+      this.currentPortfolio = this.activePortfolio.accountID;
     });
   }
 
@@ -38,7 +39,7 @@ export class TotalInfoWrapperComponent implements OnInit, OnDestroy {
     this.portfolioService.setActiveAccount(this.portfolios[portfolioID].accountID);
 
     
-    this.currentPortfolio = portfolioID;
+    // this.currentPortfolio = portfolioID;
     console.log(portfolioID);
     
   }

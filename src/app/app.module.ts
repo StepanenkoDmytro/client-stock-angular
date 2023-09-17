@@ -40,6 +40,7 @@ import { TransactionsHistoryComponent } from './pages/stock-portfolio/holdings-s
 import { OverviewCompanyComponent } from './pages/stock-portfolio/holdings-stock/expanded-info/overview-company/overview-company.component';
 import { TotalInfoCardComponent } from './pages/stock-portfolio/total-info-wrapper/total-info-card/total-info-card.component';
 import { UiModule } from './modules/ui/ui.module';
+import { CarouselComponent } from './components/carousel/carousel.component';
 
 
 @NgModule({
@@ -65,6 +66,7 @@ import { UiModule } from './modules/ui/ui.module';
     TransactionsHistoryComponent,
     OverviewCompanyComponent,
     TotalInfoCardComponent,
+    CarouselComponent,
   ],
   imports: [
     BrowserModule,

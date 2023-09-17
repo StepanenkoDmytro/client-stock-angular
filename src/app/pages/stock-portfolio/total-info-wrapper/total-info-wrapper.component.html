@@ -1,4 +1,4 @@
-<div class="slider-portfolio">
+<!-- <div class="slider-portfolio">
     <div *ngFor="let portfolio of portfolios; let i = index" 
          [ngClass]="{
                 'back-portfolio': i === currentPortfolio - 1 || i === currentPortfolio + 1,
@@ -10,4 +10,8 @@
             </app-total-info-card>
         </div>
     </div>
-</div>
+</div> -->
+<app-carousel
+        [items]="portfolios" 
+        [start]="currentPortfolio">
+    </app-carousel>

@@ -1,7 +1,0 @@
-<app-carousel-item *ngFor="let item of visibleItems; let i = index" 
-                   class="carousel-item"
-                   [class.carousel-item__active]="i === activeIndex" 
-                   (click)="changeVisibleItems(item.id)"
-                   [@state]="state">
-    {{item.id}}
-</app-carousel-item>

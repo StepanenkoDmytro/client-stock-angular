@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { DepositWalletComponent } from 'src/app/dialog/deposit-wallet.dialog/deposit-wallet.component';
-import { Item } from 'src/app/modules/ui/components/carousel/carousel.component';
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
+import { IPortfolio } from 'src/app/domain/portfolio.domain';
+import { PortfolioDataService } from 'src/app/service/portfolio-data.service';
 
 
 @Component({
@@ -9,36 +10,39 @@ import { Item } from 'src/app/modules/ui/components/carousel/carousel.component'
   templateUrl: './portfolio.component.html',
   styleUrls: ['./portfolio.component.scss']
 })
-export class PortfolioComponent {
+export class PortfolioComponent implements OnInit {
+
+  public activePortfolio: IPortfolio | null = null;
+  public portfolios: IPortfolio[] = [];
+  public currentPortfolio: number = 0;
+
+  public activePortfolioID: number = 0;
+
+  private portfoliosSubscription: Subscription | undefined;
 
   constructor(
-    public dialogService: MatDialog
+    public dialogService: MatDialog,
+    public portfolioService: PortfolioDataService
   ) { }
 
-  public items: Item[] = [
-    {
-      id: 1,
-      isActive: true,
-    },
-    {
-      id: 2,
-      isActive: false,
-    },
-    // {
-    //   id: 3,
-    // isActive: false,
-    // },
-    // {
-    //   id: 4,
-    // isActive: false,
-    // },
-  ];
+  public ngOnInit(): void {
+    this.portfoliosSubscription = this.portfolioService.portfolios$.subscribe(portfolios => {
+      this.portfolios = portfolios;
+      this.activePortfolio = portfolios.find((portfolio: IPortfolio) => portfolio.isActive) || portfolios[0];
+      this.activePortfolioID = this.activePortfolio.accountID;
+    });
+  }
 
-  openDialog(): void {
-    const config = new MatDialogConfig();
-    config.autoFocus = true;
-    config.disableClose = true;
-    config.hasBackdrop = true;
-    this.dialogService.open(DepositWalletComponent, config);
+  public changePortfolio(portfolioID: number): void {
+    this.portfolioService.setActiveAccount(this.portfolios[portfolioID].accountID);
+
+    
+    this.currentPortfolio = portfolioID;
+  }
+
+  public ngOnDestroy(): void {
+    if (this.portfoliosSubscription) {
+      this.portfoliosSubscription.unsubscribe();
+    }
   }
 }

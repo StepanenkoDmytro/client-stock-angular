@@ -1,57 +1,6 @@
 <div class="page-container d-flex justify-content-center">
-    <!-- <section>
-        <div class="info-container">
-            <img src='assets/non-user-photo.png'>
-        </div>
-
-        <div class="info-container">
-            <mat-dialog-actions>
-                <button mat-flat-button (click)="openDialog()">
-                    Deposit
-                </button>
-            </mat-dialog-actions>
-        </div>
-    </section>
-
-    <section>
-        <div class="info-container">
-            <app-area-chart>
-            </app-area-chart>
-        </div>
-    </section>
-
-    <section>
-        <div class="info-container">
-            <div class="table-assets">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Account name</th>
-                            <th>Account Type</th>
-                            <th>Account value</th>
-                            <th>Account money USD</th>
-                            <th>Account profit</th>
-                            <th>Delete account</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>My Stock</td>
-                            <td>StockWallet</td>
-                            <td></td>
-                            <td>1000$</td>
-                            <td></td>
-                            <td>
-                                <mat-icon>delete</mat-icon>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-            </div>
-        </div>
-    </section> -->
-
     <app-carousel
-        [items]="items"></app-carousel>
+        [items]="portfolios" 
+        [start]="activePortfolioID">
+    </app-carousel>
 </div>

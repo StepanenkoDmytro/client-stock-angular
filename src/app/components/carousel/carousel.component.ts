@@ -1,9 +1,16 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { trigger, transition, state, animate, style } from '@angular/animations';
+import { IPortfolio } from 'src/app/domain/portfolio.domain';
 
 
 export interface Item {
-  id: number,
+  accountID: number,
+  isActive: boolean,
+}
+
+export interface InputObject {
+  portfolio: IPortfolio;
+  accountID: number; // Додайте поле accountID з типом number
   isActive: boolean,
 }
 
@@ -27,25 +34,33 @@ export interface Item {
 export class CarouselComponent implements OnInit {
 
   @Input()
-  public items: Item[] = [];
+  public items: IPortfolio[] = [];
+  @Input()
+  public start: number = 1;
 
-  state: boolean = false;
-
-  public activeIndex: number = 1;
-  public visibleItems: Item[] = [];
+  public state: boolean = false;
+  public visibleItems: IPortfolio[] = [];
+  public leftIndexItem: number = 0;
+  public rightIndexItem: number = 2;
 
   public ngOnInit(): void {
-    this.changeVisibleItems(this.activeIndex);
+    
+    console.log(this.items, this.start);
+    this.changeVisibleItems(this.start);
   }
 
   public changeVisibleItems(itemID: number): void {
+    if (!this.items || this.items.length === 0) {
+      return;
+    }
+
     this.state = !this.state;
     const itemCount = this.items.length;
-    const currentItemIndex = this.items.findIndex(item => item.id === itemID);
+    const currentItemIndex = this.items.findIndex(item => item.accountID === itemID);
     const lastItem = this.items.length - 1;
 
-
     if (currentItemIndex === 0) {
+      
       this.visibleItems = this.items.slice(currentItemIndex, currentItemIndex + 2);
       this.visibleItems.unshift(this.items[lastItem]);
     }
@@ -58,7 +73,7 @@ export class CarouselComponent implements OnInit {
       this.visibleItems = this.items.slice(currentItemIndex - 1, currentItemIndex + 2);
       this.visibleItems.push(this.items[0]);
     }
-
-    this.activeIndex = this.visibleItems.findIndex(item => item.id === this.items[currentItemIndex].id)
+    
+    this.start = this.visibleItems.findIndex(item => item.accountID === this.items[currentItemIndex].accountID)
   }
 }

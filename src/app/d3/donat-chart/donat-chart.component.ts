@@ -42,7 +42,8 @@ export class DonatChartComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(private d3: D3Service) { }
   ngOnInit(): void {
-    this.donutID = this.donutID + this._portfolio$.value?.accountID;
+    const randomNum = Math.floor(Math.random() * 100);
+    this.donutID = `${this.donutID}${randomNum}`;
     this.sub = this._portfolio$.subscribe((portfolio) => {
       if (portfolio) {
         this.updateD3(portfolio);
