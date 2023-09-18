@@ -1,35 +1,18 @@
  .dynamic-block {
 
-     display: grid;
-     grid-template-columns: repeat(2, 1fr) 280px 340px;
-     grid-template-rows: repeat(auto);
+     display: flex;
+     flex-direction: column;
 
      .mdc-data-table__row:last-child .mat-mdc-cell {
          border-bottom: 10px solid var(--black-color);
      }
 
-     .chart-info {
-         grid-column: span 3;
-         grid-row: span 2;
-     }
-
-     .primary-visible-height {
-         grid-row: span 1;
-     }
-
-     .primary-visible-width {
-         grid-column: span 4;
-         grid-row: span 1;
-     }
-
      .indexes-grid-element {
          display: block;
-         grid-column: span 4;
          height: 150px;
      }
 
      .additional-table {
-         grid-column: span 1;
          display: block;
          font-size: 14px;
          height: 260px;

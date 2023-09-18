@@ -13,13 +13,12 @@
     }
 }
 
-
-
 .changeable-section {
     display: flex;
+    flex-direction: column-reverse;
 
     .total-info {
-        margin-left: auto;
+        margin: 0;
         padding: 0;
     }
 }
@@ -60,6 +59,5 @@
                 }
             }
         }
-
     }
 }

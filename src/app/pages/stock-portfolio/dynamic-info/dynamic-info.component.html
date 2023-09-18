@@ -1,8 +1,6 @@
 <section class="dynamic-block">
 
-    <app-resizable class="info-container chart-info"
-                   [class.primary-visible-height]="stateService.chartHasMinHeight && !stateService.chartHasMaxWidth"
-                   [class.primary-visible-width]="stateService.chartHasMaxWidth">
+    <app-resizable class="info-container">
       <mat-label>Portfolio Performance Chart:</mat-label>
       <app-area-chart></app-area-chart>
     </app-resizable>
