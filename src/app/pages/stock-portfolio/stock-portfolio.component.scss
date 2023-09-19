@@ -6,7 +6,7 @@
     &--icon {
         color: #6c7aa3cc;
     }
-    
+
     &--icon:hover {
         color: #6c7aa3e2;
         transform: rotate(10deg);
@@ -19,7 +19,9 @@
 
     .total-info {
         margin: 0;
-        padding: 0;
+        padding: 10px;
+        display: block;
+        width: 410px;
     }
 }
 
