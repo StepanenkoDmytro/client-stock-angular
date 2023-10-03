@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Subscription, fromEvent } from 'rxjs';
 import { IPortfolio, IPortfolioStock } from 'src/app/domain/portfolio.domain';
 import { SimpleDataModel } from 'src/app/domain/widget.domain';
@@ -167,11 +167,6 @@ export class DonatChartComponent implements OnInit, AfterViewInit, OnDestroy {
       .innerRadius(this.radius * 0.5)
       .outerRadius(this.radius * 0.8);
 
-    var outerArc = this.d3.d3
-      .arc()
-      .innerRadius(this.radius * 0.9)
-      .outerRadius(this.radius * 0.9);
-
     this.svg
       .selectAll('allSlices')
       .data(data_ready)
@@ -191,15 +186,15 @@ export class DonatChartComponent implements OnInit, AfterViewInit, OnDestroy {
 
     text.append('tspan')
       .attr('x', 0)
-      .attr('y', -20)
-      .attr('font-size', '17px')
+      .attr('y', -15)
+      .attr('font-size', '22px')
       .attr('font-weight', '400')
       .text(`Total balance: ${this.totalBalance}$`);
 
     text.append('tspan')
       .attr('x', 0)
       .attr('y', 40)
-      .attr('font-size', '14px')
+      .attr('font-size', '16px')
       .attr('fill', 'var(--light-color-100)')
       .style('opacity', 0.7)
       .text('The riskiness of portfolio:');
@@ -207,7 +202,7 @@ export class DonatChartComponent implements OnInit, AfterViewInit, OnDestroy {
     text.append('tspan')
       .attr('x', 0)
       .attr('y', 70)
-      .attr('font-size', '18px')
+      .attr('font-size', '22px')
       .attr('font-weight', '400')
       .attr('fill', 'var(--decline-color)')
       .text(`${this.riskness}`);

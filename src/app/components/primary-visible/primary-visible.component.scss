@@ -1,10 +1,11 @@
 .head-page {
     display: inline-flex;
+    width: 100%;
 }
 
 .primary {
-    width: 65%;
-    border: 1px solid red;
+    width: 100%;
+    margin: 0;
     display: flex;
     justify-content: space-around;
 }

@@ -1,11 +1,10 @@
 <div cdkDropListGroup>
     <div class="head-page">
-    <div class="primary" 
+    <div class="primary info-container" 
          cdkDropList
          [cdkDropListData]="primaryComponents"
          (cdkDropListDropped)="drop($event)">
-        <app-tools-manager *ngFor="let component of primaryComponents" [component]="component" 
-                           class="info-container w-100" 
+        <app-tools-manager *ngFor="let component of primaryComponents" [component]="component"   
                            cdkDrag>
         </app-tools-manager>
     </div>
