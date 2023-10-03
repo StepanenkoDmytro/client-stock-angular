@@ -41,6 +41,9 @@ import { OverviewCompanyComponent } from './pages/stock-portfolio/holdings-stock
 import { TotalInfoCardComponent } from './pages/stock-portfolio/total-info-wrapper/total-info-card/total-info-card.component';
 import { UiModule } from './modules/ui/ui.module';
 import { CarouselComponent } from './components/carousel/carousel.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { PrimaryVisibleComponent } from './components/primary-visible/primary-visible.component';
+import { ToolsManagerComponent } from './components/tools-manager/tools-manager.component';
 
 
 @NgModule({
@@ -67,6 +70,8 @@ import { CarouselComponent } from './components/carousel/carousel.component';
     OverviewCompanyComponent,
     TotalInfoCardComponent,
     CarouselComponent,
+    PrimaryVisibleComponent,
+    ToolsManagerComponent,
   ],
   imports: [
     BrowserModule,
@@ -86,6 +91,7 @@ import { CarouselComponent } from './components/carousel/carousel.component';
     MatCardModule,
     MatMenuModule,
     MatExpansionModule,
+    DragDropModule,
     AppRoutingModule,
     NoopAnimationsModule,
     ReactiveFormsModule,

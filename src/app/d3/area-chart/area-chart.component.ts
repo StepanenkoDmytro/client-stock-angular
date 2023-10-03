@@ -47,8 +47,8 @@ export class AreaChartComponent implements OnInit, OnDestroy {
   @ViewChild('chartContainer', { static: true })
   private chartContainer!: ElementRef;
 
-  private width: number = 0;
-  private height: number = 0;
+  private width: number = 200;
+  private height: number = 200;
   private margin = { top: 10, right: 30, bottom: 30, left: 50 };
   private svg: any;
   private moveMouse$: any;
