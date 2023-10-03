@@ -47,8 +47,8 @@ export class AreaChartComponent implements OnInit, OnDestroy {
   @ViewChild('chartContainer', { static: true })
   private chartContainer!: ElementRef;
 
-  private width: number = 200;
-  private height: number = 200;
+  private width: number = 300;
+  private height: number = 300;
   private margin = { top: 10, right: 30, bottom: 30, left: 50 };
   private svg: any;
   private moveMouse$: any;
@@ -61,9 +61,11 @@ export class AreaChartComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.resizechartContainer = new ResizeObserver((entries) => {
-      this.width = entries[0].target.clientWidth - this.margin.left - this.margin.right;
-      this.height = entries[0].target.clientHeight - this.margin.top - this.margin.bottom - 30;
-
+      if (entries[0].target.clientWidth > 300 && entries[0].target.clientHeight > 300) {
+        this.width = entries[0].target.clientWidth - this.margin.left - this.margin.right;
+        this.height = entries[0].target.clientHeight - this.margin.top - this.margin.bottom - 30;
+      }
+      
       this.d3.d3.select("#my_dataviz").selectChildren('*').remove();
       this.createSvg();
       this.loadData(this.data);

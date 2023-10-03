@@ -1,6 +1,5 @@
-import { CdkDialogContainer } from '@angular/cdk/dialog';
-import { CdkDrag, CdkDragDrop, CdkDragEnd, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-primary-visible',
@@ -11,13 +10,12 @@ export class PrimaryVisibleComponent {
 
   primaryComponents: string[] = [
     'chart',
-    'commodities',
-    // 'profit'
   ];
 
   workComponents: string[] = [
     'indices',
-    'profit'
+    'profit',
+    'commodities'
   ];
 
   drop(event: CdkDragDrop<string[]>) {
