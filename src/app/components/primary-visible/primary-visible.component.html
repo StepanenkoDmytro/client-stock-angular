@@ -1,4 +1,14 @@
 <div cdkDropListGroup>
+    <mat-label *ngIf="isFullComponent">
+        <a routerLink="/portfolio-overview">
+            <mat-icon>aspect_ratio</mat-icon>
+        </a>
+    </mat-label>
+    <mat-label *ngIf="!isFullComponent">
+        <a routerLink="{{linkComponent}}">
+            <mat-icon>aspect_ratio</mat-icon>
+        </a>
+    </mat-label>
     <div class="head-page">
     <div class="primary" 
          cdkDropList
@@ -8,16 +18,16 @@
                            cdkDrag>
         </app-tools-manager>
     </div>
-    <ng-content></ng-content>
+    <ng-content *ngIf="isFullComponent"></ng-content>
     </div>
 
     <div class="work" 
+         *ngIf="isFullComponent"
          cdkDropList
          [cdkDropListData]="workComponents"
          cdkDropListOrientation="horizontal"
          (cdkDropListDropped)="drop($event)">
         <app-tools-manager *ngFor="let component of workComponents" [component]="component" 
-                           
                            cdkDrag>
         </app-tools-manager>
     </div>

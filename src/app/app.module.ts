@@ -44,6 +44,7 @@ import { CarouselComponent } from './components/carousel/carousel.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { PrimaryVisibleComponent } from './components/primary-visible/primary-visible.component';
 import { ToolsManagerComponent } from './components/tools-manager/tools-manager.component';
+import { StockPageComponent } from './pages/stock-page/stock-page.component';
 
 
 @NgModule({
@@ -72,6 +73,7 @@ import { ToolsManagerComponent } from './components/tools-manager/tools-manager.
     CarouselComponent,
     PrimaryVisibleComponent,
     ToolsManagerComponent,
+    StockPageComponent,
   ],
   imports: [
     BrowserModule,
