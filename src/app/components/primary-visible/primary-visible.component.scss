@@ -11,8 +11,12 @@
 }
 
 .work {
-    display: grid;
-    grid-template-columns: repeat(2, auto);
-    grid-auto-flow: dense;
-    border: 1px solid blue;
+    // display: grid;
+    // grid-template-columns: repeat(auto-fill, auto);
+    // grid-template-rows: repeat(auto-fill, auto);
+    // grid-auto-flow: dense;
+    // border: 1px solid blue;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
 }

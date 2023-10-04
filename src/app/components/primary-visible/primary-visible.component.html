@@ -1,6 +1,6 @@
 <div cdkDropListGroup>
     <div class="head-page">
-    <div class="primary info-container" 
+    <div class="primary" 
          cdkDropList
          [cdkDropListData]="primaryComponents"
          (cdkDropListDropped)="drop($event)">
@@ -14,9 +14,10 @@
     <div class="work" 
          cdkDropList
          [cdkDropListData]="workComponents"
+         cdkDropListOrientation="horizontal"
          (cdkDropListDropped)="drop($event)">
         <app-tools-manager *ngFor="let component of workComponents" [component]="component" 
-                           class="info-container" 
+                           
                            cdkDrag>
         </app-tools-manager>
     </div>
