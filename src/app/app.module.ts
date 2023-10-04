@@ -45,6 +45,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { UnifiedWidgetViewComponent } from './components/unified-widget-view/unified-widget-view.component';
 import { ToolsManagerComponent } from './components/tools-manager/tools-manager.component';
 import { StockPageComponent } from './pages/stock-page/stock-page.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -98,6 +99,7 @@ import { StockPageComponent } from './pages/stock-page/stock-page.component';
     NoopAnimationsModule,
     ReactiveFormsModule,
     UiModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
