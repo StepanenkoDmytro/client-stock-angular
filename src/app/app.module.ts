@@ -42,7 +42,7 @@ import { TotalInfoCardComponent } from './pages/stock-portfolio/total-info-wrapp
 import { UiModule } from './modules/ui/ui.module';
 import { CarouselComponent } from './components/carousel/carousel.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { PrimaryVisibleComponent } from './components/primary-visible/primary-visible.component';
+import { UnifiedWidgetViewComponent } from './components/unified-widget-view/unified-widget-view.component';
 import { ToolsManagerComponent } from './components/tools-manager/tools-manager.component';
 import { StockPageComponent } from './pages/stock-page/stock-page.component';
 
@@ -71,7 +71,7 @@ import { StockPageComponent } from './pages/stock-page/stock-page.component';
     OverviewCompanyComponent,
     TotalInfoCardComponent,
     CarouselComponent,
-    PrimaryVisibleComponent,
+    UnifiedWidgetViewComponent,
     ToolsManagerComponent,
     StockPageComponent,
   ],

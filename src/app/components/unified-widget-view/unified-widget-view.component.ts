@@ -3,11 +3,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-primary-visible',
-  templateUrl: './primary-visible.component.html',
-  styleUrls: ['./primary-visible.component.scss']
+  selector: 'unified-widget-view',
+  templateUrl: './unified-widget-view.component.html',
+  styleUrls: ['./unified-widget-view.component.scss']
 })
-export class PrimaryVisibleComponent implements OnInit {
+export class UnifiedWidgetViewComponent implements OnInit {
 
   @Input()
   public linkComponent: string = '';
