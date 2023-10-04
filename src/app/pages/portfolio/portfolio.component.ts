@@ -3,6 +3,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
+import { MaskType } from 'src/app/directive/mask.directive';
 import { IPortfolio } from 'src/app/domain/portfolio.domain';
 import { PortfolioDataService } from 'src/app/service/portfolio-data.service';
 
@@ -13,7 +14,9 @@ import { PortfolioDataService } from 'src/app/service/portfolio-data.service';
   styleUrls: ['./portfolio.component.scss']
 })
 export class PortfolioComponent implements OnInit {
-  public cpfValue: string[] = ['a','b','c'];
+  public cpfValue: string[] = ['a', 'b', 'c'];
+  // public test: RegExp[] = /^\d{2}\/\d{2}\/\d{4}$/gi;
+  public MaskType = MaskType;
 
   public activePortfolio: IPortfolio | null = null;
   public portfolios: IPortfolio[] = [];
@@ -39,7 +42,7 @@ export class PortfolioComponent implements OnInit {
   public changePortfolio(portfolioID: number): void {
     this.portfolioService.setActiveAccount(this.portfolios[portfolioID].accountID);
 
-    
+
     this.currentPortfolio = portfolioID;
   }
 
