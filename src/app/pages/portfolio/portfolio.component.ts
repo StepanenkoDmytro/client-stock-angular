@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 import { IPortfolio } from 'src/app/domain/portfolio.domain';
 import { PortfolioDataService } from 'src/app/service/portfolio-data.service';
@@ -11,6 +13,7 @@ import { PortfolioDataService } from 'src/app/service/portfolio-data.service';
   styleUrls: ['./portfolio.component.scss']
 })
 export class PortfolioComponent implements OnInit {
+  public cpfValue: string[] = ['a','b','c'];
 
   public activePortfolio: IPortfolio | null = null;
   public portfolios: IPortfolio[] = [];
