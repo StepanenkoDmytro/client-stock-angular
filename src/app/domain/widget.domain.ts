@@ -1,3 +1,10 @@
+export interface IWidgetState {
+  id?: string,
+  nameWidget: string,
+  primary: string[],
+  work: string[]
+}
+
 export interface ICommodityTable {
   commodity: string,
   price: number,

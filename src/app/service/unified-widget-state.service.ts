@@ -1,30 +1,63 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable, map } from 'rxjs';
+import { IWidgetState } from '../domain/widget.domain';
+import { STOCK_WIDGET_DEFAULT } from '../domain/default-widget-state.domain';
+
+
+interface CreateResponse {
+  name: string
+}
+
+interface IWidgetResponse {
+  [key: string]: any;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class UnifiedWidgetStateService {
-  static url = 'https://widget-state-default-rtdb.firebaseio.com/';
+  static url = 'https://widget-state-default-rtdb.firebaseio.com/widget-state';
 
   constructor(private http: HttpClient) { }
 
-  private primaryComponents: string[] = [];
-  private workComponents: string[] = [];
-
-  getPrimaryComponents(): string[] {
-    return this.primaryComponents;
+  public create(): Observable<IWidgetState> {
+    return this.http
+      .post<CreateResponse>(`${UnifiedWidgetStateService.url}/${STOCK_WIDGET_DEFAULT.nameWidget}.json`, STOCK_WIDGET_DEFAULT)
+      .pipe(
+        map(res => {
+          return { ...STOCK_WIDGET_DEFAULT, id: res.name }
+        }));
   }
 
-  getWorkComponents(): string[] {
-    return this.workComponents;
+  public loadState(_nameWidget: string): Observable<IWidgetState> {
+    return this.http
+      .get<IWidgetState>(`${UnifiedWidgetStateService.url}/${_nameWidget}.json`)
+      .pipe(
+        map((state: IWidgetResponse) => {
+          if (!state) {
+            throw new Error(`Unknown namewidget ${_nameWidget}`);
+          }
+          const id = Object.keys(state)[0];
+          const nameWidget = state[id].nameWidget;
+          const primary = state[id].primary;
+          const work = state[id].work;
+
+          return {
+            id,
+            nameWidget,
+            primary,
+            work,
+          }}));
   }
 
-  public savePrimaryState(primary: string[]): void {
-
-  }
-
-  public saveWorkState(work: string[]): void {
-    
+  public updateState(widgetState: IWidgetState): Observable<IWidgetState> {
+    const id = widgetState.id;
+    if (!id) {
+      throw new Error('widgetState має містити ідентифікатор (id)');
+    }
+    const { id: _, ...stateWithoutId } = widgetState;
+    return this.http
+      .put<any>(`${UnifiedWidgetStateService.url}/${widgetState.nameWidget}/${widgetState.id}.json`, stateWithoutId);
   }
 }
