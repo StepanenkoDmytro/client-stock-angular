@@ -1,0 +1,70 @@
+.center {
+    display: flex;
+    justify-content: center;
+}
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+    &--row {
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+.wallet-info {
+    border: 0.5px solid grey;
+    padding: 10px 15px 10px 15px;
+    margin-top: 20px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    width: 220px;
+
+    &--main {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &--money {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 15px 0 0 0;
+    }
+
+    &--specification {
+        display: flex;
+        flex-direction: column;
+        font-size: 12px;
+    }
+}
+
+.wallet-info:last-child {
+    margin-left: 20px;
+}
+
+.label {
+    font-size: 14px;
+    font-weight: 300;
+}
+
+.specification {
+
+    &--positive {
+        color: green;
+        text-align: right;
+        margin: 0;
+    }
+
+    &--negative {
+        color: red;
+        text-align: right;
+        margin: 0;
+    }
+
+    &--info {
+        color: grey;
+    }
+}
