@@ -46,6 +46,7 @@ import { UnifiedWidgetViewComponent } from './components/unified-widget-view/uni
 import { ToolsManagerComponent } from './components/tools-manager/tools-manager.component';
 import { StockPageComponent } from './pages/stock-page/stock-page.component';
 import { HttpClientModule } from '@angular/common/http';
+import { CreditCardComponent } from './components/credit-card/credit-card.component';
 
 
 @NgModule({
@@ -75,6 +76,7 @@ import { HttpClientModule } from '@angular/common/http';
     UnifiedWidgetViewComponent,
     ToolsManagerComponent,
     StockPageComponent,
+    CreditCardComponent,
   ],
   imports: [
     BrowserModule,
