@@ -1,8 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { Subscription } from 'rxjs';
-import { IPortfolio } from 'src/app/domain/portfolio.domain';
-import { PortfolioDataService } from 'src/app/service/portfolio-data.service';
+import { Component } from '@angular/core';
+import { MNY_WIDGET } from 'src/app/domain/default-widget-state.domain';
 
 
 @Component({
@@ -10,39 +7,7 @@ import { PortfolioDataService } from 'src/app/service/portfolio-data.service';
   templateUrl: './portfolio.component.html',
   styleUrls: ['./portfolio.component.scss']
 })
-export class PortfolioComponent implements OnInit {
+export class PortfolioComponent {
 
-  public activePortfolio: IPortfolio | null = null;
-  public portfolios: IPortfolio[] = [];
-  public currentPortfolio: number = 0;
-
-  public activePortfolioID: number = 0;
-
-  private portfoliosSubscription: Subscription | undefined;
-
-  constructor(
-    public dialogService: MatDialog,
-    public portfolioService: PortfolioDataService
-  ) { }
-
-  public ngOnInit(): void {
-    this.portfoliosSubscription = this.portfolioService.portfolios$.subscribe(portfolios => {
-      this.portfolios = portfolios;
-      this.activePortfolio = portfolios.find((portfolio: IPortfolio) => portfolio.isActive) || portfolios[0];
-      this.activePortfolioID = this.activePortfolio.accountID;
-    });
-  }
-
-  public changePortfolio(portfolioID: number): void {
-    this.portfolioService.setActiveAccount(this.portfolios[portfolioID].accountID);
-
-    
-    this.currentPortfolio = portfolioID;
-  }
-
-  public ngOnDestroy(): void {
-    if (this.portfoliosSubscription) {
-      this.portfoliosSubscription.unsubscribe();
-    }
-  }
+  public componentURL = MNY_WIDGET;
 }

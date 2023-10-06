@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { IWidgetState } from '../domain/widget.domain';
-import { STOCK_WIDGET_DEFAULT } from '../domain/default-widget-state.domain';
+import { MNY_WIDGET_DEFAULT, STOCK_WIDGET_DEFAULT } from '../domain/default-widget-state.domain';
 
 
 interface CreateResponse {
@@ -23,10 +23,10 @@ export class UnifiedWidgetStateService {
 
   public create(): Observable<IWidgetState> {
     return this.http
-      .post<CreateResponse>(`${UnifiedWidgetStateService.url}/${STOCK_WIDGET_DEFAULT.nameWidget}.json`, STOCK_WIDGET_DEFAULT)
+      .post<CreateResponse>(`${UnifiedWidgetStateService.url}/${MNY_WIDGET_DEFAULT.nameWidget}.json`, MNY_WIDGET_DEFAULT)
       .pipe(
         map(res => {
-          return { ...STOCK_WIDGET_DEFAULT, id: res.name }
+          return { ...MNY_WIDGET_DEFAULT, id: res.name }
         }));
   }
 

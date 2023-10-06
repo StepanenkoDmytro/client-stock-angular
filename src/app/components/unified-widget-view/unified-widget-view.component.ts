@@ -1,6 +1,7 @@
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MNY_WIDGET } from 'src/app/domain/default-widget-state.domain';
 import { UnifiedWidgetStateService } from 'src/app/service/unified-widget-state.service';
 
 @Component({
@@ -14,21 +15,25 @@ export class UnifiedWidgetViewComponent implements OnInit {
   public linkComponent: string = '';
   public isFullComponent: boolean = false;
   public primaryComponents: string[] = [];
+  public finalWidget: string = MNY_WIDGET;
   public workComponents: string[] = [];
   private idComponent: string = '';
   private nameWidget: string = '';
+
 
   constructor(private router: Router,
     private unifiedWidgetState: UnifiedWidgetStateService) { }
 
   public ngOnInit(): void {
-    const currentURL = this.router.url;
+    const currentURL = this.router.url.substring(1);
     this.isFullComponent = this.linkComponent === currentURL;
 
-    this.nameWidget = this.linkComponent.substring(1); 
+    this.nameWidget = this.linkComponent; 
     console.log(this.nameWidget);
 
     this.unifiedWidgetState.loadState(this.nameWidget).subscribe(state => {
+      console.log(state);
+      
       this.primaryComponents = state.primary;
       this.workComponents = state.work;
 

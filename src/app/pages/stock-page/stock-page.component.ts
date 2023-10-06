@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { STOCK_WIDGET } from 'src/app/domain/default-widget-state.domain';
 
 @Component({
   selector: 'app-stock-page',
@@ -7,5 +7,5 @@ import { Router } from '@angular/router';
   styleUrls: ['./stock-page.component.scss']
 })
 export class StockPageComponent {
-  public componentURL = '/stock-portfolio';
+  public componentURL = STOCK_WIDGET;
 }

@@ -1,6 +1,5 @@
-<app-card-wrapper></app-card-wrapper>
 <div cdkDropListGroup>
-    <mat-label *ngIf="isFullComponent">
+    <mat-label *ngIf="isFullComponent && linkComponent !== finalWidget">
         <a routerLink="/portfolio-overview">
             <mat-icon>aspect_ratio</mat-icon>
         </a>
