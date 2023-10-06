@@ -1,22 +1,38 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
+.small-version {
+    border: 1px solid red;
+    border-radius: 10px;
+}
+
 .head-page {
     display: inline-flex;
     width: 100%;
 }
 
 .primary {
-    width: 100%;
     margin: 0;
     display: flex;
     justify-content: space-around;
+
+    &--full {
+        width: 100%;
+        margin-right: 20px;
+    }
 }
 
 .work {
-    // display: grid;
-    // grid-template-columns: repeat(auto-fill, auto);
-    // grid-template-rows: repeat(auto-fill, auto);
-    // grid-auto-flow: dense;
-    // border: 1px solid blue;
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 10px;
+    grid-auto-flow: row dense;
+    align-items: center;
+    justify-items: center;
+}
+
+.grid-span {
+    grid-column: span 2;
 }

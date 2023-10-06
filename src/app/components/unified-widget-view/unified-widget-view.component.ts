@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { MNY_WIDGET } from 'src/app/domain/default-widget-state.domain';
 import { UnifiedWidgetStateService } from 'src/app/service/unified-widget-state.service';
 
+
 @Component({
   selector: 'unified-widget-view',
   templateUrl: './unified-widget-view.component.html',
@@ -28,17 +29,13 @@ export class UnifiedWidgetViewComponent implements OnInit {
     const currentURL = this.router.url.substring(1);
     this.isFullComponent = this.linkComponent === currentURL;
 
-    this.nameWidget = this.linkComponent; 
-    console.log(this.nameWidget);
-
+    this.nameWidget = this.linkComponent;
     this.unifiedWidgetState.loadState(this.nameWidget).subscribe(state => {
-      console.log(state);
-      
       this.primaryComponents = state.primary;
       this.workComponents = state.work;
 
       this.idComponent = state.id!;
-      
+
     }, err => console.error(err));
   }
 
@@ -62,8 +59,10 @@ export class UnifiedWidgetViewComponent implements OnInit {
     }
 
     this.unifiedWidgetState.updateState(newState).subscribe(state => {
-      console.log(state);
-      
     }, err => console.error(err))
+  }
+
+  public isBigComponent(_t36: string): boolean {
+    return _t36 === 'stock';
   }
 }

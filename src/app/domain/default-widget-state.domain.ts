@@ -23,3 +23,4 @@ export const MNY_WIDGET_DEFAULT: IWidgetState = {
       'stock'
     ],
   }
+  

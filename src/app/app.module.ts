@@ -48,6 +48,7 @@ import { StockPageComponent } from './pages/stock-page/stock-page.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CreditCardComponent } from './components/card-wrapper/credit-card/credit-card.component';
 import { CardWrapperComponent } from './components/card-wrapper/card-wrapper.component';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 
 @NgModule({
@@ -104,6 +105,7 @@ import { CardWrapperComponent } from './components/card-wrapper/card-wrapper.com
     ReactiveFormsModule,
     UiModule,
     HttpClientModule,
+    MatGridListModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

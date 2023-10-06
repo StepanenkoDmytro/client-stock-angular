@@ -1,7 +1,7 @@
-<div [ngSwitch]="component" class="w-100">
+<div [ngSwitch]="component">
     <app-commodities-table *ngSwitchCase="'commodities'" class="info-container"></app-commodities-table>
     <app-profit-table *ngSwitchCase="'profit'" class="info-container"></app-profit-table>
     <app-index-card *ngSwitchCase="'indices'" class="info-container"></app-index-card>
     <app-area-chart *ngSwitchCase="'chart'" class="info-container"></app-area-chart>
-    <app-stock-page *ngSwitchCase="'stock'" class="info-container"></app-stock-page>
+    <app-stock-page *ngSwitchCase="'stock'"></app-stock-page>
 </div>

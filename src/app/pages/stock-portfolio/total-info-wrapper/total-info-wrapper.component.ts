@@ -37,11 +37,6 @@ export class TotalInfoWrapperComponent implements OnInit, OnDestroy {
 
   public changePortfolio(portfolioID: number): void {
     this.portfolioService.setActiveAccount(this.portfolios[portfolioID].accountID);
-
-    
-    // this.currentPortfolio = portfolioID;
-    console.log(portfolioID);
-    
   }
 
   public ngOnDestroy(): void {

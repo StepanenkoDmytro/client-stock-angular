@@ -15,7 +15,6 @@ export class ResizableComponent implements OnDestroy {
 
   // @HostListener('mousemove', ['$event'])
   // private handleMouseMove(event: MouseEvent): void {
-  //   console.log(event)
   //   this.mouseMove$.next(event);
   // }
 
