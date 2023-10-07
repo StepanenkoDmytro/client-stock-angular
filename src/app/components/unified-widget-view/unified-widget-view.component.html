@@ -15,7 +15,7 @@
             cdkDropList
             [cdkDropListData]="primaryComponents"
             (cdkDropListDropped)="drop($event)">
-            <app-tools-manager *ngFor="let component of primaryComponents" [component]="component"   
+            <app-tools-manager [class.primary--component]="isFullComponent" *ngFor="let component of primaryComponents" [component]="component"   
                             cdkDrag>
             </app-tools-manager>
         </div>

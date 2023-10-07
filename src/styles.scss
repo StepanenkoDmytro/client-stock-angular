@@ -37,12 +37,11 @@ ul {
     background: var(--dark-color);
     border-radius: 10px;
     margin-top: 10px;
-    margin-left: 10px;
     padding: 10px;
 }
 
 .info-container {
-    display: inline-block;
+    display: block;
     font-size: small;
     margin: 10px;
     padding: 20px;
