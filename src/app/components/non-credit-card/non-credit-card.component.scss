@@ -1,0 +1,47 @@
+.card {
+    width: 300px;
+    height: 160px;
+    border-radius: 20px;
+    background: url(/assets/img/bg-tarjeta-01.jpg);
+    background-size: cover;
+    padding: 13px;
+    border: 1px solid black;
+}
+
+.chip {
+    width: 22px;
+    position: absolute;
+    top: 27px;
+    left: 20px;
+}
+
+.important-info {
+    letter-spacing: 1.5px;
+    color: #FFF;
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.card-info {
+    padding: 0px 10px 0px 10px;
+    margin-top: 70px;
+    display: flex;
+    justify-content: space-between;
+
+    &--part {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.label {
+    margin: 0;
+    color: #acacac;
+    font-size: 12px;
+}
+
+.numero {
+    font-size: 26px;
+    position: relative;
+    top: 54px; 
+}

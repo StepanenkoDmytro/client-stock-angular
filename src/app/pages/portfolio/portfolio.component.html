@@ -1,5 +1,34 @@
 <div class="page-container">
-    <unified-widget-view [linkComponent]="componentURL">
+    <!-- Старий дизайн, поки не видаляю -->
+    <!-- <unified-widget-view [linkComponent]="componentURL">
         <app-card-wrapper></app-card-wrapper>
-    </unified-widget-view>
+    </unified-widget-view> -->
+    <div class="info-container">
+        <div class="space-between">
+            <h3>Рахунок</h3>
+            <button (click)="openBudgetTracker()" class="add-button">
+                <mat-icon class="add-button--icon">add_circle</mat-icon>
+            </button>
+        </div>
+        <app-non-credit-card class="center"></app-non-credit-card>
+
+        <h3>Історія</h3>
+        <div class="history">
+            <p>Покупки сьогодні відсутні</p>
+            <p>Покупки сьогодні відсутні</p>
+            <p>Покупки сьогодні відсутні</p>
+            <p>Покупки сьогодні відсутні</p>
+            <p>Покупки сьогодні відсутні</p>
+            <p>Покупки сьогодні відсутні</p>
+            <p>Покупки сьогодні відсутні</p>
+            <p>Покупки сьогодні відсутні</p>
+            <p>Покупки сьогодні відсутні</p>
+            <p>Покупки сьогодні відсутні</p>
+            <p>Покупки сьогодні відсутні</p>
+            <p>Покупки сьогодні відсутні</p>
+            
+        </div>
+
+        
+    </div>
 </div>

@@ -18,7 +18,15 @@ export interface DataModel {
 }
 
 export interface SimpleDataModel {
-  name: string;
-  value: string;
-  color?: string;
+  name: string,
+  value: string,
+  color?: string,
+}
+
+export interface IBudgetExpense {
+  id?: string,
+  date: moment.Moment,
+  cost: number,
+  category: string,
+  note: string,
 }

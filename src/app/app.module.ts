@@ -49,6 +49,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { CreditCardComponent } from './components/card-wrapper/credit-card/credit-card.component';
 import { CardWrapperComponent } from './components/card-wrapper/card-wrapper.component';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { BudgetTrackerComponent } from './dialog/budget-tracker/budget-tracker.component';
+import { NonCreditCardComponent } from './components/non-credit-card/non-credit-card.component';
 
 
 @NgModule({
@@ -80,6 +82,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
     StockPageComponent,
     CreditCardComponent,
     CardWrapperComponent,
+    BudgetTrackerComponent,
+    NonCreditCardComponent,
   ],
   imports: [
     BrowserModule,
