@@ -29,4 +29,18 @@ img {
 .history {
     height: 300px;
     overflow-y: scroll;
+    background-color: var(--dark-color);
+}
+
+.element {
+    display: flex;
+    justify-content: space-between;
+
+    &--cost {
+        font-size: 20px;
+    }
+
+    &--category {
+        font-size: 12px;
+    }
 }

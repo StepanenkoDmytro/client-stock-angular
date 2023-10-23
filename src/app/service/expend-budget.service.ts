@@ -8,6 +8,16 @@ interface CreateResponse {
   name: string
 }
 
+interface FirebaseRequest {
+  category: string,
+  cost: number,
+  note: string,
+}
+
+interface FirebaseMapResponse {
+  [key: string]: FirebaseRequest;
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -18,9 +28,8 @@ export class ExpendBudgetService {
   constructor(private http: HttpClient) { }
 
   public create(form: IBudgetExpense): Observable<any> {
-    console.log(form);
     const { id, date, ...data } = form;
-    
+
     return this.http
       .post(`${ExpendBudgetService.url}/${form.date}.json`, data)
       .pipe(
@@ -31,13 +40,17 @@ export class ExpendBudgetService {
       );
   }
 
-  public load(date: moment.Moment): Observable<any> {
+  public load(date: moment.Moment): Observable<IBudgetExpense[]> {
+    const dateString = date.format('YYYY-MM-DD');
     return this.http
-      .get(`${ExpendBudgetService.url}/${date.format('YYYY-MM-DD')}.json`)
+      .get<FirebaseMapResponse>(`${ExpendBudgetService.url}/${dateString}.json`)
       .pipe(
         tap(res => console.log(res)),
         map(tasks => {
-            return tasks;
+          if (!tasks) {
+            return [];
+          }
+          return Object.keys(tasks).map(key => ({ ...tasks[key], id: key, date: dateString }));
         })
       )
   }

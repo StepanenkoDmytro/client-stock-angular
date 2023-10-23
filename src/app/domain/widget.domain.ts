@@ -25,7 +25,7 @@ export interface SimpleDataModel {
 
 export interface IBudgetExpense {
   id?: string,
-  date: moment.Moment,
+  date: string,
   cost: number,
   category: string,
   note: string,

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { DepositWalletComponent } from '../dialog/deposit-wallet.dialog/deposit-wallet.component';
 import { BudgetTrackerComponent } from '../dialog/budget-tracker/budget-tracker.component';
 
@@ -15,7 +15,9 @@ export class DialogService {
     this.dialog.open(DepositWalletComponent);
   }
 
-  public openBudgetTracker(): void {
-    this.dialog.open(BudgetTrackerComponent);
+  public openBudgetTracker(): MatDialogRef<BudgetTrackerComponent> {
+    const dialogRef = this.dialog.open(BudgetTrackerComponent);
+
+    return dialogRef;
   }
 }
