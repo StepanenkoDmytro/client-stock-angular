@@ -43,12 +43,13 @@ export class AreaChartComponent implements OnInit, OnDestroy {
     { date: this.d3.d3.timeParse('%Y-%m-%d')('2013-05-24')!, value: 133.85 },
     { date: this.d3.d3.timeParse('%Y-%m-%d')('2013-05-25')!, value: 133.22 }
   ];
+  public areaID: string = 'area';
 
   @ViewChild('chartContainer', { static: true })
   private chartContainer!: ElementRef;
 
-  private width: number = 200;
-  private height: number = 200;
+  private width: number = 300;
+  private height: number = 300;
   private margin = { top: 10, right: 30, bottom: 30, left: 50 };
   private svg: any;
   private moveMouse$: any;
@@ -60,11 +61,18 @@ export class AreaChartComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit(): void {
-    this.resizechartContainer = new ResizeObserver((entries) => {
-      this.width = entries[0].target.clientWidth - this.margin.left - this.margin.right;
-      this.height = entries[0].target.clientHeight - this.margin.top - this.margin.bottom - 30;
+    const randomNum = Math.floor(Math.random() * 100);
+    this.areaID = `${this.areaID}${randomNum}`;
 
-      this.d3.d3.select("#my_dataviz").selectChildren('*').remove();
+    this.resizechartContainer = new ResizeObserver((entries) => {
+      if (entries[0].target.clientWidth > 300 && entries[0].target.clientHeight > 300) {
+        this.width = entries[0].target.clientWidth - this.margin.left - this.margin.right;
+        this.height = entries[0].target.clientHeight - this.margin.top - this.margin.bottom - 30;
+        console.log(this.width, this.height);
+        
+      }
+      
+      this.d3.d3.select(`#${this.areaID}`).selectChildren('*').remove();
       this.createSvg();
       this.loadData(this.data);
     });
@@ -84,7 +92,7 @@ export class AreaChartComponent implements OnInit, OnDestroy {
 
   private createSvg(): void {
 
-    this.svg = this.d3.d3.select("#my_dataviz")
+    this.svg = this.d3.d3.select(`#${this.areaID}`)
       .append("svg")
       .attr("width", this.width + this.margin.left + this.margin.right)
       .attr("height", this.height + this.margin.top + this.margin.bottom)

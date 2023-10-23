@@ -1,3 +1,5 @@
+import { MNY_WIDGET, STOCK_WIDGET } from "./default-widget-state.domain";
+
 export interface INavItem {
     link: string,
     icon?: string,
@@ -17,7 +19,7 @@ export const MENU_MARKET_ITEMS: INavItem[] = [
 
 export const MENU_PORTFOLIO_ITEMS: INavItem[] = [
     {
-        link: '/portfolio-overview',
+        link: `/${MNY_WIDGET}`,
         icon: '/icons/portfolioOverviewIcon.svg',
         title: 'Portfolio Overview'
       },
@@ -27,7 +29,7 @@ export const MENU_PORTFOLIO_ITEMS: INavItem[] = [
         title: 'Crypto Portfolio'
       },
       {
-        link: '/stock-portfolio',
+        link: `/${STOCK_WIDGET}`,
         icon: '/icons/stockPortfolioIcon.svg',
         title: 'Stock Portfolio'
       },

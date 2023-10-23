@@ -1,6 +1,27 @@
-<div class="page-container d-flex justify-content-center">
-    <app-primary-visible class="w-100">
-        <app-total-info-wrapper class="total-info info-container">
-        </app-total-info-wrapper>
-    </app-primary-visible>
+<div class="page-container">
+    <!-- Старий дизайн, поки не видаляю -->
+    <!-- <unified-widget-view [linkComponent]="componentURL">
+        <app-card-wrapper></app-card-wrapper>
+    </unified-widget-view> -->
+    <div class="info-container">
+        <div class="space-between">
+            <h3>Рахунок</h3>
+            <button (click)="openBudgetTracker()" class="add-button">
+                <mat-icon class="add-button--icon">add_circle</mat-icon>
+            </button>
+        </div>
+        <app-non-credit-card class="center"></app-non-credit-card>
+
+        <h3>Історія</h3>
+        <div class="history">
+            <ul>
+                <li *ngFor="let item of expenseArr">
+                    <div class="element">
+                        <p class="element--cost">{{item.cost}}</p>
+                        <p class="element--category">{{item.category}}</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>

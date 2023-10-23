@@ -42,8 +42,15 @@ import { TotalInfoCardComponent } from './pages/stock-portfolio/total-info-wrapp
 import { UiModule } from './modules/ui/ui.module';
 import { CarouselComponent } from './components/carousel/carousel.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { PrimaryVisibleComponent } from './components/primary-visible/primary-visible.component';
+import { UnifiedWidgetViewComponent } from './components/unified-widget-view/unified-widget-view.component';
 import { ToolsManagerComponent } from './components/tools-manager/tools-manager.component';
+import { StockPageComponent } from './pages/stock-page/stock-page.component';
+import { HttpClientModule } from '@angular/common/http';
+import { CreditCardComponent } from './components/card-wrapper/credit-card/credit-card.component';
+import { CardWrapperComponent } from './components/card-wrapper/card-wrapper.component';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { BudgetTrackerComponent } from './dialog/budget-tracker/budget-tracker.component';
+import { NonCreditCardComponent } from './components/non-credit-card/non-credit-card.component';
 
 
 @NgModule({
@@ -70,8 +77,13 @@ import { ToolsManagerComponent } from './components/tools-manager/tools-manager.
     OverviewCompanyComponent,
     TotalInfoCardComponent,
     CarouselComponent,
-    PrimaryVisibleComponent,
+    UnifiedWidgetViewComponent,
     ToolsManagerComponent,
+    StockPageComponent,
+    CreditCardComponent,
+    CardWrapperComponent,
+    BudgetTrackerComponent,
+    NonCreditCardComponent,
   ],
   imports: [
     BrowserModule,
@@ -96,6 +108,8 @@ import { ToolsManagerComponent } from './components/tools-manager/tools-manager.
     NoopAnimationsModule,
     ReactiveFormsModule,
     UiModule,
+    HttpClientModule,
+    MatGridListModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

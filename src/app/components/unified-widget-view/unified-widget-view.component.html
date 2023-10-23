@@ -1,0 +1,37 @@
+<div cdkDropListGroup [class.small-version]="!isFullComponent">
+    <mat-label *ngIf="isFullComponent && linkComponent !== finalWidget">
+        <a routerLink="/{{finalWidget}}">
+            <mat-icon>aspect_ratio</mat-icon>
+        </a>
+    </mat-label>
+    <mat-label *ngIf="!isFullComponent">
+        <a routerLink="/{{linkComponent}}">
+            <mat-icon>aspect_ratio</mat-icon>
+        </a>
+    </mat-label>
+    <div class="head-page">
+        <div class="primary" 
+            [class.primary--full]="isFullComponent"
+            cdkDropList
+            [cdkDropListData]="primaryComponents"
+            (cdkDropListDropped)="drop($event)">
+            <app-tools-manager [class.primary--component]="isFullComponent" *ngFor="let component of primaryComponents" [component]="component"   
+                            cdkDrag>
+            </app-tools-manager>
+        </div>
+        <ng-content *ngIf="isFullComponent"></ng-content>
+    </div>
+
+    <div class="work" 
+         *ngIf="isFullComponent"
+         cdkDropList
+         [cdkDropListData]="workComponents"
+         cdkDropListOrientation="horizontal"
+         (cdkDropListDropped)="drop($event)">
+        <app-tools-manager *ngFor="let component of workComponents" 
+                           [component]="component" 
+                           cdkDrag
+                           [class.grid-span]="isBigComponent(component)">
+        </app-tools-manager>
+    </div>
+</div>

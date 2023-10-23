@@ -44,8 +44,6 @@ export class CarouselComponent implements OnInit {
   public rightIndexItem: number = 2;
 
   public ngOnInit(): void {
-    
-    console.log(this.items, this.start);
     this.changeVisibleItems(this.start);
   }
 

@@ -1,9 +1,9 @@
-<section class="total-info">
+<section class="total-info" style="margin-top: -10px;">
 
     <app-donat-chart [portfolio]="portfolio">
     </app-donat-chart>
 
-    <div class="fs-6">
+    <div style="margin-top: -10px;">
         <div class="total-info--primary">
             <p>Total contribution: </p>
             <p>{{ portfolio?.contribution }}$</p>
@@ -23,7 +23,10 @@
         <div class="total-info-riskness">
             <div class="total-info-riskness--row">
                 <div>
-                    <p>Variance & Standard deviation: </p>
+                    <p class="truncate" 
+                       title="Variance & Standard deviation:">
+                       Variance & Standard deviation:
+                    </p>
                 </div>
                 <div>
                     <p>1.2</p>

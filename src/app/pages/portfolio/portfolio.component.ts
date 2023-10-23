@@ -1,48 +1,37 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { Subscription } from 'rxjs';
-import { IPortfolio } from 'src/app/domain/portfolio.domain';
-import { PortfolioDataService } from 'src/app/service/portfolio-data.service';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import * as moment from 'moment';
+import { MNY_WIDGET } from 'src/app/domain/default-widget-state.domain';
+import { IBudgetExpense } from 'src/app/domain/widget.domain';
+import { DialogService } from 'src/app/service/dialog.service';
+import { ExpendBudgetService } from 'src/app/service/expend-budget.service';
 
 
 @Component({
   selector: 'app-portfolio',
   templateUrl: './portfolio.component.html',
-  styleUrls: ['./portfolio.component.scss']
+  styleUrls: ['./portfolio.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PortfolioComponent implements OnInit {
-
-  public activePortfolio: IPortfolio | null = null;
-  public portfolios: IPortfolio[] = [];
-  public currentPortfolio: number = 0;
-
-  public activePortfolioID: number = 0;
-
-  private portfoliosSubscription: Subscription | undefined;
+export class PortfolioComponent {
+  public componentURL = MNY_WIDGET;
+  public expenseArr: IBudgetExpense[] = [];
+  //ngrx
 
   constructor(
-    public dialogService: MatDialog,
-    public portfolioService: PortfolioDataService
+    private dialog: DialogService,
+    private expendBudget: ExpendBudgetService
   ) { }
 
-  public ngOnInit(): void {
-    this.portfoliosSubscription = this.portfolioService.portfolios$.subscribe(portfolios => {
-      this.portfolios = portfolios;
-      this.activePortfolio = portfolios.find((portfolio: IPortfolio) => portfolio.isActive) || portfolios[0];
-      this.activePortfolioID = this.activePortfolio.accountID;
+  public openBudgetTracker() {
+    this.dialog.openBudgetTracker().afterClosed().subscribe(result => {
+      if (!result) {
+        return;
+      }
+
+      this.expendBudget.load(moment()).subscribe(task => {
+        this.expenseArr = task;
+      }, err => console.log(err));
+
     });
-  }
-
-  public changePortfolio(portfolioID: number): void {
-    this.portfolioService.setActiveAccount(this.portfolios[portfolioID].accountID);
-
-    
-    this.currentPortfolio = portfolioID;
-  }
-
-  public ngOnDestroy(): void {
-    if (this.portfoliosSubscription) {
-      this.portfoliosSubscription.unsubscribe();
-    }
   }
 }

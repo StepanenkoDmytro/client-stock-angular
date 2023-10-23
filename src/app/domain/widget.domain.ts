@@ -1,3 +1,10 @@
+export interface IWidgetState {
+  id?: string,
+  nameWidget: string,
+  primary: string[],
+  work: string[]
+}
+
 export interface ICommodityTable {
   commodity: string,
   price: number,
@@ -11,7 +18,15 @@ export interface DataModel {
 }
 
 export interface SimpleDataModel {
-  name: string;
-  value: string;
-  color?: string;
+  name: string,
+  value: string,
+  color?: string,
+}
+
+export interface IBudgetExpense {
+  id?: string,
+  date: string,
+  cost: number,
+  category: string,
+  note: string,
 }

@@ -1,6 +1,7 @@
-<div [ngSwitch]="component" class="w-100 h-100">
-    <app-commodities-table *ngSwitchCase="'commodities'" style="width: 200px;"></app-commodities-table>
-    <app-profit-table *ngSwitchCase="'profit'"></app-profit-table>
-    <app-index-card *ngSwitchCase="'indices'"></app-index-card>
-    <app-area-chart *ngSwitchCase="'chart'"></app-area-chart>
+<div [ngSwitch]="component">
+    <app-commodities-table *ngSwitchCase="'commodities'" class="info-container"></app-commodities-table>
+    <app-profit-table *ngSwitchCase="'profit'" class="info-container profit"></app-profit-table>
+    <app-index-card *ngSwitchCase="'indices'" class="info-container"></app-index-card>
+    <app-area-chart *ngSwitchCase="'chart'" class="info-container"></app-area-chart>
+    <app-stock-page *ngSwitchCase="'stock'"></app-stock-page>
 </div>

@@ -1,0 +1,54 @@
+<mat-tab-group>
+    <mat-tab label="Витрати">
+        <div>
+            <label>Дата</label>
+            <input type="date" [formControl]="dateCtrl">
+        </div>
+        <div>
+            <label>Категорія</label>
+            <select [formControl]="categoryCtrl">
+                <option *ngFor="let category of outlayCategory" [value]="category">
+                    {{ category }}
+                </option>
+            </select>
+        </div>
+
+        <div>
+            <label>Сума</label>
+            <input type="number" [formControl]="costCtrl">
+        </div>
+
+        <div>
+            <label>Примітка</label>
+            <textarea type="text"></textarea>
+        </div>
+        <div class="space-between">
+        <button>Відмінити</button> 
+        <button (click)="save()">Зберегти</button>
+    </div>
+    </mat-tab>
+    <mat-tab label="Дохід">
+        <div>
+            <label>Дата</label>
+            <input type="date">
+        </div>
+        <div>
+            <label>Категорія</label>
+            <select>
+                <option *ngFor="let category of incomeCategory" [value]="category">
+                    {{ category }}
+                </option>
+            </select>
+        </div>
+
+        <div>
+            <label>Сума</label>
+            <input type="number">
+        </div>
+
+        <div>
+            <label>Примітка</label>
+            <textarea type="text"></textarea>
+        </div>
+    </mat-tab>
+</mat-tab-group>

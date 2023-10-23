@@ -1,4 +1,6 @@
 .total-info {
+    width: 200px;
+
     .label {
         align-self: center;
         margin: 20px;
@@ -8,17 +10,28 @@
         display: flex;
         justify-content: space-between;
         margin: 0px 30px 0px 20px;
+        font-size: 12px;
+        height: 20px;
     }
 
     &-riskness {
-        padding-top: 10px;
+        padding-top: 5px;
         border: 1px solid var(--accept-color);
         border-radius: 5px;
+        font-size: 10px;
 
         &--row {
             display: flex;
             justify-content: space-between;
             margin: 0px 15px 0px 15px;
+            height: 20px;
         }
     }
+}
+
+.truncate-95 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 95px;
 }
