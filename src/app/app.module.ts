@@ -51,6 +51,8 @@ import { CardWrapperComponent } from './components/card-wrapper/card-wrapper.com
 import { MatGridListModule } from '@angular/material/grid-list';
 import { BudgetTrackerComponent } from './dialog/budget-tracker/budget-tracker.component';
 import { NonCreditCardComponent } from './components/non-credit-card/non-credit-card.component';
+import { ExpendCalendarComponent } from './components/expend-calendar/expend-calendar.component';
+import { SelectorComponent } from './components/expend-calendar/selector/selector.component';
 
 
 @NgModule({
@@ -84,6 +86,8 @@ import { NonCreditCardComponent } from './components/non-credit-card/non-credit-
     CardWrapperComponent,
     BudgetTrackerComponent,
     NonCreditCardComponent,
+    ExpendCalendarComponent,
+    SelectorComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,40 @@
+.calendar {
+    // border: 1px solid red;
+}
+
+table {
+    width: 100%;
+    margin-bottom: 1rem;
+    border-collapse: collapse;
+
+    td,
+    th {
+        border: 1px solid #000;
+    }
+
+    td {
+        height: 50px;
+        text-align: center;
+        transition: all .2s;
+
+        &.disabled {
+            opacity: .5;
+        }
+
+        &:hover:not(.disabled) {
+            background: #eee;
+            cursor: pointer;
+        }
+        
+    }
+
+    .active {
+        color: var(--primary-color);
+        font-weight: bold;
+    }
+
+    .selected {
+        background: #eee;
+        color: blue;
+    }
+}
