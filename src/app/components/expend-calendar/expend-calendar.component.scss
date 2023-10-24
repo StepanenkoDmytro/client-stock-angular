@@ -1,0 +1,69 @@
+.calendar {
+
+    &--day {
+        font-size: 14px;
+    }
+}
+
+table {
+    width: 100%;
+    margin-bottom: 1rem;
+    border-collapse: collapse;
+
+    td,
+    th {
+        border: 1px solid #000;
+    }
+
+    td {
+        height: 50px;
+        text-align: center;
+        transition: all .2s;
+
+        &.disabled {
+            opacity: .5;
+        }
+
+        &:hover:not(.disabled) {
+            background: #eee;
+            cursor: pointer;
+        }
+
+    }
+
+    .active {
+        color: var(--primary-color);
+
+    }
+
+    .selected {
+        background: #eee;
+        color: blue;
+    }
+}
+
+.date {
+    font-weight: bold;
+}
+
+.day-info {
+    margin-top: 20px;
+    font-size: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+
+    p {
+
+        margin: 0;
+    }
+}
+
+.enter {
+    width: 115px;
+    height: 70px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 5px;
+}
