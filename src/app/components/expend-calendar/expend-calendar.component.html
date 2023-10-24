@@ -14,11 +14,21 @@
         </thead>
         <tbody>
             <tr *ngFor="let week of calendar">
-                <td *ngFor="let day of week.days" [class.disabled]="day.disabled" [class.selected]="day.selected"
-                    (click)="select(day.value)">
-                    <span [class.active]="day.active">
-                        {{ day.value | dateFormat: 'ddd DD' }}
-                    </span>
+                <td *ngFor="let day of week.days" class="calendar--day" [class.disabled]="day.disabled"
+                    [class.selected]="day.selected" (click)="select(day.value)">
+
+                    <div class="enter">
+                        <div class="date" [class.active]="day.active">
+                            <p>
+                                {{ day.value | dateFormat: 'DD' }}
+                            </p>
+                        </div>
+
+                        <div class="day-info">
+                            <p>Витрати: 100$</p>
+                            <p>Дохід: 20 000$</p>
+                        </div>
+                    </div>
                 </td>
             </tr>
         </tbody>

@@ -53,6 +53,7 @@ import { BudgetTrackerComponent } from './dialog/budget-tracker/budget-tracker.c
 import { NonCreditCardComponent } from './components/non-credit-card/non-credit-card.component';
 import { ExpendCalendarComponent } from './components/expend-calendar/expend-calendar.component';
 import { SelectorComponent } from './components/expend-calendar/selector/selector.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 
 @NgModule({
@@ -107,6 +108,7 @@ import { SelectorComponent } from './components/expend-calendar/selector/selecto
     MatCardModule,
     MatMenuModule,
     MatExpansionModule,
+    MatProgressBarModule,
     DragDropModule,
     AppRoutingModule,
     NoopAnimationsModule,
