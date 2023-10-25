@@ -54,6 +54,8 @@ import { NonCreditCardComponent } from './components/non-credit-card/non-credit-
 import { ExpendCalendarComponent } from './components/expend-calendar/expend-calendar.component';
 import { SelectorComponent } from './components/expend-calendar/selector/selector.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { SavingsGoalComponent } from './components/savings-goal/savings-goal.component';
+import { DonatChartComponentV2 } from './d3/donat-chart-v2/donat-chart.component';
 
 
 @NgModule({
@@ -64,6 +66,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     DepositWalletComponent,
     StockMarketComponent,
     DonatChartComponent,
+    DonatChartComponentV2,
     AreaChartComponent,
     StockDetailsComponent,
     StockPickComponent,
@@ -89,6 +92,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     NonCreditCardComponent,
     ExpendCalendarComponent,
     SelectorComponent,
+    SavingsGoalComponent,
   ],
   imports: [
     BrowserModule,
