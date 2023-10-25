@@ -26,6 +26,9 @@ export class DonatChartComponentV2 implements OnInit, AfterViewInit, OnDestroy {
   }
   public donutID: string = 'donut';
 
+  @Input()
+  public color: string = '#0493c3';
+
   private _portfolio$ = new BehaviorSubject<IExpend | null>(null)
   private data: SimpleDataModel[] = [];
   private totalBalance: number = 0;
@@ -65,7 +68,7 @@ export class DonatChartComponentV2 implements OnInit, AfterViewInit, OnDestroy {
 
     this.d3.d3.select(`#${this.donutID}`).selectChildren('*').remove();
     this.createSvg();
-    this.createColors(this.data);
+    this.createColors(this.color);
     this.drawChart();
     this.clientAction();
   }
@@ -147,8 +150,8 @@ export class DonatChartComponentV2 implements OnInit, AfterViewInit, OnDestroy {
 
 
     this.colors = this.d3.d3.scaleOrdinal<string>()
-      .domain(data.map((d: any) => d.name))
-      .range(customColors);
+      // .domain(data.map((d: any) => d.name))
+      .range(data);
   }
 
   private drawChart(): void {
@@ -171,7 +174,7 @@ export class DonatChartComponentV2 implements OnInit, AfterViewInit, OnDestroy {
       .enter()
       .append('path')
       .attr('d', arc)
-      .attr('fill', (d: any, i: number) => this.colors(i.toString()))
+      .attr('fill', this.color)
       .attr('stroke', 'var(--dark-color)')
       .style('stroke-width', '10')
       .style('opacity', 0.7);

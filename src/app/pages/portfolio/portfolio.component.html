@@ -1,46 +1,78 @@
-<div class="page-container">
-    <!-- Старий дизайн, поки не видаляю -->
-    <!-- <unified-widget-view [linkComponent]="componentURL">
-        <app-card-wrapper></app-card-wrapper>
-    </unified-widget-view> -->
-
-    <app-expend-calendar class="info-container align-self-start"></app-expend-calendar>
+<main class="mny-page">
+    <div style="display: flex; justify-content: space-between; height: 70px; background-color: var(--accept-color);">
+        <button style="background-color: inherit; border: none;">
+            <img src="assets/burger-menu.svg">
+        </button>
+        <p style="font-size: 32px;
+        align-self: center;">Pegazzo</p>
+        <button style="background-color: inherit; border: none;">
+            <img src="assets/dots.svg">
+        </button>
+    </div>
+    <!-- <app-expend-calendar class="info-container align-self-start"></app-expend-calendar> -->
     <div class="info-container">
-        <div class="space-between">
-            <h3>Рахунок</h3>
-            <button (click)="openBudgetTracker()" class="add-button">
-                <mat-icon class="add-button--icon">add_circle</mat-icon>
+        <div style="position: relative;
+        top: -3%;">
+
+            <img src="assets/income/salary.svg" style="position: relative;
+            top: 23%;
+            left: 8%;">
+            <img src="assets/income/passive.svg" style="position: relative;
+            top: 10%;
+            left: 16%;">
+            <img src="assets/income/piggy.svg" style="position: relative;
+            top: 10%;
+            left: 33%;">
+            <img src="assets/income/bonus.svg" style="position: relative;
+            top: 25%;
+            left: 39%;">
+            <app-donat-chart-v2 [portfolio]="incomeMock" style="display: block; width: 300px; margin: auto;"
+                [color]="'#26a69a'"></app-donat-chart-v2>
+        </div>
+
+        <div style="position: relative;
+        top: -15%;">
+            <img src="assets/expend/house.svg" style="position: relative;
+            top: 42%;
+            left: 6%;">
+            <img src="assets/expend/pet.svg" style="position: relative;
+            top: 27%;
+            left: 4%;">
+            <img src="assets/expend/car.svg" style="position: relative;
+            top: 18%;
+            left: 10%;">
+            <img src="assets/expend/clothes.svg" style="position: relative;
+            top: 18%;
+            left: 15%;">
+            <img src="assets/expend/drink.svg" style="position: relative;
+            top: 27%;
+            left: 19%;">
+            <img src="assets/expend/gift.svg" style="position: relative;
+            top: 44%;
+            left: 17%;">
+            <img src="assets/expend/health.svg" style="position: relative;
+            top: 65%;
+            left: 4%;">
+            <img src="assets/expend/food.svg" style="position: relative;
+            top: 50%;
+            left: 4%;">
+
+            <app-donat-chart-v2 [portfolio]="expendMock" style="display: block; width: 300px; margin: auto;"
+                [color]="'#db2d3e'"></app-donat-chart-v2>
+        </div>
+
+        <div class="add-buttons" style="position: relative;
+        top: -19%;">
+            <button (click)="openBudgetTracker()" class="add-buttons--icon" id="expend">
+                Витрата
+                <!-- <mat-icon class="add-buttons--icon" id="expend">add_circle</mat-icon> -->
+            </button>
+
+            <button (click)="openBudgetTracker()" class="add-buttons--icon" id="income">
+                Дохід
+                <!-- <mat-icon class="add-buttons--icon" id="income">add_circle</mat-icon> -->
             </button>
         </div>
-        <app-non-credit-card class="center"></app-non-credit-card>
 
-        <div class="space-between">
-            <h3>Історія</h3>
-            <h4>{{currentDate}}</h4>
-        </div>
-
-        <div class="history">
-            <ul>
-                <li *ngFor="let item of expenseArr">
-                    <div class="element">
-                        <p class="element--cost">{{item.cost}}</p>
-                        <p class="element--category">{{item.category}}</p>
-                    </div>
-                </li>
-            </ul>
-        </div>
     </div>
-
-    <div class="info-container">
-        <div style="display: flex;">
-            <app-donat-chart-v2 [portfolio]="incomeMock" style="width: 200px;"></app-donat-chart-v2>
-            <app-donat-chart-v2 [portfolio]="expendMock"  style="width: 200px;"></app-donat-chart-v2>
-        </div>
-
-        <app-area-chart class="info-container"></app-area-chart>
-    </div>
-
-    <div class="info-container">
-        <app-savings-goal></app-savings-goal>
-    </div>
-</div>
+</main>
