@@ -55,6 +55,7 @@ import { ExpendCalendarComponent } from './components/expend-calendar/expend-cal
 import { SelectorComponent } from './components/expend-calendar/selector/selector.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { SavingsGoalComponent } from './components/savings-goal/savings-goal.component';
+import { DonatChartComponentV2 } from './d3/donat-chart-v2/donat-chart.component';
 
 
 @NgModule({
@@ -65,6 +66,7 @@ import { SavingsGoalComponent } from './components/savings-goal/savings-goal.com
     DepositWalletComponent,
     StockMarketComponent,
     DonatChartComponent,
+    DonatChartComponentV2,
     AreaChartComponent,
     StockDetailsComponent,
     StockPickComponent,

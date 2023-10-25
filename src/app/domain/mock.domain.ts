@@ -286,4 +286,19 @@ export const COMMODITY_MOCKS: ICommodityTable[] = [
         }
     ]
   }
+
+  export const INCOME_MOCK: IExpend = {
+    title: 'Дохід',
+    money: 30000
+  }
+
+  export const EXPENSE_MOCK: IExpend = {
+    title: 'Витрати',
+    money: 10000
+  }
+
+  export interface IExpend {
+    title: string,
+    money: number,
+  }
   

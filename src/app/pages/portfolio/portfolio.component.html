@@ -30,6 +30,16 @@
             </ul>
         </div>
     </div>
+
+    <div class="info-container">
+        <div style="display: flex;">
+            <app-donat-chart-v2 [portfolio]="incomeMock" style="width: 200px;"></app-donat-chart-v2>
+            <app-donat-chart-v2 [portfolio]="expendMock"  style="width: 200px;"></app-donat-chart-v2>
+        </div>
+
+        <app-area-chart class="info-container"></app-area-chart>
+    </div>
+
     <div class="info-container">
         <app-savings-goal></app-savings-goal>
     </div>

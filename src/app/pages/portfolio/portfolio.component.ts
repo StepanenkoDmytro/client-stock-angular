@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { switchMap, tap } from 'rxjs';
 import { MNY_WIDGET } from 'src/app/domain/default-widget-state.domain';
+import { EXPENSE_MOCK, INCOME_MOCK } from 'src/app/domain/mock.domain';
 import { IBudgetExpense } from 'src/app/domain/widget.domain';
 import { DateService } from 'src/app/service/date.service';
 import { DialogService } from 'src/app/service/dialog.service';
@@ -17,6 +18,9 @@ export class PortfolioComponent implements OnInit {
   public componentURL = MNY_WIDGET;
   public expenseArr: IBudgetExpense[] = [];
   public currentDate: string = '';
+
+  public incomeMock = INCOME_MOCK;
+  public expendMock = EXPENSE_MOCK;
   //ngrx
 
   constructor(
