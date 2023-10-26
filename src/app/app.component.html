@@ -1,6 +1,16 @@
+<div style="display: flex; justify-content: space-between; height: 70px; background-color: var(--accept-color);">
+  <button style="background-color: inherit; border: none;" (click)="switchToggleSidenav()">
+      <img src="assets/burger-menu.svg" style="width: 50px;">
+  </button>
+  <p style="font-size: 32px;
+  align-self: center;">Pegazzo</p>
+  <button style="background-color: inherit; border: none;">
+      <img src="assets/dots.svg" style="width: 50px;">
+  </button>
+</div>
 <mat-sidenav-container>
   <!-- Отдельній компонент (app-side-nav-header) -->
-  <mat-sidenav mode="side" 
+  <mat-sidenav mode="over" 
                opened="{{ isSidenavOpened }}" 
                class="sidenav-container">
 
@@ -26,20 +36,9 @@
       </mat-list-item>
     </mat-list>
 
-    <button mat-icon-button class="center-button--left" 
-            aria-label="expand row" 
-            (click)="switchToggleSidenav()">
-      <mat-icon *ngIf="isSidenavOpened">keyboard_arrow_left</mat-icon>
-      
-    </button>
   </mat-sidenav>
 
   <mat-sidenav-content>
-    <button mat-icon-button class="center-button--right" 
-            aria-label="expand row" 
-            (click)="switchToggleSidenav()">
-      <mat-icon *ngIf="!isSidenavOpened">keyboard_arrow_right</mat-icon>
-    </button>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 

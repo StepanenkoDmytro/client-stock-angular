@@ -1,4 +1,6 @@
 <app-selector></app-selector>
+<p style="font-size: 22px;">Дохід: </p>
+<p style="font-size: 22px;">20 000$</p>
 <div class="calendar">
     <table>
         <thead>
@@ -25,12 +27,30 @@
                         </div>
 
                         <div class="day-info">
-                            <p>Витрати: 100$</p>
-                            <p>Дохід: 20 000$</p>
+                            <p style="color: red">100$</p>
+                            <p style="color: green">20 000$</p>
+                            <p style="color: red">100$</p>
+                            <p style="color: green">20 000$</p>
                         </div>
                     </div>
                 </td>
             </tr>
         </tbody>
     </table>
+
+    <div class="small-menu">
+        <a routerLink="#">
+            <p>Витрати</p>
+        </a>
+        <a routerLink="/expend-calendar">
+            <p>Календар витрат</p>
+        </a>
+        <a routerLink="#">
+            <p>Аналітика</p>
+        </a>
+        <a routerLink="#">
+            <p>Цілі</p>
+        </a>
+    </div>
+
 </div>

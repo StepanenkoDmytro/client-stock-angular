@@ -1,5 +1,5 @@
 <main class="mny-page">
-    <div style="display: flex; justify-content: space-between; height: 70px; background-color: var(--accept-color);">
+    <!-- <div style="display: flex; justify-content: space-between; height: 70px; background-color: var(--accept-color);">
         <button style="background-color: inherit; border: none;">
             <img src="assets/burger-menu.svg">
         </button>
@@ -8,7 +8,7 @@
         <button style="background-color: inherit; border: none;">
             <img src="assets/dots.svg">
         </button>
-    </div>
+    </div> -->
     <!-- <app-expend-calendar class="info-container align-self-start"></app-expend-calendar> -->
     <div class="info-container">
         <div style="position: relative;
@@ -26,7 +26,7 @@
             <img src="assets/income/bonus.svg" style="position: relative;
             top: 25%;
             left: 39%;">
-            <app-donat-chart-v2 [portfolio]="incomeMock" style="display: block; width: 300px; margin: auto;"
+            <app-donat-chart-v2 [portfolio]="incomeMock" style="display: block; width: 250px; margin: auto;"
                 [color]="'#26a69a'"></app-donat-chart-v2>
         </div>
 
@@ -57,7 +57,7 @@
             top: 50%;
             left: 4%;">
 
-            <app-donat-chart-v2 [portfolio]="expendMock" style="display: block; width: 300px; margin: auto;"
+            <app-donat-chart-v2 [portfolio]="expendMock" style="display: block; width: 250px; margin: auto;"
                 [color]="'#db2d3e'"></app-donat-chart-v2>
         </div>
 
@@ -65,14 +65,27 @@
         top: -19%;">
             <button (click)="openBudgetTracker()" class="add-buttons--icon" id="expend">
                 Витрата
-                <!-- <mat-icon class="add-buttons--icon" id="expend">add_circle</mat-icon> -->
             </button>
 
             <button (click)="openBudgetTracker()" class="add-buttons--icon" id="income">
                 Дохід
-                <!-- <mat-icon class="add-buttons--icon" id="income">add_circle</mat-icon> -->
             </button>
         </div>
 
     </div>
+    <div class="small-menu">
+        <a routerLink="#">
+            <p>Витрати</p>
+        </a>
+        <a routerLink="/expend-calendar">
+            <p>Календар витрат</p>
+        </a>
+        <a routerLink="#">
+            <p>Аналітика</p>
+        </a>
+        <a routerLink="#">
+            <p>Цілі</p>
+        </a>
+    </div>
+
 </main>
