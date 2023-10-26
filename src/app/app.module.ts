@@ -61,6 +61,7 @@ import { MnyPageWrapperComponent } from './pages/portfolio/mny-page-wrapper/mny-
 import { CategoryFinancesComponent } from './pages/portfolio/category-finances/category-finances.component';
 import { MnyExpendCalendarComponent } from './pages/portfolio/mny-expend-calendar/mny-expend-calendar.component';
 import { MnyTargetsComponent } from './pages/portfolio/mny-targets/mny-targets.component';
+import { DayViewComponent } from './pages/portfolio/mny-expend-calendar/day-view/day-view.component';
 
 
 @NgModule({
@@ -103,6 +104,7 @@ import { MnyTargetsComponent } from './pages/portfolio/mny-targets/mny-targets.c
     CategoryFinancesComponent,
     MnyExpendCalendarComponent,
     MnyTargetsComponent,
+    DayViewComponent,
   ],
   imports: [
     BrowserModule,

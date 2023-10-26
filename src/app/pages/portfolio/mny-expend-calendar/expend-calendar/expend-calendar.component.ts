@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { DateService } from 'src/app/service/date.service';
 
@@ -24,7 +25,8 @@ export class ExpendCalendarComponent implements OnInit {
   calendar: Week[] = [];
 
   constructor(
-    private dateService: DateService
+    private dateService: DateService,
+    private router: Router,
   ) { }
 
   public ngOnInit(): void {
@@ -59,5 +61,6 @@ export class ExpendCalendarComponent implements OnInit {
 
   public select(day: moment.Moment) {
    this.dateService.changeDate(day);
+   this.router.navigate(['/day-view']);
   }
 }

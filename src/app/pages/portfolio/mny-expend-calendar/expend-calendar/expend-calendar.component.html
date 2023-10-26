@@ -18,8 +18,11 @@
             </thead>
             <tbody>
                 <tr *ngFor="let week of calendar">
-                    <td *ngFor="let day of week.days" class="calendar--day" [class.disabled]="day.disabled"
-                        [class.selected]="day.selected" (click)="select(day.value)">
+                    <td *ngFor="let day of week.days" 
+                        class="calendar--day" 
+                        [class.disabled]="day.disabled"
+                        [class.selected]="day.selected" 
+                        (click)="select(day.value)">
 
                         <div class="enter">
                             <div class="date" [class.active]="day.active">
