@@ -1,30 +1,9 @@
-// img {
-//     position: relative;
-//     box-sizing: border-box;
-//     width: 50px;
-//     // height: 154px;
-//     // border: 2px solid black;
-//     border-radius: 50%;
-// }
-
 .total-info {
     margin: 0px 0px 0px 20px;
     padding: 10px;
     display: block;
     width: 410px;
 }
-
-// .add-button {
-//     background-color: inherit;
-//     border: none;
-
-//     &--icon {
-//         font-size: 50px;
-//         width: 50px;
-//         height: 50px;
-//         color: rgb(193, 1, 78);
-//     }
-// }
 
 .history {
     height: 180px;
@@ -45,85 +24,3 @@
     }
 }
 
-@media only screen and (max-width: 390px) {
-    :host {
-        display: block;
-        height: 92vh;
-    }
-
-    .up-left {
-        position: relative;
-        top: 10%;
-        left: 5%;
-    }
-
-    .up-right {
-        position: relative;
-        top: 10%;
-        left: 65%;
-    }
-
-    .down-left {
-        position: relative;
-        top: 90%;
-        left: -20%;
-    }
-
-    .down-right {
-        position: relative;
-        top: 90%;
-        left: 40%;
-    }
-
-    img {
-        width: 50px;
-        // border-radius: 50%;
-        // color: #ffffff;
-    }
-
-    .mny-page {
-        height: inherit;
-    }
-
-    .info-container {
-        display: flex;
-        flex-direction: column;
-        margin: 0;
-        padding: 0;
-        box-shadow: none;
-        border-radius: 0;
-        height: calc(100% - 70px);
-    }
-
-    .add-buttons {
-        font-size: 18px;
-        background-color: inherit;
-        margin-top: auto;
-        display: flex;
-        justify-content: space-between;
-
-        &--icon {
-            width: 120px;
-            height: 120px;
-            margin: 0px 20px 20px 20px;
-            border-radius: 50%;
-            border: none;
-        }
-    }
-
-    .small-menu {
-        display: flex;
-        justify-content: space-evenly;
-        align-items: center;
-        background-color: var(--accept-color);
-        height: 70px;
-    }
-}
-
-#income {
-    background-color: var(--accept-color);
-}
-
-#expend {
-    background-color: var(--decline-color);
-}

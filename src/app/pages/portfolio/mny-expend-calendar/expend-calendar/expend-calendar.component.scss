@@ -1,5 +1,4 @@
 .calendar {
-
     &--day {
         font-size: 14px;
     }
@@ -49,11 +48,11 @@ table {
 }
 
 .day-info {
-    // margin-top: 20px;
     font-size: 10px;
     display: flex;
     flex-direction: column;
     margin-left: auto;
+    text-align: end;
 
     p {
 
@@ -62,12 +61,9 @@ table {
 }
 
 .enter {
-    // width: 115px;
-    // height: 70px;
+    height: 110px;
     display: flex;
     flex-direction: column;
-    // justify-content: space-between;
-    // padding: 5px;
 }
 
 .small-menu {
