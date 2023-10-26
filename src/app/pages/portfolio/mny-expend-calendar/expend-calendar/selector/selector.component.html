@@ -1,8 +1,8 @@
-<p>
+<div class="selector">
     <i class="material-icons" (click)="go(-1)">arrow_left</i>
    <span>
     {{ dateService.date | async | dateFormat }}
 </span>
 
     <i class="material-icons" (click)="go(1)">arrow_right</i>
-</p>
+</div>

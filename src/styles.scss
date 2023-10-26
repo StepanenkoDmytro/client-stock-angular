@@ -3,12 +3,7 @@
 
 html,
 body {
-    // background-color: rgb(16, 16, 16);
     font-family: Roboto, "Helvetica Neue", sans-serif;
-
-    .mat-drawer-container {
-        // background-color: rgb(16, 16, 16);
-    }
 
     mat-label {
         font-size: 16px;
@@ -16,13 +11,14 @@ body {
 }
 
 :root {
+    --background-color: #eee3e3;
     --primary-color: #dc3545;
     --dark-color: rgb(30, 30, 32);
     --black-color: rgb(16, 16, 16);
     --light-color: #f4f4f4;
-    --light-color-100: #c0bab5da;
+    --light-color-100: #c0bab5;
     --accept-color: #26a69a;
-    --decline-color: #db2d3e;
+    --decline-color: #db2d3eb5;
     --stroke-color: #9bc8e235;
     --stroke-color-50: #aabbc51d;
 }
@@ -44,12 +40,9 @@ ul {
 .info-container {
     display: block;
     font-size: small;
-    // margin: 10px;
-    // padding: 20px;
     box-shadow: -5px 5px 10px -5px rgb(16, 16, 16);
-    background-color: rgb(16, 16, 16);
-    // border-radius: 10px;
-    color: var(--light-color);
+    background-color: var(--background-color);
+    color: var(--black-color);
 }
 
 .table-assets {

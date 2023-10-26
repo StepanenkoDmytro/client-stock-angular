@@ -6,7 +6,7 @@
 
 table {
     width: 100%;
-    margin-bottom: 1rem;
+    margin-bottom: auto;
     border-collapse: collapse;
 
     td,
@@ -28,6 +28,12 @@ table {
             cursor: pointer;
         }
 
+    }
+
+    tr:last-child {
+        td {
+            border-bottom: none;
+        }
     }
 
     .active {
@@ -72,4 +78,30 @@ table {
     align-items: center;
     background-color: var(--accept-color);
     height: 70px;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-evenly;
+
+    &--card {
+        text-align: center;
+        font-size: 16px;
+    }
+}
+
+.info {
+    font-size: 18px;
+}
+
+#income {
+    color: var(--accept-color);
+}
+
+#expend {
+    color: var(--decline-color);
+}
+
+#summary {
+    color: var(--light-color-100);
 }

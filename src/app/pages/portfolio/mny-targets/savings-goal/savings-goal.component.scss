@@ -6,6 +6,11 @@
     &--info {
         font-size: 22px;
     }
+
+    &--money {
+        font-size: 28px;
+        color: var(--accept-color);
+    }
 }
 
 .goals {
@@ -17,7 +22,7 @@
 .goal {
     display: flex;
     flex-direction: column;
-    background-color: var(--dark-color);
+    background-color: var(--light-color-100);
     border-radius: 10px;
     padding: 10px;
 

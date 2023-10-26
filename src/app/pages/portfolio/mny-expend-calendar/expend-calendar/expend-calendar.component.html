@@ -1,7 +1,18 @@
 <main>
     <app-selector></app-selector>
-    <div>
-        <ng-content></ng-content>
+    <div class="calendar-header">
+        <div class="calendar-header--card">
+            <p>Дохід: </p>
+            <p id="income" class="info">20 000$</p>
+        </div>
+        <div class="calendar-header--card">
+            <p>Витрати: </p>
+            <p id="expend" class="info">20 000$</p>
+        </div>
+        <div class="calendar-header--card">
+            <p>Сумарно: </p>
+            <p id="summary" class="info">20 000$</p>
+        </div>
     </div>
     <div class="calendar">
         <table>

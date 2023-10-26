@@ -70,7 +70,6 @@ export class DonatChartComponentV2 implements OnInit, AfterViewInit, OnDestroy {
     this.createSvg();
     this.createColors(this.color);
     this.drawChart();
-    this.clientAction();
   }
 
   public ngOnDestroy(): void {
@@ -86,51 +85,6 @@ export class DonatChartComponentV2 implements OnInit, AfterViewInit, OnDestroy {
       name: stocks.title,
       value: stocks.money.toString(),
     };
-  }
-
-  private clientAction(): void {
-    const tooltip = this.d3.d3.select('#tooltip');
-
-    const svgContainerElement = this.svg.node();
-    if (svgContainerElement instanceof Element) {
-
-      this.mouseMove$ = fromEvent<MouseEvent>(svgContainerElement, 'mousemove');
-
-      this.mouseMove$.subscribe((event: any) => {
-        if (event.target.__data__) {
-          const curData = event.target.__data__.data;
-          const index = event.target.__data__.index + 1;
-
-          const offsetX = event.clientX - 120;
-          const offsetY = event.clientY;
-
-          this.svg.selectAll('path')
-            .style('opacity', 0.5)
-            .on('mouseout', () => {
-              this.svg.selectAll('path')
-                .style('opacity', 0.7);
-
-              tooltip
-                .style('display', 'none');
-
-              this.svg.select(`path:nth-child(${index})`)
-                .attr('stroke', 'var(--dark-color)')
-                .style('stroke-width', '10');
-            });
-
-          this.svg.select(`path:nth-child(${index})`)
-            .style('opacity', 1)
-            .attr('stroke', 'var(--stroke-color)')
-            .style('stroke-width', '10');
-
-          tooltip
-            .style('display', 'block')
-            .html(`${curData.name}: ${curData.value}`)
-            .style('left', `${offsetX}px`)
-            .style('top', `${offsetY}px`);
-        }
-      });
-    }
   }
 
   private createSvg(): void {
@@ -176,43 +130,27 @@ export class DonatChartComponentV2 implements OnInit, AfterViewInit, OnDestroy {
       .attr('d', arc)
       .attr('fill', this.color)
       .attr('stroke', 'var(--dark-color)')
-      .style('stroke-width', '10')
+      .style('stroke-width', '4')
       .style('opacity', 0.7);
 
     const text = this.svg.append('text')
       .attr('alignment-baseline', 'middle')
       .attr('class', 'chart-label')
-      .attr('fill', 'var(--light-color)')
+      .attr('fill', 'var(--black-color)')
       .attr('text-anchor', 'middle');
 
     text.append('tspan')
       .attr('x', 0)
       .attr('y', -10)
-      .attr('font-size', '22px')
+      .attr('font-size', '26px')
       .attr('font-weight', '400')
       .text(`${this.data[0].name}`);
     
       text.append('tspan')
       .attr('x', 0)
       .attr('y', 35)
-      .attr('font-size', '26px')
+      .attr('font-size', '30px')
       .attr('font-weight', '400')
       .text(`${this.data[0].value}$`);
-
-    // text.append('tspan')
-    //   .attr('x', 0)
-    //   .attr('y', 40)
-    //   .attr('font-size', '16px')
-    //   .attr('fill', 'var(--light-color-100)')
-    //   .style('opacity', 0.7)
-    //   .text('The riskiness of portfolio:');
-
-    // text.append('tspan')
-    //   .attr('x', 0)
-    //   .attr('y', 70)
-    //   .attr('font-size', '22px')
-    //   .attr('font-weight', '400')
-    //   .attr('fill', 'var(--decline-color)')
-    //   .text(`${this.riskness}`);
   }
 }

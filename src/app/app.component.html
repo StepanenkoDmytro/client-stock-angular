@@ -1,13 +1,6 @@
-<div style="display: flex; justify-content: space-between; height: 70px; background-color: var(--accept-color);">
-  <button style="background-color: inherit; border: none;" (click)="switchToggleSidenav()">
-      <img src="assets/burger-menu.svg" style="width: 50px;">
-  </button>
-  <p style="font-size: 32px;
-  align-self: center;">Pegazzo</p>
-  <button style="background-color: inherit; border: none;">
-      <img src="assets/dots.svg" style="width: 50px;">
-  </button>
-</div>
+<app-header (isSidenavOpenedChange)="switchToggleSidenav($event)"></app-header>
+
+
 <mat-sidenav-container>
   <!-- Отдельній компонент (app-side-nav-header) -->
   <mat-sidenav mode="over" 
