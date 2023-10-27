@@ -1,6 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
-<svg fill="none" width="800px" height="800px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
-<title>house</title>
-<path d="M0 16h4l12-13.696 12 13.696h4l-13.984-16h-4zM4 32h8v-9.984q0-0.832 0.576-1.408t1.44-0.608h4q0.8 0 1.408 0.608t0.576 1.408v9.984h8v-13.408l-12-13.248-12 13.248v13.408zM26.016 6.112l4 4.576v-8.672h-4v4.096z" stroke="#101010" stroke-miterlimit="10" stroke-width="1"></path>
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_2_24)">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M10.4436 105.733L35.9333 80.2436V27.6H64.0666V52.1103L100 16.1769L189.556 105.733H172.4V180.733H119.267V130.733H80.7333V180.733H27.6V105.733H10.4436ZM60.9333 30.7333H39.0667V81.5397L18.0064 102.6H30.7333V177.6H77.6V127.6H122.4V177.6H169.267V102.6H181.994L100 20.6064L60.9333 59.673V30.7333Z" fill="black"/>
+</g>
+<defs>
+<clipPath id="clip0_2_24">
+<rect width="200" height="200" fill="white"/>
+</clipPath>
+</defs>
 </svg>
