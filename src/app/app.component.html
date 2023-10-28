@@ -3,13 +3,13 @@
 
 <mat-sidenav-container>
   <!-- Отдельній компонент (app-side-nav-header) -->
-  <mat-sidenav mode="over" 
-               opened="{{ isSidenavOpened }}" 
+  <mat-sidenav mode="over"
+               opened="{{ isSidenavOpened }}"
                class="sidenav-container">
 
     <p>Markets:</p>
     <mat-list>
-      <mat-list-item *ngFor="let itemMarket of menuItemsMarkets" 
+      <mat-list-item *ngFor="let itemMarket of menuItemsMarkets"
                      role="listitem"
                      routerLinkActive="active">
         <a routerLink={{itemMarket.link}}>
@@ -20,7 +20,7 @@
 
     <p>Account:</p>
     <mat-list>
-      <mat-list-item *ngFor="let itemPortfolio of menuItemsPortfolio" 
+      <mat-list-item *ngFor="let itemPortfolio of menuItemsPortfolio"
                      role="listitem"
                      routerLinkActive="active">
         <a routerLink={{itemPortfolio.link}}>
@@ -32,7 +32,9 @@
   </mat-sidenav>
 
   <mat-sidenav-content>
-    <router-outlet></router-outlet>
+    <section class="content-wrapper">
+      <router-outlet></router-outlet>
+    </section>
   </mat-sidenav-content>
 
 </mat-sidenav-container>

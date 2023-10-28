@@ -4,21 +4,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { StockPortfolioComponent } from './pages/stock-portfolio/stock-portfolio.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatIconModule } from '@angular/material/icon';
 import { PortfolioComponent } from './pages/portfolio/portfolio.component';
-import { MatDialogModule } from '@angular/material/dialog';
 import { DepositWalletComponent } from './dialog/deposit-wallet.dialog/deposit-wallet.component';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { StockMarketComponent } from './pages/stock-portfolio/stock-market/stock-market.component';
-import { MatTableModule } from '@angular/material/table';
-import { MatListModule } from '@angular/material/list';
 import { DonatChartComponent } from './d3/donat-chart/donat-chart.component';
 import { AreaChartComponent } from './d3/area-chart/area-chart.component';
 import { StockDetailsComponent } from './pages/stock-portfolio/stock-market/stock-details/stock-details.component';
@@ -27,10 +16,6 @@ import { HoldingsStockComponent } from './pages/stock-portfolio/holdings-stock/h
 import { TradeStockComponent } from './pages/stock-portfolio/stock-market/trade-stock/trade-stock.component';
 import { ExpandedInfoComponent } from './pages/stock-portfolio/holdings-stock/expanded-info/expanded-info.component';
 import { DateFormatPipe } from './pipe/date-format.pipe';
-import { MatCardModule } from '@angular/material/card';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatExpansionModule } from '@angular/material/expansion';
 import { DynamicInfoComponent } from './pages/stock-portfolio/dynamic-info/dynamic-info.component';
 import { TotalInfoWrapperComponent } from './pages/stock-portfolio/total-info-wrapper/total-info-wrapper.component';
 import { CommoditiesTableComponent } from './pages/stock-portfolio/dynamic-info/commodities-table/commodities-table.component';
@@ -48,12 +33,10 @@ import { StockPageComponent } from './pages/stock-page/stock-page.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CreditCardComponent } from './components/card-wrapper/credit-card/credit-card.component';
 import { CardWrapperComponent } from './components/card-wrapper/card-wrapper.component';
-import { MatGridListModule } from '@angular/material/grid-list';
 import { BudgetTrackerComponent } from './pages/portfolio/category-finances/budget-tracker-wrapper/budget-tracker/budget-tracker.component';
 import { NonCreditCardComponent } from './components/non-credit-card/non-credit-card.component';
 import { ExpendCalendarComponent } from './pages/portfolio/mny-expend-calendar/expend-calendar/expend-calendar.component';
 import { SelectorComponent } from './pages/portfolio/mny-expend-calendar/expend-calendar/selector/selector.component';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { SavingsGoalComponent } from './pages/portfolio/mny-targets/savings-goal/savings-goal.component';
 import { DonatChartComponentV2 } from './d3/donat-chart-v2/donat-chart.component';
 import { MnyPageMenuComponent } from './pages/portfolio/mny-page-wrapper/mny-page-menu/mny-page-menu.component';
@@ -115,29 +98,12 @@ import { InputCalculatorComponent } from './components/input-calculator/input-ca
   imports: [
     BrowserModule,
     FormsModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatButtonModule,
-    MatTabsModule,
-    MatTableModule,
-    MatListModule,
-    MatCheckboxModule,
-    MatButtonToggleModule,
-    MatCardModule,
-    MatMenuModule,
-    MatExpansionModule,
-    MatProgressBarModule,
     DragDropModule,
     AppRoutingModule,
     NoopAnimationsModule,
     ReactiveFormsModule,
     UiModule,
     HttpClientModule,
-    MatGridListModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
