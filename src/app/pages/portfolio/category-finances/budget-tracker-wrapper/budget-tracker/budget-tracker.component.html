@@ -1,0 +1,32 @@
+<div class="label">
+    <p>{{date | titlecase}}</p>
+</div>
+
+<div class="input">
+    <img src="assets/money.svg">
+    <input type="number" class="input--money">
+    <img src="assets/delete.svg">
+</div>
+
+<div>
+    <label>Категорія</label>
+    <select>
+        <option *ngFor="let category of outlayCategory" [value]="category">
+            {{ category }}
+        </option>
+    </select>
+</div>
+
+<div>
+    <label>Сума</label>
+    <input type="number">
+</div>
+
+<div>
+    <label>Примітка</label>
+    <textarea type="text"></textarea>
+</div>
+<div class="space-between">
+    <button>Відмінити</button>
+    <button (click)="save()">Зберегти</button>
+</div>

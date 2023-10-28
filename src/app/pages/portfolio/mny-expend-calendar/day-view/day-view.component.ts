@@ -39,17 +39,17 @@ export class DayViewComponent implements OnInit {
   }
 
   public openBudgetTracker() {
-    const curDate = this.dateService.date.value;
-    this.dialog.openBudgetTracker().afterClosed().subscribe(result => {
-      if (!result) {
-        return;
-      }
+    // const curDate = this.dateService.date.value;
+    // this.dialog.openBudgetTracker().afterClosed().subscribe(result => {
+    //   if (!result) {
+    //     return;
+    //   }
 
-      this.expendBudget.load(curDate).subscribe(task => {
-        this.expenseArr = task;
-        this.cdr.detectChanges();
-      }, err => console.log(err));
+    //   this.expendBudget.load(curDate).subscribe(task => {
+    //     this.expenseArr = task;
+    //     this.cdr.detectChanges();
+    //   }, err => console.log(err));
 
-    });
+    // });
   }
 }

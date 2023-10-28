@@ -7,6 +7,7 @@ import { MNY_WIDGET, STOCK_WIDGET } from './domain/default-widget-state.domain';
 import { MnyExpendCalendarComponent } from './pages/portfolio/mny-expend-calendar/mny-expend-calendar.component';
 import { MnyTargetsComponent } from './pages/portfolio/mny-targets/mny-targets.component';
 import { DayViewComponent } from './pages/portfolio/mny-expend-calendar/day-view/day-view.component';
+import { BudgetTrackerWrapperComponent } from './pages/portfolio/category-finances/budget-tracker-wrapper/budget-tracker-wrapper.component';
 
 const routes: Routes = [
   { path: 'stock-market', component: StockMarketComponent },
@@ -14,7 +15,8 @@ const routes: Routes = [
   { path: MNY_WIDGET, component: PortfolioComponent },
   { path: 'expend-calendar', component: MnyExpendCalendarComponent },
   { path: 'savings-goals', component: MnyTargetsComponent },
-  { path: 'day-view', component: DayViewComponent }
+  { path: 'day-view', component: DayViewComponent },
+  { path: 'money-tracker', component: BudgetTrackerWrapperComponent },
 ];
 
 @NgModule({

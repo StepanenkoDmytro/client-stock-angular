@@ -1,0 +1,30 @@
+img {
+    width: 50px;
+}
+
+.label {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 500;
+    margin: 20px 0px 20px 0px;
+}
+
+.input {
+    background-color: var(--accept-color);
+    display: flex;
+    padding: 20px;
+    margin: 0px 20px 0px 20px;
+
+    &--money {
+        margin: auto;
+        background-color: inherit;
+        border: none;
+        text-align: center;
+        width: 70%;
+        font-size: 36px;
+    }
+
+    &--money:focus-visible {
+        outline: none;
+    }
+}

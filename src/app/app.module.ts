@@ -49,7 +49,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CreditCardComponent } from './components/card-wrapper/credit-card/credit-card.component';
 import { CardWrapperComponent } from './components/card-wrapper/card-wrapper.component';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { BudgetTrackerComponent } from './dialog/budget-tracker/budget-tracker.component';
+import { BudgetTrackerComponent } from './pages/portfolio/category-finances/budget-tracker-wrapper/budget-tracker/budget-tracker.component';
 import { NonCreditCardComponent } from './components/non-credit-card/non-credit-card.component';
 import { ExpendCalendarComponent } from './pages/portfolio/mny-expend-calendar/expend-calendar/expend-calendar.component';
 import { SelectorComponent } from './pages/portfolio/mny-expend-calendar/expend-calendar/selector/selector.component';
@@ -63,6 +63,7 @@ import { MnyExpendCalendarComponent } from './pages/portfolio/mny-expend-calenda
 import { MnyTargetsComponent } from './pages/portfolio/mny-targets/mny-targets.component';
 import { DayViewComponent } from './pages/portfolio/mny-expend-calendar/day-view/day-view.component';
 import { HeaderComponent } from './components/header/header.component';
+import { BudgetTrackerWrapperComponent } from './pages/portfolio/category-finances/budget-tracker-wrapper/budget-tracker-wrapper.component';
 
 
 @NgModule({
@@ -107,6 +108,7 @@ import { HeaderComponent } from './components/header/header.component';
     MnyTargetsComponent,
     DayViewComponent,
     HeaderComponent,
+    BudgetTrackerWrapperComponent,
   ],
   imports: [
     BrowserModule,
