@@ -1,0 +1,30 @@
+<form class="auth-form"
+      [formGroup]="form"
+      (ngSubmit)="handleSubmit()">
+  <mat-form-field class="auth-form--field">
+    <mat-label>{{ 'Email:' }}</mat-label>
+    <input [formControl]="nameCtrl" type="email" matInput>
+  </mat-form-field>
+
+  <mat-form-field class="auth-form--field">
+    <mat-label>{{ 'Password:' }}</mat-label>
+    <input [formControl]="passwordCtrl" type="password" matInput>
+  </mat-form-field>
+
+  <div>
+    <button mat-flat-button
+            [disabled]="form.invalid"
+            type="submit" class="auth-form--submit">
+      {{ 'Log In' }}
+    </button>
+  </div>
+</form>
+
+<a [routerLink]="'../forget-password'">Forget your password?</a>
+<br>
+
+-- OR --
+
+<p>Log In with Google</p>
+
+

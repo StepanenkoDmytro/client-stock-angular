@@ -8,6 +8,9 @@ import { MnyExpendCalendarComponent } from './pages/portfolio/mny-expend-calenda
 import { MnyTargetsComponent } from './pages/portfolio/mny-targets/mny-targets.component';
 import { DayViewComponent } from './pages/portfolio/mny-expend-calendar/day-view/day-view.component';
 import { BudgetTrackerWrapperComponent } from './pages/portfolio/category-finances/budget-tracker-wrapper/budget-tracker-wrapper.component';
+import { NotFoundComponent } from './modules/ui/components/not-found/not-found.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { JwtInterceptor } from './modules/auth/jwt.interceptor';
 
 const routes: Routes = [
   { path: 'stock-market', component: StockMarketComponent },
@@ -17,10 +20,16 @@ const routes: Routes = [
   { path: 'savings-goals', component: MnyTargetsComponent },
   { path: 'day-view', component: DayViewComponent },
   { path: 'money-tracker', component: BudgetTrackerWrapperComponent },
+  { path: 'auth', loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule) },
+  { path: 'not-found', component: NotFoundComponent },
+  { path: '**', pathMatch: 'full', redirectTo: 'not-found' },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+  ]
 })
 export class AppRoutingModule { }
