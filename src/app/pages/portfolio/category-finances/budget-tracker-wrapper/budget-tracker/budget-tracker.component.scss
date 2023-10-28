@@ -2,6 +2,11 @@ img {
     width: 50px;
 }
 
+.budget {
+    display: flex;
+    flex-direction: column;
+}
+
 .label {
     text-align: center;
     font-size: 22px;

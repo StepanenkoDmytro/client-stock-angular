@@ -1,0 +1,12 @@
+<div class="calculator">
+    <div class="numbers">
+        <div *ngFor="let number of numbers" class="calculator--element">
+            <div>{{ number }}</div>
+        </div>
+    </div>
+    <div class="actions">
+        <div *ngFor="let action of actions" class="calculator--element">
+            <div>{{ action }}</div>
+        </div>
+    </div>
+</div>

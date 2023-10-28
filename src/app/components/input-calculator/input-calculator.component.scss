@@ -1,0 +1,23 @@
+.calculator {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+
+    &--element {
+        font-size: 30px;
+        border: 1px solid grey;
+        border-radius: 2px;
+        text-align: center;
+        margin: 2px;
+        padding: 30px;
+    }
+}
+
+.numbers {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.actions {
+    display: grid;
+    grid-template-columns: 1fr;
+}

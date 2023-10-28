@@ -64,6 +64,7 @@ import { MnyTargetsComponent } from './pages/portfolio/mny-targets/mny-targets.c
 import { DayViewComponent } from './pages/portfolio/mny-expend-calendar/day-view/day-view.component';
 import { HeaderComponent } from './components/header/header.component';
 import { BudgetTrackerWrapperComponent } from './pages/portfolio/category-finances/budget-tracker-wrapper/budget-tracker-wrapper.component';
+import { InputCalculatorComponent } from './components/input-calculator/input-calculator.component';
 
 
 @NgModule({
@@ -109,6 +110,7 @@ import { BudgetTrackerWrapperComponent } from './pages/portfolio/category-financ
     DayViewComponent,
     HeaderComponent,
     BudgetTrackerWrapperComponent,
+    InputCalculatorComponent,
   ],
   imports: [
     BrowserModule,
