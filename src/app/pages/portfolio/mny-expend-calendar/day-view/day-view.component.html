@@ -1,0 +1,27 @@
+<app-mny-page-wrapper class="info-container">
+    <div>
+        <div class="space-between">
+            <h3>Рахунок</h3>
+            <button (click)="openBudgetTracker()" class="add-button">
+                <mat-icon class="add-button--icon">add_circle</mat-icon>
+            </button>
+        </div>
+        <app-non-credit-card class="center"></app-non-credit-card>
+
+        <div class="space-between">
+            <h3>Історія</h3>
+            <h4>{{currentDate}}</h4>
+        </div>
+
+        <div class="history">
+            <ul>
+                <li *ngFor="let item of expenseArr">
+                    <div class="element">
+                        <p class="element--cost">{{item.cost}}</p>
+                        <p class="element--category">{{item.category}}</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</app-mny-page-wrapper>

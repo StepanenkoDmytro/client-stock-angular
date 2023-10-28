@@ -8,13 +8,12 @@ import { INavItem, MENU_MARKET_ITEMS, MENU_PORTFOLIO_ITEMS } from './domain/app-
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-
-  public isSidenavOpened = false;
+  public isSidenavOpened: boolean = false;
 
   public menuItemsMarkets: INavItem[] = MENU_MARKET_ITEMS;
   public menuItemsPortfolio: INavItem[] = MENU_PORTFOLIO_ITEMS;
 
-  public switchToggleSidenav() {
-    this.isSidenavOpened = !this.isSidenavOpened;
+  public switchToggleSidenav($event: boolean) {
+    this.isSidenavOpened = $event;
   }
 }

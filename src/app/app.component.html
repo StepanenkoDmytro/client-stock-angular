@@ -1,6 +1,9 @@
+<app-header (isSidenavOpenedChange)="switchToggleSidenav($event)"></app-header>
+
+
 <mat-sidenav-container>
   <!-- Отдельній компонент (app-side-nav-header) -->
-  <mat-sidenav mode="side" 
+  <mat-sidenav mode="over" 
                opened="{{ isSidenavOpened }}" 
                class="sidenav-container">
 
@@ -26,20 +29,9 @@
       </mat-list-item>
     </mat-list>
 
-    <button mat-icon-button class="center-button--left" 
-            aria-label="expand row" 
-            (click)="switchToggleSidenav()">
-      <mat-icon *ngIf="isSidenavOpened">keyboard_arrow_left</mat-icon>
-      
-    </button>
   </mat-sidenav>
 
   <mat-sidenav-content>
-    <button mat-icon-button class="center-button--right" 
-            aria-label="expand row" 
-            (click)="switchToggleSidenav()">
-      <mat-icon *ngIf="!isSidenavOpened">keyboard_arrow_right</mat-icon>
-    </button>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 

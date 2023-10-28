@@ -1,5 +1,4 @@
 .calendar {
-
     &--day {
         font-size: 14px;
     }
@@ -7,7 +6,7 @@
 
 table {
     width: 100%;
-    margin-bottom: 1rem;
+    margin-bottom: auto;
     border-collapse: collapse;
 
     td,
@@ -16,7 +15,7 @@ table {
     }
 
     td {
-        height: 50px;
+        // height: 50px;
         text-align: center;
         transition: all .2s;
 
@@ -31,6 +30,12 @@ table {
 
     }
 
+    tr:last-child {
+        td {
+            border-bottom: none;
+        }
+    }
+
     .active {
         color: var(--primary-color);
 
@@ -43,15 +48,17 @@ table {
 }
 
 .date {
+    display: flex;
+    justify-content: flex-start;
     font-weight: bold;
 }
 
 .day-info {
-    margin-top: 20px;
     font-size: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    margin-left: auto;
+    text-align: end;
 
     p {
 
@@ -60,10 +67,41 @@ table {
 }
 
 .enter {
-    width: 115px;
-    height: 70px;
+    height: 110px;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 5px;
+    flex-direction: column;
+}
+
+.small-menu {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: var(--accept-color);
+    height: 70px;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-evenly;
+
+    &--card {
+        text-align: center;
+        font-size: 16px;
+    }
+}
+
+.info {
+    font-size: 18px;
+}
+
+#income {
+    color: var(--accept-color);
+}
+
+#expend {
+    color: var(--decline-color);
+}
+
+#summary {
+    color: var(--light-color-100);
 }

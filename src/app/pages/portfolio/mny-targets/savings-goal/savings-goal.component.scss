@@ -1,7 +1,28 @@
+.primary {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 20px;
+
+    &--info {
+        font-size: 22px;
+    }
+
+    &--money {
+        font-size: 28px;
+        color: var(--accept-color);
+    }
+}
+
+.goals {
+    height: 84vh;
+    overflow-y: scroll;
+    padding: 0px 10px 0px 10px;
+}
+
 .goal {
     display: flex;
     flex-direction: column;
-    background-color: var(--dark-color);
+    background-color: var(--light-color-100);
     border-radius: 10px;
     padding: 10px;
 

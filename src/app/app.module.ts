@@ -49,13 +49,22 @@ import { HttpClientModule } from '@angular/common/http';
 import { CreditCardComponent } from './components/card-wrapper/credit-card/credit-card.component';
 import { CardWrapperComponent } from './components/card-wrapper/card-wrapper.component';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { BudgetTrackerComponent } from './dialog/budget-tracker/budget-tracker.component';
+import { BudgetTrackerComponent } from './pages/portfolio/category-finances/budget-tracker-wrapper/budget-tracker/budget-tracker.component';
 import { NonCreditCardComponent } from './components/non-credit-card/non-credit-card.component';
-import { ExpendCalendarComponent } from './components/expend-calendar/expend-calendar.component';
-import { SelectorComponent } from './components/expend-calendar/selector/selector.component';
+import { ExpendCalendarComponent } from './pages/portfolio/mny-expend-calendar/expend-calendar/expend-calendar.component';
+import { SelectorComponent } from './pages/portfolio/mny-expend-calendar/expend-calendar/selector/selector.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { SavingsGoalComponent } from './components/savings-goal/savings-goal.component';
+import { SavingsGoalComponent } from './pages/portfolio/mny-targets/savings-goal/savings-goal.component';
 import { DonatChartComponentV2 } from './d3/donat-chart-v2/donat-chart.component';
+import { MnyPageMenuComponent } from './pages/portfolio/mny-page-wrapper/mny-page-menu/mny-page-menu.component';
+import { MnyPageWrapperComponent } from './pages/portfolio/mny-page-wrapper/mny-page-wrapper.component';
+import { CategoryFinancesComponent } from './pages/portfolio/category-finances/category-finances.component';
+import { MnyExpendCalendarComponent } from './pages/portfolio/mny-expend-calendar/mny-expend-calendar.component';
+import { MnyTargetsComponent } from './pages/portfolio/mny-targets/mny-targets.component';
+import { DayViewComponent } from './pages/portfolio/mny-expend-calendar/day-view/day-view.component';
+import { HeaderComponent } from './components/header/header.component';
+import { BudgetTrackerWrapperComponent } from './pages/portfolio/category-finances/budget-tracker-wrapper/budget-tracker-wrapper.component';
+import { InputCalculatorComponent } from './components/input-calculator/input-calculator.component';
 
 
 @NgModule({
@@ -93,6 +102,15 @@ import { DonatChartComponentV2 } from './d3/donat-chart-v2/donat-chart.component
     ExpendCalendarComponent,
     SelectorComponent,
     SavingsGoalComponent,
+    MnyPageMenuComponent,
+    MnyPageWrapperComponent,
+    CategoryFinancesComponent,
+    MnyExpendCalendarComponent,
+    MnyTargetsComponent,
+    DayViewComponent,
+    HeaderComponent,
+    BudgetTrackerWrapperComponent,
+    InputCalculatorComponent,
   ],
   imports: [
     BrowserModule,
