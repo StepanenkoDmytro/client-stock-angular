@@ -48,6 +48,7 @@ import { DayViewComponent } from './pages/portfolio/mny-expend-calendar/day-view
 import { HeaderComponent } from './components/header/header.component';
 import { BudgetTrackerWrapperComponent } from './pages/portfolio/category-finances/budget-tracker-wrapper/budget-tracker-wrapper.component';
 import { InputCalculatorComponent } from './components/input-calculator/input-calculator.component';
+import { SavingsStockComponent } from './pages/savings-stock/savings-stock.component';
 
 
 @NgModule({
@@ -94,6 +95,7 @@ import { InputCalculatorComponent } from './components/input-calculator/input-ca
     HeaderComponent,
     BudgetTrackerWrapperComponent,
     InputCalculatorComponent,
+    SavingsStockComponent,
   ],
   imports: [
     BrowserModule,

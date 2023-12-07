@@ -34,6 +34,7 @@ export const ACCOUNT_STOCKS_MOCK: IPortfolioStock[] = [
         countStocks: 10,
         sector: "MANUFACTURING",
         dividendYield: 0,
+        icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Tesla_T_symbol.svg/1200px-Tesla_T_symbol.svg.png"
     },
     {
         symbol: "BAC",
@@ -300,5 +301,15 @@ export const COMMODITY_MOCKS: ICommodityTable[] = [
   export interface IExpend {
     title: string,
     money: number,
+  }
+
+  export const STOCKS_MOCK: IExpend = {
+    title: 'Stocks',
+    money: 30000
+  }
+
+  export const PROFIT_MOCK: IExpend = {
+    title: 'Profit',
+    money: 10000
   }
   
