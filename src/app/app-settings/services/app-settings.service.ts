@@ -1,19 +1,5 @@
 import { Injectable } from '@angular/core';
-
-const environment = {
-  API_URLS: {
-    domain: 'https://pegazzo-backend.onrender.com',
-    api: {
-      v1: '/api/v1',
-    },
-    services: {
-      auth: {
-        'sign-in': '/auth/sign-in',
-        'sign-out': '/auth/sign-out'
-      }
-    }
-  },
-}
+import { environment } from '../../../environments/environment';
 
 export type IAppApi = {
   [key: string]: string;
@@ -29,6 +15,7 @@ export class AppSettingsService {
 
   constructor() { }
 
+  // TODO: Rework this bullshit
   public get authApi(): IAppApi {
     return this.apiUrls.services.auth;
   }

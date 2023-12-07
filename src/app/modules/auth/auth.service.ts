@@ -11,7 +11,7 @@ import { HttpClient } from '@angular/common/http';
 export class AuthService {
 
   private _authToken: string = '';
-  // private
+  private _pathToNavigateAfterLogin: string = '';
 
   constructor(
     private readonly router: Router,
@@ -20,13 +20,12 @@ export class AuthService {
   ) { }
 
   public get authToken(): string {
-    if (!this._authToken) {
-      // throw new Error('Auth token is absent.');
-      console.error('Auth token is absent.');
-      this.router.navigate(['/auth']);
-    }
-
     return this._authToken;
+  }
+
+  public navigateToAuthPage(): void {
+    this._pathToNavigateAfterLogin = this.router.url;
+    this.router.navigate(['/auth']);
   }
 
   public loginOrRegister(data: ILoginFormData): Observable<boolean> {
@@ -35,6 +34,13 @@ export class AuthService {
     return this.httpClient.post(loginUrl, data).pipe(
       switchMap( (resp: any) => {
         this._authToken = resp['token'];
+
+        if (this._pathToNavigateAfterLogin) {
+          const pathToNavigate = this._pathToNavigateAfterLogin || '/';
+          this.router.navigate([pathToNavigate]);
+          this._pathToNavigateAfterLogin = '';
+        }
+
         return of(true);
       }),
       catchError( (error: Error) => {
