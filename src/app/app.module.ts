@@ -38,7 +38,7 @@ import { NonCreditCardComponent } from './components/non-credit-card/non-credit-
 import { ExpendCalendarComponent } from './pages/portfolio/mny-expend-calendar/expend-calendar/expend-calendar.component';
 import { SelectorComponent } from './pages/portfolio/mny-expend-calendar/expend-calendar/selector/selector.component';
 import { SavingsGoalComponent } from './pages/portfolio/mny-targets/savings-goal/savings-goal.component';
-import { DonatChartComponentV2 } from './d3/donat-chart-v2/donat-chart.component';
+// import { DonatChartComponentV2 } from './modules/ui/components/donat-chart/donat-chart.component';
 import { MnyPageMenuComponent } from './pages/portfolio/mny-page-wrapper/mny-page-menu/mny-page-menu.component';
 import { MnyPageWrapperComponent } from './pages/portfolio/mny-page-wrapper/mny-page-wrapper.component';
 import { CategoryFinancesComponent } from './pages/portfolio/category-finances/category-finances.component';
@@ -59,7 +59,7 @@ import { SavingsStockComponent } from './pages/savings-stock/savings-stock.compo
     DepositWalletComponent,
     StockMarketComponent,
     DonatChartComponent,
-    DonatChartComponentV2,
+    // DonatChartComponentV2,
     AreaChartComponent,
     StockDetailsComponent,
     StockPickComponent,

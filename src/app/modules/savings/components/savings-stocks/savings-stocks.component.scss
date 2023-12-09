@@ -1,0 +1,28 @@
+.header-stock {
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-mobile {
+    border-radius: 5px;
+    margin: 20px 10px 0px 10px;
+    background-color: var(--stroke-color);
+}
+
+.stock {
+    display: flex;
+    justify-content: space-between;
+
+    &--name {
+        display: flex;
+    }
+
+    &--info {
+        // display: flex;
+    }
+}
+
+.card-icon {
+    width: 40px;
+    align-self: center;
+}

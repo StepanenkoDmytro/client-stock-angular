@@ -16,6 +16,6 @@ import { UiModule } from '../ui/ui.module';
     CommonModule,
     UiModule,
     SavingsRoutingModule
-  ]
+  ],
 })
 export class SavingsModule { }
