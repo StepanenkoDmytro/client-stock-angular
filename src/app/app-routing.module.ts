@@ -22,6 +22,7 @@ const routes: Routes = [
   { path: 'day-view', component: DayViewComponent },
   { path: 'money-tracker', component: BudgetTrackerWrapperComponent },
   { path: 'auth', loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule) },
+  { path: 'savings', loadChildren: () => import('./modules/savings/savings.module').then(m => m.SavingsModule) },
   { path: 'not-found', component: NotFoundComponent },
   { path: '**', pathMatch: 'full', redirectTo: 'not-found' },
 ];
