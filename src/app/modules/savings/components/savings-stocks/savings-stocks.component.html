@@ -1,22 +1,25 @@
-<header class="space-between">
+<header class="space-between row">
+    <div class="col-6">
+        <app-donat-chart-v2 [portfolio]="stocksMock" 
+                            class="donut"
+                            [color]="'#26a69a'">
+        </app-donat-chart-v2>
+    </div>
     
-    <app-donat-chart-v2 [portfolio]="stocksMock" 
-                        class="donut"
-                        [color]="'#26a69a'">
-    </app-donat-chart-v2>
-
-    <app-donat-chart-v2 [portfolio]="profitMock" 
-                        class="donut"
-                        [color]="'#26a69a'">
-    </app-donat-chart-v2>
+    <div class="col-6">
+        <p>Total contribution: 1500$</p>
+        <p>Total profit: 500$</p>
+        <p>Yield : 7%</p>
+        <p>Riskness of portfolio: Agressive</p>
+    </div>
 </header>
 
 <main class="scroll-list">
     <!-- TODO переробить, щоб над кожним списком конкретного типу активу була примітка з назвою (Акації, облігації, ETF) -->
-    <div style="display: flex; background-color: var(--stroke-color); padding: 5px;">
+    <!-- <div style="display: flex; background-color: var(--stroke-color); padding: 5px;">
         <p>Stocks</p> 
         <p style="margin-left: 5px;">{{ stocks.length }} pcs.</p>
-    </div>
+    </div> -->
 
     <div *ngFor="let stock of stocks">
         <app-stock-card [stock]="stock">
