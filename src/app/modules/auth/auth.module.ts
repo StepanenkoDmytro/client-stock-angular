@@ -5,7 +5,6 @@ import { AuthContainerComponent } from './components/auth-container/auth-contain
 import { LoginComponent } from './components/login/login.component';
 import { ForgetPasswordComponent } from './components/forget-password/forget-password.component';
 import { UiModule } from '../ui/ui.module';
-import { ReactiveFormsModule } from '@angular/forms';
 
 
 

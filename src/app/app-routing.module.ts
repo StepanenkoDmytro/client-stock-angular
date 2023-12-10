@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PortfolioComponent } from './pages/portfolio/portfolio.component';
-import { StockMarketComponent } from './pages/stock-portfolio/stock-market/stock-market.component';
 import { StockPageComponent } from './pages/stock-page/stock-page.component';
 import { MNY_WIDGET, STOCK_WIDGET } from './domain/default-widget-state.domain';
 import { MnyExpendCalendarComponent } from './pages/portfolio/mny-expend-calendar/mny-expend-calendar.component';
@@ -13,7 +12,6 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './modules/auth/jwt.interceptor';
 
 const routes: Routes = [
-  { path: 'stock-market', component: StockMarketComponent },
   { path: STOCK_WIDGET, component: StockPageComponent },
   { path: MNY_WIDGET, component: PortfolioComponent },
   { path: 'expend-calendar', component: MnyExpendCalendarComponent },
@@ -21,6 +19,7 @@ const routes: Routes = [
   { path: 'day-view', component: DayViewComponent },
   { path: 'money-tracker', component: BudgetTrackerWrapperComponent },
   { path: 'auth', loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule) },
+  { path: 'savings', loadChildren: () => import('./modules/savings/savings.module').then(m => m.SavingsModule) },
   { path: 'not-found', component: NotFoundComponent },
   { path: '**', pathMatch: 'full', redirectTo: 'not-found' },
 ];

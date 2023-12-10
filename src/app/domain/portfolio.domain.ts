@@ -46,6 +46,7 @@ export interface IPortfolioStock {
     countStocks: number,
     sector: string,
     dividendYield: number,
+    icon?: string,
 }
 
 export interface PurchaseData {

@@ -18,7 +18,7 @@ const customColors = [
   templateUrl: './donat-chart.component.html',
   styleUrls: ['./donat-chart.component.scss']
 })
-export class DonatChartComponentV2 implements OnInit, AfterViewInit, OnDestroy {
+export class DonatChartComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Input()
   public set portfolio(value: IExpend | null) {

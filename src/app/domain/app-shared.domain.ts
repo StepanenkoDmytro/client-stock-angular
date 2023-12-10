@@ -12,7 +12,7 @@ export const MENU_MARKET_ITEMS: INavItem[] = [
         title: 'Coin Market'
     },
     {
-        link: '/stock-market',
+        link: '/savings',
         title: 'Stock Market'
     }
 ];
