@@ -3,26 +3,34 @@
     justify-content: space-between;
 }
 
-.card-mobile {
-    border-radius: 5px;
-    margin: 20px 10px 0px 10px;
-    background-color: var(--stroke-color);
+.scroll-list {
+    overflow-y: scroll;
+    max-height: 420px;
 }
 
-.stock {
-    display: flex;
-    justify-content: space-between;
-
-    &--name {
-        display: flex;
-    }
-
-    &--info {
-        // display: flex;
-    }
+.donut {
+    display: block;
+    width: 250px;
+    margin: auto;
 }
 
-.card-icon {
-    width: 40px;
-    align-self: center;
+
+
+
+
+
+
+
+
+
+
+.btn {
+    background: rgba(38, 166, 153, 0.763);
+    // opacity: 0.7;
+    border: none;
+    margin-top: 5px;
+}
+
+.btn p {
+    color: var(--black-color);
 }

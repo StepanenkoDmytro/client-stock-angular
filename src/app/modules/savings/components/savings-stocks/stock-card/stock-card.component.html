@@ -1,0 +1,27 @@
+<div class="stock card-mobile row">
+    <div class="stock--title col-8">
+        <img *ngIf="stock.icon" [src]="stock.icon" class="card-icon" alt="icon-company">
+        <img *ngIf="!stock.icon" src="assets/company.svg" class="card-icon" alt="icon-company">
+        <div class="stock--name">
+            <p class="company-primary-info">{{ stock.name }}</p>
+
+            <p>{{ stock.countStocks }} pcs.</p>
+        </div>
+    </div>
+
+    <div class="stock--info col-4 text-end">
+        <p class="company-primary-info">{{ stock.buyPrice * stock.countStocks }}$</p>
+        
+        <p class="company-profit">+10%</p>
+    </div>
+
+    <div class="company-expand-info col-12">
+        <mat-expansion-panel class="expand">
+            <mat-expansion-panel-header></mat-expansion-panel-header>
+
+            <p>Hello</p>
+        
+        </mat-expansion-panel>
+    
+    </div>
+</div>

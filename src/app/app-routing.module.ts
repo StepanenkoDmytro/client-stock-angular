@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PortfolioComponent } from './pages/portfolio/portfolio.component';
-import { StockMarketComponent } from './pages/stock-portfolio/stock-market/stock-market.component';
 import { StockPageComponent } from './pages/stock-page/stock-page.component';
 import { MNY_WIDGET, STOCK_WIDGET } from './domain/default-widget-state.domain';
 import { MnyExpendCalendarComponent } from './pages/portfolio/mny-expend-calendar/mny-expend-calendar.component';
@@ -11,10 +10,8 @@ import { BudgetTrackerWrapperComponent } from './pages/portfolio/category-financ
 import { NotFoundComponent } from './modules/ui/components/not-found/not-found.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './modules/auth/jwt.interceptor';
-import { SavingsStockComponent } from './pages/savings-stock/savings-stock.component';
 
 const routes: Routes = [
-  { path: 'stock-market', component: SavingsStockComponent },
   { path: STOCK_WIDGET, component: StockPageComponent },
   { path: MNY_WIDGET, component: PortfolioComponent },
   { path: 'expend-calendar', component: MnyExpendCalendarComponent },

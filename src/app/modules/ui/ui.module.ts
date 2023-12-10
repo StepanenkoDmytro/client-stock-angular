@@ -28,6 +28,6 @@ export const COMPONENTS = [
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-  ]
+  ],
 })
 export class UiModule { }

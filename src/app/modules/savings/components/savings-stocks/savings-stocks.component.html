@@ -1,50 +1,36 @@
-<header class="header-stock">
+<header class="space-between">
     
-    <app-donat-chart-v2 [portfolio]="stocksMock" style="display: block; width: 250px; margin: auto;"
-    [color]="'#26a69a'">
-        
+    <app-donat-chart-v2 [portfolio]="stocksMock" 
+                        class="donut"
+                        [color]="'#26a69a'">
     </app-donat-chart-v2>
-    <app-donat-chart-v2 [portfolio]="profitMock" style="display: block; width: 250px; margin: auto;"
-    [color]="'#26a69a'">
-        
+
+    <app-donat-chart-v2 [portfolio]="profitMock" 
+                        class="donut"
+                        [color]="'#26a69a'">
     </app-donat-chart-v2>
 </header>
 
-<main>
+<main class="scroll-list">
+    <!-- TODO переробить, щоб над кожним списком конкретного типу активу була примітка з назвою (Акації, облігації, ETF) -->
+    <div style="display: flex; background-color: var(--stroke-color); padding: 5px;">
+        <p>Stocks</p> 
+        <p style="margin-left: 5px;">{{ stocks.length }} pcs.</p>
+    </div>
+
     <div *ngFor="let stock of stocks">
-        <div class="stock card-mobile">
-            <div class="stock--name">
-                <img mat-card-image 
-                     class="card-icon"
-                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Tesla_T_symbol.svg/1200px-Tesla_T_symbol.svg.png"
-                     alt="icon-company">
-                <div>
-                    {{ stock.name }}
-
-                    <p>count: {{ stock.countStocks }}</p>
-                </div>
-            </div>
-
-            <div class="stock--info">
-                <div>
-                    <p>{{ stock.buyPrice * stock.countStocks }}$</p>
-                    
-                </div>
-                
-                <div>
-                    <p>+10%</p>
-                </div>
-            </div>
-        </div>
+        <app-stock-card [stock]="stock">
+        </app-stock-card>
+        
     </div>
 </main>
 
-<footer style="display: flex; justify-content: space-between;">
-   <button>
+<footer class="space-between">
+   <button class="btn">
         <p>Stock market</p>
    </button>
 
-   <button>
+   <button class="btn">
         <p>Statistic</p>
    </button>
 </footer>

@@ -4,13 +4,15 @@ import { SavingsContainerComponent } from './components/savings-container/saving
 import { SavingsStocksComponent } from './components/savings-stocks/savings-stocks.component';
 import { SavingsRoutingModule } from './savings-routing.module';
 import { UiModule } from '../ui/ui.module';
+import { StockCardComponent } from './components/savings-stocks/stock-card/stock-card.component';
 
 
 
 @NgModule({
   declarations: [
     SavingsContainerComponent,
-    SavingsStocksComponent
+    SavingsStocksComponent,
+    StockCardComponent
   ],
   imports: [
     CommonModule,
