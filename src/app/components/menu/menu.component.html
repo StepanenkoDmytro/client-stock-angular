@@ -1,0 +1,11 @@
+<div class="line"></div>
+<mat-list class="menu">
+  <mat-list-item
+    *ngFor="let item of menu"
+    role="listitem"
+    routerLinkActive="active">
+    <a routerLink="{{ item.link }}">
+      {{ item.title }}
+    </a>
+  </mat-list-item>
+</mat-list>
