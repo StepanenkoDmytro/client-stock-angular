@@ -1,25 +1,45 @@
-import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { BehaviorSubject, Subscription, fromEvent } from 'rxjs';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { IExpend } from 'src/app/domain/mock.domain';
-import { IPortfolio, IPortfolioStock } from 'src/app/domain/portfolio.domain';
 import { SimpleDataModel } from 'src/app/domain/widget.domain';
 import { D3Service } from 'src/app/service/d3.service';
 
-
-const customColors = [
-  '#c32f0ddd', '#0493c3', '#832174', '#02a02f', '#d7a502',
-  '#c1014e', '#0071d4', '#c87800', '#01b48a', '#782814',
-  '#206273', '#b8784e', '#66FF33', '#48653c', '#00BBFF',
-  '#FF3399', '#33FF66', '#FFCC00', '#00FF99', '#a74300'
-];
+// const customColors = [
+//   '#c32f0ddd',
+//   '#0493c3',
+//   '#832174',
+//   '#02a02f',
+//   '#d7a502',
+//   '#c1014e',
+//   '#0071d4',
+//   '#c87800',
+//   '#01b48a',
+//   '#782814',
+//   '#206273',
+//   '#b8784e',
+//   '#66FF33',
+//   '#48653c',
+//   '#00BBFF',
+//   '#FF3399',
+//   '#33FF66',
+//   '#FFCC00',
+//   '#00FF99',
+//   '#a74300',
+// ];
 
 @Component({
-  selector: 'app-donat-chart-v2',
+  selector: 'app-donat-chart',
   templateUrl: './donat-chart.component.html',
-  styleUrls: ['./donat-chart.component.scss']
+  styleUrls: ['./donat-chart.component.scss'],
 })
 export class DonatChartComponent implements OnInit, AfterViewInit, OnDestroy {
-
   @Input()
   public set portfolio(value: IExpend | null) {
     this._portfolio$.next(value);
@@ -29,7 +49,7 @@ export class DonatChartComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input()
   public color: string = '#0493c3';
 
-  private _portfolio$ = new BehaviorSubject<IExpend | null>(null)
+  private _portfolio$ = new BehaviorSubject<IExpend | null>(null);
   private data: SimpleDataModel[] = [];
   private totalBalance: number = 0;
   private riskness: string = '';
@@ -44,11 +64,11 @@ export class DonatChartComponent implements OnInit, AfterViewInit, OnDestroy {
   private mouseMove$: any;
   private sub: Subscription | null = null;
 
-  constructor(private d3: D3Service) { }
+  constructor(private d3: D3Service) {}
   ngOnInit(): void {
     const randomNum = Math.floor(Math.random() * 100);
     this.donutID = `${this.donutID}${randomNum}`;
-    this.sub = this._portfolio$.subscribe((portfolio) => {
+    this.sub = this._portfolio$.subscribe(portfolio => {
       if (portfolio) {
         this.updateD3(portfolio);
       }
@@ -80,7 +100,9 @@ export class DonatChartComponent implements OnInit, AfterViewInit, OnDestroy {
     this.sub?.unsubscribe();
   }
 
-  private mapStocksToSimpleDataModel(stocks: IExpend | undefined): SimpleDataModel {
+  private mapStocksToSimpleDataModel(
+    stocks: IExpend | undefined
+  ): SimpleDataModel {
     return {
       name: stocks.title,
       value: stocks.money.toString(),
@@ -101,23 +123,21 @@ export class DonatChartComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private createColors(data: any): void {
-
-
-    this.colors = this.d3.d3.scaleOrdinal<string>()
+    this.colors = this.d3.d3
+      .scaleOrdinal<string>()
       // .domain(data.map((d: any) => d.name))
       .range(data);
   }
 
   private drawChart(): void {
-
-    var pie = this.d3.d3
+    const pie = this.d3.d3
       .pie<SimpleDataModel>()
       .sort(null)
       .value((d: SimpleDataModel) => parseInt(d.value));
 
-    var data_ready = pie(this.data);
+    const data_ready = pie(this.data);
 
-    var arc = this.d3.d3
+    const arc = this.d3.d3
       .arc()
       .innerRadius(this.radius * 0.5)
       .outerRadius(this.radius * 0.8);
@@ -133,20 +153,23 @@ export class DonatChartComponent implements OnInit, AfterViewInit, OnDestroy {
       .style('stroke-width', '4')
       .style('opacity', 0.7);
 
-    const text = this.svg.append('text')
+    const text = this.svg
+      .append('text')
       .attr('alignment-baseline', 'middle')
       .attr('class', 'chart-label')
       .attr('fill', 'var(--black-color)')
       .attr('text-anchor', 'middle');
 
-    text.append('tspan')
+    text
+      .append('tspan')
       .attr('x', 0)
       .attr('y', -10)
       .attr('font-size', '26px')
       .attr('font-weight', '400')
       .text(`${this.data[0].name}`);
-    
-      text.append('tspan')
+
+    text
+      .append('tspan')
       .attr('x', 0)
       .attr('y', 35)
       .attr('font-size', '30px')
