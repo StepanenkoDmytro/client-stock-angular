@@ -16,8 +16,8 @@ export const MENU: INavItem[] = [
     title: 'Savings',
   },
   {
-    link: `/report`,
+    link: `/news`,
     icon: '/icons/stockPortfolioIcon.svg',
-    title: 'Report',
+    title: 'News',
   },
 ];
