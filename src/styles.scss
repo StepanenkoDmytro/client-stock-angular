@@ -1,169 +1,39 @@
-@use '@angular/material' as mat;
 
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
 @include mat.core();
 
-// Define a dark theme
-$dark-theme: mat.define-dark-theme((
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$pegazzo-client-primary: mat.define-palette(mat.$indigo-palette);
+$pegazzo-client-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$pegazzo-client-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$pegazzo-client-theme: mat.define-light-theme((
   color: (
-    primary: mat.define-palette(mat.$pink-palette),
-    accent: mat.define-palette(mat.$blue-grey-palette),
-  ),
-  // Only include `typography` and `density` in the default dark theme.
-  typography: mat.define-typography-config(),
-  density: 0,
+    primary: $pegazzo-client-primary,
+    accent: $pegazzo-client-accent,
+    warn: $pegazzo-client-warn,
+  )
 ));
 
-// Define a light theme
-$light-theme: mat.define-light-theme((
-  color: (
-    primary: mat.define-palette(mat.$indigo-palette),
-    accent: mat.define-palette(mat.$pink-palette),
-  ),
-));
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($pegazzo-client-theme);
 
-// Apply the dark theme by default
-@include mat.core-theme($dark-theme);
-@include mat.button-theme($dark-theme);
-
-// Apply the light theme only when the user prefers light themes.
-@media (prefers-color-scheme: light) {
-  // Use the `-color` mixins to only apply color styles without reapplying the same
-  // typography and density styles.
-  @include mat.core-color($light-theme);
-  @include mat.button-color($light-theme);
-}
-
-
-html,
-body {
-    font-family: Roboto, "Helvetica Neue", sans-serif;
-
-    mat-label {
-        font-size: 16px;
-    }
-}
-
-:root {
-    --background-color: #eee3e3;
-    --primary-color: #dc3545;
-    --dark-color: rgb(30, 30, 32);
-    --black-color: rgb(16, 16, 16);
-    --light-color: #f4f4f4;
-    --light-color-100: #c0bab5;
-    --accept-color: #26a69a;
-    --decline-color: #db2d3eb5;
-    --stroke-color: #9bc8e235;
-    --stroke-color-50: #aabbc51d;
-}
-
-ul {
-    list-style: none;
-}
-
-.page-container {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    background: var(--dark-color);
-    border-radius: 10px;
-    margin-top: 10px;
-    padding: 10px;
-}
-
-.info-container {
-    display: block;
-    font-size: small;
-    box-shadow: -5px 5px 10px -5px rgb(16, 16, 16);
-    background-color: var(--background-color);
-    color: var(--black-color);
-}
-
-.table-assets {
-    font-size: small;
-    padding: 0px 10px 0px 10px;
-
-    th,
-    td:not(:first-child) {
-        text-align: center;
-    }
-
-    .mat-mdc-header-row,
-    .mat-mdc-row {
-        color: var(--light-color);
-    }
-
-    .mat-mdc-table {
-        background: var(--black-color);
-    }
-
-    table {
-        tr {
-            height: 50px;
-
-            td {
-                font-size: 12px;
-            }
-        }
-
-        thead {
-
-            tr {
-                border-bottom: rgb(16, 16, 16) solid 10px;
-            }
-        }
-
-        tbody {
-            height: auto;
-
-            tr {
-                border-radius: 10px;
-                background-color: rgb(30, 30, 32);
-            }
-
-            td {
-                border-bottom: var(--black-color) solid 10px;
-            }
-        }
-    }
-
-    p {
-        font-size: medium;
-    }
-
-    a {
-        text-decoration: none;
-        color: rgb(249, 250, 254);
-    }
-
-    .mdc-data-table__row:last-child .mat-mdc-cell {
-        border-bottom: 10px solid var(--black-color);
-    }
-}
-
-.btn-confirm {
-    background: var(--accept-color) !important;
-}
-
-.truncate {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100px;
-}
-
-.scroll {
-    overflow: scroll;
-}
-
-.space-between {
-    display: flex;
-    justify-content: space-between;
-}
-
-.center {
-    display: flex;
-    justify-content: center;
-}
+/* You can add global styles to this file, and also import other style files */
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

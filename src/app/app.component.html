@@ -1,40 +1,6 @@
-<app-header (isSidenavOpenedChange)="switchToggleSidenav($event)"></app-header>
-
-
-<mat-sidenav-container>
-  <!-- Отдельній компонент (app-side-nav-header) -->
-  <mat-sidenav mode="over"
-               opened="{{ isSidenavOpened }}"
-               class="sidenav-container">
-
-    <p>Markets:</p>
-    <mat-list>
-      <mat-list-item *ngFor="let itemMarket of menuItemsMarkets"
-                     role="listitem"
-                     routerLinkActive="active">
-        <a routerLink={{itemMarket.link}}>
-          {{ itemMarket.title }}
-        </a>
-      </mat-list-item>
-    </mat-list>
-
-    <p>Account:</p>
-    <mat-list>
-      <mat-list-item *ngFor="let itemPortfolio of menuItemsPortfolio"
-                     role="listitem"
-                     routerLinkActive="active">
-        <a routerLink={{itemPortfolio.link}}>
-          {{ itemPortfolio.title }}
-        </a>
-      </mat-list-item>
-    </mat-list>
-
-  </mat-sidenav>
-
-  <mat-sidenav-content>
-    <section class="content-wrapper">
-      <router-outlet></router-outlet>
-    </section>
-  </mat-sidenav-content>
-
-</mat-sidenav-container>
+<section class="pgz-application">
+  <section class="pgz-application--content">
+    <router-outlet></router-outlet>
+  </section>
+  <pgz-navigation class="pgz-application--bottom-navigation"></pgz-navigation>
+</section>

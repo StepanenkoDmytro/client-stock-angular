@@ -1,0 +1,6 @@
+<div class="navigation">
+  <mat-icon class="navigation--element" *ngFor="let item of navigationItems"
+            [routerLink]="item.path" [routerLinkActive]="'navigation--element__active'">
+    {{ item.icon }}
+  </mat-icon>
+</div>

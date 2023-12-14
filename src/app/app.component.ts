@@ -1,19 +1,17 @@
-import { Component } from '@angular/core';
-import { INavItem, MENU_MARKET_ITEMS, MENU_PORTFOLIO_ITEMS } from './domain/app-shared.domain';
-
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterOutlet } from '@angular/router';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { NavigationComponent } from './core/UI/components/navigation/navigation.component';
 
 @Component({
-  selector: 'app-root',
+  selector: 'pgz-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrl: './app.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [CommonModule, RouterOutlet, MatSlideToggleModule, NavigationComponent],
 })
 export class AppComponent {
-  public isSidenavOpened: boolean = false;
-
-  public menuItemsMarkets: INavItem[] = MENU_MARKET_ITEMS;
-  public menuItemsPortfolio: INavItem[] = MENU_PORTFOLIO_ITEMS;
-
-  public switchToggleSidenav($event: boolean) {
-    this.isSidenavOpened = $event;
-  }
+  title = 'PEGAZZO';
 }

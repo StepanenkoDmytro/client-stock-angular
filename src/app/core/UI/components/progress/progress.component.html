@@ -1,0 +1,13 @@
+<div class="progress"
+     [style.background-color]="bgColor" [style.height.px]="height">
+  <div class="progress--done"
+       [style.background-color]="progressColor"
+       [style.height.px]="height"
+       [style.width.%]="(progress / total) * 100">
+  </div>
+  <div class="progress--text"
+       [style.font-size.px]="height - 4"
+       [style.color]="fontColor">
+    {{ text }} ({{ (progress / total) * 100 }}%)
+  </div>
+</div>
