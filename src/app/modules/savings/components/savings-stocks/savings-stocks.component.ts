@@ -15,4 +15,12 @@ export class SavingsStocksComponent {
   stocksMock = STOCKS_MOCK;
   profitMock = PROFIT_MOCK;
   public stocks: IPortfolioStock[] = ACCOUNT_STOCKS_MOCK;
+
+  public isPortfolioFrame: boolean = true;
+
+  onChangeFrame(frame: boolean): void {
+    this.isPortfolioFrame = frame;
+    console.log(frame);
+    
+  }
 }

@@ -1,11 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  AfterViewInit,
-  Component,
-  Input,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import * as d3 from 'd3';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { IExpend } from 'src/app/domain/mock.domain';
@@ -13,8 +7,8 @@ import { D3Service } from 'src/app/service/d3.service';
 
 const customColors = [
   '#c32f0ddd',
-  '#0493c3',
-  '#832174',
+  // '#0493c3',
+  // '#832174',
   // ... add more colors as needed
 ];
 
@@ -24,25 +18,6 @@ const customColors = [
   styleUrls: ['./bar-chart.component.scss'],
 })
 export class BarChartComponent implements OnInit, AfterViewInit, OnDestroy {
-  @Input()
-  public set data(value: IExpend | null) {
-  const mock: any[] = [
-    { name: 'January', value: 10 },
-    { name: 'February', value: 20 },
-    { name: 'March', value: 20 },
-    { name: 'April', value: 20 },
-    { name: 'May', value: 20 },
-    { name: 'June', value: 20 },
-    { name: 'July', value: 20 },
-    { name: 'August', value: 20 },
-    { name: 'September', value: 20 },
-    { name: 'October', value: 20 },
-    { name: 'November', value: 20 },
-    { name: 'December', value: 20 },
-  ];
-  
-    this._data$.next(mock);
-  }
   public barChartID: string = 'bar-chart';
 
   private _data$ = new BehaviorSubject<any>(null);
@@ -65,6 +40,23 @@ export class BarChartComponent implements OnInit, AfterViewInit, OnDestroy {
         this.updateD3(portfolio);
       }
     });
+
+    const month: any[] = [
+      { name: 'Jan', value: 10 },
+      { name: 'null', value: 18 },
+      { name: 'Mar', value: 11 },
+      { name: 'null1', value: 7 },
+      { name: 'May', value: 15 },
+      { name: 'null2', value: 9 },
+      { name: 'July', value: 13 },
+      { name: 'null3', value: 2 },
+      { name: 'Sep', value: 5 },
+      { name: 'null4', value: 17 },
+      { name: 'Nov', value: 8 },
+      { name: 'null5', value: 12 },
+    ];
+
+    this._data$.next(month);
   }
 
   ngAfterViewInit(): void {
@@ -74,12 +66,11 @@ export class BarChartComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private updateD3(data: IExpend): void {
-    // Ensure data is an array
     const dataArray = Array.isArray(data) ? data : [data];
-  
+
     this.d3.d3.select(`#${this.barChartID}`).selectChildren('*').remove();
     this.createSvg();
-    this.createColors(dataArray); // Pass the array to createColors
+    this.createColors(dataArray);
     this.drawChart(dataArray);
     this.clientAction();
   }
@@ -93,7 +84,7 @@ export class BarChartComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private clientAction(): void {
-    // Add any necessary interactivity here using D3
+    //TODO ?
   }
 
   private createSvg(): void {
@@ -110,13 +101,11 @@ export class BarChartComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private createColors(data: any[]): void {
-    // Assuming each bar corresponds to a category, use a color scale
     this.colors = this.d3.d3
       .scaleOrdinal<string>()
-      .domain(data.map((d: any) => d.name)) // assuming each bar has a unique name
+      .domain(data.map((d: any) => d.name))
       .range(customColors);
   }
-  
 
   private drawChart(data: any[]): void {
     const x = this.d3.d3
@@ -133,8 +122,6 @@ export class BarChartComponent implements OnInit, AfterViewInit, OnDestroy {
         d3.max(data as Array<{ name: string; value: number }>, d => d.value),
       ]);
 
-    // Rest of your code
-
     this.svg
       .selectAll('rect')
       .data(data)
@@ -148,9 +135,9 @@ export class BarChartComponent implements OnInit, AfterViewInit, OnDestroy {
         (d: any) =>
           this.height - this.margin.top - this.margin.bottom - y(d.value)
       )
-      .attr('fill', (d: any, i: number) => this.colors(i.toString()));
+      .attr('fill', 'var(--accept-color)')
+      .attr('opacity', '0.9');
 
-    // Add axes if needed
     this.svg
       .append('g')
       .attr(
@@ -159,7 +146,11 @@ export class BarChartComponent implements OnInit, AfterViewInit, OnDestroy {
           (this.height - this.margin.top - this.margin.bottom) +
           ')'
       )
-      .call(this.d3.d3.axisBottom(x));
+      .call(this.d3.d3.axisBottom(x))
+      .selectAll('text')
+      .style('color', (d: any) => {
+        return d.includes('null') ? 'rgb(0,0,0,0)' : 'black';
+      });
 
     this.svg.append('g').call(this.d3.d3.axisLeft(y));
   }
