@@ -139,6 +139,35 @@ export class BarChartComponent implements OnInit, AfterViewInit, OnDestroy {
         d3.max(data as Array<{ name: string; value: number }>, d => d.value),
       ]);
 
+    const maxValue = d3.max(
+      data as Array<{ name: string; value: number }>,
+      d => d.value
+    );
+
+    const evenNumbers = Array.from(
+      { length: Math.floor(maxValue / 2) + 1 },
+      (_, index) => index * 2
+    );
+
+    this.svg
+      .append('g')
+      .selectAll('line')
+      .data(evenNumbers)
+      .enter()
+      .append('line')
+      .attr('x1', 0)
+      .attr('x2', this.width - this.margin.left)
+      .attr('y1', (d: any) => {
+        return y(d);
+      })
+      .attr('y2', (d: any) => {
+        console.log(d);
+
+        return y(d);
+      })
+      .style('stroke', '#331d1d57')
+      .style('stroke-width', '0.3px');
+
     this.svg
       .selectAll('rect')
       .data(data)
@@ -152,8 +181,7 @@ export class BarChartComponent implements OnInit, AfterViewInit, OnDestroy {
         (d: any) =>
           this.height - this.margin.top - this.margin.bottom - y(d.value)
       )
-      .attr('fill', 'var(--accept-color)')
-      .attr('opacity', '0.9');
+      .attr('fill', 'var(--accept-color)');
 
     this.svg
       .append('g')
