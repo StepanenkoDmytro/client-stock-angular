@@ -20,7 +20,5 @@ export class SavingsStocksComponent {
 
   onChangeFrame(frame: boolean): void {
     this.isPortfolioFrame = frame;
-    console.log(frame);
-    
   }
 }

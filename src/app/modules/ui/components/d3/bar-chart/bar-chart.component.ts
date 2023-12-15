@@ -1,16 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import * as d3 from 'd3';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { IExpend } from 'src/app/domain/mock.domain';
 import { D3Service } from 'src/app/service/d3.service';
 
-const customColors = [
-  '#c32f0ddd',
-  // '#0493c3',
-  // '#832174',
-  // ... add more colors as needed
-];
+const customColors = ['#c32f0ddd'];
 
 @Component({
   selector: 'app-bar-chart',
@@ -25,16 +27,21 @@ export class BarChartComponent implements OnInit, AfterViewInit, OnDestroy {
   private colors: any;
   private width = 300;
   private height = 200;
-  private margin = { top: 20, right: 20, bottom: 30, left: 40 };
+  private margin = { top: 20, right: 0, bottom: 30, left: 20 };
 
   private mouseMove$: any;
   private sub: Subscription | null = null;
+  private resizechartContainer: ResizeObserver | null = null;
+
+  @ViewChild('chartContainer', { static: true })
+  private chartContainer!: ElementRef;
 
   constructor(private d3: D3Service) {}
 
   ngOnInit(): void {
     const randomNum = Math.floor(Math.random() * 100);
     this.barChartID = `${this.barChartID}${randomNum}`;
+
     this.sub = this._data$.subscribe(portfolio => {
       if (portfolio) {
         this.updateD3(portfolio);
@@ -60,9 +67,18 @@ export class BarChartComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    if (this._data$.value) {
-      this.updateD3(this._data$.value);
-    }
+    this.resizechartContainer = new ResizeObserver(entries => {
+      if (entries[0].target.clientWidth > 200) {
+        this.width =
+          entries[0].target.clientWidth - this.margin.left - this.margin.right;
+      }
+
+      if (this._data$.value) {
+        this.updateD3(this._data$.value);
+      }
+    });
+
+    this.resizechartContainer.observe(this.chartContainer.nativeElement);
   }
 
   private updateD3(data: IExpend): void {
@@ -93,6 +109,7 @@ export class BarChartComponent implements OnInit, AfterViewInit, OnDestroy {
       .append('svg')
       .attr('width', this.width)
       .attr('height', this.height)
+      .style('width', '100%')
       .append('g')
       .attr(
         'transform',
