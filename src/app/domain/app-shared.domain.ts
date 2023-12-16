@@ -6,7 +6,7 @@ export interface INavItem {
 
 export const MENU: INavItem[] = [
   {
-    link: `/money-widget`,
+    link: `/savings/spendings`,
     icon: '/icons/portfolioOverviewIcon.svg',
     title: 'Expends',
   },

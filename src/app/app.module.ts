@@ -40,7 +40,6 @@ import { SelectorComponent } from './pages/portfolio/mny-expend-calendar/expend-
 import { SavingsGoalComponent } from './pages/portfolio/mny-targets/savings-goal/savings-goal.component';
 import { MnyPageMenuComponent } from './pages/portfolio/mny-page-wrapper/mny-page-menu/mny-page-menu.component';
 import { MnyPageWrapperComponent } from './pages/portfolio/mny-page-wrapper/mny-page-wrapper.component';
-import { CategoryFinancesComponent } from './pages/portfolio/category-finances/category-finances.component';
 import { MnyExpendCalendarComponent } from './pages/portfolio/mny-expend-calendar/mny-expend-calendar.component';
 import { MnyTargetsComponent } from './pages/portfolio/mny-targets/mny-targets.component';
 import { DayViewComponent } from './pages/portfolio/mny-expend-calendar/day-view/day-view.component';
@@ -49,6 +48,7 @@ import { BudgetTrackerWrapperComponent } from './pages/portfolio/category-financ
 import { InputCalculatorComponent } from './components/input-calculator/input-calculator.component';
 import { SavingsStockComponent } from './pages/savings-stock/savings-stock.component';
 import { MenuComponent } from './components/menu/menu.component';
+import { CategoryFinancesTestComponent } from './pages/portfolio/category-finances/category-finances.component';
 
 
 @NgModule({
@@ -87,7 +87,7 @@ import { MenuComponent } from './components/menu/menu.component';
     SavingsGoalComponent,
     MnyPageMenuComponent,
     MnyPageWrapperComponent,
-    CategoryFinancesComponent,
+    CategoryFinancesTestComponent,
     MnyExpendCalendarComponent,
     MnyTargetsComponent,
     DayViewComponent,

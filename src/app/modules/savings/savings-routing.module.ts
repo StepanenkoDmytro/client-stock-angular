@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Route, RouterModule } from '@angular/router';
 import { SavingsContainerComponent } from './components/savings-container/savings-container.component';
 import { SavingsStocksComponent } from './components/savings-stocks/savings-stocks.component';
+import { SpendingsComponent } from './spendings/spendings.component';
 
 const ROUTES: Route[] = [
   {
@@ -11,18 +12,14 @@ const ROUTES: Route[] = [
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'stock' },
       { path: 'stock', component: SavingsStocksComponent },
-    ]
-  }
+      { path: 'spendings', component: SpendingsComponent },
+    ],
+  },
 ];
 
 @NgModule({
   declarations: [],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(ROUTES),
-  ],
-  exports: [
-    RouterModule
-  ]
+  imports: [CommonModule, RouterModule.forChild(ROUTES)],
+  exports: [RouterModule],
 })
-export class SavingsRoutingModule { }
+export class SavingsRoutingModule {}

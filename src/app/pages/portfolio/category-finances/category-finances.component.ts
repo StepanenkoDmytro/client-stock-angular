@@ -8,7 +8,7 @@ import { IBudgetExpense } from 'src/app/domain/widget.domain';
   templateUrl: './category-finances.component.html',
   styleUrls: ['./category-finances.component.scss']
 })
-export class CategoryFinancesComponent {
+export class CategoryFinancesTestComponent {
   public expenseArr: IBudgetExpense[] = [];
   public incomeMock = INCOME_MOCK;
   public expendMock = EXPENSE_MOCK;
