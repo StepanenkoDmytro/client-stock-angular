@@ -12,13 +12,19 @@ import { IPortfolioStock } from '../../domain';
   styleUrls: ['./savings-stocks.component.scss'],
 })
 export class SavingsStocksComponent {
-  stocksMock = STOCKS_MOCK;
-  profitMock = PROFIT_MOCK;
+  public stocksMock = STOCKS_MOCK;
+  public profitMock = PROFIT_MOCK;
   public stocks: IPortfolioStock[] = ACCOUNT_STOCKS_MOCK;
+  years: string[] = ['2022', '2023', '2024']; // Додайте необхідні роки
+  months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
   public isPortfolioFrame: boolean = true;
 
   onChangeFrame(frame: boolean): void {
     this.isPortfolioFrame = frame;
+  }
+
+  trackYear(index: number, year: string): string {
+    return year;
   }
 }

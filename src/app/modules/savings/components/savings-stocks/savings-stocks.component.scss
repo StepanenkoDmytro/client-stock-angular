@@ -1,28 +1,54 @@
 .header-stock {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .scroll-list {
-    overflow-y: scroll;
+  overflow-y: scroll;
 }
 
 .donut {
-    display: block;
-    margin: auto;
+  display: block;
+  margin: auto;
 }
 
 .btn {
-    background: rgba(38, 166, 153, 0.763);
-    border: none;
-    margin-top: 5px;
+  background: rgba(38, 166, 153, 0.763);
+  border: none;
+  margin-top: 5px;
 }
 
 .btn p {
-    color: var(--black-color);
+  color: var(--black-color);
 }
 
 .bar {
-    display: block;
-    margin: 10px;
+  display: block;
+  margin: 10px;
 }
+
+.statistic {
+  &--year {
+    overflow-y: scroll;
+    height: 40vh;
+  }
+
+  &--month {
+    .mat-expansion-panel-header-description {
+        flex-grow: 0;
+    }
+  } 
+}
+
+.icon-wrapper {
+    border: 2px solid var(--accept-color);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    transform: scale(0.7);
+
+    &--icon {
+        color:var(--accept-color);
+    }
+}
+
