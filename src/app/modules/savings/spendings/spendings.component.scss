@@ -25,7 +25,7 @@
   margin: auto;
   display: grid;
   grid-template-columns: 20% 60% 20%;
-  grid-template-rows: 20% 70% 20%;
+  grid-template-rows: 25% 60% 25%;
   width: 100%;
   align-items: center;
 }
@@ -65,14 +65,14 @@ img {
   grid-column: 1;
   grid-row: 2;
   align-self: center;
-  justify-content: center;
+  justify-content: start;
 }
 
 .deg4 {
   grid-column: 3;
   grid-row: 2;
   align-self: center;
-  justify-content: center;
+  justify-content: end;
 }
 
 .deg5 {
