@@ -67,5 +67,5 @@ export const PROFIT_MOCK: IExpend = {
 
 export const SPENDING_MOCK: IExpend = {
   title: '',
-  money: 200000,
+  money: '2 000 000',
 };

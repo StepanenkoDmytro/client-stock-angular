@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-button-toggle',
@@ -6,6 +6,10 @@ import { Component, EventEmitter, Output } from '@angular/core';
   styleUrls: ['./button-toggle.component.scss'],
 })
 export class ButtonToggleComponent {
+  @Input()
+  public dataUnchecked: string = '';
+  @Input()
+  public dataChecked: string = '';
   @Output()
   public buttonValue = new EventEmitter<boolean>();
 

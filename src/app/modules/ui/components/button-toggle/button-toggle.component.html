@@ -5,8 +5,8 @@
            (click)="changeValue()">
     <label for="status">
         <div class="status-switch" 
-             data-unchecked="Stocks" 
-             data-checked="Stastics">
+             [attr.data-unchecked]="dataUnchecked" 
+             [attr.data-checked]="dataChecked">
         </div>
     </label>
 </header>

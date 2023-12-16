@@ -3,8 +3,11 @@
       <p class="text">Total balance</p>
       <p class="sum">$99 967.99</p>
   </div>
+
+  <app-button-toggle [dataUnchecked]="'Spendings'" [dataChecked]="'History'"></app-button-toggle>
+
   <div class="circle-container">
-      <app-donat-chart class="center" [portfolio]="stocksMock" [color]="'#26a69a'">
+      <app-donat-chart class="center" [portfolio]="stocksMock" [color]="'#CBCACA'">
       </app-donat-chart>
     <a href="#" class="item deg2"><img src="assets/expend/pet.svg" /></a>
     <a href="#" class="item deg3"><img src="assets/expend/car.svg" /></a>

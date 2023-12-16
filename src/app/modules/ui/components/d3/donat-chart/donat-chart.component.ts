@@ -11,28 +11,6 @@ import { IExpend } from 'src/app/domain/mock.domain';
 import { SimpleDataModel } from 'src/app/domain/widget.domain';
 import { D3Service } from 'src/app/service/d3.service';
 
-// const customColors = [
-//   '#c32f0ddd',
-//   '#0493c3',
-//   '#832174',
-//   '#02a02f',
-//   '#d7a502',
-//   '#c1014e',
-//   '#0071d4',
-//   '#c87800',
-//   '#01b48a',
-//   '#782814',
-//   '#206273',
-//   '#b8784e',
-//   '#66FF33',
-//   '#48653c',
-//   '#00BBFF',
-//   '#FF3399',
-//   '#33FF66',
-//   '#FFCC00',
-//   '#00FF99',
-//   '#a74300',
-// ];
 
 @Component({
   selector: 'app-donat-chart',
@@ -47,7 +25,7 @@ export class DonatChartComponent implements OnInit, AfterViewInit, OnDestroy {
   public donutID: string = 'donut';
 
   @Input()
-  public color: string = '#0493c3';
+  public color: string = '#CBCACA';
 
   private _portfolio$ = new BehaviorSubject<IExpend | null>(null);
   private data: SimpleDataModel[] = [];
@@ -139,8 +117,8 @@ export class DonatChartComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const arc = this.d3.d3
       .arc()
-      .innerRadius(this.radius * 0.6)
-      .outerRadius(this.radius * 0.8);
+      .innerRadius(this.radius * 0.75)
+      .outerRadius(this.radius * 1);
 
     this.svg
       .selectAll('allSlices')
@@ -148,10 +126,7 @@ export class DonatChartComponent implements OnInit, AfterViewInit, OnDestroy {
       .enter()
       .append('path')
       .attr('d', arc)
-      .attr('fill', this.color)
-      .attr('stroke', 'var(--dark-color)')
-      .style('stroke-width', '4')
-      .style('opacity', 0.7);
+      .attr('fill', this.color);
 
     const text = this.svg
       .append('text')

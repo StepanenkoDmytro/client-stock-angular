@@ -15,7 +15,7 @@
   </div>
 </header>
 
-<app-button-toggle (buttonValue)="onChangeFrame($event)"></app-button-toggle>
+<app-button-toggle [dataUnchecked]="'Stocks'" [dataChecked]="'Statistic'" (buttonValue)="onChangeFrame($event)"></app-button-toggle>
 
 <main *ngIf="isPortfolioFrame" class="scroll-list">
   <!-- TODO переробить, щоб над кожним списком конкретного типу активу була примітка з назвою (Акації, облігації, ETF) -->
@@ -41,8 +41,6 @@
   <mat-tab-group class="statistic--year">
     <mat-tab *ngFor="let year of years; trackBy: trackYear" [label]="year">
       <ng-container *ngFor="let month of months">
-        <!-- Тут можна розмістити вміст для кожного місяця, наприклад: -->
-        <!-- <div>{{ month }}</div> -->
         <mat-expansion-panel class="statistic--month" hideToggle>
           <mat-expansion-panel-header>
             <mat-panel-title>
@@ -61,6 +59,4 @@
       </ng-container>
     </mat-tab>
   </mat-tab-group>
-  
-  
 </main>
