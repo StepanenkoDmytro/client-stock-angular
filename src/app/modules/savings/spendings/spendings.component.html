@@ -1,18 +1,20 @@
-<div >
-<div>
-    <p class="text">Total balance</p>
-    <p class="sum">$99 967.99</p>
-</div>
-<div class="circle-container">
-    <app-donat-chart class="center" [portfolio]="stocksMock" [color]="'#26a69a'">
-    </app-donat-chart>
-  <a href="#" class="item deg2"><img src="assets/expend/pet.svg" /></a>
-  <a href="#" class="item deg3"><img src="assets/expend/car.svg" /></a>
-  <a href="#" class="item deg4"><img src="assets/expend/clothes.svg"/></a>
-  <a href="#" class="item deg5"><img src="assets/expend/drink.svg" /></a>
-  <a href="#" class="item deg6"><img class="central-img" src="assets/expend/gift.svg" /></a>
-  <a href="#" class="item deg1"><img src="assets/expend/health.svg"/></a>
-  <a href="#" class="item deg7"><img class="central-img" src="assets/expend/food.svg" /></a>
-  <a href="#" class="item deg8"><img src="assets/expend/house.svg" /></a>
-</div>
+<div class="spending">
+  <div class="spending--content">
+      <p class="text">Total balance</p>
+      <p class="sum">$99 967.99</p>
+  </div>
+  <div class="circle-container">
+      <app-donat-chart class="center" [portfolio]="stocksMock" [color]="'#26a69a'">
+      </app-donat-chart>
+    <a href="#" class="item deg2"><img src="assets/expend/pet.svg" /></a>
+    <a href="#" class="item deg3"><img src="assets/expend/car.svg" /></a>
+    <a href="#" class="item deg4"><img src="assets/expend/clothes.svg"/></a>
+    <a href="#" class="item deg5"><img src="assets/expend/drink.svg" /></a>
+    <a href="#" class="item deg6"><img class="central-img" src="assets/expend/gift.svg" /></a>
+    <a href="#" class="item deg1"><img src="assets/expend/health.svg"/></a>
+    <a href="#" class="item deg7"><img class="central-img" src="assets/expend/food.svg" /></a>
+    <a href="#" class="item deg8"><img src="assets/expend/house.svg" /></a>
+  </div>
+
+  <button mat-flat-button class="spending--button">Add spending</button>
 </div>

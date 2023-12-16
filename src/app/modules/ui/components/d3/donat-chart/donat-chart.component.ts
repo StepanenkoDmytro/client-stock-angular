@@ -139,7 +139,7 @@ export class DonatChartComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const arc = this.d3.d3
       .arc()
-      .innerRadius(this.radius * 0.5)
+      .innerRadius(this.radius * 0.6)
       .outerRadius(this.radius * 0.8);
 
     this.svg
