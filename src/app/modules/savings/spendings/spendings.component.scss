@@ -10,19 +10,34 @@
   justify-content: flex-end;
   height: inherit;
 
+  &--header {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 100%;
+    height: 100%;
+    // padding: 20px 0px 20px 0px;
+  }
+
   &--content {
-    margin: auto;
+    // margin: auto;
+  }
+
+  &--history {
+    overflow-y: scroll;
+    width: 100%;
+    height: 145%;
   }
 
   &--button {
-    margin: auto;
+    margin-top: 80px;
     width: 100%;
     background-color: #edb03b !important;
   }
 }
 
 .circle-container {
-  margin: auto;
+  // margin: auto;
   display: grid;
   grid-template-columns: 20% 60% 20%;
   grid-template-rows: 30% 60% 30%;

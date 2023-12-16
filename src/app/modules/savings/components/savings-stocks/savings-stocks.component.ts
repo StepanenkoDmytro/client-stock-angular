@@ -20,11 +20,11 @@ export class SavingsStocksComponent {
 
   public isPortfolioFrame: boolean = true;
 
-  onChangeFrame(frame: boolean): void {
+  public onChangeFrame(frame: boolean): void {
     this.isPortfolioFrame = frame;
   }
 
-  trackYear(index: number, year: string): string {
+  public trackYear(index: number, year: string): string {
     return year;
   }
 }

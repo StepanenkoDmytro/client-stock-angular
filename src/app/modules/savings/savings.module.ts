@@ -6,6 +6,7 @@ import { SavingsRoutingModule } from './savings-routing.module';
 import { UiModule } from '../ui/ui.module';
 import { StockCardComponent } from './components/savings-stocks/stock-card/stock-card.component';
 import { SpendingsComponent } from './spendings/spendings.component';
+import { SpendingCardComponent } from './spendings/spending-card/spending-card.component';
 
 
 @NgModule({
@@ -14,6 +15,7 @@ import { SpendingsComponent } from './spendings/spendings.component';
     SavingsStocksComponent,
     StockCardComponent,
     SpendingsComponent,
+    SpendingCardComponent,
   ],
   imports: [
     CommonModule,
