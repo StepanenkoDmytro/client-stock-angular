@@ -1,46 +1,66 @@
 <section class="spending">
+  
   <header class="spending--header">
-    <div class="spending--content">
-        <p class="text">Total balance</p>
-        <p class="sum">$99 967.99</p>
+
+    <div>
+      <p class="text">Total balance</p>
+      <p class="sum">$99 967.99</p>
     </div>
 
-    <app-button-toggle [dataUnchecked]="'Spendings'" [dataChecked]="'History'" (buttonValue)="onChangeFrame($event)"></app-button-toggle>
+    <app-button-toggle
+      [dataUnchecked]="'Spendings'"
+      [dataChecked]="'History'"
+      (buttonValue)="onChangeFrame($event)"></app-button-toggle>
   </header>
 
-  <section *ngIf="isSpendingsFrame" style="margin-bottom: 20px;">
-    <div class="circle-container">
-        <app-donat-chart class="center" [portfolio]="stocksMock" [color]="'#CBCACA'">
-        </app-donat-chart>
-      <a href="#" class="item deg2"><img src="assets/expend/pet.svg" /></a>
-      <a href="#" class="item deg3"><img src="assets/expend/car.svg" /></a>
-      <a href="#" class="item deg4"><img src="assets/expend/clothes.svg"/></a>
-      <a href="#" class="item deg5"><img src="assets/expend/drink.svg" /></a>
-      <a href="#" class="item deg6"><img class="central-img" src="assets/expend/gift.svg" /></a>
-      <a href="#" class="item deg1"><img src="assets/expend/health.svg"/></a>
-      <a href="#" class="item deg7"><img class="central-img" src="assets/expend/food.svg" /></a>
-      <a href="#" class="item deg8"><img src="assets/expend/house.svg" /></a>
+  <section *ngIf="isSpendingsFrame" class="spendings-category">
+    <div class="spendings-category--categories">
+
+      <app-donat-chart
+        class="center"
+        [portfolio]="stocksMock"
+        [color]="'#CBCACA'">
+      </app-donat-chart>
+
+      <a href="#" class="item deg-1"><img src="assets/expend/health.svg"/></a>
+      <a href="#" class="item deg-2"><img src="assets/expend/pet.svg"/></a>
+      <a href="#" class="item deg-3"><img src="assets/expend/car.svg"/></a>
+      <a href="#" class="item deg-4"><img src="assets/expend/clothes.svg"/></a>
+      <a href="#" class="item deg-5"><img src="assets/expend/drink.svg"/></a>
+      <a href="#" class="item deg-6"><img class="central-img" src="assets/expend/gift.svg"/></a>
+      <a href="#" class="item deg-7"><img class="central-img" src="assets/expend/food.svg"/></a>
+      <a href="#" class="item deg-8"><img src="assets/expend/house.svg" /></a>
     </div>
 
-    <button mat-flat-button class="spending--button">Add spending</button>
+    <button mat-flat-button class="spendings-category--button">Add spending</button>
   </section>
 
-  <section *ngIf="!isSpendingsFrame" class="spending--history">
+  <section *ngIf="!isSpendingsFrame" class="spendings-history">
 
-    <p class="day-spending">Today</p>
-    <div *ngFor="let spendingToday of categoriesSpendings.today">
-      <app-spending-card [spending]="spendingToday"></app-spending-card>
+    <div class="spendings-history--calendar">
+      <a href="#" class="calendar-btn">
+      <p style="margin: 0">Calendar</p>
+      <mat-icon>calendar_month</mat-icon>
+    </a>
     </div>
 
-    <p class="day-spending">Last week</p>
-    <div *ngFor="let spendingLastWeek of categoriesSpendings.lastWeek">
-      <app-spending-card [spending]="spendingLastWeek"></app-spending-card>
-    </div>
+    <div class="spendings-history--list">
 
-    <p class="day-spending">Last month</p>
-    <div *ngFor="let spendingLastMonth of categoriesSpendings.month">
-      <app-spending-card [spending]="spendingLastMonth"></app-spending-card>
+      <p class="spendings-history--list-item">Today</p>
+      <div *ngFor="let spendingToday of categoriesSpendings.today">
+        <app-spending-card [spending]="spendingToday"></app-spending-card>
+      </div>
+
+      <p class="spendings-history--list-item">Last week</p>
+      <div *ngFor="let spendingLastWeek of categoriesSpendings.lastWeek">
+        <app-spending-card [spending]="spendingLastWeek"></app-spending-card>
+      </div>
+
+      <p class="spendings-history--list-item">Last month</p>
+      <div *ngFor="let spendingLastMonth of categoriesSpendings.month">
+        <app-spending-card [spending]="spendingLastMonth"></app-spending-card>
+      </div>
+
     </div>
-    
   </section>
 </section>

@@ -16,17 +16,32 @@
     justify-content: space-around;
     width: 100%;
     height: 100%;
-    // padding: 20px 0px 20px 0px;
   }
 
-  &--content {
-    // margin: auto;
+  .text {
+    display: flex;
+    justify-content: center;
+    font-size: 22px;
   }
+  
+  .sum {
+    display: flex;
+    justify-content: center;
+    font-size: 52px;
+    margin-top: 50px;
+    color: var(--accept-color);
+  }
+}
 
-  &--history {
-    overflow-y: scroll;
+.spendings-category {
+  margin-bottom: 20px;
+
+  &--categories {
+    display: grid;
+    grid-template-columns: 20% 60% 20%;
+    grid-template-rows: 30% 60% 30%;
     width: 100%;
-    height: 145%;
+    align-items: center;
   }
 
   &--button {
@@ -34,113 +49,112 @@
     width: 100%;
     background-color: #edb03b !important;
   }
+
+  .center {
+    grid-column: 2;
+    grid-row: 2;
+    display: block;
+    width: 100%;
+    transform: scale(1.1);
+  }
+
+  .deg-1 {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: end;
+    justify-content: end;
+  }
+  
+  .deg-2 {
+    grid-column: 1;
+    grid-row: 3;
+    align-self: start;
+    justify-content: end;
+  }
+  
+  .deg-3 {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: center;
+    justify-content: start;
+  }
+  
+  .deg-4 {
+    grid-column: 3;
+    grid-row: 2;
+    align-self: center;
+    justify-content: end;
+  }
+  
+  .deg-5 {
+    grid-column: 3;
+    grid-row: 3;
+    align-self: start;
+    justify-content: start;
+  }
+  
+  .deg-6 {
+    grid-column: 2;
+    grid-row: 3;
+    align-self: end;
+    justify-content: center;
+  }
+  
+  .deg-7 {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: start;
+    justify-content: center;
+  }
+  
+  .deg-8 {
+    grid-column: 3;
+    grid-row: 1;
+    align-self: end;
+    justify-content: start;
+  }
+
+  img {
+    width: 70%;
+    height: auto;
+  }
+
+  .central-img {
+    width: 24%;
+  }
+
+  .item {
+    display: flex;
+    width: 100%;
+  }
 }
 
-.circle-container {
-  // margin: auto;
-  display: grid;
-  grid-template-columns: 20% 60% 20%;
-  grid-template-rows: 30% 60% 30%;
+.spendings-history {
   width: 100%;
-  align-items: center;
-}
+  height: 145%;
 
-.item {
-  display: flex;
-  width: 100%;
-}
+  &--calendar {
+    display: flex;
+    justify-content: end;
+  }
 
-img {
-  width: 70%;
-  height: auto;
-}
+  &--list {
+    overflow-y: scroll;
+  }
 
-.center {
-  grid-column: 2;
-  grid-row: 2;
-  display: block;
-  width: 100%;
-  transform: scale(1.1);
-}
+  &--list-item {
+    font-size: 24px;
+  }
+  
+  &--list-item:not(:first-child) {
+    margin-top: 40px;
+  }
 
-.deg1 {
-  grid-column: 1;
-  grid-row: 1;
-  align-self: end;
-  justify-content: end;
-}
-
-.deg2 {
-  grid-column: 1;
-  grid-row: 3;
-  align-self: start;
-  justify-content: end;
-}
-
-.deg3 {
-  grid-column: 1;
-  grid-row: 2;
-  align-self: center;
-  justify-content: start;
-}
-
-.deg4 {
-  grid-column: 3;
-  grid-row: 2;
-  align-self: center;
-  justify-content: end;
-}
-
-.deg5 {
-  grid-column: 3;
-  grid-row: 3;
-  align-self: start;
-  justify-content: start;
-}
-
-.deg6 {
-  grid-column: 2;
-  grid-row: 3;
-  align-self: end;
-  justify-content: center;
-}
-
-.deg7 {
-  grid-column: 2;
-  grid-row: 1;
-  align-self: start;
-  justify-content: center;
-}
-
-.deg8 {
-  grid-column: 3;
-  grid-row: 1;
-  align-self: end;
-  justify-content: start;
-}
-
-.central-img {
-  width: 24%;
-}
-
-.text {
-  display: flex;
-  justify-content: center;
-  font-size: 22px;
-}
-
-.sum {
-  display: flex;
-  justify-content: center;
-  font-size: 52px;
-  margin-top: 50px;
-  color: var(--accept-color);
-}
-
-.day-spending {
-  font-size: 24px;
-}
-
-.day-spending:not(:first-child) {
-  margin-top: 40px;
+  .calendar-btn {
+    display: flex;
+    align-items: center;
+    color: var(--accept-color);
+    border: none;
+    background: inherit;
+  }
 }
