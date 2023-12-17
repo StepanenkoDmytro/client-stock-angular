@@ -1,0 +1,33 @@
+:host {
+  display: block;
+}
+
+.bar {
+  display: block;
+  margin: 10px;
+}
+
+.statistic {
+  &--year {
+    overflow-y: scroll;
+    height: 33vh;
+  }
+
+  &--month {
+    .mat-expansion-panel-header-description {
+        flex-grow: 0;
+    }
+  }
+}
+
+.icon-wrapper {
+  border: 2px solid var(--accept-color);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  transform: scale(0.7);
+
+  &--icon {
+      color:var(--accept-color);
+  }
+}

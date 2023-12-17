@@ -1,4 +1,4 @@
-export interface IDonutValue {
+export interface ID3Value {
     title: string;
     money: number | string;
   }

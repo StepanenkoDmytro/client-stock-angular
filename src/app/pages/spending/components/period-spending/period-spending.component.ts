@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { DonutComponent } from '../../../../core/UI/components/charts/donut/donut.component';
-import { IDonutValue } from '../../../../core/domain/d3.domain';
+import { ID3Value } from '../../../../core/domain/d3.domain';
 
 
 const UI_COMPONENTS = [
@@ -17,7 +17,7 @@ const UI_COMPONENTS = [
 })
 export class PeriodSpendingComponent {
   @Input()
-  public expends: IDonutValue;
+  public expends: ID3Value;
   
   
 }

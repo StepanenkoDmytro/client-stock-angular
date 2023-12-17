@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { IDonutValue, SimpleDataModel } from '../../../../domain/d3.domain';
+import { ID3Value, SimpleDataModel } from '../../../../domain/d3.domain';
 import * as d3 from 'd3';
 
 
@@ -14,7 +14,7 @@ import * as d3 from 'd3';
 })
 export class DonutComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input()
-  public set portfolio(value: IDonutValue | null) {
+  public set portfolio(value: ID3Value | null) {
     this._portfolio$.next(value);
   }
   public donutID: string = 'donut';
@@ -23,7 +23,7 @@ export class DonutComponent implements OnInit, AfterViewInit, OnDestroy {
   public color: string = '#CBCACA';
   public d3 = d3;
 
-  private _portfolio$ = new BehaviorSubject<IDonutValue | null>(null);
+  private _portfolio$ = new BehaviorSubject<ID3Value | null>(null);
   private data: SimpleDataModel[] = [];
   private totalBalance: number = 0;
   private riskness: string = '';
@@ -54,7 +54,7 @@ export class DonutComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  private updateD3(portfolio: IDonutValue): void {
+  private updateD3(portfolio: ID3Value): void {
     this.data = [this.mapStocksToSimpleDataModel(portfolio)];
 
     this.d3.select(`#${this.donutID}`).selectChildren('*').remove();
@@ -72,7 +72,7 @@ export class DonutComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private mapStocksToSimpleDataModel(
-    stocks: IDonutValue | undefined
+    stocks: ID3Value | undefined
   ): SimpleDataModel {
     return {
       name: stocks? stocks.title : '',

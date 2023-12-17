@@ -7,7 +7,7 @@ import { MatBottomSheet, MatBottomSheetModule } from '@angular/material/bottom-s
 import { AddSpendingComponent } from './components/add-spending/add-spending.component';
 import { ButtonToggleComponent } from '../../core/UI/components/button-toggle/button-toggle.component';
 import { HistorySpendingComponent } from './components/history-spending/history-spending.component';
-import { IDonutValue } from '../../core/domain/d3.domain';
+import { ID3Value } from '../../core/domain/d3.domain';
 import { ISpending } from '../../core/domain/spending.domain';
 import moment from 'moment';
 
@@ -32,7 +32,7 @@ const MATERIAL_MODULES = [
   imports: [ ...UI_COMPONENTS, ...MATERIAL_MODULES ],
 })
 export class SpendingComponent {
-  public expends: IDonutValue = {
+  public expends: ID3Value = {
     title: 'Total',
     money: '2 000 000',
   };

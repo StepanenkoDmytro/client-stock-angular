@@ -4,12 +4,14 @@ import { ACCOUNT_STOCKS_MOCK } from '../../core/domain/mock.domain';
 import { TotalInfoComponent } from './components/total-info/total-info.component';
 import { StockSavingComponent } from './components/stock-saving/stock-saving.component';
 import { ButtonToggleComponent } from '../../core/UI/components/button-toggle/button-toggle.component';
+import { StockStatisticComponent } from './components/stock-statistic/stock-statistic.component';
 
 
 const UI_COMPONENTS = [
   TotalInfoComponent,
   StockSavingComponent,
-  ButtonToggleComponent
+  ButtonToggleComponent,
+  StockStatisticComponent,
 ];
 
 @Component({
