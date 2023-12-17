@@ -136,3 +136,11 @@ img {
   margin-top: 50px;
   color: var(--accept-color);
 }
+
+.day-spending {
+  font-size: 24px;
+}
+
+.day-spending:not(:first-child) {
+  margin-top: 40px;
+}

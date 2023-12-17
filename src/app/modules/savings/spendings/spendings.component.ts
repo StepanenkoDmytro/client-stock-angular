@@ -25,10 +25,22 @@ export class SpendingsComponent {
       date: moment().toDate(),
     },
     {
+      icon: 'assets/expend/clothes.svg',
+      title: 'T-shirt',
+      cost: 50,
+      date: moment().toDate(),
+    },
+    {
       icon: 'assets/expend/pet.svg',
       title: 'Pet',
       cost: 10,
-      date: moment().subtract(7, 'days').toDate(),
+      date: moment().subtract(6, 'days').toDate(),
+    },
+    {
+      icon: 'assets/expend/clothes.svg',
+      title: 'T-shirt',
+      cost: 50,
+      date: moment().subtract(5, 'days').toDate(),
     },
     {
       icon: 'assets/expend/pet.svg',
@@ -37,6 +49,7 @@ export class SpendingsComponent {
       date: moment().subtract(1, 'month').toDate(),
     },
   ];
+
   public categoriesSpendings: CategorizedSpendings = this.categorizeSpendings(
     this.spendings
   );
@@ -46,10 +59,9 @@ export class SpendingsComponent {
   }
 
   private categorizeSpendings(spendings: ISpending[]): CategorizedSpendings {
-    const today = moment();
+    const today = moment().startOf('day');
 
-    const lastWeek = today.subtract(7, 'days');
-    const startOfMonth = moment().subtract(1, 'month');
+    const lastWeek = moment().subtract(7, 'days').startOf('day');
 
     const categorizedSpendings: CategorizedSpendings = {
       today: [],
@@ -62,12 +74,13 @@ export class SpendingsComponent {
 
       if (spendingDate.isSame(today, 'day')) {
         categorizedSpendings.today.push(spending);
-      } else if (spendingDate.isBefore(lastWeek, 'day')) {
+      } else if (spendingDate.isAfter(lastWeek, 'day')) {
         categorizedSpendings.lastWeek.push(spending);
       } else {
         categorizedSpendings.month.push(spending);
       }
     });
+
     return categorizedSpendings;
   }
 }

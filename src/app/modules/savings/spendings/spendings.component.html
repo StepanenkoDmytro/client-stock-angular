@@ -26,17 +26,21 @@
   </section>
 
   <section *ngIf="!isSpendingsFrame" class="spending--history">
-    <p style="font-size: 16px;">Today</p>
+
+    <p class="day-spending">Today</p>
     <div *ngFor="let spendingToday of categoriesSpendings.today">
       <app-spending-card [spending]="spendingToday"></app-spending-card>
     </div>
-    <p style="font-size: 16px; margin-top: 20px;">Last week</p>
+
+    <p class="day-spending">Last week</p>
     <div *ngFor="let spendingLastWeek of categoriesSpendings.lastWeek">
       <app-spending-card [spending]="spendingLastWeek"></app-spending-card>
     </div>
-    <p style="font-size: 16px; margin-top: 20px;">Last month</p>
+
+    <p class="day-spending">Last month</p>
     <div *ngFor="let spendingLastMonth of categoriesSpendings.month">
       <app-spending-card [spending]="spendingLastMonth"></app-spending-card>
     </div>
+    
   </section>
 </section>
