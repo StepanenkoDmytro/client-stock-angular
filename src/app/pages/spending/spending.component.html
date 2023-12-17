@@ -3,6 +3,7 @@
   <pgz-total-balance [balance]="100000"></pgz-total-balance>
 
   <pgz-button-toggle
+      class="frame-btn"
       [dataUnchecked]="'Spendings'"
       [dataChecked]="'History'"
       (buttonValue)="onChangeFrame($event)">
@@ -14,5 +15,5 @@
     <pgz-history-spending></pgz-history-spending>
   }
 
-  <button mat-flat-button color="primary" (click)="addSpending()">{{ 'Add spending' }}</button>
+  <button mat-flat-button class="spending-btn" (click)="addSpending()">{{ 'Add spending' }}</button>
 </div>
