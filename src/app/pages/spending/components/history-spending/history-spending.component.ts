@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import moment from 'moment';
 import { ICategorizedSpendings, ISpending } from '../../../../core/domain/spending.domain';
@@ -21,47 +21,14 @@ const MATERIAL_MODULES = [
   styleUrl: './history-spending.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HistorySpendingComponent {
-  public spendings: ISpending[] = [
-    {
-      id: 1,
-      icon: 'assets/expend/pet.svg',
-      title: 'Pet',
-      cost: 10,
-      date: moment().toDate(),
-    },
-    {
-      id: 2,
-      icon: 'assets/expend/clothes.svg',
-      title: 'T-shirt',
-      cost: 50,
-      date: moment().toDate(),
-    },
-    {
-      id: 3,
-      icon: 'assets/expend/pet.svg',
-      title: 'Pet',
-      cost: 10,
-      date: moment().subtract(6, 'days').toDate(),
-    },
-    {
-      id: 4,
-      icon: 'assets/expend/clothes.svg',
-      title: 'T-shirt',
-      cost: 50,
-      date: moment().subtract(5, 'days').toDate(),
-    },
-    {
-      id: 5,
-      icon: 'assets/expend/pet.svg',
-      title: 'Pet',
-      cost: 10,
-      date: moment().subtract(1, 'month').toDate(),
-    },
-  ];
-  public categoriesSpendings: ICategorizedSpendings = this.categorizeSpendings(
-    this.spendings
-  );
+export class HistorySpendingComponent implements OnInit {
+  @Input()
+  public spendings: ISpending[];
+  public categoriesSpendings: ICategorizedSpendings;
+
+  public ngOnInit(): void {
+    this.categoriesSpendings = this.categorizeSpendings(this.spendings);
+  }
 
   private categorizeSpendings(spendings: ISpending[]): ICategorizedSpendings {
     const today = moment().startOf('day');

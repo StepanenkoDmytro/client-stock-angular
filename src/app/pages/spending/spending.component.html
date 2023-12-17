@@ -1,6 +1,6 @@
 <div class="spending">
   <pgz-progress [progress]="38" [height]="30" [text]="'House'"></pgz-progress>
-  <pgz-total-balance [balance]="100000"></pgz-total-balance>
+  <pgz-total-balance [balance]="expends.money"></pgz-total-balance>
 
   <pgz-button-toggle
       class="frame-btn"
@@ -10,9 +10,9 @@
   </pgz-button-toggle>
 
   @if(isSpendingsFrame) {
-    <pgz-period-spending></pgz-period-spending>
+    <pgz-period-spending [expends]="expends"></pgz-period-spending>
   } @else {
-    <pgz-history-spending></pgz-history-spending>
+    <pgz-history-spending [spendings]="historySpending"></pgz-history-spending>
   }
 
   <button mat-flat-button class="spending-btn" (click)="addSpending()">{{ 'Add spending' }}</button>

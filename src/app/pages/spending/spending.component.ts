@@ -7,6 +7,9 @@ import { MatBottomSheet, MatBottomSheetModule } from '@angular/material/bottom-s
 import { AddSpendingComponent } from './components/add-spending/add-spending.component';
 import { ButtonToggleComponent } from '../../core/UI/components/button-toggle/button-toggle.component';
 import { HistorySpendingComponent } from './components/history-spending/history-spending.component';
+import { IDonutValue } from '../../core/domain/d3.domain';
+import { ISpending } from '../../core/domain/spending.domain';
+import moment from 'moment';
 
 const UI_COMPONENTS = [
   ProgressComponent,
@@ -29,6 +32,48 @@ const MATERIAL_MODULES = [
   imports: [ ...UI_COMPONENTS, ...MATERIAL_MODULES ],
 })
 export class SpendingComponent {
+  public expends: IDonutValue = {
+    title: 'Total',
+    money: '2 000 000',
+  };
+
+  public historySpending: ISpending[] = [
+    {
+      id: 1,
+      icon: 'assets/expend/pet.svg',
+      title: 'Pet',
+      cost: 10,
+      date: moment().toDate(),
+    },
+    {
+      id: 2,
+      icon: 'assets/expend/clothes.svg',
+      title: 'T-shirt',
+      cost: 50,
+      date: moment().toDate(),
+    },
+    {
+      id: 3,
+      icon: 'assets/expend/pet.svg',
+      title: 'Pet',
+      cost: 10,
+      date: moment().subtract(6, 'days').toDate(),
+    },
+    {
+      id: 4,
+      icon: 'assets/expend/clothes.svg',
+      title: 'T-shirt',
+      cost: 50,
+      date: moment().subtract(5, 'days').toDate(),
+    },
+    {
+      id: 5,
+      icon: 'assets/expend/pet.svg',
+      title: 'Pet',
+      cost: 10,
+      date: moment().subtract(1, 'month').toDate(),
+    },
+  ]
   public isSpendingsFrame: boolean = true;
 
   constructor(

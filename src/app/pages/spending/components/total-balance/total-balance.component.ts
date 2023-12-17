@@ -11,5 +11,5 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 export class TotalBalanceComponent {
 
   @Input()
-  public balance: number = 100000;
+  public balance: string | number = 100000;
 }
