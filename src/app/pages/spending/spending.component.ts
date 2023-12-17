@@ -5,6 +5,7 @@ import { PeriodSpendingComponent } from './components/period-spending/period-spe
 import { MatButtonModule } from '@angular/material/button';
 import { MatBottomSheet, MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { AddSpendingComponent } from './components/add-spending/add-spending.component';
+import { DonutComponent } from '../../core/UI/components/charts/donut/donut.component';
 
 const UI_COMPONENTS = [
   ProgressComponent,
