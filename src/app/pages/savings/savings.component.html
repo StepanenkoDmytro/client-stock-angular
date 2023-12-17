@@ -1,1 +1,31 @@
-<p>savings works!</p>
+<pgz-total-info></pgz-total-info>
+  
+  <pgz-button-toggle [dataUnchecked]="'Stocks'" [dataChecked]="'Statistic'" (buttonValue)="onChangeFrame($event)"></pgz-button-toggle>
+  
+  @if(isPortfolioFrame) {
+    <pgz-stock-saving [stocks]="stocks"></pgz-stock-saving>
+  } @else {
+    <!-- <app-bar-chart class="bar"></app-bar-chart> -->
+  
+    <!-- <mat-tab-group class="statistic--year">
+      <mat-tab *ngFor="let year of years; trackBy: trackYear" [label]="year">
+        <ng-container *ngFor="let month of months">
+          <mat-expansion-panel class="statistic--month" hideToggle>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                
+                {{ month }}
+              </mat-panel-title>
+              <mat-panel-description>
+                <div class="icon-wrapper">
+                <mat-icon class="icon-wrapper--icon">add</mat-icon>
+                </div>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <p>Some text</p>
+        
+          </mat-expansion-panel>
+        </ng-container>
+      </mat-tab>
+    </mat-tab-group> -->
+  }

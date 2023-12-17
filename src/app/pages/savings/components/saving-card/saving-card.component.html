@@ -1,0 +1,27 @@
+<div class="stock card-mobile row">
+    <div class="stock--title col-7">
+        @if(stock.icon) {
+            <img [src]="stock.icon" class="card-icon" alt="icon-company">
+        } @else {
+            <img src="assets/icons/company.svg" class="card-icon" alt="icon-company">
+        }
+        
+        <div class="stock--name">
+            <p class="company-primary-info">{{ stock.name }}</p>
+
+            <p>{{ stock.countStocks }} pcs.</p>
+        </div>
+    </div>
+
+    <div class="stock--info col-4 text-end">
+        <p class="company-primary-info">{{ stock.buyPrice * stock.countStocks }}$</p>
+        
+        <p class="company-profit">+10%</p>
+    </div>
+    <div class="d-flex col-1">
+        <button class="dots--button">
+            <img src="assets/icons/dots.svg" 
+                 class="dots--icon">
+        </button>
+    </div>
+</div>
