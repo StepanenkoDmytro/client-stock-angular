@@ -1,0 +1,33 @@
+:host {
+  display: block;
+}
+
+.spendings-history {
+  width: 100%;
+  height: 145%;
+
+  &--calendar {
+    display: flex;
+    justify-content: end;
+  }
+
+  &--list {
+    overflow-y: scroll;
+  }
+
+  &--list-item {
+    font-size: 24px;
+  }
+  
+  &--list-item:not(:first-child) {
+    margin-top: 40px;
+  }
+
+  .calendar-btn {
+    display: flex;
+    align-items: center;
+    color: var(--accept-color);
+    border: none;
+    background: inherit;
+  }
+}

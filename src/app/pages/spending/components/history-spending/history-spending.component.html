@@ -1,0 +1,28 @@
+<section class="spendings-history">
+
+    <div class="spendings-history--calendar">
+        <a href="#" class="calendar-btn">
+            <p style="margin: 0">Calendar</p>
+            <mat-icon>calendar_month</mat-icon>
+        </a>
+    </div>
+
+    <div class="spendings-history--list">
+
+        <p class="spendings-history--list-item">Today</p>
+        @for (spendingToday of categoriesSpendings.today; track spendingToday.id) {
+            <pgz-history-spending-card [spending]="spendingToday"></pgz-history-spending-card>
+        }
+
+        <p class="spendings-history--list-item">Last week</p>
+        @for (spendingLastWeek of categoriesSpendings.lastWeek; track spendingLastWeek.id) {
+            <pgz-history-spending-card [spending]="spendingLastWeek"></pgz-history-spending-card>
+        }
+
+        <p class="spendings-history--list-item">Last month</p>
+        @for (spendingLastMonth of categoriesSpendings.month; track spendingLastMonth.id) {
+            <pgz-history-spending-card [spending]="spendingLastMonth"></pgz-history-spending-card>
+        }
+
+    </div>
+</section>

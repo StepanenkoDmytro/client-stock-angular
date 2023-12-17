@@ -1,0 +1,12 @@
+<header class="custom-checkbox">
+    <input id="status" 
+           type="checkbox" 
+           name="status"
+           (click)="changeValue()">
+    <label for="status">
+        <div class="status-switch" 
+             [attr.data-unchecked]="dataUnchecked" 
+             [attr.data-checked]="dataChecked">
+        </div>
+    </label>
+</header>

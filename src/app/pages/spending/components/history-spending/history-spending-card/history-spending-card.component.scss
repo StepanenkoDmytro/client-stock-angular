@@ -1,0 +1,43 @@
+:host {
+  display: block;
+}
+
+.spending-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0 10px 0;
+}
+
+.spending {
+  margin: 10px;
+  display: flex;
+  justify-content: space-between;
+
+  &--info {
+    display: flex;
+  }
+
+  &--icon {
+    width: 24px;
+  }
+
+  &--title {
+    font-size: 16px;
+  }
+
+  &--cost {
+    font-size: 14px;
+  }
+}
+
+.line {
+  border-bottom: 1px solid #e8e8e8;
+  align-self: center;
+  width: 92%;
+}
+
+.text {
+  margin: 0px 10px 0px 10px;
+  align-self: center;
+}
+

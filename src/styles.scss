@@ -35,5 +35,18 @@ $pegazzo-client-theme: mat.define-light-theme((
 
 /* You can add global styles to this file, and also import other style files */
 
+:root {
+  --background-color: #eee3e3;
+  --primary-color: #dc3545;
+  --dark-color: rgb(30, 30, 32);
+  --black-color: rgb(16, 16, 16);
+  --light-color: #f4f4f4;
+  --light-color-100: #c0bab5;
+  --accept-color: rgba(38, 166, 153, 0.763);
+  --decline-color: #db2d3eb5;
+  --stroke-color: #9bc8e235;
+  --stroke-color-50: #aabbc51d;
+}
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
