@@ -35,23 +35,16 @@
                         [class.selected]="day.selected" 
                         (click)="select(day.value)">
 
-                        <div class="enter">
-                            <div class="date" [class.active]="day.active">
-                                <p>
-                                    {{ day.value | dateFormat: 'DD' }}
-                                </p>
-                            </div>
-
-                            <div class="day-info">
-                                <p style="color: red">100$</p>
-                                <p style="color: green">20 000$</p>
-                                <p style="color: red">100$</p>
-                                <!-- <p style="color: green">20 000$</p> -->
-                            </div>
+                        <div [class.enter]="day.selected">
+                            <p>{{ day.value | dateFormat: 'DD' }}</p>
                         </div>
                     </td>
                 </tr>
             </tbody>
         </table>
+    </div>
+
+    <div>
+        <app-day-view></app-day-view>
     </div>
 </main>

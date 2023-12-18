@@ -11,13 +11,15 @@ table {
 
     td,
     th {
-        border: 1px solid #000;
+        // border: 1px solid #000;
     }
 
     td {
         // height: 50px;
+        height: 6vh;
+        width: 14%;
         text-align: center;
-        transition: all .2s;
+        vertical-align: bottom;
 
         &.disabled {
             opacity: .5;
@@ -42,8 +44,7 @@ table {
     }
 
     .selected {
-        background: #eee;
-        color: blue;
+        color: var(--accept-color);
     }
 }
 
@@ -67,9 +68,12 @@ table {
 }
 
 .enter {
-    height: 110px;
+    border: 1px solid var(--accept-color);
+    height: 100%;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    align-items: self-end;
+    border-radius: 50%;
 }
 
 .small-menu {
