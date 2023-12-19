@@ -1,0 +1,116 @@
+:host {
+  display: block;
+}
+
+.calendar {
+  &--day {
+      font-size: 14px;
+  }
+}
+
+table {
+  width: 100%;
+  margin-bottom: auto;
+  border-collapse: collapse;
+
+  td,
+  th {
+      // border: 1px solid #000;
+  }
+
+  td {
+      // height: 50px;
+      height: 6vh;
+      width: 14%;
+      text-align: center;
+      vertical-align: bottom;
+
+      &.disabled {
+          opacity: .5;
+      }
+
+      &:hover:not(.disabled) {
+          background: #eee;
+          cursor: pointer;
+      }
+
+  }
+
+  tr:last-child {
+      td {
+          border-bottom: none;
+      }
+  }
+
+  .active {
+      color: var(--primary-color);
+
+  }
+
+  .selected {
+      color: var(--accept-color);
+  }
+}
+
+.date {
+  display: flex;
+  justify-content: flex-start;
+  font-weight: bold;
+}
+
+.day-info {
+  font-size: 10px;
+  display: flex;
+  flex-direction: column;
+  margin-left: auto;
+  text-align: end;
+
+  p {
+
+      margin: 0;
+  }
+}
+
+.enter {
+  border: 1px solid var(--accept-color);
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: self-end;
+  border-radius: 50%;
+}
+
+.small-menu {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: var(--accept-color);
+  height: 70px;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-evenly;
+
+  &--card {
+      text-align: center;
+      font-size: 16px;
+  }
+}
+
+.info {
+  font-size: 18px;
+}
+
+#income {
+  color: var(--accept-color);
+}
+
+#expend {
+  color: var(--decline-color);
+}
+
+#summary {
+  color: var(--light-color-100);
+}
+

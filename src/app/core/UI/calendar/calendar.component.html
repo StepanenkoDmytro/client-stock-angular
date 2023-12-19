@@ -1,0 +1,69 @@
+<main>
+    <pgz-selector></pgz-selector>
+    <div class="calendar-header">
+        <div class="calendar-header--card">
+            <p>Дохід: </p>
+            <p id="income" class="info">20 000$</p>
+        </div>
+        <div class="calendar-header--card">
+            <p>Витрати: </p>
+            <p id="expend" class="info">20 000$</p>
+        </div>
+        <div class="calendar-header--card">
+            <p>Сумарно: </p>
+            <p id="summary" class="info">20 000$</p>
+        </div>
+    </div>
+    <div class="calendar">
+        <table>
+            <thead>
+                <tr>
+                    <th>Sun</th>
+                    <th>Mon</th>
+                    <th>Tue</th>
+                    <th>Wen</th>
+                    <th>Thu</th>
+                    <th>Fri</th>
+                    <th>Sat</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <!-- <tr *ngFor="let week of calendar"> -->
+                    @for(week of calendar; track week) {
+
+                    <tr>
+                        @for(day of week.days; track day) {
+                            <td
+                            class="calendar--day" 
+                            [class.disabled]="day.disabled"
+                            [class.selected]="day.selected" 
+                            (click)="select(day.value)">
+
+                            <div [class.enter]="day.selected">
+                                <p>{{ day.value | dateFormat: 'DD' }}</p>
+                            </div>
+
+                            </td>
+                        }
+                    <!-- <td *ngFor="let day of week.days" 
+                        class="calendar--day" 
+                        [class.disabled]="day.disabled"
+                        [class.selected]="day.selected" 
+                        (click)="select(day.value)"> -->
+
+                        <!-- <div [class.enter]="day.selected">
+                            <p>{{ day.value | dateFormat: 'DD' }}</p>
+                        </div> -->
+                    <!-- </td> -->
+                </tr>
+                    }
+                <!-- </tr> -->
+            </tbody>
+        </table>
+    </div>
+<!-- 
+    <div>
+        <app-day-view></app-day-view>
+    </div> -->
+</main>

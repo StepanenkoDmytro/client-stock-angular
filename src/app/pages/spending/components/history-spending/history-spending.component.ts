@@ -3,6 +3,7 @@ import { MatIconModule } from '@angular/material/icon';
 import moment from 'moment';
 import { ICategorizedSpendings, ISpending } from '../../../../core/domain/spending.domain';
 import { HistorySpendingCardComponent } from './history-spending-card/history-spending-card.component';
+import { DateFormatPipe } from '../../../../core/UI/calendar/date-format.pipe';
 
 
 const UI_COMPONENTS = [
@@ -19,7 +20,7 @@ const MATERIAL_MODULES = [
   imports: [...UI_COMPONENTS, ...MATERIAL_MODULES],
   templateUrl: './history-spending.component.html',
   styleUrl: './history-spending.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HistorySpendingComponent implements OnInit {
   @Input()
