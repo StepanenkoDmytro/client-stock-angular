@@ -73,7 +73,7 @@ export class SpendingComponent {
       cost: 10,
       date: moment().subtract(1, 'month').toDate(),
     },
-  ]
+  ];
   public isSpendingsFrame: boolean = true;
 
   constructor(

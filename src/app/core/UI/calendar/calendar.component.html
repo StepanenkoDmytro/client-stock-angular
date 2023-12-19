@@ -1,5 +1,4 @@
 <main>
-    <pgz-selector></pgz-selector>
     <div class="calendar-header">
         <div class="calendar-header--card">
             <p>Дохід: </p>
@@ -28,10 +27,7 @@
                 </tr>
             </thead>
             <tbody>
-
-                <!-- <tr *ngFor="let week of calendar"> -->
-                    @for(week of calendar; track week) {
-
+                @for(week of calendar; track week) {
                     <tr>
                         @for(day of week.days; track day) {
                             <td
@@ -46,24 +42,9 @@
 
                             </td>
                         }
-                    <!-- <td *ngFor="let day of week.days" 
-                        class="calendar--day" 
-                        [class.disabled]="day.disabled"
-                        [class.selected]="day.selected" 
-                        (click)="select(day.value)"> -->
-
-                        <!-- <div [class.enter]="day.selected">
-                            <p>{{ day.value | dateFormat: 'DD' }}</p>
-                        </div> -->
-                    <!-- </td> -->
-                </tr>
-                    }
-                <!-- </tr> -->
+                    </tr>
+                }
             </tbody>
         </table>
     </div>
-<!-- 
-    <div>
-        <app-day-view></app-day-view>
-    </div> -->
 </main>

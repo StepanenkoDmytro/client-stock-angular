@@ -1,23 +1,21 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { DateFormatPipe } from '../date-format.pipe';
-import { DateService } from '../date.service';
+import { DateService } from '../../../../pages/spending/date.service';
 import moment from 'moment';
-import { BehaviorSubject } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'pgz-selector',
   standalone: true,
-  imports: [DateFormatPipe],
+  imports: [DateFormatPipe, AsyncPipe],
   templateUrl: './selector.component.html',
   styleUrl: './selector.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SelectorComponent {
 
-  month: BehaviorSubject<moment.Moment> = new BehaviorSubject(moment());
-
   constructor(
-    private dateService: DateService,
+    public dateService: DateService,
   ) { }
 
   go(dir: number) {

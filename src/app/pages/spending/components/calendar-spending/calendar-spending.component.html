@@ -1,0 +1,8 @@
+<pgz-selector></pgz-selector>
+<pgz-calendar></pgz-calendar>
+
+@for(spending of spendingsByDay; track spending) {
+    <pgz-history-spending-card [spending]="spending"></pgz-history-spending-card>
+} @empty {
+    <p class="no-value">No expenses</p>
+}
