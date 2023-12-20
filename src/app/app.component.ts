@@ -4,6 +4,7 @@ import { RouterOutlet } from '@angular/router';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NavigationComponent } from './core/UI/components/navigation/navigation.component';
 
+
 @Component({
   selector: 'pgz-root',
   templateUrl: './app.component.html',

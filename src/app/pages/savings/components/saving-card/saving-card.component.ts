@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { IPortfolioStock } from '../../../../core/domain/savings.domain';
 
+
 @Component({
   selector: 'pgz-saving-card',
   standalone: true,

@@ -18,6 +18,4 @@ const UI_COMPONENTS = [
 export class PeriodSpendingComponent {
   @Input()
   public expends: ID3Value;
-  
-  
 }

@@ -54,3 +54,4 @@ export const ACCOUNT_STOCKS_MOCK: IPortfolioStock[] = [
       dividendYield: 0.0426,
     },
   ];
+  

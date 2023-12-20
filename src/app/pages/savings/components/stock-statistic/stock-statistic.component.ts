@@ -3,7 +3,6 @@ import { BarComponent } from '../../../../core/UI/components/charts/bar/bar.comp
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
-import moment from 'moment';
 
 
 const UI_COMPONENTS = [

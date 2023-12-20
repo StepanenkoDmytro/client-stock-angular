@@ -28,12 +28,12 @@ export class CalendarSpendingComponent implements OnInit {
 
   constructor(
     public dateService: DateService,
-    private taskService: ExpenseService,
+    private expenseService: ExpenseService,
   ) { }
 
   public ngOnInit(): void {
     this.dateService.date.pipe(
-      switchMap(value => this.taskService.loadByDate(value))
+      switchMap(value => this.expenseService.loadByDate(value))
     ).subscribe(spendings => {
       this.spendingsByDay = spendings;
     });

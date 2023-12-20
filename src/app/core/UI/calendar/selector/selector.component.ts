@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { DateFormatPipe } from '../date-format.pipe';
 import { DateService } from '../../../../pages/spending/date.service';
-import moment from 'moment';
 import { AsyncPipe } from '@angular/common';
+
 
 @Component({
   selector: 'pgz-selector',

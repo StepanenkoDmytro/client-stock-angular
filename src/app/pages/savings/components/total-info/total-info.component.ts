@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { DonutComponent } from '../../../../core/UI/components/charts/donut/donut.component';
 
+
 @Component({
   selector: 'pgz-total-info',
   standalone: true,

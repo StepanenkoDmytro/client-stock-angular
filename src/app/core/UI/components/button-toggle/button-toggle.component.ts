@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
+
 @Component({
   selector: 'pgz-button-toggle',
   standalone: true,

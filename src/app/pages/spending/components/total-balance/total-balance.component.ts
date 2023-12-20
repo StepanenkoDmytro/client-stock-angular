@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
+
 @Component({
   selector: 'pgz-total-balance',
   standalone: true,
