@@ -27,7 +27,7 @@ export class StockStatisticComponent {
   public years: string[] = ['2022', '2023', '2024'];
   public months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-  public trackYear(index: number, year: string): string {
+  public trackYear(year: string): string {
     return year;
   }
 }
