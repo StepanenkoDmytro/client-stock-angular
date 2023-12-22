@@ -1,14 +1,25 @@
 :host {
   display: block;
 
+  
+}
+
+.add-spending {
+  margin-top: 20px;
+}
+
+.input-category {
   ::ng-deep .mdc-text-field--outlined {
     --mdc-outlined-text-field-outline-width: 0px;
   }
 }
+
 .select-category {
   display: flex;
   padding-bottom: 10px;
   border-bottom: 1px solid #E8E8E8;
+  
+
 
   ::ng-deep .mat-mdc-select-arrow {
     display: none;
@@ -21,12 +32,33 @@
 }
 
 .spending-btn {
-  width: 90%;
+  width: 100%;
+  font-size: 1.2rem;
   border: 1px solid #edb03b;
+  padding: 1.8rem;
   
   &--save {
     background-color: #edb03b !important;
   }
-
 }
 
+.name-of-product {
+  
+  ::placeholder {
+    font-size: 1rem;
+  }
+}
+
+
+
+.choise-btn {
+  display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.line {
+  border-bottom: 1px solid #E8E8E8;
+  width: inherit;
+}

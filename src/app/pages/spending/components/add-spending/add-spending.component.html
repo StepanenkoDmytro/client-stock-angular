@@ -1,26 +1,40 @@
-<mat-form-field appearance="outline" class="w-100">
-    <mat-label>Category</mat-label>
-    <div class="select-category">
+<section class="add-spending">
+
+    <mat-form-field appearance="outline" class="w-100 input-category">
+        <mat-label>Category</mat-label>
+        <div class="select-category">
+            <img [src]="selectedCategory.icon" class="icon-select">
+            <mat-select matNativeControl [(value)]="selectedCategory" (selectionChange)="test($event)" style="font-size: 1.5rem;">
+                @for(category of categories; track category) {
+                    <img [src]="category.icon" style="width: 24px;">
+                    <mat-option [value]="category">{{ category.title }}</mat-option>
+                }
+            </mat-select>
+            <img matSuffix src="assets/icons/arrow.svg">
+        </div>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" floatLabel="always" class="w-100 name-of-product">
+        <mat-label>Name</mat-label>
+        <input matInput type="text" placeholder="Enter name of product" style="font-size: 1.5rem;">  
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" floatLabel="always" class="w-100">
+        <mat-label>Sum</mat-label>
+        <input matInput type="number" inputmode="numeric" class="line" placeholder="0" style="font-size: 1.5rem;">
         
-    <img [src]="selectedCategory.icon" class="icon-select">
-    <mat-select matNativeControl [(value)]="selectedCategory" (selectionChange)="test($event)" style="font-size: 1.5rem;">
-      @for(category of categories; track category) {
-        <img [src]="category.icon" style="width: 24px;">
-        <mat-option [value]="category">
-            {{ category.title }}
-        </mat-option>
-      }
-    </mat-select>
-    <img matSuffix src="assets/icons/arrow.svg">
-</div>
-</mat-form-field>
-<div>
-    <input type="text">
-</div>
+        <!-- <span matTextSuffix style="font-size: 1.5rem;">.00&nbsp;</span>     -->
+        <span matTextSuffix style="font-size: 1.5rem;">$</span> 
+    </mat-form-field>
 
-<div>
-    <input type="number" inputmode="numeric">
-</div>
+    <mat-form-field appearance="outline" floatLabel="always" class="w-100">
+        <mat-label>Comment</mat-label>
+        
+            <textarea matInput placeholder="Ex. It makes me feel..."></textarea>
+    </mat-form-field>
 
-<button mat-flat-button class="spending-btn">{{ 'Add spending and add next' }}</button>
-<button mat-flat-button class="spending-btn spending-btn--save">{{ 'Add spending and Exit' }}</button>
+    <div class="choise-btn">
+        <button mat-flat-button class="spending-btn">{{ 'Add spending and add next' }}</button>
+        <button mat-flat-button class="spending-btn spending-btn--save">{{ 'Add spending and Exit' }}</button>
+    </div>
+</section>
