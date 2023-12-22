@@ -10,6 +10,7 @@ import { HistorySpendingComponent } from './components/history-spending/history-
 import { ID3Value } from '../../core/domain/d3.domain';
 import { ISpending } from '../../core/domain/spending.domain';
 import { ExpenseService } from './expense.service';
+import { switchMap } from 'rxjs';
 
 
 const UI_COMPONENTS = [
@@ -53,7 +54,11 @@ export class SpendingComponent implements OnInit {
   }
 
   public addSpending(): void {
-    this._bottomSheet.open(AddSpendingComponent);
+    this._bottomSheet.open(AddSpendingComponent).backdropClick().pipe(
+      switchMap(() => this.expenseService.loadByMonth())
+    ).subscribe(spendings => {
+      this.historySpending = spendings;
+    });
   }
 
   

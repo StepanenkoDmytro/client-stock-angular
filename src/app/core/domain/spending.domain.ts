@@ -1,7 +1,7 @@
 import moment from "moment";
 
 export interface ISpending {
-    id: number
+    id?: number
     icon: string;
     title: string;
     cost: number;

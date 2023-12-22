@@ -4,6 +4,12 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
+import { ExpenseService } from '../../expense.service';
+import { FormsModule } from '@angular/forms';
+import {MatNativeDateModule} from '@angular/material/core';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import moment from 'moment';
+import { ISpending } from '../../../../core/domain/spending.domain';
 
 
 const UI_MODULES = [
@@ -11,7 +17,10 @@ const UI_MODULES = [
   MatFormFieldModule,
   MatIconModule,
   MatButtonModule,
-  MatInputModule
+  MatInputModule,
+  FormsModule,
+  MatNativeDateModule,
+  MatDatepickerModule,
 ];
 
 @Component({
@@ -23,7 +32,6 @@ const UI_MODULES = [
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddSpendingComponent {
-
   public categories: any[] = [
     {
       title: 'Car',
@@ -35,9 +43,21 @@ export class AddSpendingComponent {
     }
   ];
   public selectedCategory: any = this.categories[0];
+  public nameOfProduct: string;
+  public costOfProduct: number;
+  public date: Date = moment().toDate();
 
-  test(event: any) {
-    console.log('test',event);
-    
+  constructor(
+    private expenseService: ExpenseService
+  ) {}
+
+  saveSpending() {
+    const newExpense: ISpending = {
+      icon: this.selectedCategory.icon,
+      title: this.nameOfProduct,
+      cost: this.costOfProduct,
+      date: this.date,
+    }
+    this.expenseService.addSpending(newExpense);
   }
 }

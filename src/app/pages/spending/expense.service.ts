@@ -23,4 +23,22 @@ export class ExpenseService {
  
     return of(filterExpenses);
   }
+
+  public addSpending(spending: ISpending):Observable<ISpending> {
+    if(spending.title == null) {
+      throw Error('cost or name of product can not be null')
+    }
+
+    if(spending.id == null) {
+      spending.id = this.getLastId();
+    }
+    this.historySpending.push(spending);
+    console.log(this.historySpending);
+    
+    return of(spending);
+  }
+
+  private getLastId(): number {
+    return this.historySpending.length + 1;
+  }
 }
