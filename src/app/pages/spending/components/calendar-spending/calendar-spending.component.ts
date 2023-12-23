@@ -2,8 +2,8 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit } from '@angu
 import { CalendarComponent } from '../../../../core/UI/calendar/calendar.component';
 import { SelectorComponent } from '../../../../core/UI/calendar/selector/selector.component';
 import { switchMap } from 'rxjs';
-import { DateService } from '../../date.service';
-import { ExpenseService } from '../../expense.service';
+import { DateService } from '../../../../service/date.service';
+import { ExpenseService } from '../../../../service/expense.service';
 import { ISpending } from '../../../../domain/spending.domain';
 import { HistorySpendingCardComponent } from '../history-spending/history-spending-card/history-spending-card.component';
 

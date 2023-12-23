@@ -21,10 +21,6 @@ export interface ICategorySpending {
 
 export const CATEGORY_SPENDING: ICategorySpending[] = [
   {
-    title: 'Car',
-    icon: 'assets/expend/car.svg'
-  },
-  {
     title: 'Clothes',
     icon: 'assets/expend/clothes.svg'
   },
@@ -33,16 +29,20 @@ export const CATEGORY_SPENDING: ICategorySpending[] = [
     icon: 'assets/expend/drink.svg'
   },
   {
-    title: 'Food',
-    icon: 'assets/expend/food.svg'
-  },
-  {
     title: 'Gift',
     icon: 'assets/expend/gift.svg'
   },
   {
+    title: 'Car',
+    icon: 'assets/expend/car.svg'
+  },
+  {
     title: 'Health',
     icon: 'assets/expend/health.svg'
+  },
+  {
+    title: 'Food',
+    icon: 'assets/expend/food.svg'
   },
   {
     title: 'House',
@@ -51,7 +51,7 @@ export const CATEGORY_SPENDING: ICategorySpending[] = [
   {
     title: 'Pet',
     icon: 'assets/expend/pet.svg'
-  }
+  },
 ];
 
 export const SPENDING_MOCK: ISpending[] = [

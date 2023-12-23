@@ -2,14 +2,16 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { DonutComponent } from '../../../../core/UI/components/charts/donut/donut.component';
 import { ID3Value } from '../../../../domain/d3.domain';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { switchMap } from 'rxjs';
-import { ExpenseService } from '../../expense.service';
+import { NgClass } from "@angular/common";
+import { ExpenseService } from '../../../../service/expense.service';
 import { AddSpendingComponent } from '../add-spending/add-spending.component';
 import { CATEGORY_SPENDING, ICategorySpending } from '../../../../domain/spending.domain';
+import { switchMap } from 'rxjs';
 
 
 const UI_COMPONENTS = [
   DonutComponent,
+  NgClass
 ];
 
 @Component({
@@ -33,6 +35,8 @@ export class PeriodSpendingComponent {
   public addSpending(category: ICategorySpending): void {
     this._bottomSheet.open(AddSpendingComponent, {
       data: { category }
-    }).backdropClick().subscribe();
+    }).backdropClick().pipe(
+      switchMap(() => this.expenseService.loadByMonth())
+    ).subscribe();
   }
 }

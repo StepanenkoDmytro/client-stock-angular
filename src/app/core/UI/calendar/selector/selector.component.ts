@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { DateFormatPipe } from '../date-format.pipe';
-import { DateService } from '../../../../pages/spending/date.service';
+import { DateService } from '../../../../service/date.service';
 import { AsyncPipe } from '@angular/common';
 
 
@@ -18,7 +18,7 @@ export class SelectorComponent {
     public dateService: DateService,
   ) { }
 
-  go(dir: number) {
+  public go(dir: number): void {
     this.dateService.changeMonth(dir);
   }
 }

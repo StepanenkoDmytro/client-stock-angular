@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { ISpending } from '../../domain/spending.domain';
+import { ISpending } from '../domain/spending.domain';
 import moment from 'moment';
 
 

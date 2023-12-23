@@ -1,7 +1,7 @@
 <section class="add-spending">
 
     <mat-form-field appearance="outline" class="w-100 input-category">
-        <mat-label [class.no-category]="selectedCategory.title.length === 0">Category</mat-label>
+        <mat-label [class.no-category]="!!selectedCategory">Category</mat-label>
         <div class="select-category">
             <img [src]="selectedCategory.icon" class="icon-select">
             <mat-select matNativeControl [(value)]="selectedCategory" style="font-size: 1.5rem;">

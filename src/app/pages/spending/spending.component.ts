@@ -9,7 +9,7 @@ import { ButtonToggleComponent } from '../../core/UI/components/button-toggle/bu
 import { HistorySpendingComponent } from './components/history-spending/history-spending.component';
 import { ID3Value } from '../../domain/d3.domain';
 import { ISpending } from '../../domain/spending.domain';
-import { ExpenseService } from './expense.service';
+import { ExpenseService } from '../../service/expense.service';
 import { switchMap } from 'rxjs';
 
 

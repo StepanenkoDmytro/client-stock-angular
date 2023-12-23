@@ -2,15 +2,6 @@
   display: block;
 }
 
-.spending {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  height: inherit;
-
-}
-
 .spendings-category {
   margin-bottom: 20px;
 
@@ -20,12 +11,6 @@
     grid-template-rows: 30% 60% 30%;
     width: 100%;
     align-items: center;
-  }
-
-  &--button {
-    margin-top: 80px;
-    width: 100%;
-    background-color: #edb03b !important;
   }
 
   .center {
