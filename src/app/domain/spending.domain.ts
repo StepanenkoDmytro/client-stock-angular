@@ -14,6 +14,46 @@ export interface ICategorizedSpendings {
     month: ISpending[];
 }
 
+export interface ICategorySpending {
+  title: string,
+  icon: string,
+}
+
+export const CATEGORY_SPENDING: ICategorySpending[] = [
+  {
+    title: 'Car',
+    icon: 'assets/expend/car.svg'
+  },
+  {
+    title: 'Clothes',
+    icon: 'assets/expend/clothes.svg'
+  },
+  {
+    title: 'Drink',
+    icon: 'assets/expend/drink.svg'
+  },
+  {
+    title: 'Food',
+    icon: 'assets/expend/food.svg'
+  },
+  {
+    title: 'Gift',
+    icon: 'assets/expend/gift.svg'
+  },
+  {
+    title: 'Health',
+    icon: 'assets/expend/health.svg'
+  },
+  {
+    title: 'House',
+    icon: 'assets/expend/house.svg'
+  },
+  {
+    title: 'Pet',
+    icon: 'assets/expend/pet.svg'
+  }
+];
+
 export const SPENDING_MOCK: ISpending[] = [
     {
       id: 1,

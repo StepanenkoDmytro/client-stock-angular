@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { ID3Value, SimpleDataModel } from '../../../../domain/d3.domain';
+import { ID3Value, SimpleDataModel } from '../../../../../domain/d3.domain';
 import * as d3 from 'd3';
 
 

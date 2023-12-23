@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as d3 from 'd3';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { ID3Value } from '../../../../domain/d3.domain';
+import { ID3Value } from '../../../../../domain/d3.domain';
 
 
 @Component({

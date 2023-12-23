@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { IPortfolioStock } from '../../../../core/domain/savings.domain';
+import { IPortfolioStock } from '../../../../domain/savings.domain';
 import { SavingCardComponent } from '../saving-card/saving-card.component';
 
 

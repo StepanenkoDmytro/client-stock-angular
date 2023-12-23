@@ -7,14 +7,14 @@
         [color]="'#CBCACA'">
         </pgz-donut>
 
-        <a href="#" class="item deg-1"><img src="assets/expend/health.svg"/></a>
-        <a href="#" class="item deg-2"><img src="assets/expend/pet.svg"/></a>
-        <a href="#" class="item deg-3"><img src="assets/expend/car.svg"/></a>
-        <a href="#" class="item deg-4"><img src="assets/expend/clothes.svg"/></a>
-        <a href="#" class="item deg-5"><img src="assets/expend/drink.svg"/></a>
-        <a href="#" class="item deg-6"><img class="central-img" src="assets/expend/gift.svg"/></a>
-        <a href="#" class="item deg-7"><img class="central-img" src="assets/expend/food.svg"/></a>
-        <a href="#" class="item deg-8"><img src="assets/expend/house.svg" /></a>
+        <a (click)="addSpending(categories[5])" class="item deg-1"><img src="assets/expend/health.svg"/></a>
+        <a (click)="addSpending(categories[7])" class="item deg-2"><img src="assets/expend/pet.svg"/></a>
+        <a (click)="addSpending(categories[0])" class="item deg-3"><img src="assets/expend/car.svg"/></a>
+        <a (click)="addSpending(categories[1])" class="item deg-4"><img src="assets/expend/clothes.svg"/></a>
+        <a (click)="addSpending(categories[2])" class="item deg-5"><img src="assets/expend/drink.svg"/></a>
+        <a (click)="addSpending(categories[4])" class="item deg-6"><img class="central-img" src="assets/expend/gift.svg"/></a>
+        <a (click)="addSpending(categories[3])" class="item deg-7"><img class="central-img" src="assets/expend/food.svg"/></a>
+        <a (click)="addSpending(categories[6])" class="item deg-8"><img src="assets/expend/house.svg" /></a>
     </div>
 
 </section>

@@ -7,8 +7,8 @@ import { MatBottomSheet, MatBottomSheetModule } from '@angular/material/bottom-s
 import { AddSpendingComponent } from './components/add-spending/add-spending.component';
 import { ButtonToggleComponent } from '../../core/UI/components/button-toggle/button-toggle.component';
 import { HistorySpendingComponent } from './components/history-spending/history-spending.component';
-import { ID3Value } from '../../core/domain/d3.domain';
-import { ISpending } from '../../core/domain/spending.domain';
+import { ID3Value } from '../../domain/d3.domain';
+import { ISpending } from '../../domain/spending.domain';
 import { ExpenseService } from './expense.service';
 import { switchMap } from 'rxjs';
 

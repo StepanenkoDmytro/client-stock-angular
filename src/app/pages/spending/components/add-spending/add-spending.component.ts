@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,7 +9,8 @@ import { FormsModule } from '@angular/forms';
 import {MatNativeDateModule} from '@angular/material/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import moment from 'moment';
-import { ISpending } from '../../../../core/domain/spending.domain';
+import { CATEGORY_SPENDING, ICategorySpending, ISpending } from '../../../../domain/spending.domain';
+import { MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
 
 
 const UI_MODULES = [
@@ -32,26 +33,20 @@ const UI_MODULES = [
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddSpendingComponent {
-  public categories: any[] = [
-    {
-      title: 'Car',
-      icon: 'assets/expend/car.svg'
-    },
-    {
-      title: 'Clothes',
-      icon: 'assets/expend/clothes.svg'
-    }
-  ];
-  public selectedCategory: any = this.categories[0];
+  public categories: ICategorySpending[] = CATEGORY_SPENDING;
+  public selectedCategory: ICategorySpending;
   public nameOfProduct: string;
   public costOfProduct: number;
   public date: Date = moment().toDate();
 
   constructor(
-    private expenseService: ExpenseService
-  ) {}
+    private expenseService: ExpenseService,
+    @Inject(MAT_BOTTOM_SHEET_DATA) public data: { category?: ICategorySpending }
+  ) {
+    this.selectedCategory = this.data.category ? this.data.category : { title: '', icon: '' };
+  }
 
-  saveSpending() {
+  public saveSpending() {
     const newExpense: ISpending = {
       icon: this.selectedCategory.icon,
       title: this.nameOfProduct,

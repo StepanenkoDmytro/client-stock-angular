@@ -4,7 +4,7 @@ import { SelectorComponent } from '../../../../core/UI/calendar/selector/selecto
 import { switchMap } from 'rxjs';
 import { DateService } from '../../date.service';
 import { ExpenseService } from '../../expense.service';
-import { ISpending } from '../../../../core/domain/spending.domain';
+import { ISpending } from '../../../../domain/spending.domain';
 import { HistorySpendingCardComponent } from '../history-spending/history-spending-card/history-spending-card.component';
 
 

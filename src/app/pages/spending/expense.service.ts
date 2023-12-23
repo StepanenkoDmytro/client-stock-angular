@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { ISpending, SPENDING_MOCK } from '../../core/domain/spending.domain';
+import { ISpending } from '../../domain/spending.domain';
 import moment from 'moment';
 
 
@@ -9,20 +9,19 @@ import moment from 'moment';
 })
 export class ExpenseService {
   private readonly localStorageKey = 'spendingData';
-  public historySpending: ISpending[];
+  public historySpending: ISpending[] = [];
 
   constructor() {
     const storedData = localStorage.getItem(this.localStorageKey);
     const parse: ISpending[] = JSON.parse(storedData);
 
-    this.historySpending = parse;
+    if(parse !== null) {
+      this.historySpending = parse;
+    }
   }
 
   public loadByDate(date: moment.Moment): Observable<ISpending[]> {
-    const storedData = localStorage.getItem(this.localStorageKey);
-    const parse: ISpending[] = JSON.parse(storedData);
-    const filterExpenses = parse.filter(spending => moment(spending.date).startOf('day').isSame(date.startOf('day')));
-    console.log(storedData);
+    const filterExpenses = this.historySpending.filter(spending => moment(spending.date).startOf('day').isSame(date.startOf('day')));
     return of(filterExpenses);
   }
 

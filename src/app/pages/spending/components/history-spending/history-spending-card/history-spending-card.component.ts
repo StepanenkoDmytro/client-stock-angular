@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { ISpending } from '../../../../../core/domain/spending.domain';
+import { ISpending } from '../../../../../domain/spending.domain';
 
 
 @Component({

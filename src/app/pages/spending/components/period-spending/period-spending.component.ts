@@ -1,6 +1,11 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { DonutComponent } from '../../../../core/UI/components/charts/donut/donut.component';
-import { ID3Value } from '../../../../core/domain/d3.domain';
+import { ID3Value } from '../../../../domain/d3.domain';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { switchMap } from 'rxjs';
+import { ExpenseService } from '../../expense.service';
+import { AddSpendingComponent } from '../add-spending/add-spending.component';
+import { CATEGORY_SPENDING, ICategorySpending } from '../../../../domain/spending.domain';
 
 
 const UI_COMPONENTS = [
@@ -16,6 +21,18 @@ const UI_COMPONENTS = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PeriodSpendingComponent {
+  public categories: ICategorySpending[] = CATEGORY_SPENDING;
   @Input()
   public expends: ID3Value;
+
+  constructor(
+    private _bottomSheet: MatBottomSheet,
+    private expenseService: ExpenseService,
+  ) { }
+
+  public addSpending(category: ICategorySpending): void {
+    this._bottomSheet.open(AddSpendingComponent, {
+      data: { category }
+    }).backdropClick().subscribe();
+  }
 }
