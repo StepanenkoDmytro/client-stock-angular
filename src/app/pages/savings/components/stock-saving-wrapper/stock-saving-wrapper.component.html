@@ -1,0 +1,9 @@
+<pgz-total-info></pgz-total-info>
+  
+  <pgz-button-toggle [dataUnchecked]="'Stocks'" [dataChecked]="'Statistic'" (buttonValue)="onChangeFrame($event)"></pgz-button-toggle>
+  
+  @if(isPortfolioFrame) {
+    <pgz-stock-saving [stocks]="stocks"></pgz-stock-saving>
+  } @else {
+    <pgz-stock-statistic></pgz-stock-statistic>
+  }
