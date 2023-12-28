@@ -10,7 +10,7 @@ import { IPortfolioStock } from '../../domain/savings.domain';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CoinService } from './service/coin.service';
 import { HttpClientModule } from '@angular/common/http';
-import { AddAssetsComponent } from './components/add-saving/add-assets.component';
+import { AddAssetsComponent } from './components/add-assets/add-assets.component';
 import { MatBottomSheet, MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatButtonModule } from '@angular/material/button';
 
