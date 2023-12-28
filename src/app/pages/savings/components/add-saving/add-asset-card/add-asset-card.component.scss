@@ -1,0 +1,76 @@
+:host {
+  display: block;
+}
+
+.asset {
+  display: flex;
+  justify-content: space-between;
+
+  &--title {
+    display: flex;
+  }
+
+  &--name {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+  }
+
+  &--info {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.card-mobile {
+  border-radius: 10px;
+  margin: 10px 0px 0px 0px;
+  padding: 5px;
+  background-color: var(--stroke-color);
+}
+
+.card-icon {
+  width: 40px;
+  align-self: center;
+}
+
+.company-primary-info {
+  font-size: 17px;
+  margin-bottom: 5px;
+}
+
+.company-expand-info .mat-expansion-panel-header {
+  height: auto;
+}
+
+.company-expand-info .mat-expansion-panel-header-description {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.company-expand-info .mat-mdc-form-field + .mat-mdc-form-field {
+  margin-left: 8px;
+}
+
+.mat-expansion-panel:not(.mat-expanded)
+  .mat-expansion-panel-header:not([aria-disabled='true']):hover {
+  background: inherit;
+}
+
+.expand {
+  background: inherit;
+  box-shadow: none !important;
+  display: flex;
+  justify-content: center;
+}
+
+.dots {
+  &--button {
+    background-color: inherit;
+    border: none;
+  }
+
+  &--icon {
+    width: 25px;
+  }
+}

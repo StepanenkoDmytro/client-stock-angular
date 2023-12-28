@@ -10,6 +10,9 @@ import { IPortfolioStock } from '../../domain/savings.domain';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CoinService } from './service/coin.service';
 import { HttpClientModule } from '@angular/common/http';
+import { AddAssetsComponent } from './components/add-saving/add-assets.component';
+import { MatBottomSheet, MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MatButtonModule } from '@angular/material/button';
 
 
 const UI_COMPONENTS = [
@@ -23,7 +26,9 @@ const UI_COMPONENTS = [
 const MATERIAL_MODULES = [
   MatIconModule,
   MatTabsModule,
-  MatFormFieldModule
+  MatFormFieldModule,
+  MatButtonModule,
+  MatBottomSheetModule
 ];
 
 enum AssetsType {
@@ -54,7 +59,8 @@ export class SavingsComponent implements OnInit {
   public stocks: IPortfolioStock[] = ACCOUNT_STOCKS_MOCK;
   public isPortfolioFrame: boolean = true;
 
-  constructor(private coinService: CoinService) {}
+  constructor(private coinService: CoinService,
+    private _bottomSheet: MatBottomSheet,) {}
   
   public ngOnInit(): void {
   //  this.coinService.test().subscribe((response) => {
@@ -75,5 +81,12 @@ export class SavingsComponent implements OnInit {
 
   public onChangeFrame(frame: boolean): void {
     this.isPortfolioFrame = frame;
+  }
+
+  public addSaving(): void {
+    this._bottomSheet.open(AddAssetsComponent).backdropClick().subscribe(() => {
+      console.log('here');
+      
+    });
   }
 }

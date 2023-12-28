@@ -43,15 +43,15 @@ export const ACCOUNT_STOCKS_MOCK: IPortfolioStock[] = [
       sector: 'FINANCE',
       dividendYield: 0.03,
     },
-    {
-      symbol: 'F',
-      assetType: 'COMMON STOCKS',
-      name: 'Ford Motor Company',
-      currency: 'USD',
-      buyPrice: 13.26,
-      countStocks: 200,
-      sector: 'MANUFACTURING',
-      dividendYield: 0.0426,
-    },
+    // {
+    //   symbol: 'F',
+    //   assetType: 'COMMON STOCKS',
+    //   name: 'Ford Motor Company',
+    //   currency: 'USD',
+    //   buyPrice: 13.26,
+    //   countStocks: 200,
+    //   sector: 'MANUFACTURING',
+    //   dividendYield: 0.0426,
+    // },
   ];
   
