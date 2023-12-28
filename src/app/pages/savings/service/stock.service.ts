@@ -5,12 +5,13 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class CoinService {
-  private readonly url: string = 'http://localhost:8000/api/v1/coins';
+export class StockService {
+  private readonly url: string = 'http://localhost:8000/api/v1/stocks';
 
   constructor(private readonly httpClient: HttpClient) { }
 
-  public getCoins(): Observable<any> {
-    return this.httpClient.get(this.url);
+  public getMovers(type: string): Observable<any> {
+    const url = this.url + '/movers/' + type;
+    return this.httpClient.get(url);
   }
 }
