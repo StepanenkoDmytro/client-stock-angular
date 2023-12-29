@@ -42,9 +42,9 @@ export class AddAssetsComponent {
   public step = 0;
   
   public selectedTypeAssets: string = null;
-  public test: { [key: string]: any  } = {
-    'one': CryptoMarketComponent,
-    'two': StockMarketComponent,
+  public assetMarketsComponents: { [key: string]: any  } = {
+    'crypto': CryptoMarketComponent,
+    'stock': StockMarketComponent,
   };
 
   public setStep(index: number) {

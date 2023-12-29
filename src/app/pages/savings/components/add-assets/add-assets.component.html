@@ -8,8 +8,8 @@
       <mat-form-field class="w-100">
         <mat-label>Select type</mat-label>
         <mat-select [(ngModel)]="selectedTypeAssets">
-            <mat-option [value]="'one'">Crypto</mat-option>
-            <mat-option [value]="'two'">Stocks</mat-option>
+            <mat-option [value]="'crypto'">Crypto</mat-option>
+            <mat-option [value]="'stock'">Stocks</mat-option>
           </mat-select>
       </mat-form-field>
   
@@ -27,8 +27,8 @@
       </mat-expansion-panel-header>
 
       <!-- <ng-container *ngIf=""> -->
-        @if(selectedTypeAssets && test[selectedTypeAssets]) {
-          <ng-container *ngComponentOutlet="test[selectedTypeAssets]"></ng-container>
+        @if(selectedTypeAssets && assetMarketsComponents[selectedTypeAssets]) {
+          <ng-container *ngComponentOutlet="assetMarketsComponents[selectedTypeAssets]"></ng-container>
         }
         
       <!-- </ng-container> -->
