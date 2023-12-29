@@ -1,0 +1,29 @@
+<mat-form-field class="w-100">
+        <mat-label>Assets</mat-label>
+        <input matInput type="text" [(ngModel)]="value">
+        @if (value) {
+            <button matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+              <mat-icon>close</mat-icon>
+            </button>
+        } 
+      </mat-form-field>
+
+        <div style="display: flex; justify-content: space-between;">
+            <div class="d-flex">
+                <mat-icon>tune</mat-icon>
+                <p style="margin: 0 0 0 5px;">1012 psc.</p>
+            </div>
+            <div>
+                <select class="form-select" aria-label="Default select example">
+                <option selected>Popularity</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </select>
+            </div>
+        </div>
+        <div style="height: 45vh; overflow-y: scroll; overflow-x: hidden;">
+            @for(stock of stocks; track stock) {
+                <pgz-add-asset-card [asset]="stock"></pgz-add-asset-card>
+            }
+        </div>
