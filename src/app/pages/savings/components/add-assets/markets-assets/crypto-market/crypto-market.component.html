@@ -1,1 +1,21 @@
-<p>crypto-market works!</p>
+<mat-form-field class="w-100">
+    <mat-label>Assets</mat-label>
+    <input matInput type="text" [(ngModel)]="value">
+    @if (value) {
+        <button matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+          <mat-icon>close</mat-icon>
+        </button>
+    } 
+  </mat-form-field>
+  
+<div style="display: flex; justify-content: space-between;">
+    <div class="d-flex">
+        <mat-icon>tune</mat-icon>
+        <p style="margin: 0 0 0 5px;">1012 psc.</p>
+    </div>
+</div>
+<div style="height: 45vh; overflow-y: scroll; overflow-x: hidden;">
+    @for(asset of coins; track asset) {
+        <pgz-add-asset-card [asset]="asset"></pgz-add-asset-card>
+    }
+</div>

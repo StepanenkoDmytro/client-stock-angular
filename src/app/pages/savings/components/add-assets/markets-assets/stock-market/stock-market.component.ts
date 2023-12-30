@@ -42,7 +42,9 @@ export class StockMarketComponent implements AfterViewInit {
   ]);
   public selectedFilter: string = 'MOST_ACTIVES';
 
-  constructor(private stockService: StockService, private cdr: ChangeDetectorRef) { }
+  constructor(
+    private stockService: StockService, 
+    private cdr: ChangeDetectorRef) { }
 
   public ngAfterViewInit(): void {
     
