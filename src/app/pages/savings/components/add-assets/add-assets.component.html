@@ -26,13 +26,9 @@
         <mat-panel-description>Find assets for purchase.</mat-panel-description>
       </mat-expansion-panel-header>
 
-      <!-- <ng-container *ngIf=""> -->
         @if(selectedTypeAssets && assetMarketsComponents[selectedTypeAssets]) {
           <ng-container *ngComponentOutlet="assetMarketsComponents[selectedTypeAssets]"></ng-container>
         }
-        
-      <!-- </ng-container> -->
-  
       
       <mat-action-row>
         <button mat-button color="warn" (click)="prevStep()">Previous</button>

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { IPortfolioStock } from '../../../../../domain/savings.domain';
+import { IAsset, IPortfolioStock } from '../../../../../domain/savings.domain';
 
 @Component({
   selector: 'pgz-add-asset-card',
@@ -11,5 +11,5 @@ import { IPortfolioStock } from '../../../../../domain/savings.domain';
 })
 export class AddAssetCardComponent {
   @Input()
-  public asset: IPortfolioStock;
+  public asset: IAsset;
 }

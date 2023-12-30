@@ -9,3 +9,10 @@ export interface IPortfolioStock {
     dividendYield: number;
     icon?: string;
 }
+
+export interface IAsset {
+    symbol: string;
+    name: string;
+    assetType: string;
+    price: number;
+  }

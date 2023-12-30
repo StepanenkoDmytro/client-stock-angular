@@ -1,10 +1,10 @@
 <div class="asset card-mobile row">
     <div class="asset--title col-6">
-        @if(asset.icon) {
+        <!-- @if(asset.icon) {
             <img [src]="asset.icon" class="card-icon" alt="icon-company">
         } @else {
             <img src="assets/icons/company.svg" class="card-icon" alt="icon-company">
-        }
+        } -->
         
         <div class="asset--name">
             <p class="company-primary-info">{{ asset.name }}</p>
@@ -12,7 +12,7 @@
     </div>
 
     <div class="asset--info col-6 text-end">
-        <p class="company-primary-info">{{ asset.buyPrice * asset.countStocks }}$</p>
+        <p class="company-primary-info">{{ asset.price }}$</p>
         
         <p style="font-size: 12px;">Div.income/year 0.51%</p>
     </div>

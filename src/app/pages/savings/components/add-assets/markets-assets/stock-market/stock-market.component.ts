@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { AddAssetCardComponent } from '../../add-asset-card/add-asset-card.component';
 import { ACCOUNT_STOCKS_MOCK } from '../../../../../../domain/mock.domain';
-import { IPortfolioStock } from '../../../../../../domain/savings.domain';
+import { IAsset, IPortfolioStock } from '../../../../../../domain/savings.domain';
 import { FormsModule } from '@angular/forms';
 import { StockService } from '../../../../service/stock.service';
 import { HttpClientModule } from '@angular/common/http';
@@ -19,7 +19,7 @@ const MATERIAL_MODULES = [
   MatInputModule,
   MatIconModule,
   FormsModule,
-]
+];
 
 @Component({
   selector: 'pgz-stock-market',
@@ -30,20 +30,42 @@ const MATERIAL_MODULES = [
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [StockService]
 })
-export class StockMarketComponent implements OnInit {
+export class StockMarketComponent implements AfterViewInit {
   
   public value = 'Clear me';
   public stocks: IPortfolioStock[] = ACCOUNT_STOCKS_MOCK;
+  public companies: IAsset[] = [];
+  public moverFilters: Map<string, string> = new Map<string, string>([
+    ['Most actives', 'MOST_ACTIVES'],
+    ['Day gainers', 'DAY_GAINERS'],
+    ['Day losers', 'DAY_LOSERS'],
+  ]);
+  public selectedFilter: string = 'MOST_ACTIVES';
 
-  constructor(private stockService: StockService) { }
+  constructor(private stockService: StockService, private cdr: ChangeDetectorRef) { }
 
-  public ngOnInit(): void {
-    this.stockService.getMovers('DAY_GAINERS').subscribe(
-      (response) => {
-        console.log('Success', response);
+  public ngAfterViewInit(): void {
+    
+    this.stockService.getMovers(this.selectedFilter).subscribe(
+      (response: IAsset[]) => {
+        this.companies = response;
+        this.cdr.detectChanges();
+        
       },
-    (error) => {
-    console.error('Error', error);
-  });
+      (error) => {
+      console.error('Error', error);
+    });
+  }
+
+  public onFilterChange() {
+    this.stockService.getMovers(this.selectedFilter).subscribe(
+      (response: IAsset[]) => {
+        this.companies = response;
+        this.cdr.detectChanges();
+        
+      },
+      (error) => {
+      console.error('Error', error);
+    });
   }
 }
