@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -10,7 +10,8 @@ export class CoinService {
 
   constructor(private readonly httpClient: HttpClient) { }
 
-  public getCoins(): Observable<any> {
-    return this.httpClient.get(this.url);
-  }
+  public getCoinList(filter: string = ''): Observable<any> {
+    const params = new HttpParams().set('filter', filter);
+    return this.httpClient.get(this.url, {params});
+  } 
 }

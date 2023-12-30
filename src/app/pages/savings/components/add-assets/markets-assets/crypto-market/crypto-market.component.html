@@ -1,8 +1,8 @@
 <mat-form-field class="w-100">
     <mat-label>Assets</mat-label>
-    <input matInput type="text" [(ngModel)]="value">
-    @if (value) {
-        <button matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+    <input matInput type="text" [(ngModel)]="filter" (ngModelChange)="onFilterChange()">
+    @if (filter) {
+        <button matSuffix mat-icon-button aria-label="Clear" (click)="filter=''">
           <mat-icon>close</mat-icon>
         </button>
     } 
@@ -11,7 +11,7 @@
 <div style="display: flex; justify-content: space-between;">
     <div class="d-flex">
         <mat-icon>tune</mat-icon>
-        <p style="margin: 0 0 0 5px;">1012 psc.</p>
+        <p style="margin: 0 0 0 5px;">{{ assetsCount }} psc.</p>
     </div>
 </div>
 <div style="height: 45vh; overflow-y: scroll; overflow-x: hidden;">

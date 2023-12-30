@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { AddAssetCardComponent } from '../../add-asset-card/add-asset-card.component';
 
+
 const UI_COMPONENTS = [
   AddAssetCardComponent
 ];
@@ -29,25 +30,33 @@ const MATERIAL_MODULES = [
 })
 export class CryptoMarketComponent implements OnInit {
 
-  public value = 'Clear me';
+  public filter: string = '';
   public coins: IAsset[] = [];
+  public assetsCount: number = 0;
 
   constructor(
     private coinService: CoinService, 
     private cdr: ChangeDetectorRef) { }
 
   public ngOnInit(): void {
-    this.coinService.getCoins().subscribe(
+    this.sendRequest();
+  }
+
+  public onFilterChange(): void {
+    this.sendRequest();
+  }
+
+  private sendRequest(): void {
+    this.coinService.getCoinList(this.filter).subscribe(
       (response) => {
         this.coins = response.data;
+        this.assetsCount = response.totalItems;
         console.log(response);
         
         this.cdr.detectChanges();
-        
       },
       (error) => {
       console.error('Error', error);
     });
   }
-
 }
