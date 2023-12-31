@@ -1,23 +1,21 @@
 <section class="spendings-category">
     <div class="spendings-category--categories">
 
-        <pgz-donut
-        class="center"
-        [portfolio]="expends"
-        [color]="'#CBCACA'">
+        <pgz-donut class="center"
+                   [portfolio]="expends"
+                   [color]="'#CBCACA'">
         </pgz-donut>
 
-        @for(category of categories; track category; let i = $index) {
-            <a 
-            (click)="addSpending(category)"
-            class="item"
-            [ngClass]="'deg-' + (i + 1)">
-            @if(i === 5 || i === 6) {
-                <img [src]="category.icon" class="central-img"/>
-            } @else {
-                <img [src]="category.icon"/>
-            }
-         </a>
+        @for(category of categories.slice(0,8); track category; let i = $index) {
+            <a class="item"
+               [ngClass]="'deg-' + (i + 1)"
+               (click)="addSpending(category)">
+              @if(i === 5 || i === 6) {
+                  <img [src]="category.icon" class="central-img"/>
+              } @else {
+                  <img [src]="category.icon"/>
+              }
+            </a>
         }
     </div>
 </section>

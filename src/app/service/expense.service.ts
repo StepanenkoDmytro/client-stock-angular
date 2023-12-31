@@ -26,22 +26,16 @@ export class ExpenseService {
   }
 
   public loadByMonth():Observable<ISpending[]> {
-    
     const filterExpenses = this.historySpending.filter(spending => moment(spending.date).startOf('month').isSame(moment().startOf('month')));
-    
-    
+
     return of(filterExpenses);
   }
 
   public addSpending(spending: ISpending):Observable<ISpending> {
-    if(spending.title == null) {
-      throw Error('cost or name of product can not be null')
-    }
-
-    if(spending.id == null) {
+    if(spending.id === null) {
       spending.id = this.getLastId();
     }
-    
+
     this.historySpending.push(spending);
     localStorage.setItem(this.localStorageKey, JSON.stringify(this.historySpending));
     return of(spending);

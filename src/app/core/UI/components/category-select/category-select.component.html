@@ -1,0 +1,44 @@
+<mat-form-field appearance="outline" class="w-100" [matMenuTriggerFor]="menu" #menuTrigger>
+  <mat-label>Category</mat-label>
+  <pgz-icon class="ms-2" matIconPrefix [name]="selectedCategory.icon"></pgz-icon>
+  <input matInput type="text" readonly [ngModel]="selectedCategory.title">
+  <mat-icon matIconSuffix>{{ 'expand_more' }}</mat-icon>
+</mat-form-field>
+
+<mat-menu #menu="matMenu" [class]="'category-menu'" [overlapTrigger]="true">
+  <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree w-100" [class]="'category-menu'" (click)="$event.stopPropagation(); $event.preventDefault();">
+    <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle  (click)="selectCategory($event, node)">
+      <pgz-icon class="me-2" [name]="node.icon || 'category'"></pgz-icon>
+      {{node.title}}
+    </mat-tree-node>
+    <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild" (click)="selectCategory($event, node)">
+      <div class="mat-tree-node d-flex align-items-center">
+        <button mat-icon-button matTreeNodeToggle
+                [attr.aria-label]="'Toggle ' + node.title">
+          <mat-icon class="mat-icon-rtl-mirror">
+            {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+          </mat-icon>
+        </button>
+        <pgz-icon class="me-2" [name]="node.icon || 'category'"></pgz-icon>
+        {{node.title}}
+      </div>
+      <!-- There is inline padding applied to this div using styles.
+          This padding value depends on the mat-icon-button width.  -->
+      <div [class.example-tree-invisible]="!treeControl.isExpanded(node)"
+           role="group">
+        <ng-container matTreeNodeOutlet></ng-container>
+      </div>
+    </mat-nested-tree-node>
+  </mat-tree>
+</mat-menu>
+
+<!--<mat-select appearance="outline" floatLabel="always" class="w-100">-->
+<!--  @for (category of categories; track category.id) {-->
+<!--    <mat-option [value]="category">-->
+<!--      <div class="d-flex justify-content-between">-->
+<!--        {{ category.title }}-->
+<!--        @if (category.children.length) { {{ category.children.length }} }-->
+<!--      </div>-->
+<!--    </mat-option>-->
+<!--  }-->
+<!--</mat-select>-->

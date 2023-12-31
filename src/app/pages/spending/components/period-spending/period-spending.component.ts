@@ -5,8 +5,8 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { NgClass } from "@angular/common";
 import { ExpenseService } from '../../../../service/expense.service';
 import { AddSpendingComponent } from '../add-spending/add-spending.component';
-import { CATEGORY_SPENDING, ICategorySpending } from '../../../../domain/spending.domain';
 import { switchMap } from 'rxjs';
+import { Category } from '../../../../domain/category.domain';
 
 
 const UI_COMPONENTS = [
@@ -23,16 +23,18 @@ const UI_COMPONENTS = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PeriodSpendingComponent {
-  public categories: ICategorySpending[] = CATEGORY_SPENDING;
+
   @Input()
   public expends: ID3Value;
+
+  public categories: Category[] = Category.defaultList;
 
   constructor(
     private _bottomSheet: MatBottomSheet,
     private expenseService: ExpenseService,
   ) { }
 
-  public addSpending(category: ICategorySpending): void {
+  public addSpending(category: Category): void {
     this._bottomSheet.open(AddSpendingComponent, {
       data: { category }
     }).backdropClick().pipe(

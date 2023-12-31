@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,9 +8,10 @@ import { ExpenseService } from '../../../../service/expense.service';
 import { FormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { CATEGORY_SPENDING, ICategorySpending, ISpending } from '../../../../domain/spending.domain';
-import { MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
 import moment from 'moment';
+import { Category } from '../../../../domain/category.domain';
+import { ISpending } from '../../../../domain/spending.domain';
+import { CategorySelectComponent } from '../../../../core/UI/components/category-select/category-select.component';
 
 
 const UI_MODULES = [
@@ -22,6 +23,7 @@ const UI_MODULES = [
   FormsModule,
   MatNativeDateModule,
   MatDatepickerModule,
+  CategorySelectComponent,
 ];
 
 @Component({
@@ -33,29 +35,25 @@ const UI_MODULES = [
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddSpendingComponent {
-  public categories: ICategorySpending[] = CATEGORY_SPENDING;
-  public selectedCategory: ICategorySpending;
-  public nameOfProduct: string;
-  public costOfProduct: number;
+  public categories: Category[] = Category.defaultList;
+  public selectedCategory: Category = null /* this.data?.category */ || Category.default;
+  public nameOfProduct: string = '';
+  public costOfProduct: number = 0;
   public date: Date = moment().toDate();
 
   constructor(
     private expenseService: ExpenseService,
-    @Inject(MAT_BOTTOM_SHEET_DATA) public data: { category?: ICategorySpending }
-  ) {
-    const isCategoryPreselected: boolean = !!(this.data && this.data.category);
-    const emptyCategory: ICategorySpending = { title: '', icon: '' };
-
-    this.selectedCategory = isCategoryPreselected ? this.data.category : emptyCategory;
-  }
+    // @Inject(MAT_BOTTOM_SHEET_DATA) public data: { category?: Category }
+  ) { }
 
   public saveSpending(): void {
     const newExpense: ISpending = {
-      icon: this.selectedCategory.icon,
+      category: this.selectedCategory,
       title: this.nameOfProduct,
       cost: this.costOfProduct,
       date: this.date,
-    }  
+    }
+
     this.expenseService.addSpending(newExpense);
   }
 }
