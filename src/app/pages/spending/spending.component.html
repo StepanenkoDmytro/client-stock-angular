@@ -9,13 +9,11 @@
       (buttonValue)="onChangeFrame($event)">
   </pgz-button-toggle>
 
-  <!-- <input type="number" inputmode="numeric"> -->
-
   @if(isSpendingsFrame) {
     <pgz-period-spending [expends]="expends"></pgz-period-spending>
   } @else {
     <pgz-history-spending [spendings]="historySpending"></pgz-history-spending>
   }
 
-  <button mat-flat-button class="spending-btn" (click)="addSpending()">{{ 'Add spending' }}</button>
+  <button mat-flat-button class="spending-btn" [routerLink]="['add']">{{ 'Add' }}</button>
 </div>

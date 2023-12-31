@@ -27,6 +27,7 @@ export class SavingsComponent {
   public isPortfolioFrame: boolean = true;
 
   public onChangeFrame(frame: boolean): void {
+    // TODO: rename
     this.isPortfolioFrame = frame;
   }
 }
