@@ -9,7 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import {FormsModule} from '@angular/forms';
 import { ACCOUNT_STOCKS_MOCK } from '../../../../domain/mock.domain';
-import { IPortfolioStock } from '../../../../domain/savings.domain';
+import { IAsset, IPortfolioStock } from '../../../../domain/savings.domain';
 import { AddAssetCardComponent } from './add-asset-card/add-asset-card.component';
 import { StockService } from '../../service/stock.service';
 import { HttpClientModule } from '@angular/common/http';
@@ -27,6 +27,8 @@ const MATERIAL_MODULES = [
   MatDatepickerModule,
   MatNativeDateModule,
   MatSelectModule,
+  MatInputModule,
+  MatIconModule,
   FormsModule,
   NgComponentOutlet,
 ];
@@ -47,14 +49,15 @@ export class AddAssetsComponent implements OnInit {
     'crypto': CryptoMarketComponent,
     'stock': StockMarketComponent,
   };
+  public selectedAsset: IAsset;
 
   constructor(
     private marketStateService: MarketStateService
   ) { }
 
   public ngOnInit(): void {
-    this.marketStateService.asset.subscribe((val) => {
-      console.log(val);
+    this.marketStateService.asset.subscribe((asset) => {
+      this.selectedAsset = asset;
     });
   }
 

@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { AddAssetCardComponent } from '../../add-asset-card/add-asset-card.component';
+import { MarketStateService } from '../market-state.service';
 
 
 const UI_COMPONENTS = [
@@ -36,6 +37,7 @@ export class CryptoMarketComponent implements OnInit {
 
   constructor(
     private coinService: CoinService, 
+    private marketStateService: MarketStateService,
     private cdr: ChangeDetectorRef) { }
 
   public ngOnInit(): void {
@@ -49,7 +51,7 @@ export class CryptoMarketComponent implements OnInit {
   private sendRequest(): void {
     this.coinService.getCoinList(this.filter).subscribe(
       (response) => {
-        this.coins = response.data;
+        this.coins = this.mapResponseToAsset(response.data);
         this.assetsCount = response.totalItems;
         console.log(response);
         
@@ -58,5 +60,24 @@ export class CryptoMarketComponent implements OnInit {
       (error) => {
       console.error('Error', error);
     });
+  }
+
+  public onChoiseAsset(asset: any): void {
+    console.log(this.marketStateService.asset);
+    
+    this.marketStateService.choiseAsset(asset);
+  }
+
+  private mapResponseToAsset(response: any[]): IAsset[] {
+    const result = response.map((resp: any) => {
+      return {
+        symbol: resp.symbol,
+        name: resp.name,
+        assetType: resp.assetType,
+        price: resp.priceUSD,
+      }
+
+    })
+    return result;
   }
 }

@@ -60,7 +60,7 @@ export class StockMarketComponent implements AfterViewInit {
       console.error('Error', error);
     });
 
-    this.marketStateService.choiseAsset('hello');
+    
   }
 
   public onFilterChange() {
@@ -72,5 +72,9 @@ export class StockMarketComponent implements AfterViewInit {
       (error) => {
       console.error('Error', error);
     });
+  }
+
+  public onChoiseAsset(asset: any): void {
+    this.marketStateService.choiseAsset(asset);
   }
 }
