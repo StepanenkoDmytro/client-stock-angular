@@ -18,6 +18,7 @@ import { StockSavingWrapperComponent } from '../stock-saving-wrapper/stock-savin
 import { NgComponentOutlet } from '@angular/common';
 import { StockMarketComponent } from './markets-assets/stock-market/stock-market.component';
 import { CryptoMarketComponent } from './markets-assets/crypto-market/crypto-market.component';
+import { MarketStateService } from './markets-assets/market-state.service';
 
 
 const MATERIAL_MODULES = [
@@ -38,7 +39,7 @@ const MATERIAL_MODULES = [
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [...MATERIAL_MODULES,],
 })
-export class AddAssetsComponent {
+export class AddAssetsComponent implements OnInit {
   public step = 0;
   
   public selectedTypeAssets: string = null;
@@ -46,6 +47,16 @@ export class AddAssetsComponent {
     'crypto': CryptoMarketComponent,
     'stock': StockMarketComponent,
   };
+
+  constructor(
+    private marketStateService: MarketStateService
+  ) { }
+
+  public ngOnInit(): void {
+    this.marketStateService.asset.subscribe((val) => {
+      console.log(val);
+    });
+  }
 
   public setStep(index: number) {
     this.step = index;

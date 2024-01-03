@@ -8,6 +8,7 @@ import { IAsset, IPortfolioStock } from '../../../../../../domain/savings.domain
 import { FormsModule } from '@angular/forms';
 import { StockService } from '../../../../service/stock.service';
 import { HttpClientModule } from '@angular/common/http';
+import { MarketStateService } from '../market-state.service';
 
 
 const UI_COMPONENTS = [
@@ -44,6 +45,7 @@ export class StockMarketComponent implements AfterViewInit {
 
   constructor(
     private stockService: StockService, 
+    private marketStateService: MarketStateService,
     private cdr: ChangeDetectorRef) { }
 
   public ngAfterViewInit(): void {
@@ -57,6 +59,8 @@ export class StockMarketComponent implements AfterViewInit {
       (error) => {
       console.error('Error', error);
     });
+
+    this.marketStateService.choiseAsset('hello');
   }
 
   public onFilterChange() {
@@ -64,7 +68,6 @@ export class StockMarketComponent implements AfterViewInit {
       (response: IAsset[]) => {
         this.companies = response;
         this.cdr.detectChanges();
-        
       },
       (error) => {
       console.error('Error', error);
