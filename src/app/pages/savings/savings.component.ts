@@ -8,11 +8,12 @@ import { StockStatisticComponent } from './components/stock-saving-wrapper/stock
 import { ACCOUNT_STOCKS_MOCK } from '../../domain/mock.domain';
 import { IPortfolioStock } from '../../domain/savings.domain';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { CoinService } from './service/coin.service';
+import { CoinService } from './components/add-assets/markets-assets/service/coin.service';
 import { HttpClientModule } from '@angular/common/http';
 import { AddAssetsComponent } from './components/add-assets/add-assets.component';
 import { MatBottomSheet, MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatButtonModule } from '@angular/material/button';
+import { SavingsService } from '../../service/savings.service';
 
 
 const UI_COMPONENTS = [
@@ -59,24 +60,16 @@ export class SavingsComponent implements OnInit {
   public stocks: IPortfolioStock[] = ACCOUNT_STOCKS_MOCK;
   public isPortfolioFrame: boolean = true;
 
-  constructor(private coinService: CoinService,
-    private _bottomSheet: MatBottomSheet,) {}
+  constructor(
+    private savingsService: SavingsService,
+    private _bottomSheet: MatBottomSheet,
+  ) { }
   
   public ngOnInit(): void {
-  //  this.coinService.test().subscribe((response) => {
-    
-  //   const resp: IAssets = {
-  //     assetType: AssetsType.COIN,
-  //     symbol: response.symbol,
-  //     name: response.name,
-  //     count: 0,
-  //     avgPrice: response.price,
-  //   };
-  //   console.log('Success', response);
-  // },
-  // (error) => {
-  //   console.error('Error', error);
-  // });
+    this.savingsService.getAll().subscribe(val => {
+      console.log(val);
+      
+    });
   }
 
   public onChangeFrame(frame: boolean): void {
@@ -84,9 +77,6 @@ export class SavingsComponent implements OnInit {
   }
 
   public addSaving(): void {
-    this._bottomSheet.open(AddAssetsComponent).backdropClick().subscribe(() => {
-      console.log('here');
-      
-    });
+    this._bottomSheet.open(AddAssetsComponent);
   }
 }

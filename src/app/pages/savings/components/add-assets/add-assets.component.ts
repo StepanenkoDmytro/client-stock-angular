@@ -11,14 +11,16 @@ import {FormsModule} from '@angular/forms';
 import { ACCOUNT_STOCKS_MOCK } from '../../../../domain/mock.domain';
 import { IAsset, IPortfolioStock } from '../../../../domain/savings.domain';
 import { AddAssetCardComponent } from './add-asset-card/add-asset-card.component';
-import { StockService } from '../../service/stock.service';
+import { StockService } from './markets-assets/service/stock.service';
 import { HttpClientModule } from '@angular/common/http';
-import { CoinService } from '../../service/coin.service';
+import { CoinService } from './markets-assets/service/coin.service';
 import { StockSavingWrapperComponent } from '../stock-saving-wrapper/stock-saving-wrapper.component';
 import { NgComponentOutlet } from '@angular/common';
 import { StockMarketComponent } from './markets-assets/stock-market/stock-market.component';
 import { CryptoMarketComponent } from './markets-assets/crypto-market/crypto-market.component';
-import { MarketStateService } from './markets-assets/market-state.service';
+import { MarketStateService } from './markets-assets/service/market-state.service';
+import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
+import { SavingsService } from '../../../../service/savings.service';
 
 
 const MATERIAL_MODULES = [
@@ -52,13 +54,15 @@ export class AddAssetsComponent implements OnInit {
   public selectedAsset: IAsset;
 
   constructor(
-    private marketStateService: MarketStateService
+    private marketStateService: MarketStateService,
+    private savingsService: SavingsService,
+    private _bottomSheetRef: MatBottomSheetRef<AddAssetsComponent>
   ) { }
 
   public ngOnInit(): void {
-    this.marketStateService.asset.subscribe((asset) => {
+    this.marketStateService.asset.subscribe(asset => {
       this.selectedAsset = asset;
-    });
+    })
   }
 
   public setStep(index: number) {
@@ -67,6 +71,13 @@ export class AddAssetsComponent implements OnInit {
 
   public nextStep() {
     this.step++;
+
+    if(this.step > 2) {
+      const newAsset = this.selectedAsset;
+      
+      this.savingsService.addSavings(newAsset);
+      this._bottomSheetRef.dismiss();
+    }
   }
 
   public prevStep() {

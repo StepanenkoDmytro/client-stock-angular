@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { IAsset } from '../../../../../../domain/savings.domain';
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 export class MarketStateService {
   public asset: BehaviorSubject<any> = new BehaviorSubject({});
 
-  public choiseAsset(asset: any): void {
+  public choiseAsset(asset: IAsset): void {
     this.asset.next(asset);
   }
 }

@@ -6,9 +6,9 @@ import { AddAssetCardComponent } from '../../add-asset-card/add-asset-card.compo
 import { ACCOUNT_STOCKS_MOCK } from '../../../../../../domain/mock.domain';
 import { IAsset, IPortfolioStock } from '../../../../../../domain/savings.domain';
 import { FormsModule } from '@angular/forms';
-import { StockService } from '../../../../service/stock.service';
+import { StockService } from '../service/stock.service';
 import { HttpClientModule } from '@angular/common/http';
-import { MarketStateService } from '../market-state.service';
+import { MarketStateService } from '../service/market-state.service';
 
 
 const UI_COMPONENTS = [
@@ -74,7 +74,10 @@ export class StockMarketComponent implements AfterViewInit {
     });
   }
 
-  public onChoiseAsset(asset: any): void {
-    this.marketStateService.choiseAsset(asset);
+  public onChoiseAsset(asset: IAsset): void {
+    this.stockService.getCompany(asset.symbol).subscribe(val => {
+      const newSome: IPortfolioStock = {...val,buyPrice: asset.price, count: 0,};
+      this.marketStateService.choiseAsset(newSome);
+    });
   }
 }
