@@ -22,9 +22,30 @@ export class SavingsService {
     return of(this.historySavings);
   }
 
-  public addSavings(saving: IAsset):Observable<IAsset> {
-    this.historySavings.push(saving);
-    localStorage.setItem(this.localStorageKey, JSON.stringify(this.historySavings));
-    return of(saving);
+  public addSavings(saving: IAsset): Observable<IAsset> {
+    const existAsset = this.historySavings.find(asset => asset.symbol === saving.symbol);
+
+    if(!!existAsset) {
+      const existingCost = existAsset.buyPrice * existAsset.count;
+      const addAssetCost = saving.price * saving.count;
+
+      const sumOfCost = existingCost + addAssetCost;
+      const sumOfCount = existAsset.count + saving.count;
+      
+      const avgPrice = sumOfCost / sumOfCount;
+
+      existAsset.buyPrice = avgPrice;
+      existAsset.count = sumOfCount;
+
+      const index = this.historySavings.findIndex(asset => asset.symbol === saving.symbol);
+      this.historySavings[index] =existAsset;
+      localStorage.setItem(this.localStorageKey, JSON.stringify(this.historySavings));
+      return of(existAsset);
+    } else {
+      saving.buyPrice = saving.price;
+      this.historySavings.push(saving);
+      localStorage.setItem(this.localStorageKey, JSON.stringify(this.historySavings));
+      return of(saving);
+    }
   }
 }

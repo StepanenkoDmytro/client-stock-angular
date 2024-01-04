@@ -12,6 +12,9 @@
         <mat-icon>insert_chart</mat-icon>
       </div>
     </div>
+    @if(assets.length === 0) {
+      <p style="text-align: center;">Empty list</p>
+    }
     @for(asset of assets; track asset) {
       <pgz-add-asset-card [asset]="asset"></pgz-add-asset-card>
     }

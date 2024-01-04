@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { TotalInfoComponent } from './components/total-info/total-info.component';
 import { ButtonToggleComponent } from '../../core/UI/components/button-toggle/button-toggle.component';
 import {MatIconModule} from '@angular/material/icon';
@@ -10,6 +10,7 @@ import { MatBottomSheet, MatBottomSheetModule } from '@angular/material/bottom-s
 import { MatButtonModule } from '@angular/material/button';
 import { SavingsService } from '../../service/savings.service';
 import { AddAssetCardComponent } from './components/add-asset-card/add-asset-card.component';
+import { switchMap } from 'rxjs';
 
 
 const UI_COMPONENTS = [
@@ -42,6 +43,7 @@ export class SavingsComponent implements OnInit {
   constructor(
     private savingsService: SavingsService,
     private _bottomSheet: MatBottomSheet,
+    private cdr: ChangeDetectorRef, 
   ) { }
   
   public ngOnInit(): void {
@@ -55,6 +57,11 @@ export class SavingsComponent implements OnInit {
   }
 
   public addSaving(): void {
-    this._bottomSheet.open(AddAssetsComponent);
+    this._bottomSheet.open(AddAssetsComponent).afterDismissed().pipe(
+      switchMap(() => this.savingsService.getAll())
+    ).subscribe(portfolio => {
+      this.assets = portfolio;
+      this.cdr.detectChanges();
+    });
   }
 }

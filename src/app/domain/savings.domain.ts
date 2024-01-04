@@ -1,6 +1,5 @@
 export interface IPortfolioStock extends IAsset {
     currency: string;
-    buyPrice: number;
     sector: string;
     dividendYield: number;
     icon?: string;
@@ -16,6 +15,7 @@ export interface IAsset {
     assetType: string;
     price: number;
     count: number,
+    buyPrice?: number;
 }
 
 export interface ICompany {
