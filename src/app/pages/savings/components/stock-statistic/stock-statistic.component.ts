@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { BarComponent } from '../../../../../core/UI/components/charts/bar/bar.component';
+import { BarComponent } from '../../../../core/UI/components/charts/bar/bar.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';

@@ -2,13 +2,13 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, O
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { AddAssetCardComponent } from '../../add-asset-card/add-asset-card.component';
+import { AddAssetCardComponent } from '../../../add-asset-card/add-asset-card.component';
 import { ACCOUNT_STOCKS_MOCK } from '../../../../../../domain/mock.domain';
 import { IAsset, IPortfolioStock } from '../../../../../../domain/savings.domain';
 import { FormsModule } from '@angular/forms';
-import { StockService } from '../service/stock.service';
+import { StockService } from '../../service/stock.service';
 import { HttpClientModule } from '@angular/common/http';
-import { MarketStateService } from '../service/market-state.service';
+import { MarketStateService } from '../../service/market-state.service';
 
 
 const UI_COMPONENTS = [

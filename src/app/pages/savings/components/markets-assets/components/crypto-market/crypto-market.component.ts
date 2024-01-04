@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { CoinService } from '../service/coin.service';
+import { CoinService } from '../../service/coin.service';
 import { HttpClientModule } from '@angular/common/http';
 import { IAsset, IPortfolioCrypto } from '../../../../../../domain/savings.domain';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { AddAssetCardComponent } from '../../add-asset-card/add-asset-card.component';
-import { MarketStateService } from '../service/market-state.service';
+import { AddAssetCardComponent } from '../../../add-asset-card/add-asset-card.component';
+import { MarketStateService } from '../../service/market-state.service';
 
 
 const UI_COMPONENTS = [

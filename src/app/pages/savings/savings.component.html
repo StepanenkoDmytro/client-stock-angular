@@ -1,44 +1,36 @@
 <pgz-total-info></pgz-total-info>
 
 <div class="type-assets">
-    <!-- <p>Type assets</p> -->
 </div>
 <mat-tab-group class="tab" color="transparent" aria-label>
-    <mat-tab>
-      <ng-template mat-tab-label>All</ng-template>
-      <div style="display: flex; justify-content: space-between;">
-        <div><mat-icon>sort</mat-icon></div>
-        <div>
+  <mat-tab>
+    <ng-template mat-tab-label>All</ng-template>
+    <div style="display: flex; justify-content: space-between;">
+      <div><mat-icon>sort</mat-icon></div>
+      <div>
         Statistic
         <mat-icon>insert_chart</mat-icon>
+      </div>
     </div>
-      </div>
-      <pgz-stock-saving [stocks]="stocks"></pgz-stock-saving>
-    </mat-tab>
+    @for(asset of assets; track asset) {
+      <pgz-add-asset-card [asset]="asset"></pgz-add-asset-card>
+    }
+    
+  </mat-tab>
   
-    <mat-tab>
-        <ng-template mat-tab-label>Stock</ng-template>
-        
-        <div style="display: flex; justify-content: space-between;">
-            <div><mat-icon>sort</mat-icon></div>
-            <div>
-            Statistic
-            <mat-icon>insert_chart</mat-icon>
-        </div>
-          </div>
-        @if(isPortfolioFrame) {
-            <pgz-stock-saving [stocks]="stocks"></pgz-stock-saving>
-        } @else {
-            <pgz-stock-statistic></pgz-stock-statistic>
-        }
-    </mat-tab>
-  
-    <!-- <mat-tab>
-      <ng-template mat-tab-label>Third</ng-template>
-      <div style="display: flex; justify-content: end;">
-        <mat-icon>sort</mat-icon>
+  <mat-tab>
+    <ng-template mat-tab-label>Stock</ng-template>
+    
+    <div style="display: flex; justify-content: space-between;">
+      <div><mat-icon>sort</mat-icon></div>
+      <div>
+        Statistic
+        <mat-icon>insert_chart</mat-icon>
       </div>
-      Content 3
-    </mat-tab> -->
-  </mat-tab-group>
+    </div>
+    @for(asset of assets; track asset) {
+      <pgz-add-asset-card [asset]="asset"></pgz-add-asset-card>
+    }
+  </mat-tab>
+</mat-tab-group>
 <button mat-flat-button class="spending-btn" (click)="addSaving()">{{ 'Add' }}</button>
