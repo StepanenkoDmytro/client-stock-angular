@@ -13,7 +13,6 @@ export const routes: Routes = [
   { path: AppRoutes.SPENDING, loadComponent: () => import('./pages/spending/spending.component').then(c => c.SpendingComponent) },
   { path: AppRoutes.CALENDAR, loadComponent: () => import('./pages/spending/components/calendar-spending/calendar-spending.component').then(c => c.CalendarSpendingComponent) },
   { path: AppRoutes.SAVINGS, loadComponent: () => import('./pages/savings/savings.component').then(c => c.SavingsComponent) },
-  { path: AppRoutes.SAVING_STOCK, loadComponent: () => import('./pages/savings/components/stock-saving-wrapper/stock-saving-wrapper.component').then(c => c.StockSavingWrapperComponent) },
   { path: AppRoutes.PROFILE, loadComponent: () => import('./pages/profile/profile.component').then(c => c.ProfileComponent) },
   { path: '**', loadComponent: () => import('./pages/not-found/not-found.component').then(c => c.NotFoundComponent) },
 ];
