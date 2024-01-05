@@ -1,39 +1,17 @@
 <pgz-total-info></pgz-total-info>
 
-<div class="type-assets">
-</div>
-<mat-tab-group class="tab" color="transparent" aria-label>
-  <mat-tab>
-    <ng-template mat-tab-label>All</ng-template>
-    <div style="display: flex; justify-content: space-between;">
-      <div><mat-icon>sort</mat-icon></div>
-      <div>
-        Statistic
-        <mat-icon>insert_chart</mat-icon>
-      </div>
-    </div>
-    @if(assets.length === 0) {
-      <p style="text-align: center;">Empty list</p>
+<section class="savings">
+  <mat-chip-set>
+    @for (filter of filters; track filter) {
+      <mat-chip class="filters" [class.selected]="isSelected(filter)"
+      (click)="toggleChip(filter)">{{filter}}</mat-chip>
     }
-    @for(asset of assets; track asset) {
-      <pgz-add-asset-card [asset]="asset"></pgz-add-asset-card>
-    }
-    
-  </mat-tab>
-  
-  <mat-tab>
-    <ng-template mat-tab-label>Stock</ng-template>
-    
-    <div style="display: flex; justify-content: space-between;">
-      <div><mat-icon>sort</mat-icon></div>
-      <div>
-        Statistic
-        <mat-icon>insert_chart</mat-icon>
-      </div>
-    </div>
-    @for(asset of assets; track asset) {
-      <pgz-add-asset-card [asset]="asset"></pgz-add-asset-card>
-    }
-  </mat-tab>
-</mat-tab-group>
+  </mat-chip-set>
+  @if(assets.length === 0) {
+    <p style="text-align: center;">Empty list</p>
+  }
+  @for(asset of filteredAssets; track asset) {
+    <pgz-add-asset-card [asset]="asset"></pgz-add-asset-card>
+  }
+  </section>
 <button mat-flat-button class="spending-btn" (click)="addSaving()">{{ 'Add' }}</button>

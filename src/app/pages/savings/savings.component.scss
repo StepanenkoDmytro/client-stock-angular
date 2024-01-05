@@ -3,28 +3,13 @@
     flex-direction: column;
 }
 
-.tab {
-  margin-left: 5px;
-  ::ng-deep .mdc-tab {
-    border-radius: 10px;
-    margin: 0px 10px 0px 0px;
-    background-color: #c2c2c270;
-    font-weight: 500;
-  }
-
-  ::ng-deep .mdc-tab--active {
-    background-color: var(--accept-color);
-  }
-
-  ::ng-deep .mdc-tab-indicator{
-    display:none 
- }
-
-
+.savings {
+  height: calc(75vh - 140px); 
+  padding: 0 10px 0 10px;
 }
 
-.type-assets {
-  // display: flex;
-  // justify-content: end;
-  margin: 5px;
+.filters.selected {
+  background-color: #5DB075; 
+  color: #fff; 
 }
+
