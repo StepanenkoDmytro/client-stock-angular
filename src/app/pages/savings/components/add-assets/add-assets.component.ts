@@ -12,8 +12,8 @@ import { NgComponentOutlet } from '@angular/common';
 import { StockMarketComponent } from '../markets-assets/components/stock-market/stock-market.component';
 import { CryptoMarketComponent } from '../markets-assets/components/crypto-market/crypto-market.component';
 import { MarketStateService } from '../markets-assets/service/market-state.service';
-import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { SavingsService } from '../../../../service/savings.service';
+import { Router, RouterModule } from '@angular/router';
 
 
 const MATERIAL_MODULES = [
@@ -34,7 +34,7 @@ const MATERIAL_MODULES = [
     templateUrl: './add-assets.component.html',
     styleUrl: './add-assets.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [...MATERIAL_MODULES,],
+    imports: [...MATERIAL_MODULES, RouterModule],
 })
 export class AddAssetsComponent implements OnInit {
   public step = 0;
@@ -49,7 +49,7 @@ export class AddAssetsComponent implements OnInit {
   constructor(
     private marketStateService: MarketStateService,
     private savingsService: SavingsService,
-    private _bottomSheetRef: MatBottomSheetRef<AddAssetsComponent>
+    private router: Router
   ) { }
 
   public ngOnInit(): void {
@@ -69,7 +69,7 @@ export class AddAssetsComponent implements OnInit {
       const newAsset = this.selectedAsset;
       
       this.savingsService.addSavings(newAsset);
-      this._bottomSheetRef.dismiss();
+      this.router.navigate(['savings']);
     }
   }
 

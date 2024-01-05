@@ -14,4 +14,4 @@
     <pgz-add-asset-card [asset]="asset"></pgz-add-asset-card>
   }
   </section>
-<button mat-flat-button class="spending-btn" (click)="addSaving()">{{ 'Add' }}</button>
+<button mat-flat-button class="spending-btn" [routerLink]="['add']">{{ 'Add' }}</button>

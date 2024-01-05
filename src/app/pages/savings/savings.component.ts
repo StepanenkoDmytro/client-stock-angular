@@ -6,12 +6,11 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { IAsset } from '../../domain/savings.domain';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatChipsModule } from '@angular/material/chips';
-import { AddAssetsComponent } from './components/add-assets/add-assets.component';
-import { MatBottomSheet, MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatButtonModule } from '@angular/material/button';
 import { SavingsService } from '../../service/savings.service';
 import { AddAssetCardComponent } from './components/add-asset-card/add-asset-card.component';
 import { switchMap } from 'rxjs';
+import { RouterModule } from '@angular/router';
 
 
 const UI_COMPONENTS = [
@@ -26,14 +25,13 @@ const MATERIAL_MODULES = [
   MatTabsModule,
   MatFormFieldModule,
   MatButtonModule,
-  MatBottomSheetModule,
   MatChipsModule
 ];
 
 @Component({
   selector: 'pgz-savings',
   standalone: true,
-  imports: [...UI_COMPONENTS, ...MATERIAL_MODULES],
+  imports: [...UI_COMPONENTS, ...MATERIAL_MODULES, RouterModule],
   templateUrl: './savings.component.html',
   styleUrl: './savings.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -47,7 +45,6 @@ export class SavingsComponent implements OnInit {
 
   constructor(
     private savingsService: SavingsService,
-    private _bottomSheet: MatBottomSheet,
     private cdr: ChangeDetectorRef, 
   ) { }
 
@@ -72,15 +69,15 @@ export class SavingsComponent implements OnInit {
     this.isPortfolioFrame = frame;
   }
 
-  public addSaving(): void {
-    this._bottomSheet.open(AddAssetsComponent).afterDismissed().pipe(
-      switchMap(() => this.savingsService.getAll())
-    ).subscribe(portfolio => {
-      this.assets = portfolio;
-      this.getAssetTypes();
-      this.cdr.detectChanges();
-    });
-  }
+  // public addSaving(): void {
+  //   this._bottomSheet.open(AddAssetsComponent).afterDismissed().pipe(
+  //     switchMap(() => this.savingsService.getAll())
+  //   ).subscribe(portfolio => {
+  //     this.assets = portfolio;
+  //     this.getAssetTypes();
+  //     this.cdr.detectChanges();
+  //   });
+  // }
 
   private getAssetTypes(): void {
     this.filters.add('All');
