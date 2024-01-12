@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class CoinService {
-  private readonly url: string = 'http://45.77.60.247:8000/api/v1/coins';
+  private readonly url: string = 'http://api/v1/coins';
 
   constructor(private readonly httpClient: HttpClient) { }
 
