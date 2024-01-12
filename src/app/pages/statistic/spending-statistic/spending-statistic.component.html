@@ -1,0 +1,35 @@
+<main class="scroll-list">
+    <pgz-bar class="bar"></pgz-bar>
+  
+    <mat-tab-group class="statistic--year">
+      @for(year of years; track trackYear; let y = $index) {
+        <mat-tab [label]="year">
+          @for(month of months; track month; let m = $index) {
+            <ng-container>
+              <mat-expansion-panel class="statistic--month" hideToggle>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    
+                    {{ month }}
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    @if(spendingHistory.years[y]?.monthlyExpenses[m]?.totalAmount) {
+                        <p style="margin: 0 5px 0 0;">{{ spendingHistory.years[y]?.monthlyExpenses[m]?.totalAmount }}$</p>
+                    }
+                    <div class="icon-wrapper">
+                        <mat-icon class="icon-wrapper--icon">add</mat-icon>
+                    </div>
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                @for (spendingByDay of loadSpendingByMonth(spendingHistory.years[y].year, spendingHistory.years[y].monthlyExpenses[m]?.month); track spendingByDay.id) {
+                    <pgz-history-spending-card [spending]="spendingByDay"></pgz-history-spending-card>
+                }
+            
+              </mat-expansion-panel>
+            </ng-container>
+          }
+        </mat-tab>
+      }
+    </mat-tab-group>
+  </main>

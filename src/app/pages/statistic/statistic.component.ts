@@ -7,12 +7,14 @@ import { BarComponent } from '../../core/UI/components/charts/bar/bar.component'
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
+import { SpendingStatisticComponent } from './spending-statistic/spending-statistic.component';
 
 
 const UI_COMPONENTS = [
   DonutComponent,
   ButtonToggleComponent,
-  BarComponent
+  BarComponent,
+  SpendingStatisticComponent
 ];
 
 const MATERIAL_MODULES = [
@@ -36,10 +38,10 @@ export class StatisticComponent {
   years: string[] = ['2022', '2023', '2024']; // Додайте необхідні роки
   months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-  public isPortfolioFrame: boolean = true;
+  public isSpendingFrame: boolean = true;
 
   public onChangeFrame(frame: boolean): void {
-    this.isPortfolioFrame = frame;
+    this.isSpendingFrame = frame;
   }
 
   public trackYear(index: number, year: string): string {

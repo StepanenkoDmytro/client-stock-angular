@@ -36,7 +36,7 @@ export class PeriodSpendingComponent {
     this._bottomSheet.open(AddSpendingComponent, {
       data: { category }
     }).backdropClick().pipe(
-      switchMap(() => this.expenseService.loadByMonth())
+      switchMap(() => this.expenseService.loadByCurrentMonth())
     ).subscribe();
   }
 }

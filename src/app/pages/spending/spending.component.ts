@@ -49,14 +49,14 @@ export class SpendingComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    this.expenseService.loadByMonth().subscribe(spendings => {
+    this.expenseService.loadByCurrentMonth().subscribe(spendings => {
       this.historySpending = spendings;
     });
   }
 
   public addSpending(): void {
     this._bottomSheet.open(AddSpendingComponent).backdropClick().pipe(
-      switchMap(() => this.expenseService.loadByMonth())
+      switchMap(() => this.expenseService.loadByCurrentMonth())
     ).subscribe(spendings => {
       this.historySpending = spendings;
     });
