@@ -20,6 +20,7 @@ const UI_COMPONENTS = [
   HistorySpendingComponent,
   ButtonToggleComponent,
 ];
+
 const MATERIAL_MODULES = [
   MatButtonModule,
   MatBottomSheetModule
