@@ -1,0 +1,9 @@
+:host {
+  display: block;
+}
+
+.input-price {
+  ::ng-deep .mdc-text-field--outlined {
+    --mdc-outlined-text-field-outline-width: 0px;
+  }
+}

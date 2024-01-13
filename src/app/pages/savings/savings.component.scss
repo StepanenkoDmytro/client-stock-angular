@@ -1,3 +1,15 @@
 :host {
-  display: block;
+  display: flex;
+    flex-direction: column;
 }
+
+.savings {
+  height: calc(75vh - 140px); 
+  padding: 0 10px 0 10px;
+}
+
+.filters.selected {
+  background-color: #5DB075; 
+  color: #fff; 
+}
+

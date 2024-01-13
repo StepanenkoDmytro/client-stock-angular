@@ -12,8 +12,7 @@ export class DateService {
 
   public changeMonth(dir: number) {
      const value = this.date.value.add(dir, 'month');
-     console.log(value, dir);
-     
+    
      this.date.next(value);
   }
 
