@@ -19,23 +19,6 @@ export interface ICategorySpending {
   icon: string,
 }
 
-// expense-history.interface.ts
-
-export interface ISpendingHistory {
-  years: IYearSpending[];
-}
-
-export interface IYearSpending {
-  year: number;
-  monthlyExpenses: IMonthlySpending[];
-}
-
-export interface IMonthlySpending {
-  month: number;
-  totalAmount: number;
-}
-
-
 export const CATEGORY_SPENDING: ICategorySpending[] = [
   {
     title: 'Clothes',

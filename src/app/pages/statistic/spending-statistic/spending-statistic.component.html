@@ -1,8 +1,10 @@
 <main class="scroll-list">
-    <pgz-bar class="bar"></pgz-bar>
+    <pgz-bar #barChart [values]="barData" class="bar"></pgz-bar>
   
-    <mat-tab-group class="statistic--year">
-      @for(year of years; track trackYear; let y = $index) {
+    <mat-tab-group class="statistic--year" 
+                   [selectedIndex]="selectedYear"
+                   (selectedIndexChange)="onTabChange($event)">
+      @for(year of years; let y = $index; track year;) {
         <mat-tab [label]="year">
           @for(month of months; track month; let m = $index) {
             <ng-container>
@@ -21,7 +23,6 @@
                     </div>
                   </mat-panel-description>
                 </mat-expansion-panel-header>
-
                 @for (spendingByDay of loadSpendingByMonth(spendingHistory.years[y].year, spendingHistory.years[y].monthlyExpenses[m]?.month); track spendingByDay.id) {
                     <pgz-history-spending-card [spending]="spendingByDay"></pgz-history-spending-card>
                 }

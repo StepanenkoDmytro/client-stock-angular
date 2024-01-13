@@ -1,7 +1,8 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as d3 from 'd3';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { ID3Value } from '../../../../../domain/d3.domain';
+import { IBarData } from '../../../../../domain/statistic.domain';
 
 
 @Component({
@@ -17,6 +18,12 @@ export class BarComponent implements OnInit, AfterViewInit, OnDestroy {
   public barChartID: string = 'bar-chart';
 
   private _data$ = new BehaviorSubject<any>(null);
+
+  @Input() 
+  set values(values: IBarData[]) {
+    this._data$.next(values);
+  }
+
   private svg: any;
   private colors: any;
   private customColors = ['#c32f0ddd'];
@@ -35,28 +42,11 @@ export class BarComponent implements OnInit, AfterViewInit, OnDestroy {
     const randomNum = Math.floor(Math.random() * 100);
     this.barChartID = `${this.barChartID}${randomNum}`;
 
-    this.sub = this._data$.subscribe(portfolio => {
-      if (portfolio) {
-        this.updateD3(portfolio);
+    this.sub = this._data$.subscribe(data => {
+      if (data) {
+        this.updateD3(data);
       }
     });
-
-    const month: any[] = [
-      { name: 'Jan', value: 10 },
-      { name: 'null', value: 18 },
-      { name: 'Mar', value: 11 },
-      { name: 'null1', value: 7 },
-      { name: 'May', value: 15 },
-      { name: 'null2', value: 9 },
-      { name: 'July', value: 13 },
-      { name: 'null3', value: 2 },
-      { name: 'Sep', value: 5 },
-      { name: 'null4', value: 17 },
-      { name: 'Nov', value: 8 },
-      { name: 'null5', value: 12 },
-    ];
-
-    this._data$.next(month);
   }
 
   ngAfterViewInit(): void {
@@ -65,12 +55,9 @@ export class BarComponent implements OnInit, AfterViewInit, OnDestroy {
         this.width =
           entries[0].target.clientWidth - this.margin.left - this.margin.right;
       }
-
-      if (this._data$.value) {
-        this.updateD3(this._data$.value);
-      }
+      this.updateD3(this._data$.value);
     });
-
+    
     this.resizechartContainer.observe(this.chartContainer.nativeElement);
   }
 
