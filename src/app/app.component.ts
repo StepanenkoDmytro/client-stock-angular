@@ -5,8 +5,19 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NavigationComponent } from './core/UI/components/navigation/navigation.component';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { IconComponent } from './core/UI/components/icon/icon.component';
-import { HttpClientModule } from '@angular/common/http';
+import { MatToolbarModule } from '@angular/material/toolbar';
+
+const ANGULAR_MODULES = [
+  CommonModule,
+  RouterOutlet,
+];
+
+const UI_MODULES = [
+  MatSlideToggleModule,
+  NavigationComponent,
+  MatIconModule,
+  MatToolbarModule,
+];
 
 
 @Component({
@@ -15,7 +26,7 @@ import { HttpClientModule } from '@angular/common/http';
   styleUrl: './app.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [CommonModule, RouterOutlet, MatSlideToggleModule, NavigationComponent, MatIconModule],
+  imports: [...ANGULAR_MODULES, ...UI_MODULES],
 })
 export class AppComponent {
   title = 'PEGAZZO';

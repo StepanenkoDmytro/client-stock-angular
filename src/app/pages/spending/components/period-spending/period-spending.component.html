@@ -11,9 +11,9 @@
                [ngClass]="'deg-' + (i + 1)"
                (click)="addSpending(category)">
               @if(i === 5 || i === 6) {
-                  <img [src]="category.icon" class="central-img"/>
+                  <pgz-icon class="central-img" [name]="category.icon"></pgz-icon>
               } @else {
-                  <img [src]="category.icon"/>
+                  <pgz-icon [name]="category.icon"></pgz-icon>
               }
             </a>
         }

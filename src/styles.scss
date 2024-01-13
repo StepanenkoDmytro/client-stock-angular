@@ -9,44 +9,194 @@
 // Be sure that you only ever include this mixin once!
 @include mat.core();
 
+$pgz-light-primary: (
+  50 : #e0fff9,
+  100 : #b3fff0,
+  200 : #80ffe6,
+  300 : #4dffdb,
+  400 : #26ffd4,
+  500 : #00ffcc,
+  600 : #00ffc7,
+  700 : #00ffc0,
+  800 : #00ffb9,
+  900 : #00ffad,
+  A100 : #ffffff,
+  A200 : #f2fffa,
+  A400 : #bfffe8,
+  A700 : #a6ffdf,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #000000,
+    500 : #000000,
+    600 : #000000,
+    700 : #000000,
+    800 : #000000,
+    900 : #000000,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+$pgz-light-accent: (
+  50 : #e0f9f3,
+  100 : #b3f0e0,
+  200 : #80e6cc,
+  300 : #4ddbb8,
+  400 : #26d4a8,
+  500 : #00cc99,
+  600 : #00c791,
+  700 : #00c086,
+  800 : #00b97c,
+  900 : #00ad6b,
+  A100 : #d7ffed,
+  A200 : #a4ffd7,
+  A400 : #71ffc0,
+  A700 : #58ffb5,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #000000,
+    500 : #000000,
+    600 : #000000,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+$pgz-light-background: #e5f7f3;
+
+$pgz-dark-primary: (
+  50 : #e0e7e4,
+  100 : #b3c2bd,
+  200 : #809991,
+  300 : #4d7064,
+  400 : #265243,
+  500 : #003322,
+  600 : #002e1e,
+  700 : #002719,
+  800 : #002014,
+  900 : #00140c,
+  A100 : #55ff99,
+  A200 : #22ff7a,
+  A400 : #00ee5f,
+  A700 : #00d455,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #ffffff,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+$pgz-dark-accent: (
+  50 : #e0ede9,
+  100 : #b3d1c7,
+  200 : #80b3a2,
+  300 : #4d947c,
+  400 : #267d60,
+  500 : #006644,
+  600 : #005e3e,
+  700 : #005335,
+  800 : #00492d,
+  900 : #00381f,
+  A100 : #6effb0,
+  A200 : #3bff93,
+  A400 : #08ff77,
+  A700 : #00ee6b,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #ffffff,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+$pgz-dark-background: #001a11;
+
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$pegazzo-client-primary: mat.define-palette(mat.$indigo-palette);
-$pegazzo-client-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
-
-// The warn palette is optional (defaults to red).
-$pegazzo-client-warn: mat.define-palette(mat.$red-palette);
-
-// Create the theme object. A theme consists of configurations for individual
-// theming systems such as "color" or "typography".
-$pegazzo-client-theme: mat.define-light-theme((
+$dark-theme: mat.define-dark-theme((
   color: (
-    primary: $pegazzo-client-primary,
-    accent: $pegazzo-client-accent,
-    warn: $pegazzo-client-warn,
-  )
+    primary: mat.define-palette($pgz-dark-primary),
+    accent: mat.define-palette($pgz-dark-accent),
+  ),
+  typography: mat.define-typography-config(),
+  density: 0,
 ));
+
+$light-theme: mat.define-light-theme((
+  color: (
+    primary: mat.define-palette($pgz-light-primary),
+    accent: mat.define-palette($pgz-light-accent),
+  ),
+));
+
+// Apply the dark theme by default
+@include mat.all-component-themes($dark-theme);
+@include mat.core-theme($dark-theme);
+@include mat.button-theme($dark-theme);
+$mat-background: $pgz-dark-background;
+
+// Apply the light theme only when the user prefers light themes.
+@media (prefers-color-scheme: light) {
+  // Use the `-color` mixins to only apply color styles without reapplying the same
+  // typography and density styles.
+  @include mat.all-component-themes($light-theme);
+  @include mat.core-color($light-theme);
+  @include mat.button-color($light-theme);
+  $mat-background: $pgz-light-background;
+}
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-@include mat.all-component-themes($pegazzo-client-theme);
 
 /* You can add global styles to this file, and also import other style files */
-
-:root {
-  --background-color: #eee3e3;
-  --primary-color: #dc3545;
-  --dark-color: rgb(30, 30, 32);
-  --black-color: rgb(16, 16, 16);
-  --light-color: #f4f4f4;
-  --light-color-100: #c0bab5;
-  --accept-color: rgba(38, 166, 153, 0.763);
-  --decline-color: #db2d3eb5;
-  --stroke-color: #9bc8e235;
-  --stroke-color-50: #aabbc51d;
-}
+//
+//:root {
+//  --background-color: #eee3e3;
+//  --primary-color: #dc3545;
+//  --dark-color: rgb(30, 30, 32);
+//  --black-color: rgb(16, 16, 16);
+//  --light-color: #f4f4f4;
+//  --light-color-100: #c0bab5;
+//  --accept-color: rgba(38, 166, 153, 0.763);
+//  --decline-color: #db2d3eb5;
+//  --stroke-color: #9bc8e235;
+//  --stroke-color-50: #aabbc51d;
+//}
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

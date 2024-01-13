@@ -7,10 +7,12 @@ import { ExpenseService } from '../../../../service/expense.service';
 import { AddSpendingComponent } from '../add-spending/add-spending.component';
 import { switchMap } from 'rxjs';
 import { Category } from '../../../../domain/category.domain';
+import { IconComponent } from '../../../../core/UI/components/icon/icon.component';
 
 
 const UI_COMPONENTS = [
   DonutComponent,
+  IconComponent,
   NgClass
 ];
 
@@ -27,7 +29,7 @@ export class PeriodSpendingComponent {
   @Input()
   public expends: ID3Value;
 
-  public categories: Category[] = Category.defaultList;
+  public categories: Category[] = Category.defaultList[1].children;
 
   constructor(
     private _bottomSheet: MatBottomSheet,
