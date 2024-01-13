@@ -1,9 +1,17 @@
 <pgz-total-info></pgz-total-info>
-  
-  <pgz-button-toggle [dataUnchecked]="'Stocks'" [dataChecked]="'Statistic'" (buttonValue)="onChangeFrame($event)"></pgz-button-toggle>
-  
-  @if(isPortfolioFrame) {
-    <pgz-stock-saving [stocks]="stocks"></pgz-stock-saving>
-  } @else {
-    <pgz-stock-statistic></pgz-stock-statistic>
+
+<section class="savings">
+  <mat-chip-set>
+    @for (filter of filters; track filter) {
+      <mat-chip class="filters" [class.selected]="isSelected(filter)"
+      (click)="toggleChip(filter)">{{filter}}</mat-chip>
+    }
+  </mat-chip-set>
+  @if(assets.length === 0) {
+    <p style="text-align: center;">Empty list</p>
   }
+  @for(asset of filteredAssets; track asset) {
+    <pgz-add-asset-card [asset]="asset"></pgz-add-asset-card>
+  }
+  </section>
+<button mat-flat-button class="spending-btn" [routerLink]="['add']">{{ 'Add' }}</button>

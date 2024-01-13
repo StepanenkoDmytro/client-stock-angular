@@ -2,7 +2,7 @@
   display: block;
 }
 
-.stock {
+.asset {
   display: flex;
   justify-content: space-between;
 
@@ -11,20 +11,27 @@
   }
 
   &--name {
-    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+  }
+
+  &--count {
+    font-size: 12px;
   }
 
   &--info {
     display: flex;
     flex-direction: column;
-    padding-right: 0;
   }
 }
 
 .card-mobile {
   border-radius: 10px;
-  margin: 10px 10px 0px 10px;
-  padding: 10px;
+  margin: 10px 0px 0px 0px;
+  padding: 5px;
   background-color: var(--stroke-color);
 }
 
@@ -36,12 +43,6 @@
 .company-primary-info {
   font-size: 17px;
   margin-bottom: 5px;
-}
-
-.company-profit {
-  margin-top: auto;
-  margin-bottom: 0;
-  color: green;
 }
 
 .company-expand-info .mat-expansion-panel-header {
