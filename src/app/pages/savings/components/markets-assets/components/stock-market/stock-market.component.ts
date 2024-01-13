@@ -42,6 +42,7 @@ export class StockMarketComponent implements AfterViewInit {
     ['Day losers', 'DAY_LOSERS'],
   ]);
   public selectedFilter: string = 'MOST_ACTIVES';
+  public selectedAssetIndex: number;
 
   constructor(
     private stockService: StockService, 
@@ -74,10 +75,11 @@ export class StockMarketComponent implements AfterViewInit {
     });
   }
 
-  public onChoiseAsset(asset: IAsset): void {
+  public onChoiseAsset(asset: IAsset, index: number): void {
     this.stockService.getCompany(asset.symbol).subscribe(val => {
       const newSome: IPortfolioStock = {...val,buyPrice: asset.price, count: 0,};
       this.marketStateService.choiseAsset(newSome);
     });
+    this.selectedAssetIndex = index;
   }
 }
