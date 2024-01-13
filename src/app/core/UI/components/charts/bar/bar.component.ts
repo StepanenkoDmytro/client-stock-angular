@@ -2,7 +2,7 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Input, O
 import * as d3 from 'd3';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { ID3Value } from '../../../../../domain/d3.domain';
-import { IBarData } from '../../../../../domain/statistic.domain';
+import { IBarData, MOCK_BAR_DATA } from '../../../../../domain/statistic.domain';
 
 
 @Component({
@@ -21,7 +21,8 @@ export class BarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() 
   set values(values: IBarData[]) {
-    this._data$.next(values);
+    const data = values || MOCK_BAR_DATA;
+    this._data$.next(data);
   }
 
   private svg: any;

@@ -58,7 +58,7 @@ export class ExpenseService {
 
   public generateSpendingHistory(): ISpendingHistory {
     const expenseHistory: ISpendingHistory = { years: [] };
-  
+
     this.historySpending.forEach((spending: ISpending) => {
       const { year, month } = this.extractYearAndMonth(spending);
   
@@ -67,7 +67,6 @@ export class ExpenseService {
   
       monthEntry.totalAmount += spending.cost;
     });
-  
     return expenseHistory;
   }
   

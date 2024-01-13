@@ -45,14 +45,14 @@ export class SpendingStatisticComponent implements OnInit, AfterViewInit {
   constructor(
     private expenseService: ExpenseService,
     private barMappingService: BarMappingHelperService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) { }
 
   public ngOnInit(): void {
     this.spendingHistory = this.expenseService.generateSpendingHistory();
     this.years = this.spendingHistory.years.map(yearSpending => {
 
-      return yearSpending.year.toString()
+      return yearSpending.year.toString();
     });
 
     this.selectedYear = this.spendingHistory.years.findIndex(yearSpending => {
@@ -77,9 +77,13 @@ export class SpendingStatisticComponent implements OnInit, AfterViewInit {
   }
 
   private setBarData(selectedYear: number): void {
-    const monthStatistic: IMonthlySpending[] = this.spendingHistory.years[selectedYear].monthlyExpenses;
+    if(this.spendingHistory.years.length > 0) {
+      
+    const monthStatistic: IMonthlySpending[] = this.spendingHistory.years[selectedYear]?.monthlyExpenses;
+    console.log(monthStatistic);
     const newBarData = this.barMappingService.spendingHistoryMapToBarValues(monthStatistic);
     this.barData = newBarData;
     this.barChart.values = this.barData;
+  }
   }
 }
