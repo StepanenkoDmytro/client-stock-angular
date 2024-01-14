@@ -9,7 +9,7 @@
         <p class="text spending--cost">{{ spending.cost }}$</p>
         <mat-icon [matMenuTriggerFor]="actionsMenu">more_vert</mat-icon>
         <mat-menu #actionsMenu>
-          <mat-icon>edit</mat-icon>
+          <mat-icon (click)="edit()">edit</mat-icon>
           <mat-icon>delete</mat-icon>
         </mat-menu>
       </div>

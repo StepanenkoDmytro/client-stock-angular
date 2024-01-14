@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,6 +13,7 @@ import { Category } from '../../../../domain/category.domain';
 import { ISpending } from '../../../../domain/spending.domain';
 import { CategorySelectComponent } from '../../../../core/UI/components/category-select/category-select.component';
 import { Router } from '@angular/router';
+import { EditStateSpendingService } from '../../service/edit-state-spending.service';
 
 
 const UI_MODULES = [
@@ -35,18 +36,33 @@ const UI_MODULES = [
   styleUrl: './add-spending.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AddSpendingComponent {
+export class AddSpendingComponent implements OnInit, OnDestroy {
   public categories: Category[] = Category.defaultList;
   public selectedCategory: Category = null /* this.data?.category */ || Category.default;
   public nameOfProduct: string = '';
   public costOfProduct: number = 0;
   public date: Date = moment().toDate();
 
+  public isEditSpending: boolean = false;
+
   constructor(
     private expenseService: ExpenseService,
-    private router: Router
+    private router: Router,
+    private editStateService: EditStateSpendingService,
     // @Inject(MAT_BOTTOM_SHEET_DATA) public data: { category?: Category }
   ) { }
+
+  public ngOnInit(): void {
+    const editSpending = this.editStateService.editStateSpending;
+    this.isEditSpending = !!editSpending;
+
+    if(this.isEditSpending) {
+      this.selectedCategory = editSpending.category;
+      this.nameOfProduct = editSpending.title;
+      this.costOfProduct = editSpending.cost;
+      this.date = editSpending.date;
+    }
+  }
 
   public saveSpending(): void {
     const newExpense: ISpending = {
@@ -57,6 +73,15 @@ export class AddSpendingComponent {
     }
     
     this.expenseService.addSpending(newExpense);
-    this.router.navigate(['spending']);
+
+    if(this.isEditSpending) {
+      this.router.navigate([this.editStateService.prevRoute.path]);
+    } else {
+      this.router.navigate(['spending']);
+    }
+  }
+
+  public ngOnDestroy(): void {
+    this.editStateService.destroyEditStateSpending();
   }
 }

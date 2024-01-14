@@ -65,7 +65,6 @@ export class SpendingComponent implements OnInit {
     });
   }
 
-
   public onChangeFrame(frame: boolean): void {
     this.isSpendingsFrame = frame;
   }
