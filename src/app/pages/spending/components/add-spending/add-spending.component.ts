@@ -12,6 +12,7 @@ import moment from 'moment';
 import { Category } from '../../../../domain/category.domain';
 import { ISpending } from '../../../../domain/spending.domain';
 import { CategorySelectComponent } from '../../../../core/UI/components/category-select/category-select.component';
+import { Router } from '@angular/router';
 
 
 const UI_MODULES = [
@@ -43,6 +44,7 @@ export class AddSpendingComponent {
 
   constructor(
     private expenseService: ExpenseService,
+    private router: Router
     // @Inject(MAT_BOTTOM_SHEET_DATA) public data: { category?: Category }
   ) { }
 
@@ -55,5 +57,6 @@ export class AddSpendingComponent {
     }
     
     this.expenseService.addSpending(newExpense);
+    this.router.navigate(['spending']);
   }
 }
