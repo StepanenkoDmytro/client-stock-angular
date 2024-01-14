@@ -52,7 +52,7 @@ export class HistorySpendingComponent implements OnInit {
         categorizedSpendings.month.push(spending);
       }
     });
-
+    
     return categorizedSpendings;
   }
 }

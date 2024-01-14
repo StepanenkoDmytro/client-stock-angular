@@ -80,7 +80,7 @@ export class SpendingStatisticComponent implements OnInit, AfterViewInit {
     if(this.spendingHistory.years.length > 0) {
       
     const monthStatistic: IMonthlySpending[] = this.spendingHistory.years[selectedYear]?.monthlyExpenses;
-    console.log(monthStatistic);
+
     const newBarData = this.barMappingService.spendingHistoryMapToBarValues(monthStatistic);
     this.barData = newBarData;
     this.barChart.values = this.barData;

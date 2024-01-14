@@ -1,6 +1,6 @@
 <section class="add-spending">
 
-    <pgz-category-select></pgz-category-select>
+    <pgz-category-select [(ngModel)]="selectedCategory"></pgz-category-select>
 
     <mat-form-field appearance="outline" floatLabel="always" class="w-100 name-of-product">
         <mat-label>Name</mat-label>
@@ -19,7 +19,6 @@
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
-
 
     <mat-form-field appearance="outline" floatLabel="always" class="w-100">
         <mat-label>Comment</mat-label>

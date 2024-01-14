@@ -11,7 +11,7 @@ export class BarMappingHelperService {
       ...month,
       value: monthStatistic[index]?.totalAmount || 0
     }));
-    console.log(createBarData);
+    
     return createBarData;
   }
 }

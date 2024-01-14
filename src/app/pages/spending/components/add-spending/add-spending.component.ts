@@ -53,7 +53,7 @@ export class AddSpendingComponent {
       cost: this.costOfProduct,
       date: this.date,
     }
-
+    
     this.expenseService.addSpending(newExpense);
   }
 }
