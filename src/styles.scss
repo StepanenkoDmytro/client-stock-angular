@@ -158,42 +158,39 @@ $light-theme: mat.define-light-theme((
     primary: mat.define-palette($pgz-light-primary),
     accent: mat.define-palette($pgz-light-accent),
   ),
+  typography: mat.define-typography-config(),
+  density: 0,
 ));
 
-// Apply the dark theme by default
+.dark-theme {
 @include mat.all-component-themes($dark-theme);
 @include mat.core-theme($dark-theme);
 @include mat.button-theme($dark-theme);
 $mat-background: $pgz-dark-background;
+}
 
-// Apply the light theme only when the user prefers light themes.
-@media (prefers-color-scheme: light) {
-  // Use the `-color` mixins to only apply color styles without reapplying the same
-  // typography and density styles.
+.light-theme {
   @include mat.all-component-themes($light-theme);
-  @include mat.core-color($light-theme);
-  @include mat.button-color($light-theme);
+  @include mat.core-theme($light-theme);
+  @include mat.button-theme($light-theme);
   $mat-background: $pgz-light-background;
 }
+
+// Apply the light theme only when the user prefers light themes.
+// @media (prefers-color-scheme: light) {
+//   // Use the `-color` mixins to only apply color styles without reapplying the same
+//   // typography and density styles.
+//   @include mat.all-component-themes($light-theme);
+//   @include mat.core-color($light-theme);
+//   @include mat.button-color($light-theme);
+//   $mat-background: $pgz-light-background;
+// }
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 
 /* You can add global styles to this file, and also import other style files */
-//
-//:root {
-//  --background-color: #eee3e3;
-//  --primary-color: #dc3545;
-//  --dark-color: rgb(30, 30, 32);
-//  --black-color: rgb(16, 16, 16);
-//  --light-color: #f4f4f4;
-//  --light-color-100: #c0bab5;
-//  --accept-color: rgba(38, 166, 153, 0.763);
-//  --decline-color: #db2d3eb5;
-//  --stroke-color: #9bc8e235;
-//  --stroke-color-50: #aabbc51d;
-//}
 
 html, body { height: 100%; }
 body {
