@@ -1,7 +1,7 @@
 <div class="goal">
     <div class="progress">
-        <p style="position: absolute; left: 25%; margin: 8px 0 0 0;">House ($4 000 / $40 000)</p>
-        <div style="position: absolute; right: 5%; margin-top: 5px;">
+        <p class="goal--text-progress">{{ goal.name }} (${{ goal.currentSum }} / ${{ goal.finishSum }})</p>
+        <div class="progress--icons">
             <mat-icon>edit</mat-icon>
             <mat-icon>delete</mat-icon>
         </div>
@@ -9,12 +9,16 @@
             
         </div>
     </div>
-    <div class="d-flex" style="margin: 10px;">
-        <p style="font-size: 9px; margin: 0;">Approximate goal achievement date</p>
-        <div style="margin-left: auto;"><p style="font-size: 9px; margin: 0;">30.05.2025</p></div>
+    <div class="goal--row">
+        <p>Approximate goal achievement date</p>
+        <div class="goal--row-value">
+            <p>{{ goal.approximateDate }}</p>
+        </div>
     </div>
-    <div class="d-flex" style="margin: 10px;">
-        <p style="font-size: 9px; margin: 0;">Portfolio share:</p>
-        <div style="margin-left: auto;"><p style="font-size: 9px; margin: 0;">20%</p></div>
+    <div class="goal--row">
+        <p>Portfolio share:</p>
+        <div class="goal--row-value">
+            <p>{{ goal.share }}</p>
+        </div>
     </div>
 </div>

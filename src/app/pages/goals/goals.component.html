@@ -1,3 +1,5 @@
 <pgz-total-balance></pgz-total-balance>
 
-<pgz-goal-card></pgz-goal-card>
+@for(goal of goals; track goal) {
+    <pgz-goal-card [goal]="goal"></pgz-goal-card>
+}
