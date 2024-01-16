@@ -1,0 +1,18 @@
+:host {
+  display: block;
+}
+
+.goal {
+  margin: 10px;
+  border: 1px solid var(--bs-gray-300);
+  border-radius: 10px;
+}
+
+.progress {
+  --bs-progress-height: 2.5rem;
+  --bs-progress-font-size: 1rem;
+}
+
+.progress-bar {
+  background-color: var(--bs-warning);
+}
