@@ -11,10 +11,11 @@ import { SavingsService } from '../../service/savings.service';
 import { AddAssetCardComponent } from './components/add-asset-card/add-asset-card.component';
 import { switchMap } from 'rxjs';
 import { RouterModule } from '@angular/router';
+import { TotalBalanceComponent } from '../../core/UI/components/total-balance/total-balance.component';
 
 
 const UI_COMPONENTS = [
-  TotalInfoComponent,
+  TotalBalanceComponent,
   ButtonToggleComponent,
   ButtonToggleComponent,
   AddAssetCardComponent

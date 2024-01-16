@@ -8,13 +8,15 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { SpendingStatisticComponent } from './spending-statistic/spending-statistic.component';
+import { TotalBalanceComponent } from '../../core/UI/components/total-balance/total-balance.component';
 
 
 const UI_COMPONENTS = [
   DonutComponent,
   ButtonToggleComponent,
   BarComponent,
-  SpendingStatisticComponent
+  SpendingStatisticComponent,
+  TotalBalanceComponent
 ];
 
 const MATERIAL_MODULES = [

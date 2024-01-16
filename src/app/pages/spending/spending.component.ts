@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ProgressComponent } from '../../core/UI/components/progress/progress.component';
-import { TotalBalanceComponent } from './components/total-balance/total-balance.component';
+import { TotalBalanceComponent } from '../../core/UI/components/total-balance/total-balance.component';
 import { PeriodSpendingComponent } from './components/period-spending/period-spending.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatBottomSheet, MatBottomSheetModule } from '@angular/material/bottom-sheet';

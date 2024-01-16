@@ -1,19 +1,4 @@
-<header class="space-between row">
-    <div class="col-6">
-      <pgz-donut
-        class="donut"
-        [portfolio]="stocksMock"
-        [color]="'#26a69a'">
-      </pgz-donut>
-    </div>
-  
-    <div class="col-6">
-      <p>Total contribution: 1500$</p>
-      <p>Total profit: 500$</p>
-      <p>Yield: 7%</p>
-      <p>Riskness of portfolio: Agressive</p>
-    </div>
-  </header>
+<pgz-total-balance></pgz-total-balance>
   
   <pgz-button-toggle [dataUnchecked]="'Spending'" [dataChecked]="'Saving'" (buttonValue)="onChangeFrame($event)"></pgz-button-toggle>
   
