@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -6,6 +6,7 @@ import { NavigationComponent } from './core/UI/components/navigation/navigation.
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { DarkLightModeService } from './service/dark-light-mode.service';
 
 const ANGULAR_MODULES = [
   CommonModule,
@@ -28,8 +29,8 @@ const UI_MODULES = [
   standalone: true,
   imports: [...ANGULAR_MODULES, ...UI_MODULES],
 })
-export class AppComponent {
-  title = 'PEGAZZO';
+export class AppComponent implements OnInit {
+  public title: string = 'PEGAZZO';
 
   private CUSTOM_SVG_ICONS = [
     { name: 'custom_clothes', url: 'assets/expend/clothes.svg'},
@@ -44,10 +45,20 @@ export class AppComponent {
 
   constructor(
     private iconRegistry: MatIconRegistry,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private darkLightModeService: DarkLightModeService
   ) {
     this.CUSTOM_SVG_ICONS.forEach(icon => {
       this.iconRegistry.addSvgIcon(icon.name, this.sanitizer.bypassSecurityTrustResourceUrl(icon.url));
     });
+  }
+
+  public ngOnInit(): void {
+    const isFirstVisit = this.darkLightModeService.mode === null;
+    if(isFirstVisit) {
+      this.darkLightModeService.set('light');
+    } else {
+      this.darkLightModeService.set(this.darkLightModeService.mode);
+    }
   }
 }
