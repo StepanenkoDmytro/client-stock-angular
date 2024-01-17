@@ -15,7 +15,7 @@
 }
 .portfolio-info {
   display: flex;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
 }
 
@@ -23,22 +23,7 @@
   
   &--total {
     display: flex;
-    font-size: 17px;
+    font-size: 15px;
     font-weight: 500;
   }
-}
-
-
-.text {
-  display: flex;
-  justify-content: center;
-  font-size: 22px;
-}
-
-.sum {
-  display: flex;
-  justify-content: center;
-  font-size: 52px;
-  margin: 10px;
-  color: var(--accept-color);
 }

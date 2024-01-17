@@ -22,8 +22,8 @@ export class NavigationComponent {
   public navigationItems: INavigationItem[] = [
     { path: AppRoutes.SPENDING, icon: 'account_balance_wallet' },
     { path: AppRoutes.SAVINGS, icon: 'savings' },
-    { path: AppRoutes.STATISTIC, icon: 'equalizer' },
     { path: AppRoutes.GOALS, icon: 'crisis_alert' },
+    { path: AppRoutes.STATISTIC, icon: 'equalizer' },
     { path: AppRoutes.PROFILE, icon: 'account_circle' },
   ]
 }
