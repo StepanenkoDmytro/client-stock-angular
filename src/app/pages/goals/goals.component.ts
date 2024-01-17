@@ -30,6 +30,7 @@ const MATERIAL_MODULES = [
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GoalsComponent implements OnInit {
+
   public goals: IGoal[];
   public portfolioCost: number = 0;
 
@@ -48,5 +49,9 @@ export class GoalsComponent implements OnInit {
     this.goalsService.getAll().subscribe(goals => {
       this.goals = goals;
     });
+  }
+
+  public onDeleteGoal(deletedGoal: IGoal) {
+    this.goalsService.deleteGoal(deletedGoal);
   }
 }

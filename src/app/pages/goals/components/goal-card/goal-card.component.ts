@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { IGoal } from '../../../../domain/goals.domain';
@@ -14,11 +14,15 @@ import { CommonModule } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GoalCardComponent implements OnInit {
+
   @Input()
   public goal: IGoal;
   @Input()
   public costOfPortfolio: number;
   public currentSum: number;
+
+  @Output()
+  public deleteGoal = new EventEmitter<IGoal>();
 
   public ngOnInit(): void {
     this.currentSum = this.calcCurrentSum();
@@ -31,5 +35,9 @@ export class GoalCardComponent implements OnInit {
     } else {
       return this.goal.share;
     }
+  }
+
+  public onDelete() {
+    this.deleteGoal.emit(this.goal);
   }
 }

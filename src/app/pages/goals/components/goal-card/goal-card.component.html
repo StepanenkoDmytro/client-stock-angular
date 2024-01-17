@@ -3,7 +3,7 @@
         <p class="goal--text-progress">{{ goal.name }} (${{ currentSum }} / ${{ goal.finishSum }})</p>
         <div class="progress--icons">
             <mat-icon>edit</mat-icon>
-            <mat-icon>delete</mat-icon>
+            <mat-icon (click)="onDelete()">delete</mat-icon>
         </div>
         <div class="progress-bar" 
              [class.success]="goal.status === 'success'" 

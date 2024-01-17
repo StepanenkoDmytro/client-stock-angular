@@ -64,7 +64,7 @@ export class AddGoalComponent implements OnInit {
       status: this.selectedStatus,
     }
 
-    this.goalsService.addSpending(goal);
+    this.goalsService.addGoal(goal);
     this.router.navigate(['goals']);
   }
 }

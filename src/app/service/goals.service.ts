@@ -27,7 +27,7 @@ export class GoalsService {
     return this.$historyGoals;
   }
 
-  public addSpending(goal: IGoal):void {
+  public addGoal(goal: IGoal):void {
     if(goal.status == null) {
       throw Error('cost or name of product can not be null')
     }
@@ -37,6 +37,13 @@ export class GoalsService {
     }
 
     this.historyGoalsSubject.push(goal);
+    localStorage.setItem(this.localStorageKey, JSON.stringify(this.historyGoalsSubject));
+    this.$historyGoals.next(this.historyGoalsSubject);
+  }
+
+  public deleteGoal(goal: IGoal): void {
+    const indexToRemove = this.historyGoalsSubject.indexOf(goal);
+    this.historyGoalsSubject.splice(indexToRemove, 1);
     localStorage.setItem(this.localStorageKey, JSON.stringify(this.historyGoalsSubject));
     this.$historyGoals.next(this.historyGoalsSubject);
   }
