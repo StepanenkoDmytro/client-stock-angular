@@ -3,6 +3,8 @@ import { MatIconModule } from '@angular/material/icon';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { IGoal } from '../../../../domain/goals.domain';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { EditStateGoalService } from '../../service/edit-state-goal.service';
 
 
 @Component({
@@ -24,6 +26,11 @@ export class GoalCardComponent implements OnInit {
   @Output()
   public deleteGoal = new EventEmitter<IGoal>();
 
+  constructor(
+    private editStateService: EditStateGoalService,
+    private router: Router
+  ) { }
+
   public ngOnInit(): void {
     this.currentSum = this.calcCurrentSum();
   }
@@ -37,7 +44,12 @@ export class GoalCardComponent implements OnInit {
     }
   }
 
-  public onDelete() {
+  public onEdit(): void {
+    this.editStateService.saveEditStateGoal(this.goal);
+    this.router.navigate(['/goals/add']);
+  }
+
+  public onDelete(): void {
     this.deleteGoal.emit(this.goal);
   }
 }

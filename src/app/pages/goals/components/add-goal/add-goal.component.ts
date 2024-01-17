@@ -8,6 +8,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { Router, RouterModule } from '@angular/router';
 import { IGoal } from '../../../../domain/goals.domain';
 import { GoalsService } from '../../../../service/goals.service';
+import { EditStateGoalService } from '../../service/edit-state-goal.service';
 
 
 const MATERIAL_MODULES = [
@@ -32,6 +33,7 @@ export class AddGoalComponent implements OnInit {
   public costOfGoal: number;
   public shareOfGoal: number;
   public selectedStatus: any;
+  public isEditGoal: boolean = false;
 
   public statuses: any[] = [
     {
@@ -49,11 +51,21 @@ export class AddGoalComponent implements OnInit {
   ]; 
 
   constructor(
+    private editStateService: EditStateGoalService,
     private goalsService: GoalsService,
     private router: Router
   ) { }
 
   public ngOnInit(): void {
+    const editGoal = this.editStateService.editStateGoal;
+    this.isEditGoal = !!editGoal;
+
+    if(this.isEditGoal) {
+      this.nameOfGoal = editGoal.name;
+      this.costOfGoal = editGoal.finishSum;
+      this.shareOfGoal = editGoal.share;
+      this.selectedStatus = editGoal.status;
+    }
   }
 
   public saveGoals(): void {
@@ -66,6 +78,10 @@ export class AddGoalComponent implements OnInit {
 
     this.goalsService.addGoal(goal);
     this.router.navigate(['goals']);
+  }
+
+  public ngOnDestroy(): void {
+    this.editStateService.destroyEditStateGoal();
   }
 }
 
