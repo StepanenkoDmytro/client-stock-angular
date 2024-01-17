@@ -8,9 +8,9 @@
         <div class="progress-bar" 
              [class.success]="goal.status === 'success'" 
              [class.in-progress]="goal.status === 'progress'" 
-             [class.completed]="goal.status === 'completed'" 
-             role="progressbar" style="width: 25%;" 
-             aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+             [class.completed]="goal.status === 'disabled'" 
+             role="progressbar" 
+             [style.width.%]="(goal.currentSum / goal.finishSum) * 100">
         </div>
     </div>
     <div class="goal--row">

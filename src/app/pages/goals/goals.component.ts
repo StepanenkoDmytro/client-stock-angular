@@ -35,7 +35,7 @@ export class GoalsComponent implements OnInit {
     this.goals = [
       {
         name: 'House',
-        currentSum: 4000,
+        currentSum: 10000,
         finishSum: 40000,
         share: '20%',
         status: 'success',
@@ -45,11 +45,11 @@ export class GoalsComponent implements OnInit {
         currentSum: 4000,
         finishSum: 40000,
         share: '20%',
-        status: 'completed',
+        status: 'disabled',
       },
       {
         name: 'House',
-        currentSum: 4000,
+        currentSum: 20000,
         finishSum: 40000,
         share: '20%',
         status: 'progress',

@@ -11,6 +11,7 @@
     position: absolute; 
     left: 25%; 
     margin: 8px 0 0 0;
+    z-index: 1;
   }
 
   &--row {
@@ -30,6 +31,8 @@
 
 .active {
   .progress-bar {
+    position: relative;
+    z-index: 0;
     background-color: var(--bs-gray-300);
   }
 }
@@ -37,11 +40,13 @@
 .progress {
   --bs-progress-height: 2.5rem;
   --bs-progress-font-size: 1rem;
+  position: relative;
 
   &--icons {
     position: absolute; 
     right: 5%; 
     margin-top: 5px;
+    z-index: 1;
   }
 }
 
