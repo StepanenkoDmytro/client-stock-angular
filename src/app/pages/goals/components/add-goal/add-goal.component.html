@@ -5,10 +5,11 @@
     <span>Back</span>
 </div>
 
-<section style="margin-top: 10px; padding: 10px;">
+<section style="margin-top: 10px; padding: 10px; justify-content: flex-start;
+height: inherit;">
     <mat-form-field appearance="outline" floatLabel="always" class="w-100">
         <mat-label>Name</mat-label>
-        <input matInput type="text" inputmode="numeric" class="line" placeholder="Enter name of goal" style="font-size: 1.5rem;" [(ngModel)]="nameOfGoal">
+        <input matInput type="text" class="line" placeholder="Enter name of goal" style="font-size: 1.5rem;" [(ngModel)]="nameOfGoal">
     </mat-form-field>
 
     <mat-form-field appearance="outline" floatLabel="always" class="w-100">
@@ -19,7 +20,7 @@
 
     <mat-form-field appearance="outline" class="w-100">
         <mat-label>Status of goal</mat-label>
-        <mat-select floatLabel="always">
+        <mat-select floatLabel="always" [(ngModel)]="selectedStatus">
             @for (status of statuses; track status) {
             <mat-option [value]="status.value">
                 <div class="d-flex justify-content-between">
@@ -30,7 +31,15 @@
         </mat-select>
     </mat-form-field>
 
-    <div>
-        <p>Create a calculator for tracking changes in the goals portfolio.</p>
-    </div>
+    @if(selectedStatus === 'progress') {
+        <mat-form-field appearance="outline" floatLabel="always" class="w-100">
+            <mat-label>Share</mat-label>
+            <input matInput type="number" inputmode="numeric" class="line" placeholder="Enter share of portfolio" style="font-size: 1.5rem;" [(ngModel)]="shareOfGoal">
+        </mat-form-field>
+    }
+    
 </section>
+<div>
+    <p>Create a calculator for tracking changes in the goals portfolio.</p>
+</div>
+<button mat-flat-button class="add-btn" (click)="saveGoals()">{{ 'Save' }}</button>

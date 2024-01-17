@@ -1,10 +1,13 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { IGoal } from '../../../../domain/goals.domain';
+import { GoalsService } from '../../../../service/goals.service';
 
 
 const MATERIAL_MODULES = [
@@ -12,7 +15,8 @@ const MATERIAL_MODULES = [
   MatIconModule,
   MatInputModule,
   FormsModule,
-  MatSelectModule
+  MatSelectModule,
+  MatButtonModule
 ];
 
 @Component({
@@ -23,9 +27,11 @@ const MATERIAL_MODULES = [
   styleUrl: './add-goal.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AddGoalComponent {
+export class AddGoalComponent implements OnInit {
   public nameOfGoal: string;
   public costOfGoal: number;
+  public shareOfGoal: number;
+  public selectedStatus: any;
 
   public statuses: any[] = [
     {
@@ -41,4 +47,26 @@ export class AddGoalComponent {
       value: 'disabled',
     },
   ]; 
+
+  constructor(
+    private goalsService: GoalsService,
+    private router: Router
+  ) { }
+
+  public ngOnInit(): void {
+  }
+
+  public saveGoals(): void {
+    const goal: IGoal = {
+      name: this.nameOfGoal,
+      finishSum: this.costOfGoal,
+      share: this.shareOfGoal,
+      status: this.selectedStatus,
+    }
+
+    this.goalsService.addSpending(goal);
+    this.router.navigate(['goals']);
+  }
 }
+
+

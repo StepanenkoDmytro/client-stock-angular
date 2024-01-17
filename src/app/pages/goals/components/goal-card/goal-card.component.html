@@ -1,6 +1,6 @@
 <div class="goal">
     <div class="progress">
-        <p class="goal--text-progress">{{ goal.name }} (${{ goal.currentSum }} / ${{ goal.finishSum }})</p>
+        <p class="goal--text-progress">{{ goal.name }} (${{ currentSum }} / ${{ goal.finishSum }})</p>
         <div class="progress--icons">
             <mat-icon>edit</mat-icon>
             <mat-icon>delete</mat-icon>
@@ -10,7 +10,7 @@
              [class.in-progress]="goal.status === 'progress'" 
              [class.completed]="goal.status === 'disabled'" 
              role="progressbar" 
-             [style.width.%]="(goal.currentSum / goal.finishSum) * 100">
+             [style.width.%]="(currentSum / goal.finishSum) * 100">
         </div>
     </div>
     <div class="goal--row">

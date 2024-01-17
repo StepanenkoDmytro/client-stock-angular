@@ -1,8 +1,8 @@
 export interface IGoal {
+    id?: number,
     name: string,
-    currentSum: number,
     finishSum: number,
-    share: string,
+    share: number,
     status: string,
     approximateDate?: Date
 }

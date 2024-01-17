@@ -48,4 +48,12 @@ export class SavingsService {
       return of(saving);
     }
   }
+
+  public getCostOfAllAssets(): Observable<number> {
+    const costOfAllAssets = this.historySavings.reduce((accumulator, currentValue) => {
+      return accumulator + (currentValue.buyPrice * currentValue.count);
+    }, 0);
+
+    return of(costOfAllAssets);
+  }
 }

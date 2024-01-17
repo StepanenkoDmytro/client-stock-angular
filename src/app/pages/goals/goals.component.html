@@ -1,10 +1,10 @@
-<section style="height: inherit;">
+<section class="goals">
     <pgz-total-balance></pgz-total-balance>
 
     <pgz-button-toggle [dataUnchecked]="'Goals'" [dataChecked]="'History'"></pgz-button-toggle>
 
     @for(goal of goals; track goal) {
-        <pgz-goal-card [goal]="goal"></pgz-goal-card>
+        <pgz-goal-card [goal]="goal" [costOfPortfolio]="portfolioCost"></pgz-goal-card>
     }
 </section>
 <button mat-flat-button class="add-btn" [routerLink]="['add']">{{ 'Add' }}</button>

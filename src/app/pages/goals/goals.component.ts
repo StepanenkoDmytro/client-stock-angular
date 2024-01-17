@@ -6,6 +6,8 @@ import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { ButtonToggleComponent } from '../../core/UI/components/button-toggle/button-toggle.component';
 import { MatButtonModule } from '@angular/material/button';
+import { SavingsService } from '../../service/savings.service';
+import { GoalsService } from '../../service/goals.service';
 
 
 const UI_COMPONENTS = [
@@ -29,31 +31,22 @@ const MATERIAL_MODULES = [
 })
 export class GoalsComponent implements OnInit {
   public goals: IGoal[];
+  public portfolioCost: number = 0;
 
-  constructor() { }
+  constructor(
+    private savingsService: SavingsService,
+    private goalsService: GoalsService
+  ) { }
   public ngOnInit(): void {
-    this.goals = [
-      {
-        name: 'House',
-        currentSum: 10000,
-        finishSum: 40000,
-        share: '20%',
-        status: 'success',
-      },
-      {
-        name: 'House',
-        currentSum: 4000,
-        finishSum: 40000,
-        share: '20%',
-        status: 'disabled',
-      },
-      {
-        name: 'House',
-        currentSum: 20000,
-        finishSum: 40000,
-        share: '20%',
-        status: 'progress',
+    
+    this.savingsService.getCostOfAllAssets().subscribe(val => {
+      if(val) {
+        this.portfolioCost = val;
       }
-    ];
+    });
+
+    this.goalsService.getAll().subscribe(goals => {
+      this.goals = goals;
+    });
   }
 }
