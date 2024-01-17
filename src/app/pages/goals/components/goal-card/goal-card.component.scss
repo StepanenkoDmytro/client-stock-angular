@@ -27,6 +27,14 @@
   &--row-value {
     margin-left: auto;
   }
+
+  &--success {
+    border: 1px solid var(--bs-success);
+  }
+
+  &--progress {
+    border: 1px solid var(--bs-warning);
+  }
 }
 
 .active {
@@ -54,14 +62,26 @@
   background-color: var(--bs-warning);
 }
 
-.success {
-  background-color: var(--bs-success);
+.progress-color {
+  &--success {
+    background-color: var(--bs-success);
+  }
+  
+  &--in-progress {
+    background-color: var(--bs-warning);
+  }
+  
+  &--completed {
+    background-color: var(--bs-gray-500);
+  }
 }
 
-.in-progress {
-  background-color: var(--bs-warning);
-}
-
-.completed {
-  background-color: var(--bs-gray-500);
+.goal-border {
+  &--success {
+    border: 2px solid var(--bs-success);
+  }
+  
+  &--progress {
+    border: 2px solid var(--bs-warning);
+  }
 }

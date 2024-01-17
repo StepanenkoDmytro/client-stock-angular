@@ -72,7 +72,7 @@ export class AddGoalComponent implements OnInit {
     const goal: IGoal = {
       name: this.nameOfGoal,
       finishSum: this.costOfGoal,
-      share: this.shareOfGoal,
+      share: this?.shareOfGoal,
       status: this.selectedStatus,
     }
 
