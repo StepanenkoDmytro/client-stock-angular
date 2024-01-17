@@ -9,33 +9,44 @@ import { IMonthlySpending, ISpendingHistory, IYearSpending } from '../domain/sta
   providedIn: 'root'
 })
 export class ExpenseService {
-  private readonly localStorageKey = 'spendingData';
-  public historySpending: ISpending[] = [];
+  private readonly historyLocalStorageKey = 'spendingData';
+  private readonly budgetLocalStorageKey = 'spending_budget';
+
+  public
+  public historySpendingSubject: ISpending[] = [];
+  public monthlyBudget: number = 0;
 
   constructor() {
-    const storedData = localStorage.getItem(this.localStorageKey);
-    const parse: ISpending[] = JSON.parse(storedData);
+    const historyStoredData = localStorage.getItem(this.historyLocalStorageKey);
+    const budgetStoredData = localStorage.getItem(this.budgetLocalStorageKey);
 
-    if(parse !== null) {
-      this.historySpending = parse;
+    const parseHistory: ISpending[] = JSON.parse(historyStoredData);
+    const parseBudget: number = JSON.parse(budgetStoredData);
+
+    if(parseHistory !== null) {
+      this.historySpendingSubject = parseHistory;
+    }
+
+    if(parseBudget !== null) {
+      this.monthlyBudget = parseBudget;
     }
   }
 
   public loadByDate(date: moment.Moment): Observable<ISpending[]> {
-    const filterExpenses = this.historySpending.filter(spending => moment(spending.date).startOf('day').isSame(date.startOf('day')));
+    const filterExpenses = this.historySpendingSubject.filter(spending => moment(spending.date).startOf('day').isSame(date.startOf('day')));
     return of(filterExpenses);
   }
 
   public loadByCurrentMonth():Observable<ISpending[]> {
 
-    const filterExpenses = this.historySpending.filter(spending => moment(spending.date).startOf('month').isSame(moment().startOf('month')));
+    const filterExpenses = this.historySpendingSubject.filter(spending => moment(spending.date).startOf('month').isSame(moment().startOf('month')));
 
 
     return of(filterExpenses);
   }
 
   public loadByMonth(year: number, month: number) :ISpending[] {
-    const result = this.historySpending.filter((spending) => {
+    const result = this.historySpendingSubject.filter((spending) => {
       const spendingDate = new Date(spending.date);
       return spendingDate.getFullYear() === year && spendingDate.getMonth() + 1 === month
     });
@@ -51,15 +62,20 @@ export class ExpenseService {
       spending.id = this.getLastId();
     }
 
-    this.historySpending.push(spending);
-    localStorage.setItem(this.localStorageKey, JSON.stringify(this.historySpending));
+    this.historySpendingSubject.push(spending);
+    localStorage.setItem(this.historyLocalStorageKey, JSON.stringify(this.historySpendingSubject));
     return of(spending);
+  }
+
+  public getSpentBymonth(): Observable<number> {
+
+    return of(0);
   }
 
   public generateSpendingHistory(): ISpendingHistory {
     const expenseHistory: ISpendingHistory = { years: [] };
 
-    this.historySpending.forEach((spending: ISpending) => {
+    this.historySpendingSubject.forEach((spending: ISpending) => {
       const { year, month } = this.extractYearAndMonth(spending);
 
       let yearEntry = this.getOrCreateYearEntry(expenseHistory, year);
@@ -99,6 +115,6 @@ export class ExpenseService {
 
 
   private getLastId(): number {
-    return this.historySpending.length + 1;
+    return this.historySpendingSubject.length + 1;
   }
 }

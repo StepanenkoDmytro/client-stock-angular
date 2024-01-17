@@ -1,1 +1,11 @@
-<mat-slide-toggle [formControl]="isDarkMode">Slide me!</mat-slide-toggle>
+<section style="display: flex; flex-direction: column;">
+    <mat-slide-toggle [formControl]="isDarkMode">Slide me!</mat-slide-toggle>
+
+    <div style="display: flex;">
+    <mat-form-field class="w-100">
+        <mat-label>Monthly budget</mat-label>
+        <input matInput type="number" readonly [ngModel]="monthlyBudget">
+    </mat-form-field>
+    <button (click)="saveMonthlyBudget()">Save</button>
+    </div>
+</section>
