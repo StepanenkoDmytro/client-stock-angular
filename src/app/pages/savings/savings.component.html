@@ -1,6 +1,7 @@
+<section class="savings">
 <pgz-total-balance></pgz-total-balance>
 
-<section class="savings">
+
   <mat-chip-set>
     @for (filter of filters; track filter) {
       <mat-chip class="filters" [class.selected]="isSelected(filter)"
@@ -14,4 +15,4 @@
     <pgz-add-asset-card [asset]="asset"></pgz-add-asset-card>
   }
   </section>
-<button mat-flat-button class="spending-btn" [routerLink]="['add']">{{ 'Add' }}</button>
+<button mat-flat-button class="add-btn" [routerLink]="['add']">{{ 'Add' }}</button>

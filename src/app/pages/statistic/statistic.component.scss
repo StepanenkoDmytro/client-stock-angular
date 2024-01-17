@@ -1,5 +1,6 @@
 :host {
   display: block;
+  // height: 100%;
 }
 
 .header-stock {
@@ -34,7 +35,7 @@
 .statistic {
   &--year {
     overflow-y: scroll;
-    height: 39vh;
+    height: 30vh;
   }
 
   &--month {

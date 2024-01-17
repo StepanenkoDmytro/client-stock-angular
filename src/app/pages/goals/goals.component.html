@@ -1,5 +1,10 @@
-<pgz-total-balance></pgz-total-balance>
+<section style="height: inherit;">
+    <pgz-total-balance></pgz-total-balance>
 
-@for(goal of goals; track goal) {
-    <pgz-goal-card [goal]="goal"></pgz-goal-card>
-}
+    <pgz-button-toggle [dataUnchecked]="'Goals'" [dataChecked]="'History'"></pgz-button-toggle>
+
+    @for(goal of goals; track goal) {
+        <pgz-goal-card [goal]="goal"></pgz-goal-card>
+    }
+</section>
+<button mat-flat-button class="add-btn" [routerLink]="['add']">{{ 'Add' }}</button>

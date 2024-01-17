@@ -48,3 +48,15 @@
 .progress-bar {
   background-color: var(--bs-warning);
 }
+
+.success {
+  background-color: var(--bs-success);
+}
+
+.in-progress {
+  background-color: var(--bs-warning);
+}
+
+.completed {
+  background-color: var(--bs-gray-500);
+}

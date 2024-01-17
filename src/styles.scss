@@ -173,9 +173,10 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-.spending-btn {
+.add-btn {
   margin-top: 20px;
+  margin-bottom: 10px;
   width: 90%;
   align-self: center;
-  background-color: #edb03b !important;
+  background-color: var(--bs-warning)!important;
 }

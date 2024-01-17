@@ -1,5 +1,4 @@
 <div class="spending">
-  <pgz-progress [progress]="38" [height]="30" [text]="'House'"></pgz-progress>
   <pgz-total-balance [balance]="expends.money"></pgz-total-balance>
 
   <pgz-button-toggle
@@ -15,5 +14,6 @@
     <pgz-history-spending [spendings]="historySpending"></pgz-history-spending>
   }
   
-  <button mat-flat-button class="spending-btn" [routerLink]="['add']">{{ 'Add' }}</button>
+  
 </div>
+<button mat-flat-button class="add-btn" [routerLink]="['add']">{{ 'Add' }}</button>

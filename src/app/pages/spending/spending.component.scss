@@ -1,15 +1,17 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
 .spending {
+    justify-content: flex-start;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-end;
     height: inherit;
 }
 
 .frame-btn {
     margin-bottom: 30px;
-}
-
-.spending-btn {
-    margin-top: 100px;
 }

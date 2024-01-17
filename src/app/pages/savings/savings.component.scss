@@ -1,11 +1,15 @@
 :host {
   display: flex;
-    flex-direction: column;
+  flex-direction: column;
+  height: 100%;
 }
 
 .savings {
-  height: calc(75vh - 140px); 
-  padding: 0 10px 0 10px;
+  justify-content: flex-start;
+    display: flex;
+    flex-direction: column;
+    // align-items: center;
+    height: inherit;
 }
 
 .filters.selected {
