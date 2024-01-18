@@ -81,6 +81,14 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
     }
   }
 
+  public prevRoute(): void {
+    if(this.editStateService.prevRoute) {
+      this.router.navigate([this.editStateService.prevRoute.path]);
+    } else {
+      this.router.navigate(['spending']);
+    }
+  }
+
   public ngOnDestroy(): void {
     this.editStateService.destroyEditStateSpending();
   }

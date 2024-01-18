@@ -9,7 +9,7 @@ export class EditStateSpendingService {
   public editStateSpending: ISpending = null;
   public prevRoute: Route = null;
 
-  public saveEditStateSpending(spending: ISpending, route: Route): void {
+  public saveEditStateSpending(spending: ISpending, route?: Route): void {
     this.editStateSpending = spending;
     this.prevRoute = route;
   }
