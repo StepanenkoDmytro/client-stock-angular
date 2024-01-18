@@ -74,7 +74,7 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
     
     this.expenseService.addSpending(newExpense);
 
-    if(this.isEditSpending) {
+    if(this.isEditSpending && this.editStateService.prevRoute) {
       this.router.navigate([this.editStateService.prevRoute.path]);
     } else {
       this.router.navigate(['spending']);

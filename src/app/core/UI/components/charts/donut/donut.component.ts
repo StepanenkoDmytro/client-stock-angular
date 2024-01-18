@@ -100,10 +100,14 @@ export class DonutComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private drawChart(): void {
+    const maxValue = d3.max(this.data, (d: SimpleDataModel) => parseInt(d.value));
+    const scale = d3.scaleLinear().domain([0, maxValue]).range([0, 100]);
+
+
     const pie = this.d3
       .pie<SimpleDataModel>()
       .sort(null)
-      .value((d: SimpleDataModel) => parseInt(d.value));
+      .value((d: SimpleDataModel) => scale(parseInt(d.value)));
 
     const data_ready = pie(this.data);
 

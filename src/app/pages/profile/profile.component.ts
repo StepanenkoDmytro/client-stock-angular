@@ -26,6 +26,8 @@ export class ProfileComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
+    const savedMode = this.darkLightModeService.activeTheme === 'dark';
+    this.isDarkMode.setValue(savedMode);
     this.isDarkMode.valueChanges.subscribe((darkMode) => {
         const mode = darkMode ? 'dark' : 'light';
         this.darkLightModeService.set(mode);

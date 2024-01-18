@@ -39,8 +39,8 @@ const MATERIAL_MODULES = [
 })
 export class SpendingComponent implements OnInit {
   public expends: ID3Value = {
-    title: 'Total',
-    money: '2 000 000',
+    title: 'Spending by day',
+    money: 0,
   };
 
   public historySpending: ISpending[] = [];
@@ -54,6 +54,12 @@ export class SpendingComponent implements OnInit {
   public ngOnInit(): void {
     this.expenseService.loadByCurrentMonth().subscribe(spendings => {
       this.historySpending = spendings;
+    });
+
+    this.expenseService.getSpentByDay().subscribe(spend => {
+      if(spend) {
+      this.expends.money = spend;
+      }
     });
   }
 

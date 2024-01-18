@@ -91,6 +91,21 @@ export class ExpenseService {
     );
   }
 
+  public getSpentByDay(): Observable<number> {
+    const currentDay = moment(new Date);
+    return this.loadByDate(currentDay).pipe(
+      map(spendingList => {
+        if (spendingList) {
+          return spendingList
+            .map(spend => spend.cost)
+            .reduce((accumulator, cost) => accumulator + cost, 0);
+        }
+        return 0; 
+      })
+    );
+  }
+  
+
   public generateSpendingHistory(): ISpendingHistory {
     const expenseHistory: ISpendingHistory = { years: [] };
 
