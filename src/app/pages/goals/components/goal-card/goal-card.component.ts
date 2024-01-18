@@ -5,12 +5,13 @@ import { IGoal } from '../../../../domain/goals.domain';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { EditStateGoalService } from '../../service/edit-state-goal.service';
+import { MoneyPipe } from '../../../../pipe/money.pipe';
 
 
 @Component({
   selector: 'pgz-goal-card',
   standalone: true,
-  imports: [MatProgressBarModule, MatIconModule, CommonModule],
+  imports: [MatProgressBarModule, MatIconModule, CommonModule, MoneyPipe],
   templateUrl: './goal-card.component.html',
   styleUrl: './goal-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

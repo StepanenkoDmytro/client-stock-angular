@@ -1,16 +1,16 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { SavingsService } from '../../../../service/savings.service';
 import { ExpenseService } from '../../../../service/expense.service';
-import { forkJoin } from 'rxjs';
+import { MoneyPipe } from '../../../../pipe/money.pipe';
 
 
 @Component({
   selector: 'pgz-total-balance',
   standalone: true,
-  imports: [],
+  imports: [MoneyPipe],
   templateUrl: './total-balance.component.html',
   styleUrl: './total-balance.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TotalBalanceComponent implements OnInit {
 

@@ -2,16 +2,15 @@
     <div class="asset--title col-6">
         <div class="asset--name">
             <p class="company-primary-info">{{ asset.name }}</p>
-            @if(asset.count > 0) {
-                <p class="asset--count">{{ asset.count }}pcs.</p>
-            }
-            
+            <!-- <p style="font-size: 12px;">{{ asset.assetType }}</p> -->
+            <p style="font-size: 12px;">{{ asset.count }} pcs by {{ asset.price | moneyFormat }}$</p>
         </div>
+        
     </div>
 
     <div class="asset--info col-6 text-end">
-        <p class="company-primary-info">{{ asset.price }}$</p>
-        
+        <p class="company-primary-info">{{ asset.price * asset.count  | moneyFormat }}$</p>
         <p style="font-size: 12px;">{{ asset.assetType }}</p>
+        <!-- <p style="font-size: 12px;">{{ asset.count }} pcs by {{ asset.price }}$</p> -->
     </div>
 </div>

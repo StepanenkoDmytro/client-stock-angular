@@ -2,7 +2,7 @@
      [class.goal-border--success]="goal.status === 'success'" 
      [class.goal-border--progress]="goal.status === 'progress'">
     <div class="progress">
-        <p class="goal--text-progress">{{ goal.name }} (${{ currentSum }} / ${{ goal.finishSum }})</p>
+        <p class="goal--text-progress">{{ goal.name }} (${{ currentSum | moneyFormat }} / ${{ goal.finishSum | moneyFormat }})</p>
         <div class="progress--icons">
             <mat-icon (click)="onEdit()">edit</mat-icon>
             <mat-icon (click)="onDelete()">delete</mat-icon>
