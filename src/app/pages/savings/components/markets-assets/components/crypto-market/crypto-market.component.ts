@@ -6,12 +6,12 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { AddAssetCardComponent } from '../../../add-asset-card/add-asset-card.component';
 import { MarketStateService } from '../../service/market-state.service';
+import { AssetMarketCardComponent } from '../asset-market-card/asset-market-card.component';
 
 
 const UI_COMPONENTS = [
-  AddAssetCardComponent
+  AssetMarketCardComponent
 ];
 
 const MATERIAL_MODULES = [

@@ -68,7 +68,7 @@ export class AddAssetsComponent implements OnInit {
     if(this.step > 2) {
       const newAsset = this.selectedAsset;
       
-      this.savingsService.addSavings(newAsset);
+      this.savingsService.addSaving(newAsset);
       this.router.navigate(['savings']);
     }
   }

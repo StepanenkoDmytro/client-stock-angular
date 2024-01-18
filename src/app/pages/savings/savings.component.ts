@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { TotalInfoComponent } from './components/total-info/total-info.component';
 import { ButtonToggleComponent } from '../../core/UI/components/button-toggle/button-toggle.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -8,8 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatButtonModule } from '@angular/material/button';
 import { SavingsService } from '../../service/savings.service';
-import { AddAssetCardComponent } from './components/add-asset-card/add-asset-card.component';
-import { switchMap } from 'rxjs';
+import { AssetCardComponent } from './components/asset-card/asset-card.component';
 import { RouterModule } from '@angular/router';
 import { TotalBalanceComponent } from '../../core/UI/components/total-balance/total-balance.component';
 
@@ -18,7 +16,7 @@ const UI_COMPONENTS = [
   TotalBalanceComponent,
   ButtonToggleComponent,
   ButtonToggleComponent,
-  AddAssetCardComponent
+  AssetCardComponent
 ];
 
 const MATERIAL_MODULES = [
@@ -38,6 +36,7 @@ const MATERIAL_MODULES = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SavingsComponent implements OnInit {
+
   public assets: IAsset[];
   public filteredAssets: IAsset[];
   public filters: Set<string> = new Set<string>();
@@ -46,7 +45,7 @@ export class SavingsComponent implements OnInit {
 
   constructor(
     private savingsService: SavingsService,
-    private cdr: ChangeDetectorRef, 
+    private cdr: ChangeDetectorRef
   ) { }
 
   public ngOnInit(): void {
@@ -71,17 +70,12 @@ export class SavingsComponent implements OnInit {
     this.isPortfolioFrame = frame;
   }
 
-  // public addSaving(): void {
-  //   this._bottomSheet.open(AddAssetsComponent).afterDismissed().pipe(
-  //     switchMap(() => this.savingsService.getAll())
-  //   ).subscribe(portfolio => {
-  //     this.assets = portfolio;
-  //     this.getAssetTypes();
-  //     this.cdr.detectChanges();
-  //   });
-  // }
+  public onDeleteAsset(asset: IAsset): void {
+    this.savingsService.deleteSaving(asset);
+  }
 
   private getAssetTypes(): void {
+    this.filters.clear();
     this.filters.add('All');
     this.assets.forEach(asset => {
       this.filters.add(asset.assetType);

@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { SavingsService } from '../../../../service/savings.service';
 import { ExpenseService } from '../../../../service/expense.service';
 import { MoneyPipe } from '../../../../pipe/money.pipe';
+import { combineLatest } from 'rxjs';
 
 
 @Component({
@@ -23,31 +24,20 @@ export class TotalBalanceComponent implements OnInit {
   constructor(
     private savingService: SavingsService,
     private expenseService: ExpenseService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   public ngOnInit(): void {
-    this.savingService.getCostOfAllAssets().subscribe(portfolioCost => {
+    combineLatest(
+      this.savingService.getCostOfAllAssets(),
+      this.expenseService.getMonthlyBudget(),
+      this.expenseService.getSpentByMonth()
+    ).subscribe(([ portfolioCost, monthlyBudget, spentByMonth ]) => {
       this.portfolioCost = portfolioCost;
-    });
-
-    this.expenseService.getMonthlyBudget().subscribe(budget => {
-      this.monthlyBudget = budget;
-    });
-
-    this.expenseService.getSpentByMonth().subscribe(spent => {
-      this.spentByMonth = spent;
+      this.monthlyBudget = monthlyBudget;
+      this.spentByMonth = spentByMonth;
       this.balance = this.monthlyBudget - this.spentByMonth;
+      this.cdr.detectChanges();
     });
-
-    // forkJoin({
-    //   portfolioCost: this.savingService.getCostOfAllAssets(),
-    //   monthlyBudget: this.expenseService.getMonthlyBudget(),
-    //   spentByMonth: this.expenseService.getSpentByMonth()
-    // }).subscribe(({ portfolioCost, monthlyBudget, spentByMonth }) => {
-    //   this.portfolioCost = portfolioCost;
-    //   this.monthlyBudget = monthlyBudget;
-    //   this.spentByMonth = spentByMonth;
-    //   this.balance = this.monthlyBudget - this.spentByMonth;
-    // });
   }
 }

@@ -12,7 +12,7 @@
     <p style="text-align: center;">Empty list</p>
   }
   @for(asset of filteredAssets; track asset) {
-    <pgz-add-asset-card [asset]="asset"></pgz-add-asset-card>
+    <pgz-asset-card [asset]="asset" (deleteAsset)="onDeleteAsset($event)"></pgz-asset-card>
   }
   </section>
 <button mat-flat-button class="add-btn" [routerLink]="['add']">{{ 'Add' }}</button>

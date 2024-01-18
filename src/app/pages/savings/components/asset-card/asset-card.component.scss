@@ -14,7 +14,6 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    // align-items: center;
     margin-left: 10px;
   }
 
@@ -24,7 +23,18 @@
 
   &--info {
     display: flex;
+    justify-content: end;
+  }
+
+  &--values {
+    display: flex;
     flex-direction: column;
+  }
+
+  &--icon {
+    height: 100%;
+    font-size: 2.2rem;
+    line-height: 50px;
   }
 }
 

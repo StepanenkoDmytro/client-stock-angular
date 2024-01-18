@@ -1,15 +1,14 @@
-<div class="asset card-mobile row">
+<div class="asset card-mobile row" [class.selected]="isSelected">
     <div class="asset--title col-6">
         <div class="asset--name">
             <p class="company-primary-info">{{ asset.name }}</p>
             <!-- <p style="font-size: 12px;">{{ asset.assetType }}</p> -->
-            <p style="font-size: 12px;">{{ asset.count }} pcs by {{ asset.price | moneyFormat }}$</p>
         </div>
         
     </div>
 
     <div class="asset--info col-6 text-end">
-        <p class="company-primary-info">{{ asset.price * asset.count  | moneyFormat }}$</p>
+        <p class="company-primary-info">{{ asset.price | moneyFormat }}$</p>
         <p style="font-size: 12px;">{{ asset.assetType }}</p>
         <!-- <p style="font-size: 12px;">{{ asset.count }} pcs by {{ asset.price }}$</p> -->
     </div>
