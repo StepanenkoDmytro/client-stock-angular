@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { DonutComponent } from '../../../../core/UI/components/charts/donut/donut.component';
 import { ID3Value } from '../../../../domain/d3.domain';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { NgClass } from "@angular/common";
+import { CommonModule, NgClass } from "@angular/common";
 import { ExpenseService } from '../../../../service/expense.service';
 import { AddSpendingComponent } from '../add-spending/add-spending.component';
 import { switchMap } from 'rxjs';
@@ -19,7 +19,7 @@ const UI_COMPONENTS = [
 @Component({
   selector: 'pgz-period-spending',
   standalone: true,
-  imports: [...UI_COMPONENTS],
+  imports: [...UI_COMPONENTS, CommonModule],
   templateUrl: './period-spending.component.html',
   styleUrl: './period-spending.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -36,7 +36,7 @@ export class PeriodSpendingComponent {
     private expenseService: ExpenseService,
   ) { }
 
-  public addSpending(category: Category): void {
+  public addBySelectSpending(category: Category): void {
     this._bottomSheet.open(AddSpendingComponent, {
       data: { category }
     }).backdropClick().pipe(

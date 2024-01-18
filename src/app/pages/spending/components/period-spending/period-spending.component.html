@@ -6,8 +6,8 @@
                    [color]="'#CBCACA'">
         </pgz-donut>
 
-        @for(category of categories.slice(0,8); track category; let i = $index) {
-            <a class="item"
+        @for(category of categories.slice(1,9); track category; let i = $index) {
+            <!-- <a class="item"
                [ngClass]="'deg-' + (i + 1)"
                (click)="addSpending(category)">
               @if(i === 5 || i === 6) {
@@ -15,7 +15,13 @@
               } @else {
                   <pgz-icon [name]="category.icon"></pgz-icon>
               }
-            </a>
+            </a> -->
+            <pgz-icon class="item"
+                      [ngClass]="'deg-' + (i + 1)"
+                      [ngStyle]="i === 5 || i === 6 ? {'width': '46%'} : {}"
+                      (click)="addBySelectSpending(category)"
+                      [name]="category.icon">
+            </pgz-icon>
         }
     </div>
 </section>

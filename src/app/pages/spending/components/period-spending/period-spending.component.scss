@@ -1,5 +1,6 @@
 :host {
   display: block;
+  width: 100%;
 }
 
 .spendings-category {
@@ -9,6 +10,7 @@
     display: grid;
     grid-template-columns: 20% 60% 20%;
     grid-template-rows: 30% 60% 30%;
+    padding: 0 10px 0 10px;
     width: 100%;
     align-items: center;
   }
@@ -18,7 +20,7 @@
     grid-row: 2;
     display: block;
     width: 100%;
-    transform: scale(1.1);
+    // transform: scale(1.1);
   }
 
   .deg-1 {
@@ -26,6 +28,7 @@
     grid-row: 1;
     align-self: end;
     justify-content: end;
+    margin-left: auto;
   }
   
   .deg-2 {
@@ -33,6 +36,7 @@
     grid-row: 3;
     align-self: start;
     justify-content: end;
+    margin-left: auto;
   }
   
   .deg-3 {
@@ -47,6 +51,7 @@
     grid-row: 2;
     align-self: center;
     justify-content: end;
+    margin-left: auto;
   }
   
   .deg-5 {
@@ -59,8 +64,9 @@
   .deg-6 {
     grid-column: 2;
     grid-row: 3;
-    align-self: end;
+    align-self: flex-end;
     justify-content: center;
+    margin: auto auto 0 auto;
   }
   
   .deg-7 {
@@ -68,6 +74,7 @@
     grid-row: 1;
     align-self: start;
     justify-content: center;
+    margin: 0 auto auto auto;
   }
   
   .deg-8 {
@@ -88,6 +95,7 @@
 
   .item {
     display: flex;
-    width: 100%;
+    width: 80%;
+    height: auto;
   }
 }

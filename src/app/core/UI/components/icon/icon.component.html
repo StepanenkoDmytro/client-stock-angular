@@ -1,5 +1,5 @@
 @if(_isSVG) {
-<mat-icon svgIcon="{{ _src }}"></mat-icon>
+<mat-icon svgIcon="{{ _src }}" [inline]="true"></mat-icon>
 } @else {
-<mat-icon>{{ _src }}</mat-icon>
+<mat-icon  [inline]="true">{{ _src }}</mat-icon>
 }
