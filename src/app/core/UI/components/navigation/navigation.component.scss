@@ -1,15 +1,16 @@
 :host {
   display: block;
-  height: 60px;
+  height: 100px;
 }
 
 .navigation {
+  border-top: 1px solid mediumaquamarine;
   display: flex;
   justify-content: space-around;
   align-items: center;
   width: 100%;
   height: 100%;
-  background-color: red;
+  background: #8b8b8b;
 
   &--element {
     color: white;

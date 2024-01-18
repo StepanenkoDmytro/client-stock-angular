@@ -1,20 +1,16 @@
 <section class="spendings-category">
     <div class="spendings-category--categories">
 
-        <pgz-donut class="center"
+        <pgz-donut class="spendings-category--donut"
                    [portfolio]="expends"
                    [color]="'#CBCACA'">
         </pgz-donut>
 
-        @for(category of categories.slice(0,8); track category; let i = $index) {
-            <a class="item"
-               [ngClass]="'deg-' + (i + 1)"
-               (click)="addSpending(category)">
-              @if(i === 5 || i === 6) {
-                  <pgz-icon class="central-img" [name]="category.icon"></pgz-icon>
-              } @else {
-                  <pgz-icon [name]="category.icon"></pgz-icon>
-              }
+        @for(category of viewCategories; track category) {
+            <a class="spendings-category--item"
+               [style.transform]="'rotate(' + category.angle + 'deg) translate(220%) rotate(-' +  category.angle + 'deg)'"
+               (click)="addSpending(category.category)">
+               <pgz-icon class="spendings-category--icon" [name]="category.category.icon"></pgz-icon>
             </a>
         }
     </div>
