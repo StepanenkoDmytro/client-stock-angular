@@ -72,6 +72,17 @@ export class SpendingStatisticComponent implements OnInit, AfterViewInit {
     return this.expenseService.loadByMonth(year, month);
   }
 
+  // public async loadSpendingByMonth(year: number, month: number): Promise<ISpending[]> {
+  //   try {
+  //     const spendingList = await this.expenseService.loadByMonth(year, month).toPromise();
+
+  //     return spendingList;
+  //   } catch (error) {
+  //     console.error('Error loading spending by month:', error);
+  //     return [];
+  //   }
+  // }
+
   public onTabChange(selectedYear: number): void {
     this.setBarData(selectedYear);
   }

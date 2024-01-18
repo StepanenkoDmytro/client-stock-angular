@@ -33,6 +33,6 @@ export class ProfileComponent implements OnInit {
   }
 
   public saveMonthlyBudget() {
-    this.expenseService.monthlyBudget = this.monthlyBudget;
+    this.expenseService.saveMonthlyBudget(this.monthlyBudget);
   }
 }

@@ -4,8 +4,11 @@
     <div style="display: flex;">
     <mat-form-field class="w-100">
         <mat-label>Monthly budget</mat-label>
-        <input matInput type="number" readonly [ngModel]="monthlyBudget">
+        <input matInput type="number" [(ngModel)]="monthlyBudget">
     </mat-form-field>
     <button (click)="saveMonthlyBudget()">Save</button>
     </div>
+
+    <p>change currency</p>
+    <p>change language</p>
 </section>

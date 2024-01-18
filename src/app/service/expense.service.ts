@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, map, of, reduce } from 'rxjs';
 import { ISpending } from '../domain/spending.domain';
 import moment from 'moment';
 import { IMonthlySpending, ISpendingHistory, IYearSpending } from '../domain/statistic.domain';
@@ -12,37 +12,51 @@ export class ExpenseService {
   private readonly historyLocalStorageKey = 'spendingData';
   private readonly budgetLocalStorageKey = 'spending_budget';
 
-  public
   public historySpendingSubject: ISpending[] = [];
-  public monthlyBudget: number = 0;
+
+  public $monthlyBudget: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  public $historySpending: BehaviorSubject<ISpending[]> = new BehaviorSubject<ISpending[]>([]);
 
   constructor() {
     const historyStoredData = localStorage.getItem(this.historyLocalStorageKey);
-    const budgetStoredData = localStorage.getItem(this.budgetLocalStorageKey);
-
     const parseHistory: ISpending[] = JSON.parse(historyStoredData);
-    const parseBudget: number = JSON.parse(budgetStoredData);
 
     if(parseHistory !== null) {
       this.historySpendingSubject = parseHistory;
+      this.$historySpending.next(parseHistory);
     }
+  }
+
+  public getMonthlyBudget(): Observable<number> {
+    const budgetStoredData = localStorage.getItem(this.budgetLocalStorageKey);
+    const parseBudget: number = JSON.parse(budgetStoredData);
 
     if(parseBudget !== null) {
-      this.monthlyBudget = parseBudget;
+      this.$monthlyBudget.next(parseBudget);
     }
+
+    return this.$monthlyBudget;
+  }
+
+  public saveMonthlyBudget(budget: number): void {
+    localStorage.setItem(this.budgetLocalStorageKey, JSON.stringify(budget));
+    this.$monthlyBudget.next(budget);
   }
 
   public loadByDate(date: moment.Moment): Observable<ISpending[]> {
-    const filterExpenses = this.historySpendingSubject.filter(spending => moment(spending.date).startOf('day').isSame(date.startOf('day')));
-    return of(filterExpenses);
+    return this.getAll().pipe(
+      map(spendingList => 
+        spendingList.filter(spending => 
+          moment(spending.date).startOf('day').isSame(date.startOf('day'))))
+    );
   }
 
-  public loadByCurrentMonth():Observable<ISpending[]> {
-
-    const filterExpenses = this.historySpendingSubject.filter(spending => moment(spending.date).startOf('month').isSame(moment().startOf('month')));
-
-
-    return of(filterExpenses);
+  public loadByCurrentMonth(): Observable<ISpending[]> {
+    return this.getAll().pipe(
+      map(spendingList => 
+        spendingList.filter(spending => 
+          moment(spending.date).startOf('month').isSame(moment().startOf('month'))))
+    );
   }
 
   public loadByMonth(year: number, month: number) :ISpending[] {
@@ -53,7 +67,7 @@ export class ExpenseService {
     return result;
   }
 
-  public addSpending(spending: ISpending):Observable<ISpending> {
+  public addSpending(spending: ISpending): void {
     if(spending.title == null) {
       throw Error('cost or name of product can not be null')
     }
@@ -63,13 +77,18 @@ export class ExpenseService {
     }
 
     this.historySpendingSubject.push(spending);
+    this.$historySpending.next(this.historySpendingSubject);
     localStorage.setItem(this.historyLocalStorageKey, JSON.stringify(this.historySpendingSubject));
-    return of(spending);
   }
 
-  public getSpentBymonth(): Observable<number> {
+  public getSpentByMonth(): Observable<number> {
 
-    return of(0);
+    return this.loadByCurrentMonth().pipe(
+      map(spendingList => 
+        spendingList
+          .map(spend => spend.cost)
+          .reduce((accumulator, cost) => accumulator + cost), 0)
+    );
   }
 
   public generateSpendingHistory(): ISpendingHistory {
@@ -84,6 +103,10 @@ export class ExpenseService {
       monthEntry.totalAmount += spending.cost;
     });
     return expenseHistory;
+  }
+
+  private getAll(): Observable<ISpending[]> {
+    return this.$historySpending;
   }
 
   private extractYearAndMonth(spending: ISpending): { year: number; month: number } {

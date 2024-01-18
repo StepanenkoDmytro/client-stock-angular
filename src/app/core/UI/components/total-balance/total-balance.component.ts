@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { SavingsService } from '../../../../service/savings.service';
 import { ExpenseService } from '../../../../service/expense.service';
+import { forkJoin } from 'rxjs';
 
 
 @Component({
@@ -14,7 +15,7 @@ import { ExpenseService } from '../../../../service/expense.service';
 export class TotalBalanceComponent implements OnInit {
 
   @Input()
-  public balance: string | number = 100000;
+  public balance: number;
   public portfolioCost: number;
   public monthlyBudget: number;
   public spentByMonth: number;
@@ -29,10 +30,24 @@ export class TotalBalanceComponent implements OnInit {
       this.portfolioCost = portfolioCost;
     });
 
-    this.monthlyBudget = this.expenseService.monthlyBudget;
-    this.expenseService.getSpentBymonth().subscribe(spent => {
+    this.expenseService.getMonthlyBudget().subscribe(budget => {
+      this.monthlyBudget = budget;
+    });
+
+    this.expenseService.getSpentByMonth().subscribe(spent => {
       this.spentByMonth = spent;
-    })
-    
+      this.balance = this.monthlyBudget - this.spentByMonth;
+    });
+
+    // forkJoin({
+    //   portfolioCost: this.savingService.getCostOfAllAssets(),
+    //   monthlyBudget: this.expenseService.getMonthlyBudget(),
+    //   spentByMonth: this.expenseService.getSpentByMonth()
+    // }).subscribe(({ portfolioCost, monthlyBudget, spentByMonth }) => {
+    //   this.portfolioCost = portfolioCost;
+    //   this.monthlyBudget = monthlyBudget;
+    //   this.spentByMonth = spentByMonth;
+    //   this.balance = this.monthlyBudget - this.spentByMonth;
+    // });
   }
 }
