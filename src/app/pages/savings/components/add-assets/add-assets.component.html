@@ -17,11 +17,9 @@
           </mat-select>
       </mat-form-field>
   
-  <!-- #docregion action-bar -->
       <mat-action-row>
         <button mat-button color="primary" (click)="nextStep()">Next</button>
       </mat-action-row>
-  <!-- #enddocregion action-bar -->
     </mat-expansion-panel>
   
     <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
@@ -48,9 +46,6 @@
 
       
         @if(selectedAsset) {
-          
-          <!-- <p>{{ selectedAsset.name }}</p> -->
-          
           <div style="display: flex; justify-content: space-between;">
             <span style="font-size: 20px;">Price</span>
             <input type="number" [value]="selectedAsset.price" style="

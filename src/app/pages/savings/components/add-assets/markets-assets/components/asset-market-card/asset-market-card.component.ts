@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { IAsset } from '../../../../../../domain/savings.domain';
-import { MoneyPipe } from '../../../../../../pipe/money.pipe';
+import { IAsset } from '../../../../../../../domain/savings.domain';
+import { MoneyPipe } from '../../../../../../../pipe/money.pipe';
 
 @Component({
   selector: 'pgz-asset-market-card',

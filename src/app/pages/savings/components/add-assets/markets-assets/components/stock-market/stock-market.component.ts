@@ -1,14 +1,13 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { ACCOUNT_STOCKS_MOCK } from '../../../../../../domain/mock.domain';
-import { IAsset, IPortfolioStock } from '../../../../../../domain/savings.domain';
 import { FormsModule } from '@angular/forms';
 import { StockService } from '../../service/stock.service';
 import { HttpClientModule } from '@angular/common/http';
 import { MarketStateService } from '../../service/market-state.service';
 import { AssetMarketCardComponent } from '../asset-market-card/asset-market-card.component';
+import { IPortfolioStock, IAsset } from '../../../../../../../domain/savings.domain';
 
 
 const UI_COMPONENTS = [
@@ -34,7 +33,6 @@ const MATERIAL_MODULES = [
 export class StockMarketComponent implements AfterViewInit {
   
   public value = 'Clear me';
-  public stocks: IPortfolioStock[] = ACCOUNT_STOCKS_MOCK;
   public companies: IAsset[] = [];
   public moverFilters: Map<string, string> = new Map<string, string>([
     ['Most actives', 'MOST_ACTIVES'],
@@ -60,8 +58,6 @@ export class StockMarketComponent implements AfterViewInit {
       (error) => {
       console.error('Error', error);
     });
-
-    
   }
 
   public onFilterChange() {

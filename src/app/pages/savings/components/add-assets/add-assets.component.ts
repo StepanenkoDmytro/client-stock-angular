@@ -9,11 +9,11 @@ import { MatSelectModule } from '@angular/material/select';
 import {FormsModule} from '@angular/forms';
 import { IAsset } from '../../../../domain/savings.domain';
 import { NgComponentOutlet } from '@angular/common';
-import { StockMarketComponent } from '../markets-assets/components/stock-market/stock-market.component';
-import { CryptoMarketComponent } from '../markets-assets/components/crypto-market/crypto-market.component';
-import { MarketStateService } from '../markets-assets/service/market-state.service';
 import { SavingsService } from '../../../../service/savings.service';
 import { Router, RouterModule } from '@angular/router';
+import { CryptoMarketComponent } from './markets-assets/components/crypto-market/crypto-market.component';
+import { StockMarketComponent } from './markets-assets/components/stock-market/stock-market.component';
+import { MarketStateService } from './markets-assets/service/market-state.service';
 
 
 const MATERIAL_MODULES = [
