@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { MarketStateService } from '../service/market-state.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { IconComponent } from '../../../../../core/UI/components/icon/icon.component';
 
 
 const MATERIAL_MODULES = [
@@ -17,13 +18,14 @@ const MATERIAL_MODULES = [
 @Component({
   selector: 'pgz-asset',
   standalone: true,
-  imports: [...MATERIAL_MODULES],
+  imports: [...MATERIAL_MODULES, IconComponent],
   templateUrl: './asset.component.html',
   styleUrl: './asset.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AssetComponent implements OnInit {
   public selectedAsset: IAsset;
+  public editDisabled: boolean = true;
   
   constructor(
     private marketStateService: MarketStateService

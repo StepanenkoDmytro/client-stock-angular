@@ -33,3 +33,12 @@ export interface ICompany {
     dividendDate: string;
     exDividendDate: string;
 }
+
+export interface ICoin {
+    id: string;
+    name: string;
+    symbol: string;
+    price: number;
+    assetType: string;
+    marketCapUsd: number;
+}
