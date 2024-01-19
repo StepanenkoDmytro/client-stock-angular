@@ -1,0 +1,36 @@
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { IAsset } from '../../../../../domain/savings.domain';
+import { FormsModule } from '@angular/forms';
+import { MarketStateService } from '../service/market-state.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+
+
+const MATERIAL_MODULES = [
+  MatIconModule, 
+  FormsModule, 
+  MatFormFieldModule, 
+  MatInputModule
+];
+
+@Component({
+  selector: 'pgz-asset',
+  standalone: true,
+  imports: [...MATERIAL_MODULES],
+  templateUrl: './asset.component.html',
+  styleUrl: './asset.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class AssetComponent implements OnInit {
+  public selectedAsset: IAsset;
+  
+  constructor(
+    private marketStateService: MarketStateService
+  ) { }
+
+  public ngOnInit(): void {
+    this.selectedAsset = this.marketStateService.asset.value;
+    console.log(this.selectedAsset);
+  }
+}

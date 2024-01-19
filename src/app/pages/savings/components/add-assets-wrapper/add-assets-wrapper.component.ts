@@ -13,7 +13,7 @@ import { SavingsService } from '../../../../service/savings.service';
 import { Router, RouterModule } from '@angular/router';
 import { CryptoMarketComponent } from './markets-assets/components/crypto-market/crypto-market.component';
 import { StockMarketComponent } from './markets-assets/components/stock-market/stock-market.component';
-import { MarketStateService } from './markets-assets/service/market-state.service';
+import { MarketStateService } from './service/market-state.service';
 
 
 const MATERIAL_MODULES = [
@@ -29,10 +29,10 @@ const MATERIAL_MODULES = [
 ];
 
 @Component({
-    selector: 'pgz-add-assets',
+    selector: 'pgz-add-assets-wrapper',
     standalone: true,
-    templateUrl: './add-assets.component.html',
-    styleUrl: './add-assets.component.scss',
+    templateUrl: './add-assets-wrapper.component.html',
+    styleUrl: './add-assets-wrapper.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [...MATERIAL_MODULES, RouterModule],
 })
@@ -65,11 +65,11 @@ export class AddAssetsComponent implements OnInit {
   public nextStep() {
     this.step++;
 
-    if(this.step > 2) {
+    if(this.step > 1) {
       const newAsset = this.selectedAsset;
       
-      this.savingsService.addSaving(newAsset);
-      this.router.navigate(['savings']);
+      this.marketStateService.selectAsset(newAsset);
+      this.router.navigate(['/savings/asset']);
     }
   }
 

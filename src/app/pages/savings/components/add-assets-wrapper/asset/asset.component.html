@@ -1,0 +1,23 @@
+@if(selectedAsset) {
+    <div class="asset">
+        <mat-form-field appearance="outline" floatLabel="always" class="w-100">
+            <mat-label>Sum</mat-label>
+            <input matInput type="number" inputmode="numeric" class="line" placeholder="0" style="font-size: 1.5rem;" [(ngModel)]="selectedAsset.price">
+            <span matTextSuffix style="font-size: 1.5rem;">$</span>
+            <mat-icon style="font-size: 1.5rem;">edit</mat-icon>
+        </mat-form-field>
+        
+    </div>
+
+    <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+        <span style="font-size: 20px;">Quantity</span>
+        <input type="number" [(ngModel)]="selectedAsset.count" style="
+        width: 70%;
+        border: none;
+        font-size: 18px;
+        color: gray;
+        border-bottom: 1px solid #E8E8E8;">
+    </div>
+}@else {
+    <p>Oops, something went wrong</p>
+}

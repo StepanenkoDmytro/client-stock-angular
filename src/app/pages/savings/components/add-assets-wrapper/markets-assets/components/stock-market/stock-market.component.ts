@@ -3,9 +3,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
-import { StockService } from '../../service/stock.service';
+import { StockService } from '../../../service/stock.service';
 import { HttpClientModule } from '@angular/common/http';
-import { MarketStateService } from '../../service/market-state.service';
+import { MarketStateService } from '../../../service/market-state.service';
 import { AssetMarketCardComponent } from '../asset-market-card/asset-market-card.component';
 import { IPortfolioStock, IAsset } from '../../../../../../../domain/savings.domain';
 
@@ -74,7 +74,7 @@ export class StockMarketComponent implements AfterViewInit {
   public onChoiseAsset(asset: IAsset, index: number): void {
     this.stockService.getCompany(asset.symbol).subscribe(val => {
       const newSome: IPortfolioStock = {...val,buyPrice: asset.price, count: 0,};
-      this.marketStateService.choiseAsset(newSome);
+      this.marketStateService.selectAsset(newSome);
     });
     this.selectedAssetIndex = index;
   }

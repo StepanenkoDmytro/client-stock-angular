@@ -12,6 +12,10 @@
             <p class="asset--text-primary-info">{{ asset.price * asset.count  | moneyFormat }}$</p>
             <p class="asset--text-small-info">{{ asset.assetType }}</p>
         </div>
-        <pgz-icon [name]="'more_vert'" class="asset--icon" (click)="onDelete()"></pgz-icon>
+        <pgz-icon [name]="'more_vert'" class="asset--icon" [matMenuTriggerFor]="actionsMenu"></pgz-icon>
+        <mat-menu #actionsMenu>
+            <mat-icon (click)="onEdit()">edit</mat-icon>
+            <mat-icon (click)="onDelete()">delete</mat-icon>
+          </mat-menu>
     </div>
 </div>

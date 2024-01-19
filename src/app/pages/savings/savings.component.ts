@@ -8,8 +8,9 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatButtonModule } from '@angular/material/button';
 import { SavingsService } from '../../service/savings.service';
 import { AssetCardComponent } from './components/asset-card/asset-card.component';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { TotalBalanceComponent } from '../../core/UI/components/total-balance/total-balance.component';
+import { MarketStateService } from './components/add-assets-wrapper/service/market-state.service';
 
 
 const UI_COMPONENTS = [
@@ -44,8 +45,10 @@ export class SavingsComponent implements OnInit {
   public isPortfolioFrame: boolean = true;
 
   constructor(
+    private assetStateService: MarketStateService,
     private savingsService: SavingsService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router
   ) { }
 
   public ngOnInit(): void {
@@ -72,6 +75,11 @@ export class SavingsComponent implements OnInit {
 
   public onDeleteAsset(asset: IAsset): void {
     this.savingsService.deleteSaving(asset);
+  }
+
+  public onEditAsset(asset: IAsset): void {
+    this.assetStateService.selectAsset(asset);
+    this.router.navigate(['/savings/asset']);
   }
 
   private getAssetTypes(): void {

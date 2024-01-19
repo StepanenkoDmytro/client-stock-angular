@@ -37,41 +37,4 @@
         <button mat-button color="primary" (click)="nextStep()">Next</button>
       </mat-action-row> 
     </mat-expansion-panel>
-  
-    <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle>
-      <mat-expansion-panel-header>
-        <mat-panel-title>Details of addition</mat-panel-title>
-        <mat-panel-description>Details of adding a new asset.</mat-panel-description>
-      </mat-expansion-panel-header>
-
-      
-        @if(selectedAsset) {
-          <div style="display: flex; justify-content: space-between;">
-            <span style="font-size: 20px;">Price</span>
-            <input type="number" [value]="selectedAsset.price" style="
-            width: 70%;
-            border: none;
-            font-size: 18px;
-            color: gray;
-            border-bottom: 1px solid #E8E8E8;">
-            <mat-icon style="font-size: 1.5rem;">edit</mat-icon>
-          </div>
-
-          <div style="display: flex; justify-content: space-between; margin-top: 10px;">
-            <span style="font-size: 20px;">Quantity</span>
-            <input type="number" [(ngModel)]="selectedAsset.count" style="
-            width: 70%;
-            border: none;
-            font-size: 18px;
-            color: gray;
-            border-bottom: 1px solid #E8E8E8;">
-          </div>
-        }
-  
-      <mat-action-row>
-        <button mat-button color="warn" (click)="prevStep()">Previous</button>
-        <button mat-button color="primary" (click)="nextStep()">End</button>
-      </mat-action-row>
-    </mat-expansion-panel>
-  
 </mat-accordion>

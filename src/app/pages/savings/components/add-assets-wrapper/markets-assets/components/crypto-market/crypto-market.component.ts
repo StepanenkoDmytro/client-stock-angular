@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { CoinService } from '../../service/coin.service';
+import { CoinService } from '../../../service/coin.service';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MarketStateService } from '../../service/market-state.service';
+import { MarketStateService } from '../../../service/market-state.service';
 import { AssetMarketCardComponent } from '../asset-market-card/asset-market-card.component';
 import { IPortfolioCrypto } from '../../../../../../../domain/savings.domain';
 
@@ -65,6 +65,6 @@ export class CryptoMarketComponent implements OnInit {
   public onChoiseAsset(asset: IPortfolioCrypto, index: number): void {
     asset.count = 0;
     this.selectedAssetIndex = index;
-    this.marketStateService.choiseAsset(asset);
+    this.marketStateService.selectAsset(asset);
   }
 }
