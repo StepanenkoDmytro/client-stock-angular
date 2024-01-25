@@ -3,10 +3,10 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { BarComponent } from '../../../core/UI/components/charts/bar/bar.component';
-import { ExpenseService } from '../../../service/expense.service';
+import { SpendingsService } from '../../../service/spendings.service';
 import { ISpending } from '../../../domain/spending.domain';
 import { HistorySpendingCardComponent } from '../../spending/components/history-spending/history-spending-card/history-spending-card.component';
-import { IBarData, IMonthlySpending, ISpendingHistory } from '../../../domain/statistic.domain';
+import { IBarData, IMonthlySpending, ISpendingHistory, IYearSpending } from '../../../domain/statistic.domain';
 import { BarMappingHelperService } from '../../../core/UI/components/charts/bar/bar-mapping-helper.service';
 import { BehaviorSubject } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
@@ -43,13 +43,15 @@ export class SpendingStatisticComponent implements OnInit, AfterViewInit {
   private barChart: BarComponent;
 
   constructor(
-    private expenseService: ExpenseService,
+    private spendingsService: SpendingsService,
     private barMappingService: BarMappingHelperService,
     private cdr: ChangeDetectorRef,
   ) { }
 
   public ngOnInit(): void {
-    this.spendingHistory = this.expenseService.generateSpendingHistory();
+    this.spendingsService.getAll().subscribe(allSpendings => {
+      this.spendingHistory = this.generateSpendingHistory(allSpendings);
+    });
     this.years = this.spendingHistory.years.map(yearSpending => {
 
       return yearSpending.year.toString();
@@ -62,19 +64,63 @@ export class SpendingStatisticComponent implements OnInit, AfterViewInit {
 
   public ngAfterViewInit(): void {
     this.setBarData(this.selectedYear);
-    
   }
 
-  public loadSpendingByMonth(year: number, month: number): ISpending[] {
-    if(!month) {
-      return [];
-    }
-    return this.expenseService.loadByMonth(year, month);
+  private generateSpendingHistory(array: ISpending[]): ISpendingHistory {
+    const expenseHistory: ISpendingHistory = { years: [] };
+
+    array.forEach((spending: ISpending) => {
+      const { year, month } = this.extractYearAndMonth(spending);
+
+      let yearEntry = this.getOrCreateYearEntry(expenseHistory, year);
+      let monthEntry = this.getOrCreateMonthEntry(yearEntry, month);
+
+      monthEntry.totalAmount += spending.cost;
+    });
+    return expenseHistory;
   }
+
+  private extractYearAndMonth(spending: ISpending): { year: number; month: number } {
+    const spendingDate = new Date(spending.date);
+    return { year: spendingDate.getFullYear(), month: spendingDate.getMonth() + 1 };
+  }
+
+  private getOrCreateYearEntry(expenseHistory: ISpendingHistory, year: number): IYearSpending {
+    let yearEntry = expenseHistory.years.find((entry) => entry.year === year);
+
+    if (!yearEntry) {
+      yearEntry = { year, monthlyExpenses: [] };
+      expenseHistory.years.push(yearEntry);
+    }
+
+    return yearEntry;
+  }
+
+  private getOrCreateMonthEntry(yearEntry: IYearSpending, month: number): IMonthlySpending {
+    let monthEntry = yearEntry.monthlyExpenses.find((entry) => entry.month === month);
+
+    if (!monthEntry) {
+      monthEntry = { month, totalAmount: 0 };
+      yearEntry.monthlyExpenses.push(monthEntry);
+    }
+
+    return monthEntry;
+  }
+
+  // public loadSpendingByMonth(year: number, month: number): ISpending[] {
+  //   if(!month) {
+  //     return [];
+  //   }
+  //   return this.loadByMonth(year, month);
+  // }
+
+  // public loadByMonth(year: number, month: number) :ISpending[] {
+  //   return this.spendingHistory.years[year].monthlyExpenses[month].month;
+  // }
 
   // public async loadSpendingByMonth(year: number, month: number): Promise<ISpending[]> {
   //   try {
-  //     const spendingList = await this.expenseService.loadByMonth(year, month).toPromise();
+  //     const spendingList = await this.spendingsService.loadByMonth(year, month).toPromise();
 
   //     return spendingList;
   //   } catch (error) {

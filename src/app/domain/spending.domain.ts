@@ -1,7 +1,7 @@
 import { Category } from './category.domain';
 
 export interface ISpending {
-    id?: number;
+    id?: string;
     category: Category;
     title: string;
     cost: number;

@@ -1,8 +1,15 @@
 import { createAction } from "@ngrx/store";
 import { ISpending } from "../domain/spending.domain";
+import { IUserState } from "./user.reducer";
 
 export const addSpending = 
     createAction(
-        '[USER] Add Spending', 
+        '[SPENDING] Add Spending', 
         (payload: { spending: ISpending }) => ({ payload })
     );
+
+export const loadSpending = 
+createAction(
+    '[SPENDING] Load Spendings', 
+    (payload: { state: IUserState }) => ({ payload })
+);

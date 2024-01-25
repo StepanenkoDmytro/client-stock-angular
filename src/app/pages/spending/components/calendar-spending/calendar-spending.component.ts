@@ -1,9 +1,9 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CalendarComponent } from '../../../../core/UI/calendar/calendar.component';
 import { SelectorComponent } from '../../../../core/UI/calendar/selector/selector.component';
 import { switchMap } from 'rxjs';
 import { DateService } from '../../../../service/date.service';
-import { ExpenseService } from '../../../../service/expense.service';
+import { SpendingsService } from '../../../../service/spendings.service';
 import { ISpending } from '../../../../domain/spending.domain';
 import { HistorySpendingCardComponent } from '../history-spending/history-spending-card/history-spending-card.component';
 
@@ -28,12 +28,12 @@ export class CalendarSpendingComponent implements OnInit {
 
   constructor(
     public dateService: DateService,
-    private expenseService: ExpenseService,
+    private spendingsService: SpendingsService,
   ) { }
 
   public ngOnInit(): void {
     this.dateService.date.pipe(
-      switchMap(value => this.expenseService.loadByDate(value))
+      switchMap(value => this.spendingsService.loadByDate(value))
     ).subscribe(spendings => {
       this.spendingsByDay = spendings;
     });

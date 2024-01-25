@@ -4,7 +4,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { DarkLightModeService } from '../../service/dark-light-mode.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { ExpenseService } from '../../service/expense.service';
+import { TotalBalanceService } from '../../core/UI/components/total-balance/total-balance.service';
 
 
 @Component({
@@ -22,7 +22,7 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private darkLightModeService: DarkLightModeService,
-    private expenseService: ExpenseService
+    private totalBalanceService: TotalBalanceService
   ) { }
 
   public ngOnInit(): void {
@@ -35,6 +35,6 @@ export class ProfileComponent implements OnInit {
   }
 
   public saveMonthlyBudget() {
-    this.expenseService.saveMonthlyBudget(this.monthlyBudget);
+    this.totalBalanceService.saveMonthlyBudget(this.monthlyBudget);
   }
 }

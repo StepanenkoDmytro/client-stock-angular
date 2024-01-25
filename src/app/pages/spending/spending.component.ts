@@ -9,7 +9,7 @@ import { ButtonToggleComponent } from '../../core/UI/components/button-toggle/bu
 import { HistorySpendingComponent } from './components/history-spending/history-spending.component';
 import { ID3Value } from '../../domain/d3.domain';
 import { ISpending } from '../../domain/spending.domain';
-import { ExpenseService } from '../../service/expense.service';
+import { SpendingsService } from '../../service/spendings.service';
 import { switchMap } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
@@ -48,15 +48,15 @@ export class SpendingComponent implements OnInit {
 
   constructor(
     private _bottomSheet: MatBottomSheet,
-    private expenseService: ExpenseService,
+    private spendingsService: SpendingsService,
   ) { }
 
   public ngOnInit(): void {
-    this.expenseService.loadByCurrentMonth().subscribe(spendings => {
+    this.spendingsService.loadByCurrentMonth().subscribe(spendings => {
       this.historySpending = spendings;
     });
 
-    this.expenseService.getSpentByDay().subscribe(spend => {
+    this.spendingsService.getSpentByDay().subscribe(spend => {
       if(spend) {
       this.expends.money = spend;
       }
@@ -65,7 +65,7 @@ export class SpendingComponent implements OnInit {
 
   public addSpending(): void {
     this._bottomSheet.open(AddSpendingComponent).backdropClick().pipe(
-      switchMap(() => this.expenseService.loadByCurrentMonth())
+      switchMap(() => this.spendingsService.loadByCurrentMonth())
     ).subscribe(spendings => {
       this.historySpending = spendings;
     });

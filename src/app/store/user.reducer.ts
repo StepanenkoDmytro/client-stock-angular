@@ -1,6 +1,6 @@
 import { createReducer, on } from "@ngrx/store";
 import { IUSer } from "../model/User";
-import { addSpending } from "./spendings.actions";
+import { addSpending, loadSpending } from "./spendings.actions";
 
 
 export interface IUserState {
@@ -30,5 +30,8 @@ export const userReducer = createReducer(
           ]
         }
       })),
+    on(loadSpending, (state, action) => ({
+      ...action.payload.state
+    }))
 );
 

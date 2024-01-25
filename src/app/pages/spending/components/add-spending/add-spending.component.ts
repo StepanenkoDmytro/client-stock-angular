@@ -4,7 +4,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-import { ExpenseService } from '../../../../service/expense.service';
+import { SpendingsService } from '../../../../service/spendings.service';
 import { FormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -46,7 +46,7 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
   public isEditSpending: boolean = false;
 
   constructor(
-    private expenseService: ExpenseService,
+    private spendingsService: SpendingsService,
     private router: Router,
     private editStateService: EditStateSpendingService,
     // @Inject(MAT_BOTTOM_SHEET_DATA) public data: { category?: Category }
@@ -72,7 +72,7 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
       date: this.date,
     }
     
-    this.expenseService.addSpending(newExpense);
+    this.spendingsService.addSpending(newExpense);
 
     if(this.isEditSpending && this.editStateService.prevRoute) {
       this.router.navigate([this.editStateService.prevRoute.path]);
