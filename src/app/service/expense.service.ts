@@ -3,6 +3,10 @@ import { BehaviorSubject, Observable, map, of, reduce } from 'rxjs';
 import { ISpending } from '../domain/spending.domain';
 import moment from 'moment';
 import { IMonthlySpending, ISpendingHistory, IYearSpending } from '../domain/statistic.domain';
+import { Store, select } from '@ngrx/store';
+import { IUserState } from '../store/user.reducer';
+import { addSpending } from '../store/spendings.actions';
+import { spendingHistorySelector } from '../store/spendings.selectors';
 
 
 @Injectable({
@@ -17,7 +21,10 @@ export class ExpenseService {
   public $monthlyBudget: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   public $historySpending: BehaviorSubject<ISpending[]> = new BehaviorSubject<ISpending[]>([]);
 
-  constructor() {
+  // private readonly store: Store = inject(Store);
+  constructor(
+    private store: Store<IUserState>
+  ) {
     const historyStoredData = localStorage.getItem(this.historyLocalStorageKey);
     const parseHistory: ISpending[] = JSON.parse(historyStoredData);
 
@@ -79,6 +86,8 @@ export class ExpenseService {
     this.historySpendingSubject.push(spending);
     this.$historySpending.next(this.historySpendingSubject);
     localStorage.setItem(this.historyLocalStorageKey, JSON.stringify(this.historySpendingSubject));
+    this.store.dispatch(addSpending({ spending }));
+
   }
 
   public getSpentByMonth(): Observable<number> {
@@ -121,7 +130,11 @@ export class ExpenseService {
   }
 
   private getAll(): Observable<ISpending[]> {
-    return this.$historySpending;
+    return this.store.pipe(select(spendingHistorySelector))
+  }
+
+  public getReduxSpendings(): Observable<ISpending[]> {
+    return this.store.pipe(select(spendingHistorySelector));
   }
 
   private extractYearAndMonth(spending: ISpending): { year: number; month: number } {

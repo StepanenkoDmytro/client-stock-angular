@@ -7,6 +7,7 @@ import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { DarkLightModeService } from './service/dark-light-mode.service';
+import { Store } from '@ngrx/store';
 
 const ANGULAR_MODULES = [
   CommonModule,
@@ -46,7 +47,8 @@ export class AppComponent implements OnInit {
   constructor(
     private iconRegistry: MatIconRegistry,
     private sanitizer: DomSanitizer,
-    private darkLightModeService: DarkLightModeService
+    private darkLightModeService: DarkLightModeService,
+    private store: Store<{count: number}>
   ) {
     this.CUSTOM_SVG_ICONS.forEach(icon => {
       this.iconRegistry.addSvgIcon(icon.name, this.sanitizer.bypassSecurityTrustResourceUrl(icon.url));
@@ -54,6 +56,8 @@ export class AppComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    // this.store.dispatch(addMessage({ message: { content } }));
+  
     const isFirstVisit = this.darkLightModeService.mode === null;
     if(isFirstVisit) {
       this.darkLightModeService.set('light');
