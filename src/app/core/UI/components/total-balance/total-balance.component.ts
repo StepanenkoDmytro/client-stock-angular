@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MoneyPipe } from '../../../../pipe/money.pipe';
 import { combineLatest } from 'rxjs';
 import { TotalBalanceService } from './total-balance.service';
@@ -23,7 +23,6 @@ export class TotalBalanceComponent implements OnInit {
   constructor(
     private savingService: SavingsService,
     private totalBalanceService: TotalBalanceService,
-    private cdr: ChangeDetectorRef
   ) { }
 
   public ngOnInit(): void {

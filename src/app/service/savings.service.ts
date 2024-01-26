@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IAsset } from '../domain/savings.domain';
 import { BehaviorSubject, Observable, map, of } from 'rxjs';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,9 @@ export class SavingsService {
   public $historySaving: BehaviorSubject<IAsset[]> = new BehaviorSubject<IAsset[]>([]);
   public historySavingsSubject: IAsset[] = [];
 
-  constructor() {
+  constructor(
+    private userService: UserService,
+  ) {
     const storedData = localStorage.getItem(this.localStorageKey);
     const parse: IAsset[] = JSON.parse(storedData);
 
@@ -32,6 +35,8 @@ export class SavingsService {
     } else {
       this.addNewAsset(newAsset);
     }
+
+    this.userService.addAsset(newAsset);
 
     this.updateLocalStorageAndNotify();
   }

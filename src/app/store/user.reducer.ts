@@ -1,6 +1,8 @@
 import { createReducer, on } from "@ngrx/store";
 import { IUSer } from "../model/User";
-import { addSpending, deleteSpending, editSpending, loadSpending } from "./spendings.actions";
+import { addSpending, deleteSpending, editSpending } from "./spendings.actions";
+import { loadUser } from "./user.actions";
+import { addAsset } from "./assets.actions";
 
 
 export interface IUserState {
@@ -10,6 +12,7 @@ export interface IUserState {
 
 const initialUser: IUSer = {
     spendingsHistory: [],
+    assetsList: [],
 }
 
 const initialUserState: IUserState = {
@@ -19,6 +22,8 @@ const initialUserState: IUserState = {
 
 export const userReducer = createReducer(
     initialUserState,
+
+    //Spendings reducers
     on(addSpending, (state, action) => {
       return {
         ...state,
@@ -58,10 +63,23 @@ export const userReducer = createReducer(
           spendingsHistory: updatedSpendingsHistory,
         },
       };
-    }),    
-    on(loadSpending, (state, action) => ({
+    }),  
+      
+    //User reducers
+    on(loadUser, (state, action) => ({
       ...action.payload.state
-    })
-    )
+    })),
+
+    //Savings reducers
+    on(addAsset, (state, action) => {
+      return {
+        ...state,
+        idIncrement: state.idIncrement + 1,
+        user: {
+          ...state.user,
+          assetsList: [...state.user.assetsList, action.payload.asset],
+        },
+      };
+    }),
 );
 
