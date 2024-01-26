@@ -25,10 +25,14 @@ export class HistorySpendingCardComponent {
     private route: ActivatedRoute,
   ) { }
 
-  public edit(): void {
+  public onEdit(): void {
     const currentRoute = this.route.snapshot;
     const routeConfig = currentRoute.routeConfig;
     this.editStateService.saveEditStateSpending(this.spending, routeConfig);
     this.router.navigate(['/spending/add']);
+  }
+
+  public onDelete(): void {
+    this.editStateService.deleteCurrentSpending(this.spending);
   }
 }

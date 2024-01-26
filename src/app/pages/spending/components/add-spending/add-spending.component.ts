@@ -28,6 +28,7 @@ const UI_MODULES = [
   CategorySelectComponent,
 ];
 
+
 @Component({
   selector: 'pgz-add-spending',
   standalone: true,
@@ -71,14 +72,17 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
       cost: this.costOfProduct,
       date: this.date,
     }
-    
-    this.spendingsService.addSpending(newExpense);
 
-    if(this.isEditSpending && this.editStateService.prevRoute) {
-      this.router.navigate([this.editStateService.prevRoute.path]);
+    const editSpending = this.editStateService.editStateSpending;
+
+    if(this.isEditSpending && editSpending.title !== '') {
+      newExpense.id = editSpending.id;
+      this.spendingsService.editSpending(newExpense);
     } else {
-      this.router.navigate(['spending']);
+      this.spendingsService.addSpending(newExpense);
     }
+    
+    this.prevRoute();
   }
 
   public prevRoute(): void {

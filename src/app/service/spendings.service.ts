@@ -1,23 +1,18 @@
 import { Injectable } from '@angular/core';
-import { Observable, filter, map } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { ISpending } from '../domain/spending.domain';
 import moment from 'moment';
-import { Store, select } from '@ngrx/store';
-import { IUserState } from '../store/user.reducer';
-import { addSpending, loadSpending } from '../store/spendings.actions';
-import { spendingHistorySelector, spendingsFeatureSelector } from '../store/spendings.selectors';
 import { v4 as uuidv4 } from 'uuid';
+import { UserService } from './user.service';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class SpendingsService {
-  private readonly historyLocalStorageKey = 'spendingData';
-  private isInit: boolean = false;
 
   constructor(
-    private store$: Store<IUserState>,
+    private userService: UserService,
   ) { }
 
   public loadByDate(date: moment.Moment): Observable<ISpending[]> {
@@ -41,11 +36,20 @@ export class SpendingsService {
       throw Error('cost or name of product can not be null')
     }
 
-    if(spending.id === null) {
+    if(!spending.id) {
       spending.id = uuidv4();
+      console.log(spending.title,spending.id)
     }
 
-    this.store$.dispatch(addSpending({ spending }));
+    this.userService.addSpending(spending);
+  }
+
+  public editSpending(spending: ISpending): void {
+    this.userService.editSpending(spending);
+  }
+
+  public deleteSpending(spending: ISpending): void {
+    this.userService.deleteSpending(spending);
   }
 
   public getSpentByDay(): Observable<number> {
@@ -63,31 +67,6 @@ export class SpendingsService {
   }
 
   public getAll(): Observable<ISpending[]> {
-    return this.store$.pipe(select(spendingHistorySelector))
-  }
-
-  public init(): void {
-    if(this.isInit) {
-      return;
-    }
-
-    this.isInit = true;
-    this.loadFromStorage();
-
-    this.store$.pipe(
-      select(spendingsFeatureSelector),
-      filter(state => !!state)
-      ).subscribe(spendingHistoryState => {
-      localStorage.setItem(this.historyLocalStorageKey, JSON.stringify(spendingHistoryState));
-    })
-  }
-
-  private loadFromStorage(): void {
-    const storageState = localStorage.getItem(this.historyLocalStorageKey);
-    if(storageState) {
-      this.store$.dispatch(loadSpending({
-        state: JSON.parse(storageState)
-      }))
-    }
+    return this.userService.getAllSpendings();
   }
 }
