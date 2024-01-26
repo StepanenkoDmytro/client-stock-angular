@@ -15,13 +15,14 @@ export class TotalBalanceService {
   ) { }
 
     public getMonthlyBudget(): Observable<number> {
+      
     const budgetStoredData = localStorage.getItem(this.budgetLocalStorageKey);
     const parseBudget: number = JSON.parse(budgetStoredData);
-
+    
     if(parseBudget !== null) {
       this.monthlyBudget$.next(parseBudget);
     }
-
+    
     return this.monthlyBudget$;
   }
 
@@ -31,12 +32,12 @@ export class TotalBalanceService {
   }
 
   public getSpentByMonth(): Observable<number> {
-
     return this.spendingsService.loadByCurrentMonth().pipe(
       map(spendingList => 
         spendingList
           .map(spend => spend.cost)
-          .reduce((accumulator, cost) => accumulator + cost), 0)
+          .reduce((accumulator, cost) => accumulator + cost, 0)
+      )
     );
   }
 }
