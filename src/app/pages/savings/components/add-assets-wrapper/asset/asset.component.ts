@@ -9,7 +9,6 @@ import { IconComponent } from '../../../../../core/UI/components/icon/icon.compo
 import { SavingsService } from '../../../../../service/savings.service';
 import { PortfolioCoin } from '../markets-assets/model/PortfolioCoin';
 import { MarketCoinInfo } from '../markets-assets/model/MarketCoinInfo';
-import { CoinService } from '../service/coin.service';
 
 
 const MATERIAL_MODULES = [
@@ -18,6 +17,7 @@ const MATERIAL_MODULES = [
   MatFormFieldModule, 
   MatInputModule
 ];
+
 
 @Component({
   selector: 'pgz-asset',

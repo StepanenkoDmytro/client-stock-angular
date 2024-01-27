@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, filter, map, tap } from 'rxjs';
+import { Observable, filter, map } from 'rxjs';
 import { ISpending } from '../domain/spending.domain';
 import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
@@ -86,7 +86,6 @@ export class SpendingsService {
 
     this.store$.pipe(
       select(spendingsFeatureSelector),
-      tap(state=> console.log(state)),
       filter(state => !!state)
       ).subscribe(spendingHistoryState => {
 

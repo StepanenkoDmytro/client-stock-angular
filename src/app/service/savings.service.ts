@@ -3,7 +3,7 @@ import { IAsset, IPortfolioCrypto } from '../domain/savings.domain';
 import { Observable, filter } from 'rxjs';
 import { ISavingsState } from '../pages/savings/store/asset.reducer';
 import { Store, select } from '@ngrx/store';
-import { savingsFeatureSelector, spendingHistorySelector } from '../pages/savings/store/asset.selectors';
+import { assetsListFeatureSelector, assetsListHistorySelector } from '../pages/savings/store/asset.selectors';
 import { addAsset, loadSavings, editAsset, deleteAsset } from '../pages/savings/store/assets.actions';
 
 
@@ -20,7 +20,7 @@ export class SavingsService {
   ) { }
 
   public getAll(): Observable<IAsset[]> {
-    return this.store$.pipe(select(spendingHistorySelector));
+    return this.store$.pipe(select(assetsListHistorySelector));
   }
 
   public getPortfolioAssetBySymbol(assetSymbol: string): IPortfolioCrypto {
@@ -60,13 +60,13 @@ export class SavingsService {
     this.loadFromStorage();
 
     this.store$.pipe(
-      select(savingsFeatureSelector),
+      select(assetsListFeatureSelector),
       filter(state => !!state)
       ).subscribe(assetsListState => {
       localStorage.setItem(this.assetListLocalStorageKey, JSON.stringify(assetsListState));
     });
 
-    // window.addEventListener('storage', () => this.loadFromStorage());
+    window.addEventListener('storage', () => this.loadFromStorage());
   }
 
   private loadFromStorage(): void {

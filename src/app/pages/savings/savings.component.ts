@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ButtonToggleComponent } from '../../core/UI/components/button-toggle/button-toggle.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -28,6 +28,7 @@ const MATERIAL_MODULES = [
   MatChipsModule
 ];
 
+
 @Component({
   selector: 'pgz-savings',
   standalone: true,
@@ -47,11 +48,11 @@ export class SavingsComponent implements OnInit {
   constructor(
     private assetStateService: MarketStateService,
     private savingsService: SavingsService,
-    private cdr: ChangeDetectorRef,
     private router: Router
   ) { }
 
   public ngOnInit(): void {
+    this.savingsService.init();
     this.savingsService.getAll().subscribe(portfolio => {
       this.assets = portfolio;
       this.filteredAssets = portfolio;
