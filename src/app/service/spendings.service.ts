@@ -1,18 +1,23 @@
 import { Injectable } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { Observable, filter, map, tap } from 'rxjs';
 import { ISpending } from '../domain/spending.domain';
 import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
-import { UserService } from './user.service';
+import { ISpendingsState } from '../pages/spending/store/spendings.reducer';
+import { Store, select } from '@ngrx/store';
+import { spendingsHistorySelector, spendingsFeatureSelector } from '../pages/spending/store/spendings.selectors';
+import { addSpending, deleteSpending, editSpending, loadSpending } from '../pages/spending/store/spendings.actions';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class SpendingsService {
+  private readonly spendingHistoryLocalStorageKey = 'spendings-history';
+  public isInit: boolean = false;
 
   constructor(
-    private userService: UserService,
+    private store$: Store<ISpendingsState>,
   ) { }
 
   public loadByDate(date: moment.Moment): Observable<ISpending[]> {
@@ -40,15 +45,16 @@ export class SpendingsService {
       spending.id = uuidv4();
     }
 
-    this.userService.addSpending(spending);
+    this.store$.dispatch(addSpending({ spending }));
   }
 
   public editSpending(spending: ISpending): void {
-    this.userService.editSpending(spending);
+    this.store$.dispatch(editSpending({ spending }));
   }
 
   public deleteSpending(spending: ISpending): void {
-    this.userService.deleteSpending(spending);
+    const id = spending.id;
+    this.store$.dispatch(deleteSpending({id}));
   }
 
   public getSpentByDay(): Observable<number> {
@@ -66,6 +72,37 @@ export class SpendingsService {
   }
 
   public getAll(): Observable<ISpending[]> {
-    return this.userService.getAllSpendings();
+    return this.store$.pipe(select(spendingsHistorySelector));
+  }
+
+  public init(): void {
+    if(this.isInit) {
+      return;
+    }
+
+    this.isInit = true;
+    
+    this.loadFromStorage();
+
+    this.store$.pipe(
+      select(spendingsFeatureSelector),
+      tap(state=> console.log(state)),
+      filter(state => !!state)
+      ).subscribe(spendingHistoryState => {
+
+      localStorage.setItem(this.spendingHistoryLocalStorageKey, JSON.stringify(spendingHistoryState));
+    });
+
+    window.addEventListener('storage', () => this.loadFromStorage());
+  }
+
+  private loadFromStorage(): void {
+    
+    const storageState = localStorage.getItem(this.spendingHistoryLocalStorageKey);
+    if(storageState) {
+      this.store$.dispatch(loadSpending({
+        state: JSON.parse(storageState)
+      }))
+    }
   }
 }

@@ -1,9 +1,11 @@
 import { createAction } from "@ngrx/store";
 import { IUserState } from "./user.reducer";
+import { ISavingsState } from "../pages/savings/store/asset.reducer";
+import { ISpendingsState } from "../pages/spending/store/spendings.reducer";
 
 
-export const loadUser = 
+export const updateGlobalUser = 
     createAction(
-        '[USER] Load User', 
-        (payload: { state: IUserState }) => ({ payload })
+        '[User Service] Update User, Savings and Spendings states', 
+        (payload: { userState: IUserState, spendingState: ISpendingsState, assetState: ISavingsState }) => ({ payload })
     );

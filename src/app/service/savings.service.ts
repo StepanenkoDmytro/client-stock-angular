@@ -1,20 +1,26 @@
 import { Injectable } from '@angular/core';
 import { IAsset, IPortfolioCrypto } from '../domain/savings.domain';
-import { Observable, tap } from 'rxjs';
-import { UserService } from './user.service';
+import { Observable, filter } from 'rxjs';
+import { ISavingsState } from '../pages/savings/store/asset.reducer';
+import { Store, select } from '@ngrx/store';
+import { savingsFeatureSelector, spendingHistorySelector } from '../pages/savings/store/asset.selectors';
+import { addAsset, loadSavings, editAsset, deleteAsset } from '../pages/savings/store/assets.actions';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class SavingsService {
+  private readonly assetListLocalStorageKey = 'assets-list';
+  public isInit: boolean = false;
   private assetsList: IAsset[] = [];
 
   constructor(
-    private userService: UserService,
+    private store$: Store<ISavingsState>,
   ) { }
 
   public getAll(): Observable<IAsset[]> {
-    return this.userService.getAllSavings().pipe(tap(assets => this.assetsList = assets));
+    return this.store$.pipe(select(spendingHistorySelector));
   }
 
   public getPortfolioAssetBySymbol(assetSymbol: string): IPortfolioCrypto {
@@ -26,24 +32,49 @@ export class SavingsService {
       return null;
     }
   }
-  
 
   public addSaving(newAsset: IAsset): void {
-
     if(!newAsset.name) {
       throw Error('asset name can not be null')
     }
     
     newAsset.buyPrice = newAsset.price;
-    this.userService.addAsset(newAsset);
+    this.store$.dispatch(addAsset({ asset: newAsset}));
   }
 
-  public editAsset(editAsset: IAsset): void {
-
-    this.userService.editAsset(editAsset);
+  public editAsset(editedAsset: IAsset): void {
+    this.store$.dispatch(editAsset({asset: editedAsset}));
   }
 
-  public deleteSaving(deleteSaving: IAsset): void {
-    this.userService.deleteAsset(deleteSaving);
+  public deleteSaving(deletedAsset: IAsset): void {
+    const symbol = deletedAsset.symbol;
+    this.store$.dispatch(deleteAsset({symbol: symbol}));
+  }
+
+  public init(): void {
+    if(this.isInit) {
+      return;
+    }
+
+    this.isInit = true;
+    this.loadFromStorage();
+
+    this.store$.pipe(
+      select(savingsFeatureSelector),
+      filter(state => !!state)
+      ).subscribe(assetsListState => {
+      localStorage.setItem(this.assetListLocalStorageKey, JSON.stringify(assetsListState));
+    });
+
+    // window.addEventListener('storage', () => this.loadFromStorage());
+  }
+
+  private loadFromStorage(): void {
+    const storageState = localStorage.getItem(this.assetListLocalStorageKey);
+    if(storageState) {
+      this.store$.dispatch(loadSavings({
+        state: JSON.parse(storageState)
+      }))
+    }
   }
 }

@@ -46,6 +46,7 @@ export class SpendingComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
+    this.spendingsService.init();
     this.spendingsService.getSpentByDay().subscribe(spend => {
       if(spend) {
       this.expends.money = spend;

@@ -1,5 +1,6 @@
 import { createAction } from "@ngrx/store";
-import { ISpending } from "../domain/spending.domain";
+import { ISpending } from "../../../domain/spending.domain";
+import { ISpendingsState } from "./spendings.reducer";
 
 
 export const addSpending = 
@@ -12,6 +13,12 @@ export const editSpending =
     createAction(
         '[SPENDING] Edit Spendings', 
         (payload: { spending: ISpending }) => ({ payload })
+    );
+
+export const loadSpending = 
+    createAction(
+        '[SPENDING] Load Spendings', 
+        (payload: { state: ISpendingsState }) => ({ payload })
     );
 
 export const deleteSpending = 

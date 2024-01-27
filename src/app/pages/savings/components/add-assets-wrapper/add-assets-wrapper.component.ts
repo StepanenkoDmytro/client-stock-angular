@@ -6,7 +6,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import {FormsModule} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { IMarket } from '../../../../domain/savings.domain';
 import { NgComponentOutlet } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
