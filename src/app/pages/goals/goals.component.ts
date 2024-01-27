@@ -40,11 +40,11 @@ export class GoalsComponent implements OnInit {
   ) { }
   public ngOnInit(): void {
     
-    this.savingsService.getCostOfAllAssets().subscribe(val => {
-      if(val) {
-        this.portfolioCost = val;
-      }
-    });
+    // this.savingsService.getCostOfAllAssets().subscribe(val => {
+    //   if(val) {
+    //     this.portfolioCost = val;
+    //   }
+    // });
 
     this.goalsService.getAll().subscribe(goals => {
       this.goals = goals;

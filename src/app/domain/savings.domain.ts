@@ -14,15 +14,11 @@ export interface IAsset {
     name: string;
     assetType: string;
     price: number;
-    count: number,
+    count?: number,
     buyPrice?: number;
 }
 
-export interface ICompany {
-    symbol: string;
-    assetType: string;
-    name: string;
-    price: number;
+export interface ICompany extends IMarket {
     exchange: string;
     currency: string;
     country: string;
@@ -34,11 +30,14 @@ export interface ICompany {
     exDividendDate: string;
 }
 
-export interface ICoin {
+export interface ICoin extends IMarket {
     id: string;
-    name: string;
-    symbol: string;
-    price: number;
-    assetType: string;
     marketCapUsd: number;
+}
+
+export interface IMarket {
+    name: string;
+    assetType: string;
+    price: number;
+    symbol: string;
 }

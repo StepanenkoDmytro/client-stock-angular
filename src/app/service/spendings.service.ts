@@ -38,7 +38,6 @@ export class SpendingsService {
 
     if(!spending.id) {
       spending.id = uuidv4();
-      console.log(spending.title,spending.id)
     }
 
     this.userService.addSpending(spending);

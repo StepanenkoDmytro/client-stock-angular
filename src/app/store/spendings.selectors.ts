@@ -1,7 +1,6 @@
-import { createFeatureSelector, createSelector } from "@ngrx/store";
-import { IUserState } from "./user.reducer";
+import { createSelector } from "@ngrx/store";
+import { userFeatureSelector } from "./user.selectors";
 
-export const spendingsFeatureSelector = createFeatureSelector<IUserState>('user');
 
-export const spendingHistorySelector = createSelector(spendingsFeatureSelector,
+export const spendingHistorySelector = createSelector(userFeatureSelector,
     state => state.user.spendingsHistory)

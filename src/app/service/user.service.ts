@@ -4,10 +4,12 @@ import { Store, select } from '@ngrx/store';
 import { ISpending } from '../domain/spending.domain';
 import { addSpending, deleteSpending, editSpending } from '../store/spendings.actions';
 import { Observable } from 'rxjs';
-import { spendingHistorySelector, spendingsFeatureSelector } from '../store/spendings.selectors';
+import { spendingHistorySelector } from '../store/spendings.selectors';
 import { loadUser } from '../store/user.actions';
 import { IAsset } from '../domain/savings.domain';
-import { addAsset } from '../store/assets.actions';
+import { addAsset, deleteAsset, editAsset } from '../store/assets.actions';
+import { userFeatureSelector } from '../store/user.selectors';
+import { assetsListSelector } from '../store/asset.selectors';
 
 
 @Injectable({
@@ -43,8 +45,21 @@ export class UserService {
 
   //Savings methods
 
+  public getAllSavings(): Observable<IAsset[]> {
+    return this.store$.pipe(select(assetsListSelector));
+  }
+
   public addAsset(asset: IAsset): void {
     this.store$.dispatch(addAsset({asset}));
+  }
+
+  public editAsset(asset: IAsset): void {
+    this.store$.dispatch(editAsset({asset}));
+  }
+
+  public deleteAsset(asset: IAsset): void {
+    const symbol = asset.symbol;
+    this.store$.dispatch(deleteAsset({symbol}));
   }
 
   //Init user service
@@ -58,7 +73,7 @@ export class UserService {
     this.loadFromStorage();
 
     this.store$.pipe(
-      select(spendingsFeatureSelector),
+      select(userFeatureSelector),
       // filter(state => !!state)
       ).subscribe(spendingHistoryState => {
       localStorage.setItem(this.historyLocalStorageKey, JSON.stringify(spendingHistoryState));

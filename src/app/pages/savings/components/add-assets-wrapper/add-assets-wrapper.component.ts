@@ -53,9 +53,9 @@ export class AddAssetsComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    this.marketStateService.asset.subscribe(asset => {
-      this.selectedAsset = asset;
-    })
+    // this.marketStateService.asset.subscribe(asset => {
+    //   this.selectedAsset = asset;
+    // })
   }
 
   public setStep(index: number) {
@@ -69,6 +69,7 @@ export class AddAssetsComponent implements OnInit {
       const newAsset = this.selectedAsset;
       
       this.marketStateService.selectAsset(newAsset);
+
       this.router.navigate(['/savings/asset']);
     }
   }

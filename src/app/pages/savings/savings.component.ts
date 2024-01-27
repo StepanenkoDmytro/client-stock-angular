@@ -78,7 +78,7 @@ export class SavingsComponent implements OnInit {
   }
 
   public onEditAsset(asset: IAsset): void {
-    this.assetStateService.selectAsset(asset);
+    this.assetStateService.selectPortfolioAsset(asset);
     this.router.navigate(['/savings/asset']);
   }
 

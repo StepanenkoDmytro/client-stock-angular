@@ -36,7 +36,6 @@ export class GoalCardComponent implements OnInit {
     this.currentSum = this.calcCurrentSum();
 
     if(this.goal.status === 'progress' && this.currentSum - this.goal.finishSum > 1000) {
-      console.log(this.currentSum - this.goal.finishSum)
       this.goal.status = 'success';
     }
     //TODO: додати логіку: додати статус archive, щоб перекидати в історію і не відображати в активному списку

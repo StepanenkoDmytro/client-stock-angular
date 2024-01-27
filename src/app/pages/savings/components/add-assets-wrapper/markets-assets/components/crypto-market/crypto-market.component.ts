@@ -7,7 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MarketStateService } from '../../../service/market-state.service';
 import { AssetMarketCardComponent } from '../asset-market-card/asset-market-card.component';
-import { IPortfolioCrypto } from '../../../../../../../domain/savings.domain';
+import { IAsset, ICoin, IPortfolioCrypto } from '../../../../../../../domain/savings.domain';
+import { PortfolioCoin } from '../../model/PortfolioCoin';
 
 
 const UI_COMPONENTS = [
@@ -20,6 +21,7 @@ const MATERIAL_MODULES = [
   MatIconModule,
   FormsModule,
 ];
+
 @Component({
   selector: 'pgz-crypto-market',
   standalone: true,
@@ -32,7 +34,7 @@ const MATERIAL_MODULES = [
 export class CryptoMarketComponent implements OnInit {
 
   public filter: string = '';
-  public coins: IPortfolioCrypto[] = [];
+  public coins: ICoin[] = [];
   public selectedAssetIndex: number;
   public assetsCount: number = 0;
 
@@ -62,8 +64,7 @@ export class CryptoMarketComponent implements OnInit {
     });
   }
 
-  public onChoiseAsset(asset: IPortfolioCrypto, index: number): void {
-    asset.count = 0;
+  public onChoiseAsset(asset: ICoin, index: number): void {
     this.selectedAssetIndex = index;
     this.marketStateService.selectAsset(asset);
   }

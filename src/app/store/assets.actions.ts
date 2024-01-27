@@ -7,3 +7,15 @@ export const addAsset =
         '[ASSET] Add Asset', 
         (payload: { asset: IAsset }) => ({ payload })
     );
+
+export const editAsset = 
+    createAction(
+        '[ASSET] Edit Asset', 
+        (payload: { asset: IAsset }) => ({ payload })
+    );
+
+export const deleteAsset = 
+    createAction(
+        '[ASSET] Delete Asset', 
+        (payload: { symbol: string }) => ({ payload })
+    );
