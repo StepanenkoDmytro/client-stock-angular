@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
-import { MarketCoinInfo } from '../markets-assets/model/MarketCoinInfo';
+import { MarketCoinInfo } from '../model/MarketCoinInfo';
 
 
 interface IMarketCoinData {

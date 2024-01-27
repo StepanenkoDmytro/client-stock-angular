@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, switchMap, withLatestFrom } from 'rxjs';
-import { IAsset, ICoin, IMarket } from '../../../../../domain/savings.domain';
+import { IAsset, ICoin, IMarket } from '../../../domain/savings.domain';
 import { CoinService } from './coin.service';
-import { PortfolioCoin } from '../markets-assets/model/PortfolioCoin';
-import { SavingsService } from '../../../../../service/savings.service';
+import { PortfolioCoin } from '../model/PortfolioCoin';
+import { SavingsService } from '../../../service/savings.service';
 
 
 @Injectable({

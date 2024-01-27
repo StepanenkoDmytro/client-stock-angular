@@ -7,8 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MarketStateService } from '../../../service/market-state.service';
 import { AssetMarketCardComponent } from '../asset-market-card/asset-market-card.component';
-import { IAsset, ICoin, IPortfolioCrypto } from '../../../../../../../domain/savings.domain';
-import { PortfolioCoin } from '../../model/PortfolioCoin';
+import { IAsset, ICoin, IPortfolioCrypto } from '../../../../../domain/savings.domain';
+import { PortfolioCoin } from '../../../model/PortfolioCoin';
 
 
 const UI_COMPONENTS = [

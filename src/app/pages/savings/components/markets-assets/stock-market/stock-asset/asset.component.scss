@@ -1,0 +1,44 @@
+:host {
+  display: block;
+
+  ::ng-deep {
+    .mat-mdc-form-field-subscript-wrapper {
+      display: none;
+    }
+  }
+}
+
+.asset {
+  margin: 20px 10px 10px 10px;
+  // margin-top: 20px;
+  // display: flex; 
+  // justify-content: space-between;
+
+  &--price {
+    display: flex;
+    // margin: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+  }
+
+  &--icon {
+    background-color: var(--bs-gray-300);
+    font-size: 1.5rem;
+    width: auto;
+    height: auto;
+    padding: 15px 5px 5px 5px;
+  }
+
+   &--count {
+    // margin: 10px;
+    width: 100%;
+   }
+}
+
+.currency {
+  font-size: 1.5rem;
+
+  &--disabled {
+      opacity: 0.4;
+  }
+}

@@ -1,4 +1,4 @@
-import { ICoin } from "../../../../../../domain/savings.domain";
+import { ICoin } from "../../../domain/savings.domain";
 
 export class MarketCoinInfo implements ICoin {
     id: string;

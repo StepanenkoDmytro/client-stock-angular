@@ -1,14 +1,14 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { ICoin, IPortfolioCrypto } from '../../../../../domain/savings.domain';
+import { ICoin, IPortfolioCrypto } from '../../../../../../domain/savings.domain';
 import { FormsModule } from '@angular/forms';
-import { MarketStateService } from '../service/market-state.service';
+import { MarketStateService } from '../../../../service/market-state.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { IconComponent } from '../../../../../core/UI/components/icon/icon.component';
-import { SavingsService } from '../../../../../service/savings.service';
-import { PortfolioCoin } from '../markets-assets/model/PortfolioCoin';
-import { MarketCoinInfo } from '../markets-assets/model/MarketCoinInfo';
+import { IconComponent } from '../../../../../../core/UI/components/icon/icon.component';
+import { SavingsService } from '../../../../../../service/savings.service';
+import { PortfolioCoin } from '../../../../model/PortfolioCoin';
+import { MarketCoinInfo } from '../../../../model/MarketCoinInfo';
 
 
 const MATERIAL_MODULES = [

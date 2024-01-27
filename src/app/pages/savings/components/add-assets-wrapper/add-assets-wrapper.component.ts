@@ -10,9 +10,9 @@ import { FormsModule } from '@angular/forms';
 import { IMarket } from '../../../../domain/savings.domain';
 import { NgComponentOutlet } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { CryptoMarketComponent } from './markets-assets/components/crypto-market/crypto-market.component';
-import { StockMarketComponent } from './markets-assets/components/stock-market/stock-market.component';
-import { MarketStateService } from './service/market-state.service';
+import { CryptoMarketComponent } from '../markets-assets/crypto-market/crypto-market.component';
+import { StockMarketComponent } from '../markets-assets/stock-market/stock-market.component';
+import { MarketStateService } from '../../service/market-state.service';
 
 
 const MATERIAL_MODULES = [

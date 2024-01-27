@@ -7,7 +7,7 @@ import { StockService } from '../../../service/stock.service';
 import { HttpClientModule } from '@angular/common/http';
 import { MarketStateService } from '../../../service/market-state.service';
 import { AssetMarketCardComponent } from '../asset-market-card/asset-market-card.component';
-import { IPortfolioStock, IAsset } from '../../../../../../../domain/savings.domain';
+import { IPortfolioStock, IAsset } from '../../../../../domain/savings.domain';
 
 
 const UI_COMPONENTS = [

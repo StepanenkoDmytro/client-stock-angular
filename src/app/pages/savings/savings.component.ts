@@ -10,7 +10,7 @@ import { SavingsService } from '../../service/savings.service';
 import { AssetCardComponent } from './components/asset-card/asset-card.component';
 import { Router, RouterModule } from '@angular/router';
 import { TotalBalanceComponent } from '../../core/UI/components/total-balance/total-balance.component';
-import { MarketStateService } from './components/add-assets-wrapper/service/market-state.service';
+import { MarketStateService } from './service/market-state.service';
 
 
 const UI_COMPONENTS = [
