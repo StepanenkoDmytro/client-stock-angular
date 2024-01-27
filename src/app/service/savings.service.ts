@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { IAsset } from '../domain/savings.domain';
-import { BehaviorSubject, Observable, map, of, tap } from 'rxjs';
+import { IAsset, IPortfolioCrypto } from '../domain/savings.domain';
+import { Observable, tap } from 'rxjs';
 import { UserService } from './user.service';
 
 @Injectable({
@@ -17,9 +17,16 @@ export class SavingsService {
     return this.userService.getAllSavings().pipe(tap(assets => this.assetsList = assets));
   }
 
-  public getPortfolioAssetBySymbol(assetSymbol: string): IAsset {
-    return this.assetsList.find(asset => asset.symbol = assetSymbol);
+  public getPortfolioAssetBySymbol(assetSymbol: string): IPortfolioCrypto {
+    const asset = this.assetsList.find(asset => asset.symbol === assetSymbol);
+  
+    if (asset && typeof asset === 'object') {
+      return asset as IPortfolioCrypto;
+    } else {
+      return null;
+    }
   }
+  
 
   public addSaving(newAsset: IAsset): void {
 
@@ -39,13 +46,4 @@ export class SavingsService {
   public deleteSaving(deleteSaving: IAsset): void {
     this.userService.deleteAsset(deleteSaving);
   }
-
-  // public getCostOfAllAssets(): Observable<number> {
-  //   return this.$historySaving.pipe(
-  //     map(assetsList => 
-  //           assetsList.reduce((accumulator, currentValue) => {
-  //               return accumulator + (currentValue.buyPrice * currentValue.count);
-  //             }, 0)
-  //   ));
-  // }
 }

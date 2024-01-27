@@ -7,9 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import {FormsModule} from '@angular/forms';
-import { IAsset } from '../../../../domain/savings.domain';
+import { IMarket } from '../../../../domain/savings.domain';
 import { NgComponentOutlet } from '@angular/common';
-import { SavingsService } from '../../../../service/savings.service';
 import { Router, RouterModule } from '@angular/router';
 import { CryptoMarketComponent } from './markets-assets/components/crypto-market/crypto-market.component';
 import { StockMarketComponent } from './markets-assets/components/stock-market/stock-market.component';
@@ -44,18 +43,17 @@ export class AddAssetsComponent implements OnInit {
     'crypto': CryptoMarketComponent,
     'stock': StockMarketComponent,
   };
-  public selectedAsset: IAsset;
+  public selectedAsset: IMarket;
 
   constructor(
     private marketStateService: MarketStateService,
-    private savingsService: SavingsService,
     private router: Router
   ) { }
 
   public ngOnInit(): void {
-    // this.marketStateService.asset.subscribe(asset => {
-    //   this.selectedAsset = asset;
-    // })
+    this.marketStateService.marketAssets$.subscribe(asset => {
+      this.selectedAsset = asset;
+    })
   }
 
   public setStep(index: number) {
