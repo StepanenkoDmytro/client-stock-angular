@@ -15,4 +15,4 @@
     <pgz-asset-card [asset]="asset" (deleteAsset)="onDeleteAsset($event)" (editAsset)="onEditAsset($event)"></pgz-asset-card>
   }
   </section>
-<button mat-flat-button class="add-btn" [routerLink]="['add']">{{ 'Add' }}</button>
+<button mat-flat-button class="add-btn" (click)="openSelectedFilter()">{{ selectedFilterMarket() }}</button>

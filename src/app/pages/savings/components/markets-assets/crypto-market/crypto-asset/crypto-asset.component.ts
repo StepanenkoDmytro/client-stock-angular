@@ -20,11 +20,11 @@ const MATERIAL_MODULES = [
 
 
 @Component({
-  selector: 'pgz-asset',
+  selector: 'pgz-crypto-asset',
   standalone: true,
   imports: [...MATERIAL_MODULES, IconComponent],
-  templateUrl: './asset.component.html',
-  styleUrl: './asset.component.scss',
+  templateUrl: './crypto-asset.component.html',
+  styleUrl: './crypto-asset.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AssetComponent implements OnInit, AfterViewInit, OnDestroy {

@@ -11,13 +11,18 @@ import { AssetCardComponent } from './components/asset-card/asset-card.component
 import { Router, RouterModule } from '@angular/router';
 import { TotalBalanceComponent } from '../../core/UI/components/total-balance/total-balance.component';
 import { MarketStateService } from './service/market-state.service';
+import {
+  MatBottomSheet,
+  MatBottomSheetModule,
+} from '@angular/material/bottom-sheet';
+import { SelectMarketSheetComponent } from './components/select-market-sheet/select-market-sheet.component';
 
 
 const UI_COMPONENTS = [
   TotalBalanceComponent,
   ButtonToggleComponent,
   ButtonToggleComponent,
-  AssetCardComponent
+  AssetCardComponent,
 ];
 
 const MATERIAL_MODULES = [
@@ -25,6 +30,7 @@ const MATERIAL_MODULES = [
   MatTabsModule,
   MatFormFieldModule,
   MatButtonModule,
+  MatBottomSheetModule,
   MatChipsModule
 ];
 
@@ -48,7 +54,8 @@ export class SavingsComponent implements OnInit {
   constructor(
     private assetStateService: MarketStateService,
     private savingsService: SavingsService,
-    private router: Router
+    private router: Router,
+    private _bottomSheet: MatBottomSheet
   ) { }
 
   public ngOnInit(): void {
@@ -80,7 +87,29 @@ export class SavingsComponent implements OnInit {
 
   public onEditAsset(asset: IAsset): void {
     this.assetStateService.selectPortfolioAsset(asset);
-    this.router.navigate(['/savings/asset']);
+    const newRoute = '/savings/' + asset.assetType.toLocaleLowerCase() + '-asset';
+    this.router.navigate([newRoute]);
+  }
+
+  public openSelectedFilter(): void {
+    if(this.selectedFilter === 'All') {
+      const bottomSheetRef = this._bottomSheet.open(SelectMarketSheetComponent);
+
+      bottomSheetRef.afterDismissed().subscribe((result) => {
+        this.selectedFilter = result;
+        this.openSelectedFilter();
+      });
+    } else {
+      this.router.navigate(['savings/',this.selectedFilter.toLocaleLowerCase()]);
+    }
+  }
+
+  public selectedFilterMarket(): string {
+    if(this.selectedFilter === 'All') {
+      return 'Select Market';
+    } else {
+      return this.selectedFilter + ' Market';
+    }
   }
 
   private getAssetTypes(): void {

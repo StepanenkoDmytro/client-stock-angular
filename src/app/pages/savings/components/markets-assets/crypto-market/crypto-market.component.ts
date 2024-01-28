@@ -7,8 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MarketStateService } from '../../../service/market-state.service';
 import { AssetMarketCardComponent } from '../asset-market-card/asset-market-card.component';
-import { IAsset, ICoin, IPortfolioCrypto } from '../../../../../domain/savings.domain';
-import { PortfolioCoin } from '../../../model/PortfolioCoin';
+import { ICoin } from '../../../../../domain/savings.domain';
+import { Router, RouterModule } from '@angular/router';
 
 
 const UI_COMPONENTS = [
@@ -25,7 +25,7 @@ const MATERIAL_MODULES = [
 @Component({
   selector: 'pgz-crypto-market',
   standalone: true,
-  imports: [...UI_COMPONENTS, ...MATERIAL_MODULES, HttpClientModule],
+  imports: [...UI_COMPONENTS, ...MATERIAL_MODULES, HttpClientModule, RouterModule],
   templateUrl: './crypto-market.component.html',
   styleUrl: './crypto-market.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -41,7 +41,9 @@ export class CryptoMarketComponent implements OnInit {
   constructor(
     private coinService: CoinService, 
     private marketStateService: MarketStateService,
-    private cdr: ChangeDetectorRef) { }
+    private cdr: ChangeDetectorRef,
+    private router: Router,
+  ) { }
 
   public ngOnInit(): void {
     this.sendRequest();
@@ -67,5 +69,9 @@ export class CryptoMarketComponent implements OnInit {
   public onChoiseAsset(asset: ICoin, index: number): void {
     this.selectedAssetIndex = index;
     this.marketStateService.selectAsset(asset);
+  }
+
+  public goToAsset(): void {
+    this.router.navigate(['/savings/crypto-asset']);
   }
 }
