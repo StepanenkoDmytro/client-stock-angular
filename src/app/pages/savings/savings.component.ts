@@ -10,12 +10,12 @@ import { SavingsService } from '../../service/savings.service';
 import { AssetCardComponent } from './components/asset-card/asset-card.component';
 import { Router, RouterModule } from '@angular/router';
 import { TotalBalanceComponent } from '../../core/UI/components/total-balance/total-balance.component';
-import { MarketStateService } from './service/market-state.service';
+import { MarketService } from './service/market.service';
 import {
   MatBottomSheet,
   MatBottomSheetModule,
 } from '@angular/material/bottom-sheet';
-import { SelectMarketSheetComponent } from './components/select-market-sheet/select-market-sheet.component';
+import { SelectMarketSheetComponent } from '../../core/UI/components/select-market-sheet/select-market-sheet.component';
 
 
 const UI_COMPONENTS = [
@@ -52,7 +52,7 @@ export class SavingsComponent implements OnInit {
   public isPortfolioFrame: boolean = true;
 
   constructor(
-    private assetStateService: MarketStateService,
+    private assetStateService: MarketService,
     private savingsService: SavingsService,
     private router: Router,
     private _bottomSheet: MatBottomSheet

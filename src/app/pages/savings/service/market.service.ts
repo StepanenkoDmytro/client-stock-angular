@@ -10,7 +10,7 @@ import { StockService } from './stock.service';
 @Injectable({
   providedIn: 'root'
 })
-export class MarketStateService {
+export class MarketService {
   public marketAssets$: BehaviorSubject<IMarket | null> = new BehaviorSubject<IMarket>(null);
   public portfolioAsset$: BehaviorSubject<IAsset | null> = new BehaviorSubject<IAsset | null>(null);
   public isExistingAsset: boolean = false;

@@ -5,7 +5,7 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { StockService } from '../../../service/stock.service';
 import { HttpClientModule } from '@angular/common/http';
-import { MarketStateService } from '../../../service/market-state.service';
+import { MarketService } from '../../../service/market.service';
 import { AssetMarketCardComponent } from '../asset-market-card/asset-market-card.component';
 import { IPortfolioStock, IAsset, IMarket } from '../../../../../domain/savings.domain';
 import { StockAssetComponent } from './stock-asset/stock-asset.component';
@@ -47,7 +47,7 @@ export class StockMarketComponent implements AfterViewInit {
 
   constructor(
     private stockService: StockService, 
-    private marketStateService: MarketStateService,
+    private MarketService: MarketService,
     private cdr: ChangeDetectorRef,
     private router: Router,) { }
 
@@ -78,7 +78,7 @@ export class StockMarketComponent implements AfterViewInit {
   public onChoiseAsset(asset: IAsset, index: number): void {
     this.stockService.getCompany(asset.symbol).subscribe(val => {
       const newSome: IPortfolioStock = {...val,buyPrice: asset.price, count: 0,};
-      this.marketStateService.selectAsset(newSome);
+      this.MarketService.selectAsset(newSome);
     });
     this.selectedAssetIndex = index;
   }

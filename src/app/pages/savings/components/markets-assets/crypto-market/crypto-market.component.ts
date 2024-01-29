@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MarketStateService } from '../../../service/market-state.service';
+import { MarketService } from '../../../service/market.service';
 import { AssetMarketCardComponent } from '../asset-market-card/asset-market-card.component';
 import { ICoin } from '../../../../../domain/savings.domain';
 import { Router, RouterModule } from '@angular/router';
@@ -40,7 +40,7 @@ export class CryptoMarketComponent implements OnInit {
 
   constructor(
     private coinService: CoinService, 
-    private marketStateService: MarketStateService,
+    private MarketService: MarketService,
     private cdr: ChangeDetectorRef,
     private router: Router,
   ) { }
@@ -68,7 +68,7 @@ export class CryptoMarketComponent implements OnInit {
 
   public onChoiseAsset(asset: ICoin, index: number): void {
     this.selectedAssetIndex = index;
-    this.marketStateService.selectAsset(asset);
+    this.MarketService.selectAsset(asset);
   }
 
   public goToAsset(): void {

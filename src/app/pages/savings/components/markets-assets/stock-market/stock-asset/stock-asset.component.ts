@@ -2,7 +2,7 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, O
 import { MatIconModule } from '@angular/material/icon';
 import { ICompany, IPortfolioStock } from '../../../../../../domain/savings.domain';
 import { FormsModule } from '@angular/forms';
-import { MarketStateService } from '../../../../service/market-state.service';
+import { MarketService } from '../../../../service/market.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { IconComponent } from '../../../../../../core/UI/components/icon/icon.component';
@@ -34,27 +34,27 @@ export class StockAssetComponent implements OnInit, AfterViewInit, OnDestroy {
   public count: number = 0;
   
   constructor(
-    private marketStateService: MarketStateService,
+    private MarketService: MarketService,
     private savingsService: SavingsService,
     private cdr: ChangeDetectorRef
   ) { }
 
   public ngOnInit(): void {
-    if(this.marketStateService.isExistingAsset) {
-      this.portfolioStock = this.marketStateService.portfolioAsset$.value as PortfolioStock;
+    if(this.MarketService.isExistingAsset) {
+      this.portfolioStock = this.MarketService.portfolioAsset$.value as PortfolioStock;
       this.count = this.portfolioStock.count;
     }
   }
 
   public ngAfterViewInit(): void {
-    this.marketStateService.getAsset().subscribe(val => {
+    this.MarketService.getAsset().subscribe(val => {
       this.coinMarketInfo = val as MarketStockInfo;
       this.cdr.detectChanges();
     });
   }
 
   public saveEdit(): void {
-    if(this.marketStateService.isExistingAsset) {
+    if(this.MarketService.isExistingAsset) {
       this.savingsService.editAsset(this.portfolioStock);
     } else {
       const newAsset: IPortfolioStock = PortfolioStock.mapICompanyToPortfolioStock(this.coinMarketInfo);
@@ -64,6 +64,6 @@ export class StockAssetComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.marketStateService.destroyMarketState();
+    this.MarketService.destroyMarketState();
   }
 }

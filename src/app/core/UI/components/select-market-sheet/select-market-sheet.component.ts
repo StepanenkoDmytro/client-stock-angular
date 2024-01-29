@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { MARKETS } from '../../savings.routes';
+import { MARKETS } from '../../../../pages/savings/savings.routes';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 
 
