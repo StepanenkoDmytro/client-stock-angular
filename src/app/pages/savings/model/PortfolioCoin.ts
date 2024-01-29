@@ -1,4 +1,5 @@
-import { IAsset, ICoin, IMarket, IPortfolioCrypto } from "../../../domain/savings.domain";
+import { IAsset, ICoin } from "../../../domain/savings.domain";
+
 
 export class PortfolioCoin implements IAsset {
     id: string;

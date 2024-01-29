@@ -10,13 +10,9 @@
 
 .asset {
   margin: 20px 10px 10px 10px;
-  // margin-top: 20px;
-  // display: flex; 
-  // justify-content: space-between;
 
   &--price {
     display: flex;
-    // margin: 10px;
     margin-bottom: 20px;
     width: 100%;
   }
@@ -30,7 +26,6 @@
   }
 
    &--count {
-    // margin: 10px;
     width: 100%;
    }
 }

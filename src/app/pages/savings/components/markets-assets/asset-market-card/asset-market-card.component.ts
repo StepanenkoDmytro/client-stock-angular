@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { IAsset, ICoin } from '../../../../../domain/savings.domain';
+import { ICoin, IMarket } from '../../../../../domain/savings.domain';
 import { MoneyPipe } from '../../../../../pipe/money.pipe';
 
 @Component({
@@ -12,7 +12,7 @@ import { MoneyPipe } from '../../../../../pipe/money.pipe';
 })
 export class AssetMarketCardComponent {
   @Input()
-  public asset: ICoin;
+  public asset: ICoin | IMarket;
   @Input()
   public isSelected: boolean = false;
 }

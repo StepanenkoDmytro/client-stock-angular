@@ -26,6 +26,6 @@ export class CoinService {
 
   public getCoinMarketInfoBySymbol(symbol: string): Observable<any> {
     const newUrl = this.url + '/' + symbol;
-    return this.httpClient.get(newUrl).pipe(tap(stream => console.log('getCoinMarketInfoBySymbol',stream)));
+    return this.httpClient.get(newUrl);
   }
 }

@@ -27,7 +27,7 @@ const MATERIAL_MODULES = [
   styleUrl: './crypto-asset.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AssetComponent implements OnInit, AfterViewInit, OnDestroy {
+export class CryptoAssetComponent implements OnInit, AfterViewInit, OnDestroy {
   public coinMarketInfo: ICoin;
   public portfolioCoin: IPortfolioCrypto;
   public editDisabled: boolean = true;
@@ -57,6 +57,7 @@ export class AssetComponent implements OnInit, AfterViewInit, OnDestroy {
     if(this.marketStateService.isExistingAsset) {
       this.savingsService.editAsset(this.portfolioCoin);
     } else {
+      
       const newAsset: IPortfolioCrypto = PortfolioCoin.mapICoinToPortfolioCoin(this.coinMarketInfo);
       newAsset.count = this.count;
       this.savingsService.addSaving(newAsset);

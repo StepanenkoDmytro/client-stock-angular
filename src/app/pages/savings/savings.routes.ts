@@ -1,8 +1,9 @@
 import { Route } from "@angular/router";
 import { SavingsComponent } from "./savings.component";
-import { AddAssetsComponent } from "./components/add-assets-wrapper/add-assets-wrapper.component";
-import { AssetComponent } from "./components/markets-assets/crypto-market/crypto-asset/crypto-asset.component";
+import { CryptoAssetComponent } from "./components/markets-assets/crypto-market/crypto-asset/crypto-asset.component";
 import { CryptoMarketComponent } from "./components/markets-assets/crypto-market/crypto-market.component";
+import { StockMarketComponent } from "./components/markets-assets/stock-market/stock-market.component";
+import { StockAssetComponent } from "./components/markets-assets/stock-market/stock-asset/stock-asset.component";
 
 
 export const MARKETS: string[] = ['crypto', 'stock'];
@@ -13,15 +14,19 @@ export const SAVINGS_ROUTES: Route[] = [
         component: SavingsComponent
     },
     {
-        path: 'add',
-        component: AddAssetsComponent
+        path: 'crypto',
+        component: CryptoMarketComponent,
     },
     {
         path: 'crypto-asset',
-        component: AssetComponent
+        component: CryptoAssetComponent,
     },
     {
-        path: 'crypto',
-        component: CryptoMarketComponent,
-    }
+        path: 'stock',
+        component: StockMarketComponent,
+    },
+    {
+        path: 'stock-asset',
+        component: StockAssetComponent
+    },
 ];

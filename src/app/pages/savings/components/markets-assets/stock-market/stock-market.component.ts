@@ -7,11 +7,14 @@ import { StockService } from '../../../service/stock.service';
 import { HttpClientModule } from '@angular/common/http';
 import { MarketStateService } from '../../../service/market-state.service';
 import { AssetMarketCardComponent } from '../asset-market-card/asset-market-card.component';
-import { IPortfolioStock, IAsset } from '../../../../../domain/savings.domain';
+import { IPortfolioStock, IAsset, IMarket } from '../../../../../domain/savings.domain';
+import { StockAssetComponent } from './stock-asset/stock-asset.component';
+import { Router } from '@angular/router';
 
 
 const UI_COMPONENTS = [
-  AssetMarketCardComponent
+  AssetMarketCardComponent,
+  StockAssetComponent
 ];
 
 const MATERIAL_MODULES = [
@@ -33,7 +36,7 @@ const MATERIAL_MODULES = [
 export class StockMarketComponent implements AfterViewInit {
   
   public value = 'Clear me';
-  public companies: IAsset[] = [];
+  public companies: IMarket[] = [];
   public moverFilters: Map<string, string> = new Map<string, string>([
     ['Most actives', 'MOST_ACTIVES'],
     ['Day gainers', 'DAY_GAINERS'],
@@ -45,13 +48,14 @@ export class StockMarketComponent implements AfterViewInit {
   constructor(
     private stockService: StockService, 
     private marketStateService: MarketStateService,
-    private cdr: ChangeDetectorRef) { }
+    private cdr: ChangeDetectorRef,
+    private router: Router,) { }
 
   public ngAfterViewInit(): void {
     
     this.stockService.getMovers(this.selectedFilter).subscribe(
-      (response: IAsset[]) => {
-        this.companies = response;
+      (response: IMarket[]) => {
+        this.companies = [...response];
         this.cdr.detectChanges();
         
       },
@@ -61,14 +65,14 @@ export class StockMarketComponent implements AfterViewInit {
   }
 
   public onFilterChange() {
-    this.stockService.getMovers(this.selectedFilter).subscribe(
-      (response: IAsset[]) => {
-        this.companies = response;
-        this.cdr.detectChanges();
-      },
-      (error) => {
-      console.error('Error', error);
-    });
+    // this.stockService.getMovers(this.selectedFilter).subscribe(
+    //   (response: IAsset[]) => {
+    //     this.companies = response;
+    //     this.cdr.detectChanges();
+    //   },
+    //   (error) => {
+    //   console.error('Error', error);
+    // });
   }
 
   public onChoiseAsset(asset: IAsset, index: number): void {
@@ -77,5 +81,9 @@ export class StockMarketComponent implements AfterViewInit {
       this.marketStateService.selectAsset(newSome);
     });
     this.selectedAssetIndex = index;
+  }
+
+  public goToAsset(): void {
+    this.router.navigate(['/savings/stock-asset']);
   }
 }

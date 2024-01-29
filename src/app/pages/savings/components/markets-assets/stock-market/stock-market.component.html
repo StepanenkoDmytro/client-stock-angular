@@ -23,6 +23,8 @@
 </div>
 <div style="height: 45vh; overflow-y: scroll; overflow-x: hidden;">
     @for(asset of companies; track asset; let i = $index) {
-        <!-- <pgz-stock-asset [isSelected]="i === selectedAssetIndex" [asset]="asset" (click)="onChoiseAsset(asset, i)"></pgz-stock-asset> -->
+        <pgz-asset-market-card [isSelected]="i === selectedAssetIndex" [asset]="asset" (click)="onChoiseAsset(asset, i)"></pgz-asset-market-card>
     }
 </div>
+
+<button (click)="goToAsset()">Go to asset</button>
