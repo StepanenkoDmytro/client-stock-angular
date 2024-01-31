@@ -15,7 +15,7 @@ interface IMarketCoinData {
   providedIn: 'root'
 })
 export class CoinService {
-  private readonly url: string = 'http://localhost:8000/api/v1/coins';
+  private readonly url: string = 'http://localhost:8000/api/v1/markets/coins';
 
   constructor(private readonly httpClient: HttpClient) { }
 

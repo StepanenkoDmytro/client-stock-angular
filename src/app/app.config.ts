@@ -4,12 +4,13 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideServiceWorker } from '@angular/service-worker';
-import { provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
 import { provideState, provideStore } from '@ngrx/store';
 import { userReducer } from './store/user.reducer';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { assetReducer } from './pages/savings/store/asset.reducer';
 import { spendingsReducer } from './pages/spending/store/spendings.reducer';
+import { JwtInterceptor } from './pages/auth/jwt.interceptor';
 
 
 export const appConfig: ApplicationConfig = {
@@ -29,5 +30,6 @@ export const appConfig: ApplicationConfig = {
       maxAge: 25, 
       logOnly: !isDevMode(),
     }),
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
   ],
 };

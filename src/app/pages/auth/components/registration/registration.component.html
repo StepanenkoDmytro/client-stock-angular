@@ -1,0 +1,40 @@
+<form class="auth-form"
+      [formGroup]="form"
+      (ngSubmit)="handleSubmit()">
+  <mat-form-field class="auth-form--field">
+    <mat-label>{{ 'Email:' }}</mat-label>
+    <input [formControl]="nameCtrl" type="email" matInput>
+  </mat-form-field>
+
+  <mat-form-field class="auth-form--field">
+    <mat-label>{{ 'Password:' }}</mat-label>
+    <input [formControl]="passwordCtrl" type="password" matInput>
+  </mat-form-field>
+
+  <mat-form-field class="auth-form--field">
+    <mat-label>{{ 'Repeat password:' }}</mat-label>
+    <input [formControl]="repeatPasswordCtrl" type="password" matInput>
+  </mat-form-field>
+
+  @if(invalidPasswordErrorMessage) {
+    <p>{{ invalidPasswordErrorMessage }}</p>
+  }
+
+  <div>
+    <button mat-flat-button
+            [disabled]="form.invalid"
+            type="submit" class="auth-form--submit">
+      {{ 'Registraion' }}
+    </button>
+  </div>
+</form>
+
+<p><a [routerLink]="'../forget-password'">Forget your password?</a></p>
+<p><a [routerLink]="['../..', AppRoutes.SPENDING]">Skip</a></p>
+<br>
+
+-- OR --
+
+<p>Log In with Google</p>
+
+

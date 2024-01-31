@@ -1,8 +1,4 @@
 import { Injectable } from '@angular/core';
-import { IUserState } from '../store/user.reducer';
-import { Store } from '@ngrx/store';
-import { SavingsService } from './savings.service';
-import { SpendingsService } from './spendings.service';
 
 
 @Injectable({

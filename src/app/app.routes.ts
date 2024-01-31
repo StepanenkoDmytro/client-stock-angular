@@ -1,16 +1,18 @@
 import { Routes } from '@angular/router';
 
-export const enum AppRoutes {
+export enum AppRoutes {
  SPENDING = 'spending',
  CALENDAR = 'spending/calendar',
  SAVINGS = 'savings',
  STATISTIC = 'statistic',
  GOALS = 'goals',
  PROFILE = 'profile',
+ AUTH = 'auth',
 }
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: AppRoutes.SPENDING},
+  { path: AppRoutes.AUTH, loadChildren: () => import('./pages/auth/auth.routes').then(c => c.AUTH_ROUTES) },
   { path: AppRoutes.SPENDING, loadChildren: () => import('./pages/spending/spending.routes').then(c => c.SPENDING_ROUTES) },
   { path: AppRoutes.SAVINGS, loadChildren: () => import('./pages/savings/savings.routes').then(c => c.SAVINGS_ROUTES) },
   { path: AppRoutes.STATISTIC, loadComponent: () => import('./pages/statistic/statistic.component').then(c => c.StatisticComponent) },
