@@ -5,6 +5,7 @@ import { DarkLightModeService } from '../../service/dark-light-mode.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TotalBalanceService } from '../../core/UI/components/total-balance/total-balance.service';
+import { AuthService } from '../../service/auth.service';
 
 
 @Component({
@@ -22,7 +23,8 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private darkLightModeService: DarkLightModeService,
-    private totalBalanceService: TotalBalanceService
+    private totalBalanceService: TotalBalanceService,
+    private authService: AuthService,
   ) { }
 
   public ngOnInit(): void {
@@ -34,7 +36,11 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  public saveMonthlyBudget() {
+  public saveMonthlyBudget(): void {
     this.totalBalanceService.saveMonthlyBudget(this.monthlyBudget);
+  }
+
+  public logout(): void {
+    this.authService.logOut();
   }
 }

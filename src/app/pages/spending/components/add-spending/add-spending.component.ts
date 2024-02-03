@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,6 +14,7 @@ import { ISpending } from '../../../../domain/spending.domain';
 import { CategorySelectComponent } from '../../../../core/UI/components/category-select/category-select.component';
 import { Router } from '@angular/router';
 import { EditStateSpendingService } from '../../service/edit-state-spending.service';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 
 const UI_MODULES = [
@@ -32,7 +33,7 @@ const UI_MODULES = [
 @Component({
   selector: 'pgz-add-spending',
   standalone: true,
-  imports: [...UI_MODULES],
+  imports: [...UI_MODULES, HttpClientModule],
   templateUrl: './add-spending.component.html',
   styleUrl: './add-spending.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -50,6 +51,7 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
     private spendingsService: SpendingsService,
     private router: Router,
     private editStateService: EditStateSpendingService,
+    private readonly httpClient: HttpClient,
     // @Inject(MAT_BOTTOM_SHEET_DATA) public data: { category?: Category }
   ) { }
 
@@ -81,6 +83,15 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
     } else {
       this.spendingsService.addSpending(newExpense);
     }
+
+    const newExpenseForApi = {
+      category: this.selectedCategory.title,
+      title: this.nameOfProduct,
+      cost: this.costOfProduct,
+      date: this.date,
+    }
+    const headers = { 'Content-Type': 'application/json' };
+    this.httpClient.post('http://localhost:8000/api/v1/profile/add-spending',newExpenseForApi, {headers}).subscribe(val => console.log(val))
     
     this.prevRoute();
   }

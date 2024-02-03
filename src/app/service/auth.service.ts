@@ -9,6 +9,7 @@ import { ILoginFormData } from '../domain/auth.domain';
   providedIn: 'root'
 })
 export class AuthService {
+  private readonly authTokenKey = 'authToken';
   private readonly url: string = 'http://localhost:8000/api/v1/auth/';
 
   private _authToken: string = '';
@@ -21,8 +22,7 @@ export class AuthService {
   public get authToken(): string {
     if (!this._authToken) {
       // throw new Error('Auth token is absent.');
-      console.error('Auth token is absent.');
-      this.router.navigate(['/auth']);
+      return localStorage.getItem(this.authTokenKey);
     }
 
     return this._authToken;
@@ -34,6 +34,7 @@ export class AuthService {
     return this.httpClient.post(loginUrl, data).pipe(
       switchMap( (resp: any) => {
         this._authToken = resp['token'];
+        localStorage.setItem(this.authTokenKey, this._authToken);
         return of(true);
       }),
       catchError( (error: Error) => {
@@ -69,7 +70,7 @@ export class AuthService {
   public logOut(): Observable<any> {
     console.log('Making request to server to Log Out User');
     this._authToken = '';
-    // TODO: Handle error case
+    localStorage.removeItem(this.authTokenKey);
     return of(true);
   }
 

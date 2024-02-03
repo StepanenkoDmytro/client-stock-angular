@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators, FormBuilder, ReactiveFormsModule } 
 import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../../../../service/auth.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -31,6 +31,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly authService: AuthService,
+    private router: Router
   ) { }
 
   public ngOnInit(): void {
@@ -41,10 +42,18 @@ export class LoginComponent implements OnInit {
   }
 
   public async handleSubmit(): Promise<void> {
+    let issSuccess: boolean = false; 
     try {
-      await firstValueFrom(this.authService.login(this.form.getRawValue()));
+      console.log(this.form.getRawValue());
+      issSuccess = await firstValueFrom(this.authService.login(this.form.getRawValue()));
     } catch (e) {
       this.showLoginError();
+    }
+
+    if(issSuccess) {
+      this.router.navigate(['/spending']);
+    } else {
+      console.log('TODO: mat error');
     }
   }
 
