@@ -42,16 +42,16 @@ export class LoginComponent implements OnInit {
   }
 
   public async handleSubmit(): Promise<void> {
-    let issSuccess: boolean = false; 
+    let isSuccess: boolean = false; 
     try {
-      console.log(this.form.getRawValue());
-      issSuccess = await firstValueFrom(this.authService.login(this.form.getRawValue()));
+      isSuccess = await firstValueFrom(this.authService.login(this.form.getRawValue()));
     } catch (e) {
       this.showLoginError();
     }
 
-    if(issSuccess) {
+    if(isSuccess) {
       this.router.navigate(['/spending']);
+      console.log('TODO: create some ');
     } else {
       console.log('TODO: mat error');
     }

@@ -6,11 +6,13 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideServiceWorker } from '@angular/service-worker';
 import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
 import { provideState, provideStore } from '@ngrx/store';
+import { provideEffects } from '@ngrx/effects';
 import { userReducer } from './store/user.reducer';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { assetReducer } from './pages/savings/store/asset.reducer';
 import { spendingsReducer } from './pages/spending/store/spendings.reducer';
 import { JwtInterceptor } from './pages/auth/jwt.interceptor';
+import { SpendingsEffects } from './pages/spending/store/spendings.effects';
 
 
 export const appConfig: ApplicationConfig = {
@@ -26,10 +28,11 @@ export const appConfig: ApplicationConfig = {
     provideState({ name: 'user', reducer: userReducer }),
     provideState({ name: 'spending', reducer: spendingsReducer }),
     provideState({ name: 'assets', reducer: assetReducer }),
+    provideEffects([SpendingsEffects]),
     provideStoreDevtools({
       maxAge: 25, 
       logOnly: !isDevMode(),
     }),
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
   ],
 };
