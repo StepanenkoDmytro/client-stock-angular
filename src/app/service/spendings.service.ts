@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable, filter, map } from 'rxjs';
-import { ISpending } from '../domain/spending.domain';
 import moment from 'moment';
-import { v4 as uuidv4 } from 'uuid';
 import { ISpendingsState } from '../pages/spending/store/spendings.reducer';
 import { Store, select } from '@ngrx/store';
 import { spendingsHistorySelector, spendingsFeatureSelector } from '../pages/spending/store/spendings.selectors';
 import { addSpending, deleteSpending, editSpending, loadSpending } from '../pages/spending/store/spendings.actions';
+import { Spending } from '../pages/spending/model/Spending';
 
 
 @Injectable({
@@ -20,7 +19,7 @@ export class SpendingsService {
     private store$: Store<ISpendingsState>,
   ) { }
 
-  public loadByDate(date: moment.Moment): Observable<ISpending[]> {
+  public loadByDate(date: moment.Moment): Observable<Spending[]> {
     return this.getAll().pipe(
       map(spendingList => 
         spendingList.filter(spending => 
@@ -28,7 +27,7 @@ export class SpendingsService {
     );
   }
 
-  public loadByCurrentMonth(): Observable<ISpending[]> {
+  public loadByCurrentMonth(): Observable<Spending[]> {
     return this.getAll().pipe(
       map(spendingList => 
         spendingList.filter(spending => 
@@ -36,23 +35,20 @@ export class SpendingsService {
     );
   }
 
-  public addSpending(spending: ISpending): void {
+  public addSpending(spending: Spending): void {
     if(spending.title === null) {
       throw Error('cost or name of product can not be null')
-    }
-
-    if(!spending.id) {
-      spending.id = uuidv4();
     }
 
     this.store$.dispatch(addSpending({ spending }));
   }
 
-  public editSpending(spending: ISpending): void {
+  public editSpending(spending: Spending): void {
+    spending.isSaved = false;
     this.store$.dispatch(editSpending({ spending }));
   }
 
-  public deleteSpending(spending: ISpending): void {
+  public deleteSpending(spending: Spending): void {
     const id = spending.id;
     this.store$.dispatch(deleteSpending({id}));
   }
@@ -71,7 +67,7 @@ export class SpendingsService {
     );
   }
 
-  public getAll(): Observable<ISpending[]> {
+  public getAll(): Observable<Spending[]> {
     return this.store$.pipe(select(spendingsHistorySelector));
   }
 

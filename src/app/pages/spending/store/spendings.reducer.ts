@@ -1,11 +1,11 @@
 import { createReducer, on } from "@ngrx/store";
-import { ISpending } from "../../../domain/spending.domain";
 import { addSpending, editSpending, deleteSpending, loadSpending } from "./spendings.actions";
+import { Spending } from "../model/Spending";
 
 
 export interface ISpendingsState {
   idIncrement: number,
-  spendingsHistory: ISpending[];
+  spendingsHistory: Spending[];
 }
 
 const initialSpendingsState: ISpendingsState = {

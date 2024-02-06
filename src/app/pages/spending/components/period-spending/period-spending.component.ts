@@ -6,7 +6,7 @@ import { Category } from '../../../../domain/category.domain';
 import { IconComponent } from '../../../../core/UI/components/icon/icon.component';
 import { EditStateSpendingService } from '../../service/edit-state-spending.service';
 import { Router } from '@angular/router';
-import { ISpending } from '../../../../domain/spending.domain';
+import { Spending } from '../../model/Spending';
 
 
 const UI_COMPONENTS = [
@@ -36,12 +36,13 @@ export class PeriodSpendingComponent {
   ) { }
 
   public addBySelectSpending(category: Category): void {
-    const newSpending: ISpending = {
-      category: category,
-      title: '',
-      cost: 0,
-      date: new Date(),
-    };
+    const newSpending: Spending = new Spending(
+      false,
+      category,
+      '',
+      0,
+      new Date(),
+    );
     newSpending.category = category;
     this.editStateService.saveEditStateSpending(newSpending);
     this.router.navigate(['/spending/add']);

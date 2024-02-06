@@ -1,5 +1,3 @@
-
-
 export interface ICategory {
   id: string;
   title: string;
@@ -49,5 +47,20 @@ export class Category implements ICategory {
 
   public get isRoot(): boolean {
     return !this.parent;
+  }
+
+  public findCategory(title: string): Category | undefined {
+    if (this.title === title) {
+        return this;
+    }
+    
+    for (const child of this.children) {
+        const found = child.findCategory(title);
+        if (found) {
+            return found;
+        }
+    }
+    
+    return undefined;
   }
 }

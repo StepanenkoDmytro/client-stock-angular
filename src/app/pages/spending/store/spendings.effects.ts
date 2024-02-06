@@ -1,19 +1,24 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, filter, map, mergeMap} from 'rxjs/operators';
+import { catchError, filter, map, mergeMap, tap} from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { addSpending, deleteSpending, editSpending } from './spendings.actions';
 import { AuthService } from '../../../service/auth.service';
+import { Spending } from '../model/Spending';
+import { ISavingsState } from '../../savings/store/asset.reducer';
+import { Store } from '@ngrx/store';
 
 
 @Injectable()
 export class SpendingsEffects {
+  private readonly url: string = 'http://localhost:8000/api/v1/profile/';
 
   constructor(
     private actions$: Actions,
     private http: HttpClient,
-    private authService: AuthService
+    private authService: AuthService,
+    private store: Store<ISavingsState>
   ) {}
 
   addSpending$ = createEffect(() => this.actions$.pipe(
@@ -21,16 +26,16 @@ export class SpendingsEffects {
     filter(() => !!this.authService.authToken),
     mergeMap(action => {
       const newSpending = action.payload.spending;
-      const transformed = {
-        id: newSpending.id,
-        category: newSpending.category.title,
-        title: newSpending.title,
-        cost: newSpending.cost,
-        date: newSpending.date,
-      };
+      const transformedToApi = Spending.mapToSpendingApi(newSpending);
 
-      return this.http.post('http://localhost:8000/api/v1/profile/add-spending', transformed).pipe(
-        map(() => console.log('success saving spending')), 
+      const savedSpendingUrl = this.url + 'add-spending';
+
+      return this.http.post(savedSpendingUrl, transformedToApi).pipe(
+        tap((response: any) => {
+          console.log('response from server ', response);
+          const transformedFromApi = Spending.mapFromSpendingApi(response);
+          this.store.dispatch(editSpending({ spending: transformedFromApi }));
+        }), 
         catchError(error => of(console.log({ error }))) 
       );
     })
@@ -41,7 +46,7 @@ export class SpendingsEffects {
     ofType(deleteSpending),
     filter(() => !!this.authService.authToken),
     mergeMap(action => {
-      const deleteUrl = 'http://localhost:8000/api/v1/profile/delete-spending/' + action.payload.id;
+      const deleteUrl = this.url + 'delete-spending/' + action.payload.id;
 
       return this.http.delete(deleteUrl).pipe(
         map(() => console.log('success deleting spending')), 

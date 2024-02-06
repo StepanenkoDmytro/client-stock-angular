@@ -1,3 +1,4 @@
+import { Spending } from '../pages/spending/model/Spending';
 import { Category } from './category.domain';
 
 export interface ISpending {
@@ -9,7 +10,7 @@ export interface ISpending {
 }
 
 export interface ICategorizedSpendings {
-    today: ISpending[];
-    lastWeek: ISpending[];
-    month: ISpending[];
+    today: Spending[];
+    lastWeek: Spending[];
+    month: Spending[];
 }

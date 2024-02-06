@@ -4,8 +4,8 @@ import { SelectorComponent } from '../../../../core/UI/calendar/selector/selecto
 import { switchMap } from 'rxjs';
 import { DateService } from '../../../../service/date.service';
 import { SpendingsService } from '../../../../service/spendings.service';
-import { ISpending } from '../../../../domain/spending.domain';
 import { HistorySpendingCardComponent } from '../history-spending/history-spending-card/history-spending-card.component';
+import { Spending } from '../../model/Spending';
 
 
 const UI_COMPONENTS = [
@@ -24,7 +24,7 @@ const UI_COMPONENTS = [
 })
 export class CalendarSpendingComponent implements OnInit {
 
-  public spendingsByDay: ISpending[];
+  public spendingsByDay: Spending[];
 
   constructor(
     public dateService: DateService,

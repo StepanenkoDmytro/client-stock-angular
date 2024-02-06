@@ -10,11 +10,11 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import moment from 'moment';
 import { Category } from '../../../../domain/category.domain';
-import { ISpending } from '../../../../domain/spending.domain';
 import { CategorySelectComponent } from '../../../../core/UI/components/category-select/category-select.component';
 import { Router } from '@angular/router';
 import { EditStateSpendingService } from '../../service/edit-state-spending.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { Spending } from '../../model/Spending';
 
 
 const UI_MODULES = [
@@ -45,7 +45,7 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
   public costOfProduct: number = 0;
   public date: Date = moment().toDate();
 
-  public isEditSpending: boolean = false;
+  public editSpending: Spending = null;
 
   constructor(
     private spendingsService: SpendingsService,
@@ -55,31 +55,29 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit(): void {
-    const editSpending = this.editStateService.editStateSpending;
-    this.isEditSpending = !!editSpending;
+    this.editSpending = this.editStateService.editStateSpending;
 
-    if(this.isEditSpending) {
-      this.selectedCategory = editSpending.category;
-      this.nameOfProduct = editSpending.title;
-      this.costOfProduct = editSpending.cost;
-      this.date = editSpending.date;
+    if(!!this.editSpending) {
+      this.selectedCategory = this.editSpending.category;
+      this.nameOfProduct = this.editSpending.title;
+      this.costOfProduct = this.editSpending.cost;
+      this.date = this.editSpending.date;
     }
   }
 
   public saveSpending(): void {
-    const newExpense: ISpending = {
-      category: this.selectedCategory,
-      title: this.nameOfProduct,
-      cost: this.costOfProduct,
-      date: this.date,
-    }
-
     const editSpending = this.editStateService.editStateSpending;
 
-    if(this.isEditSpending && editSpending.title !== '') {
-      newExpense.id = editSpending.id;
-      this.spendingsService.editSpending(newExpense);
+    if(!!this.editSpending && editSpending.title !== '') {
+      this.spendingsService.editSpending(this.editSpending);
     } else {
+      const newExpense: Spending = new Spending(
+        false,
+        this.selectedCategory,
+        this.nameOfProduct,
+        this.costOfProduct,
+        this.date,
+      );
       this.spendingsService.addSpending(newExpense);
     }
     this.prevRoute();

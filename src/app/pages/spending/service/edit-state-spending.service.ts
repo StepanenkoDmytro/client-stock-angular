@@ -1,26 +1,26 @@
 import { Injectable } from '@angular/core';
-import { ISpending } from '../../../domain/spending.domain';
 import { Route } from '@angular/router';
 import { SpendingsService } from '../../../service/spendings.service';
+import { Spending } from '../model/Spending';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class EditStateSpendingService {
-  public editStateSpending: ISpending = null;
+  public editStateSpending: Spending = null;
   public prevRoute: Route = null;
 
   constructor(
     private spendingService: SpendingsService
   ) { }
 
-  public saveEditStateSpending(spending: ISpending, route?: Route): void {
+  public saveEditStateSpending(spending: Spending, route?: Route): void {
     this.editStateSpending = spending;
     this.prevRoute = route;
   }
 
-  public deleteCurrentSpending(spending: ISpending): void {
+  public deleteCurrentSpending(spending: Spending): void {
     
     this.spendingService.deleteSpending(spending);
   }

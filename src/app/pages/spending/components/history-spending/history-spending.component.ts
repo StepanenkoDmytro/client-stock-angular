@@ -1,9 +1,10 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import moment from 'moment';
-import { ICategorizedSpendings, ISpending } from '../../../../domain/spending.domain';
+import { ICategorizedSpendings } from '../../../../domain/spending.domain';
 import { HistorySpendingCardComponent } from './history-spending-card/history-spending-card.component';
 import { SpendingsService } from '../../../../service/spendings.service';
+import { Spending } from '../../model/Spending';
 
 
 const UI_COMPONENTS = [
@@ -24,7 +25,7 @@ const MATERIAL_MODULES = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HistorySpendingComponent implements OnInit {
-  public spendings: ISpending[];
+  public spendings: Spending[];
   public categoriesSpendings: ICategorizedSpendings;
 
   constructor(
@@ -39,7 +40,7 @@ export class HistorySpendingComponent implements OnInit {
     
   }
 
-  private categorizeSpendings(spendings: ISpending[]): ICategorizedSpendings {
+  private categorizeSpendings(spendings: Spending[]): ICategorizedSpendings {
     const today = moment().startOf('day');
 
     const lastWeek = moment().subtract(7, 'days').startOf('day');

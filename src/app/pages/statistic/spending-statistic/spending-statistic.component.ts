@@ -4,12 +4,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { BarComponent } from '../../../core/UI/components/charts/bar/bar.component';
 import { SpendingsService } from '../../../service/spendings.service';
-import { ISpending } from '../../../domain/spending.domain';
 import { HistorySpendingCardComponent } from '../../spending/components/history-spending/history-spending-card/history-spending-card.component';
 import { IBarData, IMonthlySpending, ISpendingHistory, IYearSpending } from '../../../domain/statistic.domain';
 import { BarMappingHelperService } from '../../../core/UI/components/charts/bar/bar-mapping-helper.service';
-import { BehaviorSubject } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
+import { Spending } from '../../spending/model/Spending';
 
 
 const UI_COMPONENTS = [
@@ -66,10 +64,10 @@ export class SpendingStatisticComponent implements OnInit, AfterViewInit {
     this.setBarData(this.selectedYear);
   }
 
-  private generateSpendingHistory(array: ISpending[]): ISpendingHistory {
+  private generateSpendingHistory(array: Spending[]): ISpendingHistory {
     const expenseHistory: ISpendingHistory = { years: [] };
 
-    array.forEach((spending: ISpending) => {
+    array.forEach((spending: Spending) => {
       const { year, month } = this.extractYearAndMonth(spending);
 
       let yearEntry = this.getOrCreateYearEntry(expenseHistory, year);
@@ -80,7 +78,7 @@ export class SpendingStatisticComponent implements OnInit, AfterViewInit {
     return expenseHistory;
   }
 
-  private extractYearAndMonth(spending: ISpending): { year: number; month: number } {
+  private extractYearAndMonth(spending: Spending): { year: number; month: number } {
     const spendingDate = new Date(spending.date);
     return { year: spendingDate.getFullYear(), month: spendingDate.getMonth() + 1 };
   }

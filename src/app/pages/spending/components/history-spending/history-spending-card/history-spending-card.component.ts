@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
-import { ISpending } from '../../../../../domain/spending.domain';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { IconComponent } from '../../../../../core/UI/components/icon/icon.component';
 import { EditStateSpendingService } from '../../../service/edit-state-spending.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Spending } from '../../../model/Spending';
 
 
 @Component({
@@ -17,7 +17,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class HistorySpendingCardComponent {
   @Input()
-  public spending: ISpending;
+  public spending: Spending;
 
   constructor(
     private editStateService: EditStateSpendingService,

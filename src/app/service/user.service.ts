@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class UserService {
-  private readonly historyLocalStorageKey = 'user-state';
+  // private readonly historyLocalStorageKey = 'user-state';
   private isInit: boolean = false;
 
   constructor() { }
