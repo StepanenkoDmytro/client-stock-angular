@@ -71,8 +71,12 @@ export class AuthService {
 
     return this.httpClient.post(loginUrl, data).pipe(
       switchMap( (resp: any) => {
-        // this._authToken = resp['token'];
-        this._authToken = 'resp[]';
+        console.log(resp);
+        const portfolioID = resp.user.portfolio[0].id;
+        console.log(portfolioID);
+        this.userService.savePortfolioID(portfolioID);
+        this._authToken = resp.token;
+        localStorage.setItem(this.authTokenKey, this._authToken);
         return of(true);
       }),
       catchError( (error: Error) => {

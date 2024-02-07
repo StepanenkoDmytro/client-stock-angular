@@ -26,10 +26,11 @@ export class SpendingsEffects {
   addSpending$ = createEffect(() => this.actions$.pipe(
     ofType(addSpending, editSpending),
     filter(() => !!this.authService.authToken),
-    mergeMap(action => {
+    withLatestFrom(this.store.select(selectPortfolioID)),
+    switchMap(([action, portfolioID]) => {
       const newSpending = action.payload.spending;
       if(!newSpending.isSaved) {
-        return this.sendSpendingToServer(newSpending);
+        return this.sendSpendingToServer(portfolioID, newSpending);
       } else {
         return EMPTY;
       }
@@ -59,10 +60,10 @@ export class SpendingsEffects {
   ), { dispatch: false });
 
 
-  private sendSpendingToServer(spending: Spending): Observable<Spending> {
+  private sendSpendingToServer(portfolioID: number, spending: Spending): Observable<Spending> {
     const transformedToApi = Spending.mapToSpendingApi(spending);
 
-    const savedSpendingUrl = this.url + 'add-spending';
+    const savedSpendingUrl = this.url + portfolioID + '/add-spending';
 
     return this.http.post(savedSpendingUrl, transformedToApi).pipe(
       tap((response: any) => {

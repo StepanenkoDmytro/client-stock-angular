@@ -4,7 +4,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../../../../service/auth.service';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { AppRoutes } from '../../../../app.routes';
 
@@ -37,18 +37,19 @@ export class RegistrationComponent {
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly authService: AuthService,
+    private router: Router
   ) { }
 
   public ngOnInit(): void {
     this.form = this.formBuilder.group({
       'email': this.nameCtrl,
       'password': this.passwordCtrl,
-      'repeatPassword': this.repeatPasswordCtrl,
+      // 'repeatPassword': this.repeatPasswordCtrl,
     })
   }
 
   public async handleSubmit(): Promise<void> {
-    debugger;
+    let isSuccess: boolean = false; 
     if (this.repeatPasswordCtrl.value !== this.passwordCtrl.value) {
       this.invalidPasswordErrorMessage = 'Passwords should be same';
       //TODO: rework to Validator
@@ -59,9 +60,16 @@ export class RegistrationComponent {
 
     this.invalidPasswordErrorMessage = '';
     try {
-      await firstValueFrom(this.authService.register(this.form.getRawValue()));
+      isSuccess = await firstValueFrom(this.authService.register(this.form.getRawValue()));
     } catch (e) {
       this.showLoginError();
+    }
+
+    if(isSuccess) {
+      this.router.navigate(['/spending']);
+      console.log('TODO: create some ');
+    } else {
+      console.log('TODO: mat error');
     }
   }
 
