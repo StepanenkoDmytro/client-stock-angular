@@ -1,8 +1,7 @@
 import { createReducer, on } from "@ngrx/store";
 import { IUSer } from "../model/User";
-import { addSpending, deleteSpending, editSpending } from "../pages/spending/store/spendings.actions";
 
-import { addAsset, deleteAsset, editAsset } from "../pages/savings/store/assets.actions";
+import { addPortfolioID, loadUser } from "./user.actions";
 
 
 export interface IUserState {
@@ -11,8 +10,7 @@ export interface IUserState {
 }
 
 const initialUser: IUSer = {
-    // spendingsHistory: [],
-    // assetsList: [],
+    portfolioID: null
 }
 
 const initialUserState: IUserState = {
@@ -22,8 +20,18 @@ const initialUserState: IUserState = {
 
 export const userReducer = createReducer(
     initialUserState,
-    //User reducers
-    // on(loadUser, (state, action) => ({
-    //   ...action.payload.state
-    // })),
+    // User reducers
+    on(loadUser, (state, action) => ({
+      ...action.payload.userState
+    })),
+    on(addPortfolioID, (state, action) => {
+        return {
+            ...state,
+            idIncrement: state.idIncrement + 1,
+            user: {
+                ...state.user,
+                portfolioID: action.payload.portfolioID
+            },
+        };
+    }),
 );

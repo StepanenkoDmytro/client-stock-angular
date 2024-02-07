@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { addSpending, editSpending, deleteSpending, loadSpending } from "./spendings.actions";
+import { addSpending, editSpending, deleteSpending, loadSpending, addMultipleSpendings } from "./spendings.actions";
 import { Spending } from "../model/Spending";
 
 
@@ -34,6 +34,13 @@ export const spendingsReducer = createReducer(
     return {
         ...state,
         spendingsHistory: updatedSpendingsHistory,
+    };
+  }),
+  on(addMultipleSpendings, (state, action) => {
+    return {
+        ...state,
+        idIncrement: state.idIncrement + action.payload.spendings.length,
+        spendingsHistory: [...state.spendingsHistory, ...action.payload.spendings],
     };
   }),
   on(loadSpending, (state, action) => ({

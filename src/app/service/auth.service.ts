@@ -3,7 +3,24 @@ import { catchError, Observable, of, switchMap } from 'rxjs';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ILoginFormData } from '../domain/auth.domain';
+import { UserService } from './user.service';
 
+
+interface IUserApiResponse {
+  token: string,
+  user: IUserApi
+}
+
+interface IUserApi {
+  email: string,
+  id: number,
+  portfolio: IPortfolioApi[],
+}
+
+interface IPortfolioApi {
+  id: number,
+  spendings: any[]
+}
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +33,7 @@ export class AuthService {
 
   constructor(
     private readonly router: Router,
+    private userService: UserService,
     private readonly httpClient: HttpClient,
   ) { }
 
@@ -31,9 +49,13 @@ export class AuthService {
   public login(data: ILoginFormData): Observable<boolean> {
     const loginUrl: string = this.url + 'sign-in';
 
-    return this.httpClient.post(loginUrl, data).pipe(
-      switchMap( (resp: any) => {
-        this._authToken = resp['token'];
+    return this.httpClient.post<IUserApiResponse>(loginUrl, data).pipe(
+      switchMap( (resp: IUserApiResponse) => {
+        console.log(resp);
+        const portfolioID = resp.user.portfolio[0].id;
+        console.log(portfolioID);
+        this.userService.savePortfolioID(portfolioID);
+        this._authToken = resp.token;
         localStorage.setItem(this.authTokenKey, this._authToken);
         return of(true);
       }),

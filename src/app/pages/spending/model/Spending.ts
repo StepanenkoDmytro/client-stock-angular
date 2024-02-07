@@ -38,7 +38,7 @@ export class Spending implements ISpending {
 
     public static mapFromSpendingApi(spending: any): Spending {
         const categoryTitle = spending.category;
-        const category = Category.defaultList.find(cat => cat.findCategory(categoryTitle));
+        const category = Category.findCategoryInDefaultList(categoryTitle);
     
         if (!category) {
             throw new Error(`Category with title "${categoryTitle}" not found.`);

@@ -25,7 +25,7 @@ export const appConfig: ApplicationConfig = {
         registrationStrategy: 'registerWhenStable:30000',
     }),
     provideStore(),
-    provideState({ name: 'user', reducer: userReducer }),
+    provideState({ name: 'user-info', reducer: userReducer }),
     provideState({ name: 'spending', reducer: spendingsReducer }),
     provideState({ name: 'assets', reducer: assetReducer }),
     provideEffects([SpendingsEffects]),

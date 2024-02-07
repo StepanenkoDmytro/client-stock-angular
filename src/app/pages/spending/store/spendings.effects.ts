@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
-import { of } from 'rxjs';
-import { catchError, filter, map, mergeMap, tap} from 'rxjs/operators';
+import { EMPTY, Observable, of } from 'rxjs';
+import { catchError, filter, map, mergeMap, switchMap, tap, withLatestFrom} from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { addSpending, deleteSpending, editSpending } from './spendings.actions';
+import { addMultipleSpendings, addSpending, deleteSpending, editSpending, loadSpending } from './spendings.actions';
 import { AuthService } from '../../../service/auth.service';
 import { Spending } from '../model/Spending';
 import { ISavingsState } from '../../savings/store/asset.reducer';
 import { Store } from '@ngrx/store';
+import { selectPortfolioID } from '../../../store/user.selectors';
+import { ISpendingsState } from './spendings.reducer';
 
 
 @Injectable()
@@ -18,7 +20,7 @@ export class SpendingsEffects {
     private actions$: Actions,
     private http: HttpClient,
     private authService: AuthService,
-    private store: Store<ISavingsState>
+    private store: Store<ISavingsState>,
   ) {}
 
   addSpending$ = createEffect(() => this.actions$.pipe(
@@ -26,21 +28,22 @@ export class SpendingsEffects {
     filter(() => !!this.authService.authToken),
     mergeMap(action => {
       const newSpending = action.payload.spending;
-      const transformedToApi = Spending.mapToSpendingApi(newSpending);
-
-      const savedSpendingUrl = this.url + 'add-spending';
-
-      return this.http.post(savedSpendingUrl, transformedToApi).pipe(
-        tap((response: any) => {
-          console.log('response from server ', response);
-          const transformedFromApi = Spending.mapFromSpendingApi(response);
-          this.store.dispatch(editSpending({ spending: transformedFromApi }));
-        }), 
-        catchError(error => of(console.log({ error }))) 
-      );
+      if(!newSpending.isSaved) {
+        return this.sendSpendingToServer(newSpending);
+      } else {
+        return EMPTY;
+      }
     })
   ), { dispatch: false });
 
+  loadSpendings$ = createEffect(() => this.actions$.pipe(
+    ofType(loadSpending),
+    filter(() => !!this.authService.authToken),
+    withLatestFrom(this.store.select(selectPortfolioID)),
+    switchMap(([action, portfolioID]) => {
+      return this.syncSpendingListWithServer(action.payload.state, portfolioID);
+    })
+  ), { dispatch: false });
 
   deleteSpending$ = createEffect(() => this.actions$.pipe(
     ofType(deleteSpending),
@@ -54,4 +57,59 @@ export class SpendingsEffects {
       );
     })
   ), { dispatch: false });
+
+
+  private sendSpendingToServer(spending: Spending): Observable<Spending> {
+    const transformedToApi = Spending.mapToSpendingApi(spending);
+
+    const savedSpendingUrl = this.url + 'add-spending';
+
+    return this.http.post(savedSpendingUrl, transformedToApi).pipe(
+      tap((response: any) => {
+        console.log('response from server ', response);
+        const transformedFromApi = Spending.mapFromSpendingApi(response);
+        this.store.dispatch(editSpending({ spending: transformedFromApi }));
+      }), 
+      catchError(error => {
+        console.error('Error occurred while saving spending:', error);
+        return EMPTY;
+      })
+    );
+  }
+
+  private syncSpendingListWithServer(spendingState: ISpendingsState, portfolioID: number): Observable<ISpendingsState> {
+    const loadSpendingsUrl = this.url + 'spendings-list/' + portfolioID;
+    return this.http.get<Spending[]>(loadSpendingsUrl).pipe(
+      map(serverSpendings => {
+        const clientSpendings = spendingState.spendingsHistory;
+        const newSpendingsFromServer = this.filterNewSpendingsFromServer(serverSpendings, clientSpendings);
+
+        if (newSpendingsFromServer.length > 0) {
+          this.store.dispatch(addMultipleSpendings({ spendings: newSpendingsFromServer }));
+        }
+
+        this.sendUnsavedSpendingsToServer(clientSpendings);
+
+        return spendingState; 
+      }),
+      catchError(error => {
+        console.error('Error occurred while loading spending:', error);
+        return EMPTY;
+      })
+    );
+  }
+
+  private filterNewSpendingsFromServer(serverSpendings: Spending[], clientSpendings: Spending[]): Spending[] {
+    return serverSpendings.filter(serverSpending => 
+      !clientSpendings.some(clientSpending => serverSpending.id === clientSpending.id)
+    ).map(spending => Spending.mapFromSpendingApi(spending));
+  }
+
+  private sendUnsavedSpendingsToServer(clientSpendings: Spending[]): void {
+    clientSpendings
+      .filter(spending => !spending.isSaved)
+      .forEach(unsavedSpending => {
+        this.store.dispatch(addSpending({ spending: unsavedSpending }));
+      });
+  }
 }

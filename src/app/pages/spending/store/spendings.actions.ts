@@ -1,4 +1,4 @@
-import { createAction } from "@ngrx/store";
+import { createAction, props } from "@ngrx/store";
 import { ISpendingsState } from "./spendings.reducer";
 import { Spending } from "../model/Spending";
 
@@ -15,6 +15,13 @@ export const editSpending =
         (payload: { spending: Spending }) => ({ payload })
     );
 
+export const addMultipleSpendings = 
+    createAction(
+        '[SPENDING] Add Multiple Spendings', 
+        (payload: { spendings: Spending[] }) => ({ payload })
+    );
+
+
 export const loadSpending = 
     createAction(
         '[SPENDING] Load Spendings', 
@@ -25,4 +32,9 @@ export const deleteSpending =
     createAction(
         '[SPENDING] Delete Spendings', 
         (payload: { id: string }) => ({ payload })
+    );
+
+export const loadSpendingFailure = createAction(
+    '[Spending] Load Spending Failure',
+    props<{ error: any }>()
     );

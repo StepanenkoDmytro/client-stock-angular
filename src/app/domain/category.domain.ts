@@ -60,7 +60,16 @@ export class Category implements ICategory {
             return found;
         }
     }
-    
+    return undefined;
+  }
+
+  public static findCategoryInDefaultList(title: string): Category | undefined {
+    for (const category of this.defaultList) {
+        const found = category.findCategory(title);
+        if (found) {
+            return found;
+        }
+    }
     return undefined;
   }
 }

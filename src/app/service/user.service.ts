@@ -1,14 +1,28 @@
 import { Injectable } from '@angular/core';
+import { IUSer } from '../model/User';
+import { Store, select } from '@ngrx/store';
+import { filter } from 'rxjs';
+import { IUserState } from '../store/user.reducer';
+import { userFeatureSelector } from '../store/user.selectors';
+import { addPortfolioID, loadUser } from '../store/user.actions';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  // private readonly historyLocalStorageKey = 'user-state';
-  private isInit: boolean = false;
+  public user: IUSer;
+  public isInit: boolean = false;
 
-  constructor() { }
+  private readonly userLocalStorageKey = 'user-info';
+
+  constructor(
+    private store$: Store<IUserState>,
+  ) { }
+
+  public savePortfolioID(portfolioID: number): void {
+    this.store$.dispatch(addPortfolioID({portfolioID}));
+  }
 
   public init(): void {
     if(this.isInit) {
@@ -16,25 +30,26 @@ export class UserService {
     }
 
     this.isInit = true;
- 
-    // this.loadFromStorage();
+    
+    this.loadFromStorage();
 
-    // this.store$.pipe(
-    //   select(userFeatureSelector),
-    //   // filter(state => !!state)
-    //   ).subscribe(spendingHistoryState => {
-    //   localStorage.setItem(this.historyLocalStorageKey, JSON.stringify(spendingHistoryState));
-    // });
+    this.store$.pipe(
+      select(userFeatureSelector),
+      filter(state => !!state)
+    ).subscribe(userState => {
+      localStorage.setItem(this.userLocalStorageKey, JSON.stringify(userState));
+    });
 
-    // window.addEventListener('storage', () => this.loadFromStorage());
+    window.addEventListener('storage', () => this.loadFromStorage());
   }
 
-  // private loadFromStorage(): void {
-  //   const storageState = localStorage.getItem(this.historyLocalStorageKey);
-  //   if(storageState) {
-  //     this.store$.dispatch(loadUser({
-  //       state: JSON.parse(storageState)
-  //     }))
-  //   }
-  // }
+  private loadFromStorage(): void {
+    
+    const storageState = localStorage.getItem(this.userLocalStorageKey);
+    if(storageState) {
+      this.store$.dispatch(loadUser({
+        userState: JSON.parse(storageState)
+      }))
+    }
+  }
 }
