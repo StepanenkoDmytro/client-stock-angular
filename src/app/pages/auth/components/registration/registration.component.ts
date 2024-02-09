@@ -44,7 +44,6 @@ export class RegistrationComponent {
     this.form = this.formBuilder.group({
       'email': this.nameCtrl,
       'password': this.passwordCtrl,
-      // 'repeatPassword': this.repeatPasswordCtrl,
     })
   }
 

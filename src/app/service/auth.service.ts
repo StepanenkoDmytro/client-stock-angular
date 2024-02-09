@@ -86,7 +86,26 @@ export class AuthService {
     );
   }
 
-  public loginWithGoogle(): any {
+  public loginWithGoogle(data: string): Observable<boolean> {
+    const loginUrl: string = this.url + 'google-sign-up';
+
+    return this.httpClient.post(loginUrl, data).pipe(
+      switchMap( (resp: any) => {
+        console.log(resp);
+        // const portfolioID = resp.user.portfolio[0].id;
+        // console.log(portfolioID);
+        // this.userService.savePortfolioID(portfolioID);
+        // this._authToken = resp.token;
+        // localStorage.setItem(this.authTokenKey, this._authToken);
+        return of(true);
+      }),
+      catchError( (error: Error) => {
+        this.handleApiError(error);
+        return of(false);
+      })
+    );
+    // console.log(data);
+    // return of(false);
   }
 
   public restorePassword(): Observable<any> {

@@ -6,6 +6,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { Router, RouterModule } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { GoogleBtnComponent } from '../google-btn/google-btn.component';
+
+
+const UI_COMPONENTS = [
+  GoogleBtnComponent
+];
 
 const MATERIAL_MODULES = [
   MatFormFieldModule,
@@ -17,7 +23,7 @@ const MATERIAL_MODULES = [
 @Component({
   selector: 'pgz-login',
   standalone: true,
-  imports: [...MATERIAL_MODULES, RouterModule],
+  imports: [...UI_COMPONENTS, ...MATERIAL_MODULES, RouterModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -38,13 +44,31 @@ export class LoginComponent implements OnInit {
     this.form = this.formBuilder.group({
       'email': this.nameCtrl,
       'password': this.passwordCtrl,
-    })
+    });
   }
+
 
   public async handleSubmit(): Promise<void> {
     let isSuccess: boolean = false; 
     try {
       isSuccess = await firstValueFrom(this.authService.login(this.form.getRawValue()));
+    } catch (e) {
+      this.showLoginError();
+    }
+
+    if(isSuccess) {
+      this.router.navigate(['/spending']);
+      console.log('TODO: create some ');
+    } else {
+      console.log('TODO: mat error');
+    }
+  }
+
+  public async loginWithGoogle(googleResponse: any): Promise<void> {
+    console.log(googleResponse);
+    let isSuccess: boolean = false; 
+    try {
+      isSuccess = await firstValueFrom(this.authService.loginWithGoogle(googleResponse));
     } catch (e) {
       this.showLoginError();
     }
