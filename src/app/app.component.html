@@ -1,11 +1,10 @@
 <section class="pgz-application">
-  <!-- <mat-toolbar color="primary">
-    <mat-toolbar-row>
-      <span>Custom Toolbar</span>
-    </mat-toolbar-row>
-  </mat-toolbar> -->
-  <section class="pgz-application--content">
+  <section class="pgz-application--content"
+           [class.pgz-application--auth]="isAuthPage()">
     <router-outlet></router-outlet>
   </section>
-  <pgz-navigation class="pgz-application--bottom-navigation"></pgz-navigation>
+  @if(!isAuthPage()) {
+    <pgz-navigation class="pgz-application--bottom-navigation"></pgz-navigation>
+  }
+  
 </section>

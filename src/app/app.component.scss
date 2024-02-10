@@ -13,6 +13,10 @@ $bottom-navigation-height: 60px;
     overflow-x: hidden;
   }
 
+  &--auth {
+    height: 100%;
+  }
+
   &--bottom-navigation {
     height: $bottom-navigation-height;
   }

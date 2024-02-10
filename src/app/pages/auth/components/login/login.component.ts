@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, NgZone, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../../../../service/auth.service';
@@ -7,17 +7,21 @@ import { Router, RouterModule } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { GoogleBtnComponent } from '../google-btn/google-btn.component';
+import { MatIconModule } from '@angular/material/icon';
+import { FacebookBtnComponent } from '../facebook-btn/facebook-btn.component';
 
 
 const UI_COMPONENTS = [
-  GoogleBtnComponent
+  GoogleBtnComponent,
+  FacebookBtnComponent
 ];
 
 const MATERIAL_MODULES = [
   MatFormFieldModule,
   ReactiveFormsModule,
   MatInputModule,
-  MatButtonModule
+  MatButtonModule,
+  MatIconModule
 ];
 
 @Component({
@@ -34,10 +38,13 @@ export class LoginComponent implements OnInit {
   public nameCtrl: FormControl<string> = new FormControl<string>('', [Validators.required]);
   public passwordCtrl: FormControl<string> = new FormControl<string>('', [Validators.required]);
 
+  public passwordHide: boolean = true;
+
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly authService: AuthService,
-    private router: Router
+    private router: Router,
+    private ngZone: NgZone
   ) { }
 
   public ngOnInit(): void {
@@ -74,8 +81,10 @@ export class LoginComponent implements OnInit {
     }
 
     if(isSuccess) {
-      this.router.navigate(['/spending']);
-      console.log('TODO: create some ');
+      this.ngZone.run(() => {
+        this.router.navigate(['/spending']);
+        console.log('TODO: create some ');
+      });
     } else {
       console.log('TODO: mat error');
     }

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NavigationComponent } from './core/UI/components/navigation/navigation.component';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
@@ -43,13 +43,16 @@ export class AppComponent implements OnInit {
     { name: 'custom_food', url: 'assets/expend/food.svg'},
     { name: 'custom_house', url: 'assets/expend/house.svg'},
     { name: 'custom_pet', url: 'assets/expend/pet.svg'},
+    { name: 'custom_google', url: 'assets/expend/google.svg'},
+    { name: 'custom_facebook', url: 'assets/expend/facebook.svg'},
   ]
 
   constructor(
     private iconRegistry: MatIconRegistry,
     private sanitizer: DomSanitizer,
     private darkLightModeService: DarkLightModeService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router,
   ) {
     this.CUSTOM_SVG_ICONS.forEach(icon => {
       this.iconRegistry.addSvgIcon(icon.name, this.sanitizer.bypassSecurityTrustResourceUrl(icon.url));
@@ -65,5 +68,9 @@ export class AppComponent implements OnInit {
     }
 
     this.userService.init();
+  }
+
+  public isAuthPage(): boolean {
+    return this.router.url.includes('auth');
   }
 }

@@ -1,18 +1,29 @@
+
+<p class="title-auth">Log In</p>
+
 <form class="auth-form"
       [formGroup]="form"
       (ngSubmit)="handleSubmit()">
-  <mat-form-field class="auth-form--field">
+  <mat-form-field class="auth-form--field" appearance="outline">
     <mat-label>{{ 'Email:' }}</mat-label>
     <input [formControl]="nameCtrl" type="email" matInput>
   </mat-form-field>
 
-  <mat-form-field class="auth-form--field">
+  <mat-form-field class="auth-form--field" appearance="outline">
     <mat-label>{{ 'Password:' }}</mat-label>
-    <input [formControl]="passwordCtrl" type="password" matInput>
+    <input [formControl]="passwordCtrl" [type]="passwordHide ? 'password' : 'text'" matInput>
+    <button mat-icon-button matSuffix (click)="passwordHide = !passwordHide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="passwordHide">
+      <mat-icon>{{passwordHide ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
   </mat-form-field>
+
+  <div class="auth-form--forget-password">
+    <a [routerLink]="'../forget-password'" class="auth-form--text-link">Forget your password?</a>
+  </div>
 
   <div>
     <button mat-flat-button
+            [class.auth-form--submit-enabled]="!form.invalid"
             [disabled]="form.invalid"
             type="submit" class="auth-form--submit">
       {{ 'Log In' }}
@@ -20,16 +31,21 @@
   </div>
 </form>
 
-<p><a [routerLink]="'../forget-password'">Forget your password?</a></p>
-<p><a [routerLink]="'../registration'">Registration</a></p>
-<br>
+<div class="or-login">
+  <div class="line"></div>
+  <span>Or Login with</span>
+  <div class="line"></div>
+</div>
 
--- OR --
+<div class="auth-form--social-media">
+  <pgz-google-btn (googleResponse)="loginWithGoogle($event)"></pgz-google-btn>
+  <pgz-facebook-btn></pgz-facebook-btn>
+</div>
 
-
-<p>Log In with Google</p>
-
-<pgz-google-btn (googleResponse)="loginWithGoogle($event)"></pgz-google-btn>
+<div class="auth-form--registration">
+  <p>Don’t have an account? <a [routerLink]="'../registration'" class="auth-form--text-link">Register now</a></p>
+  
+</div>
 
 
 

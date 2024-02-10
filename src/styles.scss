@@ -153,11 +153,14 @@ $light-theme: mat.define-light-theme((
   density: 0,
 ));
 
+
+
 .dark-theme {
-@include mat.all-component-themes($dark-theme);
-@include mat.core-theme($dark-theme);
-@include mat.button-theme($dark-theme);
-$mat-background: $pgz-dark-background;
+  @include mat.all-component-themes($dark-theme);
+  @include mat.core-theme($dark-theme);
+  @include mat.button-theme($dark-theme);
+  $mat-background: $pgz-dark-background;
+  --bs-success: #5DB075;
 }
 
 .light-theme {
@@ -165,7 +168,12 @@ $mat-background: $pgz-dark-background;
   @include mat.core-theme($light-theme);
   @include mat.button-theme($light-theme);
   $mat-background: $pgz-light-background;
+  --bs-success: #5DB075;
 }
+
+// :root {
+//   --bs-success: #5DB075;
+// }
 
 html, body { height: 100%; }
 body {
@@ -179,4 +187,38 @@ body {
   width: 90%;
   align-self: center;
   background-color: var(--bs-warning)!important;
+}
+
+/* Material form field-form css */
+/* Change the material background-color */
+.mat-mdc-text-field-wrapper {
+  background-color: var(--bs-gray-200)!important;
+}
+
+/* Change the material border color */
+.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__leading,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__notch,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing {
+  border-color: var(--bs-gray-300)!important;
+}
+
+/* Change the material border focused color */
+.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__leading,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__notch,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__trailing {
+  border-color: var(--bs-primary) !important;
+  border-width: .5px !important;
+}
+
+/* Change the material border text focused color */
+.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-floating-label, 
+.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-floating-label--float-above {
+  color: var(--bs-primary) !important;
+}
+
+/* Change the material border text error color */
+.mdc-text-field--outlined.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-notched-outline__leading, 
+.mdc-text-field--outlined.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing, 
+.mdc-text-field--outlined.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-notched-outline__notch {
+  border-color: var(--bs-danger) !important;
 }
