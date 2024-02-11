@@ -43,12 +43,13 @@ table {
   }
 
   .active {
-      color: var(--primary-color);
+      color: var(--bs-primary);
 
   }
 
   .selected {
-      color: var(--accept-color);
+      color: var(--bs-success);
+      border-radius: 50%;
   }
 }
 
@@ -72,7 +73,7 @@ table {
 }
 
 .enter {
-  border: 1px solid var(--accept-color);
+  border: 1px solid var(--bs-success);
   height: 100%;
   display: flex;
   justify-content: center;
