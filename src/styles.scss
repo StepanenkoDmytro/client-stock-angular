@@ -181,8 +181,10 @@ body {
   margin-top: 20px;
   margin-bottom: 10px;
   width: 90%;
+  height: 50px !important;
   align-self: center;
-  background-color: var(--bs-warning)!important;
+  color: white !important;
+  background-color: var(--bs-success)!important;
 }
 
 /* Material form field-form css */

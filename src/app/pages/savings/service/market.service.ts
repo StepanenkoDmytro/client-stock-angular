@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, switchMap, withLatestFrom } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, of, switchMap, withLatestFrom } from 'rxjs';
 import { IAsset, ICoin, ICompany, IMarket } from '../../../domain/savings.domain';
 import { CoinService } from './coin.service';
 import { PortfolioCoin } from '../model/PortfolioCoin';
@@ -26,10 +26,12 @@ export class MarketService {
     return this.marketAssets$.pipe(
       withLatestFrom(this.portfolioAsset$),
       switchMap(([marketAsset, portfolioAsset]) => {
-        if (marketAsset === null && portfolioAsset) {
+        if(marketAsset === null && portfolioAsset) {
           return this.findMarketInfoByAsset(portfolioAsset);
-        } else {
+        } else if(marketAsset && portfolioAsset === null) {
           return this.findMarketInfoByMarketAsset(marketAsset);
+        } else {
+          return EMPTY;
         }
       }
     ));
@@ -60,7 +62,7 @@ export class MarketService {
   private findMarketInfoByAsset(portfolioAssets: IAsset): Observable<IMarket> {
     if(portfolioAssets.assetType === 'Crypto') {
       return this.findCoinMarketInfoByAsset(portfolioAssets);
-    } else {
+    } else{
       return this.findPortfolioMarketInfoByAsset(portfolioAssets);
     }
   }

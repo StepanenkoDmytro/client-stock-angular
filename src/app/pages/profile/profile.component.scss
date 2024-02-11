@@ -1,3 +1,29 @@
 :host {
   display: block;
+  height: inherit;
+}
+
+.profile-container {
+  height: inherit;
+  display: flex; 
+  flex-direction: column;
+  margin: 1.5rem;
+}
+
+.profile {
+  &--email {
+    width: 100%;
+  }
+
+  &--btn {
+    height: 50px;
+    background-color: var(--bs-success) !important;
+    color: var(--bs-white) !important;
+  }
+}
+
+.auth-btn {
+  width: 100%;
+  margin-top: auto;
+  margin-bottom: 40px;
 }

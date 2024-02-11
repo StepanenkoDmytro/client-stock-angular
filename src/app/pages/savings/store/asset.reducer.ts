@@ -1,6 +1,7 @@
 import { createReducer, on } from "@ngrx/store";
 import { IAsset } from "../../../domain/savings.domain";
 import { addAsset, editAsset, deleteAsset, loadSavings } from "./assets.actions";
+import { logout } from "../../../store/user.actions";
 
 
 export interface ISavingsState {
@@ -17,6 +18,7 @@ export const assetReducer = createReducer(
     initialSavingsState,
     on(addAsset, (state, action) => {
         const updatedAssetsList = Array.isArray(state.assetsList) ? state.assetsList : [];
+        console.log('here', state, action);
         return {
             ...state,
             idIncrement: state.idIncrement + 1,
@@ -65,5 +67,8 @@ export const assetReducer = createReducer(
             ...state,
             assetsList: updatedAssetList,
         };
+      }),
+      on(logout, () => {
+        return { ...initialSavingsState };
       })
 );

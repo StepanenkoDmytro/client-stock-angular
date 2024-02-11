@@ -10,6 +10,7 @@ import { AssetMarketCardComponent } from '../asset-market-card/asset-market-card
 import { IPortfolioStock, IAsset, IMarket } from '../../../../../domain/savings.domain';
 import { StockAssetComponent } from './stock-asset/stock-asset.component';
 import { Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 
 
 const UI_COMPONENTS = [
@@ -22,6 +23,7 @@ const MATERIAL_MODULES = [
   MatInputModule,
   MatIconModule,
   FormsModule,
+  MatButtonModule
 ];
 
 @Component({

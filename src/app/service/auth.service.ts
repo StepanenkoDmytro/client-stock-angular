@@ -4,23 +4,8 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ILoginFormData } from '../domain/auth.domain';
 import { UserService } from './user.service';
+import { IUserApiResponse } from '../domain/user.domain';
 
-
-interface IUserApiResponse {
-  token: string,
-  user: IUserApi
-}
-
-interface IUserApi {
-  email: string,
-  id: number,
-  portfolio: IPortfolioApi[],
-}
-
-interface IPortfolioApi {
-  id: number,
-  spendings: any[]
-}
 
 @Injectable({
   providedIn: 'root'
@@ -51,10 +36,7 @@ export class AuthService {
 
     return this.httpClient.post<IUserApiResponse>(loginUrl, data).pipe(
       switchMap( (resp: IUserApiResponse) => {
-        console.log(resp);
-        const portfolioID = resp.user.portfolio[0].id;
-        console.log(portfolioID);
-        this.userService.savePortfolioID(portfolioID);
+        this.userService.saveUser(resp.user);
         this._authToken = resp.token;
         localStorage.setItem(this.authTokenKey, this._authToken);
         return of(true);
@@ -71,10 +53,7 @@ export class AuthService {
 
     return this.httpClient.post(loginUrl, data).pipe(
       switchMap( (resp: any) => {
-        console.log(resp);
-        const portfolioID = resp.user.portfolio[0].id;
-        console.log(portfolioID);
-        this.userService.savePortfolioID(portfolioID);
+        this.userService.saveUser(resp.user);
         this._authToken = resp.token;
         localStorage.setItem(this.authTokenKey, this._authToken);
         return of(true);
@@ -91,10 +70,7 @@ export class AuthService {
 
     return this.httpClient.post(loginUrl, data).pipe(
       switchMap( (resp: any) => {
-        console.log(resp);
-        const portfolioID = resp.user.portfolio[0].id;
-        console.log(portfolioID);
-        this.userService.savePortfolioID(portfolioID);
+        this.userService.saveUser(resp.user);
         this._authToken = resp.token;
         localStorage.setItem(this.authTokenKey, this._authToken);
         return of(true);
@@ -104,19 +80,18 @@ export class AuthService {
         return of(false);
       })
     );
-    // console.log(data);
-    // return of(false);
   }
 
   public restorePassword(): Observable<any> {
     return of(true);
   }
 
-  public logOut(): Observable<any> {
-    console.log('Making request to server to Log Out User');
+  public logOut(): void {
+    
     this._authToken = '';
     localStorage.removeItem(this.authTokenKey);
-    return of(true);
+
+    this.userService.logout();
   }
 
   private handleApiError(error: Error): void {

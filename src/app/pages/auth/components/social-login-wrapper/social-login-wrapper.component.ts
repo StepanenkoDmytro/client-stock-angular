@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
-import { FacebookBtnComponent } from '../facebook-btn/facebook-btn.component';
-import { GoogleBtnComponent } from '../google-btn/google-btn.component';
+import { FacebookBtnComponent } from './facebook-btn/facebook-btn.component';
+import { GoogleBtnComponent } from './google-btn/google-btn.component';
 
 
 const UI_COMPONENTS = [

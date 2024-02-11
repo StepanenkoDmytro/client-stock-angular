@@ -1,3 +1,4 @@
-export interface IUSer {
+export interface IUser {
+    email: string;
     portfolioID: number;
 }

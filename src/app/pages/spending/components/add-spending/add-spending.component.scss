@@ -3,7 +3,7 @@
 }
 
 .add-spending {
-  margin-top: 20px;
+  margin: 1.5rem;
 }
 
 .no-category {
@@ -34,11 +34,12 @@
 .spending-btn {
   width: 100%;
   font-size: 1.2rem;
-  border: 1px solid #edb03b;
+  border: 1px solid var(--bs-success);
   padding: 1.8rem;
 
   &--save {
-    background-color: #edb03b !important;
+    color: white;
+    background-color: var(--bs-success) !important;
   }
 }
 

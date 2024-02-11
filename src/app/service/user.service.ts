@@ -1,27 +1,37 @@
 import { Injectable } from '@angular/core';
-import { IUSer } from '../model/User';
+import { IUser } from '../model/User';
 import { Store, select } from '@ngrx/store';
-import { filter } from 'rxjs';
+import { BehaviorSubject, Observable, filter } from 'rxjs';
 import { IUserState } from '../store/user.reducer';
 import { userFeatureSelector } from '../store/user.selectors';
-import { addPortfolioID, loadUser } from '../store/user.actions';
+import { loadUser, logout, saveUser } from '../store/user.actions';
+import { IUserApi } from '../domain/user.domain';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  public user: IUSer;
+  private user: BehaviorSubject<IUser> = new BehaviorSubject<IUser>(null);
   public isInit: boolean = false;
 
   private readonly userLocalStorageKey = 'user-info';
 
   constructor(
-    private store$: Store<IUserState>,
+    private store$: Store<IUserState>
   ) { }
 
-  public savePortfolioID(portfolioID: number): void {
-    this.store$.dispatch(addPortfolioID({portfolioID}));
+  public getUser(): Observable<IUser> {
+    return this.user;
+  }
+
+  public saveUser(user: IUserApi): void {
+    const newUser: IUser = this.mapUserFromApi(user);
+    this.store$.dispatch(saveUser({user: newUser}));
+  }
+
+  public logout(): void {
+    this.store$.dispatch(logout());
   }
 
   public init(): void {
@@ -37,6 +47,8 @@ export class UserService {
       select(userFeatureSelector),
       filter(state => !!state)
     ).subscribe(userState => {
+      this.user.next(userState.user);
+
       localStorage.setItem(this.userLocalStorageKey, JSON.stringify(userState));
     });
 
@@ -47,9 +59,19 @@ export class UserService {
     
     const storageState = localStorage.getItem(this.userLocalStorageKey);
     if(storageState) {
+      const userState: IUserState = JSON.parse(storageState);
+      this.user.next(userState.user);
+      
       this.store$.dispatch(loadUser({
-        userState: JSON.parse(storageState)
-      }))
+        userState: userState
+      }));
     }
+  }
+
+  private mapUserFromApi(user: IUserApi): IUser {
+    return {
+      email: user.email,
+      portfolioID: user.portfolio[0].id,
+    };
   }
 }

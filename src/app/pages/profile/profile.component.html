@@ -1,16 +1,26 @@
-<section style="display: flex; flex-direction: column;">
-    <mat-slide-toggle [formControl]="isDarkMode">Slide me!</mat-slide-toggle>
-
-    <div style="display: flex;">
-    <mat-form-field class="w-100">
-        <mat-label>Monthly budget</mat-label>
-        <input matInput type="number" [(ngModel)]="monthlyBudget">
+<section class="profile-container">
+    <mat-form-field class="profile--email" appearance="outline">
+        <mat-label>{{ 'Email' }}</mat-label>
+        <input [(ngModel)]="userEmail" type="email" matInput disabled>
     </mat-form-field>
-    <button (click)="saveMonthlyBudget()">Save</button>
+
+    <div class="d-flex">
+        <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Monthly budget</mat-label>
+            <input matInput type="number" [(ngModel)]="monthlyBudget">
+        </mat-form-field>
+        <button class="profile--btn" mat-flat-button (click)="saveMonthlyBudget()">Save</button>
     </div>
 
-    <button (click)="logout()">Logout</button>
-
+    <mat-slide-toggle [formControl]="isDarkMode">Slide me!</mat-slide-toggle>
+    
     <p>change currency</p>
     <p>change language</p>
+
+
+    @if(isAuthorizedUser) {
+        <button class="profile--btn auth-btn" mat-flat-button (click)="logout()">Logout</button>
+    } @else {
+        <button class="profile--btn auth-btn" mat-flat-button (click)="login()">Login</button>
+    }
 </section>

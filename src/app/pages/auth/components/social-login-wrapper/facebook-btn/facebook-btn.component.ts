@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { IconComponent } from '../../../../core/UI/components/icon/icon.component';
+import { IconComponent } from '../../../../../core/UI/components/icon/icon.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 

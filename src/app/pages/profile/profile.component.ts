@@ -6,7 +6,19 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TotalBalanceService } from '../../core/UI/components/total-balance/total-balance.service';
 import { AuthService } from '../../service/auth.service';
+import { UserService } from '../../service/user.service';
+import { Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 
+
+const MATERIAL_MODULES = [
+  MatSlideToggleModule, 
+  FormsModule, 
+  ReactiveFormsModule, 
+  MatFormFieldModule, 
+  MatInputModule,
+  MatButtonModule
+];
 
 @Component({
   selector: 'pgz-profile',
@@ -14,9 +26,11 @@ import { AuthService } from '../../service/auth.service';
   styleUrl: './profile.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [MatSlideToggleModule, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule],
+  imports: [...MATERIAL_MODULES],
 })
 export class ProfileComponent implements OnInit {
+  public userEmail: string; 
+  public isAuthorizedUser: boolean = false;
   
   public isDarkMode: FormControl<boolean> = new FormControl<boolean>(true);
   public monthlyBudget: number;
@@ -25,15 +39,22 @@ export class ProfileComponent implements OnInit {
     private darkLightModeService: DarkLightModeService,
     private totalBalanceService: TotalBalanceService,
     private authService: AuthService,
+    private userService: UserService,
+    private router: Router,
   ) { }
 
   public ngOnInit(): void {
-    const savedMode = this.darkLightModeService.activeTheme === 'dark';
-    this.isDarkMode.setValue(savedMode);
-    this.isDarkMode.valueChanges.subscribe((darkMode) => {
-        const mode = darkMode ? 'dark' : 'light';
-        this.darkLightModeService.set(mode);
+    this.userService.getUser().subscribe(user => {
+      if(user && user.email) {
+        this.userEmail = user.email;
+        this.isAuthorizedUser = true;
+      } else {
+        this.userEmail = 'User not registered';
+        this.isAuthorizedUser = false;
+      }
     });
+
+    this.getThemeMode();
   }
 
   public saveMonthlyBudget(): void {
@@ -42,5 +63,18 @@ export class ProfileComponent implements OnInit {
 
   public logout(): void {
     this.authService.logOut();
+  }
+
+  public login(): void {
+    this.router.navigate(['/auth']);
+  }
+
+  private getThemeMode(): void {
+    const savedMode = this.darkLightModeService.activeTheme === 'dark';
+    this.isDarkMode.setValue(savedMode);
+    this.isDarkMode.valueChanges.subscribe((darkMode) => {
+        const mode = darkMode ? 'dark' : 'light';
+        this.darkLightModeService.set(mode);
+    });
   }
 }

@@ -9,13 +9,14 @@ import { IconComponent } from '../../../../../../core/UI/components/icon/icon.co
 import { SavingsService } from '../../../../../../service/savings.service';
 import { PortfolioCoin } from '../../../../model/PortfolioCoin';
 import { MarketCoinInfo } from '../../../../model/MarketCoinInfo';
+import { Router } from '@angular/router';
 
 
 const MATERIAL_MODULES = [
   MatIconModule, 
   FormsModule, 
   MatFormFieldModule, 
-  MatInputModule
+  MatInputModule,
 ];
 
 
@@ -34,27 +35,28 @@ export class CryptoAssetComponent implements OnInit, AfterViewInit, OnDestroy {
   public count: number = 0;
   
   constructor(
-    private MarketService: MarketService,
+    private marketService: MarketService,
     private savingsService: SavingsService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router
   ) { }
 
   public ngOnInit(): void {
-    if(this.MarketService.isExistingAsset) {
-      this.portfolioCoin = this.MarketService.portfolioAsset$.value as PortfolioCoin;
+    if(this.marketService.isExistingAsset) {
+      this.portfolioCoin = this.marketService.portfolioAsset$.value as PortfolioCoin;
       this.count = this.portfolioCoin.count;
     }
   }
 
   public ngAfterViewInit(): void {
-    this.MarketService.getAsset().subscribe(val => {
+    this.marketService.getAsset().subscribe(val => {
       this.coinMarketInfo = val as MarketCoinInfo;
       this.cdr.detectChanges();
     });
   }
 
   public saveEdit(): void {
-    if(this.MarketService.isExistingAsset) {
+    if(this.marketService.isExistingAsset) {
       this.savingsService.editAsset(this.portfolioCoin);
     } else {
       
@@ -62,9 +64,11 @@ export class CryptoAssetComponent implements OnInit, AfterViewInit, OnDestroy {
       newAsset.count = this.count;
       this.savingsService.addSaving(newAsset);
     }
+
+    this.router.navigate(['/savings']);
   }
 
   public ngOnDestroy(): void {
-    this.MarketService.destroyMarketState();
+    this.marketService.destroyMarketState();
   }
 }

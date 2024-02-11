@@ -9,6 +9,7 @@ import { MarketService } from '../../../service/market.service';
 import { AssetMarketCardComponent } from '../asset-market-card/asset-market-card.component';
 import { ICoin } from '../../../../../domain/savings.domain';
 import { Router, RouterModule } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 
 
 const UI_COMPONENTS = [
@@ -20,6 +21,7 @@ const MATERIAL_MODULES = [
   MatInputModule,
   MatIconModule,
   FormsModule,
+  MatButtonModule
 ];
 
 @Component({

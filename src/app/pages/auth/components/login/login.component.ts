@@ -6,15 +6,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { Router, RouterModule } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { GoogleBtnComponent } from '../google-btn/google-btn.component';
 import { MatIconModule } from '@angular/material/icon';
-import { FacebookBtnComponent } from '../facebook-btn/facebook-btn.component';
 import { SocialLoginWrapperComponent } from '../social-login-wrapper/social-login-wrapper.component';
 
 
 const UI_COMPONENTS = [
-  GoogleBtnComponent,
-  FacebookBtnComponent,
   SocialLoginWrapperComponent
 ];
 
@@ -78,7 +74,6 @@ export class LoginComponent implements OnInit {
   }
 
   public async loginWithGoogle(googleResponse: any): Promise<void> {
-    console.log(googleResponse);
     let isSuccess: boolean = false; 
     try {
       isSuccess = await firstValueFrom(this.authService.loginWithGoogle(googleResponse));

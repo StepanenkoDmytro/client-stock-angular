@@ -1,15 +1,16 @@
 import { createReducer, on } from "@ngrx/store";
-import { IUSer } from "../model/User";
+import { IUser } from "../model/User";
 
-import { addPortfolioID, loadUser } from "./user.actions";
+import { loadUser, logout, saveUser } from "./user.actions";
 
 
 export interface IUserState {
     idIncrement: number,
-    user: IUSer
+    user: IUser
 }
 
-const initialUser: IUSer = {
+const initialUser: IUser = {
+    email: '',
     portfolioID: null
 }
 
@@ -24,14 +25,16 @@ export const userReducer = createReducer(
     on(loadUser, (state, action) => ({
       ...action.payload.userState
     })),
-    on(addPortfolioID, (state, action) => {
+    on(saveUser, (state, action) => {
         return {
             ...state,
             idIncrement: state.idIncrement + 1,
             user: {
-                ...state.user,
-                portfolioID: action.payload.portfolioID
+                ...action.payload.user
             },
         };
     }),
+    on(logout, () => {
+        return { ...initialUserState };
+    })
 );
