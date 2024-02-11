@@ -1,40 +1,43 @@
+<p class="title-auth">Sign Up</p>
+
 <form class="auth-form"
       [formGroup]="form"
       (ngSubmit)="handleSubmit()">
-  <mat-form-field class="auth-form--field">
+  <mat-form-field class="auth-form--field" appearance="outline">
     <mat-label>{{ 'Email:' }}</mat-label>
-    <input [formControl]="nameCtrl" type="email" matInput>
+    <input [formControl]="emailCtrl" type="email" matInput>
   </mat-form-field>
 
-  <mat-form-field class="auth-form--field">
+  <mat-form-field class="auth-form--field" appearance="outline">
     <mat-label>{{ 'Password:' }}</mat-label>
-    <input [formControl]="passwordCtrl" type="password" matInput>
+    <input [formControl]="passwordCtrl" [type]="passwordHide ? 'password' : 'text'" matInput>
+    <button mat-icon-button matSuffix (click)="passwordHide = !passwordHide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="passwordHide">
+      <mat-icon>{{passwordHide ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
   </mat-form-field>
 
-  <mat-form-field class="auth-form--field">
+  <mat-form-field class="auth-form--field" appearance="outline">
     <mat-label>{{ 'Repeat password:' }}</mat-label>
-    <input [formControl]="repeatPasswordCtrl" type="password" matInput>
+    <input [formControl]="repeatPasswordCtrl" [type]="repeatPasswordHide ? 'password' : 'text'" matInput>
+    <button mat-icon-button matSuffix (click)="repeatPasswordHide = !repeatPasswordHide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="repeatPasswordHide">
+      <mat-icon>{{repeatPasswordHide ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
   </mat-form-field>
 
   @if(invalidPasswordErrorMessage) {
-    <p>{{ invalidPasswordErrorMessage }}</p>
+    <p class="auth-form--error">{{ invalidPasswordErrorMessage }}</p>
   }
 
-  <div>
-    <button mat-flat-button
-            [disabled]="form.invalid"
-            type="submit" class="auth-form--submit">
-      {{ 'Registraion' }}
-    </button>
-  </div>
+  <button mat-flat-button
+          [class.auth-form--submit-enabled]="!form.invalid"
+          [disabled]="form.invalid"
+          type="submit" class="auth-form--submit">
+    {{ 'Sign Up' }}
+  </button>
 </form>
 
-<p><a [routerLink]="'../forget-password'">Forget your password?</a></p>
-<p><a [routerLink]="['../..', AppRoutes.SPENDING]">Skip</a></p>
-<br>
+<div class="auth-form--login">
+  <a [routerLink]="'../login'" class="auth-form--text-link">Already have an account?</a>
+</div>
 
--- OR --
-
-<p>Log In with Google</p>
-
-
+<pgz-social-login-wrapper class="social-login" (googleResponse)="loginWithGoogle($event)"></pgz-social-login-wrapper>

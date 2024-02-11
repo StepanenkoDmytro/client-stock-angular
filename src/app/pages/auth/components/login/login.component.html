@@ -1,4 +1,3 @@
-
 <p class="title-auth">Log In</p>
 
 <form class="auth-form"
@@ -6,7 +5,7 @@
       (ngSubmit)="handleSubmit()">
   <mat-form-field class="auth-form--field" appearance="outline">
     <mat-label>{{ 'Email:' }}</mat-label>
-    <input [formControl]="nameCtrl" type="email" matInput>
+    <input [formControl]="emailCtrl" type="email" matInput>
   </mat-form-field>
 
   <mat-form-field class="auth-form--field" appearance="outline">
@@ -21,32 +20,22 @@
     <a [routerLink]="'../forget-password'" class="auth-form--text-link">Forget your password?</a>
   </div>
 
-  <div>
-    <button mat-flat-button
-            [class.auth-form--submit-enabled]="!form.invalid"
-            [disabled]="form.invalid"
-            type="submit" class="auth-form--submit">
-      {{ 'Log In' }}
-    </button>
-  </div>
+  @if(loginError) {
+    <p class="auth-form--error">{{ loginError }}</p>
+  }
+
+  <button mat-flat-button
+          [class.auth-form--submit-enabled]="!form.invalid"
+          [disabled]="form.invalid"
+          type="submit" class="auth-form--submit">
+    {{ 'Log In' }}
+  </button>
 </form>
 
-<div class="or-login">
-  <div class="line"></div>
-  <span>Or Login with</span>
-  <div class="line"></div>
-</div>
-
-<div class="auth-form--social-media">
-  <pgz-google-btn (googleResponse)="loginWithGoogle($event)"></pgz-google-btn>
-  <pgz-facebook-btn></pgz-facebook-btn>
-</div>
+<pgz-social-login-wrapper class="social-login" (googleResponse)="loginWithGoogle($event)">
+</pgz-social-login-wrapper>
 
 <div class="auth-form--registration">
   <p>Don’t have an account? <a [routerLink]="'../registration'" class="auth-form--text-link">Register now</a></p>
   
 </div>
-
-
-
-

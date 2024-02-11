@@ -13,20 +13,21 @@
 
 .auth-form {
   width: 100%;
+  height: inherit;
   font-size: 16px;
   margin-bottom: 1.5rem;
   display: flex;
   flex-direction: column;
 
   &--submit {
-    margin-top: 80px;
+    margin-top: auto;
     width: 100%;
     height: 50px;
-    color: var(--bs-white);
   }
 
   &--submit-enabled {
     background-color: var(--bs-success) !important;
+    color: var(--bs-white) !important;
   }
 
   &--field {
@@ -46,26 +47,21 @@
     font-size: 18px;
   }
 
-  &--social-media {
+  &--error {
+    margin-top: 20px;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
+    color: var(--bs-danger);
+    font-weight: 500;
   }
 
   &--text-link {
     color: var(--bs-success);
+    font-weight: 500;
     text-decoration: none;
   }
 }
 
-.or-login {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: var(--bs-gray-600);
-  margin-bottom: 25px;
-}
-
-.line {
-  width: 30%;
-  border-bottom: 1px solid var(--bs-gray-300); 
+.social-login {
+  margin-bottom: 150px;
 }

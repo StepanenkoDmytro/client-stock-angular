@@ -5,11 +5,13 @@ import { firstValueFrom } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { RouterModule } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 
 const MATERIAL_MODULES = [
   MatFormFieldModule,
   MatInputModule,
+  MatButtonModule,
   ReactiveFormsModule
 ];
 
