@@ -8,7 +8,7 @@ import { ICompany, IMarket } from '../../../domain/savings.domain';
   providedIn: 'root'
 })
 export class StockService {
-  private readonly url: string = 'http://localhost:8000/api/v1/markets/stocks';
+  private readonly url: string = 'http://45.77.60.247:8000/api/v1/markets/stocks';
 
   constructor(private readonly httpClient: HttpClient) { }
 
