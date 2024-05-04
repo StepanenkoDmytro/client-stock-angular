@@ -14,7 +14,7 @@ import { ISpendingsState } from './spendings.reducer';
 
 @Injectable()
 export class SpendingsEffects {
-  private readonly url: string = 'http://localhost:8000/api/v1/profile/';
+  private readonly url: string = 'http://pegazzo.online:8000/api/v1/profile/';
 
   constructor(
     private actions$: Actions,

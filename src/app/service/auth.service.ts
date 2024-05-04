@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { catchError, Observable, of, switchMap } from 'rxjs';
-import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ILoginFormData } from '../domain/auth.domain';
 import { UserService } from './user.service';
@@ -12,12 +11,11 @@ import { IUserApiResponse } from '../domain/user.domain';
 })
 export class AuthService {
   private readonly authTokenKey = 'authToken';
-  private readonly url: string = 'http://45.77.60.247:8000/api/v1/auth/';
+  private readonly url: string = 'http://pegazzo.online:8000/api/v1/auth/';
 
   private _authToken: string = '';
 
   constructor(
-    private readonly router: Router,
     private userService: UserService,
     private readonly httpClient: HttpClient,
   ) { }
