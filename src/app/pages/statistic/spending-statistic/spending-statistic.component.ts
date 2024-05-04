@@ -8,11 +8,13 @@ import { HistorySpendingCardComponent } from '../../spending/components/history-
 import { IBarData, IMonthlySpending, ISpendingHistory, IYearSpending } from '../../../domain/statistic.domain';
 import { BarMappingHelperService } from '../../../core/UI/components/charts/bar/bar-mapping-helper.service';
 import { Spending } from '../../spending/model/Spending';
+import { MultiLineComponent } from '../../../core/UI/components/charts/multi-line/multi-line.component';
 
 
 const UI_COMPONENTS = [
   BarComponent,
   HistorySpendingCardComponent,
+  MultiLineComponent,
 ];
 
 const MATERIAL_MODULES = [
