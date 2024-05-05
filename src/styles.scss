@@ -178,13 +178,13 @@ body {
 }
 
 .add-btn {
-  margin-top: 20px;
-  margin-bottom: 10px;
+  position: absolute !important;
+  bottom: 70px;
   width: 90%;
   height: 50px !important;
   align-self: center;
   color: white !important;
-  background-color: var(--bs-success)!important;
+  background-color: var(--bs-success) !important;
 }
 
 /* Material form field-form css */

@@ -4,6 +4,7 @@
 }
 
 .spendings-history {
+  height: 100%;
 
   &--calendar {
     display: flex;
@@ -13,7 +14,7 @@
 
   &--list {
     overflow-y: scroll;
-    height: 45vh;
+    height: calc(100% - 90px);
   }
 
   &--list-item {
