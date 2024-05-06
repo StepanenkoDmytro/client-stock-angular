@@ -6,7 +6,8 @@ import { DateService } from '../../../../service/date.service';
 import { SpendingsService } from '../../../../service/spendings.service';
 import { HistorySpendingCardComponent } from '../history-spending/history-spending-card/history-spending-card.component';
 import { Spending } from '../../model/Spending';
-
+import { MatIconModule } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
 
 const UI_COMPONENTS = [
   CalendarComponent,
@@ -14,10 +15,14 @@ const UI_COMPONENTS = [
   HistorySpendingCardComponent
 ];
 
+const MATERIAL_COMPONENTS = [
+  MatIconModule
+];
+
 @Component({
   selector: 'pgz-calendar-spending',
   standalone: true,
-  imports: [...UI_COMPONENTS],
+  imports: [...UI_COMPONENTS, ...MATERIAL_COMPONENTS, RouterModule],
   templateUrl: './calendar-spending.component.html',
   styleUrl: './calendar-spending.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

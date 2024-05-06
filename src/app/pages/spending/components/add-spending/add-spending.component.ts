@@ -1,4 +1,4 @@
-import { AfterViewChecked, ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -34,7 +34,6 @@ const MATERIAL_MODULES = [
   MatDatepickerModule,
 ];
 
-
 @Component({
   selector: 'pgz-add-spending',
   standalone: true,
@@ -43,7 +42,7 @@ const MATERIAL_MODULES = [
   styleUrl: './add-spending.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AddSpendingComponent implements OnInit, OnDestroy, AfterViewChecked {
+export class AddSpendingComponent implements OnInit, OnDestroy {
   public categories: Category[] = Category.defaultList;
   public selectedCategory: Category = null /* this.data?.category */ || Category.default;
   public nameOfProduct: string = '';
@@ -58,9 +57,6 @@ export class AddSpendingComponent implements OnInit, OnDestroy, AfterViewChecked
     private editStateService: EditStateSpendingService,
     private readonly httpClient: HttpClient,
   ) { }
-  ngAfterViewChecked(): void {
-    console.log(this.costOfProduct);
-  }
 
   public ngOnInit(): void {
     this.editSpending = this.editStateService.editStateSpending;
