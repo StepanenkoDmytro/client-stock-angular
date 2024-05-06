@@ -8,6 +8,7 @@ import { HistorySpendingCardComponent } from '../history-spending/history-spendi
 import { Spending } from '../../model/Spending';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
+import moment from 'moment';
 
 const UI_COMPONENTS = [
   CalendarComponent,
@@ -37,6 +38,8 @@ export class CalendarSpendingComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
+    this.spendingsService.init();
+    
     this.dateService.date.pipe(
       switchMap(value => this.spendingsService.loadByDate(value))
     ).subscribe(spendings => {
