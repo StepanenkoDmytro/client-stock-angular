@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewChecked, ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,9 +15,15 @@ import { Router } from '@angular/router';
 import { EditStateSpendingService } from '../../service/edit-state-spending.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Spending } from '../../model/Spending';
+import { MoneyDirective } from '../../../../directive/money.directive';
 
 
 const UI_MODULES = [
+  MoneyDirective,
+  CategorySelectComponent,
+];
+
+const MATERIAL_MODULES = [
   MatSelectModule,
   MatFormFieldModule,
   MatIconModule,
@@ -26,19 +32,18 @@ const UI_MODULES = [
   FormsModule,
   MatNativeDateModule,
   MatDatepickerModule,
-  CategorySelectComponent,
 ];
 
 
 @Component({
   selector: 'pgz-add-spending',
   standalone: true,
-  imports: [...UI_MODULES, HttpClientModule],
+  imports: [...UI_MODULES, ...MATERIAL_MODULES, HttpClientModule],
   templateUrl: './add-spending.component.html',
   styleUrl: './add-spending.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AddSpendingComponent implements OnInit, OnDestroy {
+export class AddSpendingComponent implements OnInit, OnDestroy, AfterViewChecked {
   public categories: Category[] = Category.defaultList;
   public selectedCategory: Category = null /* this.data?.category */ || Category.default;
   public nameOfProduct: string = '';
@@ -53,6 +58,9 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
     private editStateService: EditStateSpendingService,
     private readonly httpClient: HttpClient,
   ) { }
+  ngAfterViewChecked(): void {
+    console.log(this.costOfProduct);
+  }
 
   public ngOnInit(): void {
     this.editSpending = this.editStateService.editStateSpending;

@@ -73,8 +73,7 @@ export class RegistrationComponent {
     }
 
     if(isSuccess) {
-      this.router.navigate(['/spending']);
-      console.log('TODO: create some ');
+      this.router.navigate(['/auth']);
     } else {
       console.log('TODO: mat error');
     }
