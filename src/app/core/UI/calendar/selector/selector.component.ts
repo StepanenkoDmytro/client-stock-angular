@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { DateFormatPipe } from '../date-format.pipe';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+
 import { DateService } from '../../../../service/date.service';
 import { AsyncPipe } from '@angular/common';
+import { DateFormatPipe } from '../date-format.pipe';
 
 
 @Component({
@@ -12,11 +13,18 @@ import { AsyncPipe } from '@angular/common';
   styleUrl: './selector.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SelectorComponent {
+export class SelectorComponent implements OnInit {
+  public currentDate: string;
 
   constructor(
     public dateService: DateService,
-  ) { }
+    ) { }
+
+  public ngOnInit(): void {
+    this.dateService.date.subscribe(date => {
+      this.currentDate = date.format('MMMM YYYY');
+    });
+  }
 
   public go(dir: number): void {
     this.dateService.changeMonth(dir);

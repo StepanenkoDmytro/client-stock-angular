@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { SelectorComponent } from './selector/selector.component';
 import moment from 'moment';
 import { DateService } from '../../../service/date.service';
@@ -33,10 +33,14 @@ export class CalendarComponent implements OnInit {
 
   constructor(
     private dateService: DateService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   public ngOnInit(): void {
-    this.dateService.date.subscribe(this.generate.bind(this))
+    this.dateService.date.subscribe(date => {
+      this.generate(date);
+      this.cdr.markForCheck();
+    });
   }
 
   public generate(now: moment.Moment) {
