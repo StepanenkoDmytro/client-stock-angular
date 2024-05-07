@@ -1,0 +1,16 @@
+<main class="total-balance-card">
+    <div class="portfolio-info">
+        <p>Monthly budget</p> 
+        <p class="portfolio-info--money">{{ monthlyBudget | moneyFormat }} $</p>
+    </div>
+
+    <div class="portfolio-info">
+        <p>Spent by month</p> 
+        <p class="portfolio-info--money">{{ spentByMonth | moneyFormat }} $</p>
+    </div>
+
+    <div class="portfolio-info">
+        <p class="portfolio-info--text">Balance</p> 
+        <p class="portfolio-info--balance">{{ balance | moneyFormat }} $</p>
+    </div>
+</main>

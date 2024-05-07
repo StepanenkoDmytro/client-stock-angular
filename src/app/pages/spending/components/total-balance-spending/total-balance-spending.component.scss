@@ -1,0 +1,52 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.total-balance-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  border: 1px solid var(--bs-gray-300);
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px;
+  background-color: var(--bs-gray-200);
+}
+
+.portfolio-info {
+  display: flex;
+  font-size: 17px;
+
+  &--money {
+    font-size: 20px;
+    font-weight: 600;
+    margin-left: auto;
+    color: var(--bs-orange);
+  }
+
+  &--balance {
+    font-size: 24px;
+    font-weight: 600;
+    margin-left: auto;
+    color: var(--bs-succes);
+  }
+
+  &--text {
+    font-size: 20px;
+    font-weight: 600;
+  }
+}
+
+.portfolio-info:not(:last-child) {
+  margin-bottom: 15px;
+}
+
+.monthly-info {
+  
+  &--total {
+    display: flex;
+    font-size: 15px;
+    font-weight: 500;
+  }
+}

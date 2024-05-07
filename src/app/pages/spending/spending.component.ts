@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ProgressComponent } from '../../core/UI/components/progress/progress.component';
-import { TotalBalanceComponent } from '../../core/UI/components/total-balance/total-balance.component';
 import { PeriodSpendingComponent } from './components/period-spending/period-spending.component';
 import { MatButtonModule } from '@angular/material/button';
 import { ButtonToggleComponent } from '../../core/UI/components/button-toggle/button-toggle.component';
@@ -9,11 +8,12 @@ import { ID3Value } from '../../domain/d3.domain';
 import { SpendingsService } from '../../service/spendings.service';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
+import { TotalBalanceSpendingComponent } from './components/total-balance-spending/total-balance-spending.component';
 
 
 const UI_COMPONENTS = [
   ProgressComponent,
-  TotalBalanceComponent,
+  TotalBalanceSpendingComponent,
   PeriodSpendingComponent,
   HistorySpendingComponent,
   ButtonToggleComponent,
