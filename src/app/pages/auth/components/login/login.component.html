@@ -2,7 +2,7 @@
 
 <form class="auth-form"
       [formGroup]="form"
-      (ngSubmit)="handleSubmit()">
+      (ngSubmit)="login()">
   <mat-form-field class="auth-form--field" appearance="outline">
     <mat-label>{{ 'Email:' }}</mat-label>
     <input [formControl]="emailCtrl" type="email" matInput>

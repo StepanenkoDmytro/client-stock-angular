@@ -8,6 +8,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { SocialLoginWrapperComponent } from '../social-login-wrapper/social-login-wrapper.component';
+import { UnsavedDataDialogComponent } from './unsaved-data-dialog/unsaved-data-dialog.component';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 
 const UI_COMPONENTS = [
@@ -44,6 +46,7 @@ export class LoginComponent implements OnInit {
     private readonly authService: AuthService,
     private router: Router,
     private ngZone: NgZone,
+    private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
   ) { }
 
@@ -54,7 +57,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  public async handleSubmit(): Promise<void> {
+  public async login(): Promise<void> {
     let isSuccess: boolean = false; 
     try {
       isSuccess = await firstValueFrom(this.authService.login(this.form.getRawValue()));
@@ -64,8 +67,7 @@ export class LoginComponent implements OnInit {
     }
 
     if(isSuccess) {
-      this.router.navigate(['/spending']);
-      console.log('TODO: create some flash message');
+     this.successLogin();
     } else {
       this.loginError = 'Invalid login or password';
     }
@@ -83,12 +85,30 @@ export class LoginComponent implements OnInit {
 
     if(isSuccess) {
       this.ngZone.run(() => {
-        this.router.navigate(['/spending']);
-        console.log('TODO: create some ');
+        this.successLogin();
       });
     } else {
       console.log('TODO: mat error');
     }
+  }
+
+  private successLogin(): void {
+    this.router.navigate(['/spending']);
+  }
+
+  private showUnsavedDataDialod(): void {
+    const dialogRef: MatDialogRef<UnsavedDataDialogComponent> = this.dialog.open(UnsavedDataDialogComponent, {
+      width: '250px',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'save') {
+        console.log('should save');
+      } else if (result === 'delete') {
+        console.log('should delete');
+      }
+    });
   }
 
   private showLoginError(): void {
