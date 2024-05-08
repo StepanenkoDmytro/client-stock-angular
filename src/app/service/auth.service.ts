@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { catchError, Observable, of, switchMap } from 'rxjs';
+import { catchError, map, Observable, of, switchMap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ILoginFormData } from '../domain/auth.domain';
 import { UserService } from './user.service';
@@ -37,6 +37,8 @@ export class AuthService {
         this.userService.saveUser(resp.user);
         this._authToken = resp.token;
         localStorage.setItem(this.authTokenKey, this._authToken);
+
+        // this.uploadUnsavedDataToServer();
         return of(true);
       }),
       catchError( (error: Error) => {
@@ -50,12 +52,7 @@ export class AuthService {
     const loginUrl: string = this.url + 'sign-up';
 
     return this.httpClient.post(loginUrl, data).pipe(
-      switchMap( (resp: any) => {
-        this.userService.saveUser(resp.user);
-        this._authToken = resp.token;
-        localStorage.setItem(this.authTokenKey, this._authToken);
-        return of(true);
-      }),
+      map(() => true),
       catchError( (error: Error) => {
         this.handleApiError(error);
         return of(false);
@@ -71,6 +68,7 @@ export class AuthService {
         this.userService.saveUser(resp.user);
         this._authToken = resp.token;
         localStorage.setItem(this.authTokenKey, this._authToken);
+        // this.uploadUnsavedDataToServer();
         return of(true);
       }),
       catchError( (error: Error) => {
@@ -82,6 +80,18 @@ export class AuthService {
 
   public restorePassword(): Observable<any> {
     return of(true);
+  }
+
+  public hasUnsavedDataOnServer(): Promise<boolean> {
+    return this.userService.hasUnsavedDataOnServer();
+  }
+
+  public uploadUnsavedDataToServer(): void {
+    this.userService.uploadUnsavedDataToServer();
+  }
+
+  public deleteUnsavedData(): void {
+    this.userService.deleteUnsavedData();
   }
 
   public logOut(): void {

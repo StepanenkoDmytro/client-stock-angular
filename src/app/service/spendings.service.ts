@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, filter, map } from 'rxjs';
+import { Observable, filter, lastValueFrom, map } from 'rxjs';
 import moment from 'moment';
 import { ISpendingsState } from '../pages/spending/store/spendings.reducer';
 import { Store, select } from '@ngrx/store';
@@ -35,6 +35,20 @@ export class SpendingsService {
     );
   }
 
+  public getSpentByDay(): Observable<number> {
+    const currentDay = moment(new Date);
+    return this.loadByDate(currentDay).pipe(
+      map(spendingList => {
+        if (spendingList) {
+          return spendingList
+            .map(spend => spend.cost)
+            .reduce((accumulator, cost) => accumulator + cost, 0);
+        }
+        return 0; 
+      })
+    );
+  }
+
   public addSpending(spending: Spending): void {
     if(spending.title === null) {
       throw Error('cost or name of product can not be null')
@@ -53,18 +67,18 @@ export class SpendingsService {
     this.store$.dispatch(deleteSpending({id}));
   }
 
-  public getSpentByDay(): Observable<number> {
-    const currentDay = moment(new Date);
-    return this.loadByDate(currentDay).pipe(
-      map(spendingList => {
-        if (spendingList) {
-          return spendingList
-            .map(spend => spend.cost)
-            .reduce((accumulator, cost) => accumulator + cost, 0);
-        }
-        return 0; 
-      })
-    );
+  public async deleteUnsavedSpendings(): Promise<void> {
+    try {
+      const allSpendings: Spending[] = await lastValueFrom(this.getAll());
+      const unsavedSpendings: Spending[] = allSpendings.filter(spending => spending.isSaved === false);
+      if (unsavedSpendings.length > 0) {
+        unsavedSpendings.forEach(spending => this.deleteSpending(spending));
+      } else {
+        console.log('No unsaved spendings to delete.');
+      }
+    } catch (error) {
+      console.error('Error deleting unsaved spendings:', error);
+    }
   }
 
   public getAll(): Observable<Spending[]> {
@@ -91,7 +105,7 @@ export class SpendingsService {
     window.addEventListener('storage', () => this.loadFromStorage());
   }
 
-  private loadFromStorage(): void {
+  public loadFromStorage(): void {
     
     const storageState = localStorage.getItem(this.spendingHistoryLocalStorageKey);
     if(storageState) {

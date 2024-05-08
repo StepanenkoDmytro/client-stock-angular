@@ -58,6 +58,7 @@ export class LoginComponent implements OnInit {
   }
 
   public async login(): Promise<void> {
+    debugger;
     let isSuccess: boolean = false; 
     try {
       isSuccess = await firstValueFrom(this.authService.login(this.form.getRawValue()));
@@ -93,7 +94,13 @@ export class LoginComponent implements OnInit {
   }
 
   private successLogin(): void {
-    this.router.navigate(['/spending']);
+    const hasUnsavedDataOnServer: Promise<boolean> = this.authService.hasUnsavedDataOnServer();
+    if(hasUnsavedDataOnServer) {
+      this.showUnsavedDataDialod();
+      return;
+    } else {
+      this.router.navigate(['/spending']);
+    }
   }
 
   private showUnsavedDataDialod(): void {
@@ -104,10 +111,11 @@ export class LoginComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'save') {
-        console.log('should save');
+        this.authService.uploadUnsavedDataToServer();
       } else if (result === 'delete') {
-        console.log('should delete');
+        this.authService.deleteUnsavedData();
       }
+      this.router.navigate(['/spending']);
     });
   }
 
