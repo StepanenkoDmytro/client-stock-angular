@@ -82,15 +82,16 @@ export class SpendingsEffects {
     const loadSpendingsUrl = this.url + 'spendings-list/' + portfolioID;
     return this.http.get<Spending[]>(loadSpendingsUrl).pipe(
       map(serverSpendings => {
+        console.log('serverSpendings', serverSpendings);
         const clientSpendings = spendingState.spendingsHistory;
         const newSpendingsFromServer = this.filterNewSpendingsFromServer(serverSpendings, clientSpendings);
-
+        console.log('clientSpendings', clientSpendings);
         if (newSpendingsFromServer.length > 0) {
           this.store.dispatch(addMultipleSpendings({ spendings: newSpendingsFromServer }));
         }
 
         this.sendUnsavedSpendingsToServer(clientSpendings);
-
+        
         return spendingState; 
       }),
       catchError(error => {
@@ -110,6 +111,7 @@ export class SpendingsEffects {
     clientSpendings
       .filter(spending => !spending.isSaved)
       .forEach(unsavedSpending => {
+        console.log('unsavedSpending', unsavedSpending);
         this.store.dispatch(addSpending({ spending: unsavedSpending }));
       });
   }

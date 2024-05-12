@@ -17,11 +17,16 @@ const initialSpendingsState: ISpendingsState = {
 export const spendingsReducer = createReducer(
   initialSpendingsState,
   on(addSpending, (state, action) => {
+    const newSpending = action.payload.spending;
+    const isExist = state.spendingsHistory.find(spending => spending.id === newSpending.id);
+    if(!isExist) {
       return {
           ...state,
           idIncrement: state.idIncrement + 1,
           spendingsHistory: [...state.spendingsHistory, action.payload.spending],
       };
+    }
+    return state;
   }),
   on(editSpending, (state, action) => {
     const updatedSpendingsHistory = state.spendingsHistory.map(spending => {

@@ -65,7 +65,6 @@ export class LoginComponent implements OnInit {
     let isSuccess: boolean = false; 
     try {
       isSuccess = await firstValueFrom(this.authService.login(this.form.getRawValue()));
-      console.log(isSuccess);
     } catch (e) {
       this.showLoginError();
     }
