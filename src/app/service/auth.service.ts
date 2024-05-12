@@ -92,6 +92,8 @@ export class AuthService {
 
   public deleteUnsavedData(): void {
     this.userService.deleteUnsavedData();
+
+    
   }
 
   public logOut(): void {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, filter, lastValueFrom, map } from 'rxjs';
+import { Observable, filter, firstValueFrom, lastValueFrom, map } from 'rxjs';
 import moment from 'moment';
 import { ISpendingsState } from '../pages/spending/store/spendings.reducer';
 import { Store, select } from '@ngrx/store';
@@ -68,8 +68,10 @@ export class SpendingsService {
   }
 
   public async deleteUnsavedSpendings(): Promise<void> {
+    
     try {
-      const allSpendings: Spending[] = await lastValueFrom(this.getAll());
+      const allSpendings: Spending[] = await firstValueFrom(this.getAll());
+      debugger;
       const unsavedSpendings: Spending[] = allSpendings.filter(spending => spending.isSaved === false);
       if (unsavedSpendings.length > 0) {
         unsavedSpendings.forEach(spending => this.deleteSpending(spending));

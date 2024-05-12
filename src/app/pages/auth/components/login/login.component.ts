@@ -10,6 +10,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { SocialLoginWrapperComponent } from '../social-login-wrapper/social-login-wrapper.component';
 import { UnsavedDataDialogComponent } from './unsaved-data-dialog/unsaved-data-dialog.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ISavingsState } from '../../../savings/store/asset.reducer';
+import { Store } from '@ngrx/store';
+import { deleteUnsavedData } from '../../../../store/sync-data.actions';
 
 
 const UI_COMPONENTS = [
@@ -48,6 +51,7 @@ export class LoginComponent implements OnInit {
     private ngZone: NgZone,
     private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
+    private store$: Store
   ) { }
 
   public ngOnInit(): void {
@@ -58,7 +62,6 @@ export class LoginComponent implements OnInit {
   }
 
   public async login(): Promise<void> {
-    debugger;
     let isSuccess: boolean = false; 
     try {
       isSuccess = await firstValueFrom(this.authService.login(this.form.getRawValue()));
@@ -110,10 +113,8 @@ export class LoginComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result === 'save') {
-        this.authService.uploadUnsavedDataToServer();
-      } else if (result === 'delete') {
-        this.authService.deleteUnsavedData();
+      if (result === 'delete') {
+        this.store$.dispatch(deleteUnsavedData({}));
       }
       this.router.navigate(['/spending']);
     });

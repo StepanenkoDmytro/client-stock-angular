@@ -13,6 +13,7 @@ import { assetReducer } from './pages/savings/store/asset.reducer';
 import { spendingsReducer } from './pages/spending/store/spendings.reducer';
 import { JwtInterceptor } from './pages/auth/jwt.interceptor';
 import { SpendingsEffects } from './pages/spending/store/spendings.effects';
+import { SyncDataEffects } from './store/sync-data.effects';
 
 
 export const appConfig: ApplicationConfig = {
@@ -28,7 +29,7 @@ export const appConfig: ApplicationConfig = {
     provideState({ name: 'user-info', reducer: userReducer }),
     provideState({ name: 'spending', reducer: spendingsReducer }),
     provideState({ name: 'assets', reducer: assetReducer }),
-    provideEffects([SpendingsEffects]),
+    provideEffects([SpendingsEffects, SyncDataEffects]),
     provideStoreDevtools({
       maxAge: 25, 
       logOnly: !isDevMode(),
