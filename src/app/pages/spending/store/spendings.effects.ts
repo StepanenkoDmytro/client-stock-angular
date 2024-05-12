@@ -67,7 +67,6 @@ export class SpendingsEffects {
 
     return this.http.post(savedSpendingUrl, transformedToApi).pipe(
       tap((response: any) => {
-        console.log('response from server ', response);
         const transformedFromApi = Spending.mapFromSpendingApi(response);
         this.store.dispatch(editSpending({ spending: transformedFromApi }));
       }), 
@@ -82,10 +81,9 @@ export class SpendingsEffects {
     const loadSpendingsUrl = this.url + 'spendings-list/' + portfolioID;
     return this.http.get<Spending[]>(loadSpendingsUrl).pipe(
       map(serverSpendings => {
-        console.log('serverSpendings', serverSpendings);
         const clientSpendings = spendingState.spendingsHistory;
         const newSpendingsFromServer = this.filterNewSpendingsFromServer(serverSpendings, clientSpendings);
-        console.log('clientSpendings', clientSpendings);
+        
         if (newSpendingsFromServer.length > 0) {
           this.store.dispatch(addMultipleSpendings({ spendings: newSpendingsFromServer }));
         }

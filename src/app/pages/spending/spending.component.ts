@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ProgressComponent } from '../../core/UI/components/progress/progress.component';
 import { PeriodSpendingComponent } from './components/period-spending/period-spending.component';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,6 +9,8 @@ import { SpendingsService } from '../../service/spendings.service';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { TotalBalanceSpendingComponent } from './components/total-balance-spending/total-balance-spending.component';
+import { Spending } from './model/Spending';
+import { combineLatest } from 'rxjs';
 
 
 const UI_COMPONENTS = [
@@ -39,18 +41,24 @@ export class SpendingComponent implements OnInit {
     money: 0,
   };
 
+  public spendings: Spending[];
   public isSpendingsFrame: boolean = true;
 
   constructor(
     public spendingsService: SpendingsService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   public ngOnInit(): void {
-    this.spendingsService.init();
-    this.spendingsService.getSpentByDay().subscribe(spend => {
-      if(spend) {
-      this.expends.money = spend;
-      }
+    this.spendingsService.init(); 
+    combineLatest([
+      this.spendingsService.getSpentByDay(),
+      this.spendingsService.loadByCurrentMonth()
+    ]).subscribe(([spentByDay, spendings]) => {
+      this.expends = {...this.expends, money: spentByDay};
+      this.spendings = spendings;
+
+      this.cdr.detectChanges();
     });
   }
 

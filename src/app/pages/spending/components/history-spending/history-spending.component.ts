@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import moment from 'moment';
 import { ICategorizedSpendings } from '../../../../domain/spending.domain';
@@ -25,6 +25,7 @@ const MATERIAL_MODULES = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HistorySpendingComponent implements OnInit {
+  @Input()
   public spendings: Spending[];
   public categoriesSpendings: ICategorizedSpendings;
 
@@ -33,11 +34,7 @@ export class HistorySpendingComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    this.spendingsService.loadByCurrentMonth().subscribe(spendings => {
-      this.spendings = spendings;
-      this.categoriesSpendings = this.categorizeSpendings(this.spendings);
-    });
-    
+    this.categoriesSpendings = this.categorizeSpendings(this.spendings);
   }
 
   private categorizeSpendings(spendings: Spending[]): ICategorizedSpendings {

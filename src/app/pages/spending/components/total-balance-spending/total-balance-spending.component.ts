@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MoneyPipe } from '../../../../pipe/money.pipe';
 import { TotalBalanceService } from '../../../../core/UI/components/total-balance/total-balance.service';
 import { combineLatest } from 'rxjs';
@@ -18,17 +18,20 @@ export class TotalBalanceSpendingComponent implements OnInit {
 
   constructor(
     private totalBalanceService: TotalBalanceService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   public ngOnInit(): void {
     combineLatest(
-      this.totalBalanceService.getMonthlyBudget(),
-      this.totalBalanceService.getSpentByMonth()
+      [this.totalBalanceService.getMonthlyBudget(),
+      this.totalBalanceService.getSpentByMonth()]
     ).subscribe(([ monthlyBudget, spentByMonth ]) => {
+      console.log(monthlyBudget,spentByMonth)
       this.monthlyBudget = monthlyBudget;
       this.spentByMonth = spentByMonth;
 
       this.balance = monthlyBudget - spentByMonth;
+      this.cdr.markForCheck();
     });
   }
 }

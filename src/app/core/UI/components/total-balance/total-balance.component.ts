@@ -28,8 +28,8 @@ export class TotalBalanceComponent implements OnInit {
   public ngOnInit(): void {
     combineLatest(
       // this.savingService.getCostOfAllAssets(),
-      this.totalBalanceService.getMonthlyBudget(),
-      this.totalBalanceService.getSpentByMonth()
+      [this.totalBalanceService.getMonthlyBudget(),
+      this.totalBalanceService.getSpentByMonth()]
     ).subscribe(([ monthlyBudget, spentByMonth ]) => {
       // this.portfolioCost = portfolioCost;
       this.monthlyBudget = monthlyBudget;

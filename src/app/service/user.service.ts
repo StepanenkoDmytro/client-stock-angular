@@ -61,7 +61,7 @@ export class UserService {
     }
 
     this.isInit = true;
-    
+
     this.loadFromStorage();
 
     this.store$.pipe(
