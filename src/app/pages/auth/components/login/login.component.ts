@@ -114,7 +114,7 @@ export class LoginComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'delete') {
-        this.store$.dispatch(deleteUnsavedData({}));
+        this.store$.dispatch(deleteUnsavedData());
       }
       this.router.navigate(['/spending']);
     });

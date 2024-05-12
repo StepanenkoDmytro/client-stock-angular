@@ -5,7 +5,7 @@ import { Injectable } from "@angular/core";
 import { deleteUnsavedData } from "./sync-data.actions";
 import { tap, withLatestFrom } from "rxjs";
 import { spendingsHistorySelector } from "../pages/spending/store/spendings.selectors";
-import { deleteSpending } from "../pages/spending/store/spendings.actions";
+import { deleteSpendingWithoutApiCall } from "../pages/spending/store/spendings.actions";
 
 @Injectable()
 export class SyncDataEffects {
@@ -23,7 +23,7 @@ export class SyncDataEffects {
     tap(([action, spendings]) => {
         spendings.forEach(spending => {
             const id = spending.id;
-            this.store$.dispatch(deleteSpending({id}));
+            this.store$.dispatch(deleteSpendingWithoutApiCall({id}));
         });
     })
     ), { dispatch: false });

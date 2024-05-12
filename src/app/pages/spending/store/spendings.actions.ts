@@ -34,6 +34,12 @@ export const deleteSpending =
         (payload: { id: string }) => ({ payload })
     );
 
+export const deleteSpendingWithoutApiCall = 
+    createAction(
+        '[SPENDING] Delete Spendings Without api call', 
+        (payload: { id: string }) => ({ payload })
+    );
+
 export const loadSpendingFailure = createAction(
     '[Spending] Load Spending Failure',
     props<{ error: any }>()

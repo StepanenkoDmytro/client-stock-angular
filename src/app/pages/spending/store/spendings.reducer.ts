@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { addSpending, editSpending, deleteSpending, loadSpending, addMultipleSpendings } from "./spendings.actions";
+import { addSpending, editSpending, deleteSpending, loadSpending, addMultipleSpendings, deleteSpendingWithoutApiCall } from "./spendings.actions";
 import { Spending } from "../model/Spending";
 import { logout } from "../../../store/user.actions";
 
@@ -57,6 +57,16 @@ export const spendingsReducer = createReducer(
         spendingsHistory: updatedSpendingsHistory,
     };
   }),  
+  on(deleteSpendingWithoutApiCall, (state, action) => {
+    const updatedSpendingsHistory = state.spendingsHistory.filter(
+      spending => spending.id !== action.payload.id
+    );
+  
+    return {
+        ...state,
+        spendingsHistory: updatedSpendingsHistory,
+    };
+  }), 
   on(logout, () => {
     return { ...initialSpendingsState };
   })
