@@ -13,6 +13,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ISavingsState } from '../../../savings/store/asset.reducer';
 import { Store } from '@ngrx/store';
 import { deleteUnsavedData } from '../../../../store/sync-data.actions';
+import { loadSpending } from '../../../spending/store/spendings.actions';
 
 
 const UI_COMPONENTS = [
@@ -95,8 +96,8 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  private successLogin(): void {
-    const hasUnsavedDataOnServer: Promise<boolean> = this.authService.hasUnsavedDataOnServer();
+  private async successLogin(): Promise<void> {
+    const hasUnsavedDataOnServer: boolean = await this.authService.hasUnsavedDataOnServer();
     if(hasUnsavedDataOnServer) {
       this.showUnsavedDataDialod();
       return;

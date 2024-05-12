@@ -26,7 +26,6 @@ export class TotalBalanceSpendingComponent implements OnInit {
       [this.totalBalanceService.getMonthlyBudget(),
       this.totalBalanceService.getSpentByMonth()]
     ).subscribe(([ monthlyBudget, spentByMonth ]) => {
-      console.log(monthlyBudget,spentByMonth)
       this.monthlyBudget = monthlyBudget;
       this.spentByMonth = spentByMonth;
 

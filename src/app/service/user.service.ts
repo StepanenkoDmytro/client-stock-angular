@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IUser } from '../model/User';
 import { Store, select } from '@ngrx/store';
-import { BehaviorSubject, Observable, filter, lastValueFrom } from 'rxjs';
+import { BehaviorSubject, Observable, filter, firstValueFrom, lastValueFrom } from 'rxjs';
 import { IUserState } from '../store/user.reducer';
 import { userFeatureSelector } from '../store/user.selectors';
 import { loadUser, logout, saveUser } from '../store/user.actions';
@@ -35,8 +35,9 @@ export class UserService {
 
   public async hasUnsavedDataOnServer(): Promise<boolean> {
     try{
-    const allSpendings: Spending[] = await lastValueFrom(this.spendingService.getAll());
-    return allSpendings.some(spending => spending.isSaved === false);
+    const allSpendings: Spending[] = await firstValueFrom(this.spendingService.getAll());
+    const result = allSpendings.some(spending => spending.isSaved === false);
+    return result;
     } catch (error) {
       console.error('hasUnsavedDataOnServer: ', error);
       return false;
