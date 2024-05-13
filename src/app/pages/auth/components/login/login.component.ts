@@ -110,15 +110,18 @@ export class LoginComponent implements OnInit {
 
   private showUnsavedDataDialod(): void {
     const dialogRef: MatDialogRef<UnsavedDataDialogComponent> = this.dialog.open(UnsavedDataDialogComponent, {
-      width: '250px',
+      width: '400px',
+      data: this.emailCtrl.value,
       disableClose: true
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'delete') {
         this.store$.dispatch(deleteUnsavedData());
+        this.router.navigate(['/spending']);
+      } else if (result === 'save') {
+        this.router.navigate(['/spending']);
       }
-      this.router.navigate(['/spending']);
     });
   }
 

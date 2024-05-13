@@ -1,4 +1,9 @@
-<h2></h2>
-<p>Should we saved unsaved data?</p>
-<button mat-button (click)="onSave()">Save</button>
-<button mat-button (click)="onDelete()">Delete</button>
+<div class="unsaved-data--warning">
+    <mat-icon>report</mat-icon>
+    <h3>You have unsaved changes</h3>
+</div>
+<p class="unsaved-data--message">Should we upload unsaved data to the <span class="user-storage">{{data}}</span> account?</p>
+<div class="unsaved-data--actions">
+    <button class="unsaved-data--btn save" mat-button (click)="onSave()">Save</button>
+    <button class="unsaved-data--btn delete" mat-button (click)="onDelete()">Delete</button>
+</div>
