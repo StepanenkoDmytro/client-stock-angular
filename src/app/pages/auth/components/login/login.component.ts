@@ -10,10 +10,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { SocialLoginWrapperComponent } from '../social-login-wrapper/social-login-wrapper.component';
 import { UnsavedDataDialogComponent } from './unsaved-data-dialog/unsaved-data-dialog.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { ISavingsState } from '../../../savings/store/asset.reducer';
 import { Store, select } from '@ngrx/store';
 import { deleteUnsavedData } from '../../../../store/sync-data.actions';
-import { loadSpending } from '../../../spending/store/spendings.actions';
 import { spendingsHistorySelector } from '../../../spending/store/spendings.selectors';
 import { Spending } from '../../../spending/model/Spending';
 
@@ -118,10 +116,8 @@ export class LoginComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'delete') {
         this.store$.dispatch(deleteUnsavedData());
-        this.router.navigate(['/spending']);
-      } else if (result === 'save') {
-        this.router.navigate(['/spending']);
       }
+      this.router.navigate(['/spending']);
     });
   }
 

@@ -1,6 +1,7 @@
 :host {
   display: block;
   width: 100%;
+  height: 100%;
 }
 
 .spendings-history {
@@ -13,9 +14,7 @@
   }
 
   &--list {
-    overflow-y: scroll;
-    height: 100%;
-    // height: calc(100% - 90px);
+    padding-inline: 10px;
   }
 
   &--list-item {

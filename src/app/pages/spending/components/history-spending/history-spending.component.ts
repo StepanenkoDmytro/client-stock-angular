@@ -1,9 +1,8 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import moment from 'moment';
 import { ICategorizedSpendings } from '../../../../domain/spending.domain';
 import { HistorySpendingCardComponent } from './history-spending-card/history-spending-card.component';
-import { SpendingsService } from '../../../../service/spendings.service';
 import { Spending } from '../../model/Spending';
 
 
@@ -15,7 +14,6 @@ const MATERIAL_MODULES = [
   MatIconModule,
 ];
 
-
 @Component({
   selector: 'pgz-history-spending',
   standalone: true,
@@ -24,18 +22,14 @@ const MATERIAL_MODULES = [
   styleUrl: './history-spending.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HistorySpendingComponent implements OnInit {
+export class HistorySpendingComponent {
+  
   @Input()
-  public spendings: Spending[];
-  public categoriesSpendings: ICategorizedSpendings;
-
-  constructor(
-    public spendingsService: SpendingsService,
-  ) { }
-
-  public ngOnInit(): void {
-    this.categoriesSpendings = this.categorizeSpendings(this.spendings);
+  public set spendings(value: Spending[]) {
+    this.categoriesSpendings = this.categorizeSpendings([...value]);
   }
+
+  public categoriesSpendings: ICategorizedSpendings;
 
   private categorizeSpendings(spendings: Spending[]): ICategorizedSpendings {
     const today = moment().startOf('day');

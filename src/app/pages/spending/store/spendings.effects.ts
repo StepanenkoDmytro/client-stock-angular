@@ -109,7 +109,6 @@ export class SpendingsEffects {
     clientSpendings
       .filter(spending => !spending.isSaved)
       .forEach(unsavedSpending => {
-        console.log('unsavedSpending', unsavedSpending);
         this.store.dispatch(addSpending({ spending: unsavedSpending }));
       });
   }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ProgressComponent } from '../../core/UI/components/progress/progress.component';
 import { PeriodSpendingComponent } from './components/period-spending/period-spending.component';
 import { MatButtonModule } from '@angular/material/button';
@@ -26,7 +26,6 @@ const MATERIAL_MODULES = [
   MatIconModule,
 ];
 
-
 @Component({
   selector: 'pgz-spending',
   templateUrl: './spending.component.html',
@@ -46,7 +45,6 @@ export class SpendingComponent implements OnInit {
 
   constructor(
     public spendingsService: SpendingsService,
-    private cdr: ChangeDetectorRef
   ) { }
 
   public ngOnInit(): void {
@@ -56,9 +54,7 @@ export class SpendingComponent implements OnInit {
       this.spendingsService.loadByCurrentMonth()
     ]).subscribe(([spentByDay, spendings]) => {
       this.expends = {...this.expends, money: spentByDay};
-      this.spendings = spendings;
-
-      this.cdr.detectChanges();
+      this.spendings = [...spendings];
     });
   }
 
