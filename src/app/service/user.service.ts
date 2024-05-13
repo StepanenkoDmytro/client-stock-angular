@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
 import { IUser } from '../model/User';
 import { Store, select } from '@ngrx/store';
-import { BehaviorSubject, Observable, filter, firstValueFrom, lastValueFrom } from 'rxjs';
+import { BehaviorSubject, Observable, filter } from 'rxjs';
 import { IUserState } from '../store/user.reducer';
 import { userFeatureSelector } from '../store/user.selectors';
 import { loadUser, logout, saveUser } from '../store/user.actions';
 import { IUserApi } from '../domain/user.domain';
-import { SpendingsService } from '../service/spendings.service';
-import { Spending } from '../pages/spending/model/Spending';
 
 
 @Injectable({
@@ -21,7 +19,6 @@ export class UserService {
 
   constructor(
     private store$: Store<IUserState>,
-    private spendingService: SpendingsService
   ) { }
 
   public getUser(): Observable<IUser> {
@@ -31,25 +28,6 @@ export class UserService {
   public saveUser(user: IUserApi): void {
     const newUser: IUser = this.mapUserFromApi(user);
     this.store$.dispatch(saveUser({user: newUser}));
-  }
-
-  public async hasUnsavedDataOnServer(): Promise<boolean> {
-    try{
-    const allSpendings: Spending[] = await firstValueFrom(this.spendingService.getAll());
-    const result = allSpendings.some(spending => spending.isSaved === false);
-    return result;
-    } catch (error) {
-      console.error('hasUnsavedDataOnServer: ', error);
-      return false;
-    }
-  }
-
-  public uploadUnsavedDataToServer(): void {
-    this.spendingService.loadFromStorage();
-  }
-
-  public deleteUnsavedData(): void {
-    this.spendingService.deleteUnsavedSpendings();
   }
 
   public logout(): void {

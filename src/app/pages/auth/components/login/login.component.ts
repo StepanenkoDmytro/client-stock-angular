@@ -11,9 +11,11 @@ import { SocialLoginWrapperComponent } from '../social-login-wrapper/social-logi
 import { UnsavedDataDialogComponent } from './unsaved-data-dialog/unsaved-data-dialog.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ISavingsState } from '../../../savings/store/asset.reducer';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { deleteUnsavedData } from '../../../../store/sync-data.actions';
 import { loadSpending } from '../../../spending/store/spendings.actions';
+import { spendingsHistorySelector } from '../../../spending/store/spendings.selectors';
+import { Spending } from '../../../spending/model/Spending';
 
 
 const UI_COMPONENTS = [
@@ -52,7 +54,7 @@ export class LoginComponent implements OnInit {
     private ngZone: NgZone,
     private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
-    private store$: Store
+    private store$: Store<any>
   ) { }
 
   public ngOnInit(): void {
@@ -97,7 +99,7 @@ export class LoginComponent implements OnInit {
   }
 
   private async successLogin(): Promise<void> {
-    const hasUnsavedDataOnServer: boolean = await this.authService.hasUnsavedDataOnServer();
+    const hasUnsavedDataOnServer: boolean = await this.hasUnsavedDataOnServer();
     if(hasUnsavedDataOnServer) {
       this.showUnsavedDataDialod();
       return;
@@ -122,5 +124,16 @@ export class LoginComponent implements OnInit {
 
   private showLoginError(): void {
     console.log('Error :D')
+  }
+
+  private async hasUnsavedDataOnServer(): Promise<boolean> {
+    try{
+    const allSpendings: Spending[] = await firstValueFrom(this.store$.pipe(select(spendingsHistorySelector)));
+    const result = allSpendings.some(spending => spending.isSaved === false);
+    return result;
+    } catch (error) {
+      console.error('hasUnsavedDataOnServer: ', error);
+      return false;
+    }
   }
 }

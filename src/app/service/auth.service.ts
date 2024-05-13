@@ -38,7 +38,6 @@ export class AuthService {
         this._authToken = resp.token;
         localStorage.setItem(this.authTokenKey, this._authToken);
 
-        // this.uploadUnsavedDataToServer();
         return of(true);
       }),
       catchError( (error: Error) => {
@@ -68,7 +67,6 @@ export class AuthService {
         this.userService.saveUser(resp.user);
         this._authToken = resp.token;
         localStorage.setItem(this.authTokenKey, this._authToken);
-        // this.uploadUnsavedDataToServer();
         return of(true);
       }),
       catchError( (error: Error) => {
@@ -80,20 +78,6 @@ export class AuthService {
 
   public restorePassword(): Observable<any> {
     return of(true);
-  }
-
-  public hasUnsavedDataOnServer(): Promise<boolean> {
-    return this.userService.hasUnsavedDataOnServer();
-  }
-
-  public uploadUnsavedDataToServer(): void {
-    this.userService.uploadUnsavedDataToServer();
-  }
-
-  public deleteUnsavedData(): void {
-    this.userService.deleteUnsavedData();
-
-    
   }
 
   public logOut(): void {

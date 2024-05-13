@@ -67,22 +67,6 @@ export class SpendingsService {
     this.store$.dispatch(deleteSpending({id}));
   }
 
-  public async deleteUnsavedSpendings(): Promise<void> {
-    
-    try {
-      const allSpendings: Spending[] = await firstValueFrom(this.getAll());
-      debugger;
-      const unsavedSpendings: Spending[] = allSpendings.filter(spending => spending.isSaved === false);
-      if (unsavedSpendings.length > 0) {
-        unsavedSpendings.forEach(spending => this.deleteSpending(spending));
-      } else {
-        console.log('No unsaved spendings to delete.');
-      }
-    } catch (error) {
-      console.error('Error deleting unsaved spendings:', error);
-    }
-  }
-
   public getAll(): Observable<Spending[]> {
     return this.store$.pipe(select(spendingsHistorySelector));
   }
