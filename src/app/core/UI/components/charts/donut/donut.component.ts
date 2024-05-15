@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { ID3Value, SimpleDataModel } from '../../../../../domain/d3.domain';
+import { SimpleDataModel } from '../../../../../domain/d3.domain';
 import * as d3 from 'd3';
 
 
@@ -14,8 +14,8 @@ import * as d3 from 'd3';
 })
 export class DonutComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input()
-  public set portfolio(value: ID3Value | null) {
-    this._portfolio$.next(value);
+  public set data(value: SimpleDataModel[] | null) {
+    this._data$.next(value);
   }
   public donutID: string = 'donut';
 
@@ -23,10 +23,8 @@ export class DonutComponent implements OnInit, AfterViewInit, OnDestroy {
   public color: string = '#CBCACA';
   public d3 = d3;
 
-  private _portfolio$ = new BehaviorSubject<ID3Value | null>(null);
-  private data: SimpleDataModel[] = [];
-  private totalBalance: number = 0;
-  private riskness: string = '';
+  private _data$ = new BehaviorSubject<SimpleDataModel[] | null>(null);
+  private dataSubject: SimpleDataModel[] = [];
 
   private margin = { top: 0, right: 0, bottom: 0, left: 0 };
   private width = 450;
@@ -35,49 +33,36 @@ export class DonutComponent implements OnInit, AfterViewInit, OnDestroy {
   private colors: any;
   private radius = Math.min(this.width, this.height) / 2 - this.margin.left;
 
-  private mouseMove$: any;
   private sub: Subscription | null = null;
 
   public ngOnInit(): void {
     const randomNum = Math.floor(Math.random() * 100);
+
     this.donutID = `${this.donutID}${randomNum}`;
-    this.sub = this._portfolio$.subscribe(portfolio => {
-      if (portfolio) {
-        this.updateD3(portfolio);
+    this.sub = this._data$.subscribe(data => {
+      if (data) {
+        this.updateD3(data);
       }
     });
   }
 
   public ngAfterViewInit(): void {
-    if (this._portfolio$.value) {
-      this.updateD3(this._portfolio$.value);
+    if (this._data$.value) {
+      this.updateD3(this._data$.value);
     }
   }
 
-  private updateD3(portfolio: ID3Value): void {
-    this.data = [this.mapStocksToSimpleDataModel(portfolio)];
+  private updateD3(data: SimpleDataModel[]): void {
+    this.dataSubject = data;
 
     this.d3.select(`#${this.donutID}`).selectChildren('*').remove();
     this.createSvg();
-    this.createColors(this.color);
+    this.createColors();
     this.drawChart();
   }
 
   public ngOnDestroy(): void {
-    if (this.mouseMove$) {
-      this.mouseMove$.unsubscribe;
-    }
-
     this.sub?.unsubscribe();
-  }
-
-  private mapStocksToSimpleDataModel(
-    stocks: ID3Value | undefined
-  ): SimpleDataModel {
-    return {
-      name: stocks? stocks.title : '',
-      value: stocks ? stocks.money.toString() : '',
-    };
   }
 
   private createSvg(): void {
@@ -93,36 +78,38 @@ export class DonutComponent implements OnInit, AfterViewInit, OnDestroy {
       );
   }
 
-  private createColors(data: any): void {
+  private createColors(): void {
+    const colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'];
+
     this.colors = this.d3
       .scaleOrdinal<string>()
-      .range(data);
+      .range(colors);
   }
 
   private drawChart(): void {
-    const maxValue = d3.max(this.data, (d: SimpleDataModel) => parseInt(d.value));
+    const maxValue = d3.max(this.dataSubject, (d: SimpleDataModel) => d.value);
     const scale = d3.scaleLinear().domain([0, maxValue]).range([0, 100]);
-
 
     const pie = this.d3
       .pie<SimpleDataModel>()
       .sort(null)
-      .value((d: SimpleDataModel) => scale(parseInt(d.value)));
+      .value((d: SimpleDataModel) => scale(d.value));
 
-    const data_ready = pie(this.data);
+    const data_ready = pie(this.dataSubject);
 
     const arc = this.d3
       .arc()
       .innerRadius(this.radius * 0.75)
       .outerRadius(this.radius * 1);
 
-    this.svg
+      this.svg
       .selectAll('allSlices')
       .data(data_ready)
       .enter()
       .append('path')
-      .attr('d', arc)
-      .attr('fill', this.color);
+      .attr('d', (d: any) => arc(d))
+      .attr('fill', (d: any, i: any) => this.colors(i.toString()));
+    
 
     const text = this.svg
       .append('text')
@@ -131,13 +118,15 @@ export class DonutComponent implements OnInit, AfterViewInit, OnDestroy {
       .attr('fill', 'var(--black-color)')
       .attr('text-anchor', 'middle');
 
-    text
-      .append('tspan')
-      .attr('x', 0)
-      .attr('y', -10)
-      .attr('font-size', '26px')
-      .attr('font-weight', '400')
-      .text(`${this.data[0].name}`);
+      //Залишив, якщо захочу зробити варіант з текстом
+    // text
+    //   .append('tspan')
+    //   .attr('x', 0)
+    //   .attr('y', -10)
+    //   .attr('font-size', '26px')
+    //   .attr('font-weight', '400')
+    //   .text(`${this.portfolioData[0].name}`);
+    const totalBalance = this.getTotalBalanceValue();
 
     text
       .append('tspan')
@@ -145,6 +134,12 @@ export class DonutComponent implements OnInit, AfterViewInit, OnDestroy {
       .attr('y', 35)
       .attr('font-size', '30px')
       .attr('font-weight', '400')
-      .text(`${this.data[0].value}$`);
+      .text(`${totalBalance}$`);
+  }
+
+  private getTotalBalanceValue(): number {
+    return this.dataSubject
+                  .map(data => data.value)
+                  .reduce((accumulator, value) => accumulator + value, 0);
   }
 }

@@ -4,7 +4,7 @@ import { PeriodSpendingComponent } from './components/period-spending/period-spe
 import { MatButtonModule } from '@angular/material/button';
 import { ButtonToggleComponent } from '../../core/UI/components/button-toggle/button-toggle.component';
 import { HistorySpendingComponent } from './components/history-spending/history-spending.component';
-import { ID3Value } from '../../domain/d3.domain';
+import { ID3Value, SimpleDataModel } from '../../domain/d3.domain';
 import { SpendingsService } from '../../service/spendings.service';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
@@ -42,6 +42,8 @@ export class SpendingComponent implements OnInit {
 
   public spendings: Spending[];
   public isSpendingsFrame: boolean = true;
+
+  public spendingsDataModel: SimpleDataModel[];
 
   constructor(
     public spendingsService: SpendingsService,

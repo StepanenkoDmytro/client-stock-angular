@@ -2,10 +2,10 @@
     <div class="spendings-category--categories">
 
         <pgz-donut class="center"
-                   [portfolio]="expends"
+                   [data]="spendingsDataModel"
                    [color]="'#CBCACA'">
         </pgz-donut>
-
+<!-- 
         @for(category of categories.slice(1,9); track category; let i = $index) {
             <pgz-icon class="item"
                       [ngClass]="'deg-' + (i + 1)"
@@ -13,6 +13,6 @@
                       (click)="addBySelectSpending(category)"
                       [name]="category.icon">
             </pgz-icon>
-        }
+        } -->
     </div>
 </section>
