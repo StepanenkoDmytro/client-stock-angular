@@ -41,14 +41,10 @@ export class StatisticComponent implements OnInit {
   public isSpendingFrame: boolean = true;
 
   constructor(
-    private spendingsService: SpendingsService,
   ) { }
   
   public ngOnInit(): void {
-    this.spendingsService.init();
-    this.spendingsService.getAll().subscribe(allSpendings => {
-      this.spendings = allSpendings;
-    });
+    
   }
 
   public onChangeFrame(frame: boolean): void {

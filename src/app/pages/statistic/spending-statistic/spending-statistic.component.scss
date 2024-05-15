@@ -1,28 +1,21 @@
 :host {
   display: block;
 }
-
-.statistic {
-  &--year {
-    overflow-y: scroll;
-    height: 35vh;
+.spend-stat {
+  &--date-range {
+    display: flex;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 400;
   }
 
-  &--month {
-    .mat-expansion-panel-header-description {
-        flex-grow: 0;
-    }
-  } 
+  &--actions {
+    display: flex;
+    justify-content: flex-end;
+  }
 }
 
-.icon-wrapper {
-  border: 2px solid var(--accept-color);
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  transform: scale(0.7);
-
-  &--icon {
-      color:var(--accept-color);
-  }
+.mat-disable {
+  visibility: hidden;
+  height: 0;
 }
