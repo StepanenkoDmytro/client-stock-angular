@@ -17,7 +17,11 @@ export class DonutComponent implements OnInit, AfterViewInit, OnDestroy {
   public set data(value: SimpleDataModel[] | null) {
     this._data$.next(value);
   }
+  @Input()
+  public showNames: boolean = false;
+
   public donutID: string = 'donut';
+  public donutNamesID: string = 'donut-names';
 
   @Input()
   public color: string = '#CBCACA';
@@ -39,6 +43,8 @@ export class DonutComponent implements OnInit, AfterViewInit, OnDestroy {
     const randomNum = Math.floor(Math.random() * 100);
 
     this.donutID = `${this.donutID}${randomNum}`;
+    this.donutNamesID = `${this.donutNamesID}${randomNum}`;
+
     this.sub = this._data$.subscribe(data => {
       if (data) {
         this.updateD3(data);
@@ -56,9 +62,13 @@ export class DonutComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dataSubject = data;
 
     this.d3.select(`#${this.donutID}`).selectChildren('*').remove();
+    this.d3.select(`#${this.donutNamesID}`).selectChildren('*').remove();
     this.createSvg();
     this.createColors();
     this.drawChart();
+    if(this.showNames) {
+      this.createNamesList();
+    }
   }
 
   public ngOnDestroy(): void {
@@ -110,7 +120,6 @@ export class DonutComponent implements OnInit, AfterViewInit, OnDestroy {
       .attr('d', (d: any) => arc(d))
       .attr('fill', (d: any, i: any) => this.colors(i.toString()));
     
-
     const text = this.svg
       .append('text')
       .attr('alignment-baseline', 'middle')
@@ -135,6 +144,33 @@ export class DonutComponent implements OnInit, AfterViewInit, OnDestroy {
       .attr('font-size', '30px')
       .attr('font-weight', '400')
       .text(`${totalBalance}$`);
+  }
+
+  private createNamesList(): void {
+    const listContainer = this.d3.select(`div#${this.donutNamesID}`)
+    .style('display', 'flex')
+    .append('table')
+    .style('width', '90%');
+
+    const tbody = listContainer.append('tbody');
+
+    const rows = tbody
+      .selectAll('tr')
+      .data(this.dataSubject)
+      .enter()
+      .append('tr')
+      .style('position', 'relative');
+
+    rows
+      .append('td')
+      .text(' ')
+      .classed('d3-name-marker', true)
+      .style('background-color', (d: SimpleDataModel, i: number) => this.colors(i.toString()))
+
+    rows
+      .append('td')
+      .html((d: SimpleDataModel) => `<div class="d3-name"><p>${d.name}</p> <p>${d.value}</p></div>`);
+
   }
 
   private getTotalBalanceValue(): number {

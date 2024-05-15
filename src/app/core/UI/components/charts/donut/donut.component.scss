@@ -11,3 +11,23 @@
   pointer-events: none; 
   display: none; 
 }
+
+.donut-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+}
+
+.donut {
+  flex: 1;
+}
+
+.donut-names {
+  flex: 1;
+  display: none;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+/** Another styles for D3 Library in style.scss **/
+/* Classes for svg library can take only from style.scss */
