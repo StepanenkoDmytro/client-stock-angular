@@ -7,7 +7,7 @@ import { BarComponent } from '../../core/UI/components/charts/bar/bar.component'
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
-import { SpendingStatisticComponent } from './spending-statistic/spending-statistic.component';
+import { SpendingStatisticComponent } from './components/spending-statistic/spending-statistic.component';
 import { TotalBalanceComponent } from '../../core/UI/components/total-balance/total-balance.component';
 import { SpendingsService } from '../../service/spendings.service';
 import { ChartsHelperService } from '../../core/UI/components/charts/bar/charts-helper.service';

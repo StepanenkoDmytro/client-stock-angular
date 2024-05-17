@@ -14,7 +14,6 @@ export interface ISpendingApi {
 export class Spending implements ISpending {
     public readonly id: string;
 
-    
     constructor(
         public isSaved: boolean = false,
         public category: Category,

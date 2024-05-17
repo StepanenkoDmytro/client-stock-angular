@@ -18,4 +18,10 @@
     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-date-range-picker #picker></mat-date-range-picker>
   </div>
+
+  @for(data of categoryData; track data) {
+    <pgz-spending-statistic-card [data]="data">
+    </pgz-spending-statistic-card>
+  }
+ 
 </main>

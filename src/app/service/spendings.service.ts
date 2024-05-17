@@ -71,6 +71,15 @@ export class SpendingsService {
     return this.store$.pipe(select(spendingsHistorySelector));
   }
 
+  public getSpendingsByRange(start: moment.Moment, end: moment.Moment): Observable<Spending[]> {
+    return this.getAll().pipe(
+      map(spendings => spendings.filter(spending => {
+        const spendingDate = moment(spending.date);
+        return spendingDate.isBetween(start, end, 'day', '[]');
+      }))
+    );
+  }
+
   public init(): void {
     if(this.isInit) {
       return;
