@@ -10,7 +10,15 @@ import { ICategoryStatistic } from '../model/SpendindStatistic';
 export class SpendingStatisticHelperService {
 
   public mapCategoryDataToChartData(categoryData: ICategoryStatistic[]): SimpleDataModel[] {
-    return categoryData.map(data => ({ ...data, name: data.category.title, value: data.value }));
+    const totalCostByRange = categoryData
+                                      .map(data => parseFloat(data.value.toString()))
+                                      .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+                                      
+    return categoryData.map(data => ({
+      ...data,
+      name: data.category.title,
+      value: parseFloat(((data.value / totalCostByRange) * 100).toFixed(2))
+  }));
   }
 
   public spendingsMapToCategoryData(spendings: Spending[]): ICategoryStatistic[] {

@@ -5,7 +5,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { BarComponent } from '../../../../core/UI/components/charts/bar/bar.component';
 import { SpendingsService } from '../../../../service/spendings.service';
 import { HistorySpendingCardComponent } from '../../../spending/components/history-spending/history-spending-card/history-spending-card.component';
-import { Spending } from '../../../spending/model/Spending';
 import { MultiLineComponent } from '../../../../core/UI/components/charts/multi-line/multi-line.component';
 import { DonutComponent } from '../../../../core/UI/components/charts/donut/donut.component';
 import { SimpleDataModel } from '../../../../domain/d3.domain';
@@ -80,9 +79,7 @@ export class SpendingStatisticComponent implements OnInit {
       )
     ).subscribe(spendings => {
       this.categoryData = this.spendingsHelperService.spendingsMapToCategoryData(spendings);
-      console.log(this.categoryData);
       this.donutData = this.spendingsHelperService.mapCategoryDataToChartData(this.categoryData);
-      this.cdr.detectChanges();
     });
     
     this.startDateCtrl.setValue(moment(new Date()).startOf('month'));
