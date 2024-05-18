@@ -1,0 +1,21 @@
+:host {
+  display: block;
+}
+.spend-stat {
+  &--date-range {
+    display: flex;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 400;
+  }
+
+  &--actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+.mat-disable {
+  visibility: hidden;
+  height: 0;
+}

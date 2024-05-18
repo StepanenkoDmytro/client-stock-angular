@@ -5,6 +5,5 @@ export interface ID3Value {
 
 export interface SimpleDataModel {
     name: string,
-    value: string,
-    color?: string,
+    value: number,
 }

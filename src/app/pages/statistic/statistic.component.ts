@@ -1,14 +1,14 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { STOCKS_MOCK, PROFIT_MOCK, ACCOUNT_STOCKS_MOCK } from '../../domain/mock.domain';
-import { IPortfolioStock } from '../../domain/savings.domain';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { DonutComponent } from '../../core/UI/components/charts/donut/donut.component';
 import { ButtonToggleComponent } from '../../core/UI/components/button-toggle/button-toggle.component';
 import { BarComponent } from '../../core/UI/components/charts/bar/bar.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
-import { SpendingStatisticComponent } from './spending-statistic/spending-statistic.component';
+import { SpendingStatisticComponent } from './components/spending-statistic/spending-statistic.component';
 import { TotalBalanceComponent } from '../../core/UI/components/total-balance/total-balance.component';
+import { Spending } from '../spending/model/Spending';
+import { SavingsStatisticComponent } from './components/savings-statistic/savings-statistic.component';
 
 
 const UI_COMPONENTS = [
@@ -16,7 +16,8 @@ const UI_COMPONENTS = [
   ButtonToggleComponent,
   BarComponent,
   SpendingStatisticComponent,
-  TotalBalanceComponent
+  TotalBalanceComponent,
+  SavingsStatisticComponent
 ];
 
 const MATERIAL_MODULES = [
@@ -33,20 +34,19 @@ const MATERIAL_MODULES = [
   styleUrl: './statistic.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class StatisticComponent {
-  public stocksMock = STOCKS_MOCK;
-  public profitMock = PROFIT_MOCK;
-  public stocks: IPortfolioStock[] = ACCOUNT_STOCKS_MOCK;
-  years: string[] = ['2022', '2023', '2024']; // Додайте необхідні роки
-  months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
+export class StatisticComponent implements OnInit {
+  public spendings: Spending[];
   public isSpendingFrame: boolean = true;
+
+  constructor(
+  ) { }
+  
+  public ngOnInit(): void {
+    
+  }
 
   public onChangeFrame(frame: boolean): void {
     this.isSpendingFrame = frame;
   }
-
-  public trackYear(index: number, year: string): string {
-    return year;
-  }
+  
 }

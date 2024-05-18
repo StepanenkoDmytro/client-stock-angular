@@ -2,8 +2,7 @@
     <div class="spendings-category--categories">
 
         <pgz-donut class="center"
-                   [portfolio]="expends"
-                   [color]="'#CBCACA'">
+                   [data]="spendingsDataModel">
         </pgz-donut>
 
         @for(category of categories.slice(1,9); track category; let i = $index) {

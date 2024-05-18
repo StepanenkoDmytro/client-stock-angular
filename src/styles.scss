@@ -224,3 +224,22 @@ p {
 .mdc-text-field--outlined.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-notched-outline__notch {
   border-color: var(--bs-danger) !important;
 }
+
+
+/** Styles for D3 Library **/
+/* Classes for svg library can take only from style.scss */
+
+.d3-name {
+  display: flex;
+  justify-content: space-between;
+  font-size: 20px;
+}
+
+.d3-name-marker {
+  display: inline-block;
+  position: absolute;
+  top: 8px;
+  left: -15px;
+  width: 10px;
+  height: 10px;
+}

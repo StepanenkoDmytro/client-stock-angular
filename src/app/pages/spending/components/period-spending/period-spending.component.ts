@@ -1,12 +1,13 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { DonutComponent } from '../../../../core/UI/components/charts/donut/donut.component';
-import { ID3Value } from '../../../../domain/d3.domain';
+import { ID3Value, SimpleDataModel } from '../../../../domain/d3.domain';
 import { CommonModule, NgClass } from "@angular/common";
 import { Category } from '../../../../domain/category.domain';
 import { IconComponent } from '../../../../core/UI/components/icon/icon.component';
 import { EditStateSpendingService } from '../../service/edit-state-spending.service';
 import { Router } from '@angular/router';
 import { Spending } from '../../model/Spending';
+import { ChartsHelperService } from '../../../../core/UI/components/charts/bar/charts-helper.service';
 
 
 const UI_COMPONENTS = [
@@ -26,12 +27,17 @@ const UI_COMPONENTS = [
 export class PeriodSpendingComponent {
 
   @Input()
-  public expends: ID3Value;
+  public set spendings(value: Spending[]) {
+    this.spendingsDataModel = this.chartHelperService.spendingsMapToSimpleData(value);
+  }
+
+  public spendingsDataModel: SimpleDataModel[];
 
   public categories: Category[] = Category.defaultList[1].children;
 
   constructor(
     private editStateService: EditStateSpendingService,
+    private chartHelperService: ChartsHelperService,
     private router: Router 
   ) { }
 
