@@ -22,6 +22,8 @@
   @for(data of categoryData; track data) {
     <pgz-spending-statistic-card [data]="data">
     </pgz-spending-statistic-card>
+  } @empty {
+    <p style="text-align: center;">You don't have any spendings</p>
   }
  
 </main>
