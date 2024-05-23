@@ -5,12 +5,12 @@
       (ngSubmit)="handleSubmit()">
   <mat-form-field class="auth-form--field" appearance="outline">
     <mat-label>{{ 'Email:' }}</mat-label>
-    <input [formControl]="emailCtrl" type="email" matInput>
+    <input [formControl]="emailCtrl" type="email" matInput  (blur)="checkEmailValidity()">
   </mat-form-field>
 
   <mat-form-field class="auth-form--field" appearance="outline">
     <mat-label>{{ 'Password:' }}</mat-label>
-    <input [formControl]="passwordCtrl" [type]="passwordHide ? 'password' : 'text'" matInput>
+    <input [formControl]="passwordCtrl" [type]="passwordHide ? 'password' : 'text'" matInput (blur)="checkPasswordValidity()">
     <button mat-icon-button matSuffix (click)="passwordHide = !passwordHide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="passwordHide">
       <mat-icon>{{passwordHide ? 'visibility_off' : 'visibility'}}</mat-icon>
     </button>
@@ -18,15 +18,24 @@
 
   <mat-form-field class="auth-form--field" appearance="outline">
     <mat-label>{{ 'Repeat password:' }}</mat-label>
-    <input [formControl]="repeatPasswordCtrl" [type]="repeatPasswordHide ? 'password' : 'text'" matInput>
+    <input [formControl]="repeatPasswordCtrl" [type]="repeatPasswordHide ? 'password' : 'text'" matInput (blur)="checkPasswordValidity()">
     <button mat-icon-button matSuffix (click)="repeatPasswordHide = !repeatPasswordHide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="repeatPasswordHide">
       <mat-icon>{{repeatPasswordHide ? 'visibility_off' : 'visibility'}}</mat-icon>
     </button>
   </mat-form-field>
+  <div class="auth-form--errors">
+    @if(invalidPasswordErrorMessage) {
+      <p class="auth-form--error">{{ invalidPasswordErrorMessage }}</p>
+    }
 
-  @if(invalidPasswordErrorMessage) {
-    <p class="auth-form--error">{{ invalidPasswordErrorMessage }}</p>
-  }
+    @if(showEmailError) {
+      <p class="auth-form--error">Invalid email format</p>
+    }
+
+    @if(showPasswordError) {
+      <p class="auth-form--error">Password can not be empty</p>
+    }
+  </div>
 
   <button mat-flat-button
           [class.auth-form--submit-enabled]="!form.invalid"

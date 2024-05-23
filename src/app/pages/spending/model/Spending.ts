@@ -6,7 +6,7 @@ export interface ISpendingApi {
     id: string,
     isSaved: boolean,
     category: string,
-    title: string,
+    comment: string,
     cost: number,
     date: Date
 }
@@ -17,7 +17,7 @@ export class Spending implements ISpending {
     constructor(
         public isSaved: boolean = false,
         public category: Category,
-        public title: string,
+        public comment: string,
         public cost: number,
         public date: Date
     ) {
@@ -29,7 +29,7 @@ export class Spending implements ISpending {
             id: spending.id,
             isSaved: spending.isSaved,
             category: spending.category.title,
-            title: spending.title,
+            comment: spending.comment,
             cost: spending.cost,
             date: spending.date,
         }
@@ -47,7 +47,7 @@ export class Spending implements ISpending {
             id: spending.id,
             isSaved: spending.isSaved,
             category: category,
-            title: spending.title,
+            comment: spending.comment,
             cost: spending.cost,
             date: spending.date
         };

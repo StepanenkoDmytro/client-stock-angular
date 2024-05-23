@@ -50,7 +50,7 @@ export class SpendingsService {
   }
 
   public addSpending(spending: Spending): void {
-    if(spending.title === null) {
+    if(spending.comment === null) {
       throw Error('cost or name of product can not be null')
     }
 

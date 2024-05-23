@@ -14,6 +14,7 @@ import { Store, select } from '@ngrx/store';
 import { deleteUnsavedData } from '../../../../store/sync-data.actions';
 import { spendingsHistorySelector } from '../../../spending/store/spendings.selectors';
 import { Spending } from '../../../spending/model/Spending';
+import { Validator } from '../../validator/Validator';
 
 
 const UI_COMPONENTS = [
@@ -39,11 +40,13 @@ const MATERIAL_MODULES = [
 export class LoginComponent implements OnInit {
 
   public form: FormGroup;
-  public emailCtrl: FormControl<string> = new FormControl<string>('', [Validators.required, Validators.email]);
+  public emailCtrl: FormControl<string> = new FormControl<string>('', [Validators.required, Validator.emailValidator]);
   public passwordCtrl: FormControl<string> = new FormControl<string>('', [Validators.required]);
 
   public passwordHide: boolean = true;
   public loginError: string = '';
+  public showEmailError: boolean = false;
+  public showPasswordError: boolean = false;
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -94,6 +97,14 @@ export class LoginComponent implements OnInit {
     } else {
       console.log('TODO: mat error');
     }
+  }
+
+  public checkEmailValidity() {
+    this.showEmailError = this.emailCtrl.invalid;
+  }
+
+  public checkPasswordValidity() {
+    this.showPasswordError = this.passwordCtrl.invalid;
   }
 
   private async successLogin(): Promise<void> {
