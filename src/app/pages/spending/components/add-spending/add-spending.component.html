@@ -6,11 +6,6 @@
 
     <pgz-category-select [(ngModel)]="selectedCategory"></pgz-category-select>
 
-    <mat-form-field appearance="outline" floatLabel="always" class="w-100 name-of-product">
-        <mat-label>Name</mat-label>
-        <input matInput type="text" placeholder="Enter name of product" style="font-size: 1.5rem;" [(ngModel)]="nameOfProduct">
-    </mat-form-field>
-
     <mat-form-field appearance="outline" floatLabel="always" class="w-100">
         <mat-label>Sum</mat-label>
         <input matInput type="text" inputmode="numeric" class="line" placeholder="0" style="font-size: 1.5rem;" [(ngModel)]="costOfProduct" pgzMoney>
@@ -26,7 +21,7 @@
 
     <mat-form-field appearance="outline" floatLabel="always" class="w-100">
         <mat-label>Comment</mat-label>
-            <textarea matInput placeholder="Ex. It makes me feel..."></textarea>
+            <textarea matInput placeholder="Ex. It makes me feel..." [(ngModel)]="commentOfProduct"></textarea>
     </mat-form-field>
 
     <div class="choise-btn">

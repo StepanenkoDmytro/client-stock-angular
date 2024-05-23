@@ -45,7 +45,7 @@ const MATERIAL_MODULES = [
 export class AddSpendingComponent implements OnInit, OnDestroy {
   public categories: Category[] = Category.defaultList;
   public selectedCategory: Category = null /* this.data?.category */ || Category.default;
-  public nameOfProduct: string = '';
+  public commentOfProduct: string = '';
   public costOfProduct: number = 0;
   public date: Date = moment().toDate();
 
@@ -63,7 +63,7 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
 
     if(!!this.editSpending) {
       this.selectedCategory = this.editSpending.category;
-      this.nameOfProduct = this.editSpending.title;
+      this.commentOfProduct = this.editSpending.comment;
       this.costOfProduct = this.editSpending.cost;
       this.date = this.editSpending.date;
     }
@@ -72,13 +72,13 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
   public saveSpending(): void {
     const editSpending = this.editStateService.editStateSpending;
 
-    if(!!this.editSpending && editSpending.title !== '') {
+    if(!!this.editSpending && editSpending.comment !== '') {
       this.spendingsService.editSpending(this.editSpending);
     } else {
       const newExpense: Spending = new Spending(
         false,
         this.selectedCategory,
-        this.nameOfProduct,
+        this.commentOfProduct,
         this.costOfProduct,
         this.date,
       );

@@ -4,7 +4,7 @@ import { Category } from './category.domain';
 export interface ISpending {
     id?: string;
     category: Category;
-    title: string;
+    comment: string;
     cost: number;
     date: Date;
 }
