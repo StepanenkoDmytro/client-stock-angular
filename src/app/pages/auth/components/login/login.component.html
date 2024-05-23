@@ -5,12 +5,12 @@
       (ngSubmit)="login()">
   <mat-form-field class="auth-form--field" appearance="outline">
     <mat-label>{{ 'Email:' }}</mat-label>
-    <input [formControl]="emailCtrl" type="email" matInput>
+    <input [formControl]="emailCtrl" type="email" matInput (blur)="checkEmailValidity()">
   </mat-form-field>
 
   <mat-form-field class="auth-form--field" appearance="outline">
     <mat-label>{{ 'Password:' }}</mat-label>
-    <input [formControl]="passwordCtrl" [type]="passwordHide ? 'password' : 'text'" matInput>
+    <input [formControl]="passwordCtrl" [type]="passwordHide ? 'password' : 'text'" matInput (blur)="checkPasswordValidity()">
     <button mat-icon-button matSuffix (click)="passwordHide = !passwordHide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="passwordHide">
       <mat-icon>{{passwordHide ? 'visibility_off' : 'visibility'}}</mat-icon>
     </button>
@@ -20,10 +20,19 @@
     <a [routerLink]="'../forget-password'" class="auth-form--text-link">Forget your password?</a>
   </div>
 
-  @if(loginError) {
-    <p class="auth-form--error">{{ loginError }}</p>
-  }
+  <div class="auth-form--errors">
+    @if(loginError) {
+      <p class="auth-form--error">{{ loginError }}</p>
+    }
 
+    @if(showEmailError) {
+      <p class="auth-form--error">Invalid email format</p>
+    }
+
+    @if(showPasswordError) {
+      <p class="auth-form--error">Password can not be empty</p>
+    }
+  </div>
   <button mat-flat-button
           [class.auth-form--submit-enabled]="!form.invalid"
           [disabled]="form.invalid"

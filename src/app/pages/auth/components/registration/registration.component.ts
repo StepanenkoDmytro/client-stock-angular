@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { AppRoutes } from '../../../../app.routes';
 import { SocialLoginWrapperComponent } from '../social-login-wrapper/social-login-wrapper.component';
 import { MatIconModule } from '@angular/material/icon';
+import { Validator } from '../../validator/Validator';
 
 
 const MATERIAL_MODULES = [
@@ -29,15 +30,17 @@ const MATERIAL_MODULES = [
 })
 export class RegistrationComponent {
   public readonly AppRoutes = AppRoutes;
-  //TODO: Validate email, password equality, disabled submit if password not equal
+
   public form: FormGroup;
-  public emailCtrl: FormControl<string> = new FormControl<string>('', [Validators.required, Validators.email]);
+  public emailCtrl: FormControl<string> = new FormControl<string>('', [Validators.required, Validator.emailValidator]);
   public passwordCtrl: FormControl<string> = new FormControl<string>('', [Validators.required]);
   public repeatPasswordCtrl: FormControl<string> = new FormControl<string>('', [Validators.required]);
 
   public invalidPasswordErrorMessage: string;
   public passwordHide: boolean = true;
   public repeatPasswordHide: boolean = true;
+  public showEmailError: boolean = false;
+  public showPasswordError: boolean = false;
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -56,12 +59,10 @@ export class RegistrationComponent {
 
   public async handleSubmit(): Promise<void> {
     let isSuccess: boolean = false; 
+
     if (this.repeatPasswordCtrl.value !== this.passwordCtrl.value) {
       this.invalidPasswordErrorMessage = 'Passwords should be same';
       this.cdr.detectChanges();
-      //TODO: rework to Validator
-      // this.form.setErrors({customError: true});
-      
       return;
     }
 
@@ -95,6 +96,14 @@ export class RegistrationComponent {
     } else {
       console.log('TODO: mat error');
     }
+  }
+
+  public checkEmailValidity() {
+    this.showEmailError = this.emailCtrl.invalid;
+  }
+
+  public checkPasswordValidity() {
+    this.showPasswordError = this.passwordCtrl.invalid || this.repeatPasswordCtrl.invalid;
   }
 
   private showLoginError(): void {
