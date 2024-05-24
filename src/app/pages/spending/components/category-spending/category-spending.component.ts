@@ -4,6 +4,7 @@ import { CategorySpendingCardComponent } from './category-spending-card/category
 import { ICategoryStatistic } from '../../../statistic/model/SpendindStatistic';
 import { Spending } from '../../model/Spending';
 import { RouterModule } from '@angular/router';
+import { SpendingCategoryHelperService } from '../../../../service/helpers/spending-category-helper.service';
 
 
 @Component({
@@ -22,7 +23,12 @@ export class CategorySpendingComponent implements OnInit {
   @Input()
   public categories: Category[];
 
+  constructor(
+    private spendingCategoryHelper: SpendingCategoryHelperService
+  ) { }
+
   public ngOnInit(): void {
+    // this.spendingCategories = this.spendingCategoryHelper.spendingsMapToCategoryData(this.spendings);
     this.spendingCategories = this.categories.map(category => ({
       category: category,
       value: 0

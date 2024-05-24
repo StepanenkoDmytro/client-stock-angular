@@ -3,11 +3,16 @@ import { Category } from '../../domain/category.domain';
 import { SimpleDataModel } from '../../domain/d3.domain';
 import { Spending } from '../../pages/spending/model/Spending';
 import { ICategoryStatistic } from '../../pages/statistic/model/SpendindStatistic';
+import { SpendingsService } from '../spendings.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SpendingCategoryHelperService {
+
+  constructor(
+    private spendingService: SpendingsService
+  ) { }
 
   public mapCategoryDataToChartData(categoryData: ICategoryStatistic[]): SimpleDataModel[] {
     const totalCostByRange = categoryData

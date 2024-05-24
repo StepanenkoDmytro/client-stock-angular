@@ -6,15 +6,25 @@
         </div>
         <p>{{data.value}}</p>
     </div>
-    <div class="category-card-childrens">
-        @for(children of dataChildrens; track children) {
-            <div class="category-card-childrens--item">
-                <div class="category-card-childrens--category">
-                    <pgz-icon class="category-icon" [name]="children.icon"></pgz-icon>
-                    <p>{{children.title}}</p>
-                </div>
-                <!-- <p>{{children.value}}</p> -->
+    @if(dataChildrens.length > 0) {
+        <mat-expansion-panel (opened)="panelOpenState = true"
+                            (closed)="panelOpenState = false">
+        <mat-expansion-panel-header>
+        <mat-panel-title>
+            Subcategories: {{dataChildrens.length}}
+        </mat-panel-title>
+        </mat-expansion-panel-header>
+            <div class="category-card-childrens">
+                @for(children of dataChildrens; track children) {
+                    <div class="category-card-childrens--item">
+                        <div class="category-card-childrens--category">
+                            <pgz-icon class="category-icon" [name]="children.icon"></pgz-icon>
+                            <p>{{children.title}}</p>
+                        </div>
+                        <!-- <p>{{children.value}}</p> -->
+                    </div>
+                }
             </div>
-        }
-    </div>
+        </mat-expansion-panel>
+    }
 </div>

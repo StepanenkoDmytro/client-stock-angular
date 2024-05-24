@@ -2,3 +2,17 @@
   display: block;
   width: 100%;
 }
+
+.categories-actions {
+  display: flex;
+
+  &--btn {
+    margin-left: auto;
+    margin-right: 10px;
+    border: none;
+    border-radius: 10px;
+    padding: 5px 20px;
+    color: var(--bs-light);
+    background: var(--bs-success);
+  }
+}
