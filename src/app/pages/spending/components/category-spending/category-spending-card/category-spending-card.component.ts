@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { IconComponent } from '../../../../../core/UI/components/icon/icon.component';
 import { ICategoryStatistic } from '../../../../statistic/model/SpendindStatistic';
+import { Category } from '../../../../../domain/category.domain';
 
 @Component({
   selector: 'pgz-category-spending-card',
@@ -10,7 +11,13 @@ import { ICategoryStatistic } from '../../../../statistic/model/SpendindStatisti
   styleUrl: './category-spending-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CategorySpendingCardComponent {
+export class CategorySpendingCardComponent implements OnInit {
   @Input()
   public data: ICategoryStatistic;
+
+  public dataChildrens: Category[];
+
+  public ngOnInit(): void {
+    this.dataChildrens = this.data.category.children;
+  }
 }
