@@ -2,7 +2,6 @@ export interface ICategory {
   id: string;
   title: string;
   icon: string;
-  description?: string;
 }
 
 function generateUniqueId(): string {
@@ -14,11 +13,11 @@ function generateUniqueId(): string {
 export class Category implements ICategory {
 
   public static defaultList: Category[] = [
-    new Category( 'Income', 'paid', '', [
+    new Category( 'Income', 'paid', [
       new Category('Salary', 'money')
     ]),
-    new Category('Spending', 'payments', '', [
-      new Category('Other', 'category', '', [
+    new Category('Spending', 'payments', [
+      new Category('Other', 'category', [
         new Category('Test')
       ]),
       new Category('Clothes', 'custom_clothes'),
@@ -39,7 +38,6 @@ export class Category implements ICategory {
   constructor(
     public title: string = '',
     public icon: string = '',
-    public description: string = '',
     public children: Category[] = [],
   ) {
     this.id = generateUniqueId();
@@ -51,14 +49,14 @@ export class Category implements ICategory {
 
   public findCategory(title: string): Category | undefined {
     if (this.title === title) {
-        return this;
+      return this;
     }
     
     for (const child of this.children) {
-        const found = child.findCategory(title);
-        if (found) {
-            return found;
-        }
+      const found = child.findCategory(title);
+      if (found) {
+          return found;
+      }
     }
     return undefined;
   }
@@ -67,7 +65,7 @@ export class Category implements ICategory {
     for (const category of this.defaultList) {
         const found = category.findCategory(title);
         if (found) {
-            return found;
+          return found;
         }
     }
     return undefined;

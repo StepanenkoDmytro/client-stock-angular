@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Observable, filter, firstValueFrom, lastValueFrom, map } from 'rxjs';
+import { Observable, filter, map } from 'rxjs';
 import moment from 'moment';
 import { ISpendingsState } from '../pages/spending/store/spendings.reducer';
 import { Store, select } from '@ngrx/store';
-import { spendingsHistorySelector, spendingsFeatureSelector } from '../pages/spending/store/spendings.selectors';
-import { addSpending, deleteSpending, editSpending, loadSpending } from '../pages/spending/store/spendings.actions';
+import { spendingsHistorySelector, spendingsFeatureSelector, categoriesSpendindSelector } from '../pages/spending/store/spendings.selectors';
+import { addCategory, addSpending, deleteSpending, editSpending, loadSpending } from '../pages/spending/store/spendings.actions';
 import { Spending } from '../pages/spending/model/Spending';
+import { Category } from '../domain/category.domain';
 
 
 @Injectable({
@@ -19,8 +20,9 @@ export class SpendingsService {
     private store$: Store<ISpendingsState>,
   ) { }
 
+  /* Spendings */
   public loadByDate(date: moment.Moment): Observable<Spending[]> {
-    return this.getAll().pipe(
+    return this.getAllSpendings().pipe(
       map(spendingList => 
         spendingList.filter(spending => 
           moment(spending.date).startOf('day').isSame(date.startOf('day'))))
@@ -28,7 +30,7 @@ export class SpendingsService {
   }
 
   public loadByCurrentMonth(): Observable<Spending[]> {
-    return this.getAll().pipe(
+    return this.getAllSpendings().pipe(
       map(spendingList => 
         spendingList.filter(spending => 
           moment(spending.date).startOf('month').isSame(moment().startOf('month'))))
@@ -67,12 +69,26 @@ export class SpendingsService {
     this.store$.dispatch(deleteSpending({id}));
   }
 
-  public getAll(): Observable<Spending[]> {
+  public getAllSpendings(): Observable<Spending[]> {
     return this.store$.pipe(select(spendingsHistorySelector));
   }
 
+  /* Categories */
+
+  public addCategory(category: Category, parentId: string): void {
+    if(category.title === null) {
+      throw Error('cost or name of product can not be null')
+    }
+
+    this.store$.dispatch(addCategory({ category, parentId }));
+  }
+
+  public getAllCategories(): Observable<Category[]> {
+    return this.store$.pipe(select(categoriesSpendindSelector));
+  }
+
   public getSpendingsByRange(start: moment.Moment, end: moment.Moment): Observable<Spending[]> {
-    return this.getAll().pipe(
+    return this.getAllSpendings().pipe(
       map(spendings => spendings.filter(spending => {
         const spendingDate = moment(spending.date);
         return spendingDate.isBetween(start, end, 'day', '[]');
@@ -93,7 +109,6 @@ export class SpendingsService {
       select(spendingsFeatureSelector),
       filter(state => !!state)
       ).subscribe(spendingHistoryState => {
-
       localStorage.setItem(this.spendingHistoryLocalStorageKey, JSON.stringify(spendingHistoryState));
     });
 

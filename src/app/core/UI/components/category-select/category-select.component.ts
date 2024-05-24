@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ViewChild, forwardRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewChild, forwardRef } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { Category } from '../../../../domain/category.domain';
@@ -10,6 +10,8 @@ import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeModule, MatTreeNestedDataSource } from '@angular/material/tree';
 import { MatButtonModule } from '@angular/material/button';
 import { IconComponent } from '../icon/icon.component';
+import { Store, select } from '@ngrx/store';
+import { categoriesSpendindSelector } from '../../../../pages/spending/store/spendings.selectors';
 
 @Component({
   selector: 'pgz-category-select',
@@ -24,13 +26,13 @@ import { IconComponent } from '../icon/icon.component';
     multi: true
   }]
 })
-export class CategorySelectComponent implements ControlValueAccessor {
+export class CategorySelectComponent implements OnInit, ControlValueAccessor {
   public hasChild = (_: number, node: Category) => !!node.children && node.children.length > 0;
   @ViewChild('menuTrigger', {read: MatMenuTrigger})
   private menuTrigger: MatMenuTrigger;
 
-  public categories: Category[] = Category.defaultList;
-  public selectedCategory: Category = Category.default;
+  public categories: Category[];
+  public selectedCategory: Category;
 
   public treeControl = new NestedTreeControl<Category>(node => node.children);
   public dataSource = new MatTreeNestedDataSource<Category>();
@@ -39,8 +41,17 @@ export class CategorySelectComponent implements ControlValueAccessor {
   public _onTouched: () => void;
   private isDisabled: boolean = false;
 
-  constructor() {
-    this.dataSource.data = this.categories;
+  constructor(
+    private store$: Store<Category[]>
+  ) {
+  }
+  public ngOnInit(): void {
+      this.store$.pipe(select(categoriesSpendindSelector)).subscribe(categories => {
+      console.log(categories);
+      this.dataSource.data = categories;
+      this.categories = categories;
+      this.selectedCategory = categories[1];
+    });
   }
 
   public writeValue(category: Category): void {

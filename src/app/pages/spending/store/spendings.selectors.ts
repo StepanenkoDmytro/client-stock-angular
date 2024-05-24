@@ -4,3 +4,4 @@ import { ISpendingsState } from "./spendings.reducer";
 export const spendingsFeatureSelector = createFeatureSelector<ISpendingsState>('spending');
 
 export const spendingsHistorySelector = createSelector(spendingsFeatureSelector, state => state.spendingsHistory);
+export const categoriesSpendindSelector = createSelector(spendingsFeatureSelector, state => state.categorySpendings);

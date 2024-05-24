@@ -12,6 +12,7 @@ import { TotalBalanceSpendingComponent } from './components/total-balance-spendi
 import { Spending } from './model/Spending';
 import { combineLatest } from 'rxjs';
 import { CategorySpendingComponent } from './components/category-spending/category-spending.component';
+import { Category } from '../../domain/category.domain';
 
 
 const UI_COMPONENTS = [
@@ -43,6 +44,7 @@ export class SpendingComponent implements OnInit {
   };
 
   public spendings: Spending[];
+  public categories: Category[];
   public isSpendingsFrame: boolean = true;
 
   public spendingsDataModel: SimpleDataModel[];
@@ -55,10 +57,12 @@ export class SpendingComponent implements OnInit {
     this.spendingsService.init(); 
     combineLatest([
       this.spendingsService.getSpentByDay(),
-      this.spendingsService.loadByCurrentMonth()
-    ]).subscribe(([spentByDay, spendings]) => {
+      this.spendingsService.loadByCurrentMonth(),
+      this.spendingsService.getAllCategories()
+    ]).subscribe(([spentByDay, spendings, categories]) => {
       this.expends = {...this.expends, money: spentByDay};
       this.spendings = [...spendings];
+      this.categories = categories[1].children;
     });
   }
 

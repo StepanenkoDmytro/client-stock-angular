@@ -1,6 +1,13 @@
-<pgz-category-select [(ngModel)]="selectedCategory"></pgz-category-select>
+<div [routerLink]="['/spending']">
+    <span><pgz-icon [name]="'keyboard_backspace'"></pgz-icon></span>
+    <span>Back</span>
+</div>
+<div>
+    <p>Choose parent category</p>
+    <pgz-category-select [(ngModel)]="selectedCategory"></pgz-category-select>
 
-<div class="unsaved-data--actions">
-    <button class="unsaved-data--btn save" mat-button (click)="onAdd()">Add</button>
-    <button class="unsaved-data--btn delete" mat-button (click)="onCancel()">Cancel</button>
+    <input matInput type="text" [formControl]="categoryTitleCtrl">
+    <div class="unsaved-data--actions">
+        <button class="unsaved-data--btn save" mat-button (click)="onAdd()">Add</button>
+    </div>
 </div>

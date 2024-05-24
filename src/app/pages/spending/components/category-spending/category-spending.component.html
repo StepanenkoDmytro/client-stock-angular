@@ -1,5 +1,5 @@
 <div class="actions">
-    <button (click)="addCategory()">Add category</button>
+    <button [routerLink]="['add-category']">Add category</button>
 </div>
 @for(category of spendingCategories; track category) {
     <pgz-category-spending-card [data]="category"></pgz-category-spending-card>
