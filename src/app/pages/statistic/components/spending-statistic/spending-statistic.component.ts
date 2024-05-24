@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -62,7 +62,6 @@ export class SpendingStatisticComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     private spendingsHelperService: SpendingStatisticHelperService,
     private spendingsService: SpendingsService,
-    private cdr: ChangeDetectorRef
   ) { }
 
   public ngOnInit(): void {

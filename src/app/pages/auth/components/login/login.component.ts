@@ -99,11 +99,11 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  public checkEmailValidity() {
+  public checkEmailValidity(): void {
     this.showEmailError = this.emailCtrl.invalid;
   }
 
-  public checkPasswordValidity() {
+  public checkPasswordValidity(): void {
     this.showPasswordError = this.passwordCtrl.invalid;
   }
 

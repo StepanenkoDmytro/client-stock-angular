@@ -69,7 +69,19 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
     }
   }
 
-  public saveSpending(): void {
+  public save(): void {
+    this.saveSpending();
+    this.prevRoute();
+  }
+
+  public saveAndNew(): void {
+    this.saveSpending();
+    this.resetForm();
+    // this.editStateService.editStateSpending = null;
+    // this.router.navigate(['spending/add']);
+  }
+
+  private saveSpending(): void {
     const editSpending = this.editStateService.editStateSpending;
 
     if(!!this.editSpending && editSpending.comment !== '') {
@@ -84,7 +96,15 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
       );
       this.spendingsService.addSpending(newExpense);
     }
-    this.prevRoute();
+    console.log('here');
+  }
+
+  private resetForm(): void {
+    this.selectedCategory = Category.default;
+    this.commentOfProduct = '';
+    this.costOfProduct = null;
+    this.date = new Date();
+    this.editStateService.editStateSpending = null;
   }
 
   public prevRoute(): void {
