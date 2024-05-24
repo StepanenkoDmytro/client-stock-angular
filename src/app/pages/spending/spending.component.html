@@ -9,7 +9,8 @@
   </pgz-button-toggle>
 
   @if(isSpendingsFrame) {
-    <pgz-period-spending [spendings]="spendings"></pgz-period-spending>
+    <pgz-category-spending></pgz-category-spending>
+    <!-- <pgz-period-spending [spendings]="spendings"></pgz-period-spending> -->
   } @else {
     <pgz-history-spending [spendings]="spendings"></pgz-history-spending>
   }

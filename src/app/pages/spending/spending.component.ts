@@ -11,12 +11,14 @@ import { RouterModule } from '@angular/router';
 import { TotalBalanceSpendingComponent } from './components/total-balance-spending/total-balance-spending.component';
 import { Spending } from './model/Spending';
 import { combineLatest } from 'rxjs';
+import { CategorySpendingComponent } from './components/category-spending/category-spending.component';
 
 
 const UI_COMPONENTS = [
   ProgressComponent,
   TotalBalanceSpendingComponent,
-  PeriodSpendingComponent,
+  // PeriodSpendingComponent,
+  CategorySpendingComponent,
   HistorySpendingComponent,
   ButtonToggleComponent,
 ];

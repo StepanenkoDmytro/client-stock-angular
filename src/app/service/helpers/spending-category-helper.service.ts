@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Category } from '../../../domain/category.domain';
-import { SimpleDataModel } from '../../../domain/d3.domain';
-import { Spending } from '../../spending/model/Spending';
-import { ICategoryStatistic } from '../model/SpendindStatistic';
+import { Category } from '../../domain/category.domain';
+import { SimpleDataModel } from '../../domain/d3.domain';
+import { Spending } from '../../pages/spending/model/Spending';
+import { ICategoryStatistic } from '../../pages/statistic/model/SpendindStatistic';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SpendingStatisticHelperService {
+export class SpendingCategoryHelperService {
 
   public mapCategoryDataToChartData(categoryData: ICategoryStatistic[]): SimpleDataModel[] {
     const totalCostByRange = categoryData
@@ -18,7 +18,7 @@ export class SpendingStatisticHelperService {
       ...data,
       name: data.category.title,
       value: parseFloat(((data.value / totalCostByRange) * 100).toFixed(2))
-  }));
+    }));
   }
 
   public spendingsMapToCategoryData(spendings: Spending[]): ICategoryStatistic[] {

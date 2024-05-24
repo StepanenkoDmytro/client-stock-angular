@@ -46,7 +46,7 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
   public categories: Category[] = Category.defaultList;
   public selectedCategory: Category = null /* this.data?.category */ || Category.default;
   public commentOfProduct: string = '';
-  public costOfProduct: number = 0;
+  public costOfProduct: string = '0';
   public date: Date = moment().toDate();
 
   public editSpending: Spending = null;
@@ -64,7 +64,7 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
     if(!!this.editSpending) {
       this.selectedCategory = this.editSpending.category;
       this.commentOfProduct = this.editSpending.comment;
-      this.costOfProduct = this.editSpending.cost;
+      this.costOfProduct = this.editSpending.cost.toString();
       this.date = this.editSpending.date;
     }
   }
@@ -77,8 +77,6 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
   public saveAndNew(): void {
     this.saveSpending();
     this.resetForm();
-    // this.editStateService.editStateSpending = null;
-    // this.router.navigate(['spending/add']);
   }
 
   private saveSpending(): void {
@@ -87,16 +85,16 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
     if(!!this.editSpending && editSpending.comment !== '') {
       this.spendingsService.editSpending(this.editSpending);
     } else {
+      const costOfProduct = parseFloat(this.costOfProduct);
       const newExpense: Spending = new Spending(
         false,
         this.selectedCategory,
         this.commentOfProduct,
-        this.costOfProduct,
+        costOfProduct,
         this.date,
       );
       this.spendingsService.addSpending(newExpense);
     }
-    console.log('here');
   }
 
   private resetForm(): void {
