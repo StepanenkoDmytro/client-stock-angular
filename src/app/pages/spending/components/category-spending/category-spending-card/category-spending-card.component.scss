@@ -27,3 +27,17 @@
     margin-left: 10px;
   }
 }
+
+.category-card-childrens {
+  &--item {
+    display: flex;
+  }
+
+  &--category {
+    display: flex;
+  }
+
+  &--value {
+    margin-left: auto;
+  }
+}

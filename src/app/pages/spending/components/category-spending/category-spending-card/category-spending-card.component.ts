@@ -16,10 +16,10 @@ export class CategorySpendingCardComponent implements OnInit {
   @Input()
   public data: ICategoryStatistic;
 
-  public dataChildrens: Category[];
+  public dataChildrens: ICategoryStatistic[];
   public panelOpenState: boolean = false;
 
   public ngOnInit(): void {
-    this.dataChildrens = this.data.category.children;
+    this.dataChildrens = this.data.children;
   }
 }

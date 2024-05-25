@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { Category } from '../../../../domain/category.domain';
 import { CategorySpendingCardComponent } from './category-spending-card/category-spending-card.component';
 import { ICategoryStatistic } from '../../../statistic/model/SpendindStatistic';
@@ -24,14 +24,14 @@ export class CategorySpendingComponent implements OnInit {
   public categories: Category[];
 
   constructor(
-    private spendingCategoryHelper: SpendingCategoryHelperService
+    private spendingCategoryHelper: SpendingCategoryHelperService,
+    private cdr: ChangeDetectorRef
   ) { }
 
-  public ngOnInit(): void {
-    // this.spendingCategories = this.spendingCategoryHelper.spendingsMapToCategoryData(this.spendings);
-    this.spendingCategories = this.categories.map(category => ({
-      category: category,
-      value: 0
-    }));
+  public async ngOnInit(): Promise<void> {
+    
+    this.spendingCategories = await this.spendingCategoryHelper.calculateCategoryStatistic(this.spendings);
+    console.log(this.spendingCategories);
+    this.cdr.detectChanges();
   }
 }

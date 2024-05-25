@@ -6,7 +6,7 @@
         </div>
         <p>{{data.value}}</p>
     </div>
-    @if(dataChildrens.length > 0) {
+    @if(dataChildrens && dataChildrens.length > 0) {
         <mat-expansion-panel (opened)="panelOpenState = true"
                             (closed)="panelOpenState = false">
         <mat-expansion-panel-header>
@@ -18,10 +18,10 @@
                 @for(children of dataChildrens; track children) {
                     <div class="category-card-childrens--item">
                         <div class="category-card-childrens--category">
-                            <pgz-icon class="category-icon" [name]="children.icon"></pgz-icon>
-                            <p>{{children.title}}</p>
+                            <pgz-icon class="category-icon" [name]="children.category.icon"></pgz-icon>
+                            <p>{{children.category.title}}</p>
                         </div>
-                        <!-- <p>{{children.value}}</p> -->
+                        <p class="category-card-childrens--value">{{children.value}}</p>
                     </div>
                 }
             </div>
