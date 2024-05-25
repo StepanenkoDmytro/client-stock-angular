@@ -56,95 +56,30 @@ export class SpendingCategoryHelperService {
     return result;
   }
 
+  public async calculateCategoryStatistic(spendings: Spending[]): Promise<ICategoryStatistic[]> {
+    const categoriesList = await firstValueFrom(this.spendingService.getAllCategories());
+    const spendingCategoriesList = categoriesList[1].children;
 
-//   public async calculateCategoryStatistic(spendings: Spending[]): Promise<ICategoryStatistic[]> {
-//     const categoriesList = await firstValueFrom(this.spendingService.getAllCategories());
-//     const categoryMap = this.buildCategoryMap(categoriesList);
+    return spendingCategoriesList.map(category => this.calculateCategoryStatisticRecursive(category, spendings));
+  }
 
-//     const result: ICategoryStatistic[] = [];
+  private calculateCategoryStatisticRecursive(category: Category, spendings: Spending[]): ICategoryStatistic {
+    const spendingsByCategory = spendings.filter(spending => spending.category.id === category.id);
+    const costByCategory = spendingsByCategory.reduce((accumulator, spending) => accumulator + spending.cost, 0);
 
-//     for (const [categoryTitle, startCost] of categoryMap) {
-//         const category = this.findCategoryByIdRecursive(categoryTitle, categoriesList);
-//         if (category) {
-//             const categoryStatistic = this.calculateCategoryStatisticRecursive(category, spendings);
-//             result.push(categoryStatistic);
-//         }
-//     }
+    const childrenStatistics = category.children 
+      ? category.children.map(childCategory => 
+          this.calculateCategoryStatisticRecursive(childCategory, spendings)) 
+      : [];
 
-//     return result;
-// }
+    const childrenTotalCost = childrenStatistics.reduce((acc, childStat) => acc + childStat.value, 0);
+    const totalCost = costByCategory + childrenTotalCost;
 
-// private calculateCategoryStatisticRecursive(category: Category, spendings: Spending[]): ICategoryStatistic {
-//     const spendingsByCategory = spendings.filter(spending => spending.category.id === category.id);
-//     const costByCategory = spendingsByCategory
-//         .map(spending => spending.cost)
-//         .reduce((accumulator, value) => accumulator + value, 0);
-
-//     const childrenStatistics: ICategoryStatistic[] = [];
-//     let childrenTotalCost = 0;
-
-//     if (category.children && category.children.length > 0) {
-//         for (const childCategory of category.children) {
-//           const childStatistic = this.calculateCategoryStatisticRecursive(childCategory, spendings);
-//           childrenStatistics.push(childStatistic);
-//           childrenTotalCost += childStatistic.value;
-//         }
-//     }
-
-//     const totalCost = costByCategory + childrenTotalCost;
-
-//     return {
-//       category: category,
-//       value: totalCost,
-//       children: childrenStatistics.length > 0 ? childrenStatistics : undefined,
-//     };
-// }
-
-//   private buildCategoryMap(categories: Category[]): Map<string, number> {
-//     const resultMap = new Map<string, number>();
-
-//     categories[1].children.forEach(category => {
-//       resultMap.set(category.id, 0);
-//     });
-
-//     return resultMap;
-//   }
-
-//   private findCategoryByIdRecursive(id: string, categories: Category[]): Category | undefined {
-//     for (const category of categories) {
-//       if (category.id === id) {
-//         return category;
-//       }
-//       const foundInChildren = this.findCategoryByIdRecursive(id, category.children);
-//       if (foundInChildren) {
-//         return foundInChildren;
-//       }
-//     }
-//     return undefined;
-//   }
-public async calculateCategoryStatistic(spendings: Spending[]): Promise<ICategoryStatistic[]> {
-  const categoriesList = await firstValueFrom(this.spendingService.getAllCategories());
-  const spendingCategoriesList = categoriesList[1].children;
-
-  return spendingCategoriesList.map(category => this.calculateCategoryStatisticRecursive(category, spendings));
-}
-
-private calculateCategoryStatisticRecursive(category: Category, spendings: Spending[]): ICategoryStatistic {
-  const spendingsByCategory = spendings.filter(spending => spending.category.id === category.id);
-  const costByCategory = spendingsByCategory.reduce((accumulator, spending) => accumulator + spending.cost, 0);
-
-  const childrenStatistics = category.children?.map(childCategory => 
-      this.calculateCategoryStatisticRecursive(childCategory, spendings)
-  ) || [];
-
-  const childrenTotalCost = childrenStatistics.reduce((acc, childStat) => acc + childStat.value, 0);
-  const totalCost = costByCategory + childrenTotalCost;
-
-  return {
-    category: category,
-    value: totalCost,
-    children: childrenStatistics.length > 0 ? childrenStatistics : undefined,
-  };
-}
+    return {
+      category: category,
+      value: totalCost,
+      children: childrenStatistics.length > 0 ? childrenStatistics : undefined,
+    };
+  }
 
 }

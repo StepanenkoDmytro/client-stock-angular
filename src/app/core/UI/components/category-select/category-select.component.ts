@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewChild, forwardRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, ViewChild, forwardRef } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { Category } from '../../../../domain/category.domain';
@@ -27,6 +27,8 @@ import { categoriesSpendindSelector } from '../../../../pages/spending/store/spe
   }]
 })
 export class CategorySelectComponent implements OnInit, ControlValueAccessor {
+  @Input()
+  public label: string = 'Category';
   public hasChild = (_: number, node: Category) => !!node.children && node.children.length > 0;
   @ViewChild('menuTrigger', {read: MatMenuTrigger})
   private menuTrigger: MatMenuTrigger;

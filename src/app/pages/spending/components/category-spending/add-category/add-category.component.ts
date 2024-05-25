@@ -8,11 +8,29 @@ import { CategorySelectComponent } from '../../../../../core/UI/components/categ
 import { IconComponent } from '../../../../../core/UI/components/icon/icon.component';
 import { Router, RouterModule } from '@angular/router';
 import { SpendingsService } from '../../../../../service/spendings.service';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+
+const UI_MODULES = [
+  CategorySelectComponent,
+  IconComponent
+];
+
+const MATERIAL_MODULES = [
+  FormsModule,
+  ReactiveFormsModule,
+  MatFormFieldModule,
+  MatSelectModule,
+  MatFormFieldModule,
+  MatButtonModule,
+  MatInputModule,
+  FormsModule,
+];
 
 @Component({
   selector: 'pgz-add-category',
   standalone: true,
-  imports: [CategorySelectComponent, IconComponent,RouterModule , FormsModule,ReactiveFormsModule],
+  imports: [...UI_MODULES, ...MATERIAL_MODULES ,RouterModule],
   templateUrl: './add-category.component.html',
   styleUrl: './add-category.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

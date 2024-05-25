@@ -17,9 +17,7 @@ export class Category implements ICategory {
       new Category('Salary', 'money')
     ]),
     new Category('Spending', 'payments', [
-      new Category('Other', 'category', [
-        new Category('Test')
-      ]),
+      new Category('Other', 'payments'),
       new Category('Clothes', 'custom_clothes'),
       new Category('Drink', 'custom_drink'),
       new Category('Gift', 'custom_gift'),
@@ -37,7 +35,7 @@ export class Category implements ICategory {
 
   constructor(
     public title: string = '',
-    public icon: string = '',
+    public icon: string = 'payments',
     public children: Category[] = [],
   ) {
     this.id = generateUniqueId();

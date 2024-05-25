@@ -1,13 +1,18 @@
-<div [routerLink]="['/spending']">
-    <span><pgz-icon [name]="'keyboard_backspace'"></pgz-icon></span>
-    <span>Back</span>
-</div>
-<div>
-    <p>Choose parent category</p>
-    <pgz-category-select [(ngModel)]="selectedCategory"></pgz-category-select>
-
-    <input matInput type="text" [formControl]="categoryTitleCtrl">
-    <div class="unsaved-data--actions">
-        <button class="unsaved-data--btn save" mat-button (click)="onAdd()">Add</button>
+<section class="add-category">
+    <div class="back" [routerLink]="['/spending']">
+        <span><pgz-icon [name]="'keyboard_backspace'"></pgz-icon></span>
+        <span>Back</span>
     </div>
-</div>
+    <div class="category">
+        <pgz-category-select [label]="'Choose parent category'" [(ngModel)]="selectedCategory"></pgz-category-select>
+
+        <mat-form-field appearance="outline" floatLabel="always" class="w-100">
+            <mat-label>Name category</mat-label>
+            <input matInput type="text" inputmode="numeric" class="category--name" placeholder="Enter name of category" style="font-size: 1.5rem;" [formControl]="categoryTitleCtrl">
+        </mat-form-field>
+    </div>
+    <div class="add-category--actions">
+        <button class="add-category--btn" mat-button [routerLink]="['/spending']">Cancel</button>
+        <button class="add-category--btn save" mat-button (click)="onAdd()">Add</button>
+    </div>
+</section>

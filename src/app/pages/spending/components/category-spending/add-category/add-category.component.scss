@@ -1,3 +1,39 @@
 :host {
   display: block;
 }
+
+.add-category {
+  padding: 10px;
+
+  &--actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+
+  &--btn {
+    width: 100%;
+    font-size: 1.2rem;
+    border: 1px solid var(--bs-success);
+    padding: 1.5rem;
+  }
+}
+
+.category {
+  margin-top: 1rem;
+
+  &--name::placeholder {
+    font-size: 1rem;
+  }
+  
+}
+
+.back {
+  display: flex;
+}
+
+.save {
+  color: white;
+    background-color: var(--bs-success) !important;
+}
