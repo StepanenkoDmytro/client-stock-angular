@@ -38,6 +38,7 @@ const MATERIAL_MODULES = [
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddCategoryComponent implements OnInit {
+  public categories: Category[];
   public selectedCategory: Category;
   public categoryTitleCtrl: FormControl<string> = new FormControl('');
   public selectedIcon: string = 'payment';
@@ -49,6 +50,7 @@ export class AddCategoryComponent implements OnInit {
 
   public ngOnInit(): void {
     this.spendingService.getAllCategories().subscribe(categories => {
+      this.categories = categories;
       this.selectedCategory = categories[1];
     });
   }

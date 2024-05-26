@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -6,7 +6,7 @@ import { BarComponent } from '../../../../core/UI/components/charts/bar/bar.comp
 import { SpendingsService } from '../../../../service/spendings.service';
 import { HistorySpendingCardComponent } from '../../../spending/components/history-spending/history-spending-card/history-spending-card.component';
 import { MultiLineComponent } from '../../../../core/UI/components/charts/multi-line/multi-line.component';
-import { DonutComponent } from '../../../../core/UI/components/charts/donut/donut.component';
+import { DonutComponent, IDonutData } from '../../../../core/UI/components/charts/donut/donut.component';
 import { SimpleDataModel } from '../../../../domain/d3.domain';
 import { FormControl, FormGroup, FormsModule, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -18,6 +18,8 @@ import { SpendingStatisticCardComponent } from './spending-statistic-card/spendi
 import { ICategoryStatistic } from '../../model/SpendindStatistic';
 import { switchMap } from 'rxjs';
 import { SpendingCategoryHelperService } from '../../../../service/helpers/spending-category-helper.service';
+import { IconComponent } from '../../../../core/UI/components/icon/icon.component';
+import { MatButtonModule } from '@angular/material/button';
 
 
 const UI_COMPONENTS = [
@@ -25,6 +27,7 @@ const UI_COMPONENTS = [
   DonutComponent,
   BarComponent,
   HistorySpendingCardComponent,
+  IconComponent,
   MultiLineComponent,
   DateFormatPipe
 ];
@@ -33,6 +36,7 @@ const MATERIAL_MODULES = [
   MatTabsModule,
   MatExpansionModule,
   MatIconModule,
+  MatButtonModule,
   MatDatepickerModule, 
   FormsModule, 
   ReactiveFormsModule,
@@ -52,7 +56,7 @@ const MATERIAL_MODULES = [
 })
 export class SpendingStatisticComponent implements OnInit {
   public categoryData: ICategoryStatistic[];
-  public donutData: SimpleDataModel[];
+  public donutData: IDonutData;
 
   public formRangeDate: FormGroup;
   public startDateCtrl: FormControl = new FormControl();
@@ -62,6 +66,7 @@ export class SpendingStatisticComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     private spendingsHelperService: SpendingCategoryHelperService,
     private spendingsService: SpendingsService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   public ngOnInit(): void {
@@ -76,10 +81,12 @@ export class SpendingStatisticComponent implements OnInit {
       switchMap(({startDate, endDate}) => 
         this.spendingsService.getSpendingsByRange(startDate, endDate)
       )
-    ).subscribe(spendings => {
-      this.categoryData = this.spendingsHelperService.spendingsMapToCategoryData(spendings);
-      this.donutData = this.spendingsHelperService.mapCategoryDataToChartData(this.categoryData);
+    ).subscribe(async (spendings) => {
+      this.categoryData = await this.spendingsHelperService.calculateCategoryStatistic(spendings);
+      this.donutData = this.spendingsHelperService.mapCategoryStatisticToChartData(this.categoryData);
+      this.cdr.detectChanges();
     });
+
     
     this.startDateCtrl.setValue(moment(new Date()).startOf('month'));
     this.endDateCtrl.setValue(moment(new Date()));
