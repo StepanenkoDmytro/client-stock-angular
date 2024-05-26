@@ -5,17 +5,20 @@
   &--date-range {
     display: flex;
     justify-content: center;
+    align-items: center;
     font-size: 22px;
     font-weight: 400;
+    margin: 10px;
   }
 
-  &--actions {
-    display: flex;
-    justify-content: flex-end;
+  &--btn {
+    background: inherit;
+    border: none;
   }
 }
 
 .mat-disable {
   visibility: hidden;
+  width: 0;
   height: 0;
 }

@@ -3,6 +3,10 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { SimpleDataModel } from '../../../../../domain/d3.domain';
 import * as d3 from 'd3';
 
+export interface IDonutData {
+  data: SimpleDataModel[],
+  totalSum: number
+}
 
 const PALETTE = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']; 
 
@@ -16,12 +20,14 @@ const PALETTE = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b
 })
 export class DonutComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input()
-  public set data(value: SimpleDataModel[] | null) {
-    this._data$.next(value);
+  public set data(value: IDonutData | null) {
+    this.totalSum = value.totalSum;
+    this._data$.next(value.data);
   }
   @Input()
   public showNames: boolean = false;
 
+  public totalSum: number = 0;
   public donutID: string = 'donut';
   public donutNamesID: string = 'donut-names';
 
@@ -145,15 +151,14 @@ export class DonutComponent implements OnInit, AfterViewInit, OnDestroy {
     //   .attr('font-size', '26px')
     //   .attr('font-weight', '400')
     //   .text(`${this.portfolioData[0].name}`);
-    const totalBalance = this.getTotalBalanceValue();
 
     text
       .append('tspan')
       .attr('x', 0)
       .attr('y', 35)
-      .attr('font-size', '30px')
+      .attr('font-size', '50px')
       .attr('font-weight', '400')
-      .text(`${totalBalance}$`);
+      .text(`${this.totalSum.toFixed(2)}$`);
   }
 
   private createNamesList(): void {
@@ -185,7 +190,7 @@ export class DonutComponent implements OnInit, AfterViewInit, OnDestroy {
     const tbody = listContainer
       .style('display', 'flex')
       .append('table')
-      .style('width', '90%').append('tbody');
+      .style('width', '85%').append('tbody');
 
     const rows = tbody
       .selectAll('tr')
@@ -202,13 +207,7 @@ export class DonutComponent implements OnInit, AfterViewInit, OnDestroy {
 
     rows
       .append('td')
-      .html((d: SimpleDataModel) => `<div class="d3-name"><p>${d.name}</p> <p>${d.value}</p></div>`);
+      .html((d: SimpleDataModel) => `<div class="d3-name"><p>${d.name}</p> <p>${d.value}%</p></div>`);
 
-  }
-
-  private getTotalBalanceValue(): number {
-    return this.dataSubject
-                  .map(data => data.value)
-                  .reduce((accumulator, value) => accumulator + value, 0);
   }
 }

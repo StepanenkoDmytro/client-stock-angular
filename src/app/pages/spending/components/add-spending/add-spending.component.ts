@@ -13,9 +13,10 @@ import { Category } from '../../../../domain/category.domain';
 import { CategorySelectComponent } from '../../../../core/UI/components/category-select/category-select.component';
 import { Router } from '@angular/router';
 import { EditStateSpendingService } from '../../service/edit-state-spending.service';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { Spending } from '../../model/Spending';
 import { MoneyDirective } from '../../../../directive/money.directive';
+import { lastValueFrom } from 'rxjs';
 
 
 const UI_MODULES = [
@@ -43,8 +44,8 @@ const MATERIAL_MODULES = [
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddSpendingComponent implements OnInit, OnDestroy {
-  public categories: Category[] = Category.defaultList;
-  public selectedCategory: Category = null /* this.data?.category */ || Category.default;
+  public categories: Category[];
+  public selectedCategory: Category;
   public commentOfProduct: string = '';
   public costOfProduct: string = '0';
   public date: Date = moment().toDate();
@@ -55,10 +56,14 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
     private spendingsService: SpendingsService,
     private router: Router,
     private editStateService: EditStateSpendingService,
-    private readonly httpClient: HttpClient,
   ) { }
 
-  public ngOnInit(): void {
+  public async ngOnInit(): Promise<void> {
+    this.spendingsService.getAllCategories().subscribe(categories => {
+      this.categories = categories[1].children;
+      this.selectedCategory = this.categories.find(category => category.title === 'Other');
+    });
+
     this.editSpending = this.editStateService.editStateSpending;
 
     if(!!this.editSpending) {

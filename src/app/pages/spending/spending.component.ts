@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ProgressComponent } from '../../core/UI/components/progress/progress.component';
-import { PeriodSpendingComponent } from './components/period-spending/period-spending.component';
 import { MatButtonModule } from '@angular/material/button';
 import { ButtonToggleComponent } from '../../core/UI/components/button-toggle/button-toggle.component';
 import { HistorySpendingComponent } from './components/history-spending/history-spending.component';
@@ -18,7 +17,6 @@ import { Category } from '../../domain/category.domain';
 const UI_COMPONENTS = [
   ProgressComponent,
   TotalBalanceSpendingComponent,
-  // PeriodSpendingComponent,
   CategorySpendingComponent,
   HistorySpendingComponent,
   ButtonToggleComponent,

@@ -4,7 +4,7 @@
 </div>
 <section class="add-spending">
 
-    <pgz-category-select [(ngModel)]="selectedCategory"></pgz-category-select>
+    <pgz-category-select [categories]="categories" [selectedCategory]="selectedCategory" [(ngModel)]="selectedCategory"></pgz-category-select>
 
     <mat-form-field appearance="outline" floatLabel="always" class="w-100">
         <mat-label>Sum</mat-label>

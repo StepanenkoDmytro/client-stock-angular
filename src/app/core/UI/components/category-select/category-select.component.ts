@@ -33,7 +33,9 @@ export class CategorySelectComponent implements OnInit, ControlValueAccessor {
   @ViewChild('menuTrigger', {read: MatMenuTrigger})
   private menuTrigger: MatMenuTrigger;
 
+  @Input()
   public categories: Category[];
+  @Input()
   public selectedCategory: Category;
 
   public treeControl = new NestedTreeControl<Category>(node => node.children);
@@ -48,11 +50,11 @@ export class CategorySelectComponent implements OnInit, ControlValueAccessor {
   ) {
   }
   public ngOnInit(): void {
-      this.store$.pipe(select(categoriesSpendindSelector)).subscribe(categories => {
-      this.dataSource.data = categories;
-      this.categories = categories;
-      this.selectedCategory = categories[1];
-    });
+      // this.store$.pipe(select(categoriesSpendindSelector)).subscribe(categories => {
+      this.dataSource.data = this.categories;
+      // this.categories = categories;
+      // this.selectedCategory = this.categories[1];
+    // });
   }
 
   public writeValue(category: Category): void {
