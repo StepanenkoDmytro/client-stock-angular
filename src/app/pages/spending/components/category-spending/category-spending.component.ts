@@ -29,9 +29,7 @@ export class CategorySpendingComponent implements OnInit {
   ) { }
 
   public async ngOnInit(): Promise<void> {
-    
     this.spendingCategories = await this.spendingCategoryHelper.calculateCategoryStatistic(this.spendings);
-    console.log(this.spendingCategories);
     this.cdr.detectChanges();
   }
 }

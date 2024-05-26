@@ -11,6 +11,12 @@
             <input matInput type="text" inputmode="numeric" class="category--name" placeholder="Enter name of category" style="font-size: 1.5rem;" [formControl]="categoryTitleCtrl">
         </mat-form-field>
     </div>
+    <div style="display: flex; position: relative;">
+        <p>Selected icon for category: </p>
+        <pgz-icon class="category--icon" [name]="selectedIcon"></pgz-icon>
+        <pgz-icon-picker (onSelectIcon)="onSelectIcon($event)"></pgz-icon-picker>
+    </div>
+    
     <div class="add-category--actions">
         <button class="add-category--btn" mat-button [routerLink]="['/spending']">Cancel</button>
         <button class="add-category--btn save" mat-button (click)="onAdd()">Add</button>

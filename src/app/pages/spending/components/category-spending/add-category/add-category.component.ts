@@ -10,10 +10,12 @@ import { Router, RouterModule } from '@angular/router';
 import { SpendingsService } from '../../../../../service/spendings.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
+import { IconPickerComponent } from '../../../../../core/UI/components/icon-picker/icon-picker.component';
 
 const UI_MODULES = [
   CategorySelectComponent,
-  IconComponent
+  IconComponent,
+  IconPickerComponent
 ];
 
 const MATERIAL_MODULES = [
@@ -38,6 +40,7 @@ const MATERIAL_MODULES = [
 export class AddCategoryComponent implements OnInit {
   public selectedCategory: Category;
   public categoryTitleCtrl: FormControl<string> = new FormControl('');
+  public selectedIcon: string = 'payment';
 
   constructor(
     private spendingService: SpendingsService,
@@ -51,11 +54,14 @@ export class AddCategoryComponent implements OnInit {
   }
 
   public onAdd(): void {
-    const newCategory = new Category(this.categoryTitleCtrl.value);
+    const newCategory = new Category(this.categoryTitleCtrl.value, this.selectedIcon);
     
     const parentId = this.selectedCategory.id;
-    console.log(newCategory, parentId, this.selectedCategory);
     this.spendingService.addCategory(newCategory, parentId);
     this.router.navigate(['spending']);
+  }
+
+  public onSelectIcon(icon: string): void {
+    this.selectedIcon = icon;
   }
 }

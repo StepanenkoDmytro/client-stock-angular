@@ -49,7 +49,6 @@ export class CategorySelectComponent implements OnInit, ControlValueAccessor {
   }
   public ngOnInit(): void {
       this.store$.pipe(select(categoriesSpendindSelector)).subscribe(categories => {
-      console.log(categories);
       this.dataSource.data = categories;
       this.categories = categories;
       this.selectedCategory = categories[1];
