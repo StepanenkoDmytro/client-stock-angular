@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -17,7 +17,7 @@ import { DateFormatPipe } from '../../../../core/UI/calendar/date-format.pipe';
 import { SpendingStatisticCardComponent } from './spending-statistic-card/spending-statistic-card.component';
 import { ICategoryStatistic } from '../../model/SpendindStatistic';
 import { switchMap } from 'rxjs';
-import { SpendingStatisticHelperService } from '../../service/spending-statistic-helper.service';
+import { SpendingCategoryHelperService } from '../../../../service/helpers/spending-category-helper.service';
 
 
 const UI_COMPONENTS = [
@@ -60,9 +60,8 @@ export class SpendingStatisticComponent implements OnInit {
 
   constructor(
     private readonly formBuilder: FormBuilder,
-    private spendingsHelperService: SpendingStatisticHelperService,
+    private spendingsHelperService: SpendingCategoryHelperService,
     private spendingsService: SpendingsService,
-    private cdr: ChangeDetectorRef
   ) { }
 
   public ngOnInit(): void {

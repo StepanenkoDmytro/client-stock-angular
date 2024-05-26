@@ -1,6 +1,7 @@
 import { createAction, props } from "@ngrx/store";
 import { ISpendingsState } from "./spendings.reducer";
 import { Spending } from "../model/Spending";
+import { Category } from "../../../domain/category.domain";
 
 
 export const addSpending = 
@@ -43,4 +44,10 @@ export const deleteSpendingWithoutApiCall =
 export const loadSpendingFailure = createAction(
     '[Spending] Load Spending Failure',
     props<{ error: any }>()
+    );
+
+export const addCategory = 
+    createAction(
+        '[SPENDING] Add Category', 
+        (payload: { category: Category, parentId: string }) => ({ payload })
     );

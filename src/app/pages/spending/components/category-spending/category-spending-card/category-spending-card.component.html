@@ -1,0 +1,30 @@
+<div class="category-card">
+    <div class="category-card-parent">
+        <div class="category-card-parent--category">
+            <pgz-icon class="category-icon" [name]="data.category.icon"></pgz-icon>
+            <p>{{data.category.title}}</p>
+        </div>
+        <p>{{data.value}}</p>
+    </div>
+    @if(dataChildrens && dataChildrens.length > 0) {
+        <mat-expansion-panel (opened)="panelOpenState = true"
+                            (closed)="panelOpenState = false">
+        <mat-expansion-panel-header>
+        <mat-panel-title>
+            Subcategories: {{dataChildrens.length}}
+        </mat-panel-title>
+        </mat-expansion-panel-header>
+            <div class="category-card-childrens">
+                @for(children of dataChildrens; track children) {
+                    <div class="category-card-childrens--item">
+                        <div class="category-card-childrens--category">
+                            <pgz-icon class="category-icon" [name]="children.category.icon"></pgz-icon>
+                            <p>{{children.category.title}}</p>
+                        </div>
+                        <p class="category-card-childrens--value">{{children.value}}</p>
+                    </div>
+                }
+            </div>
+        </mat-expansion-panel>
+    }
+</div>

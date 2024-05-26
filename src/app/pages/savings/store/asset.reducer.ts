@@ -18,7 +18,6 @@ export const assetReducer = createReducer(
     initialSavingsState,
     on(addAsset, (state, action) => {
         const updatedAssetsList = Array.isArray(state.assetsList) ? state.assetsList : [];
-        console.log('here', state, action);
         return {
             ...state,
             idIncrement: state.idIncrement + 1,

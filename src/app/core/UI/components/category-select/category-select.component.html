@@ -1,5 +1,5 @@
 <mat-form-field appearance="outline" class="w-100" [matMenuTriggerFor]="menu" #menuTrigger>
-  <mat-label>Category</mat-label>
+  <mat-label>{{label}}</mat-label>
   <pgz-icon class="ms-2" matIconPrefix [name]="selectedCategory.icon"></pgz-icon>
   <input matInput type="text" readonly [ngModel]="selectedCategory.title">
   <mat-icon matIconSuffix>{{ 'expand_more' }}</mat-icon>

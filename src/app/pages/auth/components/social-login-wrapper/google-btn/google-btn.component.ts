@@ -49,7 +49,6 @@ export class GoogleBtnComponent implements OnInit {
       client_id: '752613829972-39bssi3276q4s3v4r43n2t51847gsq6g.apps.googleusercontent.com',
       ux_mode: "popup",
       callback: (response: any) => {
-        console.log(response);
         const token = {
           "token": response['credential']
         }
