@@ -29,6 +29,12 @@ export const loadSpending =
         (payload: { state: ISpendingsState }) => ({ payload })
     );
 
+export const loadCategories = 
+    createAction(
+        '[SPENDING] Load Categories', 
+        (payload: { state: ISpendingsState }) => ({ payload })
+    );
+
 export const deleteSpending = 
     createAction(
         '[SPENDING] Delete Spendings', 

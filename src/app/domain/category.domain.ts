@@ -4,6 +4,14 @@ export interface ICategory {
   icon: string;
 }
 
+export interface ICategoryApi {
+  id: string;
+  title: string;
+  icon: string;
+  parent: string,
+  isSaved: boolean,
+}
+
 function generateUniqueId(): string {
   const randomPart = Math.random().toString(36).substring(2, 10);
   const timestampPart = Date.now().toString(36);
@@ -12,7 +20,7 @@ function generateUniqueId(): string {
 
 export class Category implements ICategory {
 
-  public static defaultList: Category[] = [
+  private static defaultList: Category[] = [
     new Category( 'Income', 'paid', [
       new Category('Salary', 'money')
     ]),
@@ -31,18 +39,31 @@ export class Category implements ICategory {
   public static default: Category = Category.defaultList[1];
 
   public readonly id: string;
-  private parent: Category | null = null;
+  public parent: string | null = null;
 
   constructor(
     public title: string = '',
     public icon: string = 'payments',
     public children: Category[] = [],
+    public isSaved: boolean = false,
+    id?: string | null,
+    parent?: string | null,
   ) {
-    this.id = generateUniqueId();
+
+    if(id) {
+      this.id = id;
+    } else {
+      this.id = generateUniqueId();
+    }
+    this.parent = parent;
   }
 
   public get isRoot(): boolean {
     return !this.parent;
+  }
+
+  public setParent(parentId: string | null): void {
+    this.parent = parentId;
   }
 
   public findCategory(title: string): Category | undefined {
@@ -67,5 +88,37 @@ export class Category implements ICategory {
         }
     }
     return undefined;
+  }
+
+  public static getCategoryDefaultList(): Category[] {
+    this.defaultList.forEach(category => {
+      // console.log('getCategoryDefaultList' ,category);
+      category.children.map(children => children.setParent(category.id));
+    });
+    
+    return this.defaultList;
+  }
+
+  public static mapToCategoryApi(category: Category): ICategoryApi {
+    return {
+      id: category.id,
+      title: category.title,
+      icon: category.icon,
+      parent: category.parent,
+      isSaved: category.isSaved,
+    }
+}
+
+  public static mapFromCategoryApi(category: any): Category {
+    const serverCategory: Category = new Category(
+      category.title,
+      category.icon,
+      [],
+      category.saved,
+      category.id,
+      category.parent
+      );
+
+    return serverCategory;
   }
 }

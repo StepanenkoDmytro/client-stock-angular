@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable, filter, map } from 'rxjs';
+import { Observable, concatMap, filter, from, map, of } from 'rxjs';
 import moment from 'moment';
 import { ISpendingsState } from '../pages/spending/store/spendings.reducer';
 import { Store, select } from '@ngrx/store';
 import { spendingsHistorySelector, spendingsFeatureSelector, categoriesSpendindSelector } from '../pages/spending/store/spendings.selectors';
-import { addCategory, addSpending, deleteSpending, editSpending, loadSpending } from '../pages/spending/store/spendings.actions';
+import { addCategory, addSpending, deleteSpending, editSpending, loadCategories, loadSpending } from '../pages/spending/store/spendings.actions';
 import { Spending } from '../pages/spending/model/Spending';
 import { Category } from '../domain/category.domain';
 
@@ -77,9 +77,9 @@ export class SpendingsService {
 
   public addCategory(category: Category, parentId: string): void {
     if(category.title === null) {
-      throw Error('cost or name of product can not be null')
+      throw Error('title of category can not be null')
     }
-
+    
     this.store$.dispatch(addCategory({ category, parentId }));
   }
 
@@ -118,10 +118,19 @@ export class SpendingsService {
   public loadFromStorage(): void {
     
     const storageState = localStorage.getItem(this.spendingHistoryLocalStorageKey);
-    if(storageState) {
-      this.store$.dispatch(loadSpending({
-        state: JSON.parse(storageState)
-      }))
+    // if(storageState) {
+    //   this.store$.dispatch(loadSpending({
+    //     state: JSON.parse(storageState)
+    //   }))
+    // }
+
+    if (storageState) {
+      from([
+        loadCategories({ state: JSON.parse(storageState) }),
+        loadSpending({ state: JSON.parse(storageState) }),
+      ]).pipe(
+        concatMap(action => of(this.store$.dispatch(action)))
+      ).subscribe();
     }
   }
 }

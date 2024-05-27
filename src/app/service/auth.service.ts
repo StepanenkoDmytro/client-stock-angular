@@ -11,7 +11,7 @@ import { IUserApiResponse } from '../domain/user.domain';
 })
 export class AuthService {
   private readonly authTokenKey = 'authToken';
-  private readonly url: string = 'http://pegazzo.online:8000/api/v1/auth/';
+  private readonly url: string = 'http://localhost:8000/api/v1/auth/';
 
   private _authToken: string = '';
 

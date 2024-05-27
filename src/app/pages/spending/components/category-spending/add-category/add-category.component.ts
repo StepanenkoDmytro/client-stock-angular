@@ -56,9 +56,10 @@ export class AddCategoryComponent implements OnInit {
   }
 
   public onAdd(): void {
-    const newCategory = new Category(this.categoryTitleCtrl.value, this.selectedIcon);
-    
     const parentId = this.selectedCategory.id;
+    const newCategory = new Category(this.categoryTitleCtrl.value, this.selectedIcon);
+    newCategory.setParent(parentId);
+    
     this.spendingService.addCategory(newCategory, parentId);
     this.router.navigate(['spending']);
   }
