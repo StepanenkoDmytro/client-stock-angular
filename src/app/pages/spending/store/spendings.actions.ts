@@ -29,12 +29,6 @@ export const loadSpending =
         (payload: { state: ISpendingsState }) => ({ payload })
     );
 
-export const loadCategories = 
-    createAction(
-        '[SPENDING] Load Categories', 
-        (payload: { state: ISpendingsState }) => ({ payload })
-    );
-
 export const deleteSpending = 
     createAction(
         '[SPENDING] Delete Spendings', 
@@ -56,4 +50,16 @@ export const addCategory =
     createAction(
         '[SPENDING] Add Category', 
         (payload: { category: Category, parentId: string }) => ({ payload })
+    );
+
+export const loadCategories = 
+    createAction(
+        '[SPENDING] Load Categories', 
+        (payload: { state: ISpendingsState }) => ({ payload })
+    );
+
+export const loadServerCategories = 
+    createAction(
+        '[SPENDING] Load Sever Categories', 
+        (payload: { state: ISpendingsState }) => ({ payload })
     );

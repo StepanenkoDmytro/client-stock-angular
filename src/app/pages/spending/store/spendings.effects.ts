@@ -3,7 +3,7 @@ import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { EMPTY, Observable, firstValueFrom, of } from 'rxjs';
 import { catchError, filter, map, mergeMap, switchMap, tap, withLatestFrom} from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { addCategory, addMultipleSpendings, addSpending, deleteSpending, editSpending, loadCategories, loadSpending } from './spendings.actions';
+import { addCategory, addMultipleSpendings, addSpending, deleteSpending, editSpending, loadCategories, loadServerCategories, loadSpending } from './spendings.actions';
 import { AuthService } from '../../../service/auth.service';
 import { Spending } from '../model/Spending';
 import { ISavingsState } from '../../savings/store/asset.reducer';
@@ -150,18 +150,40 @@ export class SpendingsEffects {
         //TODO: create transform method for serverSpendings: swap categoryId on category
         const clientCategories = categoryState.categorySpendings;
         const flattenCategories = this.flattenCategories(clientCategories);
-        const newCategoriesFromServer = this.filterNewCategoriesFromServer(serverCategories, flattenCategories);
-        console.log('first');
-        //якщо видалити localStorage, то апку створить категорії з новими id, а з сервера прийдуть старі id (продумать)
+        const isServerCategories = this.isFirstCategoryInitialization(serverCategories, flattenCategories);
+        
+        
+        if(isServerCategories && serverCategories.length > 0) {
+          console.log('loh');
+          const newCategorySpendings = this.buildCategoryTree(serverCategories);
+          
+          categoryState = {
+            ...categoryState,
+            idIncrement: categoryState.idIncrement + 1,
+            categorySpendings: newCategorySpendings
+          };
+          this.store.dispatch(loadServerCategories({state: categoryState}));
+          // return newState;
+        } else {
+          const newCategoriesFromServer = this.filterNewCategoriesFromServer(serverCategories, flattenCategories);
+          newCategoriesFromServer.forEach(category => {
+            this.store.dispatch(addCategory({category, parentId: category.parent}));
+          });
+          
+        }
+
+        this.sendUnsavedCategoriesToServer(portfolioID, flattenCategories);
+        // const newCategoriesFromServer = this.filterNewCategoriesFromServer(serverCategories, flattenCategories);
+        // //якщо видалити localStorage, то апку створить категорії з новими id, а з сервера прийдуть старі id (продумать)
         // if (newCategoriesFromServer.length > 0) {
+        //   console.log('second', newCategoriesFromServer, flattenCategories);
         //   newCategoriesFromServer.forEach(category => {
-        //     console.log('test')
         //     const parentId = category.parent;
-        //     this.store.dispatch(addCategory({category, parentId}));
+        //     // this.store.dispatch(addCategory({category, parentId}));
         //   });
         // }
 
-        this.sendUnsavedCategoriesToServer(portfolioID, flattenCategories);
+        
         
         return categoryState; 
       }),
@@ -171,6 +193,34 @@ export class SpendingsEffects {
       })
     );
   }
+
+  private buildCategoryTree(categories: Category[]): Category[] {
+  const categoryMap: Map<string, Category> = new Map();
+  categories.forEach(category => {
+    categoryMap.set(category.id, Category.mapFromCategoryApi(category));
+  });
+
+  const rootCategories: Category[] = [];
+
+  const addChildCategories = (parentCategory: Category) => {
+    const children = categories.filter(category => category.parent === parentCategory.id);
+    children.forEach(child => {
+      const childCategory = categoryMap.get(child.id);
+      parentCategory.children.push(childCategory);
+      addChildCategories(childCategory); 
+    });
+  };
+
+  categories.forEach(category => {
+    if (!category.parent) {
+      rootCategories.push(categoryMap.get(category.id));
+      addChildCategories(categoryMap.get(category.id));
+    }
+  });
+
+  return rootCategories;
+}
+
 
   private flattenCategories(categories: Category[]): Category[] {
     const flattenedCategories: Category[] = [];
@@ -194,13 +244,23 @@ export class SpendingsEffects {
       .map(category => Category.mapFromCategoryApi(category));
   }
 
+  private isFirstCategoryInitialization(serverCategories: Category[], clientCategories: Category[]): boolean {
+    
+    const findBasicServerCategories: string[] = serverCategories.filter(category => category.parent == null).map(category => category.id);
+    const findBasicClientCategories: string[] = clientCategories.filter(category => category.parent == null).map(category => category.id);
+    
+    return findBasicClientCategories.every(clientId =>
+      !findBasicServerCategories.includes(clientId)
+    );
+  }
+
   private sendUnsavedCategoriesToServer(portfolioID: number, categories: Category[]): void {
-    console.log('second', categories);
+    
     categories
-    .filter(category => !category.isSaved)
-    .forEach(async unsavedCategory => {
-      await firstValueFrom(this.sendCategoryToServer(portfolioID, unsavedCategory));
-    });
+      .filter(category => !category.isSaved)
+      .forEach(async unsavedCategory => {
+        await firstValueFrom(this.sendCategoryToServer(portfolioID, unsavedCategory));
+      });
   }
 
   private sendCategoryToServer(portfolioID: number, category: Category): Observable<Category> {

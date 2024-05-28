@@ -123,7 +123,7 @@ export class SpendingsService {
     //     state: JSON.parse(storageState)
     //   }))
     // }
-
+    console.log('try to load')
     if (storageState) {
       from([
         loadCategories({ state: JSON.parse(storageState) }),
