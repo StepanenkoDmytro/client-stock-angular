@@ -17,51 +17,45 @@ const initialSpendingsState: ISpendingsState = {
   categorySpendings: Category.getCategoryDefaultList(),
 };
 
-const addCategoryToParent = (categories: Category[], newCategory: Category, parentId: string | null): Category[] => {
-  // debugger;
+const addCategoryToParent = (categories: Category[], newCategory: Category): Category[] => {
+
   return categories.map(category => {
-    if (parentId === null || parentId === undefined) {
+    if (!newCategory.parent) {
       const updatedCategory = category.id === newCategory.id 
-        ?  {
-          ...newCategory,
-          children: category.children
-        } as Category
+        ? updateCategoryChildren(newCategory, category.children)
         : category;
 
       return updatedCategory;
-    } else if(category.id === parentId) {
+    } 
+
+    if(category.id === newCategory.parent) {
       const existingChildIndex = category.children.findIndex(child => child.id === newCategory.id);
             
-            let updatedChildren;
-            if (existingChildIndex !== -1) {
-                // Заміна існуючої категорії, зберігаючи її children
-                const existingCategory = category.children[existingChildIndex];
-                newCategory = {
-                  ...newCategory,
-                  children: existingCategory.children
-                } as Category;
+      if(existingChildIndex === -1) {
+        return updateCategoryChildren(category, [...category.children, newCategory]);
+      }
+      const existingCategory = category.children[existingChildIndex];
+      newCategory = updateCategoryChildren(newCategory, existingCategory.children);
+      const updatedChildren = category.children
+        .map((child, index) => index === existingChildIndex ? newCategory : child);
+      
+      return updateCategoryChildren(category, updatedChildren);
+    } 
 
-                updatedChildren = category.children.map((child, index) => index === existingChildIndex ? newCategory : child);
-            } else {
-                // Додавання нової категорії
-                updatedChildren = [...category.children, newCategory];
-            }
-      const updatedParentCategory = {
-        ...category,
-        children: updatedChildren
-      };
-      return updatedParentCategory as Category;
-    } else if (category.children.length > 0) {
-      const updatedChildren = addCategoryToParent(category.children, newCategory, parentId);
-      const updatedCategory = {
-        ...category,
-        children: updatedChildren
-      };
-      return updatedCategory as Category;
-    } else {
-      return category;
-    }
+    if (category.children.length > 0) {
+      const updatedChildren = addCategoryToParent(category.children, newCategory);
+      return updateCategoryChildren(category, updatedChildren);
+    } 
+
+    return category;
   });
+}
+
+const updateCategoryChildren = ( category: Category, children: Category[]): Category => {
+  return {
+    ...category,
+    children
+  } as Category;
 }
 
 export const spendingsReducer = createReducer(
@@ -130,11 +124,8 @@ export const spendingsReducer = createReducer(
   /* Categories */
   on(addCategory, (state, action) => {
     const category = action.payload.category;
-    const parentId = action.payload.parentId;
-    // category.setParent(parentId);
-    
-    const newCategorySpendingsState: Category[] = addCategoryToParent(state.categorySpendings, category, parentId);
-    // console.log('newcategorySpendingsState', newCategorySpendingsState);
+    const newCategorySpendingsState: Category[] = addCategoryToParent(state.categorySpendings, category);
+
     return {
         ...state,
         idIncrement: state.idIncrement + 1,

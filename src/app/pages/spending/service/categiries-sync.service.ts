@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { Category, ICategoryApi } from '../../../domain/category.domain';
 import { Store } from '@ngrx/store';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -24,7 +25,7 @@ export class CategiriesSyncService {
     return this.http.post(savedCategoryUrl, categoryDTO).pipe(
       tap((response: any) => {
         const newCategory = Category.mapFromCategoryApi(response);
-        this.store.dispatch(addCategory({ category: newCategory, parentId: newCategory.parent }));
+        this.store.dispatch(addCategory({ category: newCategory }));
       }),
       catchError(error => {
         console.error('Error occurred while saving categories:', error);
@@ -41,7 +42,7 @@ export class CategiriesSyncService {
         return this.updateStateWithSyncCategory(serverCategories, categoryState, portfolioID);
       }),
       catchError(error => {
-        console.error('Error occurred while loading spending:', error);
+        console.error('Error occurred while loading categories:', error);
         return EMPTY;
       })
     );
@@ -58,7 +59,7 @@ export class CategiriesSyncService {
     } else {
       const newCategoriesFromServer = this.filterNewCategoriesFromServer(serverCategories, flattenCategories);
       newCategoriesFromServer.forEach(category => {
-        this.store.dispatch(addCategory({category, parentId: category.parent}));
+        this.store.dispatch(addCategory({category}));
       });
 
       this.sendUnsavedCategoriesToServer(portfolioID, flattenCategories);
@@ -125,7 +126,7 @@ export class CategiriesSyncService {
       .filter(serverCategory => {
         const isCategoryAbsentOnClient: boolean = !clientCategories
           .some(clientCategory => serverCategory.id === clientCategory.id);
-          
+
         return isCategoryAbsentOnClient;
       })
       .map(category => Category.mapFromCategoryApi(category));

@@ -2,15 +2,14 @@ import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { EMPTY } from 'rxjs';
 import { filter, mergeMap, switchMap, withLatestFrom} from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http';
 import { addCategory, addSpending, deleteSpending, editSpending, loadCategories, loadSpending } from './spendings.actions';
 import { AuthService } from '../../../service/auth.service';
-import { ISavingsState } from '../../savings/store/asset.reducer';
 import { Store } from '@ngrx/store';
 import { selectPortfolioID } from '../../../store/user.selectors';
 import { categoriesSpendindSelector } from './spendings.selectors';
 import { CategiriesSyncService } from '../service/categiries-sync.service';
 import { SpendingsSyncService } from '../service/spendings-sync.service';
+import { ISpendingsState } from './spendings.reducer';
 
 
 @Injectable()
@@ -18,9 +17,8 @@ export class SpendingsEffects {
 
   constructor(
     private actions$: Actions,
-    private http: HttpClient,
     private authService: AuthService,
-    private store: Store<ISavingsState>,
+    private store: Store<ISpendingsState>,
     private categoriesSyncService: CategiriesSyncService,
     private spendingsSyncService: SpendingsSyncService
   ) {}
@@ -32,12 +30,11 @@ export class SpendingsEffects {
     withLatestFrom(this.store.select(categoriesSpendindSelector)),
     switchMap(([[action, portfolioID], categories]) => {
       const newSpending = action.payload.spending;
-      
       if(!newSpending.isSaved) {
         return this.spendingsSyncService.sendSpendingToServer(portfolioID, newSpending, categories);
-      } else {
-        return EMPTY;
-      }
+      } 
+
+      return EMPTY;
     })
   ), { dispatch: false });
 
@@ -67,9 +64,9 @@ export class SpendingsEffects {
       const newCategory = action.payload.category;
       if(!newCategory.isSaved) {
         return this.categoriesSyncService.sendCategoryToServer(portfolioID, newCategory);
-      } else {
-        return EMPTY;
-      }
+      } 
+      
+      return EMPTY;
     })
   ), { dispatch: false });
 

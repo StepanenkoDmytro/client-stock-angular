@@ -75,12 +75,12 @@ export class SpendingsService {
 
   /* Categories */
 
-  public addCategory(category: Category, parentId: string): void {
+  public addCategory(category: Category): void {
     if(category.title === null) {
       throw Error('title of category can not be null')
     }
     
-    this.store$.dispatch(addCategory({ category, parentId }));
+    this.store$.dispatch(addCategory({ category }));
   }
 
   public getAllCategories(): Observable<Category[]> {

@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { Category } from '../../../../../domain/category.domain';
@@ -11,6 +10,7 @@ import { SpendingsService } from '../../../../../service/spendings.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { IconPickerComponent } from '../../../../../core/UI/components/icon-picker/icon-picker.component';
+
 
 const UI_MODULES = [
   CategorySelectComponent,
@@ -60,7 +60,7 @@ export class AddCategoryComponent implements OnInit {
     const newCategory = new Category(this.categoryTitleCtrl.value, this.selectedIcon);
     newCategory.setParent(parentId);
     
-    this.spendingService.addCategory(newCategory, parentId);
+    this.spendingService.addCategory(newCategory);
     this.router.navigate(['spending']);
   }
 
