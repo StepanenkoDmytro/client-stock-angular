@@ -18,45 +18,46 @@ const initialSpendingsState: ISpendingsState = {
 };
 
 const addCategoryToParent = (categories: Category[], newCategory: Category, parentId: string | null): Category[] => {
-  // console.log('addCategoryToParent' ,categories, newCategory, parentId);
   // debugger;
   return categories.map(category => {
-    if (parentId === null && category.id === newCategory.id) {
-      return new Category(newCategory.title, newCategory.icon, category.children, newCategory.isSaved, newCategory.id, parentId);
+    if (parentId === null || parentId === undefined) {
+      const updatedCategory = category.id === newCategory.id 
+        ?  {
+          ...newCategory,
+          children: category.children
+        } as Category
+        : category;
+
+      return updatedCategory;
     } else if(category.id === parentId) {
-      const existingChild = category.children.find(child => child.id === newCategory.id);
+      const existingChildIndex = category.children.findIndex(child => child.id === newCategory.id);
+            
+            let updatedChildren;
+            if (existingChildIndex !== -1) {
+                // Заміна існуючої категорії, зберігаючи її children
+                const existingCategory = category.children[existingChildIndex];
+                newCategory = {
+                  ...newCategory,
+                  children: existingCategory.children
+                } as Category;
 
-      const updatedChildren = existingChild
-        ? category.children.map(child => child.id === newCategory.id ? 
-          new Category(
-            newCategory.title,
-            newCategory.icon,
-            child.children, // збереження дітей
-            newCategory.isSaved,
-            newCategory.id,
-            newCategory.parent // збереження батьківського ID
-          ) : child)
-        : [...category.children, newCategory];
-        
-        return new Category(
-          category.title,
-          category.icon,
-          updatedChildren, // оновлені діти
-          category.isSaved,
-          category.id,
-          category.parent // збереження батьківського ID
-        );
-
+                updatedChildren = category.children.map((child, index) => index === existingChildIndex ? newCategory : child);
+            } else {
+                // Додавання нової категорії
+                updatedChildren = [...category.children, newCategory];
+            }
+      const updatedParentCategory = {
+        ...category,
+        children: updatedChildren
+      };
+      return updatedParentCategory as Category;
     } else if (category.children.length > 0) {
       const updatedChildren = addCategoryToParent(category.children, newCategory, parentId);
-      return new Category(
-        category.title,
-        category.icon,
-        updatedChildren, // оновлені діти
-        category.isSaved,
-        category.id,
-        category.parent // збереження батьківського ID
-      );
+      const updatedCategory = {
+        ...category,
+        children: updatedChildren
+      };
+      return updatedCategory as Category;
     } else {
       return category;
     }

@@ -9,7 +9,7 @@ export interface ICategoryApi {
   title: string;
   icon: string;
   parent: string,
-  isSaved: boolean,
+  saved: boolean,
 }
 
 function generateUniqueId(): string {
@@ -40,11 +40,12 @@ export class Category implements ICategory {
 
   public readonly id: string;
   public parent: string | null = null;
+  public children: Category[] = [];
 
   constructor(
     public title: string = '',
     public icon: string = 'payments',
-    public children: Category[] = [],
+    children: Category[] = [],
     public isSaved: boolean = false,
     id?: string | null,
     parent?: string | null,
@@ -56,6 +57,7 @@ export class Category implements ICategory {
       this.id = generateUniqueId();
     }
     this.parent = parent;
+    this.children = children;
   }
 
   public get isRoot(): boolean {
@@ -79,6 +81,10 @@ export class Category implements ICategory {
     }
     return undefined;
   }
+
+  public setChildren(children :Category[]): void {
+    this.children = children;
+  } 
 
   public static findCategoryInDefaultList(title: string): Category | undefined {
     for (const category of this.defaultList) {
@@ -105,7 +111,7 @@ export class Category implements ICategory {
       title: category.title,
       icon: category.icon,
       parent: category.parent,
-      isSaved: category.isSaved,
+      saved: category.isSaved,
     }
 }
 

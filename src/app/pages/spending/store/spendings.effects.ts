@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
-import { EMPTY, Observable, of } from 'rxjs';
+import { EMPTY, Observable, firstValueFrom, of } from 'rxjs';
 import { catchError, filter, map, mergeMap, switchMap, tap, withLatestFrom} from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { addCategory, addMultipleSpendings, addSpending, deleteSpending, editSpending, loadCategories, loadSpending } from './spendings.actions';
@@ -11,7 +11,7 @@ import { Store } from '@ngrx/store';
 import { selectPortfolioID } from '../../../store/user.selectors';
 import { ISpendingsState } from './spendings.reducer';
 import { categoriesSpendindSelector } from './spendings.selectors';
-import { Category } from '../../../domain/category.domain';
+import { Category, ICategoryApi } from '../../../domain/category.domain';
 
 
 @Injectable()
@@ -70,7 +70,7 @@ export class SpendingsEffects {
     withLatestFrom(this.store.select(selectPortfolioID)),
     switchMap(([action, portfolioID]) => {
       const newCategory = action.payload.category;
-      console.log('addCategory$', newCategory);
+      // console.log('addCategory$', newCategory);
       if(!newCategory.isSaved) {
         return this.sendCategoryToServer(portfolioID, newCategory);
       } else {
@@ -146,19 +146,20 @@ export class SpendingsEffects {
     const loadCategoriesUrl = this.url + 'categories-list/' + portfolioID;
     return this.http.get<any>(loadCategoriesUrl).pipe(
       map(serverCategories => {
-        debugger;
+        // debugger;
         //TODO: create transform method for serverSpendings: swap categoryId on category
         const clientCategories = categoryState.categorySpendings;
         const flattenCategories = this.flattenCategories(clientCategories);
         const newCategoriesFromServer = this.filterNewCategoriesFromServer(serverCategories, flattenCategories);
         console.log('first');
         //якщо видалити localStorage, то апку створить категорії з новими id, а з сервера прийдуть старі id (продумать)
-        if (newCategoriesFromServer.length > 0) {
-          newCategoriesFromServer.forEach(category => {
-            const parentId = category.parent;
-            this.store.dispatch(addCategory({category, parentId}));
-          });
-        }
+        // if (newCategoriesFromServer.length > 0) {
+        //   newCategoriesFromServer.forEach(category => {
+        //     console.log('test')
+        //     const parentId = category.parent;
+        //     this.store.dispatch(addCategory({category, parentId}));
+        //   });
+        // }
 
         this.sendUnsavedCategoriesToServer(portfolioID, flattenCategories);
         
@@ -193,26 +194,28 @@ export class SpendingsEffects {
       .map(category => Category.mapFromCategoryApi(category));
   }
 
-  private sendUnsavedCategoriesToServer(portfolioID: number ,categories: Category[]): void {
-    console.log('second');
+  private sendUnsavedCategoriesToServer(portfolioID: number, categories: Category[]): void {
+    console.log('second', categories);
     categories
     .filter(category => !category.isSaved)
-    .forEach(unsavedCategory => {
-      this.sendCategoryToServer(portfolioID, unsavedCategory);
+    .forEach(async unsavedCategory => {
+      await firstValueFrom(this.sendCategoryToServer(portfolioID, unsavedCategory));
     });
   }
 
   private sendCategoryToServer(portfolioID: number, category: Category): Observable<Category> {
     const transformedToApi = Category.mapToCategoryApi(category);
-    console.log('transformed TO Api',transformedToApi);
-
+    
+    transformedToApi.saved = true;
+// console.log('transformed TO Api',transformedToApi);
     const savedCategoryUrl = this.url + portfolioID + '/add-category';
+    // console.log(savedCategoryUrl);
 
     return this.http.post(savedCategoryUrl, transformedToApi).pipe(
       tap((response: any) => {
-        console.log('response', response);
+        // console.log('response', response);
         const transformedFromApi = Category.mapFromCategoryApi(response);
-        console.log('transformed FROM Api',transformedFromApi);
+        // console.log('transformed FROM Api',transformedFromApi);
         this.store.dispatch(addCategory({ category: transformedFromApi, parentId: transformedFromApi.parent }));
       }),
       catchError(error => {
@@ -220,5 +223,9 @@ export class SpendingsEffects {
         return EMPTY;
       })
     );
+    // return of(Category.mapFromCategoryApi(transformedToApi)).pipe(tap(category => {
+    //   this.store.dispatch(addCategory({ category: category, parentId: category.parent }));
+    // }));
   }
+
 }
