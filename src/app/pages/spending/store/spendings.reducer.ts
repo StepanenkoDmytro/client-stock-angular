@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { addSpending, editSpending, deleteSpending, loadSpending, addMultipleSpendings, deleteSpendingWithoutApiCall, addCategory, loadCategories, loadServerCategories } from "./spendings.actions";
+import { addSpending, editSpending, deleteSpending, loadSpending, addMultipleSpendings, deleteSpendingWithoutApiCall, addCategory, loadCategories, resetCategories } from "./spendings.actions";
 import { Spending } from "../model/Spending";
 import { logout } from "../../../store/user.actions";
 import { Category } from "../../../domain/category.domain";
@@ -146,10 +146,12 @@ export const spendingsReducer = createReducer(
       ...action.payload.state
     }
   }),
-  on(loadServerCategories, (state, action) => {
-    // console.log('state',state);
+  on(resetCategories, (state, action) => {
+
     return {
-      ...action.payload.state
+      ...state,
+      idIncrement: state.idIncrement + 1,
+      categorySpendings: action.payload.categorySpendings
     }
   }),
 

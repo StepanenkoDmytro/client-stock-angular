@@ -58,8 +58,8 @@ export const loadCategories =
         (payload: { state: ISpendingsState }) => ({ payload })
     );
 
-export const loadServerCategories = 
+export const resetCategories = 
     createAction(
-        '[SPENDING] Load Sever Categories', 
-        (payload: { state: ISpendingsState }) => ({ payload })
+        '[SPENDING] Reset Categories', 
+        (payload: { categorySpendings: Category[] }) => ({ payload })
     );
