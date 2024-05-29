@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, map, catchError, EMPTY, firstValueFrom, tap } from 'rxjs';
+import { Observable, map, catchError, EMPTY, firstValueFrom, tap, of } from 'rxjs';
 import { resetCategories, addCategory } from '../store/spendings.actions';
 import { ISpendingsState } from '../store/spendings.reducer';
 import { HttpClient } from '@angular/common/http';
@@ -31,6 +31,15 @@ export class CategiriesSyncService {
         console.error('Error occurred while saving categories:', error);
         return EMPTY;
       })
+    );
+  }
+
+  public deleteCategory(category: Category): Observable<void> {
+    const deleteUrl = this.url + 'delete-category/' + category.id;
+
+    return this.http.delete(deleteUrl).pipe(
+      map(() => console.log('success deleting spending')), 
+      catchError(error => of(console.log({ error }))) 
     );
   }
 

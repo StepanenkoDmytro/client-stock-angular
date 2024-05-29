@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { EMPTY } from 'rxjs';
 import { filter, mergeMap, switchMap, withLatestFrom} from 'rxjs/operators';
-import { addCategory, addSpending, deleteSpending, editSpending, loadCategories, loadSpending } from './spendings.actions';
+import { addCategory, addSpending, deleteCategory, deleteSpending, editSpending, loadCategories, loadSpending } from './spendings.actions';
 import { AuthService } from '../../../service/auth.service';
 import { Store } from '@ngrx/store';
 import { selectPortfolioID } from '../../../store/user.selectors';
@@ -69,6 +69,14 @@ export class SpendingsEffects {
       return EMPTY;
     })
   ), { dispatch: false });
+
+  deleteCategory$ = createEffect(() => this.actions$.pipe(
+    ofType(deleteCategory),
+    filter(() => !!this.authService.authToken),
+    mergeMap(action => {
+      return this.categoriesSyncService.deleteCategory(action.payload.category);
+    })
+  ), {dispatch: false});
 
   loadCategories$ = createEffect(() => this.actions$.pipe(
     ofType(loadCategories),

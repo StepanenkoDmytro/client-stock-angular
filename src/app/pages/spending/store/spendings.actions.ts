@@ -52,6 +52,12 @@ export const addCategory =
         (payload: { category: Category }) => ({ payload })
     );
 
+export const deleteCategory =
+    createAction(
+        '[SPENDING] Delete Category',
+        (payload: { category: Category }) => ({ payload })
+    );
+
 export const loadCategories = 
     createAction(
         '[SPENDING] Load Categories', 

@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { SpendingCategoryHelperService } from '../../../../service/helpers/spending-category-helper.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DeleteCategoryDialogComponent } from './delete-category-dialog/delete-category-dialog.component';
+import { SpendingsService } from '../../../../service/spendings.service';
 
 
 @Component({
@@ -26,6 +27,7 @@ export class CategorySpendingComponent implements OnInit {
   public spendingCategories: ICategoryStatistic[];
 
   constructor(
+    private spendingsService: SpendingsService,
     private spendingCategoryHelper: SpendingCategoryHelperService,
     private dialog: MatDialog,
     private cdr: ChangeDetectorRef
@@ -51,7 +53,7 @@ export class CategorySpendingComponent implements OnInit {
       if(result === 'save') {
         console.log('save');
       } else if (result === 'delete') {
-        console.log('delete');
+        this.spendingsService.deleteCategory(category);
       }
     });
   }

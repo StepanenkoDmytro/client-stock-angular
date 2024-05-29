@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { addSpending, editSpending, deleteSpending, loadSpending, addMultipleSpendings, deleteSpendingWithoutApiCall, addCategory, loadCategories, resetCategories } from "./spendings.actions";
+import { addSpending, editSpending, deleteSpending, loadSpending, addMultipleSpendings, deleteSpendingWithoutApiCall, addCategory, loadCategories, resetCategories, deleteCategory } from "./spendings.actions";
 import { Spending } from "../model/Spending";
 import { logout } from "../../../store/user.actions";
 import { Category } from "../../../domain/category.domain";
@@ -18,7 +18,6 @@ const initialSpendingsState: ISpendingsState = {
 };
 
 const addCategoryToParent = (categories: Category[], newCategory: Category): Category[] => {
-
   return categories.map(category => {
     if (!newCategory.parent) {
       const updatedCategory = category.id === newCategory.id 
@@ -47,6 +46,27 @@ const addCategoryToParent = (categories: Category[], newCategory: Category): Cat
       return updateCategoryChildren(category, updatedChildren);
     } 
 
+    return category;
+  });
+}
+
+const deleteCategoryFromParent = (categories: Category[], deletedCategory: Category): Category[] => {
+  return categories.map(category => {
+    if(category.id === deletedCategory.parent) {
+      const existingCategoryIndex = category.children.findIndex(child => child.id === deletedCategory.id);
+
+      if(existingCategoryIndex === -1) {
+        console.error('Spendings reducer: category already deleted');
+        return category;
+      }
+      const updatedChildren = category.children.filter(category => category.id !== deletedCategory.id);
+      return updateCategoryChildren(category, updatedChildren);
+    }
+
+    if(category.children.length > 0) {
+      const updatedChildren = deleteCategoryFromParent(category.children, deletedCategory);
+      return updateCategoryChildren(category, updatedChildren); 
+    }
     return category;
   });
 }
@@ -130,6 +150,16 @@ export const spendingsReducer = createReducer(
         ...state,
         idIncrement: state.idIncrement + 1,
         categorySpendings: newCategorySpendingsState,
+    };
+  }),
+  on(deleteCategory, (state, action) => {
+    const category = action.payload.category;
+    const newCategorySpendingsState: Category[] = deleteCategoryFromParent(state.categorySpendings, category);
+    console.log('newCategorySpendingsState', newCategorySpendingsState);
+    return {
+      ...state,
+      idIncrement: state.idIncrement + 1,
+      categorySpendings: newCategorySpendingsState,
     };
   }),
   on(loadCategories, (state, action) => {

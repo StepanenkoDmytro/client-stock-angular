@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable, concatMap, filter, from, map, of } from 'rxjs';
+import { Observable, concatMap, filter, firstValueFrom, from, map, of } from 'rxjs';
 import moment from 'moment';
 import { ISpendingsState } from '../pages/spending/store/spendings.reducer';
 import { Store, select } from '@ngrx/store';
 import { spendingsHistorySelector, spendingsFeatureSelector, categoriesSpendindSelector } from '../pages/spending/store/spendings.selectors';
-import { addCategory, addSpending, deleteSpending, editSpending, loadCategories, loadSpending } from '../pages/spending/store/spendings.actions';
+import { addCategory, addSpending, deleteCategory, deleteSpending, editSpending, loadCategories, loadSpending } from '../pages/spending/store/spendings.actions';
 import { Spending } from '../pages/spending/model/Spending';
 import { Category } from '../domain/category.domain';
 
@@ -21,6 +21,15 @@ export class SpendingsService {
   ) { }
 
   /* Spendings */
+  public getSpendingsByRange(start: moment.Moment, end: moment.Moment): Observable<Spending[]> {
+    return this.getAllSpendings().pipe(
+      map(spendings => spendings.filter(spending => {
+        const spendingDate = moment(spending.date);
+        return spendingDate.isBetween(start, end, 'day', '[]');
+      }))
+    );
+  }
+
   public loadByDate(date: moment.Moment): Observable<Spending[]> {
     return this.getAllSpendings().pipe(
       map(spendingList => 
@@ -69,6 +78,12 @@ export class SpendingsService {
     this.store$.dispatch(deleteSpending({id}));
   }
 
+  public getSpendingsByCategory(category: Category): Observable<Spending[]> {
+    return this.getAllSpendings().pipe(map(
+      spendings => spendings.filter(spending => spending.category.id === category.id)
+    ));
+  }
+
   public getAllSpendings(): Observable<Spending[]> {
     return this.store$.pipe(select(spendingsHistorySelector));
   }
@@ -83,21 +98,23 @@ export class SpendingsService {
     this.store$.dispatch(addCategory({ category }));
   }
 
-  public deleteCategory(category: Category): void {
+  public async deleteCategory(category: Category): Promise<void> {
+    if(!category.parent) {
+      console.error('Can not delete root category');
+      return;
+    }
     
+    const spendingsByCategory = await firstValueFrom(this.getSpendingsByCategory(category));
+    if(spendingsByCategory.length > 0) {
+      console.error('Can not delete category with spendings');
+      return;
+    }
+
+    this.store$.dispatch(deleteCategory({category}));
   }
 
   public getAllCategories(): Observable<Category[]> {
     return this.store$.pipe(select(categoriesSpendindSelector));
-  }
-
-  public getSpendingsByRange(start: moment.Moment, end: moment.Moment): Observable<Spending[]> {
-    return this.getAllSpendings().pipe(
-      map(spendings => spendings.filter(spending => {
-        const spendingDate = moment(spending.date);
-        return spendingDate.isBetween(start, end, 'day', '[]');
-      }))
-    );
   }
 
   public init(): void {
