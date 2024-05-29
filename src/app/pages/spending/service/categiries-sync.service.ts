@@ -34,10 +34,9 @@ export class CategiriesSyncService {
     );
   }
 
-  public syncCategoriesListWithServer(categoryState: ISpendingsState, portfolioID: number): Observable<ISpendingsState> {
+  public syncCategoriesListWithServer(categoryState: ISpendingsState, portfolioID: number): Observable<void> {
     const loadCategoriesUrl = this.url + 'categories-list/' + portfolioID;
     return this.http.get<any>(loadCategoriesUrl).pipe(
-      //TODO: rewrite map -> tap (Observable<void>)
       map(serverCategories => {
         return this.updateStateWithSyncCategory(serverCategories, categoryState, portfolioID);
       }),
@@ -48,7 +47,7 @@ export class CategiriesSyncService {
     );
   }
   
-  private updateStateWithSyncCategory(serverCategories: ICategoryApi[], categoryState: ISpendingsState, portfolioID: number ): ISpendingsState {
+  private updateStateWithSyncCategory(serverCategories: ICategoryApi[], categoryState: ISpendingsState, portfolioID: number ): void {
     const clientCategories = categoryState.categorySpendings;
     const flattenCategories = this.flattenCategories(clientCategories);
     const isFirstAPIInit = this.isFirstCategoryAPIInit(serverCategories, flattenCategories);
@@ -64,8 +63,6 @@ export class CategiriesSyncService {
 
       this.sendUnsavedCategoriesToServer(portfolioID, flattenCategories);
     }
-    
-    return categoryState; 
   }
 
   private flattenCategories(categories: Category[]): Category[] {

@@ -83,6 +83,10 @@ export class SpendingsService {
     this.store$.dispatch(addCategory({ category }));
   }
 
+  public deleteCategory(category: Category): void {
+    
+  }
+
   public getAllCategories(): Observable<Category[]> {
     return this.store$.pipe(select(categoriesSpendindSelector));
   }

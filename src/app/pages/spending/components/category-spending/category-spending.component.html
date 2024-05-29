@@ -3,5 +3,5 @@
 </div>
 
 @for(category of spendingCategories; track category) {
-    <pgz-category-spending-card [data]="category"></pgz-category-spending-card>
+    <pgz-category-spending-card [data]="category" (onDeleteCategory)="onDeleteCategory($event)"></pgz-category-spending-card>
 }
