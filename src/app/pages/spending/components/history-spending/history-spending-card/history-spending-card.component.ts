@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { IconComponent } from '../../../../../core/UI/components/icon/icon.component';
-import { EditStateSpendingService } from '../../../service/edit-state-spending.service';
+import { EditStateService } from '../../../service/edit-state.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Spending } from '../../../model/Spending';
 
@@ -20,7 +20,7 @@ export class HistorySpendingCardComponent {
   public spending: Spending;
 
   constructor(
-    private editStateService: EditStateSpendingService,
+    private editStateSpendingService: EditStateService,
     private router: Router,
     private route: ActivatedRoute,
   ) { }
@@ -28,11 +28,11 @@ export class HistorySpendingCardComponent {
   public onEdit(): void {
     const currentRoute = this.route.snapshot;
     const routeConfig = currentRoute.routeConfig;
-    this.editStateService.saveEditStateSpending(this.spending, routeConfig);
+    this.editStateSpendingService.saveEditStateSpending(this.spending, routeConfig);
     this.router.navigate(['/spending/add']);
   }
 
   public onDelete(): void {
-    this.editStateService.deleteCurrentSpending(this.spending);
+    this.editStateSpendingService.deleteCurrentSpending(this.spending);
   }
 }

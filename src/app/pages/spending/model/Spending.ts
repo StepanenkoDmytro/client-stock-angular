@@ -37,7 +37,7 @@ export class Spending implements ISpending {
 
     public static mapFromSpendingApi(spending: any, categories: Category[]): Spending {
         const categoryId = spending.category;
-        const category = this.findCategoryById(categoryId, categories);
+        const category = Category.findCategoryById(categoryId, categories);
     
         if (!category) {
             throw new Error(`Category with title "${categoryId}" not found.`);
@@ -53,18 +53,5 @@ export class Spending implements ISpending {
         };
         
         return mappedSpending;
-    }
-
-    private static findCategoryById(id: string, categories: Category[]): Category | undefined {
-        for (const category of categories) {
-            if (category.id === id) {
-                return category;
-            }
-            const foundInChildren = Spending.findCategoryById(id, category.children);
-            if (foundInChildren) {
-                return foundInChildren;
-            }
-        }
-        return undefined;
-    }
+    }  
  }

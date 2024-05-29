@@ -4,7 +4,7 @@
         <span>Back</span>
     </div>
     <div class="category">
-        <pgz-category-select [categories]="categories" [selectedCategory]="selectedCategory" [label]="'Choose parent category'" [(ngModel)]="selectedCategory"></pgz-category-select>
+        <pgz-category-select [categories]="categories" [selectedCategory]="selectedParentCategory" [label]="'Choose parent category'" [(ngModel)]="selectedParentCategory"></pgz-category-select>
 
         <mat-form-field appearance="outline" floatLabel="always" class="w-100">
             <mat-label>Name category</mat-label>

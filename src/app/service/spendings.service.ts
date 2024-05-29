@@ -118,12 +118,7 @@ export class SpendingsService {
   public loadFromStorage(): void {
     
     const storageState = localStorage.getItem(this.spendingHistoryLocalStorageKey);
-    // if(storageState) {
-    //   this.store$.dispatch(loadSpending({
-    //     state: JSON.parse(storageState)
-    //   }))
-    // }
-    console.log('try to load')
+
     if (storageState) {
       from([
         loadCategories({ state: JSON.parse(storageState) }),

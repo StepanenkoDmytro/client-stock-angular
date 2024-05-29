@@ -12,11 +12,10 @@ import moment from 'moment';
 import { Category } from '../../../../domain/category.domain';
 import { CategorySelectComponent } from '../../../../core/UI/components/category-select/category-select.component';
 import { Router } from '@angular/router';
-import { EditStateSpendingService } from '../../service/edit-state-spending.service';
+import { EditStateService } from '../../service/edit-state.service';
 import { HttpClientModule } from '@angular/common/http';
 import { Spending } from '../../model/Spending';
 import { MoneyDirective } from '../../../../directive/money.directive';
-import { lastValueFrom } from 'rxjs';
 
 
 const UI_MODULES = [
@@ -55,7 +54,7 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
   constructor(
     private spendingsService: SpendingsService,
     private router: Router,
-    private editStateService: EditStateSpendingService,
+    private editStateSpendingService: EditStateService,
   ) { }
 
   public async ngOnInit(): Promise<void> {
@@ -64,7 +63,7 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
       this.selectedCategory = this.categories.find(category => category.title === 'Other');
     });
 
-    this.editSpending = this.editStateService.editStateSpending;
+    this.editSpending = this.editStateSpendingService.editStateSpending;
 
     if(!!this.editSpending) {
       this.selectedCategory = this.editSpending.category;
@@ -85,7 +84,7 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
   }
 
   private saveSpending(): void {
-    const editSpending = this.editStateService.editStateSpending;
+    const editSpending = this.editStateSpendingService.editStateSpending;
 
     if(!!this.editSpending && editSpending.comment !== '') {
       this.spendingsService.editSpending(this.editSpending);
@@ -107,18 +106,18 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
     this.commentOfProduct = '';
     this.costOfProduct = null;
     this.date = new Date();
-    this.editStateService.editStateSpending = null;
+    this.editStateSpendingService.editStateSpending = null;
   }
 
   public prevRoute(): void {
-    if(this.editStateService.prevRoute) {
-      this.router.navigate([this.editStateService.prevRoute.path]);
+    if(this.editStateSpendingService.prevRoute) {
+      this.router.navigate([this.editStateSpendingService.prevRoute.path]);
     } else {
       this.router.navigate(['spending']);
     }
   }
 
   public ngOnDestroy(): void {
-    this.editStateService.destroyEditStateSpending();
+    this.editStateSpendingService.destroyEditState();
   }
 }

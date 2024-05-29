@@ -10,6 +10,7 @@ import { SpendingsService } from '../../../../../service/spendings.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { IconPickerComponent } from '../../../../../core/UI/components/icon-picker/icon-picker.component';
+import { EditStateService } from '../../../service/edit-state.service';
 
 
 const UI_MODULES = [
@@ -39,24 +40,33 @@ const MATERIAL_MODULES = [
 })
 export class AddCategoryComponent implements OnInit {
   public categories: Category[];
-  public selectedCategory: Category;
+  public selectedParentCategory: Category;
   public categoryTitleCtrl: FormControl<string> = new FormControl('');
   public selectedIcon: string = 'payment';
 
   constructor(
     private spendingService: SpendingsService,
+    private editStateCategory: EditStateService,
     private router: Router,
   ) {}
 
   public ngOnInit(): void {
+    const editCategory = this.editStateCategory.editStateCategory;
+
     this.spendingService.getAllCategories().subscribe(categories => {
       this.categories = categories;
-      this.selectedCategory = categories[1];
+      this.selectedParentCategory = categories[1];
     });
+
+    if(!!editCategory) {
+      this.selectedParentCategory = Category.findCategoryById(editCategory.parent, this.categories);
+      this.categoryTitleCtrl.setValue(editCategory.title);
+      this.selectedIcon = editCategory.icon
+    }
   }
 
   public onAdd(): void {
-    const parentId = this.selectedCategory.id;
+    const parentId = this.selectedParentCategory.id;
     const newCategory = new Category(this.categoryTitleCtrl.value, this.selectedIcon);
     newCategory.setParent(parentId);
     

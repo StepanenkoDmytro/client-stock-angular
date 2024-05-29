@@ -127,4 +127,17 @@ export class Category implements ICategory {
 
     return serverCategory;
   }
+
+  public static findCategoryById(id: string, categories: Category[]): Category | undefined {
+    for (const category of categories) {
+        if (category.id === id) {
+            return category;
+        }
+        const foundInChildren = Category.findCategoryById(id, category.children);
+        if (foundInChildren) {
+            return foundInChildren;
+        }
+    }
+    return undefined;
+}
 }
