@@ -6,11 +6,14 @@
         </div>
         <div class="category-card--info">
             <p>{{data.value}}</p>
-            <mat-icon [matMenuTriggerFor]="actionsMenu">more_vert</mat-icon>
-            <mat-menu #actionsMenu>
-                <mat-icon (click)="onEdit(data.category)">edit</mat-icon>
-                <mat-icon (click)="onDelete(data.category)">delete</mat-icon>
-            </mat-menu>
+
+            @if(data.category.title !== 'Other') {
+                <mat-icon [matMenuTriggerFor]="actionsMenu">more_vert</mat-icon>
+                <mat-menu #actionsMenu>
+                    <mat-icon (click)="onEdit(data.category)">edit</mat-icon>
+                    <mat-icon (click)="onDelete(data.category)">delete</mat-icon>
+                </mat-menu>
+            }
         </div>
     </div>
     @if(dataChildrens && dataChildrens.length > 0) {

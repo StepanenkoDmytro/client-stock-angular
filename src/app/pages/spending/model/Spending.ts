@@ -19,9 +19,14 @@ export class Spending implements ISpending {
         public category: Category,
         public comment: string,
         public cost: number,
-        public date: Date
+        public date: Date,
+        id?: string,
     ) {
-        this.id = uuidv4();
+        if(!!id) {
+            this.id = id;
+        } else {
+            this.id = uuidv4();
+        }
     }
 
     public static mapToSpendingApi(spending: Spending): ISpendingApi {

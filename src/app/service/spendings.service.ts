@@ -69,7 +69,6 @@ export class SpendingsService {
   }
 
   public editSpending(spending: Spending): void {
-    spending.isSaved = false;
     this.store$.dispatch(editSpending({ spending }));
   }
 
@@ -98,23 +97,49 @@ export class SpendingsService {
     this.store$.dispatch(addCategory({ category }));
   }
 
+  public replaceCategoryInSpendings(newCategory: Category, spendings: Spending[]): void {
+    spendings
+      .map(spending => new Spending(false, newCategory, spending.comment, spending.cost, spending.date, spending.id))
+      .forEach(spending => this.editSpending(spending));
+  }
+
+  public async editCategory(updatedCategory: Category): Promise<void> {
+    const allCategories: Category[] = await firstValueFrom(this.getAllCategories());
+    const existingCategory = Category.findCategoryById(updatedCategory.id, allCategories);
+
+    if(existingCategory.parent != updatedCategory.parent) {
+      const spendingsByCategory: Spending[] = await firstValueFrom(this.getSpendingsByCategory(existingCategory));
+      this.replaceCategoryInSpendings(updatedCategory, spendingsByCategory);
+    }
+
+    this.deleteCategory(existingCategory);
+    this.addCategory(updatedCategory);
+  }
+
   public async deleteCategory(category: Category): Promise<void> {
     if(!category.parent) {
       console.error('Can not delete root category');
       return;
-    }
-    
-    const spendingsByCategory = await firstValueFrom(this.getSpendingsByCategory(category));
-    if(spendingsByCategory.length > 0) {
-      console.error('Can not delete category with spendings');
-      return;
-    }
+    }    
 
     this.store$.dispatch(deleteCategory({category}));
   }
 
   public getAllCategories(): Observable<Category[]> {
     return this.store$.pipe(select(categoriesSpendindSelector));
+  }
+
+  public findSpendingsByCategoryIncludeChildren(spendings: Spending[], category: Category): Spending[] {
+    
+    let spendingsByCategory = spendings.filter(spending => spending.category.id === category.id);
+
+    if(category.children.length > 0) {
+      category.children.forEach(child => {
+        const spendingsByChildCategory = this.findSpendingsByCategoryIncludeChildren(spendings, child);
+        spendingsByCategory = [...spendingsByCategory, ...spendingsByChildCategory];
+      });
+    }
+    return spendingsByCategory;
   }
 
   public init(): void {

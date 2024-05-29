@@ -8,6 +8,7 @@ import { SpendingCategoryHelperService } from '../../../../service/helpers/spend
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DeleteCategoryDialogComponent } from './delete-category-dialog/delete-category-dialog.component';
 import { SpendingsService } from '../../../../service/spendings.service';
+import { firstValueFrom } from 'rxjs';
 
 
 @Component({
@@ -45,16 +46,20 @@ export class CategorySpendingComponent implements OnInit {
   private showDeleteCategoryDialod(category: Category): void {
     const dialogRef: MatDialogRef<DeleteCategoryDialogComponent> = this.dialog.open(DeleteCategoryDialogComponent, {
       width: '400px',
-      // data: this.emailCtrl.value,
       disableClose: true
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(async result => {
+      const allSpendings: Spending[] = await firstValueFrom(this.spendingsService.getAllSpendings());
+      const spendingsToUpdate: Spending[] = this.spendingsService.findSpendingsByCategoryIncludeChildren(allSpendings, category);
+      
       if(result === 'save') {
-        console.log('save');
+        const otherCategory = this.categories.find(category => category.title === 'Other');
+        this.spendingsService.replaceCategoryInSpendings(otherCategory, spendingsToUpdate);
       } else if (result === 'delete') {
-        this.spendingsService.deleteCategory(category);
+        spendingsToUpdate.forEach(spending => this.spendingsService.deleteSpending(spending));
       }
+      this.spendingsService.deleteCategory(category);
     });
   }
 }

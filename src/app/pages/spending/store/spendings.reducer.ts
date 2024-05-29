@@ -96,13 +96,12 @@ export const spendingsReducer = createReducer(
   }),
   on(editSpending, (state, action) => {
     const updatedSpendingsHistory = state.spendingsHistory.map(spending => {
-      
       if (spending.id === action.payload.spending.id) {
         return action.payload.spending;
       }
       return spending;
     });
-  
+
     return {
         ...state,
         spendingsHistory: updatedSpendingsHistory,

@@ -3,10 +3,9 @@
     <h3>Delete this category?</h3>
 </div>
 <div class="delete-category--message">
-    <p>You have <span class="user-storage">20</span> spendings in this category.</p>
-    <p>Would you like to move these expenses to the 'Other' category, or delete them?"</p>
+    <p>Your spendings will be moved to the 'Other' category</p>
 </div>
 <div class="delete-category--actions">
-    <button class="delete-category--btn save" mat-button (click)="onSave()">Save</button>
-    <button class="delete-category--btn delete" mat-button (click)="onDelete()">Delete</button>
+    <button class="delete-category--btn delete" mat-button (click)="onDelete()">No, delete spendings</button>
+    <button class="delete-category--btn save" mat-button (click)="onSave()">Ok</button>
 </div>

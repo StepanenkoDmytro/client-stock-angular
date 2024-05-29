@@ -68,37 +68,12 @@ export class Category implements ICategory {
     this.parent = parentId;
   }
 
-  public findCategory(title: string): Category | undefined {
-    if (this.title === title) {
-      return this;
-    }
-    
-    for (const child of this.children) {
-      const found = child.findCategory(title);
-      if (found) {
-          return found;
-      }
-    }
-    return undefined;
-  }
-
   public setChildren(children :Category[]): void {
     this.children = children;
   } 
 
-  public static findCategoryInDefaultList(title: string): Category | undefined {
-    for (const category of this.defaultList) {
-        const found = category.findCategory(title);
-        if (found) {
-          return found;
-        }
-    }
-    return undefined;
-  }
-
   public static getCategoryDefaultList(): Category[] {
     this.defaultList.forEach(category => {
-      // console.log('getCategoryDefaultList' ,category);
       category.children.map(children => children.setParent(category.id));
     });
     

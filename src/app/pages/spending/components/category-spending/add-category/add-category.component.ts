@@ -44,6 +44,8 @@ export class AddCategoryComponent implements OnInit {
   public categoryTitleCtrl: FormControl<string> = new FormControl('');
   public selectedIcon: string = 'payment';
 
+  private editCategory: Category;
+
   constructor(
     private spendingService: SpendingsService,
     private editStateCategory: EditStateService,
@@ -51,26 +53,33 @@ export class AddCategoryComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    const editCategory = this.editStateCategory.editStateCategory;
+    this.editCategory = this.editStateCategory.editStateCategory;
 
     this.spendingService.getAllCategories().subscribe(categories => {
       this.categories = categories;
       this.selectedParentCategory = categories[1];
     });
 
-    if(!!editCategory) {
-      this.selectedParentCategory = Category.findCategoryById(editCategory.parent, this.categories);
-      this.categoryTitleCtrl.setValue(editCategory.title);
-      this.selectedIcon = editCategory.icon
+    if(!!this.editCategory) {
+      this.selectedParentCategory = Category.findCategoryById(this.editCategory.parent, this.categories);
+      this.categoryTitleCtrl.setValue(this.editCategory.title);
+      this.selectedIcon = this.editCategory.icon
     }
   }
 
   public onAdd(): void {
     const parentId = this.selectedParentCategory.id;
-    const newCategory = new Category(this.categoryTitleCtrl.value, this.selectedIcon);
-    newCategory.setParent(parentId);
     
-    this.spendingService.addCategory(newCategory);
+    if(!!this.editCategory) {
+      const editedCategory = new Category(this.categoryTitleCtrl.value, this.selectedIcon, this.editCategory.children, false, this.editCategory.id, parentId);
+      
+      this.spendingService.editCategory(editedCategory);
+    } else {
+      const newCategory = new Category(this.categoryTitleCtrl.value, this.selectedIcon);
+      newCategory.setParent(parentId);
+
+      this.spendingService.addCategory(newCategory);
+    }
     this.router.navigate(['spending']);
   }
 
