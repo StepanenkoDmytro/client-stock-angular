@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 import { Route } from '@angular/router';
 import { SpendingsService } from '../../../service/spendings.service';
 import { Spending } from '../model/Spending';
+import { Category } from '../../../domain/category.domain';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class EditStateSpendingService {
+export class EditStateService {
   public editStateSpending: Spending = null;
+  public editStateCategory: Category = null;
   public prevRoute: Route = null;
 
   constructor(
@@ -21,12 +23,16 @@ export class EditStateSpendingService {
   }
 
   public deleteCurrentSpending(spending: Spending): void {
-    
     this.spendingService.deleteSpending(spending);
   }
 
-  public destroyEditStateSpending(): void {
+  public saveEditStateCategory(category: Category): void {
+    this.editStateCategory = category;
+  }
+
+  public destroyEditState(): void {
     this.editStateSpending = null;
+    this.editStateCategory = null;
     this.prevRoute = null;
   }
 }

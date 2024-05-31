@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { addSpending, editSpending, deleteSpending, loadSpending, addMultipleSpendings, deleteSpendingWithoutApiCall, addCategory } from "./spendings.actions";
+import { addSpending, editSpending, deleteSpending, loadSpending, addMultipleSpendings, deleteSpendingWithoutApiCall, addCategory, loadCategories, resetCategories, deleteCategory } from "./spendings.actions";
 import { Spending } from "../model/Spending";
 import { logout } from "../../../store/user.actions";
 import { Category } from "../../../domain/category.domain";
@@ -14,29 +14,68 @@ export interface ISpendingsState {
 const initialSpendingsState: ISpendingsState = {
   idIncrement: 0,
   spendingsHistory: [],
-  categorySpendings: Category.defaultList as Category[],
+  categorySpendings: Category.getCategoryDefaultList(),
 };
 
-const addCategoryToParent = (categories: Category[], newCategory: Category, parentId: string): Category[] => {
+const addCategoryToParent = (categories: Category[], newCategory: Category): Category[] => {
   return categories.map(category => {
-    if(category.id === parentId) {
-      const updatedChildren = category.children.length > 0 ? [...category.children, newCategory] : [newCategory];
-      const updatedCategory = {
-        ...category,
-        children: updatedChildren
-      };
-      return updatedCategory as Category;
-    } else if (category.children.length > 0) {
-      const updatedChildren = addCategoryToParent(category.children, newCategory, parentId);
-      const updatedCategory = {
-        ...category,
-        children: updatedChildren
-      };
-      return updatedCategory as Category;
-    } else {
-      return category;
-    }
+    if (!newCategory.parent) {
+      const updatedCategory = category.id === newCategory.id 
+        ? updateCategoryChildren(newCategory, category.children)
+        : category;
+
+      return updatedCategory;
+    } 
+
+    if(category.id === newCategory.parent) {
+      const existingChildIndex = category.children.findIndex(child => child.id === newCategory.id);
+            
+      if(existingChildIndex === -1) {
+        return updateCategoryChildren(category, [...category.children, newCategory]);
+      }
+      const existingCategory = category.children[existingChildIndex];
+      newCategory = updateCategoryChildren(newCategory, existingCategory.children);
+      const updatedChildren = category.children
+        .map((child, index) => index === existingChildIndex ? newCategory : child);
+      
+      return updateCategoryChildren(category, updatedChildren);
+    } 
+
+    if (category.children.length > 0) {
+      const updatedChildren = addCategoryToParent(category.children, newCategory);
+      return updateCategoryChildren(category, updatedChildren);
+    } 
+
+    return category;
   });
+}
+
+const deleteCategoryFromParent = (categories: Category[], deletedCategory: Category): Category[] => {
+  return categories.map(category => {
+    if(category.id === deletedCategory.parent) {
+      const existingCategoryIndex = category.children.findIndex(child => child.id === deletedCategory.id);
+
+      if(existingCategoryIndex === -1) {
+        console.error('Spendings reducer: category already deleted');
+        return category;
+      }
+      const updatedChildren = category.children.filter(category => category.id !== deletedCategory.id);
+      return updateCategoryChildren(category, updatedChildren);
+    }
+
+    if(category.children.length > 0) {
+      const updatedChildren = deleteCategoryFromParent(category.children, deletedCategory);
+      return updateCategoryChildren(category, updatedChildren); 
+    }
+    return category;
+  });
+}
+
+const updateCategoryChildren = ( category: Category, children: Category[]): Category => {
+  return {
+    ...category,
+    children
+  } as Category;
 }
 
 export const spendingsReducer = createReducer(
@@ -57,13 +96,12 @@ export const spendingsReducer = createReducer(
   }),
   on(editSpending, (state, action) => {
     const updatedSpendingsHistory = state.spendingsHistory.map(spending => {
-      
       if (spending.id === action.payload.spending.id) {
         return action.payload.spending;
       }
       return spending;
     });
-  
+
     return {
         ...state,
         spendingsHistory: updatedSpendingsHistory,
@@ -104,13 +142,37 @@ export const spendingsReducer = createReducer(
 
   /* Categories */
   on(addCategory, (state, action) => {
-    const newcategorySpendingsState: Category[] = addCategoryToParent(state.categorySpendings, action.payload.category, action.payload.parentId);
-    
+    const category = action.payload.category;
+    const newCategorySpendingsState: Category[] = addCategoryToParent(state.categorySpendings, category);
+
     return {
         ...state,
         idIncrement: state.idIncrement + 1,
-        categorySpendings: newcategorySpendingsState,
+        categorySpendings: newCategorySpendingsState,
     };
+  }),
+  on(deleteCategory, (state, action) => {
+    const category = action.payload.category;
+    const newCategorySpendingsState: Category[] = deleteCategoryFromParent(state.categorySpendings, category);
+    console.log('newCategorySpendingsState', newCategorySpendingsState);
+    return {
+      ...state,
+      idIncrement: state.idIncrement + 1,
+      categorySpendings: newCategorySpendingsState,
+    };
+  }),
+  on(loadCategories, (state, action) => {
+    return {
+      ...action.payload.state
+    }
+  }),
+  on(resetCategories, (state, action) => {
+
+    return {
+      ...state,
+      idIncrement: state.idIncrement + 1,
+      categorySpendings: action.payload.categorySpendings
+    }
   }),
 
   /* Logout */

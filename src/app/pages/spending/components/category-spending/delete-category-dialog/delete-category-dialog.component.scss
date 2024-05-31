@@ -1,0 +1,43 @@
+:host {
+  display: block;
+}
+
+.delete-category {
+  &--warning {
+    display: flex;
+    margin: 0;
+    padding: 10px 0;
+    background-color: var(--bs-warning);
+  }
+
+  &--message {
+    font-size: 18px;
+    padding: 25px 15px;
+  }
+
+  &--actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+  }
+
+  &--btn {
+    border: none;
+    border-radius: 10px;
+    padding: 5px 20px;
+    font-size: 20px;
+    font-weight: 400;
+  }
+}
+
+.save {
+  background-color: var(--bs-success);
+  color: var(--bs-light);
+}
+
+.delete {
+  font-size: 18px;
+  margin-left: 10px;
+  background-color: var(--bs-gray-400);
+  color: var(--bs-black);
+}

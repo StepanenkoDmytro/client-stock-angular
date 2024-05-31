@@ -49,5 +49,23 @@ export const loadSpendingFailure = createAction(
 export const addCategory = 
     createAction(
         '[SPENDING] Add Category', 
-        (payload: { category: Category, parentId: string }) => ({ payload })
+        (payload: { category: Category }) => ({ payload })
+    );
+
+export const deleteCategory =
+    createAction(
+        '[SPENDING] Delete Category',
+        (payload: { category: Category }) => ({ payload })
+    );
+
+export const loadCategories = 
+    createAction(
+        '[SPENDING] Load Categories', 
+        (payload: { state: ISpendingsState }) => ({ payload })
+    );
+
+export const resetCategories = 
+    createAction(
+        '[SPENDING] Reset Categories', 
+        (payload: { categorySpendings: Category[] }) => ({ payload })
     );

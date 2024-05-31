@@ -1,0 +1,11 @@
+<div class="delete-category--warning">
+    <mat-icon>report</mat-icon>
+    <h3>Delete this category?</h3>
+</div>
+<div class="delete-category--message">
+    <p>Your spendings will be moved to the 'Other' category</p>
+</div>
+<div class="delete-category--actions">
+    <button class="delete-category--btn delete" mat-button (click)="onDelete()">No, delete spendings</button>
+    <button class="delete-category--btn save" mat-button (click)="onSave()">Ok</button>
+</div>

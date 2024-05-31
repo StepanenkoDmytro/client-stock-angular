@@ -4,7 +4,17 @@
             <pgz-icon class="category-icon" [name]="data.category.icon"></pgz-icon>
             <p>{{data.category.title}}</p>
         </div>
-        <p>{{data.value}}</p>
+        <div class="category-card--info">
+            <p>{{data.value}}</p>
+
+            @if(data.category.title !== 'Other') {
+                <mat-icon [matMenuTriggerFor]="actionsMenu">more_vert</mat-icon>
+                <mat-menu #actionsMenu>
+                    <mat-icon (click)="onEdit(data.category)">edit</mat-icon>
+                    <mat-icon (click)="onDelete(data.category)">delete</mat-icon>
+                </mat-menu>
+            }
+        </div>
     </div>
     @if(dataChildrens && dataChildrens.length > 0) {
         <mat-expansion-panel (opened)="panelOpenState = true"
@@ -21,7 +31,14 @@
                             <pgz-icon class="category-icon" [name]="children.category.icon"></pgz-icon>
                             <p>{{children.category.title}}</p>
                         </div>
-                        <p class="category-card-childrens--value">{{children.value}}</p>
+                        <div class="category-card--info">
+                            <p class="category-card-childrens--value">{{children.value}}</p>
+                            <mat-icon [matMenuTriggerFor]="actionsMenu">more_vert</mat-icon>
+                            <mat-menu #actionsMenu>
+                                <mat-icon (click)="onEdit(children.category)">edit</mat-icon>
+                                <mat-icon (click)="onDelete(children.category)">delete</mat-icon>
+                            </mat-menu>
+                        </div>
                     </div>
                 }
             </div>

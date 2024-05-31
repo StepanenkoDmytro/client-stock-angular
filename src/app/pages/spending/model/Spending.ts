@@ -19,28 +19,33 @@ export class Spending implements ISpending {
         public category: Category,
         public comment: string,
         public cost: number,
-        public date: Date
+        public date: Date,
+        id?: string,
     ) {
-        this.id = uuidv4();
+        if(!!id) {
+            this.id = id;
+        } else {
+            this.id = uuidv4();
+        }
     }
 
     public static mapToSpendingApi(spending: Spending): ISpendingApi {
         return {
             id: spending.id,
             isSaved: spending.isSaved,
-            category: spending.category.title,
+            category: spending.category.id,
             comment: spending.comment,
             cost: spending.cost,
             date: spending.date,
         }
     }
 
-    public static mapFromSpendingApi(spending: any): Spending {
-        const categoryTitle = spending.category;
-        const category = Category.findCategoryInDefaultList(categoryTitle);
+    public static mapFromSpendingApi(spending: any, categories: Category[]): Spending {
+        const categoryId = spending.category;
+        const category = Category.findCategoryById(categoryId, categories);
     
         if (!category) {
-            throw new Error(`Category with title "${categoryTitle}" not found.`);
+            throw new Error(`Category with title "${categoryId}" not found.`);
         }
 
         const mappedSpending: Spending = {
@@ -53,5 +58,5 @@ export class Spending implements ISpending {
         };
         
         return mappedSpending;
-    }
+    }  
  }

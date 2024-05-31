@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ProgressComponent } from '../../core/UI/components/progress/progress.component';
 import { MatButtonModule } from '@angular/material/button';
 import { ButtonToggleComponent } from '../../core/UI/components/button-toggle/button-toggle.component';
@@ -48,7 +48,8 @@ export class SpendingComponent implements OnInit {
   public spendingsDataModel: SimpleDataModel[];
 
   constructor(
-    public spendingsService: SpendingsService,
+    private spendingsService: SpendingsService,
+    // private cdr: ChangeDetectorRef,
   ) { }
 
   public ngOnInit(): void {
@@ -61,6 +62,8 @@ export class SpendingComponent implements OnInit {
       this.expends = {...this.expends, money: spentByDay};
       this.spendings = [...spendings];
       this.categories = categories[1].children;
+      // console.log(this.categories);
+      // this.cdr.detectChanges();
     });
   }
 
