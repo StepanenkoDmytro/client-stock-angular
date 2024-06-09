@@ -1,24 +1,55 @@
 :host {
   display: block;
-  height: inherit;
+  // height: inherit;
 }
 
 .profile-container {
   height: inherit;
-  display: flex; 
-  flex-direction: column;
-  margin: 1.5rem;
+  // display: flex; 
+  // flex-direction: column;
 }
 
 .profile {
-  &--email {
-    width: 100%;
+  margin: 0px 15px 40px 25px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  &--exit {
+    position: relative;
+    bottom: -15px;
+    align-self: end;
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+    color: var(--bs-gray-600);
   }
 
-  &--btn {
-    height: 50px;
-    background-color: var(--bs-success) !important;
-    color: var(--bs-white) !important;
+  &--username {
+    display: flex;
+    font-size: 22px;
+    font-weight: 600;
+  }
+  
+  &--email {
+    display: flex;
+    color: var(--bs-success);
+    margin-top: 10px;
+  }
+
+  &--edit {
+    margin-left: 10px;
+  }
+
+  // &--btn {
+  //   height: 50px;
+  //   background-color: var(--bs-success) !important;
+  //   color: var(--bs-white) !important;
+  // }
+
+  &--delete {
+    padding: 25px;
+    color: var(--bs-danger);
   }
 }
 
@@ -26,4 +57,45 @@
   width: 100%;
   margin-top: auto;
   margin-bottom: 40px;
+}
+
+.settings-box {
+  padding-inline: 25px 20px;
+}
+
+.title {
+  background-color: var(--bs-gray-200);
+  font-weight: 500;
+  padding: 10px 25px;
+}
+
+.general-item {
+  display: flex;
+  align-items: center;
+  padding: 5px 0;
+
+  &--value {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    font-size: 19px;
+    color: var(--bs-gray);
+  }
+}
+
+.arrow-box {
+  margin-left: 12px;
+  width: 9px;
+  height: 7px;
+}
+
+.arrow-up {
+  border-bottom: 2px solid var(--bs-gray);
+  transform: rotate(40deg);
+}
+
+.arrow-down {
+  margin-top: 3px;
+  border-bottom: 2px solid var(--bs-gray);
+  transform: rotate(320deg);
 }

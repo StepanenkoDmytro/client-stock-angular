@@ -9,7 +9,18 @@ import { AuthService } from '../../service/auth.service';
 import { UserService } from '../../service/user.service';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { GeneralComponent } from './general/general.component';
+import { SystemComponent } from './system/system.component';
+import { FeedbackComponent } from './feedback/feedback.component';
+import { IconComponent } from '../../core/UI/components/icon/icon.component';
 
+
+const UI_MODULES = [
+  GeneralComponent,
+  SystemComponent,
+  FeedbackComponent,
+  IconComponent
+];
 
 const MATERIAL_MODULES = [
   MatSlideToggleModule, 
@@ -26,7 +37,7 @@ const MATERIAL_MODULES = [
   styleUrl: './profile.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [...MATERIAL_MODULES],
+  imports: [...UI_MODULES, ...MATERIAL_MODULES],
 })
 export class ProfileComponent implements OnInit {
   public userEmail: string; 
