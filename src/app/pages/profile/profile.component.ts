@@ -12,12 +12,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { GeneralComponent } from './general/general.component';
 import { SystemComponent } from './system/system.component';
 import { FeedbackComponent } from './feedback/feedback.component';
+import { IconComponent } from '../../core/UI/components/icon/icon.component';
 
 
 const UI_MODULES = [
   GeneralComponent,
   SystemComponent,
-  FeedbackComponent
+  FeedbackComponent,
+  IconComponent
 ];
 
 const MATERIAL_MODULES = [

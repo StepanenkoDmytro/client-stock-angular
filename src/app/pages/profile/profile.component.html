@@ -1,4 +1,18 @@
 <section class="profile-container">
+    <section class="profile">
+        <div class="profile--exit">
+            <p>Exit</p>
+            <pgz-icon class="profile--edit" style="height: 27px;" [name]="'custom_exit'"></pgz-icon>
+        </div>
+        <div class="profile--username">
+            <p>User912</p>
+            <pgz-icon class="profile--edit" [name]="'custom_edit'"></pgz-icon>
+        </div>
+        <div class="profile--email">
+            <p>{{ userEmail }}</p>
+            <pgz-icon class="profile--edit" [name]="'custom_edit'"></pgz-icon>
+        </div>
+    </section>
     <!-- <mat-form-field class="profile--email" appearance="outline">
         <mat-label>{{ 'Email' }}</mat-label>
         <input [(ngModel)]="userEmail" type="email" matInput disabled>

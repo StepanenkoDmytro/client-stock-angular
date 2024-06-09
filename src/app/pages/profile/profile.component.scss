@@ -10,15 +10,42 @@
 }
 
 .profile {
-  &--email {
-    width: 100%;
+  margin: 0px 15px 40px 25px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  &--exit {
+    position: relative;
+    bottom: -15px;
+    align-self: end;
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+    color: var(--bs-gray-600);
   }
 
-  &--btn {
-    height: 50px;
-    background-color: var(--bs-success) !important;
-    color: var(--bs-white) !important;
+  &--username {
+    display: flex;
+    font-size: 22px;
+    font-weight: 600;
   }
+  
+  &--email {
+    display: flex;
+    color: var(--bs-success);
+    margin-top: 10px;
+  }
+
+  &--edit {
+    margin-left: 10px;
+  }
+
+  // &--btn {
+  //   height: 50px;
+  //   background-color: var(--bs-success) !important;
+  //   color: var(--bs-white) !important;
+  // }
 
   &--delete {
     padding: 25px;
@@ -57,18 +84,18 @@
 }
 
 .arrow-box {
-  margin-left: 5px;
-  width: 15px;
+  margin-left: 12px;
+  width: 9px;
   height: 7px;
 }
 
 .arrow-up {
   border-bottom: 2px solid var(--bs-gray);
-  transform: rotate(30deg);
+  transform: rotate(40deg);
 }
 
 .arrow-down {
-  margin-top: 5px;
+  margin-top: 3px;
   border-bottom: 2px solid var(--bs-gray);
-  transform: rotate(330deg);
+  transform: rotate(320deg);
 }
