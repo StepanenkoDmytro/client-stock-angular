@@ -1,13 +1,12 @@
 :host {
   display: block;
-  height: inherit;
+  // height: inherit;
 }
 
 .profile-container {
   height: inherit;
-  display: flex; 
-  flex-direction: column;
-  margin: 1.5rem;
+  // display: flex; 
+  // flex-direction: column;
 }
 
 .profile {
@@ -20,10 +19,56 @@
     background-color: var(--bs-success) !important;
     color: var(--bs-white) !important;
   }
+
+  &--delete {
+    padding: 25px;
+    color: var(--bs-danger);
+  }
 }
 
 .auth-btn {
   width: 100%;
   margin-top: auto;
   margin-bottom: 40px;
+}
+
+.settings-box {
+  padding-inline: 25px 20px;
+}
+
+.title {
+  background-color: var(--bs-gray-200);
+  font-weight: 500;
+  padding: 10px 25px;
+}
+
+.general-item {
+  display: flex;
+  align-items: center;
+  padding: 5px 0;
+
+  &--value {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    font-size: 19px;
+    color: var(--bs-gray);
+  }
+}
+
+.arrow-box {
+  margin-left: 5px;
+  width: 15px;
+  height: 7px;
+}
+
+.arrow-up {
+  border-bottom: 2px solid var(--bs-gray);
+  transform: rotate(30deg);
+}
+
+.arrow-down {
+  margin-top: 5px;
+  border-bottom: 2px solid var(--bs-gray);
+  transform: rotate(330deg);
 }

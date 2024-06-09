@@ -1,5 +1,5 @@
 <section class="profile-container">
-    <mat-form-field class="profile--email" appearance="outline">
+    <!-- <mat-form-field class="profile--email" appearance="outline">
         <mat-label>{{ 'Email' }}</mat-label>
         <input [(ngModel)]="userEmail" type="email" matInput disabled>
     </mat-form-field>
@@ -10,17 +10,23 @@
             <input matInput type="number" [(ngModel)]="monthlyBudget">
         </mat-form-field>
         <button class="profile--btn" mat-flat-button (click)="saveMonthlyBudget()">Save</button>
-    </div>
+    </div> -->
 
-    <mat-slide-toggle [formControl]="isDarkMode">Slide me!</mat-slide-toggle>
+    <pgz-general></pgz-general>
+    <pgz-system></pgz-system>
+    <pgz-feedback></pgz-feedback>
+
+    <!-- <mat-slide-toggle [formControl]="isDarkMode">Slide me!</mat-slide-toggle>
     
     <p>change currency</p>
-    <p>change language</p>
+    <p>change language</p> -->
 
 
-    @if(isAuthorizedUser) {
+    <!-- @if(isAuthorizedUser) {
         <button class="profile--btn auth-btn" mat-flat-button (click)="logout()">Logout</button>
     } @else {
         <button class="profile--btn auth-btn" mat-flat-button (click)="login()">Login</button>
-    }
+    } -->
+
+    <p class="profile--delete">Delete profile</p>
 </section>
