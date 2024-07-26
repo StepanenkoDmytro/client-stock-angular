@@ -18,16 +18,16 @@ export class SpendingsEffects {
   constructor(
     private actions$: Actions,
     private authService: AuthService,
-    private store: Store<ISpendingsState>,
+    private store$: Store<ISpendingsState>,
     private categoriesSyncService: CategiriesSyncService,
-    private spendingsSyncService: SpendingsSyncService
+    private spendingsSyncService: SpendingsSyncService,
   ) {}
 
   addSpending$ = createEffect(() => this.actions$.pipe(
     ofType(addSpending, editSpending),
     filter(() => !!this.authService.authToken),
-    withLatestFrom(this.store.select(selectPortfolioID)),
-    withLatestFrom(this.store.select(categoriesSpendindSelector)),
+    withLatestFrom(this.store$.select(selectPortfolioID)),
+    withLatestFrom(this.store$.select(categoriesSpendindSelector)),
     switchMap(([[action, portfolioID], categories]) => {
       const newSpending = action.payload.spending;
       if(!newSpending.isSaved) {
@@ -41,8 +41,8 @@ export class SpendingsEffects {
   loadSpendings$ = createEffect(() => this.actions$.pipe(
     ofType(loadSpending),
     filter(() => !!this.authService.authToken),
-    withLatestFrom(this.store.select(selectPortfolioID)),
-    withLatestFrom(this.store.select(categoriesSpendindSelector)),
+    withLatestFrom(this.store$.select(selectPortfolioID)),
+    withLatestFrom(this.store$.select(categoriesSpendindSelector)),
     switchMap(([[action, portfolioID], categories]) => {
       return this.spendingsSyncService.syncSpendingListWithServer(action.payload.state, portfolioID, categories);
     })
@@ -59,8 +59,12 @@ export class SpendingsEffects {
   addCategory$ = createEffect(() => this.actions$.pipe(
     ofType(addCategory),
     filter(() => !!this.authService.authToken),
-    withLatestFrom(this.store.select(selectPortfolioID)),
+    withLatestFrom(this.store$.select(selectPortfolioID)),
     switchMap(([action, portfolioID]) => {
+      if(!navigator.onLine) {
+        return EMPTY;
+      }
+
       const newCategory = action.payload.category;
       if(!newCategory.isSaved) {
         return this.categoriesSyncService.sendCategoryToServer(portfolioID, newCategory);
@@ -81,7 +85,7 @@ export class SpendingsEffects {
   loadCategories$ = createEffect(() => this.actions$.pipe(
     ofType(loadCategories),
     filter(() => !!this.authService.authToken),
-    withLatestFrom(this.store.select(selectPortfolioID)),
+    withLatestFrom(this.store$.select(selectPortfolioID)),
     switchMap(([action, portfolioID]) => {
       return this.categoriesSyncService.syncCategoriesListWithServer(action.payload.state, portfolioID);
     })

@@ -11,7 +11,7 @@ import { Store } from '@ngrx/store';
   providedIn: 'root'
 })
 export class CategiriesSyncService {
-  private readonly url: string = 'http://localhost:8000/api/v1/profile/';
+  private readonly url: string = 'http://pegazzo.online:8000/api/v1/profile/';
 
   constructor(
     private http: HttpClient,
@@ -35,6 +35,11 @@ export class CategiriesSyncService {
   }
 
   public deleteCategory(category: Category): Observable<void> {
+    if(!navigator.onLine) {
+      //method for deletenig without connection
+      return EMPTY;
+    }
+
     const deleteUrl = this.url + 'delete-category/' + category.id;
 
     return this.http.delete(deleteUrl).pipe(
@@ -44,6 +49,10 @@ export class CategiriesSyncService {
   }
 
   public syncCategoriesListWithServer(categoryState: ISpendingsState, portfolioID: number): Observable<void> {
+    if(!navigator.onLine) {
+      return EMPTY;
+    }
+    
     const loadCategoriesUrl = this.url + 'categories-list/' + portfolioID;
     return this.http.get<any>(loadCategoriesUrl).pipe(
       map(serverCategories => {
