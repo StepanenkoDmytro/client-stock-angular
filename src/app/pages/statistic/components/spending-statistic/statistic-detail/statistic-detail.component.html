@@ -1,12 +1,13 @@
-<div (click)="prevRoute()">
+<!-- <div (click)="prevRoute()">
     <span><mat-icon>keyboard_backspace</mat-icon></span>
     <span>Back</span>
-</div>
+</div> -->
+<pgz-prev-route></pgz-prev-route>
 
 <pgz-multi-line></pgz-multi-line>
 
 @for(data of categoryData; track data) {
-    <pgz-spending-statistic-card [data]="data" (click)="onCardClick(data.category.id)">
+    <pgz-spending-statistic-card [data]="data" (click)="onCardClick(data.category)">
     </pgz-spending-statistic-card>
 } @empty {
     <p style="text-align: center;">You don't have any spendings</p>

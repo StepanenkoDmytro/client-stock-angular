@@ -1,0 +1,23 @@
+<section class="bread-crumbs">
+    @if(breadCrumbs.length <= 1) {
+        <div [routerLink]="'/statistic'">
+            <span><mat-icon>keyboard_backspace</mat-icon></span>
+            <span>Back</span>
+        </div>
+    }
+
+    @if(breadCrumbs.length > 1) {
+        <div class="d-flex">
+            <div class="bread-crumb">
+                <a [routerLink]="'/statistic'">Global</a>
+            </div>
+            @for(crumb of breadCrumbs; track crumb) {
+                <div class="bread-crumb">
+                    <span> - </span>
+                    <a (click)="navigate(crumb)">{{crumb.label}}</a>
+                </div>
+            }
+        </div>
+    }
+</section>
+

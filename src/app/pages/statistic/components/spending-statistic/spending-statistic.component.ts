@@ -22,6 +22,8 @@ import { IconComponent } from '../../../../core/UI/components/icon/icon.componen
 import { MatButtonModule } from '@angular/material/button';
 import { PieChartComponent } from '../../../../core/UI/components/charts/pie-chart/pie-chart.component';
 import { Router } from '@angular/router';
+import { Category } from '../../../../domain/category.domain';
+import { StatisticStateService } from '../../service/statistic-state.service';
 
 
 const UI_COMPONENTS = [
@@ -68,6 +70,7 @@ export class SpendingStatisticComponent implements OnInit {
   constructor(
     private readonly formBuilder: FormBuilder,
     private router: Router,
+    private statisticStateHelper: StatisticStateService,
     private spendingsHelperService: SpendingCategoryHelperService,
     private spendingsService: SpendingsService,
     private cdr: ChangeDetectorRef
@@ -96,7 +99,8 @@ export class SpendingStatisticComponent implements OnInit {
     this.endDateCtrl.setValue(moment(new Date()));
   }
 
-  public onCardClick(id: string): void {
-    this.router.navigate(['/statistic/details', id]);
+  public onCardClick(category: Category): void {
+    this.statisticStateHelper.addBreadCrumb(category);
+    this.router.navigate(['/statistic/details', category.id]);
   }
 }
