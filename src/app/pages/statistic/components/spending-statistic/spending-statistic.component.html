@@ -14,11 +14,14 @@
       </mat-date-range-input>
     </div>
   </div>
-  <pgz-donut class="center"
+  <!-- <pgz-donut class="center"
             [data]="donutData"
             [showNames]="true">
-  </pgz-donut>
-  
+  </pgz-donut> -->
+<div>
+  <pgz-pie-chart class="center" [data]="donutData" [showNames]="false"></pgz-pie-chart>
+  <!-- <pgz-pie-chart class="center" [data]="donutData" [showNames]="false"></pgz-pie-chart> -->
+</div>
   
 
   @for(data of categoryData; track data) {

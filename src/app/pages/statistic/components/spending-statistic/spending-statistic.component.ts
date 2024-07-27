@@ -20,6 +20,7 @@ import { switchMap } from 'rxjs';
 import { SpendingCategoryHelperService } from '../../../../service/helpers/spending-category-helper.service';
 import { IconComponent } from '../../../../core/UI/components/icon/icon.component';
 import { MatButtonModule } from '@angular/material/button';
+import { PieChartComponent } from '../../../../core/UI/components/charts/pie-chart/pie-chart.component';
 
 
 const UI_COMPONENTS = [
@@ -29,7 +30,8 @@ const UI_COMPONENTS = [
   HistorySpendingCardComponent,
   IconComponent,
   MultiLineComponent,
-  DateFormatPipe
+  DateFormatPipe,
+  PieChartComponent
 ];
 
 const MATERIAL_MODULES = [
