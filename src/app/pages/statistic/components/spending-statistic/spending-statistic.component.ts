@@ -21,6 +21,7 @@ import { SpendingCategoryHelperService } from '../../../../service/helpers/spend
 import { IconComponent } from '../../../../core/UI/components/icon/icon.component';
 import { MatButtonModule } from '@angular/material/button';
 import { PieChartComponent } from '../../../../core/UI/components/charts/pie-chart/pie-chart.component';
+import { Router } from '@angular/router';
 
 
 const UI_COMPONENTS = [
@@ -66,6 +67,7 @@ export class SpendingStatisticComponent implements OnInit {
 
   constructor(
     private readonly formBuilder: FormBuilder,
+    private router: Router,
     private spendingsHelperService: SpendingCategoryHelperService,
     private spendingsService: SpendingsService,
     private cdr: ChangeDetectorRef
@@ -92,5 +94,9 @@ export class SpendingStatisticComponent implements OnInit {
     
     this.startDateCtrl.setValue(moment(new Date()).startOf('month'));
     this.endDateCtrl.setValue(moment(new Date()));
+  }
+
+  public onCardClick(id: string): void {
+    this.router.navigate(['/statistic/details', id]);
   }
 }

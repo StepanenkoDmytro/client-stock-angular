@@ -18,14 +18,11 @@
             [data]="donutData"
             [showNames]="true">
   </pgz-donut> -->
-<div>
+
   <pgz-pie-chart class="center" [data]="donutData" [showNames]="false"></pgz-pie-chart>
-  <!-- <pgz-pie-chart class="center" [data]="donutData" [showNames]="false"></pgz-pie-chart> -->
-</div>
-  
 
   @for(data of categoryData; track data) {
-    <pgz-spending-statistic-card [data]="data">
+    <pgz-spending-statistic-card [data]="data" (click)="onCardClick(data.category.id)">
     </pgz-spending-statistic-card>
   } @empty {
     <p style="text-align: center;">You don't have any spendings</p>
