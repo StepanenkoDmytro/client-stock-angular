@@ -103,9 +103,13 @@ export class SpendingsService {
       .forEach(spending => this.editSpending(spending));
   }
 
-  public async editCategory(updatedCategory: Category): Promise<void> {
+  public async findCategoryById(categoryId: string): Promise<Category> {
     const allCategories: Category[] = await firstValueFrom(this.getAllCategories());
-    const existingCategory = Category.findCategoryById(updatedCategory.id, allCategories);
+    return Category.findCategoryById(categoryId, allCategories);
+  }
+
+  public async editCategory(updatedCategory: Category): Promise<void> {
+    const existingCategory = await this.findCategoryById(updatedCategory.id);
 
     if(existingCategory.parent != updatedCategory.parent) {
       const spendingsByCategory: Spending[] = await firstValueFrom(this.getSpendingsByCategory(existingCategory));

@@ -72,36 +72,36 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
           { date: new Date("2009"), price: 201 }
         ]
       },
-      {
-        name: "Canada",
-        values: [
-          { date: new Date("2000"), price: 200 },
-          { date: new Date("2001"), price: 120 },
-          { date: new Date("2002"), price: 33 },
-          { date: new Date("2003"), price: 21 },
-          { date: new Date("2004"), price: 51 },
-          { date: new Date("2005"), price: 190 },
-          { date: new Date("2006"), price: 120 },
-          { date: new Date("2007"), price: 85 },
-          { date: new Date("2008"), price: 221 },
-          { date: new Date("2009"), price: 101 }
-        ]
-      },
-      {
-        name: "Maxico",
-        values: [
-          { date: new Date("2000"), price: 50 },
-          { date: new Date("2001"), price: 10 },
-          { date: new Date("2002"), price: 5 },
-          { date: new Date("2003"), price: 71 },
-          { date: new Date("2004"), price: 20 },
-          { date: new Date("2005"), price: 9 },
-          { date: new Date("2006"), price: 220 },
-          { date: new Date("2007"), price: 235 },
-          { date: new Date("2008"), price: 61 },
-          { date: new Date("2009"), price: 10 }
-        ]
-      }
+      // {
+      //   name: "Canada",
+      //   values: [
+      //     { date: new Date("2000"), price: 200 },
+      //     { date: new Date("2001"), price: 120 },
+      //     { date: new Date("2002"), price: 33 },
+      //     { date: new Date("2003"), price: 21 },
+      //     { date: new Date("2004"), price: 51 },
+      //     { date: new Date("2005"), price: 190 },
+      //     { date: new Date("2006"), price: 120 },
+      //     { date: new Date("2007"), price: 85 },
+      //     { date: new Date("2008"), price: 221 },
+      //     { date: new Date("2009"), price: 101 }
+      //   ]
+      // },
+      // {
+      //   name: "Maxico",
+      //   values: [
+      //     { date: new Date("2000"), price: 50 },
+      //     { date: new Date("2001"), price: 10 },
+      //     { date: new Date("2002"), price: 5 },
+      //     { date: new Date("2003"), price: 71 },
+      //     { date: new Date("2004"), price: 20 },
+      //     { date: new Date("2005"), price: 9 },
+      //     { date: new Date("2006"), price: 220 },
+      //     { date: new Date("2007"), price: 235 },
+      //     { date: new Date("2008"), price: 61 },
+      //     { date: new Date("2009"), price: 10 }
+      //   ]
+      // }
     ];
     
     /* Format Data */

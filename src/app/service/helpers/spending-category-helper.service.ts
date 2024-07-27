@@ -42,6 +42,15 @@ export class SpendingCategoryHelperService {
     return spendingCategoriesList.map(category => this.calculateCategoryStatisticRecursive(category, spendings));
   }
 
+  public async calculateCategoryStatisticByCategory(spendings: Spending[], category: Category): Promise<ICategoryStatistic[]> {
+    const spendingCategoriesList = category.children;
+
+    // if(!spendingCategoriesList) {
+    //   return null;
+    // }
+    return spendingCategoriesList.map(category => this.calculateCategoryStatisticRecursive(category, spendings));
+  }
+
   private calculateCategoryStatisticRecursive(category: Category, spendings: Spending[]): ICategoryStatistic {
     const spendingsByCategory = spendings.filter(spending => spending.category.id === category.id);
     const costByCategory = spendingsByCategory.reduce((accumulator, spending) => accumulator + spending.cost, 0);
