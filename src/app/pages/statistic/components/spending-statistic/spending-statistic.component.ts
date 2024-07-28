@@ -7,34 +7,30 @@ import { SpendingsService } from '../../../../service/spendings.service';
 import { HistorySpendingCardComponent } from '../../../spending/components/history-spending/history-spending-card/history-spending-card.component';
 import { MultiLineComponent } from '../../../../core/UI/components/charts/multi-line/multi-line.component';
 import { DonutComponent, IDonutData } from '../../../../core/UI/components/charts/donut/donut.component';
-import { SimpleDataModel } from '../../../../domain/d3.domain';
 import { FormControl, FormGroup, FormsModule, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
 import moment from 'moment';
 import { DateFormatPipe } from '../../../../core/UI/calendar/date-format.pipe';
-import { SpendingStatisticCardComponent } from './spending-statistic-card/spending-statistic-card.component';
 import { ICategoryStatistic } from '../../model/SpendindStatistic';
 import { switchMap } from 'rxjs';
 import { SpendingCategoryHelperService } from '../../../../service/helpers/spending-category-helper.service';
 import { IconComponent } from '../../../../core/UI/components/icon/icon.component';
 import { MatButtonModule } from '@angular/material/button';
-import { PieChartComponent } from '../../../../core/UI/components/charts/pie-chart/pie-chart.component';
 import { Router } from '@angular/router';
-import { Category } from '../../../../domain/category.domain';
 import { StatisticStateService } from '../../service/statistic-state.service';
+import { StatisticChartsWrapperComponent } from '../statistic-charts-wrapper/statistic-charts-wrapper.component';
 
 
 const UI_COMPONENTS = [
-  SpendingStatisticCardComponent,
   DonutComponent,
   BarComponent,
   HistorySpendingCardComponent,
   IconComponent,
   MultiLineComponent,
   DateFormatPipe,
-  PieChartComponent
+  StatisticChartsWrapperComponent
 ];
 
 const MATERIAL_MODULES = [
@@ -60,12 +56,14 @@ const MATERIAL_MODULES = [
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SpendingStatisticComponent implements OnInit {
-  public categoryData: ICategoryStatistic[];
+  public categoryStatisticForPeriod: ICategoryStatistic[];
   public donutData: IDonutData;
 
   public formRangeDate: FormGroup;
   public startDateCtrl: FormControl = new FormControl();
   public endDateCtrl: FormControl = new FormControl();
+
+
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -89,18 +87,13 @@ export class SpendingStatisticComponent implements OnInit {
         this.spendingsService.getSpendingsByRange(startDate, endDate)
       )
     ).subscribe(async (spendings) => {
-      this.categoryData = await this.spendingsHelperService.calculateCategoryStatistic(spendings);
-      this.donutData = this.spendingsHelperService.mapCategoryStatisticToChartData(this.categoryData);
+      this.categoryStatisticForPeriod = await this.spendingsHelperService.calculateCategoryStatistic(spendings);
+      this.donutData = this.spendingsHelperService.mapCategoryStatisticToChartData(this.categoryStatisticForPeriod);
       this.cdr.detectChanges();
     });
 
     
     this.startDateCtrl.setValue(moment(new Date()).startOf('month'));
     this.endDateCtrl.setValue(moment(new Date()));
-  }
-
-  public onCardClick(category: Category): void {
-    this.statisticStateHelper.addBreadCrumb(category);
-    this.router.navigate(['/statistic/details', category.id]);
   }
 }

@@ -1,0 +1,18 @@
+<section>
+    <button (click)="toggleChart()">{{chartType}}</button>
+
+    @if(chartType === 'pie') {
+      <pgz-pie-chart class="center" [data]="pieChartData" [showNames]="false"></pgz-pie-chart>
+    }
+
+    @if(chartType === 'multiline') {
+      <pgz-multi-line></pgz-multi-line>
+    }
+
+    @for(data of categoryData; track data) {
+      <pgz-spending-statistic-card [data]="data" (click)="onCardClick(data.category)">
+      </pgz-spending-statistic-card>
+    } @empty {
+      <p style="text-align: center;">You don't have any spendings</p>
+    }
+</section>
