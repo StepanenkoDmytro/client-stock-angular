@@ -1,0 +1,18 @@
+<section>
+    <div class="spend-stat--date-range" (click)="picker.open()">
+        <p>{{ startDateCtrl.value | dateFormat:'DD MMMM YY' }} - {{ endDateCtrl.value | dateFormat:'DD MMMM YY' }}</p>
+        <button class="spend-stat--btn" >
+        <pgz-icon [name]="'edit'"></pgz-icon>
+        </button>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+
+        <div class="mat-disable">
+        <mat-date-range-input [rangePicker]="picker">
+            <input matStartDate placeholder="Start date" [formControl]="startDateCtrl" disable>
+            <input matEndDate placeholder="End date" [formControl]="endDateCtrl" disable>
+        </mat-date-range-input>
+        </div>
+    </div>
+
+    <pgz-pie-chart class="center" [data]="pieChartData" [showNames]="false"></pgz-pie-chart>
+</section>

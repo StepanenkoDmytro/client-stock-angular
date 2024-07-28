@@ -134,7 +134,10 @@ export class SpendingsService {
   }
 
   public findSpendingsByCategoryIncludeChildren(spendings: Spending[], category: Category): Spending[] {
-    
+    if(!spendings) {
+      return [];
+    }
+
     let spendingsByCategory = spendings.filter(spending => spending.category.id === category.id);
 
     if(category.children.length > 0) {

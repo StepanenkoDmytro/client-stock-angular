@@ -1,6 +1,6 @@
 <main class="scroll-list">
   
-  <div class="spend-stat--date-range" (click)="picker.open()">
+  <!-- <div class="spend-stat--date-range" (click)="picker.open()">
     <p>{{ startDateCtrl.value | dateFormat:'DD MMMM YY' }} - {{ endDateCtrl.value | dateFormat:'DD MMMM YY' }}</p>
     <button class="spend-stat--btn" >
       <pgz-icon [name]="'edit'"></pgz-icon>
@@ -13,11 +13,26 @@
         <input matEndDate placeholder="End date" [formControl]="endDateCtrl" disable>
       </mat-date-range-input>
     </div>
-  </div>
-  <!-- <pgz-donut class="center"
-            [data]="donutData"
-            [showNames]="true">
-  </pgz-donut> -->
+  </div> -->
 
-  <pgz-statistic-charts-wrapper [categoryData]="categoryStatisticForPeriod"></pgz-statistic-charts-wrapper>
+  <section>
+    <button (click)="toggleChart()">{{chartType}}</button>
+
+    @if(chartType === 'pie') {
+      <pgz-pie-chart-container [spendings]="spendings" (categoryStatistic)="getCategoryStatisticData($event)"></pgz-pie-chart-container>
+    }
+
+    @if(chartType === 'multiline') {
+      <pgz-multi-line-chart-container [spendings]="spendings" (categoryStatistic)="getCategoryStatisticData($event)"></pgz-multi-line-chart-container>
+    }
+
+    @for(data of categoryStatisticForPeriod; track data) {
+      <pgz-spending-statistic-card [data]="data" (click)="onCardClick(data.category)">
+      </pgz-spending-statistic-card>
+    } @empty {
+      <p style="text-align: center;">You don't have any spendings</p>
+    }
+</section>
+
+  
 </main>

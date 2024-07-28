@@ -20,7 +20,11 @@ import { IconComponent } from '../../../../core/UI/components/icon/icon.componen
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { StatisticStateService } from '../../service/statistic-state.service';
-import { StatisticChartsWrapperComponent } from '../statistic-charts-wrapper/statistic-charts-wrapper.component';
+import { Spending } from '../../../spending/model/Spending';
+import { PieChartContainerComponent } from './pie-chart-container/pie-chart-container.component';
+import { SpendingStatisticCardComponent } from './spending-statistic-card/spending-statistic-card.component';
+import { Category } from '../../../../domain/category.domain';
+import { MultiLineChartContainerComponent } from './multi-line-chart-container/multi-line-chart-container.component';
 
 
 const UI_COMPONENTS = [
@@ -29,8 +33,9 @@ const UI_COMPONENTS = [
   HistorySpendingCardComponent,
   IconComponent,
   MultiLineComponent,
-  DateFormatPipe,
-  StatisticChartsWrapperComponent
+  MultiLineChartContainerComponent,
+  PieChartContainerComponent,
+  SpendingStatisticCardComponent
 ];
 
 const MATERIAL_MODULES = [
@@ -46,54 +51,50 @@ const MATERIAL_MODULES = [
 @Component({
   selector: 'pgz-spending-statistic',
   standalone: true,
-  providers: [
-    { provide: MAT_DATE_LOCALE, useValue: 'uk-UA' },
-    provideMomentDateAdapter(),
-  ],
+  // providers: [
+  //   { provide: MAT_DATE_LOCALE, useValue: 'uk-UA' },
+  //   provideMomentDateAdapter(),
+  // ],
   imports: [...UI_COMPONENTS, ...MATERIAL_MODULES],
   templateUrl: './spending-statistic.component.html',
   styleUrl: './spending-statistic.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SpendingStatisticComponent implements OnInit {
+
+  public spendings: Spending[];
   public categoryStatisticForPeriod: ICategoryStatistic[];
-  public donutData: IDonutData;
-
-  public formRangeDate: FormGroup;
-  public startDateCtrl: FormControl = new FormControl();
-  public endDateCtrl: FormControl = new FormControl();
-
-
+  public chartType: 'pie' | 'multiline' = 'pie';
 
   constructor(
-    private readonly formBuilder: FormBuilder,
     private router: Router,
-    private statisticStateHelper: StatisticStateService,
-    private spendingsHelperService: SpendingCategoryHelperService,
     private spendingsService: SpendingsService,
+    private statisticStateHelper: StatisticStateService,
     private cdr: ChangeDetectorRef
   ) { }
 
   public ngOnInit(): void {
     this.spendingsService.init();
-
-    this.formRangeDate = this.formBuilder.group({
-      'startDate': this.startDateCtrl,
-      'endDate': this.endDateCtrl,
+    this.spendingsService.getAllSpendings().subscribe(spendings => {
+      console.log(spendings);
+      this.spendings = spendings;
+      // this.cdr.detectChanges();
     });
+  }
 
-    this.formRangeDate.valueChanges.pipe(
-      switchMap(({startDate, endDate}) => 
-        this.spendingsService.getSpendingsByRange(startDate, endDate)
-      )
-    ).subscribe(async (spendings) => {
-      this.categoryStatisticForPeriod = await this.spendingsHelperService.calculateCategoryStatistic(spendings);
-      this.donutData = this.spendingsHelperService.mapCategoryStatisticToChartData(this.categoryStatisticForPeriod);
-      this.cdr.detectChanges();
-    });
+  public getCategoryStatisticData(categoryStatisticData: ICategoryStatistic[]) {
+    console.log('====')
+    this.categoryStatisticForPeriod = categoryStatisticData;
+    this.cdr.detectChanges();
+  }
 
-    
-    this.startDateCtrl.setValue(moment(new Date()).startOf('month'));
-    this.endDateCtrl.setValue(moment(new Date()));
+  public toggleChart(): void {
+    this.chartType = this.chartType === 'pie' ? 'multiline' : 'pie';
+    this.cdr.detectChanges();
+  }
+
+  public onCardClick(category: Category): void {
+    this.statisticStateHelper.addBreadCrumb(category);
+    this.router.navigate(['/statistic/details', category.id]);
   }
 }
