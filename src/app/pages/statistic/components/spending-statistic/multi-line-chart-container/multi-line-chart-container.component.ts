@@ -68,5 +68,6 @@ export class MultiLineChartContainerComponent implements OnInit {
     this.multiLineChartData = this.spendingsHelperService.calculateLineChartByChildren(currentCategoryName, this.multiLineChartDataByChildren);
     // console.log('this.multiLineChartData', this.multiLineChartData)
     this.categoryStatistic.emit(this.categoryStatisticForPeriod);
+    this.cdr.detectChanges();
   }
 }

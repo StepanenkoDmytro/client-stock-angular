@@ -39,7 +39,7 @@ const MATTERIAL_COMPONENTS = [
 })
 export class PieChartContainerComponent implements OnInit {
   @Input()
-  public set spendings(value: Spending[]){
+  public set spendings(value: Spending[]) {
     this.setSpendings(this.startDateCtrl.value, this.endDateCtrl.value, value);
   }
   @Output()
@@ -59,31 +59,20 @@ export class PieChartContainerComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    // this.spendingsService.init();
     this.formRangeDate = this.formBuilder.group({
       'startDate': this.startDateCtrl,
       'endDate': this.endDateCtrl,
     });
-    this.formRangeDate.valueChanges
-    // .pipe(
-    //   switchMap(({startDate, endDate}) => 
-    //     this.spendingsService.getSpendingsByRange(startDate, endDate)
-    //   )
-    // )
-    .subscribe(({startDate, endDate}) => {
+
+    this.formRangeDate.valueChanges.subscribe(({startDate, endDate}) => {
       this.setSpendings(startDate, endDate, this.spendings);
     });
-
-    
-    // this.startDateCtrl.setValue(moment(new Date()).startOf('month'));
-    // this.endDateCtrl.setValue(moment(new Date()));
   }
 
   private async setSpendings(start: moment.Moment, end: moment.Moment, spendings: Spending[]): Promise<void> {
     const spendingsByRange = this.spendingsHelperService.getSpendingsByRange(start, end, spendings);
     const categoryStatisticForPeriod = await this.spendingsHelperService.calculateCategoryStatistic(spendingsByRange);
     this.pieChartData = this.spendingsHelperService.mapCategoryStatisticToChartData(categoryStatisticForPeriod);
-    
     this.categoryStatistic.emit(categoryStatisticForPeriod);
     this.cdr.detectChanges();
   }

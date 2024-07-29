@@ -1,38 +1,18 @@
 <main class="scroll-list">
-  
-  <!-- <div class="spend-stat--date-range" (click)="picker.open()">
-    <p>{{ startDateCtrl.value | dateFormat:'DD MMMM YY' }} - {{ endDateCtrl.value | dateFormat:'DD MMMM YY' }}</p>
-    <button class="spend-stat--btn" >
-      <pgz-icon [name]="'edit'"></pgz-icon>
-    </button>
-    <mat-date-range-picker #picker></mat-date-range-picker>
+  <button (click)="toggleChart()">{{chartType}}</button>
 
-    <div class="mat-disable">
-      <mat-date-range-input [rangePicker]="picker">
-        <input matStartDate placeholder="Start date" [formControl]="startDateCtrl" disable>
-        <input matEndDate placeholder="End date" [formControl]="endDateCtrl" disable>
-      </mat-date-range-input>
-    </div>
-  </div> -->
+  @if(chartType === 'pie') {
+    <pgz-pie-chart-container [spendings]="filteredSpendings" (categoryStatistic)="getCategoryStatisticData($event)"></pgz-pie-chart-container>
+  }
 
-  <section>
-    <button (click)="toggleChart()">{{chartType}}</button>
+  @if(chartType === 'multiline') {
+    <pgz-multi-line-chart-container [spendings]="filteredSpendings" (categoryStatistic)="getCategoryStatisticData($event)"></pgz-multi-line-chart-container>
+  }
 
-    @if(chartType === 'pie') {
-      <pgz-pie-chart-container [spendings]="spendings" (categoryStatistic)="getCategoryStatisticData($event)"></pgz-pie-chart-container>
-    }
-
-    @if(chartType === 'multiline') {
-      <pgz-multi-line-chart-container [spendings]="spendings" (categoryStatistic)="getCategoryStatisticData($event)"></pgz-multi-line-chart-container>
-    }
-
-    @for(data of categoryStatisticForPeriod; track data) {
-      <pgz-spending-statistic-card [data]="data" (click)="onCardClick(data.category)">
-      </pgz-spending-statistic-card>
-    } @empty {
-      <p style="text-align: center;">You don't have any spendings</p>
-    }
-</section>
-
-  
+  @for(data of categoryStatisticForPeriod; track data) {
+    <pgz-spending-statistic-card [data]="data" [isVisible]="isVisibleCard(data.category)" (clickCard)="onCardClick($event)" (toggleCategory)="toggleCategory($event)">
+    </pgz-spending-statistic-card>
+  } @empty {
+    <p style="text-align: center;">You don't have any spendings</p>
+  }
 </main>

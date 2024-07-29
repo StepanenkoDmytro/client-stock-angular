@@ -51,10 +51,6 @@ const MATERIAL_MODULES = [
 @Component({
   selector: 'pgz-spending-statistic',
   standalone: true,
-  // providers: [
-  //   { provide: MAT_DATE_LOCALE, useValue: 'uk-UA' },
-  //   provideMomentDateAdapter(),
-  // ],
   imports: [...UI_COMPONENTS, ...MATERIAL_MODULES],
   templateUrl: './spending-statistic.component.html',
   styleUrl: './spending-statistic.component.scss',
@@ -64,7 +60,10 @@ export class SpendingStatisticComponent implements OnInit {
 
   public spendings: Spending[];
   public categoryStatisticForPeriod: ICategoryStatistic[];
+  // public visibleCategoryStatisticForPeriod: ICategoryStatistic[];
   public chartType: 'pie' | 'multiline' = 'pie';
+  public disabledCategories: Set<string> = new Set<string>();
+  public filteredSpendings: Spending[] = [];
 
   constructor(
     private router: Router,
@@ -76,25 +75,68 @@ export class SpendingStatisticComponent implements OnInit {
   public ngOnInit(): void {
     this.spendingsService.init();
     this.spendingsService.getAllSpendings().subscribe(spendings => {
-      console.log(spendings);
+      // console.log(spendings);
       this.spendings = spendings;
+      this.filteredSpendings = spendings;
       // this.cdr.detectChanges();
     });
   }
 
   public getCategoryStatisticData(categoryStatisticData: ICategoryStatistic[]) {
-    console.log('====')
-    this.categoryStatisticForPeriod = categoryStatisticData;
+    console.log(this.disabledCategories.size === 0 || this.categoryStatisticForPeriod.length === 0);
+    if(this.disabledCategories.size === 0 || this.categoryStatisticForPeriod.length === 0) {
+      this.categoryStatisticForPeriod = categoryStatisticData;
+      
+    }
     this.cdr.detectChanges();
   }
 
   public toggleChart(): void {
     this.chartType = this.chartType === 'pie' ? 'multiline' : 'pie';
+    this.disabledCategories = new Set();
+    this.updateFilteredSpendings();
     this.cdr.detectChanges();
+  }
+
+  public isVisibleCard(category: Category): boolean {
+    return !this.disabledCategories.has(category.id);
   }
 
   public onCardClick(category: Category): void {
     this.statisticStateHelper.addBreadCrumb(category);
     this.router.navigate(['/statistic/details', category.id]);
+  }
+
+  public toggleCategory(categoryId: string): void {
+    if (this.disabledCategories.has(categoryId)) {
+      this.disabledCategories.delete(categoryId);
+    } else {
+      this.disabledCategories.add(categoryId);
+    }
+    this.updateFilteredSpendings();
+  }
+
+  private updateFilteredSpendings(): void {
+    if (this.disabledCategories.size === 0) {
+      this.filteredSpendings = this.spendings;
+    } else {
+      this.filteredSpendings = this.spendings.filter(spending => {
+        return !this.isSpendingInDisabledCategory(spending);
+      });
+    }
+    this.cdr.detectChanges();
+  }
+
+  private isSpendingInDisabledCategory(spending: Spending): boolean {
+    for (let categoryId of this.disabledCategories) {
+      const category = this.categoryStatisticForPeriod.find(cat => cat.category.id === categoryId)?.category;
+      if (category) {
+        const spendingsByCategory = this.spendingsService.findSpendingsByCategoryIncludeChildren([spending], category);
+        if (spendingsByCategory.length > 0) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 }

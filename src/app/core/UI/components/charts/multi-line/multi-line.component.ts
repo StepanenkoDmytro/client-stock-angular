@@ -1,5 +1,6 @@
-import { AfterContentInit, ChangeDetectionStrategy, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import * as d3 from 'd3';
+import { BehaviorSubject } from 'rxjs';
 import { Subscription } from 'rxjs/internal/Subscription';
 
 export interface DataValue {
@@ -22,22 +23,32 @@ export interface IMultiLineData {
 })
 export class MultiLineComponent implements OnInit, AfterContentInit {
   @Input()
-  public data: IMultiLineData[];
+  public set data(value: IMultiLineData[]) {
+    this._data.next(value);
+  }
+
   @ViewChild('chartContainer', { static: true }) 
   private chartContainer!: ElementRef;
 
   private sub: Subscription | null = null;
   private resizechartContainer: ResizeObserver | null = null;
-
+  private _data: BehaviorSubject<IMultiLineData[]> = new BehaviorSubject([]);
 
   width = 300;
   height = 300;
   margin = 50;
 
-  constructor() { }
+  constructor(
+    private cdr: ChangeDetectorRef
+  ) { }
 
   public ngOnInit(): void {
-    this.createChart();
+    // this.createChart();
+    this._data.subscribe(data => {
+      if(data && data.length > 0) {
+        this.updateD3();
+      }
+    })
   }
 
   public ngAfterContentInit(): void {
@@ -58,16 +69,16 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
   }
 
   private createChart(): void {
-
-    this.data.forEach(lineData => lineData.values.sort((a,b) => a.date.getTime() - b.date.getTime()));
+    const data = this._data.value;
+    data.forEach(lineData => lineData.values.sort((a,b) => a.date.getTime() - b.date.getTime()));
     
         /* Scale */
     const xScale = d3.scaleTime()
-    .domain(d3.extent(this.data[0].values, d => d.date) as [Date, Date])
+    .domain(d3.extent(data[0].values, d => d.date) as [Date, Date])
     .range([0, this.width - this.margin]);
 
     const yScale = d3.scaleLinear()
-    .domain([0, d3.max(this.data.flatMap(country => country.values), d => d.price) as number]) 
+    .domain([0, d3.max(data.flatMap(country => country.values), d => d.price) as number]) 
     .range([this.height - this.margin, 0]);
 
     
@@ -95,7 +106,7 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
       .attr("stroke-linejoin", "round")
       .attr("stroke-linecap", "round")
       .selectAll("path")
-      .data(this.data)
+      .data(data)
       .join("path")
       .style("mix-blend-mode", "multiply")
       .attr("d", d => line(d.values))
@@ -105,7 +116,7 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
     
     /* Add circles in the line */
     lines.selectAll("circle-group")
-      .data(this.data)
+      .data(data)
       .enter()
       .append("g")
       .style("fill", (d, i) => color(i.toString()))

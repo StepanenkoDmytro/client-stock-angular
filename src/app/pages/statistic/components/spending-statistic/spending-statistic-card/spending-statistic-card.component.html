@@ -1,7 +1,10 @@
 <div class="spending-stat-card">
-    <div class="spending-stat-card--category">
-        <pgz-icon class="spending--icon" [name]="data.category.icon"></pgz-icon>
-        <p>{{data.category.title}}</p>
+    <div (click)="onClickCard()">
+        <div class="spending-stat-card--category">
+            <pgz-icon class="spending--icon" [name]="_data.category.icon"></pgz-icon>
+            <p>{{_data.category.title}}</p>
+        </div>
+        <p>{{_data.value}}</p>
     </div>
-    <p>{{data.value}}</p>
+    <button (click)="onToggleCategory()">{{isVisible.toString()}}</button>
 </div>
