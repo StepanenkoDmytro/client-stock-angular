@@ -1,8 +1,8 @@
 <section>
     <div class="spend-stat--date-range" (click)="picker.open()">
         <p>{{ startDateCtrl.value | dateFormat:'DD MMMM YY' }} - {{ endDateCtrl.value | dateFormat:'DD MMMM YY' }}</p>
-        <button class="spend-stat--btn" >
-        <pgz-icon [name]="'edit'"></pgz-icon>
+        <button class="spend-stat--btn btn">
+            <pgz-icon [name]="'edit'"></pgz-icon>
         </button>
         <mat-date-range-picker #picker></mat-date-range-picker>
 

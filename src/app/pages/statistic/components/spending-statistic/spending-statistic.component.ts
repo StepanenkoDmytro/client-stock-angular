@@ -85,7 +85,7 @@ export class SpendingStatisticComponent implements OnInit {
   public getCategoryStatisticData(categoryStatisticData: ICategoryStatistic[]) {
     console.log(this.disabledCategories.size === 0 || this.categoryStatisticForPeriod.length === 0);
     if(this.disabledCategories.size === 0 || this.categoryStatisticForPeriod.length === 0) {
-      this.categoryStatisticForPeriod = categoryStatisticData;
+      this.categoryStatisticForPeriod = categoryStatisticData.sort((a,b) => b.value - a.value);
       
     }
     this.cdr.detectChanges();

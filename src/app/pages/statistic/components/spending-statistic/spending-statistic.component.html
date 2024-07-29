@@ -1,8 +1,10 @@
 <main class="scroll-list">
-  <button (click)="toggleChart()">{{chartType}}</button>
+  <button class="chart-container--btn" (click)="toggleChart()">{{chartType}}</button>
 
   @if(chartType === 'pie') {
-    <pgz-pie-chart-container [spendings]="filteredSpendings" (categoryStatistic)="getCategoryStatisticData($event)"></pgz-pie-chart-container>
+    <div class="chart-container--chart">
+      <pgz-pie-chart-container [spendings]="filteredSpendings" (categoryStatistic)="getCategoryStatisticData($event)"></pgz-pie-chart-container>
+    </div>
   }
 
   @if(chartType === 'multiline') {
