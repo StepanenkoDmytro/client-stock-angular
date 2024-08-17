@@ -70,16 +70,25 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
 
   private createChart(): void {
     const data = this._data.value;
-    data.forEach(lineData => lineData.values.sort((a,b) => a.date.getTime() - b.date.getTime()));
-    
-        /* Scale */
+
+    if (!data || data.length === 0) {
+        console.warn('Data is undefined or empty.');
+        return;
+    }
+
+    const firstDataValues = data[0]?.values;
+    if (!firstDataValues || firstDataValues.length === 0) {
+        console.warn('Values are undefined or empty.');
+        return;
+    }
+
     const xScale = d3.scaleTime()
-    .domain(d3.extent(data[0].values, d => d.date) as [Date, Date])
-    .range([0, this.width - this.margin]);
+        .domain(d3.extent(firstDataValues, d => d.date) as [Date, Date])
+        .range([0, this.width - this.margin]);
 
     const yScale = d3.scaleLinear()
-    .domain([0, d3.max(data.flatMap(country => country.values), d => d.price) as number]) 
-    .range([this.height - this.margin, 0]);
+        .domain([0, d3.max(data.flatMap(country => country.values), d => d.price) as number])
+        .range([this.height - this.margin, 0]);
 
     
     const color = d3.scaleOrdinal(d3.schemeCategory10);

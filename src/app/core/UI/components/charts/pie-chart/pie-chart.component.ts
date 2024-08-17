@@ -48,8 +48,8 @@ export class PieChartComponent implements OnInit, AfterViewInit, OnDestroy {
   private dataSubject: SimpleDataModel[] = [];
 
   private margin = { top: 0, right: 0, bottom: 0, left: 0 };
-  private width = 150;
-  private height = 150;
+  private width = 20;
+  private height = 20;
   private radius = Math.min(this.width, this.height) / 2 - this.margin.left;
   
 

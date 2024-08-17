@@ -112,14 +112,11 @@ export class SpendingCategoryHelperService {
   public async calculateCategoryStatisticByCategory(spendings: Spending[], category: Category): Promise<ICategoryStatistic[]> {
     const spendingCategoriesList = category.children;
 
-    // if(!spendingCategoriesList) {
-    //   return null;
-    // }
     return spendingCategoriesList.map(category => this.calculateCategoryStatisticRecursive(category, spendings));
   }
 
   public getSpendingsByRange(start: moment.Moment, end: moment.Moment, spendings: Spending[]): Spending[] {
-    console.log('===',start, end, spendings);
+
     return spendings.filter(spending => {
         const spendingDate = moment(spending.date);
         return spendingDate.isBetween(start, end, 'day', '[]');
