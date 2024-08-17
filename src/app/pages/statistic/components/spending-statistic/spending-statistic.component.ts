@@ -7,29 +7,35 @@ import { SpendingsService } from '../../../../service/spendings.service';
 import { HistorySpendingCardComponent } from '../../../spending/components/history-spending/history-spending-card/history-spending-card.component';
 import { MultiLineComponent } from '../../../../core/UI/components/charts/multi-line/multi-line.component';
 import { DonutComponent, IDonutData } from '../../../../core/UI/components/charts/donut/donut.component';
-import { SimpleDataModel } from '../../../../domain/d3.domain';
 import { FormControl, FormGroup, FormsModule, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
 import moment from 'moment';
 import { DateFormatPipe } from '../../../../core/UI/calendar/date-format.pipe';
-import { SpendingStatisticCardComponent } from './spending-statistic-card/spending-statistic-card.component';
 import { ICategoryStatistic } from '../../model/SpendindStatistic';
 import { switchMap } from 'rxjs';
 import { SpendingCategoryHelperService } from '../../../../service/helpers/spending-category-helper.service';
 import { IconComponent } from '../../../../core/UI/components/icon/icon.component';
 import { MatButtonModule } from '@angular/material/button';
+import { Router } from '@angular/router';
+import { StatisticStateService } from '../../service/statistic-state.service';
+import { Spending } from '../../../spending/model/Spending';
+import { PieChartContainerComponent } from './pie-chart-container/pie-chart-container.component';
+import { SpendingStatisticCardComponent } from './spending-statistic-card/spending-statistic-card.component';
+import { Category } from '../../../../domain/category.domain';
+import { MultiLineChartContainerComponent } from './multi-line-chart-container/multi-line-chart-container.component';
 
 
 const UI_COMPONENTS = [
-  SpendingStatisticCardComponent,
   DonutComponent,
   BarComponent,
   HistorySpendingCardComponent,
   IconComponent,
   MultiLineComponent,
-  DateFormatPipe
+  MultiLineChartContainerComponent,
+  PieChartContainerComponent,
+  SpendingStatisticCardComponent
 ];
 
 const MATERIAL_MODULES = [
@@ -45,50 +51,94 @@ const MATERIAL_MODULES = [
 @Component({
   selector: 'pgz-spending-statistic',
   standalone: true,
-  providers: [
-    { provide: MAT_DATE_LOCALE, useValue: 'uk-UA' },
-    provideMomentDateAdapter(),
-  ],
   imports: [...UI_COMPONENTS, ...MATERIAL_MODULES],
   templateUrl: './spending-statistic.component.html',
   styleUrl: './spending-statistic.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SpendingStatisticComponent implements OnInit {
-  public categoryData: ICategoryStatistic[];
-  public donutData: IDonutData;
 
-  public formRangeDate: FormGroup;
-  public startDateCtrl: FormControl = new FormControl();
-  public endDateCtrl: FormControl = new FormControl();
+  public spendings: Spending[] = [];
+  public categoryStatisticForPeriod: ICategoryStatistic[];
+  // public visibleCategoryStatisticForPeriod: ICategoryStatistic[];
+  public chartType: 'pie' | 'multiline' = 'pie';
+  public disabledCategories: Set<string> = new Set<string>();
+  public filteredSpendings: Spending[] = [];
 
   constructor(
-    private readonly formBuilder: FormBuilder,
-    private spendingsHelperService: SpendingCategoryHelperService,
+    private router: Router,
     private spendingsService: SpendingsService,
+    private statisticStateHelper: StatisticStateService,
     private cdr: ChangeDetectorRef
   ) { }
 
   public ngOnInit(): void {
+    
     this.spendingsService.init();
-
-    this.formRangeDate = this.formBuilder.group({
-      'startDate': this.startDateCtrl,
-      'endDate': this.endDateCtrl,
-    });
-
-    this.formRangeDate.valueChanges.pipe(
-      switchMap(({startDate, endDate}) => 
-        this.spendingsService.getSpendingsByRange(startDate, endDate)
-      )
-    ).subscribe(async (spendings) => {
-      this.categoryData = await this.spendingsHelperService.calculateCategoryStatistic(spendings);
-      this.donutData = this.spendingsHelperService.mapCategoryStatisticToChartData(this.categoryData);
+    this.spendingsService.getAllSpendings().subscribe(spendings => {
+      
+      this.spendings = spendings;
+      this.filteredSpendings = spendings;
+      
       this.cdr.detectChanges();
     });
+  }
 
-    
-    this.startDateCtrl.setValue(moment(new Date()).startOf('month'));
-    this.endDateCtrl.setValue(moment(new Date()));
+  public getCategoryStatisticData(categoryStatisticData: ICategoryStatistic[]) {
+    if(this.disabledCategories.size === 0 || this.categoryStatisticForPeriod.length === 0) {
+      this.categoryStatisticForPeriod = categoryStatisticData.sort((a,b) => b.value - a.value);
+      
+    }
+    this.cdr.detectChanges();
+  }
+
+  public toggleChart(): void {
+    this.chartType = this.chartType === 'pie' ? 'multiline' : 'pie';
+    this.disabledCategories = new Set();
+    this.updateFilteredSpendings();
+    this.cdr.detectChanges();
+  }
+
+  public isVisibleCard(category: Category): boolean {
+    return !this.disabledCategories.has(category.id);
+  }
+
+  public onCardClick(category: Category): void {
+    this.statisticStateHelper.addBreadCrumb(category);
+    this.router.navigate(['/statistic/details', category.id]);
+  }
+
+  public toggleCategory(categoryId: string): void {
+    if (this.disabledCategories.has(categoryId)) {
+      this.disabledCategories.delete(categoryId);
+    } else {
+      this.disabledCategories.add(categoryId);
+    }
+    this.updateFilteredSpendings();
+  }
+
+  private updateFilteredSpendings(): void {
+    if (this.disabledCategories.size === 0) {
+      this.filteredSpendings = this.spendings;
+    } else {
+      this.filteredSpendings = this.spendings.filter(spending => {
+        return !this.isSpendingInDisabledCategory(spending);
+      });
+    }
+
+    this.cdr.detectChanges();
+  }
+
+  private isSpendingInDisabledCategory(spending: Spending): boolean {
+    for (let categoryId of this.disabledCategories) {
+      const category = this.categoryStatisticForPeriod.find(cat => cat.category.id === categoryId)?.category;
+      if (category) {
+        const spendingsByCategory = this.spendingsService.findSpendingsByCategoryIncludeChildren([spending], category);
+        if (spendingsByCategory.length > 0) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 }

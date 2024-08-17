@@ -1,13 +1,14 @@
-import { AfterContentInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import * as d3 from 'd3';
+import { BehaviorSubject } from 'rxjs';
 import { Subscription } from 'rxjs/internal/Subscription';
 
-interface DataValue {
+export interface DataValue {
   date: Date;
   price: number;
 }
 
-interface CountryData {
+export interface IMultiLineData {
   name: string;
   values: DataValue[];
 }
@@ -21,21 +22,33 @@ interface CountryData {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MultiLineComponent implements OnInit, AfterContentInit {
+  @Input()
+  public set data(value: IMultiLineData[]) {
+    this._data.next(value);
+  }
+
   @ViewChild('chartContainer', { static: true }) 
   private chartContainer!: ElementRef;
 
   private sub: Subscription | null = null;
   private resizechartContainer: ResizeObserver | null = null;
-
+  private _data: BehaviorSubject<IMultiLineData[]> = new BehaviorSubject([]);
 
   width = 300;
   height = 300;
   margin = 50;
 
-  constructor() { }
+  constructor(
+    private cdr: ChangeDetectorRef
+  ) { }
 
   public ngOnInit(): void {
-    this.createChart();
+    // this.createChart();
+    this._data.subscribe(data => {
+      if(data && data.length > 0) {
+        this.updateD3();
+      }
+    })
   }
 
   public ngAfterContentInit(): void {
@@ -56,72 +69,26 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
   }
 
   private createChart(): void {
-    const data: CountryData[] = [
-      {
-        name: "USA",
-        values: [
-          { date: new Date("2000"), price: 100 },
-          { date: new Date("2001"), price: 110 },
-          { date: new Date("2002"), price: 145 },
-          { date: new Date("2003"), price: 241 },
-          { date: new Date("2004"), price: 101 },
-          { date: new Date("2005"), price: 90 },
-          { date: new Date("2006"), price: 10 },
-          { date: new Date("2007"), price: 35 },
-          { date: new Date("2008"), price: 21 },
-          { date: new Date("2009"), price: 201 }
-        ]
-      },
-      {
-        name: "Canada",
-        values: [
-          { date: new Date("2000"), price: 200 },
-          { date: new Date("2001"), price: 120 },
-          { date: new Date("2002"), price: 33 },
-          { date: new Date("2003"), price: 21 },
-          { date: new Date("2004"), price: 51 },
-          { date: new Date("2005"), price: 190 },
-          { date: new Date("2006"), price: 120 },
-          { date: new Date("2007"), price: 85 },
-          { date: new Date("2008"), price: 221 },
-          { date: new Date("2009"), price: 101 }
-        ]
-      },
-      {
-        name: "Maxico",
-        values: [
-          { date: new Date("2000"), price: 50 },
-          { date: new Date("2001"), price: 10 },
-          { date: new Date("2002"), price: 5 },
-          { date: new Date("2003"), price: 71 },
-          { date: new Date("2004"), price: 20 },
-          { date: new Date("2005"), price: 9 },
-          { date: new Date("2006"), price: 220 },
-          { date: new Date("2007"), price: 235 },
-          { date: new Date("2008"), price: 61 },
-          { date: new Date("2009"), price: 10 }
-        ]
-      }
-    ];
-    
-    /* Format Data */
-    const parseDate = d3.timeParse("%Y"); 
-    data.forEach(countryData => { 
-      countryData.values.forEach(d => {
-        // d.date = parseDate(d.date.getFullYear().toString()); // Використання getFullYear() для отримання року
-        d.price = +d.price;    
-      });
-    });
+    const data = this._data.value;
 
-    
-        /* Scale */
+    if (!data || data.length === 0) {
+        console.warn('Data is undefined or empty.');
+        return;
+    }
+
+    const firstDataValues = data[0]?.values;
+    if (!firstDataValues || firstDataValues.length === 0) {
+        console.warn('Values are undefined or empty.');
+        return;
+    }
+
     const xScale = d3.scaleTime()
-    .domain(d3.extent(data[0].values, d => d.date) as [Date, Date])
-    .range([0, this.width - this.margin]);
+        .domain(d3.extent(firstDataValues, d => d.date) as [Date, Date])
+        .range([0, this.width - this.margin]);
 
     const yScale = d3.scaleLinear()
-    .domain([0, d3.max(data.flatMap(country => country.values), d => d.price) as number]) 
-    .range([this.height - this.margin, 0]);
+        .domain([0, d3.max(data.flatMap(country => country.values), d => d.price) as number])
+        .range([this.height - this.margin, 0]);
 
     
     const color = d3.scaleOrdinal(d3.schemeCategory10);
@@ -144,13 +111,12 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
 
     lines.append("g")
       .attr("fill", "none")
-      
       .attr("stroke-width", 1)
       .attr("stroke-linejoin", "round")
       .attr("stroke-linecap", "round")
-    .selectAll("path")
-    .data(data)
-    .join("path")
+      .selectAll("path")
+      .data(data)
+      .join("path")
       .style("mix-blend-mode", "multiply")
       .attr("d", d => line(d.values))
       .attr("stroke", (d, i) => color(i.toString()));

@@ -1,0 +1,30 @@
+<section>
+
+    <div class="range-controller">
+        <p>{{ startDateCtrl.value | dateFormat:'DD MMMM YY' }} - {{ endDateCtrl.value | dateFormat:'DD MMMM YY' }}</p>
+
+        <div class="range-controller--btns">
+            <button
+                class="btn" 
+                [ngClass]="{'active': selectedRange === 'month'}" 
+                (click)="changeToCurrentMonthRange()">Cur month</button>
+        
+            <button
+                class="btn"  
+                [ngClass]="{'active': selectedRange === 'half-year'}" 
+                (click)="changeToHalfYearRange()">Half year</button>
+
+            <button 
+                class="btn" 
+                [ngClass]="{'active': selectedRange === 'year'}" 
+                (click)="changeToYearRange()">Year</button>
+
+            <button 
+                class="btn" 
+                [ngClass]="{'active': selectedRange === 'all'}" 
+                (click)="changeToAllTimeRange()">All</button>
+        </div>
+    </div>
+
+    <pgz-pie-chart [data]="pieChartData" [showNames]="false"></pgz-pie-chart>
+</section>

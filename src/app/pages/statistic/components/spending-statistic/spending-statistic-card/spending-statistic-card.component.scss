@@ -22,3 +22,8 @@
     margin-left: 10px;
   }
 }
+
+.disabled {
+  background-color: var(--bs-border-color);
+  color: var(--bs-border-color-translucent);
+}

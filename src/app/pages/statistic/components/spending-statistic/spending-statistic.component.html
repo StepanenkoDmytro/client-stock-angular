@@ -1,31 +1,20 @@
 <main class="scroll-list">
-  
-  <div class="spend-stat--date-range" (click)="picker.open()">
-    <p>{{ startDateCtrl.value | dateFormat:'DD MMMM YY' }} - {{ endDateCtrl.value | dateFormat:'DD MMMM YY' }}</p>
-    <button class="spend-stat--btn" >
-      <pgz-icon [name]="'edit'"></pgz-icon>
-    </button>
-    <mat-date-range-picker #picker></mat-date-range-picker>
+  <button class="chart-container--btn" (click)="toggleChart()">{{chartType}}</button>
 
-    <div class="mat-disable">
-      <mat-date-range-input [rangePicker]="picker">
-        <input matStartDate placeholder="Start date" [formControl]="startDateCtrl" disable>
-        <input matEndDate placeholder="End date" [formControl]="endDateCtrl" disable>
-      </mat-date-range-input>
+  @if(chartType === 'pie') {
+    <div class="chart-container--chart">
+      <pgz-pie-chart-container [spendings]="filteredSpendings" (categoryStatistic)="getCategoryStatisticData($event)"></pgz-pie-chart-container>
     </div>
-  </div>
-  <pgz-donut class="center"
-            [data]="donutData"
-            [showNames]="true">
-  </pgz-donut>
-  
-  
+  }
 
-  @for(data of categoryData; track data) {
-    <pgz-spending-statistic-card [data]="data">
+  @if(chartType === 'multiline') {
+    <pgz-multi-line-chart-container [spendings]="filteredSpendings" (categoryStatistic)="getCategoryStatisticData($event)"></pgz-multi-line-chart-container>
+  }
+
+  @for(data of categoryStatisticForPeriod; track data) {
+    <pgz-spending-statistic-card [data]="data" [isVisible]="isVisibleCard(data.category)" (clickCard)="onCardClick($event)" (toggleCategory)="toggleCategory($event)">
     </pgz-spending-statistic-card>
   } @empty {
     <p style="text-align: center;">You don't have any spendings</p>
   }
- 
 </main>

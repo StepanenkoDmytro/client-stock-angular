@@ -6,6 +6,8 @@ import { ICategoryStatistic } from '../../pages/statistic/model/SpendindStatisti
 import { SpendingsService } from '../spendings.service';
 import { firstValueFrom } from 'rxjs';
 import { IDonutData } from '../../core/UI/components/charts/donut/donut.component';
+import { DataValue, IMultiLineData } from '../../core/UI/components/charts/multi-line/multi-line.component';
+import moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -35,11 +37,90 @@ export class SpendingCategoryHelperService {
     };
   }
 
+  public mapCategoryStatisticToLineChartData(spendings: Spending[], categoryList: ICategoryStatistic[]): IMultiLineData[] {
+    
+    const resultArray = categoryList.map(category => {
+      const spendingsByCategory: Spending[] = this.spendingService.findSpendingsByCategoryIncludeChildren(spendings, category.category);
+      
+      const groupedSpendings: Map<string, number> = new Map();
+      spendingsByCategory.forEach(spending => {
+        const year = new Date(spending.date).getFullYear();
+        const month = new Date(spending.date).getMonth();
+        
+        const monthGroup = new Date(year, month).toDateString();
+        if(!groupedSpendings.has(monthGroup)) {
+          groupedSpendings.set(monthGroup, spending.cost);
+        } else {
+          const currValue = groupedSpendings.get(monthGroup);
+          groupedSpendings.set(monthGroup, currValue + spending.cost);
+        }
+      });
+      
+      const values = Array.from(groupedSpendings, ([key, value]) => ({
+        date: new Date(key),
+        price: value
+      }));
+
+
+      const result: IMultiLineData = {
+        name: category.category.title,
+        values: values,
+      };
+      return result;
+    });
+
+    return resultArray;
+  }
+
+  public calculateLineChartByChildren(name: string, children: IMultiLineData[]): IMultiLineData {
+    const groupValuesMap: Map<string, number> = new Map();
+
+
+    children.forEach(child => {
+      child.values.forEach(value => {
+        const date = value.date.toDateString();
+        
+        if(!groupValuesMap.has(date)) {
+          groupValuesMap.set(date, value.price);
+        } else {
+          const currValue = groupValuesMap.get(date);
+          groupValuesMap.set(date, currValue + value.price);
+        }
+      });
+    });
+
+    const values = Array.from(groupValuesMap, ([key, value]) => ({
+      date: new Date(key),
+      price: value
+    }));
+
+
+    const result: IMultiLineData = {
+      name: name,
+      values: values,
+    };
+    return result;
+  }
+
   public async calculateCategoryStatistic(spendings: Spending[]): Promise<ICategoryStatistic[]> {
     const categoriesList = await firstValueFrom(this.spendingService.getAllCategories());
     const spendingCategoriesList = categoriesList[1].children;
 
     return spendingCategoriesList.map(category => this.calculateCategoryStatisticRecursive(category, spendings));
+  }
+
+  public async calculateCategoryStatisticByCategory(spendings: Spending[], category: Category): Promise<ICategoryStatistic[]> {
+    const spendingCategoriesList = category.children;
+
+    return spendingCategoriesList.map(category => this.calculateCategoryStatisticRecursive(category, spendings));
+  }
+
+  public getSpendingsByRange(start: moment.Moment, end: moment.Moment, spendings: Spending[]): Spending[] {
+
+    return spendings.filter(spending => {
+        const spendingDate = moment(spending.date);
+        return spendingDate.isBetween(start, end, 'day', '[]');
+      });
   }
 
   private calculateCategoryStatisticRecursive(category: Category, spendings: Spending[]): ICategoryStatistic {

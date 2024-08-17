@@ -1,24 +1,16 @@
 :host {
   display: block;
 }
-.spend-stat {
-  &--date-range {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 22px;
-    font-weight: 400;
-    margin: 10px;
-  }
 
+.chart-container {
   &--btn {
-    background: inherit;
-    border: none;
+
+  }
+
+  &--chart {
+    padding: 0 15px;
+    // width: 300px;
   }
 }
 
-.mat-disable {
-  visibility: hidden;
-  width: 0;
-  height: 0;
-}
+

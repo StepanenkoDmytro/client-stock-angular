@@ -1,7 +1,15 @@
-<div class="spending-stat-card">
-    <div class="spending-stat-card--category">
-        <pgz-icon class="spending--icon" [name]="data.category.icon"></pgz-icon>
-        <p>{{data.category.title}}</p>
+<div class="spending-stat-card" [ngClass]="{'disabled': !isVisible}">
+    <div class="spending-stat-card--category" (click)="onClickCard()">
+        <pgz-icon class="spending--icon" [name]="_data.category.icon"></pgz-icon>
+        <p>{{_data.category.title}}</p>
     </div>
-    <p>{{data.value}}</p>
+    <p>{{_data.value}}</p>
+    <button class="btn" (click)="onToggleCategory()">
+        @if(isVisible) {
+            <mat-icon>{{'visibility'}}</mat-icon>
+        } @else {
+            <mat-icon>{{'visibility_off'}}</mat-icon>
+        }
+        
+    </button>
 </div>
