@@ -13,6 +13,7 @@ import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { Spending } from '../../../../spending/model/Spending';
 import { ICategoryStatistic } from '../../../model/SpendindStatistic';
+import { CommonModule } from '@angular/common';
 
 const UI_COMPONENTS = [
   PieChartComponent,
@@ -32,7 +33,7 @@ const MATTERIAL_COMPONENTS = [
     { provide: MAT_DATE_LOCALE, useValue: 'uk-UA' },
     provideMomentDateAdapter(),
   ],
-  imports: [...UI_COMPONENTS, ...MATTERIAL_COMPONENTS],
+  imports: [...UI_COMPONENTS, ...MATTERIAL_COMPONENTS, CommonModule],
   templateUrl: './pie-chart-container.component.html',
   styleUrl: './pie-chart-container.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -40,16 +41,21 @@ const MATTERIAL_COMPONENTS = [
 export class PieChartContainerComponent implements OnInit {
   @Input()
   public set spendings(value: Spending[]) {
+    this._spendings = value;
     this.setSpendings(this.startDateCtrl.value, this.endDateCtrl.value, value);
   }
   @Output()
   public categoryStatistic = new EventEmitter<ICategoryStatistic[]>();
+
+  public _spendings: Spending[] = [];
 
   public pieChartData: IDonutData;
   
   public formRangeDate: FormGroup;
   public startDateCtrl: FormControl<moment.Moment> = new FormControl(moment(new Date()).startOf('month'));
   public endDateCtrl: FormControl<moment.Moment> = new FormControl(moment(new Date()));
+  public selectedRange: 'month' | 'half-year' | 'year' | 'all' = 'month';
+
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -65,9 +71,36 @@ export class PieChartContainerComponent implements OnInit {
     });
 
     this.formRangeDate.valueChanges.subscribe(({startDate, endDate}) => {
-      this.setSpendings(startDate, endDate, this.spendings);
+      this.setSpendings(startDate, endDate, this._spendings);
     });
   }
+
+  public changeToCurrentMonthRange(): void {
+    this.selectedRange = 'month';
+    this.startDateCtrl.setValue(moment().startOf('month'));
+    this.endDateCtrl.setValue(moment().endOf('month'));
+  }
+  
+  public changeToHalfYearRange(): void {
+    this.selectedRange = 'half-year';
+    this.startDateCtrl.setValue(moment().subtract(6, 'months').startOf('month'));
+    this.endDateCtrl.setValue(moment().endOf('month'));
+  }
+  
+  public changeToYearRange(): void {
+    this.selectedRange = 'year';
+    this.startDateCtrl.setValue(moment().startOf('year'));
+    this.endDateCtrl.setValue(moment().endOf('year'));
+  }
+  
+  public changeToAllTimeRange(): void {
+    // debugger;
+    this.selectedRange = 'all';
+    this.startDateCtrl.setValue(moment('2000-01-01'));
+    this.endDateCtrl.setValue(moment());
+  
+  }
+  
 
   private async setSpendings(start: moment.Moment, end: moment.Moment, spendings: Spending[]): Promise<void> {
     const spendingsByRange = this.spendingsHelperService.getSpendingsByRange(start, end, spendings);

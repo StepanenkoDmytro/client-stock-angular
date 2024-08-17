@@ -58,7 +58,7 @@ const MATERIAL_MODULES = [
 })
 export class SpendingStatisticComponent implements OnInit {
 
-  public spendings: Spending[];
+  public spendings: Spending[] = [];
   public categoryStatisticForPeriod: ICategoryStatistic[];
   // public visibleCategoryStatisticForPeriod: ICategoryStatistic[];
   public chartType: 'pie' | 'multiline' = 'pie';
@@ -73,17 +73,18 @@ export class SpendingStatisticComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
+    
     this.spendingsService.init();
     this.spendingsService.getAllSpendings().subscribe(spendings => {
-      // console.log(spendings);
+      
       this.spendings = spendings;
       this.filteredSpendings = spendings;
-      // this.cdr.detectChanges();
+      
+      this.cdr.detectChanges();
     });
   }
 
   public getCategoryStatisticData(categoryStatisticData: ICategoryStatistic[]) {
-    console.log(this.disabledCategories.size === 0 || this.categoryStatisticForPeriod.length === 0);
     if(this.disabledCategories.size === 0 || this.categoryStatisticForPeriod.length === 0) {
       this.categoryStatisticForPeriod = categoryStatisticData.sort((a,b) => b.value - a.value);
       
@@ -124,6 +125,7 @@ export class SpendingStatisticComponent implements OnInit {
         return !this.isSpendingInDisabledCategory(spending);
       });
     }
+
     this.cdr.detectChanges();
   }
 

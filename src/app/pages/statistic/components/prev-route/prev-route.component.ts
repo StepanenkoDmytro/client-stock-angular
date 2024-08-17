@@ -23,7 +23,6 @@ export class PrevRouteComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.statisticStateService.breadCrumbs.subscribe(categories => {
-      console.log('update');
       if(categories.length > 0) {
         this.breadCrumbs = categories.map(category => {
           const breadCrumb: BreadCrumb = {
@@ -40,11 +39,6 @@ export class PrevRouteComponent implements OnInit, OnDestroy {
   }
 
   public navigate(crumb: BreadCrumb) {
-    // const crumbIndex = this.breadCrumbs.indexOf(crumb);
-    
-    // this.breadCrumbs = this.breadCrumbs.splice(crumbIndex - 1, this.breadCrumbs.length);
-
-    // console.log('after ', this.breadCrumbs);
     this.statisticStateService.updateBreadCrumbs(crumb.path);
     this.router.navigate(['/statistic/details', crumb.path]);
   }

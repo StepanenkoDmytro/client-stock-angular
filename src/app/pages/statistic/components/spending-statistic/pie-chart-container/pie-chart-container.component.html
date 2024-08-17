@@ -1,17 +1,23 @@
 <section>
-    <div class="spend-stat--date-range" (click)="picker.open()">
-        <p>{{ startDateCtrl.value | dateFormat:'DD MMMM YY' }} - {{ endDateCtrl.value | dateFormat:'DD MMMM YY' }}</p>
-        <button class="spend-stat--btn btn">
-            <pgz-icon [name]="'edit'"></pgz-icon>
-        </button>
-        <mat-date-range-picker #picker></mat-date-range-picker>
 
-        <div class="mat-disable">
-        <mat-date-range-input [rangePicker]="picker">
-            <input matStartDate placeholder="Start date" [formControl]="startDateCtrl" disable>
-            <input matEndDate placeholder="End date" [formControl]="endDateCtrl" disable>
-        </mat-date-range-input>
-        </div>
+    <div class="d-flex">
+        <p>{{ startDateCtrl.value | dateFormat:'DD MMMM YY' }} - {{ endDateCtrl.value | dateFormat:'DD MMMM YY' }}</p>
+
+        <button 
+    [ngClass]="{'active': selectedRange === 'month'}" 
+    (click)="changeToCurrentMonthRange()">Cur month</button>
+    
+  <button 
+    [ngClass]="{'active': selectedRange === 'half-year'}" 
+    (click)="changeToHalfYearRange()">Half year</button>
+    
+  <button 
+    [ngClass]="{'active': selectedRange === 'year'}" 
+    (click)="changeToYearRange()">Year</button>
+    
+  <button 
+    [ngClass]="{'active': selectedRange === 'all'}" 
+    (click)="changeToAllTimeRange()">All</button>
     </div>
 
     <pgz-pie-chart class="center" [data]="pieChartData" [showNames]="false"></pgz-pie-chart>
