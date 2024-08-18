@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
-  selector: 'pgz-feedback',
+  selector: 'pgz-general',
   standalone: true,
   imports: [],
-  templateUrl: './feedback.component.html',
-  styleUrl: '../profile.component.scss',
+  templateUrl: './general.component.html',
+  styleUrl: '../../profile.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FeedbackComponent {
+export class GeneralComponent {
 
 }

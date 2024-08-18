@@ -81,6 +81,10 @@
     font-size: 19px;
     color: var(--bs-gray);
   }
+
+  &--value p {
+    text-transform: capitalize;
+  }
 }
 
 .arrow-box {

@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { DarkLightModeService } from '../../service/dark-light-mode.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TotalBalanceService } from '../../core/UI/components/total-balance/total-balance.service';
@@ -9,10 +8,10 @@ import { AuthService } from '../../service/auth.service';
 import { UserService } from '../../service/user.service';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
-import { GeneralComponent } from './general/general.component';
-import { SystemComponent } from './system/system.component';
-import { FeedbackComponent } from './feedback/feedback.component';
+import { FeedbackComponent } from './components/feedback/feedback.component';
 import { IconComponent } from '../../core/UI/components/icon/icon.component';
+import { GeneralComponent } from './components/general/general.component';
+import { SystemComponent } from './components/system/system.component';
 
 
 const UI_MODULES = [
@@ -43,11 +42,9 @@ export class ProfileComponent implements OnInit {
   public userEmail: string; 
   public isAuthorizedUser: boolean = false;
   
-  public isDarkMode: FormControl<boolean> = new FormControl<boolean>(true);
-  public monthlyBudget: number;
+  public monthlyBudget: number = 0;
 
   constructor(
-    private darkLightModeService: DarkLightModeService,
     private totalBalanceService: TotalBalanceService,
     private authService: AuthService,
     private userService: UserService,
@@ -65,7 +62,7 @@ export class ProfileComponent implements OnInit {
       }
     });
 
-    this.getThemeMode();
+  
   }
 
   public saveMonthlyBudget(): void {
@@ -78,14 +75,5 @@ export class ProfileComponent implements OnInit {
 
   public login(): void {
     this.router.navigate(['/auth']);
-  }
-
-  private getThemeMode(): void {
-    const savedMode = this.darkLightModeService.activeTheme === 'dark';
-    this.isDarkMode.setValue(savedMode);
-    this.isDarkMode.valueChanges.subscribe((darkMode) => {
-        const mode = darkMode ? 'dark' : 'light';
-        this.darkLightModeService.set(mode);
-    });
   }
 }
