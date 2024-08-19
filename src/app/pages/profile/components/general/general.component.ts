@@ -28,7 +28,6 @@ export class GeneralComponent implements OnInit {
 
   public changeMonthlyBudget(): void {
     const currentBudget = this.monthlyBudget.toString();
-    console.log(currentBudget)
 
     const dialogRef = this.dialog.open(PopupMonthlyBudgetComponent, {
       maxWidth: '300px',

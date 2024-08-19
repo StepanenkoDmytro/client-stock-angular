@@ -87,6 +87,10 @@
   }
 }
 
+.disabled {
+  color: var(--bs-gray-500);
+}
+
 .arrow-box {
   margin-left: 12px;
   width: 9px;
