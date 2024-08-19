@@ -41,11 +41,8 @@ const MATERIAL_MODULES = [
 export class ProfileComponent implements OnInit {
   public userEmail: string; 
   public isAuthorizedUser: boolean = false;
-  
-  public monthlyBudget: number = 0;
 
   constructor(
-    private totalBalanceService: TotalBalanceService,
     private authService: AuthService,
     private userService: UserService,
     private router: Router,
@@ -63,10 +60,6 @@ export class ProfileComponent implements OnInit {
     });
 
   
-  }
-
-  public saveMonthlyBudget(): void {
-    this.totalBalanceService.saveMonthlyBudget(this.monthlyBudget);
   }
 
   public logout(): void {
