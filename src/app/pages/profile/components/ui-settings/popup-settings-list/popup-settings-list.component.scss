@@ -1,0 +1,24 @@
+:host {
+  display: block;
+}
+
+.setting-list {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 50px;
+
+  &--item {
+    display: flex;
+  }
+
+  &--item:not(:last-child) {
+    margin-bottom: 10px;
+  }
+
+  &--item p {
+    text-align: center;
+    text-transform: capitalize;
+    font-size: 20px;
+    margin-right: 15px;
+  }
+}

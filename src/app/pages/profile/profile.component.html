@@ -1,46 +1,49 @@
 <section class="profile-container">
     <section class="profile">
-        <div class="profile--exit">
-            <p>Exit</p>
-            <pgz-icon class="profile--edit" style="height: 27px;" [name]="'custom_exit'"></pgz-icon>
-        </div>
+
+        @if(isAuthorizedUser) {
+            <div class="profile--exit" (click)="logout()">
+                <p>Exit</p>
+                <pgz-icon class="profile--edit" [name]="'logout'"></pgz-icon>
+            </div>
+        } @else { 
+            <div class="profile--exit" (click)="login()">
+                <p>Login</p>
+                <pgz-icon class="profile--edit" [name]="'login'"></pgz-icon>
+            </div>
+        }
+
         <div class="profile--username">
             <p>User912</p>
             <pgz-icon class="profile--edit" [name]="'custom_edit'"></pgz-icon>
         </div>
+
         <div class="profile--email">
-            <p>{{ userEmail }}</p>
-            <pgz-icon class="profile--edit" [name]="'custom_edit'"></pgz-icon>
+            @if(isAuthorizedUser) {
+                <p>{{ userEmail }}</p>
+                <pgz-icon class="profile--edit" [name]="'custom_edit'"></pgz-icon>
+            } @else {
+                <p>-</p>
+            }
         </div>
     </section>
-    <!-- <mat-form-field class="profile--email" appearance="outline">
-        <mat-label>{{ 'Email' }}</mat-label>
-        <input [(ngModel)]="userEmail" type="email" matInput disabled>
-    </mat-form-field>
 
-    <div class="d-flex">
+    <!-- <div class="d-flex">
         <mat-form-field class="w-100" appearance="outline">
             <mat-label>Monthly budget</mat-label>
             <input matInput type="number" [(ngModel)]="monthlyBudget">
         </mat-form-field>
         <button class="profile--btn" mat-flat-button (click)="saveMonthlyBudget()">Save</button>
-    </div> -->
+    </div>  -->
 
     <pgz-general></pgz-general>
     <pgz-system></pgz-system>
     <pgz-feedback></pgz-feedback>
 
-    <!-- <mat-slide-toggle [formControl]="isDarkMode">Slide me!</mat-slide-toggle>
-    
-    <p>change currency</p>
-    <p>change language</p> -->
+    <!-- <mat-slide-toggle [formControl]="isDarkMode">Slide me!</mat-slide-toggle>-->
 
 
-    <!-- @if(isAuthorizedUser) {
-        <button class="profile--btn auth-btn" mat-flat-button (click)="logout()">Logout</button>
-    } @else {
-        <button class="profile--btn auth-btn" mat-flat-button (click)="login()">Login</button>
-    } -->
-
-    <p class="profile--delete">Delete profile</p>
+    @if(isAuthorizedUser) {
+        <p class="profile--delete">Delete profile</p>
+    }
 </section>

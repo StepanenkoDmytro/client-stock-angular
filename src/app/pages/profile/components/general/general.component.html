@@ -1,28 +1,28 @@
-<p class="title">Settings</p>
+<p class="title">General</p>
 <div class="settings-box">
-    <div class="general-item">
-        <p>Security</p>
+    <div class="general-item" (click)="changeMonthlyBudget()">
+        <p>Monthly budget</p>
         <div class="general-item--value">
+            <p>{{ monthlyBudget }}</p>
             <div class="arrow-box">
                 <div class="arrow-up"></div>
                 <div class="arrow-down"></div>
             </div>
         </div>
     </div>
-    <div class="general-item">
-        <p>Language</p>
+    <div class="general-item disabled">
+        <p>Currency</p>
         <div class="general-item--value">
-            <p>English</p>
+            <p>UAH</p>
             <div class="arrow-box">
                 <div class="arrow-up"></div>
                 <div class="arrow-down"></div>
             </div>
         </div>
     </div>
-    <div class="general-item">
-        <p>Theme</p>
+    <div class="general-item disabled">
+        <p>Data export/import</p>
         <div class="general-item--value">
-            <p>Light</p>
             <div class="arrow-box">
                 <div class="arrow-up"></div>
                 <div class="arrow-down"></div>

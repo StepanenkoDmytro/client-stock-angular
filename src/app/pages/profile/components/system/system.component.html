@@ -1,28 +1,28 @@
-<p class="title">General</p>
+<p class="title">Settings</p>
 <div class="settings-box">
-    <div class="general-item">
-        <p>Monthly budget</p>
+    <div class="general-item disabled">
+        <p>Security</p>
         <div class="general-item--value">
-            <p>10 000</p>
             <div class="arrow-box">
                 <div class="arrow-up"></div>
                 <div class="arrow-down"></div>
             </div>
         </div>
     </div>
-    <div class="general-item">
-        <p>Currency</p>
+    <div class="general-item disabled" (click)="changeLanguage()">
+        <p>Language</p>
         <div class="general-item--value">
-            <p>UAH</p>
+            <p>English</p>
             <div class="arrow-box">
                 <div class="arrow-up"></div>
                 <div class="arrow-down"></div>
             </div>
         </div>
     </div>
-    <div class="general-item">
-        <p>Data export/import</p>
+    <div class="general-item" (click)="changeTheme()">
+        <p>Theme</p>
         <div class="general-item--value">
+            <p>{{isDarkMode.value}}</p>
             <div class="arrow-box">
                 <div class="arrow-up"></div>
                 <div class="arrow-down"></div>

@@ -1,0 +1,10 @@
+<ul class="setting-list">
+    @for(item of data.items; track item) {
+        <li class="setting-list--item" (click)="selectSetting(item)">
+            <p>{{ item }}</p>
+            @if(item === data.activeItem) {
+                <pgz-icon [name]="'check'"></pgz-icon>
+            }
+        </li>
+    }
+</ul>
