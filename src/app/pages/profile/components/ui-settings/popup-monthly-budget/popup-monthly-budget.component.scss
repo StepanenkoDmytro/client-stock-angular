@@ -1,3 +1,13 @@
 :host {
   display: block;
 }
+
+.input-budget {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-budget button {
+  margin-left: auto;
+}

@@ -15,7 +15,7 @@ export class PopupSettingsListComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { items: string[], activeItem: string },
     private dialogRef: MatDialogRef<PopupSettingsListComponent>
-    ) {}
+  ) {}
 
   public selectSetting(setting: string): void {
     this.dialogRef.close(setting);

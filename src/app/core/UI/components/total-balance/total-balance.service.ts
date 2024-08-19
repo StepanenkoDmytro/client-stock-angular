@@ -19,7 +19,7 @@ export class TotalBalanceService {
     const budgetStoredData = localStorage.getItem(this.budgetLocalStorageKey);
     const parseBudget: number = JSON.parse(budgetStoredData);
     
-    if(parseBudget !== null) {
+    if(parseBudget) {
       this.monthlyBudget$.next(parseBudget);
     }
     

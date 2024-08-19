@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { TotalBalanceService } from '../../../../core/UI/components/total-balance/total-balance.service';
 import { PopupMonthlyBudgetComponent } from '../ui-settings/popup-monthly-budget/popup-monthly-budget.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -17,6 +17,7 @@ export class GeneralComponent implements OnInit {
   constructor(
     private totalBalanceService: TotalBalanceService,
     private dialog: MatDialog,
+    private cdr: ChangeDetectorRef,
   ) { }
 
   public ngOnInit(): void {
@@ -26,16 +27,19 @@ export class GeneralComponent implements OnInit {
   }
 
   public changeMonthlyBudget(): void {
-    const currMonthlyBudget = this.monthlyBudget;
+    const currentBudget = this.monthlyBudget.toString();
+    console.log(currentBudget)
 
     const dialogRef = this.dialog.open(PopupMonthlyBudgetComponent, {
       maxWidth: '300px',
       maxHeight: '500px',
-      data: { currMonthlyBudget },
+      data: { currentBudget },
     });
 
-    dialogRef.afterClosed().subscribe((result: number) => {
-      this.totalBalanceService.saveMonthlyBudget(result);
+    dialogRef.afterClosed().subscribe((result: string) => {
+      const monthlyBudget = parseInt(result);
+      this.totalBalanceService.saveMonthlyBudget(monthlyBudget);
+      this.cdr.detectChanges();
     });
   }
 }

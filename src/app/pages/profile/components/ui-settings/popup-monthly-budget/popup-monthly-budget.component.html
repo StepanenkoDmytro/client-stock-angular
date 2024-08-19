@@ -1,1 +1,10 @@
-<p>popup-monthly-budget works!</p>
+<div class="input-budget">
+    <mat-form-field appearance="outline" floatLabel="always" class="w-100">
+        <mat-label>Budget</mat-label>
+        <input matInput type="text" inputmode="numeric" class="line" placeholder="0" style="font-size: 1.5rem;" [(ngModel)]="monthlyBudget" pgzMoney>
+        <span matTextSuffix style="font-size: 1.5rem;">$</span>
+    </mat-form-field>
+
+
+    <button class="btn" (click)="saveMonthlyBudget()">Save</button>
+</div>
