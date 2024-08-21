@@ -54,7 +54,7 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
   public ngAfterContentInit(): void {
       this.resizechartContainer = new ResizeObserver(entries => {
       if (entries[0].target.clientWidth > 200) {
-        this.width = entries[0].target.clientWidth - 20;
+        this.width = entries[0].target.clientWidth - 30;
       }
       this.updateD3();
     });
@@ -94,7 +94,7 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
     const color = d3.scaleOrdinal(d3.schemeCategory10);
     
     /* Add SVG */
-    const svg = d3.select(this.chartContainer.nativeElement).append("svg")
+    const svg = d3.select('#chartTest').append("svg")
       .attr("width", (this.width + this.margin)+"px")
       .attr("height", (this.height + this.margin)+"px")
       .append('g')

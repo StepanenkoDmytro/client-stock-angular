@@ -7,11 +7,13 @@
             <button 
                 class="btn" 
                 [ngClass]="{'active': selectedRange === 'year'}" 
+                [disabled]="selectedRange === 'year'"
                 (click)="changeToYearRange()">Year</button>
 
             <button 
                 class="btn" 
                 [ngClass]="{'active': selectedRange === 'all'}" 
+                [disabled]="selectedRange === 'all'"
                 (click)="changeToAllTimeRange()">All</button>
         </div>
     </div>

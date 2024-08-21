@@ -29,7 +29,8 @@ const MATERIAL_COMPONENTS = [
 export class MultiLineChartContainerComponent implements OnInit {
 
   @Input()
-  public set spendings(values: Spending[]){
+  public set spendings(values: Spending[]) {
+    this._spendings = values;
     this.setSpendings(this.startDateCtrl.value, this.endDateCtrl.value, values);
   }
   @Output()
@@ -39,7 +40,7 @@ export class MultiLineChartContainerComponent implements OnInit {
   public startDateCtrl: FormControl<moment.Moment> = new FormControl(moment().startOf('year'));
   public endDateCtrl: FormControl<moment.Moment> = new FormControl(moment().endOf('year'));
   
-  public selectedRange: 'month' | 'half-year' | 'year' | 'all' = 'month';
+  public selectedRange: 'year' | 'all' = 'year';
 
   public _spendings: Spending[] = [];
   public categoryStatisticForPeriod: ICategoryStatistic[];
@@ -65,9 +66,9 @@ export class MultiLineChartContainerComponent implements OnInit {
   }
 
   public changeToYearRange(): void {
-    // this.selectedRange = 'year';
-    // this.startDateCtrl.setValue(moment().startOf('year'));
-    // this.endDateCtrl.setValue(moment().endOf('year'));
+    this.selectedRange = 'year';
+    this.startDateCtrl.setValue(moment().startOf('year'));
+    this.endDateCtrl.setValue(moment().endOf('year'));
   }
   
   public changeToAllTimeRange(): void {
