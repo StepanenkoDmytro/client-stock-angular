@@ -103,8 +103,9 @@ export class PieChartContainerComponent implements OnInit {
   
 
   private async setSpendings(start: moment.Moment, end: moment.Moment, spendings: Spending[]): Promise<void> {
-    const spendingsByRange = this.spendingsHelperService.getSpendingsByRange(start, end, spendings);
-    const categoryStatisticForPeriod = await this.spendingsHelperService.calculateCategoryStatistic(spendingsByRange);
+    const spendingsByRange: Spending[] = this.spendingsHelperService.getSpendingsByRange(start, end, spendings);
+    const categoryStatisticForPeriod: ICategoryStatistic[] = await this.spendingsHelperService.calculateCategoryStatistic(spendingsByRange);
+    
     this.pieChartData = this.spendingsHelperService.mapCategoryStatisticToChartData(categoryStatisticForPeriod);
     this.categoryStatistic.emit(categoryStatisticForPeriod);
     this.cdr.detectChanges();
