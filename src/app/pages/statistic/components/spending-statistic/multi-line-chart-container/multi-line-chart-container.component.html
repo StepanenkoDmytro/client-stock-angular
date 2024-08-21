@@ -1,1 +1,22 @@
-<pgz-multi-line [data]="[multiLineChartData]"></pgz-multi-line>
+<section>
+    <div class="range-controller">
+        <p>{{ startDateCtrl.value | dateFormat:'DD MMMM YY' }} - {{ endDateCtrl.value | dateFormat:'DD MMMM YY' }}</p>
+
+        <div class="range-controller--btns">
+
+            <button 
+                class="btn" 
+                [ngClass]="{'active': selectedRange === 'year'}" 
+                [disabled]="selectedRange === 'year'"
+                (click)="changeToYearRange()">Year</button>
+
+            <button 
+                class="btn" 
+                [ngClass]="{'active': selectedRange === 'all'}" 
+                [disabled]="selectedRange === 'all'"
+                (click)="changeToAllTimeRange()">All</button>
+        </div>
+    </div>
+
+    <pgz-multi-line [data]="[multiLineChartData]"></pgz-multi-line>
+</section>

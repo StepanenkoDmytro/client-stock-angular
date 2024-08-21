@@ -13,6 +13,11 @@ export interface IMultiLineData {
   values: DataValue[];
 }
 
+export const EmptyMultiLineData: IMultiLineData[] = [{
+  name: 'none',
+  values: []
+}];
+
 @Component({
   selector: 'pgz-multi-line',
   standalone: true,
@@ -24,7 +29,9 @@ export interface IMultiLineData {
 export class MultiLineComponent implements OnInit, AfterContentInit {
   @Input()
   public set data(value: IMultiLineData[]) {
-    this._data.next(value);
+    if(value && value[0]) {
+      this._data.next(value);
+    }
   }
 
   @ViewChild('chartContainer', { static: true }) 
@@ -32,7 +39,7 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
 
   private sub: Subscription | null = null;
   private resizechartContainer: ResizeObserver | null = null;
-  private _data: BehaviorSubject<IMultiLineData[]> = new BehaviorSubject([]);
+  private _data: BehaviorSubject<IMultiLineData[]> = new BehaviorSubject(EmptyMultiLineData);
 
   width = 300;
   height = 300;
@@ -43,7 +50,6 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
   ) { }
 
   public ngOnInit(): void {
-    // this.createChart();
     this._data.subscribe(data => {
       if(data && data.length > 0) {
         this.updateD3();
@@ -54,7 +60,7 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
   public ngAfterContentInit(): void {
       this.resizechartContainer = new ResizeObserver(entries => {
       if (entries[0].target.clientWidth > 200) {
-        this.width = entries[0].target.clientWidth - 20;
+        this.width = entries[0].target.clientWidth - 30;
       }
       this.updateD3();
     });
@@ -76,25 +82,21 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
         return;
     }
 
-    const firstDataValues = data[0]?.values;
-    if (!firstDataValues || firstDataValues.length === 0) {
-        console.warn('Values are undefined or empty.');
-        return;
-    }
+    const firstDataValues = data[0].values ? data[0].values : [{date: new Date(), price: 0}];
 
     const xScale = d3.scaleTime()
         .domain(d3.extent(firstDataValues, d => d.date) as [Date, Date])
         .range([0, this.width - this.margin]);
 
     const yScale = d3.scaleLinear()
-        .domain([0, d3.max(data.flatMap(country => country.values), d => d.price) as number])
+    .domain([0, d3.max(data.flatMap(country => country.values), d => d.price) ?? 100])
         .range([this.height - this.margin, 0]);
 
     
     const color = d3.scaleOrdinal(d3.schemeCategory10);
     
     /* Add SVG */
-    const svg = d3.select(this.chartContainer.nativeElement).append("svg")
+    const svg = d3.select('#chartTest').append("svg")
       .attr("width", (this.width + this.margin)+"px")
       .attr("height", (this.height + this.margin)+"px")
       .append('g')

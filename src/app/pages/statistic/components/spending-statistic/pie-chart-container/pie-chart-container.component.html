@@ -7,21 +7,25 @@
             <button
                 class="btn" 
                 [ngClass]="{'active': selectedRange === 'month'}" 
+                [disabled]="selectedRange === 'month'"
                 (click)="changeToCurrentMonthRange()">Cur month</button>
         
             <button
                 class="btn"  
                 [ngClass]="{'active': selectedRange === 'half-year'}" 
+                [disabled]="selectedRange === 'half-year'"
                 (click)="changeToHalfYearRange()">Half year</button>
 
             <button 
                 class="btn" 
                 [ngClass]="{'active': selectedRange === 'year'}" 
+                [disabled]="selectedRange === 'year'"
                 (click)="changeToYearRange()">Year</button>
 
             <button 
                 class="btn" 
                 [ngClass]="{'active': selectedRange === 'all'}" 
+                [disabled]="selectedRange === 'all'"
                 (click)="changeToAllTimeRange()">All</button>
         </div>
     </div>

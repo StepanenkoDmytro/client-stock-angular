@@ -35,7 +35,7 @@ const MATTERIAL_COMPONENTS = [
   ],
   imports: [...UI_COMPONENTS, ...MATTERIAL_COMPONENTS, CommonModule],
   templateUrl: './pie-chart-container.component.html',
-  styleUrl: './pie-chart-container.component.scss',
+  styleUrl: '../spending-statistic.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PieChartContainerComponent implements OnInit {
@@ -103,8 +103,9 @@ export class PieChartContainerComponent implements OnInit {
   
 
   private async setSpendings(start: moment.Moment, end: moment.Moment, spendings: Spending[]): Promise<void> {
-    const spendingsByRange = this.spendingsHelperService.getSpendingsByRange(start, end, spendings);
-    const categoryStatisticForPeriod = await this.spendingsHelperService.calculateCategoryStatistic(spendingsByRange);
+    const spendingsByRange: Spending[] = this.spendingsHelperService.getSpendingsByRange(start, end, spendings);
+    const categoryStatisticForPeriod: ICategoryStatistic[] = await this.spendingsHelperService.calculateCategoryStatistic(spendingsByRange);
+    
     this.pieChartData = this.spendingsHelperService.mapCategoryStatisticToChartData(categoryStatisticForPeriod);
     this.categoryStatistic.emit(categoryStatisticForPeriod);
     this.cdr.detectChanges();
