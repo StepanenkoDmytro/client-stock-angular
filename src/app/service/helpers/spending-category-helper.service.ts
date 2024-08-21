@@ -74,8 +74,6 @@ export class SpendingCategoryHelperService {
 
   public calculateLineChartByChildren(name: string, children: IMultiLineData[]): IMultiLineData {
     const groupValuesMap: Map<string, number> = new Map();
-
-
     children.forEach(child => {
       child.values.forEach(value => {
         const date = value.date.toDateString();
