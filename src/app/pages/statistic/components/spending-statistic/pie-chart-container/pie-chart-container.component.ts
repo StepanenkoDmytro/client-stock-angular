@@ -35,7 +35,7 @@ const MATTERIAL_COMPONENTS = [
   ],
   imports: [...UI_COMPONENTS, ...MATTERIAL_COMPONENTS, CommonModule],
   templateUrl: './pie-chart-container.component.html',
-  styleUrl: './pie-chart-container.component.scss',
+  styleUrl: '../spending-statistic.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PieChartContainerComponent implements OnInit {

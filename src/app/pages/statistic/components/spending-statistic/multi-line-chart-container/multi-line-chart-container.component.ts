@@ -23,7 +23,7 @@ const MATERIAL_COMPONENTS = [
   standalone: true,
   imports: [...UI_COMPONENTS, ...MATERIAL_COMPONENTS],
   templateUrl: './multi-line-chart-container.component.html',
-  styleUrl: './multi-line-chart-container.component.scss',
+  styleUrl: '../spending-statistic.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MultiLineChartContainerComponent implements OnInit {

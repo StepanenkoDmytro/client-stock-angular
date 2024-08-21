@@ -8,7 +8,9 @@
   }
 
   @if(chartType === 'multiline') {
-    <pgz-multi-line-chart-container [spendings]="filteredSpendings" (categoryStatistic)="getCategoryStatisticData($event)"></pgz-multi-line-chart-container>
+    <div class="chart-container--chart">
+      <pgz-multi-line-chart-container [spendings]="filteredSpendings" (categoryStatistic)="getCategoryStatisticData($event)"></pgz-multi-line-chart-container>
+    </div>
   }
 
   @for(data of categoryStatisticForPeriod; track data) {
