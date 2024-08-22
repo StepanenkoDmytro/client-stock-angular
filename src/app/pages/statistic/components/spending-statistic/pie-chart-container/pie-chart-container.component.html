@@ -1,8 +1,11 @@
 <section>
 
     <div class="range-controller">
-        <p>{{ startDateCtrl.value | dateFormat:'DD MMMM YY' }} - {{ endDateCtrl.value | dateFormat:'DD MMMM YY' }}</p>
-
+        <div>
+            <p>{{ startDateCtrl.value | dateFormat:'DD MMMM YY' }} - {{ endDateCtrl.value | dateFormat:'DD MMMM YY' }}</p>
+            <mat-checkbox class="example-margin">Compare</mat-checkbox>
+        </div>
+        
         <div class="range-controller--btns">
             <button
                 class="btn" 

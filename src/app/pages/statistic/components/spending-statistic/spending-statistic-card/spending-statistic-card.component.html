@@ -3,13 +3,14 @@
         <pgz-icon class="spending--icon" [name]="_data.category.icon"></pgz-icon>
         <p>{{_data.category.title}}</p>
     </div>
+
     <p>{{_data.value}}</p>
+
     <button class="btn" (click)="onToggleCategory()">
         @if(isVisible) {
             <mat-icon>{{'visibility'}}</mat-icon>
         } @else {
             <mat-icon>{{'visibility_off'}}</mat-icon>
         }
-        
     </button>
 </div>

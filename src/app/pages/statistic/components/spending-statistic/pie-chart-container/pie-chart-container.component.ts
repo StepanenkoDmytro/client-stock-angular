@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { switchMap } from 'rxjs';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SpendingsService } from '../../../../../service/spendings.service';
 import { SpendingCategoryHelperService } from '../../../../../service/helpers/spending-category-helper.service';
 import moment from 'moment';
@@ -24,6 +24,7 @@ const UI_COMPONENTS = [
 const MATTERIAL_COMPONENTS = [
   MatDatepickerModule,
   ReactiveFormsModule,
+  MatCheckboxModule
 ];
 
 @Component({
