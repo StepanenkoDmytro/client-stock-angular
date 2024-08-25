@@ -14,6 +14,7 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { Spending } from '../../../../spending/model/Spending';
 import { ICategoryStatistic } from '../../../model/SpendindStatistic';
 import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 const UI_COMPONENTS = [
   PieChartComponent,
@@ -22,6 +23,7 @@ const UI_COMPONENTS = [
 ];
 
 const MATTERIAL_COMPONENTS = [
+  MatFormFieldModule,
   MatDatepickerModule,
   ReactiveFormsModule,
   MatCheckboxModule
@@ -51,12 +53,18 @@ export class PieChartContainerComponent implements OnInit {
   public _spendings: Spending[] = [];
 
   public pieChartData: IDonutData;
+  public comparePieChartData: IDonutData;
   
   public formRangeDate: FormGroup;
   public startDateCtrl: FormControl<moment.Moment> = new FormControl(moment(new Date()).startOf('month'));
   public endDateCtrl: FormControl<moment.Moment> = new FormControl(moment(new Date()));
-  public selectedRange: 'month' | 'half-year' | 'year' | 'all' = 'month';
 
+  public formRangeCompareDate: FormGroup;
+  public compareStartDateCtrl: FormControl<moment.Moment> = new FormControl();
+  public compareEndDateCtrl: FormControl<moment.Moment> = new FormControl();
+
+  public selectedRange: 'month' | 'half-year' | 'year' | 'all' = 'month';
+  public isCompareEnabled: boolean = false;
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -71,8 +79,17 @@ export class PieChartContainerComponent implements OnInit {
       'endDate': this.endDateCtrl,
     });
 
+    this.formRangeCompareDate = this.formBuilder.group({
+      'startCompareDate': this.compareStartDateCtrl,
+      'endCompareDate': this.compareEndDateCtrl,
+    });
+
     this.formRangeDate.valueChanges.subscribe(({startDate, endDate}) => {
       this.setSpendings(startDate, endDate, this._spendings);
+    });
+
+    this.formRangeCompareDate.valueChanges.subscribe(({startCompareDate, endCompareDate}) => {
+      this.compareSpendings(startCompareDate, endCompareDate, this._spendings);
     });
   }
 
@@ -95,20 +112,38 @@ export class PieChartContainerComponent implements OnInit {
   }
   
   public changeToAllTimeRange(): void {
-    // debugger;
     this.selectedRange = 'all';
     this.startDateCtrl.setValue(moment('2000-01-01'));
     this.endDateCtrl.setValue(moment());
-  
+  }
+
+  public toogleCompare(): void {
+    this.isCompareEnabled = !this.isCompareEnabled;
+
+    const currStartDate = this.startDateCtrl.value.clone().toDate();
+    const monthAgoStart = moment(currStartDate).subtract(1, 'month').startOf('month').toDate();
+    const monthAgoEnd = moment(currStartDate).subtract(1, 'month').endOf('month').toDate();
+
+    this.formRangeCompareDate.setValue({
+      startCompareDate: moment(monthAgoStart),
+      endCompareDate: moment(monthAgoEnd),
+    });
   }
   
-
   private async setSpendings(start: moment.Moment, end: moment.Moment, spendings: Spending[]): Promise<void> {
     const spendingsByRange: Spending[] = this.spendingsHelperService.getSpendingsByRange(start, end, spendings);
     const categoryStatisticForPeriod: ICategoryStatistic[] = await this.spendingsHelperService.calculateCategoryStatistic(spendingsByRange);
     
     this.pieChartData = this.spendingsHelperService.mapCategoryStatisticToChartData(categoryStatisticForPeriod);
     this.categoryStatistic.emit(categoryStatisticForPeriod);
+    this.cdr.detectChanges();
+  }
+
+  private async compareSpendings(start: moment.Moment, end: moment.Moment, spendings: Spending[]): Promise<void> {
+    const spendingsByRange: Spending[] = this.spendingsHelperService.getSpendingsByRange(start, end, spendings);
+    const categoryStatisticForPeriod: ICategoryStatistic[] = await this.spendingsHelperService.calculateCategoryStatistic(spendingsByRange);
+
+    this.comparePieChartData = this.spendingsHelperService.mapCategoryStatisticToChartData(categoryStatisticForPeriod);
     this.cdr.detectChanges();
   }
 }

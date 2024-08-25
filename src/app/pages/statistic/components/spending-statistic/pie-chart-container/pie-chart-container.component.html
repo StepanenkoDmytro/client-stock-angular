@@ -2,8 +2,37 @@
 
     <div class="range-controller">
         <div>
-            <p>{{ startDateCtrl.value | dateFormat:'DD MMMM YY' }} - {{ endDateCtrl.value | dateFormat:'DD MMMM YY' }}</p>
-            <mat-checkbox class="example-margin">Compare</mat-checkbox>
+            <!-- <p>{{ startDateCtrl.value | dateFormat:'DD MMMM YY' }} - {{ endDateCtrl.value | dateFormat:'DD MMMM YY' }}</p> -->
+            <div (click)="toogleCompare()">
+                <mat-checkbox class="example-margin">Compare</mat-checkbox>
+            </div>
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-date-range-input
+                  [formGroup]="formRangeDate"
+                  [rangePicker]="campaignOnePicker"
+                  [comparisonStart]="formRangeDate.value.startDate"
+                  [comparisonEnd]="formRangeDate.value.endDate">
+                  <input matStartDate placeholder="Start date" formControlName="startDate">
+                  <input matEndDate placeholder="End date" formControlName="endDate">
+                </mat-date-range-input>
+                <mat-datepicker-toggle matIconSuffix [for]="campaignOnePicker"></mat-datepicker-toggle>
+                <mat-date-range-picker #campaignOnePicker></mat-date-range-picker>
+            </mat-form-field>
+
+            @if(isCompareEnabled) {
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-date-range-input
+                      [formGroup]="formRangeCompareDate"
+                      [rangePicker]="campaignOTwoPicker"
+                      [comparisonStart]="formRangeCompareDate.value.startDate"
+                      [comparisonEnd]="formRangeCompareDate.value.endDate">
+                      <input matStartDate placeholder="Start date" formControlName="startCompareDate">
+                      <input matEndDate placeholder="End date" formControlName="endCompareDate">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matIconSuffix [for]="campaignOnePicker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #campaignOTwoPicker></mat-date-range-picker>
+                </mat-form-field>
+            }
         </div>
         
         <div class="range-controller--btns">
@@ -33,5 +62,11 @@
         </div>
     </div>
 
-    <pgz-pie-chart [data]="pieChartData" [showNames]="false"></pgz-pie-chart>
+    <div>
+        <pgz-pie-chart [data]="pieChartData" [showNames]="false"></pgz-pie-chart>
+
+        @if(isCompareEnabled) {
+            <pgz-pie-chart [data]="comparePieChartData" [showNames]="false"></pgz-pie-chart>
+        }
+    </div>
 </section>
