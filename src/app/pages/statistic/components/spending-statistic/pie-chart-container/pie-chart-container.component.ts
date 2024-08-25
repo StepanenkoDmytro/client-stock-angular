@@ -63,7 +63,7 @@ export class PieChartContainerComponent implements OnInit {
   public compareStartDateCtrl: FormControl<moment.Moment> = new FormControl();
   public compareEndDateCtrl: FormControl<moment.Moment> = new FormControl();
 
-  public selectedRange: 'month' | 'half-year' | 'year' | 'all' = 'month';
+  public selectedRange: 'month' | '90' | '120' | '360' = 'month';
   public isCompareEnabled: boolean = false;
 
   constructor(
@@ -86,6 +86,10 @@ export class PieChartContainerComponent implements OnInit {
 
     this.formRangeDate.valueChanges.subscribe(({startDate, endDate}) => {
       this.setSpendings(startDate, endDate, this._spendings);
+
+      if(this.isCompareEnabled) {
+        this.calculateCompareRange();
+      }
     });
 
     this.formRangeCompareDate.valueChanges.subscribe(({startCompareDate, endCompareDate}) => {
@@ -99,34 +103,39 @@ export class PieChartContainerComponent implements OnInit {
     this.endDateCtrl.setValue(moment().endOf('month'));
   }
   
-  public changeToHalfYearRange(): void {
-    this.selectedRange = 'half-year';
-    this.startDateCtrl.setValue(moment().subtract(6, 'months').startOf('month'));
-    this.endDateCtrl.setValue(moment().endOf('month'));
+  public changeTo90DayRange(): void {
+    this.selectedRange = '90';
+    this.startDateCtrl.setValue(moment().subtract(90, 'days').startOf('day'));
+    this.endDateCtrl.setValue(moment().endOf('day'));
   }
   
-  public changeToYearRange(): void {
-    this.selectedRange = 'year';
-    this.startDateCtrl.setValue(moment().startOf('year'));
-    this.endDateCtrl.setValue(moment().endOf('year'));
+  public changeTo120DayRange(): void {
+    this.selectedRange = '120';
+    this.startDateCtrl.setValue(moment().subtract(120, 'days').startOf('day'));
+    this.endDateCtrl.setValue(moment().endOf('day'));
   }
   
-  public changeToAllTimeRange(): void {
-    this.selectedRange = 'all';
-    this.startDateCtrl.setValue(moment('2000-01-01'));
-    this.endDateCtrl.setValue(moment());
+  public changeTo360DayRange(): void {
+    this.selectedRange = '360';
+    this.startDateCtrl.setValue(moment().subtract(360, 'days').startOf('day'));
+    this.endDateCtrl.setValue(moment().endOf('day'));
   }
 
   public toogleCompare(): void {
     this.isCompareEnabled = !this.isCompareEnabled;
-
-    const currStartDate = this.startDateCtrl.value.clone().toDate();
-    const monthAgoStart = moment(currStartDate).subtract(1, 'month').startOf('month').toDate();
-    const monthAgoEnd = moment(currStartDate).subtract(1, 'month').endOf('month').toDate();
-
+  
+    this.calculateCompareRange();
+  }
+  
+  private calculateCompareRange(): void {
+    const daysDifference = this.endDateCtrl.value.diff(this.startDateCtrl.value, 'days');
+  
+    const monthAgoStart = this.startDateCtrl.value.clone().subtract(daysDifference, 'days').startOf('month');
+    const monthAgoEnd = monthAgoStart.clone().add(daysDifference, 'days').endOf('month');
+  
     this.formRangeCompareDate.setValue({
-      startCompareDate: moment(monthAgoStart),
-      endCompareDate: moment(monthAgoEnd),
+      startCompareDate: monthAgoStart,
+      endCompareDate: monthAgoEnd,
     });
   }
   

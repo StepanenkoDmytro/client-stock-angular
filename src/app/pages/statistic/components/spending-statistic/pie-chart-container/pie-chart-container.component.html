@@ -44,25 +44,25 @@
         
             <button
                 class="btn"  
-                [ngClass]="{'active': selectedRange === 'half-year'}" 
-                [disabled]="selectedRange === 'half-year'"
-                (click)="changeToHalfYearRange()">Half year</button>
+                [ngClass]="{'active': selectedRange === '90'}" 
+                [disabled]="selectedRange === '90'"
+                (click)="changeTo90DayRange()">90 days</button>
 
             <button 
                 class="btn" 
-                [ngClass]="{'active': selectedRange === 'year'}" 
-                [disabled]="selectedRange === 'year'"
-                (click)="changeToYearRange()">Year</button>
+                [ngClass]="{'active': selectedRange === '120'}" 
+                [disabled]="selectedRange === '120'"
+                (click)="changeTo120DayRange()">120 days</button>
 
             <button 
                 class="btn" 
-                [ngClass]="{'active': selectedRange === 'all'}" 
-                [disabled]="selectedRange === 'all'"
-                (click)="changeToAllTimeRange()">All</button>
+                [ngClass]="{'active': selectedRange === '360'}" 
+                [disabled]="selectedRange === '360'"
+                (click)="changeTo360DayRange()">360 days</button>
         </div>
     </div>
 
-    <div>
+    <div class="d-flex">
         <pgz-pie-chart [data]="pieChartData" [showNames]="false"></pgz-pie-chart>
 
         @if(isCompareEnabled) {
