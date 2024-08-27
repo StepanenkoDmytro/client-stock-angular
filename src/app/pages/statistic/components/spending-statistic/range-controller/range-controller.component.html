@@ -1,0 +1,60 @@
+<div class="range-controller">
+    <div>
+        <div (click)="toogleCompare()">
+            <mat-checkbox class="example-margin">Compare</mat-checkbox>
+        </div>
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-date-range-input
+              [formGroup]="formRange"
+              [rangePicker]="campaignOnePicker"
+              [comparisonStart]="formRange.value.startDate"
+              [comparisonEnd]="formRange.value.endDate">
+              <input matStartDate placeholder="Start date" formControlName="startDate">
+              <input matEndDate placeholder="End date" formControlName="endDate">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matIconSuffix [for]="campaignOnePicker"></mat-datepicker-toggle>
+            <mat-date-range-picker #campaignOnePicker></mat-date-range-picker>
+        </mat-form-field>
+
+        @if(isCompareEnabled) {
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-date-range-input
+                  [formGroup]="formRange"
+                  [rangePicker]="campaignOTwoPicker"
+                  [comparisonStart]="formRange.value.compareStartDate"
+                  [comparisonEnd]="formRange.value.compareEndDate">
+                  <input matStartDate placeholder="Start date" formControlName="compareStartDate">
+                  <input matEndDate placeholder="End date" formControlName="compareEndDate">
+                </mat-date-range-input>
+                <mat-datepicker-toggle matIconSuffix [for]="campaignOTwoPicker"></mat-datepicker-toggle>
+                <mat-date-range-picker #campaignOTwoPicker></mat-date-range-picker>
+            </mat-form-field>
+        }
+    </div>
+    
+    <div class="range-controller--btns">
+        <button
+            class="btn" 
+            [ngClass]="{'active': selectedRange === 'month'}" 
+            [disabled]="selectedRange === 'month'"
+            (click)="changeToCurrentMonthRange()">Cur month</button>
+    
+        <button
+            class="btn"  
+            [ngClass]="{'active': selectedRange === '90'}" 
+            [disabled]="selectedRange === '90'"
+            (click)="changeTo90DayRange()">90 days</button>
+
+        <button 
+            class="btn" 
+            [ngClass]="{'active': selectedRange === '120'}" 
+            [disabled]="selectedRange === '120'"
+            (click)="changeTo120DayRange()">120 days</button>
+
+        <button 
+            class="btn" 
+            [ngClass]="{'active': selectedRange === '360'}" 
+            [disabled]="selectedRange === '360'"
+            (click)="changeTo360DayRange()">360 days</button>
+    </div>
+</div>

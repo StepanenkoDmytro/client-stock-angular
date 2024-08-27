@@ -45,7 +45,7 @@ export class MultiLineChartContainerComponent implements OnInit {
   public _spendings: Spending[] = [];
   public categoryStatisticForPeriod: ICategoryStatistic[];
 
-  public multiLineChartData: IMultiLineData;
+  public multiLineChartData: IMultiLineData[];
   public multiLineChartDataByChildren: IMultiLineData[];
 
   constructor(
@@ -83,9 +83,7 @@ export class MultiLineChartContainerComponent implements OnInit {
     this.categoryStatisticForPeriod = await this.spendingsHelperService.calculateCategoryStatistic(spendingsByRange);
     
     this.multiLineChartDataByChildren = this.spendingsHelperService.mapCategoryStatisticToLineChartData(spendings, this.categoryStatisticForPeriod);
-    const currentCategoryName = this.categoryStatisticForPeriod[0].category.title;
-
-    this.multiLineChartData = this.spendingsHelperService.calculateLineChartByChildren(currentCategoryName, this.multiLineChartDataByChildren);
+    this.multiLineChartData = [this.spendingsHelperService.calculateLineChartByChildren('currentData', this.multiLineChartDataByChildren)];
 
     this.categoryStatistic.emit(this.categoryStatisticForPeriod);
     this.cdr.detectChanges();

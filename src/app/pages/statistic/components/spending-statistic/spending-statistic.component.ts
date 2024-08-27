@@ -25,6 +25,7 @@ import { PieChartContainerComponent } from './pie-chart-container/pie-chart-cont
 import { SpendingStatisticCardComponent } from './spending-statistic-card/spending-statistic-card.component';
 import { Category } from '../../../../domain/category.domain';
 import { MultiLineChartContainerComponent } from './multi-line-chart-container/multi-line-chart-container.component';
+import { RangeControllerComponent } from './range-controller/range-controller.component';
 
 
 const UI_COMPONENTS = [
@@ -35,7 +36,8 @@ const UI_COMPONENTS = [
   MultiLineComponent,
   MultiLineChartContainerComponent,
   PieChartContainerComponent,
-  SpendingStatisticCardComponent
+  SpendingStatisticCardComponent,
+  RangeControllerComponent
 ];
 
 const MATERIAL_MODULES = [
@@ -97,6 +99,16 @@ export class SpendingStatisticComponent implements OnInit {
     this.disabledCategories = new Set();
     this.updateFilteredSpendings();
     this.cdr.detectChanges();
+  }
+
+  public onRangeChange(range: {
+    startDate: moment.Moment,
+    endDate: moment.Moment,
+    isCompareEnabled: boolean,
+    compareStartDate?: moment.Moment,
+    compareEndDate?: moment.Moment
+  }): void {
+    
   }
 
   public isVisibleCard(category: Category): boolean {

@@ -41,6 +41,8 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
   private resizechartContainer: ResizeObserver | null = null;
   private _data: BehaviorSubject<IMultiLineData[]> = new BehaviorSubject(EmptyMultiLineData);
 
+  public multiLineID: string = 'multi-line';
+
   width = 300;
   height = 300;
   margin = 50;
@@ -50,6 +52,10 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
   ) { }
 
   public ngOnInit(): void {
+    const randomNum = Math.floor(Math.random() * 100);
+
+    this.multiLineID = `${this.multiLineID}${randomNum}`;
+
     this._data.subscribe(data => {
       if(data && data.length > 0) {
         this.updateD3();
@@ -70,7 +76,7 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
 
   private updateD3(): void {
 
-    d3.select(`#chartTest`).selectChildren('*').remove();
+    d3.select(`#${this.multiLineID}`).select("svg").remove();
     this.createChart();
   }
 
@@ -85,18 +91,17 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
     const firstDataValues = data[0].values ? data[0].values : [{date: new Date(), price: 0}];
 
     const xScale = d3.scaleTime()
-        .domain(d3.extent(firstDataValues, d => d.date) as [Date, Date])
-        .range([0, this.width - this.margin]);
+      .domain(d3.extent(firstDataValues, d => d.date) as [Date, Date])
+      .range([0, this.width - this.margin]);
 
     const yScale = d3.scaleLinear()
-    .domain([0, d3.max(data.flatMap(country => country.values), d => d.price) ?? 100])
-        .range([this.height - this.margin, 0]);
+      .domain([0, d3.max(data.flatMap(country => country.values), d => d.price) ?? 100])
+      .range([this.height - this.margin, 0]);
 
-    
     const color = d3.scaleOrdinal(d3.schemeCategory10);
     
     /* Add SVG */
-    const svg = d3.select('#chartTest').append("svg")
+    const svg = d3.select(`#${this.multiLineID}`).append("svg")
       .attr("width", (this.width + this.margin)+"px")
       .attr("height", (this.height + this.margin)+"px")
       .append('g')

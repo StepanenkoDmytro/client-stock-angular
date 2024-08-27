@@ -23,20 +23,13 @@ const UI_COMPONENTS = [
 ];
 
 const MATTERIAL_COMPONENTS = [
-  MatFormFieldModule,
-  MatDatepickerModule,
-  ReactiveFormsModule,
-  MatCheckboxModule
+
 ];
 
 @Component({
   selector: 'pgz-pie-chart-container',
   standalone: true,
-   providers: [
-    { provide: MAT_DATE_LOCALE, useValue: 'uk-UA' },
-    provideMomentDateAdapter(),
-  ],
-  imports: [...UI_COMPONENTS, ...MATTERIAL_COMPONENTS, CommonModule],
+  imports: [...UI_COMPONENTS, CommonModule],
   templateUrl: './pie-chart-container.component.html',
   styleUrl: '../spending-statistic.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -45,7 +38,7 @@ export class PieChartContainerComponent implements OnInit {
   @Input()
   public set spendings(value: Spending[]) {
     this._spendings = value;
-    this.setSpendings(this.startDateCtrl.value, this.endDateCtrl.value, value);
+    // this.setSpendings(this.startDateCtrl.value, this.endDateCtrl.value, value);
   }
   @Output()
   public categoryStatistic = new EventEmitter<ICategoryStatistic[]>();
@@ -55,89 +48,39 @@ export class PieChartContainerComponent implements OnInit {
   public pieChartData: IDonutData;
   public comparePieChartData: IDonutData;
   
-  public formRangeDate: FormGroup;
-  public startDateCtrl: FormControl<moment.Moment> = new FormControl(moment(new Date()).startOf('month'));
-  public endDateCtrl: FormControl<moment.Moment> = new FormControl(moment(new Date()));
 
-  public formRangeCompareDate: FormGroup;
-  public compareStartDateCtrl: FormControl<moment.Moment> = new FormControl();
-  public compareEndDateCtrl: FormControl<moment.Moment> = new FormControl();
-
-  public selectedRange: 'month' | '90' | '120' | '360' = 'month';
   public isCompareEnabled: boolean = false;
 
   constructor(
-    private readonly formBuilder: FormBuilder,
+    
     private spendingsService: SpendingsService,
     private spendingsHelperService: SpendingCategoryHelperService,
     private cdr: ChangeDetectorRef
   ) { }
 
   public ngOnInit(): void {
-    this.formRangeDate = this.formBuilder.group({
-      'startDate': this.startDateCtrl,
-      'endDate': this.endDateCtrl,
-    });
-
-    this.formRangeCompareDate = this.formBuilder.group({
-      'startCompareDate': this.compareStartDateCtrl,
-      'endCompareDate': this.compareEndDateCtrl,
-    });
-
-    this.formRangeDate.valueChanges.subscribe(({startDate, endDate}) => {
-      this.setSpendings(startDate, endDate, this._spendings);
-
-      if(this.isCompareEnabled) {
-        this.calculateCompareRange();
-      }
-    });
-
-    this.formRangeCompareDate.valueChanges.subscribe(({startCompareDate, endCompareDate}) => {
-      this.compareSpendings(startCompareDate, endCompareDate, this._spendings);
-    });
-  }
-
-  public changeToCurrentMonthRange(): void {
-    this.selectedRange = 'month';
-    this.startDateCtrl.setValue(moment().startOf('month'));
-    this.endDateCtrl.setValue(moment().endOf('month'));
+    
   }
   
-  public changeTo90DayRange(): void {
-    this.selectedRange = '90';
-    this.startDateCtrl.setValue(moment().subtract(90, 'days').startOf('day'));
-    this.endDateCtrl.setValue(moment().endOf('day'));
-  }
-  
-  public changeTo120DayRange(): void {
-    this.selectedRange = '120';
-    this.startDateCtrl.setValue(moment().subtract(120, 'days').startOf('day'));
-    this.endDateCtrl.setValue(moment().endOf('day'));
-  }
-  
-  public changeTo360DayRange(): void {
-    this.selectedRange = '360';
-    this.startDateCtrl.setValue(moment().subtract(360, 'days').startOf('day'));
-    this.endDateCtrl.setValue(moment().endOf('day'));
-  }
-
   public toogleCompare(): void {
     this.isCompareEnabled = !this.isCompareEnabled;
   
-    this.calculateCompareRange();
+    if(this.isCompareEnabled) {
+      // this.calculateCompareRange();
+    }
   }
   
-  private calculateCompareRange(): void {
-    const daysDifference = this.endDateCtrl.value.diff(this.startDateCtrl.value, 'days');
+  // private calculateCompareRange(): void {
+  //   const daysDifference = this.endDateCtrl.value.diff(this.startDateCtrl.value, 'days');
   
-    const monthAgoStart = this.startDateCtrl.value.clone().subtract(daysDifference, 'days').startOf('month');
-    const monthAgoEnd = monthAgoStart.clone().add(daysDifference, 'days').endOf('month');
+  //   const monthAgoStart = this.startDateCtrl.value.clone().subtract(daysDifference, 'days').startOf('month');
+  //   const monthAgoEnd = monthAgoStart.clone().add(daysDifference, 'days').endOf('month');
   
-    this.formRangeCompareDate.setValue({
-      startCompareDate: monthAgoStart,
-      endCompareDate: monthAgoEnd,
-    });
-  }
+  //   this.formRangeCompareDate.setValue({
+  //     startCompareDate: monthAgoStart,
+  //     endCompareDate: monthAgoEnd,
+  //   });
+  // }
   
   private async setSpendings(start: moment.Moment, end: moment.Moment, spendings: Spending[]): Promise<void> {
     const spendingsByRange: Spending[] = this.spendingsHelperService.getSpendingsByRange(start, end, spendings);

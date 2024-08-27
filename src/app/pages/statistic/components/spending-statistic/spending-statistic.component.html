@@ -3,6 +3,7 @@
 
   @if(chartType === 'pie') {
     <div class="chart-container--chart">
+      <pgz-range-controller (rangeChange)="onRangeChange($event)"></pgz-range-controller>
       <pgz-pie-chart-container [spendings]="filteredSpendings" (categoryStatistic)="getCategoryStatisticData($event)"></pgz-pie-chart-container>
     </div>
   }
