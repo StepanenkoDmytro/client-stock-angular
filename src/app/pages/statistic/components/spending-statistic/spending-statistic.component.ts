@@ -25,6 +25,7 @@ import { PieChartContainerComponent } from './pie-chart-container/pie-chart-cont
 import { SpendingStatisticCardComponent } from './spending-statistic-card/spending-statistic-card.component';
 import { Category } from '../../../../domain/category.domain';
 import { MultiLineChartContainerComponent } from './multi-line-chart-container/multi-line-chart-container.component';
+import { RangeControllerComponent } from './range-controller/range-controller.component';
 
 
 const UI_COMPONENTS = [
@@ -35,7 +36,8 @@ const UI_COMPONENTS = [
   MultiLineComponent,
   MultiLineChartContainerComponent,
   PieChartContainerComponent,
-  SpendingStatisticCardComponent
+  SpendingStatisticCardComponent,
+  RangeControllerComponent
 ];
 
 const MATERIAL_MODULES = [
@@ -59,16 +61,20 @@ const MATERIAL_MODULES = [
 export class SpendingStatisticComponent implements OnInit {
 
   public spendings: Spending[] = [];
-  public categoryStatisticForPeriod: ICategoryStatistic[];
-  // public visibleCategoryStatisticForPeriod: ICategoryStatistic[];
+  public categoryStatisticForPeriod: ICategoryStatistic[] = [];
   public chartType: 'pie' | 'multiline' = 'pie';
   public disabledCategories: Set<string> = new Set<string>();
   public filteredSpendings: Spending[] = [];
+  public isCompareEnabled: boolean = false;
+  public compareCategoryStatisticForChart: ICategoryStatistic[] = [];
+  public spendingsForMultiLineChart: Spending[] = [];
+  public compareSpendingsForMultiLineChart: Spending[] = []
 
   constructor(
     private router: Router,
     private spendingsService: SpendingsService,
     private statisticStateHelper: StatisticStateService,
+    private spendingsHelperService: SpendingCategoryHelperService,
     private cdr: ChangeDetectorRef
   ) { }
 
@@ -79,7 +85,7 @@ export class SpendingStatisticComponent implements OnInit {
       
       this.spendings = spendings;
       this.filteredSpendings = spendings;
-      
+
       this.cdr.detectChanges();
     });
   }
@@ -96,6 +102,34 @@ export class SpendingStatisticComponent implements OnInit {
     this.chartType = this.chartType === 'pie' ? 'multiline' : 'pie';
     this.disabledCategories = new Set();
     this.updateFilteredSpendings();
+    this.cdr.detectChanges();
+  }
+
+  public async onRangeChange(range: {
+    startDate: moment.Moment,
+    endDate: moment.Moment,
+    isCompareEnabled: boolean,
+    compareStartDate?: moment.Moment,
+    compareEndDate?: moment.Moment
+  }): Promise<void> {
+    const spendingsByRange: Spending[] = this.spendingsHelperService.getSpendingsByRange(range.startDate, range.endDate, this.filteredSpendings);
+    this.categoryStatisticForPeriod = await this.spendingsHelperService.calculateCategoryStatistic(spendingsByRange);
+    
+    this.isCompareEnabled = range.isCompareEnabled;
+
+    // if(range.isCompareEnabled) {
+      const compareSpendingsByRange: Spending[] = this.spendingsHelperService.getSpendingsByRange(range.compareStartDate, range.compareEndDate, this.filteredSpendings);
+      // if(this.chartType === 'pie') {
+        this.compareCategoryStatisticForChart = await this.spendingsHelperService.calculateCategoryStatistic(compareSpendingsByRange);
+      // }
+      
+      // if(this.chartType === 'multiline') {
+        // console.log(compareSpendingsByRange);
+        this.spendingsForMultiLineChart = spendingsByRange;
+        this.compareSpendingsForMultiLineChart = this.spendingsHelperService.getSpendingsByRange(range.compareStartDate, range.compareEndDate, compareSpendingsByRange);
+      // }
+    // }
+    console.log('here')
     this.cdr.detectChanges();
   }
 

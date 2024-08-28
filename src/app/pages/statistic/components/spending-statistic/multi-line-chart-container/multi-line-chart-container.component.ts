@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from "@angular/core";
+import { Component, ChangeDetectionStrategy, OnInit, Input, Output, EventEmitter, ChangeDetectorRef, OnChanges, SimpleChanges, ViewChild, AfterViewInit } from "@angular/core";
 import { MultiLineComponent, IMultiLineData } from "../../../../../core/UI/components/charts/multi-line/multi-line.component";
 import { SpendingCategoryHelperService } from "../../../../../service/helpers/spending-category-helper.service";
 import { Spending } from "../../../../spending/model/Spending";
@@ -26,68 +26,62 @@ const MATERIAL_COMPONENTS = [
   styleUrl: '../spending-statistic.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MultiLineChartContainerComponent implements OnInit {
+export class MultiLineChartContainerComponent {
 
   @Input()
-  public set spendings(values: Spending[]) {
-    this._spendings = values;
-    this.setSpendings(this.startDateCtrl.value, this.endDateCtrl.value, values);
-  }
-  @Output()
-  public categoryStatistic: EventEmitter<ICategoryStatistic[]> = new EventEmitter();
+  public spendings: Spending[] = [];
+  @Input()
+  public activeCategories: ICategoryStatistic[] = [];
+  @Input()
+  public isCompareEnabled: boolean = false;
+  @Input()
+  public compareSpendings: Spending[] = [];
 
-  public formRangeDate: FormGroup;
-  public startDateCtrl: FormControl<moment.Moment> = new FormControl(moment().startOf('year'));
-  public endDateCtrl: FormControl<moment.Moment> = new FormControl(moment().endOf('year'));
-  
-  public selectedRange: 'year' | 'all' = 'year';
-
-  public _spendings: Spending[] = [];
-  public categoryStatisticForPeriod: ICategoryStatistic[];
-
-  public multiLineChartData: IMultiLineData;
+  public multiLineChartData: IMultiLineData[];
   public multiLineChartDataByChildren: IMultiLineData[];
 
   constructor(
-    private readonly formBuilder: FormBuilder,
     private spendingsHelperService: SpendingCategoryHelperService,
     private cdr: ChangeDetectorRef
   ) { }
 
-  public ngOnInit(): void {
-    this.formRangeDate = this.formBuilder.group({
-      'startDate': this.startDateCtrl,
-      'endDate': this.endDateCtrl,
-    });
-
-    this.formRangeDate.valueChanges.subscribe(({startDate, endDate}) => {
-      this.setSpendings(startDate, endDate, this._spendings);
-    });
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['spendings'] || changes['activeCategories'] || changes['isCompareEnabled'] || changes['compareSpendings']) {
+      this.updateChartData();
+    }
   }
 
-  public changeToYearRange(): void {
-    this.selectedRange = 'year';
-    this.startDateCtrl.setValue(moment().startOf('year'));
-    this.endDateCtrl.setValue(moment().endOf('year'));
-  }
-  
-  public changeToAllTimeRange(): void {
-    this.selectedRange = 'all';
-    this.startDateCtrl.setValue(moment('2000-01-01'));
-    this.endDateCtrl.setValue(moment());
-  
-  }
-
-  private async setSpendings(start: moment.Moment, end: moment.Moment, spendings: Spending[]): Promise<void> {
-    const spendingsByRange: Spending[] = this.spendingsHelperService.getSpendingsByRange(start, end, spendings);
-    this.categoryStatisticForPeriod = await this.spendingsHelperService.calculateCategoryStatistic(spendingsByRange);
+  private updateChartData(): void {
     
-    this.multiLineChartDataByChildren = this.spendingsHelperService.mapCategoryStatisticToLineChartData(spendings, this.categoryStatisticForPeriod);
-    const currentCategoryName = this.categoryStatisticForPeriod[0].category.title;
+    // Формування даних для основного графіка
+    const currentData = this.spendingsHelperService.mapCategoryStatisticToLineChartData(this.spendings, this.activeCategories);
+    this.multiLineChartData = [this.spendingsHelperService.calculateLineChartByChildren('currentData', currentData)];
 
-    this.multiLineChartData = this.spendingsHelperService.calculateLineChartByChildren(currentCategoryName, this.multiLineChartDataByChildren);
+    // Якщо порівняння увімкнене, додаємо порівняльні дані
+    if (this.isCompareEnabled && this.compareSpendings.length) {
+      
+      const compareData = this.spendingsHelperService.mapCategoryStatisticToLineChartData(this.compareSpendings, this.activeCategories);
+      const compareLineData = this.spendingsHelperService.calculateLineChartByChildren('compareData', compareData);
+      this.multiLineChartData.push(compareLineData);
+    }
 
-    this.categoryStatistic.emit(this.categoryStatisticForPeriod);
+    // if(!this.isCompareEnabled) {
+    //   this.multiLineChartData.filter(data => data.name === 'compareData');
+    // }
+    // console.log(this.multiLineChartData);
     this.cdr.detectChanges();
   }
+
+
+  // private setData(): void {
+  //   this.multiLineChartDataByChildren = this.spendingsHelperService.mapCategoryStatisticToLineChartData(this.spendings, this.activeCategories);
+  //   this.multiLineChartData = [this.spendingsHelperService.calculateLineChartByChildren('currentData', this.multiLineChartDataByChildren)];
+  // }
+
+  // private setCompareData(): void {
+  //   this.multiLineChartDataByChildren = this.spendingsHelperService.mapCategoryStatisticToLineChartData(this.compareSpendings, this.activeCategories);
+  //   const compareData = this.spendingsHelperService.calculateLineChartByChildren('compareData', this.multiLineChartDataByChildren);
+  //   this.multiLineChartData.push(compareData);
+  // }
+  
 }

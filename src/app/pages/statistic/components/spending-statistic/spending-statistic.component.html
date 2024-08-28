@@ -1,17 +1,20 @@
 <main class="scroll-list">
   <button class="chart-container--btn" (click)="toggleChart()">{{chartType}}</button>
+  <div class="chart-container--chart">
+    <pgz-range-controller (rangeChange)="onRangeChange($event)"></pgz-range-controller>
+    @if(chartType === 'pie') { 
+      <pgz-pie-chart-container [categoryData]="categoryStatisticForPeriod" [isCompareEnabled]="isCompareEnabled" [compareCategoryData]="compareCategoryStatisticForChart"></pgz-pie-chart-container>
+    }
 
-  @if(chartType === 'pie') {
-    <div class="chart-container--chart">
-      <pgz-pie-chart-container [spendings]="filteredSpendings" (categoryStatistic)="getCategoryStatisticData($event)"></pgz-pie-chart-container>
-    </div>
-  }
-
-  @if(chartType === 'multiline') {
-    <div class="chart-container--chart">
-      <pgz-multi-line-chart-container [spendings]="filteredSpendings" (categoryStatistic)="getCategoryStatisticData($event)"></pgz-multi-line-chart-container>
-    </div>
-  }
+    @if(chartType === 'multiline') {
+      <pgz-multi-line-chart-container 
+        [activeCategories]="categoryStatisticForPeriod" 
+        [isCompareEnabled]="isCompareEnabled"
+        [spendings]="spendingsForMultiLineChart"
+        [compareSpendings]="compareSpendingsForMultiLineChart"
+      ></pgz-multi-line-chart-container>
+    }
+  </div>
 
   @for(data of categoryStatisticForPeriod; track data) {
     <pgz-spending-statistic-card [data]="data" [isVisible]="isVisibleCard(data.category)" (clickCard)="onCardClick($event)" (toggleCategory)="toggleCategory($event)">

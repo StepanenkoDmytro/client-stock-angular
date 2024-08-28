@@ -3,21 +3,6 @@
 }
 
 
-.range-controller {
-  display: flex;
-  flex-direction: column;
-}
-
-.range-controller p {
-  text-align: center;
-  font-size: 1.3rem;
-}
-
-.range-controller button {
-  padding: 6px;
-  height: max-content;
-}
-
 .chart-container {
   &--btn {
 
