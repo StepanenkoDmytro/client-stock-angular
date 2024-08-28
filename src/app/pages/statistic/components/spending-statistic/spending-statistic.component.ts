@@ -62,15 +62,17 @@ export class SpendingStatisticComponent implements OnInit {
 
   public spendings: Spending[] = [];
   public categoryStatisticForPeriod: ICategoryStatistic[];
-  // public visibleCategoryStatisticForPeriod: ICategoryStatistic[];
   public chartType: 'pie' | 'multiline' = 'pie';
   public disabledCategories: Set<string> = new Set<string>();
   public filteredSpendings: Spending[] = [];
+  public isCompareEnabled: boolean = false;
+  public compareCategoryStatisticForChart: ICategoryStatistic[] = [];
 
   constructor(
     private router: Router,
     private spendingsService: SpendingsService,
     private statisticStateHelper: StatisticStateService,
+    private spendingsHelperService: SpendingCategoryHelperService,
     private cdr: ChangeDetectorRef
   ) { }
 
@@ -101,14 +103,24 @@ export class SpendingStatisticComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  public onRangeChange(range: {
+  public async onRangeChange(range: {
     startDate: moment.Moment,
     endDate: moment.Moment,
     isCompareEnabled: boolean,
     compareStartDate?: moment.Moment,
     compareEndDate?: moment.Moment
-  }): void {
+  }): Promise<void> {
+    const spendingsByRange: Spending[] = this.spendingsHelperService.getSpendingsByRange(range.startDate, range.endDate, this.filteredSpendings);
+    this.categoryStatisticForPeriod = await this.spendingsHelperService.calculateCategoryStatistic(spendingsByRange);
     
+    this.isCompareEnabled = range.isCompareEnabled;
+
+    if(range.isCompareEnabled) {
+      const compareSpendingsByRange: Spending[] = this.spendingsHelperService.getSpendingsByRange(range.compareStartDate, range.compareEndDate, this.filteredSpendings);
+      this.compareCategoryStatisticForChart = await this.spendingsHelperService.calculateCategoryStatistic(compareSpendingsByRange);
+    }
+
+    this.cdr.detectChanges();
   }
 
   public isVisibleCard(category: Category): boolean {

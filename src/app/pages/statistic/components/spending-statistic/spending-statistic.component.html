@@ -4,13 +4,14 @@
   @if(chartType === 'pie') {
     <div class="chart-container--chart">
       <pgz-range-controller (rangeChange)="onRangeChange($event)"></pgz-range-controller>
-      <pgz-pie-chart-container [spendings]="filteredSpendings" (categoryStatistic)="getCategoryStatisticData($event)"></pgz-pie-chart-container>
+      <pgz-pie-chart-container [categoryData]="categoryStatisticForPeriod" [isCompareEnabled]="isCompareEnabled" [compareCategoryData]="compareCategoryStatisticForChart"></pgz-pie-chart-container>
     </div>
   }
 
   @if(chartType === 'multiline') {
     <div class="chart-container--chart">
-      <pgz-multi-line-chart-container [spendings]="filteredSpendings" (categoryStatistic)="getCategoryStatisticData($event)"></pgz-multi-line-chart-container>
+      <pgz-range-controller (rangeChange)="onRangeChange($event)"></pgz-range-controller>
+      <pgz-multi-line-chart-container [spendings]="filteredSpendings"></pgz-multi-line-chart-container>
     </div>
   }
 

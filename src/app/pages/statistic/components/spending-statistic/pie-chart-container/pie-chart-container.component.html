@@ -1,12 +1,7 @@
-<section>
+<div class="d-flex">
+    <pgz-pie-chart [data]="pieChartData" [showNames]="false"></pgz-pie-chart>
 
-    
-
-    <div class="d-flex">
-        <pgz-pie-chart [data]="pieChartData" [showNames]="false"></pgz-pie-chart>
-
-        @if(isCompareEnabled) {
-            <pgz-pie-chart [data]="comparePieChartData" [showNames]="false"></pgz-pie-chart>
-        }
-    </div>
-</section>
+    @if(isCompareEnabled) {
+        <pgz-pie-chart [data]="comparePieChartData" [showNames]="false"></pgz-pie-chart>
+    }
+</div>
