@@ -41,10 +41,10 @@ export class RangeControllerComponent implements OnInit {
   public startDateCtrl: FormControl<moment.Moment> = new FormControl(moment(new Date()).startOf('month'));
   public endDateCtrl: FormControl<moment.Moment> = new FormControl(moment(new Date()));
 
-  public compareStartDateCtrl: FormControl<moment.Moment> = new FormControl();
-  public compareEndDateCtrl: FormControl<moment.Moment> = new FormControl();
+  public compareStartDateCtrl: FormControl<moment.Moment> = new FormControl(moment());
+  public compareEndDateCtrl: FormControl<moment.Moment> = new FormControl(moment());
 
-  public selectedRange: FormControl<'month' | '90' | '120' | '360'> = new FormControl('month');
+  public selectedRange: FormControl<'month' | '90' | '120' | '365'> = new FormControl('month');
   public isCompareEnabled: FormControl<boolean> = new FormControl(false);
 
   constructor(
@@ -62,39 +62,74 @@ export class RangeControllerComponent implements OnInit {
     });
     
 
-    this.formRange.valueChanges.subscribe(() => {
+    this.formRange.valueChanges.subscribe((range) => {
       this.emitRangeChange();
+
     });
 
     this.emitRangeChange();
   }
 
   public toogleCompare(): void {
+    // debugger;
     this.isCompareEnabled.setValue(!this.isCompareEnabled.value);
+
+    this.setCompareRange();
+    
+  }
+
+  private setCompareRange(): void {
+    const currStartDate: moment.Moment = this.startDateCtrl.value.clone();
+    const compareStartDate: moment.Moment = currStartDate.clone().subtract(1, 'days');
+
+    let compareEndDate: moment.Moment = moment();
+
+    if(this.selectedRange.value === 'month') {
+      compareEndDate = compareStartDate.clone().startOf('month')
+    } else {
+      const countDays = parseInt(this.selectedRange.value);
+      compareEndDate = compareStartDate.clone().subtract(countDays, 'days');
+    }
+
+    this.compareStartDateCtrl.setValue(compareEndDate);
+    this.compareEndDateCtrl.setValue(compareStartDate);
   }
 
   public changeToCurrentMonthRange(): void {
     this.selectedRange.setValue('month');
-    this.startDateCtrl.setValue(moment().startOf('month'));
-    this.endDateCtrl.setValue(moment().endOf('month'));
+    this.startDateCtrl.setValue(moment(new Date()).startOf('month'));
+    this.endDateCtrl.setValue(moment(new Date()));
+    this.setCompareRange();
   }
   
   public changeTo90DayRange(): void {
     this.selectedRange.setValue('90');
-    this.startDateCtrl.setValue(moment().subtract(90, 'days').startOf('day'));
-    this.endDateCtrl.setValue(moment().endOf('day'));
+    const currDate = moment(new Date());
+    const countDays = parseInt(this.selectedRange.value);
+
+    this.endDateCtrl.setValue(moment(new Date()));
+    this.startDateCtrl.setValue(currDate.subtract(countDays, 'days'));
+    this.setCompareRange();
   }
   
   public changeTo120DayRange(): void {
     this.selectedRange.setValue('120');
+    const currDate = moment(new Date());
+    const countDays = parseInt(this.selectedRange.value);
+
     this.startDateCtrl.setValue(moment().subtract(120, 'days').startOf('day'));
     this.endDateCtrl.setValue(moment().endOf('day'));
+    this.setCompareRange();
   }
   
   public changeTo360DayRange(): void {
-    this.selectedRange.setValue('360');
-    this.startDateCtrl.setValue(moment().subtract(360, 'days').startOf('day'));
+    this.selectedRange.setValue('365');
+    const currDate = moment(new Date());
+    const countDays = parseInt(this.selectedRange.value);
+
+    this.startDateCtrl.setValue(moment().subtract(countDays, 'days').startOf('day'));
     this.endDateCtrl.setValue(moment().endOf('day'));
+    this.setCompareRange();
   }
 
   private emitRangeChange(): void {

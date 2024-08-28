@@ -129,7 +129,7 @@ export class SpendingStatisticComponent implements OnInit {
         this.compareSpendingsForMultiLineChart = this.spendingsHelperService.getSpendingsByRange(range.compareStartDate, range.compareEndDate, compareSpendingsByRange);
       // }
     // }
-
+    console.log('here')
     this.cdr.detectChanges();
   }
 
