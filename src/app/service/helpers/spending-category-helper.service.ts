@@ -44,15 +44,16 @@ export class SpendingCategoryHelperService {
       
       const groupedSpendings: Map<string, number> = new Map();
       spendingsByCategory.forEach(spending => {
-        const year = new Date(spending.date).getFullYear();
-        const month = new Date(spending.date).getMonth();
+        // const year = new Date(spending.date).getFullYear();
+        // const month = new Date(spending.date).getMonth();
+        // const day = new Date(spending.date).getMonth();
         
-        const monthGroup = new Date(year, month).toDateString();
-        if(!groupedSpendings.has(monthGroup)) {
-          groupedSpendings.set(monthGroup, spending.cost);
+        const dayGroup = new Date(spending.date).toDateString();
+        if(!groupedSpendings.has(dayGroup)) {
+          groupedSpendings.set(dayGroup, spending.cost);
         } else {
-          const currValue = groupedSpendings.get(monthGroup);
-          groupedSpendings.set(monthGroup, currValue + spending.cost);
+          const currValue = groupedSpendings.get(dayGroup);
+          groupedSpendings.set(dayGroup, currValue + spending.cost);
         }
       });
       

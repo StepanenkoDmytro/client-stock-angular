@@ -63,7 +63,6 @@ export class RangeControllerComponent implements OnInit {
     
 
     this.formRange.valueChanges.subscribe(() => {
-      console.log('here');
       this.emitRangeChange();
     });
 

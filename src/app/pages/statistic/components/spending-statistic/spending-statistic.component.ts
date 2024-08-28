@@ -61,12 +61,14 @@ const MATERIAL_MODULES = [
 export class SpendingStatisticComponent implements OnInit {
 
   public spendings: Spending[] = [];
-  public categoryStatisticForPeriod: ICategoryStatistic[];
+  public categoryStatisticForPeriod: ICategoryStatistic[] = [];
   public chartType: 'pie' | 'multiline' = 'pie';
   public disabledCategories: Set<string> = new Set<string>();
   public filteredSpendings: Spending[] = [];
   public isCompareEnabled: boolean = false;
   public compareCategoryStatisticForChart: ICategoryStatistic[] = [];
+  public spendingsForMultiLineChart: Spending[] = [];
+  public compareSpendingsForMultiLineChart: Spending[] = []
 
   constructor(
     private router: Router,
@@ -83,7 +85,7 @@ export class SpendingStatisticComponent implements OnInit {
       
       this.spendings = spendings;
       this.filteredSpendings = spendings;
-      
+
       this.cdr.detectChanges();
     });
   }
@@ -115,10 +117,18 @@ export class SpendingStatisticComponent implements OnInit {
     
     this.isCompareEnabled = range.isCompareEnabled;
 
-    if(range.isCompareEnabled) {
+    // if(range.isCompareEnabled) {
       const compareSpendingsByRange: Spending[] = this.spendingsHelperService.getSpendingsByRange(range.compareStartDate, range.compareEndDate, this.filteredSpendings);
-      this.compareCategoryStatisticForChart = await this.spendingsHelperService.calculateCategoryStatistic(compareSpendingsByRange);
-    }
+      // if(this.chartType === 'pie') {
+        this.compareCategoryStatisticForChart = await this.spendingsHelperService.calculateCategoryStatistic(compareSpendingsByRange);
+      // }
+      
+      // if(this.chartType === 'multiline') {
+        // console.log(compareSpendingsByRange);
+        this.spendingsForMultiLineChart = spendingsByRange;
+        this.compareSpendingsForMultiLineChart = this.spendingsHelperService.getSpendingsByRange(range.compareStartDate, range.compareEndDate, compareSpendingsByRange);
+      // }
+    // }
 
     this.cdr.detectChanges();
   }
