@@ -44,8 +44,8 @@ export class RangeControllerComponent implements OnInit {
   public compareStartDateCtrl: FormControl<moment.Moment> = new FormControl();
   public compareEndDateCtrl: FormControl<moment.Moment> = new FormControl();
 
-  public selectedRange: 'month' | '90' | '120' | '360' = 'month';
-  public isCompareEnabled: boolean = false;
+  public selectedRange: FormControl<'month' | '90' | '120' | '360'> = new FormControl('month');
+  public isCompareEnabled: FormControl<boolean> = new FormControl(false);
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -70,41 +70,41 @@ export class RangeControllerComponent implements OnInit {
   }
 
   public toogleCompare(): void {
-    this.isCompareEnabled = !this.isCompareEnabled;
+    this.isCompareEnabled.setValue(!this.isCompareEnabled.value);
   }
 
   public changeToCurrentMonthRange(): void {
-    this.selectedRange = 'month';
+    this.selectedRange.setValue('month');
     this.startDateCtrl.setValue(moment().startOf('month'));
     this.endDateCtrl.setValue(moment().endOf('month'));
   }
   
   public changeTo90DayRange(): void {
-    this.selectedRange = '90';
+    this.selectedRange.setValue('90');
     this.startDateCtrl.setValue(moment().subtract(90, 'days').startOf('day'));
     this.endDateCtrl.setValue(moment().endOf('day'));
   }
   
   public changeTo120DayRange(): void {
-    this.selectedRange = '120';
+    this.selectedRange.setValue('120');
     this.startDateCtrl.setValue(moment().subtract(120, 'days').startOf('day'));
     this.endDateCtrl.setValue(moment().endOf('day'));
   }
   
   public changeTo360DayRange(): void {
-    this.selectedRange = '360';
+    this.selectedRange.setValue('360');
     this.startDateCtrl.setValue(moment().subtract(360, 'days').startOf('day'));
     this.endDateCtrl.setValue(moment().endOf('day'));
   }
 
   private emitRangeChange(): void {
-    const { startDate, endDate, compareStartDate, compareEndDate } = this.formRange.value;
+    const { startDate, endDate, isCompareEnabled, compareStartDate, compareEndDate } = this.formRange.value;
     
     if (this.isCompareEnabled) {
       this.rangeChange.emit({
         startDate,
         endDate,
-        isCompareEnabled: this.isCompareEnabled,
+        isCompareEnabled,
         compareStartDate: compareStartDate,
         compareEndDate: compareEndDate
       });
@@ -112,7 +112,7 @@ export class RangeControllerComponent implements OnInit {
       this.rangeChange.emit({
         startDate,
         endDate,
-        isCompareEnabled: this.isCompareEnabled
+        isCompareEnabled
       });
     }
   }

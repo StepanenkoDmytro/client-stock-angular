@@ -64,8 +64,11 @@ export class MultiLineChartContainerComponent {
       const compareLineData = this.spendingsHelperService.calculateLineChartByChildren('compareData', compareData);
       this.multiLineChartData.push(compareLineData);
     }
-    console.log(this.multiLineChartData);
-    // Оновлення детектора змін
+
+    // if(!this.isCompareEnabled) {
+    //   this.multiLineChartData.filter(data => data.name === 'compareData');
+    // }
+    // console.log(this.multiLineChartData);
     this.cdr.detectChanges();
   }
 

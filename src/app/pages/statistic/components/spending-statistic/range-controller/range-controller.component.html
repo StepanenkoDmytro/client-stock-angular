@@ -16,7 +16,7 @@
             <mat-date-range-picker #campaignOnePicker></mat-date-range-picker>
         </mat-form-field>
 
-        @if(isCompareEnabled) {
+        @if(isCompareEnabled.value) {
             <mat-form-field appearance="outline" class="w-100">
                 <mat-date-range-input
                   [formGroup]="formRange"
@@ -35,26 +35,26 @@
     <div class="range-controller--btns">
         <button
             class="btn" 
-            [ngClass]="{'active': selectedRange === 'month'}" 
-            [disabled]="selectedRange === 'month'"
+            [ngClass]="{'active': selectedRange.value === 'month'}" 
+            [disabled]="selectedRange.value === 'month'"
             (click)="changeToCurrentMonthRange()">Cur month</button>
     
         <button
             class="btn"  
-            [ngClass]="{'active': selectedRange === '90'}" 
-            [disabled]="selectedRange === '90'"
+            [ngClass]="{'active': selectedRange.value === '90'}" 
+            [disabled]="selectedRange.value === '90'"
             (click)="changeTo90DayRange()">90 days</button>
 
         <button 
             class="btn" 
-            [ngClass]="{'active': selectedRange === '120'}" 
-            [disabled]="selectedRange === '120'"
+            [ngClass]="{'active': selectedRange.value === '120'}" 
+            [disabled]="selectedRange.value === '120'"
             (click)="changeTo120DayRange()">120 days</button>
 
         <button 
             class="btn" 
-            [ngClass]="{'active': selectedRange === '360'}" 
-            [disabled]="selectedRange === '360'"
+            [ngClass]="{'active': selectedRange.value === '360'}" 
+            [disabled]="selectedRange.value === '360'"
             (click)="changeTo360DayRange()">360 days</button>
     </div>
 </div>
