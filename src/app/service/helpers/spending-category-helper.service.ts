@@ -109,9 +109,39 @@ export class SpendingCategoryHelperService {
   }
 
   public async calculateCategoryStatisticByCategory(spendings: Spending[], category: Category): Promise<ICategoryStatistic[]> {
+    
     const spendingCategoriesList = category.children;
-
-    return spendingCategoriesList.map(category => this.calculateCategoryStatisticRecursive(category, spendings));
+    const otherCategoryValue = spendings
+      .filter(spending => spending.category.title === category.title)
+      .map(spending => spending.cost)
+      .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+    
+    let otherCategory = category.children.find(child => child.title === category.title);
+    if(spendingCategoriesList.length === 0) {
+      otherCategory = new Category('Other', 'payment', undefined, false, 'Other');
+      return [{
+        category: otherCategory,
+        value: otherCategoryValue,
+        children: undefined
+      }] as ICategoryStatistic[];
+    }
+    console.log(otherCategory);
+    let result: ICategoryStatistic[] = spendingCategoriesList.map(cat => this.calculateCategoryStatisticRecursive(cat, spendings));
+    if(spendingCategoriesList.length > 0) {
+    
+    const otherCategoryStatistic = result.find(stat => stat.category.title === 'Other');
+    if (otherCategoryStatistic) {
+        otherCategoryStatistic.value += otherCategoryValue;
+    } else {
+        result.push({
+            category: otherCategory = new Category('Other', 'payment', undefined, false, 'Other'),
+            value: otherCategoryValue,
+            children: undefined
+        });
+    }
+    }
+    console.log(result);
+    return result;
   }
 
   public getSpendingsByRange(start: moment.Moment, end: moment.Moment, spendings: Spending[]): Spending[] {

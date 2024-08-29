@@ -11,10 +11,10 @@
             <div class="bread-crumb">
                 <a [routerLink]="'/statistic'">Global</a>
             </div>
-            @for(crumb of breadCrumbs; track crumb) {
+            @for(crumb of breadCrumbs;let idx = $index; track crumb) {
                 <div class="bread-crumb">
                     <span> - </span>
-                    <a (click)="navigate(crumb)">{{crumb.label}}</a>
+                    <a [class.active]="idx === breadCrumbs.length - 1" (click)="navigate(crumb)">{{crumb.label}}</a>
                 </div>
             }
         </div>

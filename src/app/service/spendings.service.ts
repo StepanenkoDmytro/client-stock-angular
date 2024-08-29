@@ -138,11 +138,16 @@ export class SpendingsService {
       return [];
     }
 
+    if(!category) {
+      return spendings;
+    }
+
     let spendingsByCategory = spendings.filter(spending => spending.category.id === category.id);
 
     if(category.children.length > 0) {
       category.children.forEach(child => {
         const spendingsByChildCategory = this.findSpendingsByCategoryIncludeChildren(spendings, child);
+
         spendingsByCategory = [...spendingsByCategory, ...spendingsByChildCategory];
       });
     }

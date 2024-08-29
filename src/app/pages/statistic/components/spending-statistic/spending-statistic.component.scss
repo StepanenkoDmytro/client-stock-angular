@@ -3,9 +3,23 @@
 }
 
 
+
+.spending-statistic {
+  
+}
+
+.spending-statistic h2 {
+  margin-top: 10px;
+  text-align: center;
+}
+
 .chart-container {
   &--btn {
 
+  }
+
+  &--type {
+    margin: 15px 15px -15px 15px;
   }
 
   &--chart {

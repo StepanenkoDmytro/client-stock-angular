@@ -1,12 +1,29 @@
-<main class="scroll-list">
-  <button class="chart-container--btn" (click)="toggleChart()">{{chartType}}</button>
+<main class="spending-statistic">
+
+  @if(currCategory) {
+    <pgz-prev-route></pgz-prev-route>
+    <h2>{{currCategory.title}} statistic</h2>
+  }@else {
+    <h2>Spending statistic</h2>
+  }
+  
+
+  <div class="chart-container--type">
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-select [(ngModel)]="chartTypeCtrl">
+        <mat-option value="pie">Pie chart</mat-option>
+        <mat-option value="multiline">Multi line chart</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
   <div class="chart-container--chart">
     <pgz-range-controller (rangeChange)="onRangeChange($event)"></pgz-range-controller>
-    @if(chartType === 'pie') { 
+    @if(chartTypeCtrl === 'pie') { 
       <pgz-pie-chart-container [categoryData]="categoryStatisticForPeriod" [isCompareEnabled]="isCompareEnabled" [compareCategoryData]="compareCategoryStatisticForChart"></pgz-pie-chart-container>
     }
 
-    @if(chartType === 'multiline') {
+    @if(chartTypeCtrl === 'multiline') {
       <pgz-multi-line-chart-container 
         [activeCategories]="categoryStatisticForPeriod" 
         [isCompareEnabled]="isCompareEnabled"
@@ -17,13 +34,18 @@
   </div>
 
   <section>
-    <div>
-      <button (click)="changeSortBy()">
+    <div class="d-flex justify-content-between">
+      <button class="btn" (click)="changeSortBy()">
         @if(isAscSort){
           <pgz-icon [name]="'arrow_drop_up'"></pgz-icon>
         } @else {
           <pgz-icon [name]="'arrow_drop_down'"></pgz-icon>
         }
+      </button>
+
+      <button class="btn d-flex" (click)="allCategoriesVisible()">
+        All visible
+        <pgz-icon [name]="'visibility'"></pgz-icon>
       </button>
     </div>
 

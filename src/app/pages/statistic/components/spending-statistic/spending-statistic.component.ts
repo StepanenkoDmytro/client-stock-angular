@@ -18,7 +18,7 @@ import { switchMap } from 'rxjs';
 import { SpendingCategoryHelperService } from '../../../../service/helpers/spending-category-helper.service';
 import { IconComponent } from '../../../../core/UI/components/icon/icon.component';
 import { MatButtonModule } from '@angular/material/button';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { StatisticStateService } from '../../service/statistic-state.service';
 import { Spending } from '../../../spending/model/Spending';
 import { PieChartContainerComponent } from './pie-chart-container/pie-chart-container.component';
@@ -26,6 +26,9 @@ import { SpendingStatisticCardComponent } from './spending-statistic-card/spendi
 import { Category } from '../../../../domain/category.domain';
 import { MultiLineChartContainerComponent } from './multi-line-chart-container/multi-line-chart-container.component';
 import { RangeControllerComponent } from './range-controller/range-controller.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { PrevRouteComponent } from '../prev-route/prev-route.component';
 
 
 const UI_COMPONENTS = [
@@ -37,10 +40,13 @@ const UI_COMPONENTS = [
   MultiLineChartContainerComponent,
   PieChartContainerComponent,
   SpendingStatisticCardComponent,
-  RangeControllerComponent
+  RangeControllerComponent,
+  PrevRouteComponent
 ];
 
 const MATERIAL_MODULES = [
+  MatFormFieldModule,
+  MatSelectModule,
   MatTabsModule,
   MatExpansionModule,
   MatIconModule,
@@ -60,7 +66,9 @@ const MATERIAL_MODULES = [
 })
 export class SpendingStatisticComponent implements OnInit {
 
-  public chartType: 'pie' | 'multiline' = 'pie';
+  public currCategory: Category | null;
+
+  public chartTypeCtrl: 'pie' | 'multiline' = 'pie';
   public isCompareEnabled: boolean = false;
 
   public isAscSort : boolean = true;
@@ -74,6 +82,7 @@ export class SpendingStatisticComponent implements OnInit {
   public compareSpendingsForMultiLineChart: Spending[] = [];
   
   constructor(
+    private route: ActivatedRoute,
     private router: Router,
     private spendingsService: SpendingsService,
     private statisticStateHelper: StatisticStateService,
@@ -81,31 +90,41 @@ export class SpendingStatisticComponent implements OnInit {
     private cdr: ChangeDetectorRef
   ) { }
 
-  public ngOnInit(): void {
+  public async ngOnInit(): Promise<void> {
+    
     
     this.spendingsService.init();
-    this.spendingsService.getAllSpendings().subscribe(spendings => {
-      
-      this.spendings = spendings;
-      this.filteredSpendings = spendings;
 
-      this.cdr.detectChanges();
+    this.route.paramMap.subscribe(async paramMap => {
+      const categoryId = paramMap.get('id');
+
+      if(categoryId) {
+        this.currCategory = await this.spendingsService.findCategoryById(categoryId);
+        console.log(this.currCategory);
+      }
+      await this.loadCategoryData();
     });
+    
   }
 
-  public getCategoryStatisticData(categoryStatisticData: ICategoryStatistic[]) {
-    if(this.disabledCategories.size === 0 || this.categoryStatisticForPeriod.length === 0) {
-      this.categoryStatisticForPeriod = categoryStatisticData.sort((a,b) => b.value - a.value);
+  private async loadCategoryData(): Promise<void> {
+    this.spendingsService.getAllSpendings().subscribe(async (spendings) => {
       
+    const spendingsByCategory = this.spendingsService
+      .findSpendingsByCategoryIncludeChildren(spendings, this.currCategory);
+    
+    this.spendings = spendings;  
+    this.filteredSpendings = this.spendings;
+    if(this.currCategory) {
+      this.categoryStatisticForPeriod = (await this.spendingsHelperService.calculateCategoryStatisticByCategory(spendings, this.currCategory)).sort((a,b) => b.value - a.value);
+    }else {
+      this.categoryStatisticForPeriod = (await this.spendingsHelperService.calculateCategoryStatistic(spendings)).sort((a,b) => b.value - a.value);
     }
+    
+    this.sortCategoryStatistic();
+    
     this.cdr.detectChanges();
-  }
-
-  public toggleChart(): void {
-    this.chartType = this.chartType === 'pie' ? 'multiline' : 'pie';
-    this.disabledCategories = new Set();
-    this.updateFilteredSpendings();
-    this.cdr.detectChanges();
+    });
   }
 
   public async onRangeChange(range: {
@@ -116,9 +135,18 @@ export class SpendingStatisticComponent implements OnInit {
     compareEndDate?: moment.Moment
   }): Promise<void> {
     const spendingsByRange: Spending[] = this.spendingsHelperService.getSpendingsByRange(range.startDate, range.endDate, this.filteredSpendings);
-    this.categoryStatisticForPeriod = (await this.spendingsHelperService.calculateCategoryStatistic(spendingsByRange)).sort((a,b) => b.value - a.value);
-    this.sortCategoryStatistic();
+    
+    if(this.currCategory) {
+      this.categoryStatisticForPeriod = (await this.spendingsHelperService.calculateCategoryStatisticByCategory(spendingsByRange, this.currCategory)).sort((a,b) => b.value - a.value);
+      
 
+      // this.categoryStatisticForPeriod.find(categoryStatistic => categoryStatistic.category.title === 'Other').value = otherCategoryValue;
+    }else {
+      this.categoryStatisticForPeriod = (await this.spendingsHelperService.calculateCategoryStatistic(spendingsByRange)).sort((a,b) => b.value - a.value);
+    }
+    
+    this.sortCategoryStatistic();
+    console.log(this.categoryStatisticForPeriod);
     this.isCompareEnabled = range.isCompareEnabled;
 
     // if(range.isCompareEnabled) {
@@ -133,7 +161,12 @@ export class SpendingStatisticComponent implements OnInit {
         this.compareSpendingsForMultiLineChart = this.spendingsHelperService.getSpendingsByRange(range.compareStartDate, range.compareEndDate, compareSpendingsByRange);
       // }
     // }
-    // console.log('here')
+    this.cdr.detectChanges();
+  }
+
+  public allCategoriesVisible(): void {
+    this.disabledCategories = new Set();
+    this.sortCategoryStatistic();
     this.cdr.detectChanges();
   }
 
@@ -198,6 +231,10 @@ export class SpendingStatisticComponent implements OnInit {
   }
 
   public onCardClick(category: Category): void {
+    if(category.title === 'Other') {
+      return;
+    }
+
     this.statisticStateHelper.addBreadCrumb(category);
     this.router.navigate(['/statistic/details', category.id]);
   }
