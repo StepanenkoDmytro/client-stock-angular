@@ -26,6 +26,8 @@ import { SpendingStatisticCardComponent } from './spending-statistic-card/spendi
 import { Category } from '../../../../domain/category.domain';
 import { MultiLineChartContainerComponent } from './multi-line-chart-container/multi-line-chart-container.component';
 import { RangeControllerComponent } from './range-controller/range-controller.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 
 const UI_COMPONENTS = [
@@ -41,6 +43,8 @@ const UI_COMPONENTS = [
 ];
 
 const MATERIAL_MODULES = [
+  MatFormFieldModule,
+  MatSelectModule,
   MatTabsModule,
   MatExpansionModule,
   MatIconModule,
@@ -60,7 +64,7 @@ const MATERIAL_MODULES = [
 })
 export class SpendingStatisticComponent implements OnInit {
 
-  public chartType: 'pie' | 'multiline' = 'pie';
+  public chartTypeCtrl: 'pie' | 'multiline' = 'pie';
   public isCompareEnabled: boolean = false;
 
   public isAscSort : boolean = true;
@@ -93,21 +97,6 @@ export class SpendingStatisticComponent implements OnInit {
     });
   }
 
-  public getCategoryStatisticData(categoryStatisticData: ICategoryStatistic[]) {
-    if(this.disabledCategories.size === 0 || this.categoryStatisticForPeriod.length === 0) {
-      this.categoryStatisticForPeriod = categoryStatisticData.sort((a,b) => b.value - a.value);
-      
-    }
-    this.cdr.detectChanges();
-  }
-
-  public toggleChart(): void {
-    this.chartType = this.chartType === 'pie' ? 'multiline' : 'pie';
-    this.disabledCategories = new Set();
-    this.updateFilteredSpendings();
-    this.cdr.detectChanges();
-  }
-
   public async onRangeChange(range: {
     startDate: moment.Moment,
     endDate: moment.Moment,
@@ -133,7 +122,6 @@ export class SpendingStatisticComponent implements OnInit {
         this.compareSpendingsForMultiLineChart = this.spendingsHelperService.getSpendingsByRange(range.compareStartDate, range.compareEndDate, compareSpendingsByRange);
       // }
     // }
-    // console.log('here')
     this.cdr.detectChanges();
   }
 

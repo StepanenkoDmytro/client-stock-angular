@@ -36,6 +36,7 @@ export class CategorySpendingComponent implements OnInit {
 
   public async ngOnInit(): Promise<void> {
     this.spendingCategories = await this.spendingCategoryHelper.calculateCategoryStatistic(this.spendings);
+    this.spendingCategories.sort((a,b) => b.value - a.value);
     this.cdr.detectChanges();
   }
 

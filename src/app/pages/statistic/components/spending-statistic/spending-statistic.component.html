@@ -1,12 +1,22 @@
-<main class="scroll-list">
-  <button class="chart-container--btn btn" (click)="toggleChart()">{{chartType}}</button>
+<main class="spending-statistic">
+  <h2>Spending statistic</h2>
+
+  <div class="chart-container--type">
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-select [(ngModel)]="chartTypeCtrl">
+        <mat-option value="pie">Pie chart</mat-option>
+        <mat-option value="multiline">Multi line chart</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
   <div class="chart-container--chart">
     <pgz-range-controller (rangeChange)="onRangeChange($event)"></pgz-range-controller>
-    @if(chartType === 'pie') { 
+    @if(chartTypeCtrl === 'pie') { 
       <pgz-pie-chart-container [categoryData]="categoryStatisticForPeriod" [isCompareEnabled]="isCompareEnabled" [compareCategoryData]="compareCategoryStatisticForChart"></pgz-pie-chart-container>
     }
 
-    @if(chartType === 'multiline') {
+    @if(chartTypeCtrl === 'multiline') {
       <pgz-multi-line-chart-container 
         [activeCategories]="categoryStatisticForPeriod" 
         [isCompareEnabled]="isCompareEnabled"
