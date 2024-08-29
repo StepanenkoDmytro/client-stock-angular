@@ -16,10 +16,22 @@
     }
   </div>
 
-  @for(data of categoryStatisticForPeriod; track data) {
-    <pgz-spending-statistic-card [data]="data" [isVisible]="isVisibleCard(data.category)" (clickCard)="onCardClick($event)" (toggleCategory)="toggleCategory($event)">
-    </pgz-spending-statistic-card>
-  } @empty {
-    <p style="text-align: center;">You don't have any spendings</p>
-  }
+  <section>
+    <div>
+      <button (click)="changeSortBy()">
+        @if(isAscSort){
+          <pgz-icon [name]="'arrow_drop_up'"></pgz-icon>
+        } @else {
+          <pgz-icon [name]="'arrow_drop_down'"></pgz-icon>
+        }
+      </button>
+    </div>
+
+    @for(data of categoryStatisticForPeriod; track data) {
+      <pgz-spending-statistic-card [data]="data" [isVisible]="isVisibleCategory(data.category)" (clickCard)="onCardClick($event)" (toggleCategory)="toggleCategory($event)">
+      </pgz-spending-statistic-card>
+    } @empty {
+      <p style="text-align: center;">You don't have any spendings</p>
+    }
+  </section>
 </main>

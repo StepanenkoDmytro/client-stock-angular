@@ -60,16 +60,19 @@ const MATERIAL_MODULES = [
 })
 export class SpendingStatisticComponent implements OnInit {
 
-  public spendings: Spending[] = [];
-  public categoryStatisticForPeriod: ICategoryStatistic[] = [];
   public chartType: 'pie' | 'multiline' = 'pie';
+  public isCompareEnabled: boolean = false;
+
+  public isAscSort : boolean = true;
   public disabledCategories: Set<string> = new Set<string>();
   public filteredSpendings: Spending[] = [];
-  public isCompareEnabled: boolean = false;
+
+  public spendings: Spending[] = [];
+  public categoryStatisticForPeriod: ICategoryStatistic[] = [];
   public compareCategoryStatisticForChart: ICategoryStatistic[] = [];
   public spendingsForMultiLineChart: Spending[] = [];
-  public compareSpendingsForMultiLineChart: Spending[] = []
-
+  public compareSpendingsForMultiLineChart: Spending[] = [];
+  
   constructor(
     private router: Router,
     private spendingsService: SpendingsService,
@@ -113,8 +116,9 @@ export class SpendingStatisticComponent implements OnInit {
     compareEndDate?: moment.Moment
   }): Promise<void> {
     const spendingsByRange: Spending[] = this.spendingsHelperService.getSpendingsByRange(range.startDate, range.endDate, this.filteredSpendings);
-    this.categoryStatisticForPeriod = await this.spendingsHelperService.calculateCategoryStatistic(spendingsByRange);
-    
+    this.categoryStatisticForPeriod = (await this.spendingsHelperService.calculateCategoryStatistic(spendingsByRange)).sort((a,b) => b.value - a.value);
+    this.sortCategoryStatistic();
+
     this.isCompareEnabled = range.isCompareEnabled;
 
     // if(range.isCompareEnabled) {
@@ -129,17 +133,56 @@ export class SpendingStatisticComponent implements OnInit {
         this.compareSpendingsForMultiLineChart = this.spendingsHelperService.getSpendingsByRange(range.compareStartDate, range.compareEndDate, compareSpendingsByRange);
       // }
     // }
-    console.log('here')
+    // console.log('here')
     this.cdr.detectChanges();
   }
 
-  public isVisibleCard(category: Category): boolean {
-    return !this.disabledCategories.has(category.id);
+  public sortCategoryStatistic(): void {
+    this.categoryStatisticForPeriod.sort((a, b) => {
+      const isADisabled = this.disabledCategories.has(a.category.id);
+      const isBDisabled = this.disabledCategories.has(b.category.id);
+
+      const aIsZero = a.value === 0;
+      const bIsZero = b.value === 0;
+     
+      if (aIsZero && !bIsZero) {
+        return 1;
+      } else if (!aIsZero && bIsZero) {
+          return -1;
+      } else if (aIsZero && bIsZero) {
+          return 0;
+      }
+
+      if (isADisabled && !isBDisabled) {
+        return 1;
+      } else if (!isADisabled && isBDisabled) {
+          return -1;
+      }
+
+      if (isADisabled && !isBDisabled) {
+        return this.isAscSort ? 1 : -1;
+      } else if (!isADisabled && isBDisabled) {
+        return this.isAscSort ? -1 : 1;
+      }
+
+      if(this.isAscSort) {
+        return b.value - a.value;
+      } else {
+        return a.value - b.value;
+      }
+
+      return 0;
+    });
   }
 
-  public onCardClick(category: Category): void {
-    this.statisticStateHelper.addBreadCrumb(category);
-    this.router.navigate(['/statistic/details', category.id]);
+  public changeSortBy(): void {
+    this.isAscSort = !this.isAscSort;
+    this.sortCategoryStatistic();
+    this.cdr.detectChanges();
+  }
+
+  public isVisibleCategory(category: Category): boolean {
+    return !this.disabledCategories.has(category.id);
   }
 
   public toggleCategory(categoryId: string): void {
@@ -149,6 +192,14 @@ export class SpendingStatisticComponent implements OnInit {
       this.disabledCategories.add(categoryId);
     }
     this.updateFilteredSpendings();
+    this.sortCategoryStatistic();
+
+    this.cdr.detectChanges();
+  }
+
+  public onCardClick(category: Category): void {
+    this.statisticStateHelper.addBreadCrumb(category);
+    this.router.navigate(['/statistic/details', category.id]);
   }
 
   private updateFilteredSpendings(): void {
