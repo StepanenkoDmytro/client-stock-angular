@@ -9,6 +9,6 @@ export const STATISTIC_ROUTES: Route[] = [
     },
     { 
         path: 'details/:id', 
-        component: StatisticDetailComponent,
+        component: StatisticComponent,
     }
 ];

@@ -71,7 +71,6 @@ export class RangeControllerComponent implements OnInit {
   }
 
   public toogleCompare(): void {
-    // debugger;
     this.isCompareEnabled.setValue(!this.isCompareEnabled.value);
 
     this.setCompareRange();

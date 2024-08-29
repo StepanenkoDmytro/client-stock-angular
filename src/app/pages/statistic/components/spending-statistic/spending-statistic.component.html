@@ -1,5 +1,12 @@
 <main class="spending-statistic">
-  <h2>Spending statistic</h2>
+
+  @if(currCategory) {
+    <pgz-prev-route></pgz-prev-route>
+    <h2>{{currCategory.title}}</h2>
+  }@else {
+    <h2>Spending statistic</h2>
+  }
+  
 
   <div class="chart-container--type">
     <mat-form-field appearance="outline" floatLabel="always">

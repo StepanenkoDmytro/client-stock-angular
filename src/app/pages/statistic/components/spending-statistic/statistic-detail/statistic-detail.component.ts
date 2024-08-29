@@ -43,7 +43,7 @@ export class StatisticDetailComponent implements OnInit {
       
       this.spendingService.getAllSpendings().subscribe(async (spendings) => {
         const spendingsByCategory = this.spendingService.findSpendingsByCategoryIncludeChildren(spendings, this.category);
-        this.categoryData = await this.spendingsHelperService.calculateCategoryStatisticByCategory(spendingsByCategory, this.category);
+        // this.categoryData = await this.spendingsHelperService.calculateCategoryStatisticByCategory(spendingsByCategory, this.category);
         this.cdr.detectChanges();
       });
     }
