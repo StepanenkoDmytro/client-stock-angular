@@ -137,6 +137,12 @@ export class SpendingStatisticComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
+  public allCategoriesVisible(): void {
+    this.disabledCategories = new Set();
+    this.sortCategoryStatistic();
+    this.cdr.detectChanges();
+  }
+
   public sortCategoryStatistic(): void {
     this.categoryStatisticForPeriod.sort((a, b) => {
       const isADisabled = this.disabledCategories.has(a.category.id);
