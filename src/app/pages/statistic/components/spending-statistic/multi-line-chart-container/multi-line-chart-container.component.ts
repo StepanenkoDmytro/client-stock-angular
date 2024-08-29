@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, OnInit, Input, Output, EventEmitter, ChangeDetectorRef, OnChanges, SimpleChanges, ViewChild, AfterViewInit } from "@angular/core";
-import { MultiLineComponent, IMultiLineData } from "../../../../../core/UI/components/charts/multi-line/multi-line.component";
+
 import { SpendingCategoryHelperService } from "../../../../../service/helpers/spending-category-helper.service";
 import { Spending } from "../../../../spending/model/Spending";
 import { ICategoryStatistic } from "../../../model/SpendindStatistic";
@@ -7,6 +7,7 @@ import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import moment from "moment";
 import { DateFormatPipe } from "../../../../../core/UI/calendar/date-format.pipe";
+import { IMultiLineData, MultiLineComponent } from "../../../../../core/UI/components/charts/multi-line/multi-line.component";
 
 
 const UI_COMPONENTS = [

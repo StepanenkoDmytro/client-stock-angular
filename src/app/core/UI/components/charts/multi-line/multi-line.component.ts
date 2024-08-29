@@ -59,7 +59,7 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
 
     this._data.subscribe(data => {
       if(data && data.length > 0) {
-        this.updateD3();
+        this.createChart();
       }
     })
   }
@@ -69,104 +69,16 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
       if (entries[0].target.clientWidth > 200) {
         this.width = entries[0].target.clientWidth - 30;
       }
-      this.updateD3();
+      this.createChart();
     });
     
     this.resizechartContainer.observe(this.chartContainer.nativeElement);
   }
 
-  private updateD3(): void {
-    d3.select(`#${this.multiLineID}`).select("svg").remove();
-    this.createChart();
-  }
-
-  // private createChart(): void {
-  //   const data = this._data.value;
-
-  //   if (!data || data.length === 0) {
-  //       console.warn('Data is undefined or empty.');
-  //       return;
-  //   }
-
-  //   const firstDataValues = data[0].values ? data[0].values : [{date: new Date(), price: 0}];
-
-  //   const xScale = d3.scaleTime()
-  //     .domain(d3.extent(firstDataValues, d => d.date) as [Date, Date])
-  //     .range([0, this.width - this.margin]);
-
-  //   const yScale = d3.scaleLinear()
-  //     .domain([0, d3.max(data.flatMap(country => country.values), d => d.price) ?? 100])
-  //     .range([this.height - this.margin, 0]);
-
-  //   const color = d3.scaleOrdinal(d3.schemeCategory10);
-    
-  //   /* Add SVG */
-  //   const svg = d3.select(`#${this.multiLineID}`).append("svg")
-  //     .attr("width", (this.width + this.margin)+"px")
-  //     .attr("height", (this.height + this.margin)+"px")
-  //     .append('g')
-  //     .attr("transform", `translate(${this.margin}, ${this.margin})`);
-    
-    
-  //   /* Add line into SVG */
-  //   const line = d3.line<DataValue>()
-  //     .x(d => xScale(d.date)!)
-  //     .y(d => yScale(d.price)!);
-    
-  //   const lines = svg.append('g');
-
-
-  //   lines.append("g")
-  //     .attr("fill", "none")
-  //     .attr("stroke-width", 1)
-  //     .attr("stroke-linejoin", "round")
-  //     .attr("stroke-linecap", "round")
-  //     .selectAll("path")
-  //     .data(data)
-  //     .join("path")
-  //     .style("mix-blend-mode", "multiply")
-  //     .attr("d", d => line(d.values))
-  //     .attr("stroke", (d, i) => color(i.toString()));
-
-    
-    
-  //   /* Add circles in the line */
-  //   lines.selectAll("circle-group")
-  //     .data(data)
-  //     .enter()
-  //     .append("g")
-  //     .style("fill", (d, i) => color(i.toString()))
-  //     .selectAll("circle")
-  //     .data(d => d.values)
-  //     .enter()
-  //     .append("circle")
-  //     .attr("cx", d => xScale(d.date))
-  //     .attr("cy", d => yScale(d.price))
-  //     .attr("r", 3)
-  //     .style('opacity', 0.85);
-
-
-  //   /* Add Axis into SVG */
-  //   const xAxis = d3.axisBottom(xScale).ticks(5);
-  //   const yAxis = d3.axisLeft(yScale).ticks(5);
-    
-  //   svg.append("g")
-  //     .attr("class", "x axis")
-  //     .attr("transform", `translate(0, ${this.height - this.margin})`)
-  //     .call(xAxis);
-    
-  //   svg.append("g")
-  //     .attr("class", "y axis")
-  //     .call(yAxis)
-  //     // .append('text')
-  //     // .attr("y", 15)
-  //     // .attr("transform", "rotate(-90)")
-  //     // .attr("fill", "#000")
-  //     // .text("Total values")
-  //     ;
-  // }
   private createChart(): void {
+    d3.select(`#${this.multiLineID}`).selectAll("svg").remove();
     const data = this._data.value;
+    
 
     if (!data || data.length === 0) {
         console.warn('Data is undefined or empty.');
@@ -177,11 +89,29 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
       country.values.sort((a, b) => a.date.getTime() - b.date.getTime());
     });
 
+    console.log(data);
+
     let xScale: d3.ScaleLinear<number, number> | d3.ScaleTime<number, number>;
     let line: d3.Line<DataValue>;
 
     if(data.length > 1) {
-      const maxDays = d3.max(data.flatMap(country => country.values), d => new Date(d.date).getDate()) ?? 30;
+      const dayDiffs = data.map((el:IMultiLineData) => {
+        
+        const min = new Date(el.values[0].date);
+        const max = new Date(el.values[el.values.length - 1].date);
+
+        const diffInMs = max.getTime() - min.getTime();
+
+        return Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+      });
+
+      let maxDays = 0;
+
+      for(let dayDiff of dayDiffs) {
+        if(maxDays <= dayDiff) {
+          maxDays = dayDiff;
+        }
+      }
 
       xScale = d3.scaleLinear()
         .domain([1, maxDays]) // Дні місяця
@@ -243,24 +173,24 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
       .selectAll("path")
       .data(data)
       .join("path")
-      .style("mix-blend-mode", "multiply")
+      // .style("mix-blend-mode", "multiply")
       .attr("d", d => line(d.values))
       .attr("stroke", (d, i) => color(i.toString()));
     
     /* Add circles in the line */
-    lines.selectAll("circle-group")
-      .data(data)
-      .enter()
-      .append("g")
-      .style("fill", (d, i) => color(i.toString()))
-      .selectAll("circle")
-      .data(d => d.values)
-      .enter()
-      .append("circle")
-      .attr("cx", d => xScale(d.date))
-      .attr("cy", d => yScale(d.price))
-      .attr("r", 3)
-      .style('opacity', 0.85);
+  //   lines.selectAll("circle-group")
+  //     .data(data)
+  //     .enter()
+  //     .append("g")
+  //     .style("fill", (d, i) => color(i.toString()))
+  //     .selectAll("circle")
+  //     .data(d => d.values)
+  //     .enter()
+  //     .append("circle")
+  //     .attr("cx", d => xScale(d.date.getTime()))
+  //     .attr("cy", d => yScale(d.price))
+  //     .attr("r", 3)
+  //     .style('opacity', 0.85);
   }
 
 }
