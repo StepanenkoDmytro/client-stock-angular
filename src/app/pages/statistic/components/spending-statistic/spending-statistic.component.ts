@@ -29,6 +29,7 @@ import { RangeControllerComponent } from './range-controller/range-controller.co
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { PrevRouteComponent } from '../prev-route/prev-route.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 const UI_COMPONENTS = [
@@ -54,6 +55,7 @@ const MATERIAL_MODULES = [
   MatDatepickerModule, 
   FormsModule, 
   ReactiveFormsModule,
+  MatCheckboxModule
 ];
 
 @Component({
@@ -105,30 +107,19 @@ export class SpendingStatisticComponent implements OnInit {
       
       this.loadCategoryData();
     });
-    
-  }
-
-  private loadCategoryData(): void {
-    this.spendingsService.getAllSpendings().subscribe(async (spendings) => {
-      this.spendings = spendings;  
-      this.filteredSpendings = this.spendings;
-      this.setCategoryStatistic();
-
-      this.cdr.detectChanges();
-    });
   }
 
   public onRangeChange(range: {
     startDate: moment.Moment,
     endDate: moment.Moment,
-    isCompareEnabled: boolean,
+    // isCompareEnabled: boolean,
     compareStartDate?: moment.Moment,
     compareEndDate?: moment.Moment
   }): void {
     this.setCategoryStatistic();
     this.updateFormGroup(range);
 
-    this.isCompareEnabled = range.isCompareEnabled;
+    // this.isCompareEnabled = range.isCompareEnabled;
 
     this.cdr.markForCheck();
   }
@@ -160,56 +151,12 @@ export class SpendingStatisticComponent implements OnInit {
     this.sortCategoryStatistic();
   }
 
-  private updateFormGroup(range: { 
-    startDate: moment.Moment; 
-    endDate: moment.Moment; 
-    compareStartDate?: moment.Moment; 
-    compareEndDate?: moment.Moment; 
-  }): void {
-    this.formRange.patchValue({
-      startDate: range.startDate,
-      endDate: range.endDate,
-      compareStartDate: range.compareStartDate || null,
-      compareEndDate: range.compareEndDate || null,
-    });
-  }
-
-
   public allCategoriesVisible(): void {
     this.disabledCategories = new Set();
     this.updateFilteredSpendings();
     this.setCategoryStatistic();
 
     this.cdr.markForCheck();
-  }
-
-  private async setCategoryStatistic(): Promise<void> {
-    if(this.currCategory) {
-      this.categoryStatisticForPeriod = (await this.spendingsHelperService.calculateCategoryStatisticByCategory(this.filteredSpendings, this.currCategory));
-     } else {
-      this.categoryStatisticForPeriod = (await this.spendingsHelperService.calculateCategoryStatistic(this.filteredSpendings));
-    }
-
-    this.setChartsData();
-  }
-
-  public sortCategoryStatistic(): void {
-    this.categoryStatisticForPeriod.sort((a, b) => {
-      const isADisabled = this.disabledCategories.has(a.category.id);
-      const isBDisabled = this.disabledCategories.has(b.category.id);
-      if (isADisabled && !isBDisabled) {
-        return 1;
-      } else if (!isADisabled && isBDisabled) {
-        return -1;
-      }
-  
-      // Якщо обидві категорії або активні, або виключені, сортуємо за значенням
-      if (this.isAscSort) {
-        return a.value - b.value;
-      } else {
-        return b.value - a.value;
-      }
-    });
   }
 
   public changeSortBy(): void {
@@ -220,6 +167,11 @@ export class SpendingStatisticComponent implements OnInit {
 
   public isVisibleCategory(category: Category): boolean {
     return !this.disabledCategories.has(category.id);
+  }
+
+  public toogleCompare(): void {
+    this.isCompareEnabled = !this.isCompareEnabled;
+    this.cdr.detectChanges();
   }
 
   public toggleCategory(categoryId: string): void {
@@ -250,6 +202,58 @@ export class SpendingStatisticComponent implements OnInit {
     this.router.navigate(['/statistic/details', category.id]);
   }
 
+  private loadCategoryData(): void {
+    this.spendingsService.getAllSpendings().subscribe(async (spendings) => {
+      this.spendings = spendings;  
+      this.filteredSpendings = this.spendings;
+      this.setCategoryStatistic();
+
+      this.cdr.detectChanges();
+    });
+  }
+
+  private async setCategoryStatistic(): Promise<void> {
+    if(this.currCategory) {
+      this.categoryStatisticForPeriod = (await this.spendingsHelperService.calculateCategoryStatisticByCategory(this.filteredSpendings, this.currCategory));
+     } else {
+      this.categoryStatisticForPeriod = (await this.spendingsHelperService.calculateCategoryStatistic(this.filteredSpendings));
+    }
+
+    this.setChartsData();
+  }
+
+  private sortCategoryStatistic(): void {
+    this.categoryStatisticForPeriod.sort((a, b) => {
+      const isADisabled = this.disabledCategories.has(a.category.id);
+      const isBDisabled = this.disabledCategories.has(b.category.id);
+      if (isADisabled && !isBDisabled) {
+        return 1;
+      } else if (!isADisabled && isBDisabled) {
+        return -1;
+      }
+
+      if (this.isAscSort) {
+        return a.value - b.value;
+      } else {
+        return b.value - a.value;
+      }
+    });
+  }
+
+  private updateFormGroup(range: { 
+    startDate: moment.Moment; 
+    endDate: moment.Moment; 
+    compareStartDate?: moment.Moment; 
+    compareEndDate?: moment.Moment; 
+  }): void {
+    this.formRange.patchValue({
+      startDate: range.startDate,
+      endDate: range.endDate,
+      compareStartDate: range.compareStartDate || null,
+      compareEndDate: range.compareEndDate || null,
+    });
+  }
+
   private updateFilteredSpendings(): void {
     if (this.disabledCategories.size === 0) {
       this.filteredSpendings = this.spendings;
@@ -258,8 +262,6 @@ export class SpendingStatisticComponent implements OnInit {
         return !this.isSpendingInDisabledCategory(spending);
       });
     }
-
-    // this.cdr.detectChanges();
   }
 
   private isSpendingInDisabledCategory(spending: Spending): boolean {

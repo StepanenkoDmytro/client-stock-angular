@@ -4,13 +4,15 @@
         <p>{{_data.category.title}}</p>
     </div>
 
-    <p>{{_data.value}}</p>
+    <div class="spending-stat-card--value">
+        <p>{{_data.value}}</p>
 
-    <button class="btn" (click)="onToggleCategory()">
-        @if(isVisible) {
-            <mat-icon>{{'visibility'}}</mat-icon>
-        } @else {
-            <mat-icon>{{'visibility_off'}}</mat-icon>
-        }
-    </button>
+        <button class="btn" (click)="onToggleCategory()">
+            @if(isVisible) {
+                <mat-icon>{{'visibility'}}</mat-icon>
+            } @else {
+                <mat-icon>{{'visibility_off'}}</mat-icon>
+            }
+        </button>
+    </div>
 </div>

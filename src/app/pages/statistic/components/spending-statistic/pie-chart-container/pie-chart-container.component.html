@@ -1,4 +1,4 @@
-<div class="d-flex">
+<div class="chart" [class.chart--single]="!isCompareEnabled">
     <pgz-pie-chart [data]="pieChartData" [showNames]="false"></pgz-pie-chart>
 
     @if(isCompareEnabled) {

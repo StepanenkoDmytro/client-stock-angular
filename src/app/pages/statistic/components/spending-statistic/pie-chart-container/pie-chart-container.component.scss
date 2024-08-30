@@ -1,3 +1,14 @@
 :host {
   display: block;
 }
+
+.chart {
+  display: flex;
+  padding-top: 5px;
+  gap: 10px;
+
+  &--single {
+    margin: auto;
+    width: 210px;
+  }
+}

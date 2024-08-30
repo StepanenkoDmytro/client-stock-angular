@@ -9,7 +9,7 @@ import { ICategoryStatistic } from '../../../model/SpendindStatistic';
   standalone: true,
   imports: [PieChartComponent],
   templateUrl: './pie-chart-container.component.html',
-  styleUrl: '../spending-statistic.component.scss',
+  styleUrl: './pie-chart-container.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PieChartContainerComponent {

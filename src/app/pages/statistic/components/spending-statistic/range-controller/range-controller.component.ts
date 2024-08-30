@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -28,11 +28,14 @@ const MATTERIAL_COMPONENTS = [
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RangeControllerComponent implements OnInit {
+  @Input()
+  public set isCompareEnabled(value: boolean) {
+    this.isCompareEnabledCtrl.setValue(value);
+  }
   @Output()
   public rangeChange = new EventEmitter<{
     startDate: moment.Moment,
     endDate: moment.Moment,
-    isCompareEnabled: boolean,
     compareStartDate?: moment.Moment,
     compareEndDate?: moment.Moment
   }>();
@@ -45,7 +48,7 @@ export class RangeControllerComponent implements OnInit {
   public compareEndDateCtrl: FormControl<moment.Moment> = new FormControl(moment());
 
   public selectedRange: FormControl<'month' | '90' | '120' | '365'> = new FormControl('month');
-  public isCompareEnabled: FormControl<boolean> = new FormControl(false);
+  public isCompareEnabledCtrl: FormControl<boolean> = new FormControl(false);
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -57,24 +60,16 @@ export class RangeControllerComponent implements OnInit {
       endDate: this.endDateCtrl,
       compareStartDate: this.compareStartDateCtrl,
       compareEndDate: this.compareEndDateCtrl,
-      isCompareEnabled: this.isCompareEnabled,
+      isCompareEnabled: this.isCompareEnabledCtrl,
       selectedRange: this.selectedRange
     });
     
 
     this.formRange.valueChanges.subscribe((range) => {
       this.emitRangeChange();
-
     });
 
     this.emitRangeChange();
-  }
-
-  public toogleCompare(): void {
-    this.isCompareEnabled.setValue(!this.isCompareEnabled.value);
-
-    this.setCompareRange();
-    
   }
 
   private setCompareRange(): void {
@@ -132,21 +127,19 @@ export class RangeControllerComponent implements OnInit {
   }
 
   private emitRangeChange(): void {
-    const { startDate, endDate, isCompareEnabled, compareStartDate, compareEndDate } = this.formRange.value;
+    const { startDate, endDate, compareStartDate, compareEndDate } = this.formRange.value;
     
-    if (this.isCompareEnabled) {
+    if (this.isCompareEnabledCtrl) {
       this.rangeChange.emit({
         startDate,
         endDate,
-        isCompareEnabled,
         compareStartDate: compareStartDate,
         compareEndDate: compareEndDate
       });
     } else {
       this.rangeChange.emit({
         startDate,
-        endDate,
-        isCompareEnabled
+        endDate
       });
     }
   }

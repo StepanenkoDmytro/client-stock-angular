@@ -4,8 +4,7 @@
 
 .spending-stat-card {
   display: flex;
-  justify-content: space-between;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 500;
   height: 50px;
   border: 1px solid var(--bs-gray);
@@ -20,6 +19,15 @@
 
   &--category p {
     margin-left: 10px;
+  }
+
+  &--value {
+    display: flex;
+    margin-left: auto;
+  }
+
+  &--value p {
+    margin-right: 10px;
   }
 }
 
