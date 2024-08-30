@@ -19,7 +19,9 @@
   }
 
   &--type {
-    margin: 15px 15px -15px 15px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
   }
 
   &--chart {
