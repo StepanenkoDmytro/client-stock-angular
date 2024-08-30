@@ -125,7 +125,7 @@ export class SpendingCategoryHelperService {
         children: undefined
       }] as ICategoryStatistic[];
     }
-    console.log(otherCategory);
+    
     let result: ICategoryStatistic[] = spendingCategoriesList.map(cat => this.calculateCategoryStatisticRecursive(cat, spendings));
     if(spendingCategoriesList.length > 0) {
     

@@ -18,7 +18,6 @@ export class PieChartContainerComponent {
     if(!value) {
       return;
     }
-
     this.pieChartData = this.spendingsHelperService.mapCategoryStatisticToChartData(value);
   }
 

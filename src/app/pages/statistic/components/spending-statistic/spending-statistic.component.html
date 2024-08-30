@@ -20,7 +20,7 @@
   <div class="chart-container--chart">
     <pgz-range-controller (rangeChange)="onRangeChange($event)"></pgz-range-controller>
     @if(chartTypeCtrl === 'pie') { 
-      <pgz-pie-chart-container [categoryData]="categoryStatisticForPeriod" [isCompareEnabled]="isCompareEnabled" [compareCategoryData]="compareCategoryStatisticForChart"></pgz-pie-chart-container>
+      <pgz-pie-chart-container [categoryData]="categoryStatisticForPieChart" [isCompareEnabled]="isCompareEnabled" [compareCategoryData]="compareCategoryStatisticForPieChart"></pgz-pie-chart-container>
     }
 
     @if(chartTypeCtrl === 'multiline') {
@@ -50,8 +50,10 @@
     </div>
 
     @for(data of categoryStatisticForPeriod; track data) {
-      <pgz-spending-statistic-card [data]="data" [isVisible]="isVisibleCategory(data.category)" (clickCard)="onCardClick($event)" (toggleCategory)="toggleCategory($event)">
-      </pgz-spending-statistic-card>
+      @if(data.value !== 0) {
+        <pgz-spending-statistic-card [data]="data" [isVisible]="isVisibleCategory(data.category)" (clickCard)="onCardClick($event)" (toggleCategory)="toggleCategory($event)">
+        </pgz-spending-statistic-card>
+      }
     } @empty {
       <p style="text-align: center;">You don't have any spendings</p>
     }
