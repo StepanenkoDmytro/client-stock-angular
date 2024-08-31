@@ -108,7 +108,7 @@ export class SpendingCategoryHelperService {
     return spendingCategoriesList.map(category => this.calculateCategoryStatisticRecursive(category, spendings));
   }
 
-  public async calculateCategoryStatisticByCategory(spendings: Spending[], category: Category): Promise<ICategoryStatistic[]> {
+  public calculateCategoryStatisticByCategory(spendings: Spending[], category: Category): ICategoryStatistic[] {
     
     const spendingCategoriesList = category.children;
     const otherCategoryValue = spendings
@@ -140,7 +140,6 @@ export class SpendingCategoryHelperService {
         });
     }
     }
-    console.log(result);
     return result;
   }
 

@@ -129,19 +129,12 @@ export class RangeControllerComponent implements OnInit {
   private emitRangeChange(): void {
     const { startDate, endDate, compareStartDate, compareEndDate } = this.formRange.value;
     
-    if (this.isCompareEnabledCtrl) {
-      this.rangeChange.emit({
-        startDate,
-        endDate,
-        compareStartDate: compareStartDate,
-        compareEndDate: compareEndDate
-      });
-    } else {
-      this.rangeChange.emit({
-        startDate,
-        endDate
-      });
-    }
+    this.rangeChange.emit({
+      startDate,
+      endDate,
+      compareStartDate,
+      compareEndDate
+    });
   }
   
 }
