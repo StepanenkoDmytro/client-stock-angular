@@ -44,7 +44,7 @@ export class AddCategoryComponent implements OnInit {
   public categoryTitleCtrl: FormControl<string> = new FormControl('');
   public selectedIcon: string = 'payment';
 
-  private editCategory: Category;
+  public editCategory: Category;
 
   constructor(
     private spendingService: SpendingsService,

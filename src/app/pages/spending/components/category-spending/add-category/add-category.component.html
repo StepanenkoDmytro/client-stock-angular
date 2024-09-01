@@ -8,7 +8,7 @@
 
         <mat-form-field appearance="outline" floatLabel="always" class="w-100">
             <mat-label>Name category</mat-label>
-            <input matInput type="text" inputmode="numeric" class="category--name" placeholder="Enter name of category" style="font-size: 1.5rem;" [formControl]="categoryTitleCtrl">
+            <input matInput type="text" class="category--name" placeholder="Enter name of category" style="font-size: 1.5rem;" [formControl]="categoryTitleCtrl">
         </mat-form-field>
     </div>
     <div style="display: flex; position: relative;">
@@ -19,6 +19,13 @@
     
     <div class="add-category--actions">
         <button class="add-category--btn" mat-button [routerLink]="['/spending']">Cancel</button>
-        <button class="add-category--btn save" mat-button (click)="onAdd()">Add</button>
+        
+        <button class="add-category--btn save" mat-button (click)="onAdd()">
+            @if(!!!this.editCategory) {
+                Add
+            } @else {
+                Save
+            }
+        </button>
     </div>
 </section>
