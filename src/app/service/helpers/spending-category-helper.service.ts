@@ -25,9 +25,9 @@ export class SpendingCategoryHelperService {
 
       const donutDataModel: SimpleDataModel[] = categoryData
         .map(data => ({
-          ...data,
           name: data.category.title,
-          value: parseFloat(((data.value / totalCostByRange) * 100).toFixed(2))
+          value: parseFloat(((data.value / totalCostByRange) * 100).toFixed(2)),
+          color: data.category?.color
         }))
         .filter(data => data.value > 0);
                                       

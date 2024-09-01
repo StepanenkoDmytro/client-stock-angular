@@ -20,6 +20,10 @@ export class SpendingStatisticCardComponent implements OnInit {
   }
   @Input()
   public isVisible: boolean = true;
+  @Input()
+  public set compareData(value: ICategoryStatistic) {
+    // console.log(value);
+  }
 
   public _data: ICategoryStatistic;
 

@@ -27,8 +27,9 @@ export class PieChartComponent implements OnInit, AfterViewInit, OnDestroy {
       this._data$.next([]);
       return;
     }
+
+    console.log(value);
     this.totalSum = value.totalSum;
-    // console.log(value);
     this._data$.next(value.data);
   }
   @Input()
@@ -87,7 +88,7 @@ export class PieChartComponent implements OnInit, AfterViewInit, OnDestroy {
     this.d3.select(`#${this.donutID}`).selectChildren('*').remove();
     this.d3.select(`#${this.donutNamesID}`).selectChildren('*').remove();
     this.createSvg();
-    this.createColors(palette);
+    // this.createColors(palette);
     this.drawChart();
 
     if(this.showNames) {
@@ -141,7 +142,7 @@ export class PieChartComponent implements OnInit, AfterViewInit, OnDestroy {
       .enter()
       .append('path')
       .attr('d', (d: any) => arc(d))
-      .attr('fill', (d: any, i: any) => this.colors(i.toString()));
+      .attr('fill', (d: any, i: any) => d.data.color);
     
     // const text = this.svg
     //   .append('text')

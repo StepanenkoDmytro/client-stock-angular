@@ -214,7 +214,7 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
         compareSpendingsByRange
       );
     }
-
+    
     this.sortCategoryStatistic();
   }
 
