@@ -27,8 +27,7 @@ export class PieChartComponent implements OnInit, AfterViewInit, OnDestroy {
       this._data$.next([]);
       return;
     }
-
-    console.log(value);
+    
     this.totalSum = value.totalSum;
     this._data$.next(value.data);
   }

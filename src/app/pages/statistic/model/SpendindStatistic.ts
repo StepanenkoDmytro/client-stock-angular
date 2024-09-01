@@ -23,6 +23,8 @@ export const formInitializer = {
   };
 
 export const initializeFormGroup = (): FormGroup => {
+    // const compareStartthis.startDateCtrl.value.subtract(1, 'days'));
+    // this.compareEndDateCtrl.setValue(this.compareStartDateCtrl.value.subtract(30, 'days'));
     return new FormGroup({
         startDate: formInitializer.startDateCtrl,
         endDate: formInitializer.endDateCtrl,

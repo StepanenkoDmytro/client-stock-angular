@@ -6,11 +6,9 @@ import { BarComponent } from '../../../../core/UI/components/charts/bar/bar.comp
 import { SpendingsService } from '../../../../service/spendings.service';
 import { HistorySpendingCardComponent } from '../../../spending/components/history-spending/history-spending-card/history-spending-card.component';
 import { MultiLineComponent } from '../../../../core/UI/components/charts/multi-line/multi-line.component';
-import { DonutComponent, IDonutData } from '../../../../core/UI/components/charts/donut/donut.component';
-import { FormControl, FormGroup, FormsModule, FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { DonutComponent } from '../../../../core/UI/components/charts/donut/donut.component';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MAT_DATE_LOCALE } from '@angular/material/core';
-import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
 import moment from 'moment';
 import { DateFormatPipe } from '../../../../core/UI/calendar/date-format.pipe';
 import { ICategoryStatistic, RangeForm, initializeFormGroup } from '../../model/SpendindStatistic';
@@ -67,7 +65,6 @@ const MATERIAL_MODULES = [
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SpendingStatisticComponent implements OnInit, OnDestroy {
-
   public currCategory: Category | null;
 
   public chartTypeCtrl: 'pie' | 'multiline' = 'pie';
@@ -128,12 +125,6 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
     this.cdr.markForCheck();
   }
 
-  public ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
-  }
-
   public onRangeChange(range: {
     startDate: moment.Moment,
     endDate: moment.Moment,
@@ -141,7 +132,6 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
     compareEndDate?: moment.Moment
   }): void {
     this.updateFormGroup(range);
-    
   }
 
   public allCategoriesVisible(): void {
@@ -168,12 +158,12 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
   }
 
   public toggleCategory(categoryId: string): void {
-  
     if (this.disabledCategories.has(categoryId)) {
       this.disabledCategories.delete(categoryId);
     } else {
       this.disabledCategories.add(categoryId);
     }
+
     this.setChartsData();
   }
 
@@ -186,6 +176,10 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
     this.router.navigate(['/statistic/details', category.id]);
   }
 
+  public getCompareDataForCard(categoryId: string): ICategoryStatistic {
+    return this.compareCategoryStatisticForPieChart.find(categoryStat => categoryStat.category.id === categoryId);
+  }
+
   private async setCategoryStatistic(): Promise<void> {
     if(this.currCategory) {
       this.categoryStatisticForPeriod = this.spendingsHelperService.calculateCategoryStatisticByCategory(this.filteredSpendings, this.currCategory);
@@ -194,6 +188,12 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
     }
 
     this.setChartsData();
+  }
+
+  public ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   private async setChartsData(): Promise<void> {
@@ -206,14 +206,14 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
     this.categoryStatisticForPieChart = this.categoryStatisticForPeriod.filter(categoryStat => !this.disabledCategories.has(categoryStat.category.id))
     this.spendingsForMultiLineChart = this.filteredSpendings;
 
-    if(compareSpendingsByRange.length > 0) {
+    // if(compareSpendingsByRange.length > 0) {
       this.compareCategoryStatisticForPieChart = await this.spendingsHelperService.calculateCategoryStatistic(compareSpendingsByRange);
       this.compareSpendingsForMultiLineChart = this.spendingsHelperService.getSpendingsByRange(
         this.formRange.controls.compareStartDate.value, 
         this.formRange.controls.compareEndDate.value, 
         compareSpendingsByRange
       );
-    }
+    // }
     
     this.sortCategoryStatistic();
   }

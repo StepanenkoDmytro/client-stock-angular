@@ -30,6 +30,9 @@ const MATTERIAL_COMPONENTS = [
 export class RangeControllerComponent implements OnInit {
   @Input()
   public set isCompareEnabled(value: boolean) {
+    if(value) {
+      this.setCompareRange();
+    }
     this.isCompareEnabledCtrl.setValue(value);
   }
   @Output()
@@ -55,6 +58,7 @@ export class RangeControllerComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
+ 
     this.formRange = this.formBuilder.group({
       startDate: this.startDateCtrl,
       endDate: this.endDateCtrl,
@@ -63,7 +67,6 @@ export class RangeControllerComponent implements OnInit {
       isCompareEnabled: this.isCompareEnabledCtrl,
       selectedRange: this.selectedRange
     });
-    
 
     this.formRange.valueChanges.subscribe((range) => {
       this.emitRangeChange();
@@ -74,19 +77,21 @@ export class RangeControllerComponent implements OnInit {
 
   private setCompareRange(): void {
     const currStartDate: moment.Moment = this.startDateCtrl.value.clone();
-    const compareStartDate: moment.Moment = currStartDate.clone().subtract(1, 'days');
+    const compareEndDate: moment.Moment = currStartDate.clone().subtract(1, 'days');
 
-    let compareEndDate: moment.Moment = moment();
+    let compareStartDate: moment.Moment = moment();
 
     if(this.selectedRange.value === 'month') {
-      compareEndDate = compareStartDate.clone().startOf('month')
+      compareStartDate = compareEndDate.clone().startOf('month')
     } else {
       const countDays = parseInt(this.selectedRange.value);
-      compareEndDate = compareStartDate.clone().subtract(countDays, 'days');
+      compareStartDate = compareEndDate.clone().subtract(countDays, 'days');
     }
 
-    this.compareStartDateCtrl.setValue(compareEndDate);
-    this.compareEndDateCtrl.setValue(compareStartDate);
+    this.compareStartDateCtrl.setValue(compareStartDate);
+    this.compareEndDateCtrl.setValue(compareEndDate);
+
+
   }
 
   public changeToCurrentMonthRange(): void {

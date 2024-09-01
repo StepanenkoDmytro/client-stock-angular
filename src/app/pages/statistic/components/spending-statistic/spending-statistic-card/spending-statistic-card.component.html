@@ -1,5 +1,6 @@
-<div class="spending-stat-card" [ngClass]="{'disabled': !isVisible}">
+<div class="spending-stat-card" [ngClass]="{'disabled': isDisabledCard()}">
     <div class="spending-stat-card--color" [style.background-color]="_data.category.color"></div>
+    
     <div class="spending-stat-card--category" (click)="onClickCard()">
         <pgz-icon class="spending--icon" [name]="_data.category.icon"></pgz-icon>
         <p>{{_data.category.title}}</p>
@@ -7,6 +8,11 @@
 
     <div class="spending-stat-card--value">
         <p>{{_data.value}}</p>
+        @if(isCompareMode) {
+            <div>
+                <p>{{_compareData.value}}</p>
+            </div>
+        }
 
         <button class="btn" (click)="onToggleCategory()">
             @if(isVisible) {

@@ -61,15 +61,17 @@
       </button>
     </div>
 
-    @for(data of categoryStatisticForPeriod; track data) {
-      @if(data.value !== 0) {
+    @for(data of categoryStatisticForPeriod; let i = $index; track data) {
+      <!-- @if(data.value !== 0) { -->
         <pgz-spending-statistic-card 
           [data]="data"
+          [compareData]="getCompareDataForCard(data.category.id)"
+          [isCompareMode]="isCompareEnabled"
           [isVisible]="isVisibleCategory(data.category)" 
           (clickCard)="onCardClick($event)" 
           (toggleCategory)="toggleCategory($event)">
         </pgz-spending-statistic-card>
-      }
+      <!-- } -->
     } @empty {
       <p style="text-align: center;">You don't have any spendings</p>
     }
