@@ -63,7 +63,11 @@
 
     @for(data of categoryStatisticForPeriod; track data) {
       @if(data.value !== 0) {
-        <pgz-spending-statistic-card [data]="data" [isVisible]="isVisibleCategory(data.category)" (clickCard)="onCardClick($event)" (toggleCategory)="toggleCategory($event)">
+        <pgz-spending-statistic-card 
+          [data]="data"
+          [isVisible]="isVisibleCategory(data.category)" 
+          (clickCard)="onCardClick($event)" 
+          (toggleCategory)="toggleCategory($event)">
         </pgz-spending-statistic-card>
       }
     } @empty {
