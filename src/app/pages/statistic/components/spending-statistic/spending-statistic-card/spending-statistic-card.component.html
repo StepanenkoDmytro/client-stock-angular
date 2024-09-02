@@ -1,4 +1,7 @@
-<div class="spending-stat-card" [ngClass]="{'disabled': isDisabledCard()}">
+<div class="spending-stat-card" [ngClass]="{
+        'disabled': isDisabledCard(),
+        'spending-stat-card--compare-mode': isCompareMode
+    }">
     <div class="spending-stat-card--color" [style.background-color]="_data.category.color"></div>
     
     <div class="spending-stat-card--category" (click)="onClickCard()">
@@ -6,12 +9,23 @@
         <p>{{_data.category.title}}</p>
     </div>
 
-    <div class="spending-stat-card--value">
-        <p>{{_data.value}}</p>
+    <div class="spending-stat-card-value">
+        
         @if(isCompareMode) {
-            <div>
-                <p>{{_compareData.value}}</p>
+            <div class="mx-2">
+                <div class="d-flex justify-content-between">
+                    <p class="spending-stat-card-value--compare-range">{{startRange.format('DD MMM YYYY')}}</p>
+                    <p>{{_data.value}}</p>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <p class="spending-stat-card-value--compare-range">{{startCompareRange.format('DD MMM YYYY')}}</p>
+                    <p>{{_compareData.value}}</p>
+                </div>
+               
             </div>
+        } @else {
+            <p>{{_data.value}}</p>
         }
 
         <button class="btn" (click)="onToggleCategory()">

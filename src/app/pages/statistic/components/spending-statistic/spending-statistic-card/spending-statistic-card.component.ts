@@ -28,6 +28,10 @@ export class SpendingStatisticCardComponent implements OnInit {
   public isVisible: boolean = true;
   @Input()
   public isCompareMode: boolean = false;
+  @Input()
+  public startRange:moment.Moment;
+  @Input()
+  public startCompareRange:moment.Moment;
 
   @Output() 
   public toggleCategory: EventEmitter<string> = new EventEmitter();

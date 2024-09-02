@@ -67,6 +67,8 @@
           [data]="data"
           [compareData]="getCompareDataForCard(data.category.id)"
           [isCompareMode]="isCompareEnabled"
+          [startRange]="formRange.value.startDate"
+          [startCompareRange]="formRange.value.compareStartDate"
           [isVisible]="isVisibleCategory(data.category)" 
           (clickCard)="onCardClick($event)" 
           (toggleCategory)="toggleCategory($event)">
