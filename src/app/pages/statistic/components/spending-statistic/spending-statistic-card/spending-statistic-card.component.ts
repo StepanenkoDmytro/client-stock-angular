@@ -59,7 +59,7 @@ export class SpendingStatisticCardComponent implements OnInit {
   public isDisabledCard(): boolean {
     if(this.isCompareMode) {
       const isVisible = this._data.value > 0 || this._compareData.value > 0;
-      return !isVisible;
+      return !isVisible && !this.isVisible;
     }
     return !this.isVisible;
   }

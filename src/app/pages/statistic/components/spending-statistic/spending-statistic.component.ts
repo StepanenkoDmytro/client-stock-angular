@@ -218,21 +218,6 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
     this.sortCategoryStatistic();
   }
 
-  private sortCategoryStatistic(): void {
-    this.categoryStatisticForPeriod.sort((a, b) => {
-      const isADisabled = this.disabledCategories.has(a.category.id);
-      const isBDisabled = this.disabledCategories.has(b.category.id);
-
-      if (isADisabled && !isBDisabled) {
-        return 1;
-      } else if (!isADisabled && isBDisabled) {
-        return -1;
-      }
-
-      return this.isAscSort ? b.value - a.value : a.value - b.value;
-    });
-  }
-
   private updateFormGroup(range: { 
     startDate: moment.Moment; 
     endDate: moment.Moment; 
@@ -254,5 +239,27 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
       this.spendings
     );
     this.filteredSpendings = spendingsByRange;
+  }
+
+  private sortCategoryStatistic(): void {
+    this.categoryStatisticForPeriod.sort((a, b) => {
+      let firstValue = a.value;
+      let SecondValue = b.value;
+
+      if(this.isCompareEnabled) {
+        firstValue += this.getCompareDataForCard(a.category.id).value;
+        SecondValue += this.getCompareDataForCard(b.category.id).value;
+      }
+      const isADisabled = this.disabledCategories.has(a.category.id);
+      const isBDisabled = this.disabledCategories.has(b.category.id);
+
+      if (isADisabled && !isBDisabled) {
+        return 1;
+      } else if (!isADisabled && isBDisabled) {
+        return -1;
+      }
+
+      return this.isAscSort ? SecondValue - firstValue : firstValue - SecondValue;
+    });
   }
 }
