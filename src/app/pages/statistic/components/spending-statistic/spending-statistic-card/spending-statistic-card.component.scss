@@ -12,6 +12,14 @@
   padding: 10px;
   margin: 10px;
 
+  &--compare-mode {
+    height: 100%;
+  }
+
+  &--color {
+    width: 20px;
+  }
+
   &--category {
     display: flex;
     align-items: center;
@@ -21,13 +29,19 @@
     margin-left: 10px;
   }
 
-  &--value {
-    display: flex;
-    margin-left: auto;
-  }
-
   &--value p {
     margin-right: 10px;
+  }
+}
+
+.spending-stat-card-value {
+  display: flex;
+  margin-left: auto;
+
+  &--compare-range {
+    font-size: 17px;
+    align-self: center;
+    margin-right: 15px;
   }
 }
 

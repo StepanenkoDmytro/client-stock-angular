@@ -1,3 +1,5 @@
+import { colorPalette } from "./d3.domain";
+
 export interface ICategory {
   id: string;
   title: string;
@@ -8,6 +10,7 @@ export interface ICategoryApi {
   id: string;
   title: string;
   icon: string;
+  color: string;
   parent: string,
   saved: boolean,
 }
@@ -41,6 +44,7 @@ export class Category implements ICategory {
   public readonly id: string;
   public parent: string | null = null;
   public children: Category[] = [];
+  public color: string | null = null;
 
   constructor(
     public title: string = '',
@@ -49,6 +53,7 @@ export class Category implements ICategory {
     public isSaved: boolean = false,
     id?: string | null,
     parent?: string | null,
+    color?: string | null
   ) {
 
     if(id) {
@@ -58,6 +63,7 @@ export class Category implements ICategory {
     }
     this.parent = parent;
     this.children = children;
+    this.color = color;
   }
 
   public get isRoot(): boolean {
@@ -68,13 +74,22 @@ export class Category implements ICategory {
     this.parent = parentId;
   }
 
+  public setColor(colorId: string | null): void {
+    this.color = colorId;
+  }
+
   public setChildren(children :Category[]): void {
     this.children = children;
   } 
 
   public static getCategoryDefaultList(): Category[] {
     this.defaultList.forEach(category => {
-      category.children.map(children => children.setParent(category.id));
+      category.children.map((children, index) => {
+        children.setParent(category.id);
+        
+        const color = colorPalette[index % colorPalette.length]; 
+        children.setColor(color);
+      });
     });
     
     return this.defaultList;
@@ -85,6 +100,7 @@ export class Category implements ICategory {
       id: category.id,
       title: category.title,
       icon: category.icon,
+      color: category.color,
       parent: category.parent,
       saved: category.isSaved,
     }
@@ -97,8 +113,9 @@ export class Category implements ICategory {
       [],
       category.saved,
       category.id,
-      category.parent
-      );
+      category.parent,
+      category.color,
+    );
 
     return serverCategory;
   }
@@ -114,5 +131,5 @@ export class Category implements ICategory {
         }
     }
     return undefined;
-}
+  }
 }
