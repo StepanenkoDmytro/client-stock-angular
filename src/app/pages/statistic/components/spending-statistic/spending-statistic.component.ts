@@ -190,6 +190,10 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
     this.setChartsData();
   }
 
+  public getcompareCategoryStatisticForPieChart(): ICategoryStatistic[] {
+    return this.compareCategoryStatisticForPieChart.filter(categoryStat => !this.disabledCategories.has(categoryStat.category.id))
+  } 
+
   public ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();

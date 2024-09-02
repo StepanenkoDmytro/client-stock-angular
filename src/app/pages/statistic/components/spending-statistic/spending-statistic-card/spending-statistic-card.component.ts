@@ -51,6 +51,10 @@ export class SpendingStatisticCardComponent {
   }
 
   public isCardHaveData(): boolean {
+    if(!this.isCompareMode) {
+      return this._data.value > 0;
+    }
+    
     const isVisible = this._data.value > 0 || this._compareData.value > 0;
     return isVisible;
   }

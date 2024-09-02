@@ -30,7 +30,7 @@
     <div class="chart-container--chart">
       @if(chartTypeCtrl === 'pie') { 
         <div>
-          <pgz-pie-chart-container [categoryData]="categoryStatisticForPieChart" [isCompareEnabled]="isCompareEnabled" [compareCategoryData]="compareCategoryStatisticForPieChart"></pgz-pie-chart-container>
+          <pgz-pie-chart-container [categoryData]="categoryStatisticForPieChart" [isCompareEnabled]="isCompareEnabled" [compareCategoryData]="getcompareCategoryStatisticForPieChart()"></pgz-pie-chart-container>
         </div>
       }
 
