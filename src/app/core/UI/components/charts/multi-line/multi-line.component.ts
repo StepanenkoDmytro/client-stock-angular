@@ -102,6 +102,7 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
     
 
     if(data.length > 1) {
+      console.log(data);
       let maxDays = 0;
       let firstDayOfRange: Date | null = null;
       let lastDayOfRange: Date | null = null;
@@ -146,71 +147,85 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
       console.log('result', result);
 
 
-    const xScale: d3.ScaleLinear<number, number> | d3.ScaleTime<number, number> = d3.scaleLinear()
-      .domain([1, maxDays + 2]) // Дні місяця
-      .range([0, this.width - this.margin]);
+      const xScale: d3.ScaleLinear<number, number> | d3.ScaleTime<number, number> = d3.scaleLinear()
+        .domain([1, maxDays + 2]) // Дні місяця
+        .range([0, this.width - this.margin]);
 
-    const yScale = d3.scaleLinear()
-      .domain([0, d3.max(data.flatMap(country => country.values), d => d.price) ?? 100])
-      .range([this.height - this.margin, 0]);
+      const yScale = d3.scaleLinear()
+        .domain([0, d3.max(data.flatMap(country => country.values), d => d.price) ?? 100])
+        .range([this.height - this.margin, 0]);
 
-    const color = d3.scaleOrdinal(d3.schemeCategory10);
-    
-    /* Add SVG */
-    const svg = d3.select(`#${this.multiLineID}`).append("svg")
-      .attr("width", (this.width + this.margin) + "px")
-      .attr("height", (this.height + this.margin) + "px")
-      .append('g')
-      .attr("transform", `translate(${this.margin}, ${this.margin})`);
+      const color = d3.scaleOrdinal(d3.schemeCategory10);
+      
+      /* Add SVG */
+      const svg = d3.select(`#${this.multiLineID}`).append("svg")
+        .attr("width", (this.width + this.margin) + "px")
+        .attr("height", (this.height + this.margin) + "px")
+        .append('g')
+        .attr("transform", `translate(${this.margin}, ${this.margin})`);
 
-    const line: d3.Line<DataCompareValue> = d3.line<DataCompareValue>()
-      .x(d => xScale(d.date))
-      .y(d => yScale(d.price)!);
-  
-    /* Add Axis into SVG */
-    const xAxis = d3.axisBottom(xScale).ticks(5);
-    const yAxis = d3.axisLeft(yScale).ticks(5);
+      const line: d3.Line<DataCompareValue> = d3.line<DataCompareValue>()
+        .x(d => xScale(d.date))
+        .y(d => yScale(d.price)!);
     
-    svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", `translate(0, ${this.height - this.margin})`)
-      .call(xAxis);
-    
-    svg.append("g")
-      .attr("class", "y axis")
-      .call(yAxis);
-    
-    /* Add line into SVG */
-    
+      /* Add Axis into SVG */
+      const xAxis = d3.axisBottom(xScale).ticks(5);
+      const yAxis = d3.axisLeft(yScale).ticks(5);
+      
+      svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", `translate(0, ${this.height - this.margin})`)
+        .call(xAxis);
+      
+      svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
+      
+      /* Add line into SVG */
+      
 
-    const lines = svg.append('g');
+      const lines = svg.append('g');
 
-    lines.append("g")
-      .attr("fill", "none")
-      .attr("stroke-width", 1)
-      .attr("stroke-linejoin", "round")
-      .attr("stroke-linecap", "round")
-      .selectAll("path")
-      .data(result)
-      .join("path")
-      .style("mix-blend-mode", "multiply")
-      .attr("d", d => line(d.values))
-      .attr("stroke", (d, i) => color(i.toString()));
-    
-    /* Add circles in the line */
-    lines.selectAll("circle-group")
-      .data(result)
-      .enter()
-      .append("g")
-      .style("fill", (d, i) => color(i.toString()))
-      .selectAll("circle")
-      .data(d => d.values)
-      .enter()
-      .append("circle")
-      .attr("cx", d => xScale(d.date))
-      .attr("cy", d => yScale(d.price))
-      .attr("r", 3)
-      .style('opacity', 0.85);
+      lines.append("g")
+        .attr("fill", "none")
+        .attr("stroke-width", 1)
+        .attr("stroke-linejoin", "round")
+        .attr("stroke-linecap", "round")
+        .selectAll("path")
+        .data(result)
+        .join("path")
+        .style("mix-blend-mode", "multiply")
+        .attr("d", d => line(d.values))
+        .attr("stroke", (d, i) => color(i.toString()));
+      
+      /* Add circles in the line */
+      lines.selectAll("circle-group")
+        .data(result)
+        .enter()
+        .append("g")
+        .style("fill", (d, i) => color(i.toString()))
+        .selectAll("circle")
+        .data(d => d.values)
+        .enter()
+        .append("circle")
+        .attr("cx", d => xScale(d.date))
+        .attr("cy", d => yScale(d.price))
+        .attr("r", 3)
+        .style('opacity', 0.85);
+
+      const textPadding = 10; 
+      let currentX = this.margin;
+
+      data.forEach((d, i) => {
+        const textElement = svg.append("text")
+          .attr("x", currentX) 
+          .attr("y", this.height)
+          .attr("fill", color(i.toString()))
+          .attr("font-size", '12px')
+          .text(`-${d.name}`);
+
+        currentX += textElement.node().getBBox().width + textPadding;
+      });
     }
 
     if(data.length === 1) {
@@ -284,7 +299,10 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
       .style('opacity', 0.85);
     }
 
-    
+    // const legend = svg.append("g")
+    //         .attr("transform", `translate(${this.margin}, ${this.height + this.margin + 20})`);
+
+        
   }
 
 }

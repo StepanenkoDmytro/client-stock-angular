@@ -37,6 +37,10 @@ export class MultiLineChartContainerComponent {
   public isCompareEnabled: boolean = false;
   @Input()
   public compareSpendings: Spending[] = [];
+  @Input()
+  public startRange:moment.Moment;
+  @Input()
+  public startCompareRange:moment.Moment;
 
   public multiLineChartData: IMultiLineData[] = [];
   public multiLineChartDataByChildren: IMultiLineData[] = [];
@@ -58,12 +62,11 @@ export class MultiLineChartContainerComponent {
 
   private updateChartData(): void {
     const currentData = this.spendingsHelperService.mapCategoryStatisticToLineChartData(this.spendings, this.activeCategories);
-    this.multiLineChartData = [this.spendingsHelperService.calculateLineChartByChildren('currentData', currentData)];
+    this.multiLineChartData = [this.spendingsHelperService.calculateLineChartByChildren(`from ${this.startRange.format('DD MMM YYYY')}`, currentData)];
 
     if (this.isCompareEnabled && this.compareSpendings.length) {
-      console.log('hello')
       const compareData = this.spendingsHelperService.mapCategoryStatisticToLineChartData(this.compareSpendings, this.activeCategories);
-      const compareLineData = this.spendingsHelperService.calculateLineChartByChildren('compareData', compareData);
+      const compareLineData = this.spendingsHelperService.calculateLineChartByChildren(`from ${this.startCompareRange.format('DD MMM YYYY')}`, compareData);
       this.multiLineChartData.push(compareLineData);
     }
   }
