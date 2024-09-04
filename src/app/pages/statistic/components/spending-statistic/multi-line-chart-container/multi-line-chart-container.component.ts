@@ -38,51 +38,33 @@ export class MultiLineChartContainerComponent {
   @Input()
   public compareSpendings: Spending[] = [];
 
-  public multiLineChartData: IMultiLineData[];
-  public multiLineChartDataByChildren: IMultiLineData[];
+  public multiLineChartData: IMultiLineData[] = [];
+  public multiLineChartDataByChildren: IMultiLineData[] = [];
 
   constructor(
     private spendingsHelperService: SpendingCategoryHelperService,
     private cdr: ChangeDetectorRef
   ) { }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['spendings'] || changes['activeCategories'] || changes['isCompareEnabled'] || changes['compareSpendings']) {
-      this.updateChartData();
-    }
+  public ngOnChanges(changes: SimpleChanges): void {
+    // setTimeout(() => {
+      if (changes['spendings'] || changes['activeCategories'] || changes['isCompareEnabled'] || changes['compareSpendings']) {
+        this.updateChartData();
+        // this.cdr.markForCheck();
+      }
+    // });
   }
+  
 
   private updateChartData(): void {
-    
-    // Формування даних для основного графіка
     const currentData = this.spendingsHelperService.mapCategoryStatisticToLineChartData(this.spendings, this.activeCategories);
     this.multiLineChartData = [this.spendingsHelperService.calculateLineChartByChildren('currentData', currentData)];
 
-    // Якщо порівняння увімкнене, додаємо порівняльні дані
     if (this.isCompareEnabled && this.compareSpendings.length) {
-      
+      console.log('hello')
       const compareData = this.spendingsHelperService.mapCategoryStatisticToLineChartData(this.compareSpendings, this.activeCategories);
       const compareLineData = this.spendingsHelperService.calculateLineChartByChildren('compareData', compareData);
       this.multiLineChartData.push(compareLineData);
     }
-
-    // if(!this.isCompareEnabled) {
-    //   this.multiLineChartData.filter(data => data.name === 'compareData');
-    // }
-    // console.log(this.multiLineChartData);
-    this.cdr.detectChanges();
   }
-
-
-  // private setData(): void {
-  //   this.multiLineChartDataByChildren = this.spendingsHelperService.mapCategoryStatisticToLineChartData(this.spendings, this.activeCategories);
-  //   this.multiLineChartData = [this.spendingsHelperService.calculateLineChartByChildren('currentData', this.multiLineChartDataByChildren)];
-  // }
-
-  // private setCompareData(): void {
-  //   this.multiLineChartDataByChildren = this.spendingsHelperService.mapCategoryStatisticToLineChartData(this.compareSpendings, this.activeCategories);
-  //   const compareData = this.spendingsHelperService.calculateLineChartByChildren('compareData', this.multiLineChartDataByChildren);
-  //   this.multiLineChartData.push(compareData);
-  // }
-  
 }
