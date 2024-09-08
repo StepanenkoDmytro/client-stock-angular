@@ -30,7 +30,11 @@
     <div class="chart-container--chart">
       @if(chartTypeCtrl === 'pie') { 
         <div>
-          <pgz-pie-chart-container [categoryData]="categoryStatisticForPieChart" [isCompareEnabled]="isCompareEnabled" [compareCategoryData]="getcompareCategoryStatisticForPieChart()"></pgz-pie-chart-container>
+          <pgz-pie-chart-container 
+            [categoryData]="categoryStatisticForPieChart" 
+            [isCompareEnabled]="isCompareEnabled" 
+            [compareCategoryData]="getCompareCategoryStatisticForPieChart()"
+          ></pgz-pie-chart-container>
         </div>
       }
 
@@ -40,6 +44,8 @@
           [isCompareEnabled]="isCompareEnabled"
           [spendings]="spendingsForMultiLineChart"
           [compareSpendings]="compareSpendingsForMultiLineChart"
+          [startRange]="formRange.value.startDate"
+          [startCompareRange]="formRange.value.compareStartDate"
         ></pgz-multi-line-chart-container>
       }
     </div>

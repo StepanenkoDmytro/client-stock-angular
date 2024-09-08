@@ -190,7 +190,7 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
     this.setChartsData();
   }
 
-  public getcompareCategoryStatisticForPieChart(): ICategoryStatistic[] {
+  public getCompareCategoryStatisticForPieChart(): ICategoryStatistic[] {
     return this.compareCategoryStatisticForPieChart.filter(categoryStat => !this.disabledCategories.has(categoryStat.category.id))
   } 
 
@@ -207,18 +207,17 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
       this.spendings
     );
 
-    this.categoryStatisticForPieChart = this.categoryStatisticForPeriod.filter(categoryStat => !this.disabledCategories.has(categoryStat.category.id))
-    this.spendingsForMultiLineChart = this.filteredSpendings;
+    this.categoryStatisticForPieChart = this.categoryStatisticForPeriod.filter(categoryStat => !this.disabledCategories.has(categoryStat.category.id));
+    this.spendingsForMultiLineChart = this.filteredSpendings.filter(spending => !this.disabledCategories.has(spending.category.id));
 
-    // if(compareSpendingsByRange.length > 0) {
-      this.compareCategoryStatisticForPieChart = await this.spendingsHelperService.calculateCategoryStatistic(compareSpendingsByRange);
-      this.compareSpendingsForMultiLineChart = this.spendingsHelperService.getSpendingsByRange(
+    this.compareCategoryStatisticForPieChart = await this.spendingsHelperService.calculateCategoryStatistic(compareSpendingsByRange);
+    this.compareSpendingsForMultiLineChart = this.spendingsHelperService
+      .getSpendingsByRange(
         this.formRange.controls.compareStartDate.value, 
         this.formRange.controls.compareEndDate.value, 
         compareSpendingsByRange
-      );
-    // }
-    
+      ).filter(spending => !this.disabledCategories.has(spending.category.id));
+      
     this.sortCategoryStatistic();
   }
 
