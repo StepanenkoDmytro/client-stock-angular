@@ -63,7 +63,7 @@ export class Category implements ICategory {
     }
     this.parent = parent;
     this.children = children;
-    this.color = color;
+    this.setColor(color);
   }
 
   public get isRoot(): boolean {
@@ -75,6 +75,13 @@ export class Category implements ICategory {
   }
 
   public setColor(colorId: string | null): void {
+    if(!colorId) {
+      const randomIndex = Math.floor(Math.random() * colorPalette.length);
+      const color = colorPalette[randomIndex % colorPalette.length]; 
+      this.color = color;
+      return;
+    }
+    
     this.color = colorId;
   }
 
