@@ -11,6 +11,8 @@ import { ID3Value } from '../../domain/d3.domain';
 import { ISpending } from '../../domain/spending.domain';
 import { ExpenseService } from '../../service/expense.service';
 import { switchMap } from 'rxjs';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
 
 
 const UI_COMPONENTS = [
@@ -20,9 +22,11 @@ const UI_COMPONENTS = [
   HistorySpendingComponent,
   ButtonToggleComponent,
 ];
+
 const MATERIAL_MODULES = [
   MatButtonModule,
-  MatBottomSheetModule
+  MatBottomSheetModule,
+  MatIconModule,
 ];
 
 @Component({
@@ -31,7 +35,7 @@ const MATERIAL_MODULES = [
   styleUrl: './spending.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [ ...UI_COMPONENTS, ...MATERIAL_MODULES ],
+  imports: [ ...UI_COMPONENTS, ...MATERIAL_MODULES, RouterModule ],
 })
 export class SpendingComponent implements OnInit {
   public expends: ID3Value = {
@@ -48,20 +52,20 @@ export class SpendingComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    this.expenseService.loadByMonth().subscribe(spendings => {
+    this.expenseService.loadByCurrentMonth().subscribe(spendings => {
       this.historySpending = spendings;
     });
   }
 
   public addSpending(): void {
     this._bottomSheet.open(AddSpendingComponent).backdropClick().pipe(
-      switchMap(() => this.expenseService.loadByMonth())
+      switchMap(() => this.expenseService.loadByCurrentMonth())
     ).subscribe(spendings => {
       this.historySpending = spendings;
     });
   }
 
-  
+
   public onChangeFrame(frame: boolean): void {
     this.isSpendingsFrame = frame;
   }

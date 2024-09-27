@@ -1,5 +1,5 @@
 <div class="spending">
-  <pgz-progress [progress]="38" [height]="30" [text]="'House'"></pgz-progress>
+  <pgz-progress class="progress" [progress]="38" [height]="30" [text]="'House'"></pgz-progress>
   <pgz-total-balance [balance]="expends.money"></pgz-total-balance>
 
   <pgz-button-toggle
@@ -9,13 +9,11 @@
       (buttonValue)="onChangeFrame($event)">
   </pgz-button-toggle>
 
-  <!-- <input type="number" inputmode="numeric"> -->
-
   @if(isSpendingsFrame) {
     <pgz-period-spending [expends]="expends"></pgz-period-spending>
   } @else {
     <pgz-history-spending [spendings]="historySpending"></pgz-history-spending>
   }
 
-  <button mat-flat-button class="spending-btn" (click)="addSpending()">{{ 'Add spending' }}</button>
+  <button mat-flat-button class="spending-btn" color="primary" [routerLink]="['add']">{{ 'Add' }}</button>
 </div>

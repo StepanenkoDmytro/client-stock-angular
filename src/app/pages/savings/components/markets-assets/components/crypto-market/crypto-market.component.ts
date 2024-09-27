@@ -33,6 +33,7 @@ export class CryptoMarketComponent implements OnInit {
 
   public filter: string = '';
   public coins: IPortfolioCrypto[] = [];
+  public selectedAssetIndex: number;
   public assetsCount: number = 0;
 
   constructor(
@@ -61,9 +62,9 @@ export class CryptoMarketComponent implements OnInit {
     });
   }
 
-  public onChoiseAsset(asset: IPortfolioCrypto): void {
+  public onChoiseAsset(asset: IPortfolioCrypto, index: number): void {
     asset.count = 0;
-    
+    this.selectedAssetIndex = index;
     this.marketStateService.choiseAsset(asset);
   }
 }

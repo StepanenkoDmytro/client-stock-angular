@@ -1,28 +1,16 @@
 <section class="add-spending">
 
-    <mat-form-field appearance="outline" class="w-100 input-category">
-        <mat-label [class.no-category]="!!selectedCategory">Category</mat-label>
-        <div class="select-category">
-            <img [src]="selectedCategory.icon" class="icon-select">
-            <mat-select matNativeControl [(value)]="selectedCategory" style="font-size: 1.5rem;">
-                @for(category of categories; track category) {
-                    <img [src]="category.icon" style="width: 24px;">
-                    <mat-option [value]="category">{{ category.title }}</mat-option>
-                }
-            </mat-select>
-            <img matSuffix src="assets/icons/arrow.svg">
-        </div>
-    </mat-form-field>
+    <pgz-category-select></pgz-category-select>
 
     <mat-form-field appearance="outline" floatLabel="always" class="w-100 name-of-product">
         <mat-label>Name</mat-label>
-        <input matInput type="text" placeholder="Enter name of product" style="font-size: 1.5rem;" [(ngModel)]="nameOfProduct">  
+        <input matInput type="text" placeholder="Enter name of product" style="font-size: 1.5rem;" [(ngModel)]="nameOfProduct">
     </mat-form-field>
 
     <mat-form-field appearance="outline" floatLabel="always" class="w-100">
         <mat-label>Sum</mat-label>
         <input matInput type="number" inputmode="numeric" class="line" placeholder="0" style="font-size: 1.5rem;" [(ngModel)]="costOfProduct">
-        <span matTextSuffix style="font-size: 1.5rem;">$</span> 
+        <span matTextSuffix style="font-size: 1.5rem;">$</span>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="w-100">
@@ -31,7 +19,7 @@
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
-      
+
 
     <mat-form-field appearance="outline" floatLabel="always" class="w-100">
         <mat-label>Comment</mat-label>
@@ -39,7 +27,7 @@
     </mat-form-field>
 
     <div class="choise-btn">
-        <button mat-flat-button class="spending-btn">{{ 'Add spending and add next' }}</button>
-        <button mat-flat-button class="spending-btn spending-btn--save" (click)="saveSpending()">{{ 'Add spending and Exit' }}</button>
+        <button mat-flat-button class="spending-btn">{{ 'Save + New' }}</button>
+        <button mat-flat-button class="spending-btn spending-btn--save" (click)="saveSpending()">{{ 'Save' }}</button>
     </div>
 </section>

@@ -1,14 +1,18 @@
 <div class="spending-wrapper">
     <div class="spending">
-        <div class="spending--info">
-            <img class="spending--icon" [src]="spending.icon" />
-            <p class="text spending--title">{{ spending.title }}</p>
-        </div>
-        <div class="spending--info">
-            <p class="text spending--cost">{{ spending.cost }}$</p>
-            <img src="assets/icons/edit.svg"/>
-        </div>
+      <div class="spending--info">
+        <img class="spending--icon" [src]="spending.category.icon" />
+        <p class="text spending--title">{{ spending.category.title }}</p>
+        <p class="text spending--title">{{ spending.title }}</p>
+      </div>
+      <div class="spending--info">
+        <p class="text spending--cost">{{ spending.cost }}$</p>
+        <mat-icon [matMenuTriggerFor]="actionsMenu">more_vert</mat-icon>
+        <mat-menu #actionsMenu>
+          <mat-icon>edit</mat-icon>
+          <mat-icon>delete</mat-icon>
+        </mat-menu>
+      </div>
     </div>
     <div class="line"></div>
 </div>
-  

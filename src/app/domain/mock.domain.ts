@@ -58,4 +58,19 @@ export const ACCOUNT_STOCKS_MOCK: IPortfolioStock[] = [
     //   dividendYield: 0.0426,
     // },
   ];
+
+  export const STOCKS_MOCK: IExpend = {
+    title: 'Stocks',
+    money: 2000,
+  };
+  
+  export const PROFIT_MOCK: IExpend = {
+    title: 'Profit',
+    money: 10000,
+  };
+
+  export interface IExpend {
+    title: string;
+    money: number | string;
+  }
   
