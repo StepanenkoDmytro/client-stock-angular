@@ -3,6 +3,27 @@
   width: 100%;
   height: 100%;
 }
+.close-button-option {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.close-button-container {
+  position: absolute; 
+  bottom: 0; 
+  left: 0; 
+  right: 0; 
+  background-color: white; 
+  border-top: 1px solid #e0e0e0; 
+  display: flex; 
+}
+
+.close-button {
+  width: 100%;
+  border-top: 1px solid #e0e0e0;
+  background-color: var(--bs-gray-200);
+}
 
 .spendings-history {
   height: 100%;

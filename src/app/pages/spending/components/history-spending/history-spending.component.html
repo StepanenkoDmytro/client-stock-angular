@@ -1,11 +1,46 @@
 <section class="spendings-history">
+    <section class="d-flex justify-content-between">
+        <mat-form-field  appearance="outline" floatLabel="always">
+            <mat-label>Choose options</mat-label>
+            <mat-select #selectRef [(value)]="selectedCategories">
+                <mat-option (click)="$event.stopPropagation()">
+                    <mat-checkbox
+                    [checked]="isAllCategoriesChecked"
+                    (click)="$event.stopPropagation()"
+                    (change)="toggleAllCategories()"
+                    >
+                    All categories
+                    </mat-checkbox>
+                </mat-option>
+                @for(category of categories; track category) {
+                    <mat-option [value]="category" (click)="$event.stopPropagation()">
+                        <mat-checkbox 
+                            [checked]="selectedCategories.includes(category)"
+                            (change)="onCategoryChange(category, $event.checked)"
+                            >
+                            {{ category.title }}
+                        </mat-checkbox>
+                    </mat-option>
+                }
+                <mat-option class="close-button-option">
+                    <div class="close-button-container">
+                        <button mat-button (click)="selectRef.close()" class="close-button">
+                          Close
+                        </button>
+                      </div>
+                </mat-option>
+            </mat-select>
+            <mat-hint>{{ displayValue }}</mat-hint>
+        </mat-form-field>
+      
 
-    <div class="spendings-history--calendar">
-        <a href="spending/calendar" class="calendar-btn">
-            <p style="margin: 0">Calendar</p>
-            <mat-icon>calendar_month</mat-icon>
-        </a>
-    </div>
+        <div class="spendings-history--calendar">
+            <a href="spending/calendar" class="calendar-btn">
+                <p style="margin: 0">Calendar</p>
+                <mat-icon>calendar_month</mat-icon>
+            </a>
+        </div>
+    </section>
 
     <div class="spendings-history--list">
 
