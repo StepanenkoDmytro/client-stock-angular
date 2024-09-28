@@ -7,11 +7,9 @@
       </div>
       <div class="spending--info">
         <p class="text spending--cost">{{ spending.cost }}$</p>
-        <mat-icon [matMenuTriggerFor]="actionsMenu">more_vert</mat-icon>
-        <mat-menu #actionsMenu>
-          <mat-icon (click)="onEdit()">edit</mat-icon>
-          <mat-icon (click)="onDelete()">delete</mat-icon>
-        </mat-menu>
+        
+        <pgz-icon class="spending--icon" [name]="'custom_edit'" (click)="onEdit()"></pgz-icon>
+        <mat-icon style="color: green" (click)="onDelete()">delete</mat-icon>
       </div>
     </div>
     <div class="line"></div>

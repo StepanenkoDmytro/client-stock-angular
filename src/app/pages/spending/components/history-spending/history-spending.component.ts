@@ -71,11 +71,10 @@ export class HistorySpendingComponent implements OnInit {
   }
 
   get displayValue(): string {
-    const isAllCategoriesSelected = this.selectedCategories.map(category => category.title).includes(this.allCategoriesValue)
-    if (isAllCategoriesSelected) {
+    if (this.isAllCategoriesChecked) {
       return 'All selected';
     }
-    return this.selectedCategoriesValue.join(', ');
+    return this.selectedCategories.map(category => category.title).join(', ');
   }
 
   public onCategoryChange(category: Category, checked: boolean): void {

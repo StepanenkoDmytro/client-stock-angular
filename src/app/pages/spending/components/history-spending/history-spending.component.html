@@ -1,7 +1,7 @@
 <section class="spendings-history">
     <section class="d-flex justify-content-between">
-        <mat-form-field  appearance="outline" floatLabel="always">
-            <mat-label>Choose options</mat-label>
+        <mat-form-field  appearance="outline">
+            <mat-label>{{ displayValue }}</mat-label>
             <mat-select #selectRef [(value)]="selectedCategories">
                 <mat-option (click)="$event.stopPropagation()">
                     <mat-checkbox
@@ -22,15 +22,14 @@
                         </mat-checkbox>
                     </mat-option>
                 }
-                <mat-option class="close-button-option">
+                <!-- <mat-option class="close-button-option"> -->
                     <div class="close-button-container">
                         <button mat-button (click)="selectRef.close()" class="close-button">
                           Close
                         </button>
-                      </div>
-                </mat-option>
+                    </div>
+                <!-- </mat-option> -->
             </mat-select>
-            <mat-hint>{{ displayValue }}</mat-hint>
         </mat-form-field>
       
 
