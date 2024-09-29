@@ -1,28 +1,47 @@
-<section class="spendings-history">
-
-    <div class="spendings-history--calendar">
-        <a href="spending/calendar" class="calendar-btn">
+<mat-drawer-container class="spendings-history" [hasBackdrop]="false" autosize>
+    <mat-drawer #drawer mode="over">
+        <section class="spendings-history--filters">
+            <mat-checkbox 
+                [checked]="isAllCategoriesChecked"
+                (change)="toggleAllCategories()"
+                >
+                <p>All Categories</p>
+            </mat-checkbox>
+        @for(category of categories; track category) {
+            <mat-checkbox 
+                [checked]="selectedCategories.includes(category)"
+                (change)="onCategoryChange(category, $event.checked)"
+                >
+                <p>{{ category.title }}</p>
+            </mat-checkbox>
+        }
+        </section>
+    </mat-drawer>
+    
+    <section class="d-flex justify-content-between">
+        <div class="spendings-history--calendar">
+            <a href="spending/calendar" class="calendar-btn">
             <p style="margin: 0">Calendar</p>
             <mat-icon>calendar_month</mat-icon>
-        </a>
-    </div>
+            </a>
+        </div>
+        <button type="button" mat-button (click)="drawer.toggle()">
+            Filter
+        </button>
+    </section>
 
     <div class="spendings-history--list">
+        @for(dateSpending of spendingsGroupedByDate.keys(); track dateSpending) {
+            <p class="spendings-history--list-item">{{ dateSpending | dateFormat: 'D MMMM YYYY' }}</p>
 
-        <p class="spendings-history--list-item">Today</p>
-        @for (spendingToday of categoriesSpendings.today; track spendingToday.id) {
-            <pgz-history-spending-card [spending]="spendingToday"></pgz-history-spending-card>
+            @for(spending of spendingsGroupedByDate.get(dateSpending); track spending) {
+                <pgz-history-spending-card  [spending]="spending"></pgz-history-spending-card>
+
+            }
         }
 
-        <p class="spendings-history--list-item">Last week</p>
-        @for (spendingLastWeek of categoriesSpendings.lastWeek; track spendingLastWeek.id) {
-            <pgz-history-spending-card [spending]="spendingLastWeek"></pgz-history-spending-card>
-        }
-
-        <p class="spendings-history--list-item">Last month</p>
-        @for (spendingLastMonth of categoriesSpendings.month; track spendingLastMonth.id) {
-            <pgz-history-spending-card [spending]="spendingLastMonth"></pgz-history-spending-card>
-        }
-
+        @if(spendingsGroupedByDate.size === 0) {
+            <p style="text-align: center;">Empty list</p>
+          }
     </div>
-</section>
+</mat-drawer-container>
