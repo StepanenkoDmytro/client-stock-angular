@@ -1,16 +1,17 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import moment from 'moment';
-import { ICategorizedSpendings } from '../../../../domain/spending.domain';
 import { HistorySpendingCardComponent } from './history-spending-card/history-spending-card.component';
 import { Spending } from '../../model/Spending';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Category } from '../../../../domain/category.domain';
 import { MatButtonModule } from '@angular/material/button';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import { DateFormatPipe } from '../../../../core/UI/calendar/date-format.pipe';
 
 
 const UI_COMPONENTS = [
@@ -24,13 +25,14 @@ const MATERIAL_MODULES = [
   MatSelectModule, 
   MatCheckboxModule,
   MatInputModule,
-  MatButtonModule
+  MatButtonModule,
+  MatSidenavModule,
 ];
 
 @Component({
   selector: 'pgz-history-spending',
   standalone: true,
-  imports: [...UI_COMPONENTS, ...MATERIAL_MODULES],
+  imports: [...UI_COMPONENTS, ...MATERIAL_MODULES, DateFormatPipe],
   templateUrl: './history-spending.component.html',
   styleUrl: './history-spending.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -39,42 +41,30 @@ export class HistorySpendingComponent implements OnInit {
   
   @Input()
   public set spendings(value: Spending[]) {
-    this.categoriesSpendings = this.categorizeSpendings([...value]);
+    console.log(value);
+    this._spendings = value;
+    this.spendingsGroupedByDate = this.groupSpendingsByDate([...value]);
   }
 
   @Input()
   public categories: Category[];
 
   public selectedCategories: Category[] = [];
-  public categoriesSpendings: ICategorizedSpendings;
+  public spendingsGroupedByDate: Map<moment.Moment, Spending[]> = new Map();
   public isAllCategoriesChecked: boolean = true; 
   public selectedCategoriesValue: string[] = [];
 
-  private allCategoriesValue: string = 'All categories';
+  private _spendings: Spending[] = [];
 
-  ngOnInit(): void {
-    this.selectAllCategories();
-  }
-
-  public toggleAllCategories(): void {
-    if (this.isAllCategoriesChecked) {
-      this.selectedCategories = [];
-    } else {
-      this.selectAllCategories();
-    }
-    this.isAllCategoriesChecked = !this.isAllCategoriesChecked;
-  }
-
-  private selectAllCategories(): void {
+  public ngOnInit(): void {
     this.selectedCategories = [...this.categories];
     this.isAllCategoriesChecked = true;
   }
 
-  get displayValue(): string {
-    if (this.isAllCategoriesChecked) {
-      return 'All selected';
-    }
-    return this.selectedCategories.map(category => category.title).join(', ');
+  public toggleAllCategories(): void {
+    this.isAllCategoriesChecked = !this.isAllCategoriesChecked;
+    this.selectedCategories = this.isAllCategoriesChecked ? [...this.categories] : [];
+    this.spendingsGroupedByDate = this.groupSpendingsByDate([...this._spendings]);
   }
 
   public onCategoryChange(category: Category, checked: boolean): void {
@@ -88,31 +78,25 @@ export class HistorySpendingComponent implements OnInit {
     }
 
     this.isAllCategoriesChecked = this.selectedCategories.length === this.categories.length;
+    this.spendingsGroupedByDate = this.groupSpendingsByDate([...this._spendings]);
   }
 
-  private categorizeSpendings(spendings: Spending[]): ICategorizedSpendings {
-    const today = moment().startOf('day');
+  private groupSpendingsByDate(spendings: Spending[]): Map<moment.Moment, Spending[]> {
+    const spendingsGroupedByDate = new Map<moment.Moment, Spending[]>();
 
-    const lastWeek = moment().subtract(7, 'days').startOf('day');
+    spendings.sort((a, b) => moment(b.date).diff(moment(a.date)));
+    const filteredSpendings = spendings.filter(spending =>
+      this.isAllCategoriesChecked || this.selectedCategories.some(category => category.id === spending.category.id)
+    );
 
-    const categorizedSpendings: ICategorizedSpendings = {
-      today: [],
-      lastWeek: [],
-      month: [],
-    };
-
-    spendings.forEach(spending => {
-      const spendingDate = moment(spending.date);
-
-      if (spendingDate.isSame(today, 'day')) {
-        categorizedSpendings.today.push(spending);
-      } else if (spendingDate.isAfter(lastWeek, 'day')) {
-        categorizedSpendings.lastWeek.push(spending);
-      } else {
-        categorizedSpendings.month.push(spending);
+    filteredSpendings.forEach(spending => {
+      const date = moment(spending.date);
+      if (!spendingsGroupedByDate.has(date)) {
+        spendingsGroupedByDate.set(date, []);
       }
+      spendingsGroupedByDate.get(date)!.push(spending);
     });
-    
-    return categorizedSpendings;
+  
+    return spendingsGroupedByDate;
   }
 }
