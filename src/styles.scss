@@ -161,6 +161,12 @@ $light-theme: mat.define-light-theme((
   @include mat.button-theme($dark-theme);
   $mat-background: $pgz-dark-background;
   --bs-success: #5DB075;
+  --bs-gray-100: #6c757d;
+  --bs-gray-200: #495057;
+  --bs-gray-300: #343a40;
+  --bs-gray-400: #212529;
+  --bs-text: #e9ecef;
+  --bs-text-100: #bdbdbd;
 }
 
 .light-theme {
@@ -169,6 +175,10 @@ $light-theme: mat.define-light-theme((
   @include mat.button-theme($light-theme);
   $mat-background: $pgz-light-background;
   --bs-success: #5DB075;
+  --bs-gray-100: #fff;
+  --bs-gray-200: #e9ecef;
+  --bs-text: #000000;
+  --bs-text-100: #bdbdbd;
 }
 
 html, body { height: 100%; }
