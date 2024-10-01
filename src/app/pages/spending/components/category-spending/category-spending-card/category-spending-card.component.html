@@ -4,14 +4,16 @@
             <pgz-icon class="category-icon" [name]="data.category.icon"></pgz-icon>
             <p>{{data.category.title}}</p>
         </div>
-        <div class="category-card--info">
-            <p>{{data.value}}</p>
 
+        <p>{{data.value}}</p>
+
+        <div class="category-card-info">
             @if(data.category.title !== 'Other') {
                 <mat-icon [matMenuTriggerFor]="actionsMenu">more_vert</mat-icon>
                 <mat-menu #actionsMenu>
-                    <mat-icon (click)="onEdit(data.category)">edit</mat-icon>
-                    <mat-icon (click)="onDelete(data.category)">delete</mat-icon>
+                    <div class="category-card-info--item" (click)="onEdit(data.category)"><p>Edit</p></div>
+                    <div class="category-card-info--item" (click)="onEdit(data.category)"><p>Statistic</p></div>
+                    <div class="category-card-info--item" (click)="onDelete(data.category)"><p>Delete</p></div>
                 </mat-menu>
             }
         </div>

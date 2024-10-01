@@ -9,15 +9,23 @@
   border-radius: 10px;
   padding: 10px;
   margin: 10px;
+}
 
-  &--info {
-    display: flex;
+.category-card-info {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+
+  &--item {
+    margin: 10px 0 10px 10px;
+    font-size: 18px;
   }
 }
 
 .category-card-parent {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
   font-size: 24px;
   font-weight: 500;
   height: 50px;
