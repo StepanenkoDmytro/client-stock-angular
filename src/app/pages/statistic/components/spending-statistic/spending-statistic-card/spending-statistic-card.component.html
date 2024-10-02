@@ -28,14 +28,14 @@
             } @else {
                 <p>{{_data.value}}</p>
             }
-
-            <button class="btn" (click)="onToggleCategory()">
-                @if(isVisible) {
-                    <mat-icon>{{'visibility'}}</mat-icon>
-                } @else {
-                    <mat-icon>{{'visibility_off'}}</mat-icon>
-                }
-            </button>
         </div>
+
+        <button class="spending-stat-card--btn btn" (click)="onToggleCategory()">
+            @if(isVisible) {
+                <mat-icon>{{'visibility'}}</mat-icon>
+            } @else {
+                <mat-icon>{{'visibility_off'}}</mat-icon>
+            }
+        </button>
     </div>
 }

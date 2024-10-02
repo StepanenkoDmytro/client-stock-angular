@@ -4,6 +4,8 @@
 
 .spending-stat-card {
   display: flex;
+  align-items: center;
+  gap: 10px;
   font-size: 22px;
   font-weight: 500;
   height: 50px;
@@ -17,10 +19,19 @@
   }
 
   &--color {
-    width: 20px;
+    width: 24px;
+    height: 24px;
+    align-self: center;
+    border-radius: 5px;
   }
 
   &--category {
+    display: flex;
+    align-items: center;
+  }
+
+  &--btn {
+    margin-left: auto;
     display: flex;
     align-items: center;
   }
@@ -36,7 +47,7 @@
 
 .spending-stat-card-value {
   display: flex;
-  margin-left: auto;
+  // margin-left: auto;
 
   &--compare-range {
     font-size: 17px;

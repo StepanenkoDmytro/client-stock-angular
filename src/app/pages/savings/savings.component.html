@@ -1,13 +1,15 @@
 <section class="savings">
 <pgz-total-balance></pgz-total-balance>
 
+  <div class="savings--types">
+    <mat-chip-set>
+      @for (filter of filters; track filter) {
+        <mat-chip class="filters" [class.selected]="isSelected(filter)"
+        (click)="toggleChip(filter)">{{filter}}</mat-chip>
+      }
+    </mat-chip-set>
+  </div>
 
-  <mat-chip-set>
-    @for (filter of filters; track filter) {
-      <mat-chip class="filters" [class.selected]="isSelected(filter)"
-      (click)="toggleChip(filter)">{{filter}}</mat-chip>
-    }
-  </mat-chip-set>
   @if(assets.length === 0) {
     <p style="text-align: center;">Empty list</p>
   }
