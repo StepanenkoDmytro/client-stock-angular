@@ -1,0 +1,11 @@
+<section class="market-list">
+    <h4>Finance instruments:</h4>
+
+    @for(market of marketsList; track market) {
+        <div class="market">
+            <p class="market--item" (click)="selectAndClose(market)">{{ market.charAt(0).toUpperCase() + market.slice(1).toLowerCase() }} Market</p>
+        </div>
+    }
+</section>
+
+<button class="close-btn btn" mat-button (click)="onNoClick()">Close</button>

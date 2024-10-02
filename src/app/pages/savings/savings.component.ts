@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { ButtonToggleComponent } from '../../core/UI/components/button-toggle/button-toggle.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -15,7 +15,8 @@ import {
   MatBottomSheet,
   MatBottomSheetModule,
 } from '@angular/material/bottom-sheet';
-import { SelectMarketSheetComponent } from '../../core/UI/components/select-market-sheet/select-market-sheet.component';
+import { SelectMarketDialogComponent } from './components/select-market-dialog/select-market-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 
 const UI_COMPONENTS = [
@@ -44,6 +45,7 @@ const MATERIAL_MODULES = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SavingsComponent implements OnInit {
+  readonly dialog = inject(MatDialog);
 
   public assets: IAsset[];
   public filteredAssets: IAsset[];
@@ -55,7 +57,6 @@ export class SavingsComponent implements OnInit {
     private assetStateService: MarketService,
     private savingsService: SavingsService,
     private router: Router,
-    private _bottomSheet: MatBottomSheet
   ) { }
 
   public ngOnInit(): void {
@@ -93,12 +94,11 @@ export class SavingsComponent implements OnInit {
 
   public openSelectedFilter(): void {
     if(this.selectedFilter === 'All') {
-      const bottomSheetRef = this._bottomSheet.open(SelectMarketSheetComponent);
+      const dialogRef = this.dialog.open(SelectMarketDialogComponent);
 
-      bottomSheetRef.afterDismissed().subscribe((result) => {
+      dialogRef.afterClosed().subscribe(result => {
         this.selectedFilter = result;
-        this.openSelectedFilter();
-      });
+        this.openSelectedFilter();      });
     } else {
       this.router.navigate(['savings/',this.selectedFilter.toLocaleLowerCase()]);
     }
