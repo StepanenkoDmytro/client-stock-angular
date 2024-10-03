@@ -16,6 +16,11 @@
         <pgz-icon class="category--icon" [name]="selectedIcon"></pgz-icon>
         <pgz-icon-picker (onSelectIcon)="onSelectIcon($event)"></pgz-icon-picker>
     </div>
+
+    <div>
+        <label for="colorInput">Select Color:</label>
+        <input id="colorInput" type="color" [(ngModel)]="selectedColor">
+    </div>
     
     <div class="add-category--actions">
         <button class="add-category--btn" mat-button [routerLink]="['/spending']">Cancel</button>

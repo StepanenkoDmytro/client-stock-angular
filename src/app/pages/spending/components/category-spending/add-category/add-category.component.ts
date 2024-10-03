@@ -43,6 +43,7 @@ export class AddCategoryComponent implements OnInit {
   public selectedParentCategory: Category;
   public categoryTitleCtrl: FormControl<string> = new FormControl('');
   public selectedIcon: string = 'payment';
+  public selectedColor: string = '#000000';
 
   public editCategory: Category;
 
@@ -63,7 +64,8 @@ export class AddCategoryComponent implements OnInit {
     if(!!this.editCategory) {
       this.selectedParentCategory = Category.findCategoryById(this.editCategory.parent, this.categories);
       this.categoryTitleCtrl.setValue(this.editCategory.title);
-      this.selectedIcon = this.editCategory.icon
+      this.selectedIcon = this.editCategory.icon;
+      this.selectedColor = this.editCategory.color;
     }
   }
 
@@ -71,12 +73,13 @@ export class AddCategoryComponent implements OnInit {
     const parentId = this.selectedParentCategory.id;
     
     if(!!this.editCategory) {
-      const editedCategory = new Category(this.categoryTitleCtrl.value, this.selectedIcon, this.editCategory.children, false, this.editCategory.id, parentId);
+      const editedCategory = new Category(this.categoryTitleCtrl.value, this.selectedIcon, this.editCategory.children, false, this.editCategory.id, parentId, this.selectedColor);
       
       this.spendingService.editCategory(editedCategory);
     } else {
       const newCategory = new Category(this.categoryTitleCtrl.value, this.selectedIcon);
       newCategory.setParent(parentId);
+      newCategory.setColor(this.selectedColor);
 
       this.spendingService.addCategory(newCategory);
     }
