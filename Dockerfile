@@ -24,6 +24,7 @@ COPY --from=build /app/dist/pegazzo-client/browser /usr/share/nginx/html
 
 # Copy nginx.conf to Nginx's configuration directory
 COPY nginx.conf /etc/nginx/nginx.conf
+COPY pegazzo-online.crt /etc/nginx/pegazzo-online.crt
 
 # Expose port 81 for the Nginx server
 EXPOSE 81
