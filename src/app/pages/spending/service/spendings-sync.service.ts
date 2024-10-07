@@ -12,7 +12,7 @@ import { OfflineStorageService } from './offline-storage.service';
   providedIn: 'root'
 })
 export class SpendingsSyncService {
-  private readonly url: string = 'http://pegazzo.online:8000/api/v1/profile/';
+  private readonly url: string = 'https://pegazzo.online:8000/api/v1/profile/';
 
   constructor(
     private http: HttpClient,

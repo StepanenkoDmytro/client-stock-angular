@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class IconService {
-  private readonly url: string = 'http://pegazzo.online:8000/api/v1/icons/';
+  private readonly url: string = 'https://pegazzo.online:8000/api/v1/icons/';
 
   constructor(
     private http: HttpClient,

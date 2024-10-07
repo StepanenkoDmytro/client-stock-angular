@@ -15,7 +15,7 @@ interface IMarketCoinData {
   providedIn: 'root'
 })
 export class CoinService {
-  private readonly url: string = 'http://pegazzo.online:8000/api/v1/markets/coins';
+  private readonly url: string = 'https://pegazzo.online:8000/api/v1/markets/coins';
 
   constructor(private readonly httpClient: HttpClient) { }
 
