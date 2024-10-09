@@ -15,9 +15,6 @@ import { ICategoryStatistic } from '../../../model/SpendindStatistic';
 export class PieChartContainerComponent {
   @Input()
   public set categoryData(value: ICategoryStatistic[]) {
-    if(!value) {
-      return;
-    }
     this.pieChartData = this.spendingsHelperService.mapCategoryStatisticToChartData(value);
   }
 

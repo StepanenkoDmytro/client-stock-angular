@@ -22,12 +22,6 @@ export interface DataModel {
 export class PieChartComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input()
   public set data(value: IDonutData | null) {
-    if(value == null) {
-      this.totalSum = 0;
-      this._data$.next([]);
-      return;
-    }
-    
     this.totalSum = value.totalSum;
     this._data$.next(value.data);
   }
@@ -172,9 +166,8 @@ export class PieChartComponent implements OnInit, AfterViewInit, OnDestroy {
     const data = this.dataSubject;
     const listContainer = this.d3.select(`div#${this.donutNamesID}`);
 
-   
     if(data[0].name === "dataForNull") {
-      const text =listContainer
+      const text = listContainer
         .style('display', 'block')
         .style('text-align', 'center')
         .append('text')
