@@ -50,7 +50,7 @@ export class HistorySpendingComponent implements OnInit {
   public categories: Category[];
 
   public selectedCategories: Category[] = [];
-  public spendingsGroupedByDate: Map<moment.Moment, Spending[]> = new Map();
+  public spendingsGroupedByDate: Map<string, Spending[]> = new Map();
   public isAllCategoriesChecked: boolean = true; 
   public selectedCategoriesValue: string[] = [];
 
@@ -81,22 +81,26 @@ export class HistorySpendingComponent implements OnInit {
     this.spendingsGroupedByDate = this.groupSpendingsByDate([...this._spendings]);
   }
 
-  private groupSpendingsByDate(spendings: Spending[]): Map<moment.Moment, Spending[]> {
-    const spendingsGroupedByDate = new Map<moment.Moment, Spending[]>();
-
+  private groupSpendingsByDate(spendings: Spending[]): Map<string, Spending[]> {
+    const spendingsGroupedByDate = new Map<string, Spending[]>();
+  
     spendings.sort((a, b) => moment(b.date).diff(moment(a.date)));
+  
     const filteredSpendings = spendings.filter(spending =>
       this.isAllCategoriesChecked || this.selectedCategories.some(category => category.id === spending.category.id)
     );
-
+  
     filteredSpendings.forEach(spending => {
-      const date = moment(spending.date);
-      if (!spendingsGroupedByDate.has(date)) {
-        spendingsGroupedByDate.set(date, []);
+      const dateKey = moment(spending.date).format('D MMMM YYYY');
+  
+      if (!spendingsGroupedByDate.has(dateKey)) {
+        spendingsGroupedByDate.set(dateKey, []);
       }
-      spendingsGroupedByDate.get(date)!.push(spending);
+  
+      spendingsGroupedByDate.get(dateKey)!.push(spending);
     });
   
     return spendingsGroupedByDate;
   }
+
 }

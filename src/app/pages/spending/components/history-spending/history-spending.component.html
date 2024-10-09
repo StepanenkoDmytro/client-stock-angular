@@ -32,7 +32,7 @@
 
     <div class="spendings-history--list">
         @for(dateSpending of spendingsGroupedByDate.keys(); track dateSpending) {
-            <p class="spendings-history--list-item">{{ dateSpending | dateFormat: 'D MMMM YYYY' }}</p>
+            <p class="spendings-history--list-item">{{ dateSpending }}</p>
 
             @for(spending of spendingsGroupedByDate.get(dateSpending); track spending) {
                 <pgz-history-spending-card  [spending]="spending"></pgz-history-spending-card>
