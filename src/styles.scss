@@ -246,6 +246,20 @@ p {
   border-color: var(--bs-danger) !important;
 }
 
+.mat-expansion-panel-body {
+  padding: 0 0 16px 24px!important;
+}
+
+.mat-expansion-panel-header {
+  padding: 0 10px 0 24px !important;
+}
+
+.mat-expansion-panel:not([class*=mat-elevation-z]),
+.mat-app-background {
+  box-shadow: none!important;
+  background: inherit;
+}
+
 
 /** Styles for D3 Library **/
 /* Classes for svg library can take only from style.scss */
