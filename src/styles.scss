@@ -255,9 +255,9 @@ p {
 }
 
 .mat-expansion-panel:not([class*=mat-elevation-z]),
-.mat-app-background {
+.mat-expansion-panel .mat-app-background {
   box-shadow: none!important;
-  background: inherit;
+  background: inherit !important;
 }
 
 
