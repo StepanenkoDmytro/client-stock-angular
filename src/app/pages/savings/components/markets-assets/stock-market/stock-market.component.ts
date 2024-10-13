@@ -11,11 +11,13 @@ import { IPortfolioStock, IAsset, IMarket, ICompanyList } from '../../../../../d
 import { StockAssetComponent } from './stock-asset/stock-asset.component';
 import { Router, RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { PrevRouteComponent } from '../../prev-route/prev-route.component';
 
 
 const UI_COMPONENTS = [
   AssetMarketCardComponent,
-  StockAssetComponent
+  StockAssetComponent,
+  PrevRouteComponent
 ];
 
 const MATERIAL_MODULES = [
@@ -29,7 +31,7 @@ const MATERIAL_MODULES = [
 @Component({
   selector: 'pgz-stock-market',
   standalone: true,
-  imports: [UI_COMPONENTS, ...MATERIAL_MODULES, HttpClientModule, RouterModule],
+  imports: [UI_COMPONENTS, ...MATERIAL_MODULES, HttpClientModule],
   templateUrl: './stock-market.component.html',
   styleUrl: './stock-market.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

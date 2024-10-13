@@ -1,10 +1,10 @@
-@if(coinMarketInfo) {
+@if(marketInfo) {
     <div class="asset">
         <!-- <p>{{coinMarketInfo.}}</p> -->
         <div class="asset--price">
             <mat-form-field appearance="outline" floatLabel="always" class="w-100">
                 <mat-label>Sum</mat-label>
-                <input [(ngModel)]="coinMarketInfo.price" [disabled]="editDisabled" matInput type="number" inputmode="numeric" class="line" placeholder="0" style="font-size: 1.5rem;">
+                <input [(ngModel)]="marketInfo.price" [disabled]="editDisabled" matInput type="number" inputmode="numeric" class="line" placeholder="0" style="font-size: 1.5rem;">
                 <span matTextSuffix class="currency" [class.currency--disabled]="editDisabled">$</span>
             </mat-form-field>
             <pgz-icon class="asset--icon" (click)="editDisabled = !editDisabled" [name]="'edit'"></pgz-icon>

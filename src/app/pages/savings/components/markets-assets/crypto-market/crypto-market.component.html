@@ -1,28 +1,25 @@
-<div [routerLink]="'/savings'">
-    <span><mat-icon>keyboard_backspace</mat-icon></span>
-    <span>Back</span>
+<section>
+  <pgz-prev-route [title]="'Crypto market'"></pgz-prev-route>
+    
+  <mat-form-field class="w-100">
+      <mat-label>Assets</mat-label>
+      <input matInput type="text" [(ngModel)]="filter" (ngModelChange)="onFilterChange()">
+      @if (filter) {
+          <button matSuffix mat-icon-button aria-label="Clear" (click)="filter=''">
+            <mat-icon>close</mat-icon>
+          </button>
+      } 
+    </mat-form-field>
+    
+  <div style="display: flex; justify-content: space-between;">
+      <div class="d-flex">
+          <mat-icon>tune</mat-icon>
+          <p style="margin: 0 0 0 5px;">{{ assetsCount }} psc.</p>
+      </div>
   </div>
-  
-<mat-form-field class="w-100">
-    <mat-label>Assets</mat-label>
-    <input matInput type="text" [(ngModel)]="filter" (ngModelChange)="onFilterChange()">
-    @if (filter) {
-        <button matSuffix mat-icon-button aria-label="Clear" (click)="filter=''">
-          <mat-icon>close</mat-icon>
-        </button>
-    } 
-  </mat-form-field>
-  
-<div style="display: flex; justify-content: space-between;">
-    <div class="d-flex">
-        <mat-icon>tune</mat-icon>
-        <p style="margin: 0 0 0 5px;">{{ assetsCount }} psc.</p>
-    </div>
-</div>
-<div style="height: 45vh; overflow-y: scroll; overflow-x: hidden;">
-    @for(asset of coins; track asset; let i = $index) {
-        <pgz-asset-market-card [isSelected]="i === selectedAssetIndex" [asset]="asset" (click)="onChoiseAsset(asset, i)"></pgz-asset-market-card>
-    }
-</div>
-
-<button mat-flat-button (click)="goToAsset()">Go to asset</button>
+  <div style="height: 45vh; overflow-y: scroll; overflow-x: hidden;">
+      @for(asset of coins; track asset) {
+          <pgz-asset-market-card [asset]="asset" (click)="goToAsset()"></pgz-asset-market-card>
+      }
+  </div>
+</section>

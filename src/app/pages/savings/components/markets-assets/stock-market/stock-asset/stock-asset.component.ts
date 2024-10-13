@@ -18,7 +18,6 @@ const MATERIAL_MODULES = [
   MatInputModule
 ];
 
-
 @Component({
   selector: 'pgz-stock-asset',
   standalone: true,
@@ -28,7 +27,7 @@ const MATERIAL_MODULES = [
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StockAssetComponent implements OnInit, AfterViewInit, OnDestroy {
-  public coinMarketInfo: ICompany;
+  public marketInfo: ICompany;
   public portfolioStock: IPortfolioStock;
   public editDisabled: boolean = true;
   public count: number = 0;
@@ -48,7 +47,7 @@ export class StockAssetComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public ngAfterViewInit(): void {
     this.MarketService.getAsset().subscribe(val => {
-      this.coinMarketInfo = val as MarketStockInfo;
+      this.marketInfo = val as MarketStockInfo;
       this.cdr.detectChanges();
     });
   }
@@ -57,7 +56,7 @@ export class StockAssetComponent implements OnInit, AfterViewInit, OnDestroy {
     if(this.MarketService.isExistingAsset) {
       this.savingsService.editAsset(this.portfolioStock);
     } else {
-      const newAsset: IPortfolioStock = PortfolioStock.mapICompanyToPortfolioStock(this.coinMarketInfo);
+      const newAsset: IPortfolioStock = PortfolioStock.mapICompanyToPortfolioStock(this.marketInfo);
       newAsset.count = this.count;
       this.savingsService.addSaving(newAsset);
     }
