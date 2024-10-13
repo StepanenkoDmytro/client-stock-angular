@@ -1,5 +1,5 @@
 <div class="asset card-mobile row">
-    <div class="asset--title col-6">
+    <div class="asset--title col-7">
         <div class="asset--name">
             <p class="asset--text-primary-info">{{ asset.name }}</p>
             <p class="asset--text-small-info">{{ asset.count }} pcs by {{ asset.buyPrice | moneyFormat }}$</p>
@@ -7,15 +7,17 @@
         
     </div>
 
-    <div class="asset--info col-6 text-end">
+    <div class="asset--info col-5 text-end">
         <div class="asset--values">
             <p class="asset--text-primary-info">{{ asset.price * asset.count  | moneyFormat }}$</p>
             <p class="asset--text-small-info">{{ asset.assetType }}</p>
         </div>
-        <pgz-icon [name]="'more_vert'" class="asset--icon" [matMenuTriggerFor]="actionsMenu"></pgz-icon>
-        <mat-menu #actionsMenu>
-            <mat-icon (click)="onEdit()">edit</mat-icon>
-            <mat-icon (click)="onDelete()">delete</mat-icon>
-          </mat-menu>
-    </div>
+
+        <div class="asset-menu"></div>
+            <pgz-icon [name]="'more_vert'" class="asset--icon" [matMenuTriggerFor]="actionsMenu"></pgz-icon>
+            <mat-menu #actionsMenu>
+                <div class="asset-menu--item" (click)="onEdit()"><p>Edit</p></div>
+                <div class="asset-menu--item" (click)="onDelete()"><p>Delete</p></div>
+            </mat-menu>
+        </div>
 </div>

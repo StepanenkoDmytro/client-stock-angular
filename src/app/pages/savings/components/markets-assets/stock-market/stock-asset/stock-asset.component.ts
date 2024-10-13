@@ -35,27 +35,27 @@ export class StockAssetComponent implements OnInit, AfterViewInit, OnDestroy {
   public count: number = 0;
   
   constructor(
-    private MarketService: MarketService,
+    private marketService: MarketService,
     private savingsService: SavingsService,
     private cdr: ChangeDetectorRef
   ) { }
 
   public ngOnInit(): void {
-    if(this.MarketService.isExistingAsset) {
-      this.portfolioStock = this.MarketService.portfolioAsset$.value as PortfolioStock;
+    if(this.marketService.isExistingAsset) {
+      this.portfolioStock = this.marketService.portfolioAsset$.value as PortfolioStock;
       this.count = this.portfolioStock.count;
     }
   }
 
   public ngAfterViewInit(): void {
-    this.MarketService.getAsset().subscribe(val => {
+    this.marketService.getAsset().subscribe(val => {
       this.marketInfo = val as MarketStockInfo;
       this.cdr.detectChanges();
     });
   }
 
   public saveEdit(): void {
-    if(this.MarketService.isExistingAsset) {
+    if(this.marketService.isExistingAsset) {
       this.savingsService.editAsset(this.portfolioStock);
     } else {
       const newAsset: IPortfolioStock = PortfolioStock.mapICompanyToPortfolioStock(this.marketInfo);
@@ -65,6 +65,6 @@ export class StockAssetComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.MarketService.destroyMarketState();
+    this.marketService.destroyMarketState();
   }
 }

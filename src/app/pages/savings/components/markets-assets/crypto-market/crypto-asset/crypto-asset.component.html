@@ -1,6 +1,10 @@
 @if(coinMarketInfo) {
-    <div class="asset">
-        <p>{{coinMarketInfo.marketCapUsd}}</p>
+    <section class="asset">
+        <div>
+            <p class="asset--title">{{coinMarketInfo.name}}</p>
+            <p>{{coinMarketInfo.marketCapitalization}}</p>
+        </div>
+
         <div class="asset--price">
             <mat-form-field appearance="outline" floatLabel="always" class="w-100">
                 <mat-label>Sum</mat-label>
@@ -16,7 +20,7 @@
         </mat-form-field>
 
         <button mat-flat-button class="accept-btn" (click)="saveEdit()">Save me</button>
-    </div>
+    </section>
 } @else {
     <p>Oops, something went wrong</p>
 }

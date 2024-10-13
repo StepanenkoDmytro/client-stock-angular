@@ -1,6 +1,10 @@
 
 .asset {
     margin: 20px 10px 10px 10px;
+
+    &--title {
+        font-size: 20px;
+    }
   
     &--price {
       display: flex;
