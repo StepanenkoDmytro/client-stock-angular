@@ -9,13 +9,15 @@ import { IconComponent } from '../../../../../../core/UI/components/icon/icon.co
 import { SavingsService } from '../../../../../../service/savings.service';
 import { PortfolioStock } from '../../../../model/PortfolioStock';
 import { MarketStockInfo } from '../../../../model/MarketStockInfo';
+import { MatButtonModule } from '@angular/material/button';
 
 
 const MATERIAL_MODULES = [
   MatIconModule, 
   FormsModule, 
   MatFormFieldModule, 
-  MatInputModule
+  MatInputModule,
+  MatButtonModule
 ];
 
 @Component({
@@ -23,7 +25,7 @@ const MATERIAL_MODULES = [
   standalone: true,
   imports: [...MATERIAL_MODULES, IconComponent],
   templateUrl: './stock-asset.component.html',
-  styleUrl: './stock-asset.component.scss',
+  styleUrls: ['./stock-asset.component.scss', '../../market-assets.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StockAssetComponent implements OnInit, AfterViewInit, OnDestroy {

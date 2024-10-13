@@ -12,10 +12,10 @@
 
         <mat-form-field appearance="outline" floatLabel="always" class="asset--count">
             <mat-label>Count</mat-label>
-            <input [(ngModel)]="count" matInput type="number" inputmode="numeric" class="line" placeholder="0" style="font-size: 1.5rem;">
+            <input [(ngModel)]="count" matInput type="number" inputmode="numeric" class="line" placeholder="0" style="font-size: 1.5rem;" pgzMoney>
         </mat-form-field>
 
-        <button (click)="saveEdit()">Save me</button>
+        <button mat-flat-button class="accept-btn" (click)="saveEdit()">Save me</button>
     </div>
 } @else {
     <p>Oops, something went wrong</p>

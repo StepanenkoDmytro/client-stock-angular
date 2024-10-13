@@ -78,14 +78,12 @@ export class StockMarketComponent implements AfterViewInit {
     // });
   }
 
-  public onChoiseAsset(asset: IAsset): void {
+  public goToAsset(asset: IAsset): void {
+    //TODO: переписать, чтоб вьізов происходил при инициализации компонента
     this.stockService.getCompany(asset.symbol).subscribe(val => {
       const newSome: IPortfolioStock = {...val,buyPrice: asset.price, count: 0,};
       this.marketService.selectAsset(newSome);
     });
-  }
-
-  public goToAsset(): void {
     this.router.navigate(['/savings/stock-asset']);
   }
 }

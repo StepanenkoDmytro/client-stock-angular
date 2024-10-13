@@ -70,12 +70,8 @@ export class CryptoMarketComponent implements OnInit {
     });
   }
 
-  public onChoiseAsset(asset: ICoin, index: number): void {
-    this.selectedAssetIndex = index;
+  public goToAsset(asset: ICoin): void {
     this.marketService.selectAsset(asset);
-  }
-
-  public goToAsset(): void {
     this.router.navigate(['/savings/crypto-asset']);
   }
 }
