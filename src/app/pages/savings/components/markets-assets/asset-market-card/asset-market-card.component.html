@@ -8,7 +8,9 @@
     </div>
 
     <div class="asset--info col-6 text-end">
-        <p class="company-primary-info">{{ asset.price | moneyFormat }}$</p>
+        @if(asset.price) {
+            <p class="company-primary-info">{{ asset.price | moneyFormat }}$</p>
+        }
         <p style="font-size: 12px;">{{ asset.assetType }}</p>
         <!-- <p style="font-size: 12px;">{{ asset.count }} pcs by {{ asset.price }}$</p> -->
     </div>

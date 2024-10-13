@@ -35,6 +35,13 @@ export interface ICoin extends IMarket {
     marketCapUsd: number;
 }
 
+export interface ICompanyList {
+    data: IMarket[],
+    totalPages: number,
+    totalItems: number,
+    currentPage: number
+}
+
 export interface IMarket {
     name: string;
     assetType: string;

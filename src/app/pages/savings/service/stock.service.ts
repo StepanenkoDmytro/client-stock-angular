@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { ICompany, IMarket } from '../../../domain/savings.domain';
+import { ICompany, ICompanyList, IMarket } from '../../../domain/savings.domain';
 
 
 @Injectable({
@@ -11,6 +11,10 @@ export class StockService {
   private readonly url: string = 'https://pegazzo.online:8000/api/v1/markets/stocks';
 
   constructor(private readonly httpClient: HttpClient) { }
+
+  public getCompaniesList(page: number): Observable<ICompanyList> {
+    return this.httpClient.get<ICompanyList>(this.url);
+  }
 
   public getMovers(type: string): Observable<IMarket[]> {
     const url = this.url + '/movers/' + type;

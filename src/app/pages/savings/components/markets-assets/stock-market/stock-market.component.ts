@@ -7,9 +7,9 @@ import { StockService } from '../../../service/stock.service';
 import { HttpClientModule } from '@angular/common/http';
 import { MarketService } from '../../../service/market.service';
 import { AssetMarketCardComponent } from '../asset-market-card/asset-market-card.component';
-import { IPortfolioStock, IAsset, IMarket } from '../../../../../domain/savings.domain';
+import { IPortfolioStock, IAsset, IMarket, ICompanyList } from '../../../../../domain/savings.domain';
 import { StockAssetComponent } from './stock-asset/stock-asset.component';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 
 
@@ -29,7 +29,7 @@ const MATERIAL_MODULES = [
 @Component({
   selector: 'pgz-stock-market',
   standalone: true,
-  imports: [UI_COMPONENTS, ...MATERIAL_MODULES, HttpClientModule],
+  imports: [UI_COMPONENTS, ...MATERIAL_MODULES, HttpClientModule, RouterModule],
   templateUrl: './stock-market.component.html',
   styleUrl: './stock-market.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -45,19 +45,18 @@ export class StockMarketComponent implements AfterViewInit {
     ['Day losers', 'DAY_LOSERS'],
   ]);
   public selectedFilter: string = 'MOST_ACTIVES';
-  public selectedAssetIndex: number;
 
   constructor(
     private stockService: StockService, 
-    private MarketService: MarketService,
+    private marketService: MarketService,
     private cdr: ChangeDetectorRef,
     private router: Router,) { }
 
   public ngAfterViewInit(): void {
     
-    this.stockService.getMovers(this.selectedFilter).subscribe(
-      (response: IMarket[]) => {
-        this.companies = [...response];
+    this.stockService.getCompaniesList(0).subscribe(
+      (response: ICompanyList) => {
+        this.companies = [...response.data];
         this.cdr.detectChanges();
         
       },
@@ -77,12 +76,11 @@ export class StockMarketComponent implements AfterViewInit {
     // });
   }
 
-  public onChoiseAsset(asset: IAsset, index: number): void {
+  public onChoiseAsset(asset: IAsset): void {
     this.stockService.getCompany(asset.symbol).subscribe(val => {
       const newSome: IPortfolioStock = {...val,buyPrice: asset.price, count: 0,};
-      this.MarketService.selectAsset(newSome);
+      this.marketService.selectAsset(newSome);
     });
-    this.selectedAssetIndex = index;
   }
 
   public goToAsset(): void {
