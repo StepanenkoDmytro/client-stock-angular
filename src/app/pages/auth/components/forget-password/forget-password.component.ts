@@ -3,7 +3,7 @@ import { AuthService } from '../../../../service/auth.service';
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -29,12 +29,14 @@ export class ForgetPasswordComponent {
 
   constructor(
     private readonly authService: AuthService,
+    private router: Router
   ) { }
 
   public async sendEmailToRestorePassword(): Promise<void> {
+    //TODO: sendRecoveryCode handle diff statuses
     try {
-      await firstValueFrom(this.authService.restorePassword());
-      this.isEmailSent = true;
+      this.authService.sendRecoveryCode(this.emailCtrl.value);
+      this.router.navigate(['auth/change-password']);
     } catch (e) {
       this.showError();
     }

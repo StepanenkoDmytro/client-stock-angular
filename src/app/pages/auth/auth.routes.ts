@@ -3,6 +3,7 @@ import { AuthContainerComponent } from "./components/auth-container/auth-contain
 import { ForgetPasswordComponent } from "./components/forget-password/forget-password.component";
 import { LoginComponent } from "./components/login/login.component";
 import { RegistrationComponent } from "./components/registration/registration.component";
+import { ChangePasswordComponent } from "./components/change-password/change-password.component";
 
 export const AUTH_ROUTES: Route[] = [
     {
@@ -13,6 +14,7 @@ export const AUTH_ROUTES: Route[] = [
         { path: 'login', component: LoginComponent },
         { path: 'registration', component: RegistrationComponent },
         { path: 'forget-password', component: ForgetPasswordComponent },
+        { path: 'change-password', component: ChangePasswordComponent },
       ]
     }
   ];

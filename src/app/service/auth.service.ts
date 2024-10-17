@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { catchError, map, Observable, of, switchMap } from 'rxjs';
+import { catchError, map, Observable, of, switchMap, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ILoginFormData } from '../domain/auth.domain';
 import { UserService } from './user.service';
@@ -76,8 +76,12 @@ export class AuthService {
     );
   }
 
-  public restorePassword(): Observable<any> {
-    return of(true);
+  public sendRecoveryCode(email: string): Observable<any> {
+    const sendCodeUrl: string = this.url + 'send-code';
+    const request = { email: email };
+    return this.httpClient.post(sendCodeUrl, request).pipe(
+      tap(resp => console.log(resp))
+    );
   }
 
   public logOut(): void {
