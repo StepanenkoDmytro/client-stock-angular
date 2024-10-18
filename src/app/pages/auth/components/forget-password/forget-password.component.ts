@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { AuthService } from '../../../../service/auth.service';
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { Router, RouterModule } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
@@ -37,7 +37,8 @@ export class ForgetPasswordComponent {
   public async sendEmailToRestorePassword(): Promise<void> {
     //TODO: sendRecoveryCode handle diff statuses
     try {
-      this.authService.sendRecoveryCode(this.emailCtrl.value);
+      const recoveryCode: string = await lastValueFrom(this.authService.sendRecoveryCode(this.emailCtrl.value));
+      this.emailStateService.recoveryCode = recoveryCode;
       this.emailStateService.userEmail = this.emailCtrl.value;
       this.router.navigate(['auth/input-recovery-code']);
     } catch (e) {

@@ -6,4 +6,5 @@ import { Injectable } from '@angular/core';
 export class EmailStateService {
 
   public userEmail: string = '';
+  public recoveryCode: string = '';
 }

@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { EmailStateService } from '../../service/email-state.service';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../../../../service/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'pgz-input-recovery-code',
@@ -18,12 +19,15 @@ export class InputRecoveryCodeComponent implements OnInit {
   public codeDigits: string[] = ['', '', '', '', '', ''];
   public errorMessage: string | null = null;
 
+  private recoveryCode: string = '';
   constructor(
     private authService: AuthService,
-    private emailStateService: EmailStateService
+    private emailStateService: EmailStateService,
+    private router: Router
   ) {}
 
   public ngOnInit(): void {
+    this.recoveryCode = this.emailStateService.recoveryCode;
     this.userEmail = this.emailStateService.userEmail;
   }
 
@@ -31,7 +35,7 @@ export class InputRecoveryCodeComponent implements OnInit {
     if(!this.userEmail) {
       return;
     }
-    
+
     this.authService.sendRecoveryCode(this.userEmail);
   }
 
@@ -67,7 +71,12 @@ export class InputRecoveryCodeComponent implements OnInit {
   public onSubmit(): void {
     if (this.isCodeComplete()) {
       const recoveryCode = this.codeDigits.join('');
-      console.log('Recovery Code:', recoveryCode);
+      if(recoveryCode !== this.recoveryCode) {
+        this.errorMessage = 'Invalid code. Please try again.';
+        return;
+      }
+
+      this.router.navigate(['/auth/change-password']);
     } else {
       this.errorMessage = 'Please complete all fields.';
     }

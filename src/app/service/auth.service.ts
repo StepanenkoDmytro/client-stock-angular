@@ -76,11 +76,16 @@ export class AuthService {
     );
   }
 
-  public sendRecoveryCode(email: string): Observable<any> {
+  public sendRecoveryCode(email: string): Observable<string> {
     const sendCodeUrl: string = this.url + 'send-code';
     const request = { email: email };
-    return this.httpClient.post(sendCodeUrl, request).pipe(
-      tap(resp => console.log(resp))
+    return this.httpClient.post<{ code: string }>(sendCodeUrl, request).pipe(
+      map(resp => resp.code),
+      catchError((error: Error) => {
+        this.handleApiError(error);
+        //TODO: ask ALex about return after error
+        return '';
+      })
     );
   }
 
