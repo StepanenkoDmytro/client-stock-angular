@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { Router, RouterModule } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { EmailStateService } from './service/email-state.service';
 
 
 const MATERIAL_MODULES = [
@@ -29,6 +30,7 @@ export class ForgetPasswordComponent {
 
   constructor(
     private readonly authService: AuthService,
+    private emailStateService: EmailStateService,
     private router: Router
   ) { }
 
@@ -36,6 +38,7 @@ export class ForgetPasswordComponent {
     //TODO: sendRecoveryCode handle diff statuses
     try {
       this.authService.sendRecoveryCode(this.emailCtrl.value);
+      this.emailStateService.userEmail = this.emailCtrl.value;
       this.router.navigate(['auth/input-recovery-code']);
     } catch (e) {
       this.showError();
