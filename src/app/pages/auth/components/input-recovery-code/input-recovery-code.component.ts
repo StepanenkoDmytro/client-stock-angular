@@ -2,14 +2,14 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'pgz-change-password',
+  selector: 'pgz-input-recovery-code',
   standalone: true,
   imports: [FormsModule, ReactiveFormsModule],
-  templateUrl: './change-password.component.html',
-  styleUrl: './change-password.component.scss',
+  templateUrl: './input-recovery-code.component.html',
+  styleUrl: './input-recovery-code.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ChangePasswordComponent {
+export class InputRecoveryCodeComponent {
   codeDigits: string[] = ['', '', '', '', '', ''];
   errorMessage: string | null = null;
 

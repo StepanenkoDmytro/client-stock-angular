@@ -1,0 +1,18 @@
+<div class="recovery-code-container">
+    <form (ngSubmit)="onSubmit()">
+        <div class="code-inputs">
+            @for(digit of codeDigits; track digit; let i = $index) {
+                <input
+                        type="text" maxlength="1" class="code-input" name="digit{{i}}"
+                        [(ngModel)]="codeDigits[i]" 
+                        (input)="onDigitInput($event, i)" 
+                        (keydown.backspace)="onBackspace($event, i)"
+                        #inputElement>
+            }
+        </div>
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="!isCodeComplete()">
+        Submit
+        </button>
+    </form>
+</div>
