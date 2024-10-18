@@ -20,7 +20,7 @@ const MATERIAL_MODULES = [
   standalone: true,
   imports: [...MATERIAL_MODULES, RouterModule],
   templateUrl: './forget-password.component.html',
-  styleUrl: './forget-password.component.scss',
+  styleUrls: ['./forget-password.component.scss', '../auth.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ForgetPasswordComponent {
@@ -36,7 +36,7 @@ export class ForgetPasswordComponent {
     //TODO: sendRecoveryCode handle diff statuses
     try {
       this.authService.sendRecoveryCode(this.emailCtrl.value);
-      this.router.navigate(['auth/change-password']);
+      this.router.navigate(['auth/input-recovery-code']);
     } catch (e) {
       this.showError();
     }

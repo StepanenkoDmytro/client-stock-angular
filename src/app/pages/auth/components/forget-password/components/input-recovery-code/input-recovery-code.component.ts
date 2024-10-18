@@ -6,7 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   standalone: true,
   imports: [FormsModule, ReactiveFormsModule],
   templateUrl: './input-recovery-code.component.html',
-  styleUrl: './input-recovery-code.component.scss',
+  styleUrls: ['./input-recovery-code.component.scss', '../../../auth.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InputRecoveryCodeComponent {

@@ -25,7 +25,7 @@ const MATERIAL_MODULES = [
   standalone: true,
   imports: [SocialLoginWrapperComponent, ...MATERIAL_MODULES, RouterModule],
   templateUrl: './registration.component.html',
-  styleUrl: './registration.component.scss',
+  styleUrls: ['./registration.component.scss', '../auth.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegistrationComponent {

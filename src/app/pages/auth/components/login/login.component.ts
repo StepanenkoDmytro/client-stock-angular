@@ -34,7 +34,7 @@ const MATERIAL_MODULES = [
   standalone: true,
   imports: [...UI_COMPONENTS, ...MATERIAL_MODULES, RouterModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
+  styleUrls: ['./login.component.scss', '../auth.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent implements OnInit {
