@@ -5,6 +5,7 @@ import { EmailStateService } from '../../service/email-state.service';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../../../../service/auth.service';
 import { Router } from '@angular/router';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'pgz-input-recovery-code',
@@ -26,9 +27,18 @@ export class InputRecoveryCodeComponent implements OnInit {
     private router: Router
   ) {}
 
-  public ngOnInit(): void {
-    this.recoveryCode = this.emailStateService.recoveryCode;
+  public async ngOnInit(): Promise<void> {
     this.userEmail = this.emailStateService.userEmail;
+    try {
+      const recoveryCode: string = await lastValueFrom(this.authService.sendRecoveryCode(this.userEmail));
+      console.log(recoveryCode);
+      this.recoveryCode = recoveryCode;
+      this.emailStateService.recoveryCode = recoveryCode;
+      
+    } catch (e) {
+      this.showError();
+    }
+    
   }
 
   public resendCodeToEmail(): void {
@@ -37,6 +47,10 @@ export class InputRecoveryCodeComponent implements OnInit {
     }
 
     this.authService.sendRecoveryCode(this.userEmail);
+  }
+
+  private showError(): void {
+    console.log('Error');
   }
 
   public onDigitInput(event: any, index: number): void {
@@ -71,6 +85,7 @@ export class InputRecoveryCodeComponent implements OnInit {
   public onSubmit(): void {
     if (this.isCodeComplete()) {
       const recoveryCode = this.codeDigits.join('');
+      console.log(recoveryCode, this.recoveryCode);
       if(recoveryCode !== this.recoveryCode) {
         this.errorMessage = 'Invalid code. Please try again.';
         return;

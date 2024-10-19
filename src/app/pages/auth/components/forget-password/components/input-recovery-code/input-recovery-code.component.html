@@ -1,7 +1,7 @@
 <p class="title-auth">{{ 'Enter recovery code' }}</p>
 <p class="auth-text">We send a code to <b>{{userEmail}}</b></p>
 <div class="recovery-code-container">
-    <form (ngSubmit)="onSubmit()">
+    <!-- <form (ngSubmit)="onSubmit()"> -->
         <div class="code-inputs">
             @for(digit of codeDigits; track digit; let i = $index) {
                 <input
@@ -14,7 +14,7 @@
                     #inputElement>
             }
         </div>
-    </form>
+    <!-- </form> -->
 </div>
 <p class="auth-text">Didn't receive the email? <a class="auth-form--text-link" (click)="resendCodeToEmail()">Click here</a></p>
 
@@ -22,6 +22,7 @@
         class="auth-btn"
         [class.auth-btn--submit-enabled]="isCodeComplete()"
         [disabled]="!isCodeComplete()"
+        (click)="onSubmit()"
         >
     {{ 'Submit' }}
 </button>

@@ -5,7 +5,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, lastValueFrom } from 'rxjs';
+import { AuthService } from '../../../../../../service/auth.service';
+import { EmailStateService } from '../../service/email-state.service';
+import { Router } from '@angular/router';
 
 
 const MATERIAL_MODULES = [
@@ -25,26 +28,6 @@ const MATERIAL_MODULES = [
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChangePasswordComponent implements OnInit {
-  constructor(
-    private formBuilder: FormBuilder
-  ) {}
-  public ngOnInit(): void {
-    this.form = this.formBuilder.group({
-      'password': this.passwordCtrl,
-      'repeatPasswordCtrl': this.repeatPasswordCtrl
-    });
-
-    this.form.valueChanges.subscribe((formValues) => {
-      const password = this.passwordCtrl.value;
-      const repeatPassword = this.repeatPasswordCtrl.value;
-      console.log(password, repeatPassword)
-      if (password.length > 0 && repeatPassword.length > 0) {
-        const isValid = password === repeatPassword;
-        console.log(password, repeatPassword)
-        this.isValidityPassword.next(isValid);
-      }
-    });
-  }
   public form: FormGroup;
   public passwordCtrl: FormControl<string> = new FormControl<string>('', [Validators.required]);
   public repeatPasswordCtrl: FormControl<string> = new FormControl<string>('', [Validators.required]);
@@ -57,8 +40,37 @@ export class ChangePasswordComponent implements OnInit {
 
   public isValidityPassword: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-  public handleSubmit(): void {
-    console.log('q');
+  constructor(
+    private formBuilder: FormBuilder,
+    private authService: AuthService,
+    private emailStateService: EmailStateService,
+    private roter: Router
+  ) {}
+
+  public ngOnInit(): void {
+    this.form = this.formBuilder.group({
+      'password': this.passwordCtrl,
+      'repeatPasswordCtrl': this.repeatPasswordCtrl
+    });
+
+    this.form.valueChanges.subscribe(() => {
+      const password = this.passwordCtrl.value;
+      const repeatPassword = this.repeatPasswordCtrl.value;
+      if (password.length > 0 && repeatPassword.length > 0) {
+        const isValid = password === repeatPassword;
+        console.log(password, repeatPassword)
+        this.isValidityPassword.next(isValid);
+      }
+    });
+  }
+  
+  public async handleSubmit(): Promise<void> {
+    const recoveryCode = this.emailStateService.recoveryCode;
+    const email = this.emailStateService.userEmail;
+    const newPassword = this.passwordCtrl.value;
+
+    await lastValueFrom(this.authService.changePassword(recoveryCode, email, newPassword));
+    this.roter.navigate(['auth/login']);
   }
 
   public checkPasswordValidity(): void {

@@ -34,19 +34,12 @@ export class ForgetPasswordComponent {
     private router: Router
   ) { }
 
-  public async sendEmailToRestorePassword(): Promise<void> {
-    //TODO: sendRecoveryCode handle diff statuses
-    try {
-      const recoveryCode: string = await lastValueFrom(this.authService.sendRecoveryCode(this.emailCtrl.value));
-      this.emailStateService.recoveryCode = recoveryCode;
-      this.emailStateService.userEmail = this.emailCtrl.value;
+  public sendEmailToRestorePassword(): void {
+    this.emailStateService.userEmail = this.emailCtrl.value;
       this.router.navigate(['auth/input-recovery-code']);
-    } catch (e) {
-      this.showError();
-    }
+    //TODO: sendRecoveryCode handle diff statuses
+    
   }
 
-  private showError(): void {
-    console.log('Error');
-  }
+  
 }
