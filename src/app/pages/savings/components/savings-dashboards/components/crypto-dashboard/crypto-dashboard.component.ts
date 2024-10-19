@@ -1,13 +1,17 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { MoneyPipe } from '../../../../../../pipe/money.pipe';
 
 @Component({
   selector: 'pgz-crypto-dashboard',
   standalone: true,
-  imports: [],
+  imports: [MoneyPipe],
   templateUrl: './crypto-dashboard.component.html',
-  styleUrl: './crypto-dashboard.component.scss',
+  styleUrls: ['./crypto-dashboard.component.scss', '../dashboard.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CryptoDashboardComponent {
-
+  public balance: number = 0;
+  public portfolioCost: number = 0;
+  public monthlyBudget: number = 0;
+  public spentByMonth: number = 0;
 }

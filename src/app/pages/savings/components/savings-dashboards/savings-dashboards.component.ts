@@ -39,7 +39,7 @@ export class SavingsDashboardsComponent implements OnInit, OnChanges {
     }
   }
 
-  loadComponent(cardName: string) {
+  public loadComponent(cardName: string) {
     this.cardContainer.clear();  
     const cardRef = this.cardService.getCardComponent(cardName);
     const componentRef = this.cardContainer.createComponent(cardRef);
