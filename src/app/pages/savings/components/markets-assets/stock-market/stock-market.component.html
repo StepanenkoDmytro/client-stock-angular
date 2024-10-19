@@ -1,9 +1,5 @@
 <section>
-  <div [routerLink]="'/savings'" class="d-flex">
-    <span><mat-icon>keyboard_backspace</mat-icon></span>
-
-    <p>Stock market</p>
-  </div>
+  <pgz-prev-route [title]="'Stock market'"></pgz-prev-route>
 
   <mat-form-field class="w-100">
     <mat-label>Assets</mat-label>
@@ -28,9 +24,9 @@
       </select>
     </div>
   </div>
-  <div style="height: 45vh; overflow-y: scroll; overflow-x: hidden;">
+  <div>
       @for(asset of companies; track asset) {
-          <pgz-asset-market-card [asset]="asset" (click)="goToAsset()"></pgz-asset-market-card>
+          <pgz-asset-market-card [asset]="asset" (click)="goToAsset(asset)"></pgz-asset-market-card>
       }
   </div>
 </section>

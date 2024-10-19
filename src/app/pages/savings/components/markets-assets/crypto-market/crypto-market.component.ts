@@ -10,10 +10,12 @@ import { AssetMarketCardComponent } from '../asset-market-card/asset-market-card
 import { ICoin } from '../../../../../domain/savings.domain';
 import { Router, RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { PrevRouteComponent } from '../../prev-route/prev-route.component';
 
 
 const UI_COMPONENTS = [
-  AssetMarketCardComponent
+  AssetMarketCardComponent,
+  PrevRouteComponent
 ];
 
 const MATERIAL_MODULES = [
@@ -42,7 +44,7 @@ export class CryptoMarketComponent implements OnInit {
 
   constructor(
     private coinService: CoinService, 
-    private MarketService: MarketService,
+    private marketService: MarketService,
     private cdr: ChangeDetectorRef,
     private router: Router,
   ) { }
@@ -68,12 +70,8 @@ export class CryptoMarketComponent implements OnInit {
     });
   }
 
-  public onChoiseAsset(asset: ICoin, index: number): void {
-    this.selectedAssetIndex = index;
-    this.MarketService.selectAsset(asset);
-  }
-
-  public goToAsset(): void {
+  public goToAsset(asset: ICoin): void {
+    this.marketService.selectAsset(asset);
     this.router.navigate(['/savings/crypto-asset']);
   }
 }

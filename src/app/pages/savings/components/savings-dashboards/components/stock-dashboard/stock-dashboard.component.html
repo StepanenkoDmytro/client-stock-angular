@@ -1,0 +1,21 @@
+<main class="total-balance-card">
+    <div class="portfolio-info">
+        <p>Stock Portfolio</p> 
+        <p style="margin-left: auto;">{{ portfolioCost | moneyFormat }}$</p>
+    </div>
+    <div class="d-flex">
+        <p style="font-size: 12px;">income: +2 800$</p>
+        <p style="margin-left: auto; font-size: 12px;">dividiend yield: 17%</p>
+    </div>
+    <div class="monthly-info">
+        <div class="portfolio-info">
+            <p>Balance</p> 
+            <p style="margin-left: auto;">{{ balance | moneyFormat }} $</p>
+        </div>
+        
+        <div class="d-flex">
+            <p style="font-size: 12px;">spent by month: -{{ spentByMonth | moneyFormat }}$</p>
+            <p style="margin-left: auto; font-size: 12px;">monthly budget: {{ monthlyBudget | moneyFormat }}$</p>
+        </div>
+    </div>
+</main>

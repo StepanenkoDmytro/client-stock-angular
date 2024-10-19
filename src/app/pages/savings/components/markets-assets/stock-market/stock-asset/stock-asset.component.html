@@ -1,10 +1,14 @@
-@if(coinMarketInfo) {
-    <div class="asset">
-        <!-- <p>{{coinMarketInfo.}}</p> -->
+@if(marketInfo) {
+    <section class="asset">
+        <div>
+            <p class="asset--title">{{marketInfo.name}}</p>
+            <p>{{marketInfo.marketCapitalization}}</p>
+        </div>
+
         <div class="asset--price">
             <mat-form-field appearance="outline" floatLabel="always" class="w-100">
                 <mat-label>Sum</mat-label>
-                <input [(ngModel)]="coinMarketInfo.price" [disabled]="editDisabled" matInput type="number" inputmode="numeric" class="line" placeholder="0" style="font-size: 1.5rem;">
+                <input [(ngModel)]="marketInfo.price" [disabled]="editDisabled" matInput type="number" inputmode="numeric" class="line" placeholder="0" style="font-size: 1.5rem;">
                 <span matTextSuffix class="currency" [class.currency--disabled]="editDisabled">$</span>
             </mat-form-field>
             <pgz-icon class="asset--icon" (click)="editDisabled = !editDisabled" [name]="'edit'"></pgz-icon>
@@ -15,8 +19,8 @@
             <input [(ngModel)]="count" matInput type="number" inputmode="numeric" class="line" placeholder="0" style="font-size: 1.5rem;">
         </mat-form-field>
 
-        <button (click)="saveEdit()">Save me</button>
-    </div>
+        <button mat-flat-button class="accept-btn" (click)="saveEdit()">Save me</button>
+    </section>
 } @else {
     <p>Oops, something went wrong</p>
 }

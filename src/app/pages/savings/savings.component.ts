@@ -17,6 +17,7 @@ import {
 } from '@angular/material/bottom-sheet';
 import { SelectMarketDialogComponent } from './components/select-market-dialog/select-market-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { SavingsDashboardsComponent } from './components/savings-dashboards/savings-dashboards.component';
 
 
 const UI_COMPONENTS = [
@@ -24,6 +25,7 @@ const UI_COMPONENTS = [
   ButtonToggleComponent,
   ButtonToggleComponent,
   AssetCardComponent,
+  SavingsDashboardsComponent
 ];
 
 const MATERIAL_MODULES = [

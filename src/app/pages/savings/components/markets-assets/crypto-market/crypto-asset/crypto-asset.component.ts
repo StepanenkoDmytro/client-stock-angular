@@ -10,22 +10,28 @@ import { SavingsService } from '../../../../../../service/savings.service';
 import { PortfolioCoin } from '../../../../model/PortfolioCoin';
 import { MarketCoinInfo } from '../../../../model/MarketCoinInfo';
 import { Router } from '@angular/router';
+import { MoneyDirective } from '../../../../../../directive/money.directive';
+import { MatButtonModule } from '@angular/material/button';
 
+const UI_COMPONENTS = [
+  MoneyDirective,
+  IconComponent
+];
 
 const MATERIAL_MODULES = [
   MatIconModule, 
   FormsModule, 
   MatFormFieldModule, 
   MatInputModule,
+  MatButtonModule
 ];
-
 
 @Component({
   selector: 'pgz-crypto-asset',
   standalone: true,
-  imports: [...MATERIAL_MODULES, IconComponent],
+  imports: [...MATERIAL_MODULES, ...UI_COMPONENTS],
   templateUrl: './crypto-asset.component.html',
-  styleUrl: './crypto-asset.component.scss',
+  styleUrls: ['./crypto-asset.component.scss', '../../market-assets.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CryptoAssetComponent implements OnInit, AfterViewInit, OnDestroy {

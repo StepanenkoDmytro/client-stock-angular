@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { AuthService } from '../../../../service/auth.service';
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { EmailStateService } from './service/email-state.service';
 
 
 const MATERIAL_MODULES = [
@@ -20,7 +21,7 @@ const MATERIAL_MODULES = [
   standalone: true,
   imports: [...MATERIAL_MODULES, RouterModule],
   templateUrl: './forget-password.component.html',
-  styleUrl: './forget-password.component.scss',
+  styleUrls: ['./forget-password.component.scss', '../auth.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ForgetPasswordComponent {
@@ -29,18 +30,16 @@ export class ForgetPasswordComponent {
 
   constructor(
     private readonly authService: AuthService,
+    private emailStateService: EmailStateService,
+    private router: Router
   ) { }
 
-  public async sendEmailToRestorePassword(): Promise<void> {
-    try {
-      await firstValueFrom(this.authService.restorePassword());
-      this.isEmailSent = true;
-    } catch (e) {
-      this.showError();
-    }
+  public sendEmailToRestorePassword(): void {
+    this.emailStateService.userEmail = this.emailCtrl.value;
+      this.router.navigate(['auth/input-recovery-code']);
+    //TODO: sendRecoveryCode handle diff statuses
+    
   }
 
-  private showError(): void {
-    console.log('Error');
-  }
+  
 }

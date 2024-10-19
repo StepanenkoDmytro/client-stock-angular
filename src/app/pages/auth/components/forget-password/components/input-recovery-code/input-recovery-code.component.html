@@ -1,0 +1,28 @@
+<p class="title-auth">{{ 'Enter recovery code' }}</p>
+<p class="auth-text">We send a code to <b>{{userEmail}}</b></p>
+<div class="recovery-code-container">
+    <!-- <form (ngSubmit)="onSubmit()"> -->
+        <div class="code-inputs">
+            @for(digit of codeDigits; track digit; let i = $index) {
+                <input
+                    type="number" maxlength="1"  name="digit{{i}}"
+                    class="code-input"
+                    [ngClass]="{'code-input--filled': codeDigits[i] !== ''}"
+                    [(ngModel)]="codeDigits[i]" 
+                    (input)="onDigitInput($event, i)" 
+                    (keydown.backspace)="onBackspace($event, i)"
+                    #inputElement>
+            }
+        </div>
+    <!-- </form> -->
+</div>
+<p class="auth-text">Didn't receive the email? <a class="auth-form--text-link" (click)="resendCodeToEmail()">Click here</a></p>
+
+<button mat-flat-button 
+        class="auth-btn"
+        [class.auth-btn--submit-enabled]="isCodeComplete()"
+        [disabled]="!isCodeComplete()"
+        (click)="onSubmit()"
+        >
+    {{ 'Submit' }}
+</button>

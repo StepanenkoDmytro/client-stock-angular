@@ -1,6 +1,10 @@
 @if(coinMarketInfo) {
-    <div class="asset">
-        <p>{{coinMarketInfo.marketCapUsd}}</p>
+    <section class="asset">
+        <div>
+            <p class="asset--title">{{coinMarketInfo.name}}</p>
+            <p>{{coinMarketInfo.marketCapitalization}}</p>
+        </div>
+
         <div class="asset--price">
             <mat-form-field appearance="outline" floatLabel="always" class="w-100">
                 <mat-label>Sum</mat-label>
@@ -12,11 +16,11 @@
 
         <mat-form-field appearance="outline" floatLabel="always" class="asset--count">
             <mat-label>Count</mat-label>
-            <input [(ngModel)]="count" matInput type="number" inputmode="numeric" class="line" placeholder="0" style="font-size: 1.5rem;">
+            <input [(ngModel)]="count" matInput type="number" inputmode="numeric" class="line" placeholder="0" style="font-size: 1.5rem;" pgzMoney>
         </mat-form-field>
 
-        <button (click)="saveEdit()">Save me</button>
-    </div>
+        <button mat-flat-button class="accept-btn" (click)="saveEdit()">Save me</button>
+    </section>
 } @else {
     <p>Oops, something went wrong</p>
 }

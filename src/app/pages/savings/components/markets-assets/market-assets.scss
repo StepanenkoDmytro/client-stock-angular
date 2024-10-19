@@ -1,0 +1,45 @@
+
+.asset {
+    margin: 20px 10px 10px 10px;
+
+    &--title {
+        font-size: 20px;
+    }
+  
+    &--price {
+      display: flex;
+      margin-bottom: 20px;
+      width: 100%;
+    }
+  
+    &--icon {
+      background-color: var(--bs-gray-300);
+      font-size: 1.5rem;
+      width: auto;
+      height: auto;
+      padding: 15px 5px 5px 5px;
+    }
+  
+    &--count {
+        width: 100%;
+    }
+}
+
+
+.currency {
+    font-size: 1.5rem;
+  
+    &--disabled {
+        opacity: 0.4;
+    }
+}
+
+.accept-btn {
+    width: 100%;
+    font-size: 1.2rem;
+    color: white!important;
+    border: 1px solid var(--bs-success);
+    background-color: var(--bs-success)!important;
+    padding: 1.8rem;
+    margin-top: 15px; 
+}

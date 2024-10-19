@@ -103,7 +103,7 @@ export class SpendingCategoryHelperService {
 
   public async calculateCategoryStatistic(spendings: Spending[]): Promise<ICategoryStatistic[]> {
     const categoriesList = await firstValueFrom(this.spendingService.getAllCategories());
-    const spendingCategoriesList = categoriesList[1].children;
+    const spendingCategoriesList = categoriesList.find(category => category.title === 'Spending').children;
 
     return spendingCategoriesList.map(category => this.calculateCategoryStatisticRecursive(category, spendings));
   }

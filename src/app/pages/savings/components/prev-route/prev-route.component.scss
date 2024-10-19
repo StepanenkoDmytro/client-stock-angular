@@ -1,0 +1,23 @@
+:host {
+  display: block;
+}
+
+.route {
+  display: flex;
+  align-items: center; 
+  justify-content: center; 
+  position: relative;
+  margin-bottom: 10px;
+  font-size: 18px;
+  padding: 0;
+
+  &--icon {
+    position: absolute;
+    left: 0;
+  }
+
+  &--title {
+    flex: 1;
+    text-align: center;
+  }
+}

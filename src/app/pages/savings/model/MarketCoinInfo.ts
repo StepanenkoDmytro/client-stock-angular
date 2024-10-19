@@ -6,5 +6,5 @@ export class MarketCoinInfo implements ICoin {
     symbol: string;
     price: number;
     assetType: string;
-    marketCapUsd: number;
+    marketCapitalization: number;
 }

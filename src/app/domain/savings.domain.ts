@@ -32,7 +32,7 @@ export interface ICompany extends IMarket {
 
 export interface ICoin extends IMarket {
     id: string;
-    marketCapUsd: number;
+    marketCapitalization: number;
 }
 
 export interface ICompanyList {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { catchError, map, Observable, of, switchMap } from 'rxjs';
+import { catchError, map, Observable, of, retry, switchMap, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ILoginFormData } from '../domain/auth.domain';
 import { UserService } from './user.service';
@@ -31,7 +31,6 @@ export class AuthService {
 
   public login(data: ILoginFormData): Observable<boolean> {
     const loginUrl: string = this.url + 'sign-in';
-
     return this.httpClient.post<IUserApiResponse>(loginUrl, data).pipe(
       switchMap( (resp: IUserApiResponse) => {
         this.userService.saveUser(resp.user);
@@ -76,8 +75,37 @@ export class AuthService {
     );
   }
 
-  public restorePassword(): Observable<any> {
-    return of(true);
+  public sendRecoveryCode(email: string): Observable<string> {
+    const sendCodeUrl: string = this.url + 'send-code';
+    const request = { email: email };
+    return this.httpClient.post<{ code: string }>(sendCodeUrl, request).pipe(
+      map(resp => resp.code),
+      catchError((error: Error) => {
+        this.handleApiError(error);
+        //TODO: ask ALex about return after error
+        return '';
+      })
+    );
+  }
+
+  public changePassword(recoveryCode: string, email: string, newPassword: string): Observable<boolean> {
+    const changePasswordUrl: string = this.url + 'reset-password';
+    const request = { 
+      email: email ,
+      code: recoveryCode,
+      newPassword: newPassword
+    };
+    
+    return this.httpClient.post(changePasswordUrl, request)
+      .pipe(map((resp) => {
+        console.log(resp);
+        return true;
+      }),
+      catchError( (error: Error) => {
+        this.handleApiError(error);
+        return of(false);
+        })
+      );
   }
 
   public logOut(): void {
