@@ -17,7 +17,7 @@
           <p style="margin: 0 0 0 5px;">{{ assetsCount }} psc.</p>
       </div>
   </div>
-  <div style="height: 45vh; overflow-y: scroll; overflow-x: hidden;">
+  <div>
       @for(asset of coins; track asset) {
           <pgz-asset-market-card [asset]="asset" (click)="goToAsset(asset)"></pgz-asset-market-card>
       }

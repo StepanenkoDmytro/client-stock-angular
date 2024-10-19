@@ -24,7 +24,7 @@
       </select>
     </div>
   </div>
-  <div style="height: 45vh; overflow-y: scroll; overflow-x: hidden;">
+  <div>
       @for(asset of companies; track asset) {
           <pgz-asset-market-card [asset]="asset" (click)="goToAsset(asset)"></pgz-asset-market-card>
       }
