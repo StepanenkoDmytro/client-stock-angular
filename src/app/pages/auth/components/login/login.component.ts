@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { AuthService } from '../../../../service/auth.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { Router, RouterModule } from '@angular/router';
@@ -68,34 +68,35 @@ export class LoginComponent implements OnInit {
   public async login(): Promise<void> {
     let isSuccess: boolean = false; 
     try {
-      isSuccess = await firstValueFrom(this.authService.login(this.form.getRawValue()));
+      isSuccess = await lastValueFrom(this.authService.login(this.form.getRawValue()));
+    
+
+      if(isSuccess) {
+      this.successLogin();
+      } else {
+        this.loginError = 'Invalid login or password';
+        this.cdr.detectChanges();
+      }
     } catch (e) {
       this.showLoginError();
     }
-
-    if(isSuccess) {
-     this.successLogin();
-    } else {
-      this.loginError = 'Invalid login or password';
-    }
-
-    this.cdr.detectChanges();
   }
 
   public async loginWithGoogle(googleResponse: any): Promise<void> {
     let isSuccess: boolean = false; 
     try {
-      isSuccess = await firstValueFrom(this.authService.loginWithGoogle(googleResponse));
+      isSuccess = await lastValueFrom(this.authService.loginWithGoogle(googleResponse));
+    
+
+      if(isSuccess) {
+        this.ngZone.run(() => {
+          this.successLogin();
+        });
+      } else {
+        console.log('TODO: mat error');
+      }
     } catch (e) {
       this.showLoginError();
-    }
-
-    if(isSuccess) {
-      this.ngZone.run(() => {
-        this.successLogin();
-      });
-    } else {
-      console.log('TODO: mat error');
     }
   }
 
@@ -138,9 +139,9 @@ export class LoginComponent implements OnInit {
 
   private async hasUnsavedDataOnServer(): Promise<boolean> {
     try{
-    const allSpendings: Spending[] = await firstValueFrom(this.store$.pipe(select(spendingsHistorySelector)));
-    const result = allSpendings.some(spending => spending.isSaved === false);
-    return result;
+      const allSpendings: Spending[] = await firstValueFrom(this.store$.pipe(select(spendingsHistorySelector)));
+      const result = allSpendings.some(spending => spending.isSaved === false);
+      return result;
     } catch (error) {
       console.error('hasUnsavedDataOnServer: ', error);
       return false;

@@ -11,7 +11,7 @@ import { IUserApiResponse } from '../domain/user.domain';
 })
 export class AuthService {
   private readonly authTokenKey = 'authToken';
-  private readonly url: string = 'https://pegazzo.online:8000/api/v1/auth/';
+  private readonly url: string = 'http://localhost:8000/api/v1/auth/';
 
   private _authToken: string = '';
 
@@ -31,7 +31,6 @@ export class AuthService {
 
   public login(data: ILoginFormData): Observable<boolean> {
     const loginUrl: string = this.url + 'sign-in';
-
     return this.httpClient.post<IUserApiResponse>(loginUrl, data).pipe(
       switchMap( (resp: IUserApiResponse) => {
         this.userService.saveUser(resp.user);
@@ -98,15 +97,15 @@ export class AuthService {
     };
     
     return this.httpClient.post(changePasswordUrl, request)
-    .pipe(map((resp) => {
-      console.log(resp);
-      return true;
-    }),
-    catchError( (error: Error) => {
-      this.handleApiError(error);
-      return of(false);
-      })
-    );
+      .pipe(map((resp) => {
+        console.log(resp);
+        return true;
+      }),
+      catchError( (error: Error) => {
+        this.handleApiError(error);
+        return of(false);
+        })
+      );
   }
 
   public logOut(): void {
