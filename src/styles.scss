@@ -252,6 +252,7 @@ p {
 
 .mat-expansion-panel-header {
   padding: 0 10px 0 24px !important;
+  height: inherit !important;
 }
 
 .mat-expansion-panel:not([class*=mat-elevation-z]),
@@ -259,6 +260,10 @@ p {
   box-shadow: none!important;
   background: inherit !important;
 }
+
+  .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:not([aria-disabled=true]):hover {
+      background: inherit!important;
+  }
 
 
 /** Styles for D3 Library **/

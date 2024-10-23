@@ -3,19 +3,36 @@
         <p>Crypto Portfolio</p> 
         <p style="margin-left: auto;">{{ portfolioCost | moneyFormat }}$</p>
     </div>
-    <div class="d-flex">
-        <p style="font-size: 12px;">income: +2 800$</p>
-        <p style="margin-left: auto; font-size: 12px;">dividiend yield: 17%</p>
+    <div class="portfolio-info--invested">
+        <p>Invested Capital: +2 800$</p>
     </div>
-    <div class="monthly-info">
-        <div class="portfolio-info">
-            <p>Balance</p> 
-            <p style="margin-left: auto;">{{ balance | moneyFormat }} $</p>
-        </div>
-        
-        <div class="d-flex">
-            <p style="font-size: 12px;">spent by month: -{{ spentByMonth | moneyFormat }}$</p>
-            <p style="margin-left: auto; font-size: 12px;">monthly budget: {{ monthlyBudget | moneyFormat }}$</p>
-        </div>
+
+    <div class="monthly-info--total">
+        <p>Daily PNL</p> 
+        <p style="margin-left: auto;">{{ portfolioCost | moneyFormat }}$</p>
     </div>
+    <div class="monthly-info--total">
+        <p>Monthly PNL</p> 
+        <p style="margin-left: auto;">{{ portfolioCost | moneyFormat }}$</p>
+    </div>
+    <div class="monthly-info--total">
+        <p>Yearly PNL</p> 
+        <p style="margin-left: auto;">{{ portfolioCost | moneyFormat }}$</p>
+    </div>
+    
+    <mat-expansion-panel class="w-100">
+        <mat-expansion-panel-header style="padding: 0 !important;">
+          <mat-panel-title> Instruments </mat-panel-title>
+          
+        </mat-expansion-panel-header>
+    
+        <div class="monthly-info--total">
+            <p>Spot</p> 
+            <p style="margin-left: auto;">{{ portfolioCost | moneyFormat }}$</p>
+        </div>
+        <div class="monthly-info--total">
+            <p>Earn</p> 
+            <p style="margin-left: auto;">{{ portfolioCost | moneyFormat }}$</p>
+        </div>
+    </mat-expansion-panel>
 </main>
