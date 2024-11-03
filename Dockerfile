@@ -16,6 +16,6 @@ COPY --from=build /app/dist/pegazzo-client/browser /usr/share/nginx/html
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
-EXPOSE 80
+EXPOSE 81
 
 CMD ["nginx", "-g", "daemon off;"]
