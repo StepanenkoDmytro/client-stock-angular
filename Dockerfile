@@ -8,21 +8,14 @@ COPY . .
 
 RUN npm install --force
 
-# Build the Angular app for production
 RUN npm run build:prod
 
-FROM node:18
+FROM nginx:alpine
 
-WORKDIR /app
+COPY --from=build /app/dist/pegazzo-client/browser /usr/share/nginx/html
 
-# Копіюємо побудований Angular застосунок з першого етапу
-COPY --from=build /app/dist/pegazzo-client/browser /app
+COPY nginx.conf /etc/nginx/nginx.conf
 
-# Встановлюємо простий статичний сервер для обслуговування файлів
-RUN npm install -g http-server
+EXPOSE 80
 
-# Порт для сервера
-EXPOSE 4200
-
-# Запускаємо http-server для обслуговування файлів
-CMD ["http-server", "/app", "-p", "4200"]
+CMD ["nginx", "-g", "daemon off;"]
