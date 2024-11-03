@@ -1,33 +1,28 @@
 FROM node:18 as build
 
-# Set the working directory in the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
 
-# Copy the entire application code to the container
 COPY . .
 
-# Install dependencies
 RUN npm install --force
 
 # Build the Angular app for production
 RUN npm run build:prod
 
-# Use Nginx as the production server
-FROM nginx:alpine
+FROM node:18
 
-# Copy the built React app to Nginx's web server directory
-COPY --from=build /app/dist/pegazzo-client/browser /usr/share/nginx/html
-#COPY ./dist/pegazzo-client/browser /usr/share/nginx/html
+WORKDIR /app
 
-# Copy nginx.conf to Nginx's configuration directory
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY pegazzo-online.crt /etc/nginx/pegazzo-online.crt
+# Копіюємо побудований Angular застосунок з першого етапу
+COPY --from=build /app/dist/pegazzo-client/browser /app
 
-# Expose port 81 for the Nginx server
-EXPOSE 81
+# Встановлюємо простий статичний сервер для обслуговування файлів
+RUN npm install -g http-server
 
-# Start Nginx when the container runs
-CMD ["nginx", "-g", "daemon off;"]
+# Порт для сервера
+EXPOSE 4200
+
+# Запускаємо http-server для обслуговування файлів
+CMD ["http-server", "/app", "-p", "4200"]
