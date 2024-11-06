@@ -8,7 +8,7 @@ import { ICompany, ICompanyList, IMarket } from '../../../domain/savings.domain'
   providedIn: 'root'
 })
 export class StockService {
-  private readonly url: string = 'https://pegazzo.online:8000/api/v1/markets/stocks';
+  private readonly url: string = 'https://pegazzo.online/money-life-cycle/api/v1/markets/stocks';
 
   constructor(private readonly httpClient: HttpClient) { }
 
