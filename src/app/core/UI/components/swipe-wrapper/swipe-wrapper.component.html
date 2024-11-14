@@ -4,8 +4,12 @@
   (swipeMove)="onSwipeMove($event)"
   (swipeEnd)="onSwipeEnd($event)">
   <div #slider class="dashboard-slider">
-    <div *ngFor="let card of _cards" class="dashboard">
-      <ng-container *ngComponentOutlet="card"></ng-container>
-    </div>
+    
+    @for(card of _cards; track card; let index = $index) {
+        <div class="dashboard">
+            <div #cardContainer *ngComponentOutlet="card"></div>
+        </div>
+    }
+    
   </div>
 </div>

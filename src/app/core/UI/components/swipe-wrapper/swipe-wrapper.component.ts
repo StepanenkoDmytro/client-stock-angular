@@ -1,7 +1,6 @@
 import { CommonModule, AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output, QueryList, Renderer2, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
 import { SwipeEvent, SwipeModule } from 'ng-swipe';
-
 @Component({
   selector: 'pgz-swipe-wrapper',
   standalone: true,
@@ -19,11 +18,12 @@ export class SwipeWrapperComponent {
   _cards: any[] = [];
   @Output() currentIndexChange = new EventEmitter<number>();
 
-  @ViewChild('cardContainer', { read: ViewContainerRef, static: true }) cardContainer: ViewContainerRef;
+  
+  @ViewChildren('cardContainer', { read: ViewContainerRef }) cardContainers!: QueryList<ViewContainerRef>; // Отримуємо доступ до всіх контейнерів
   @ViewChild('slider') slider: ElementRef;
 
   currentIndex = 0;
-  // cardComponents: any[] = [];
+  public cardComponents: any[] = [];
   
   constructor(
     private renderer: Renderer2,
@@ -42,7 +42,7 @@ export class SwipeWrapperComponent {
     if (this._cards.length <= 1) {
       return; 
     }
-    
+
     const threshold = 50;
     const maxIndex = this._cards.length - 1;
   
@@ -55,15 +55,18 @@ export class SwipeWrapperComponent {
         this.currentIndex--;
       }
     }
-
+    
     this.updateSliderPosition();
     this.currentIndexChange.emit(this.currentIndex);
   }
 
   private updateSliderPosition(): void {
+    
     if(this._cards.length > 0) {
+      
       const finalOffset = -this.currentIndex * 100;
       this.renderer.setStyle(this.slider.nativeElement, 'transform', `translateX(${finalOffset}%)`);
     }
   }
+
 }
