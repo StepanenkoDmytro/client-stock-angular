@@ -1,3 +1,19 @@
 :host {
   display: block;
 }
+
+.dashboard-slider-container {
+  overflow: hidden; 
+  width: 100%; 
+}
+
+.dashboard-slider {
+  display: flex;
+  transition: transform 0.3s ease-out; 
+}
+
+.dashboard {
+  flex: 0 0 100%; 
+}
+
+
