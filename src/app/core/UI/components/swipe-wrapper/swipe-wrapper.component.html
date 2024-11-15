@@ -3,13 +3,12 @@
   ngSwipe
   (swipeMove)="onSwipeMove($event)"
   (swipeEnd)="onSwipeEnd($event)">
+
   <div #slider class="dashboard-slider">
-    
-    @for(card of _cards; track card; let index = $index) {
-        <div class="dashboard">
-            <div #cardContainer *ngComponentOutlet="card"></div>
-        </div>
+    @for(card of cards; track card; let index = $index) {
+      <div class="dashboard">
+        <ng-template *ngComponentOutlet="card"></ng-template>
+      </div>
     }
-    
   </div>
 </div>

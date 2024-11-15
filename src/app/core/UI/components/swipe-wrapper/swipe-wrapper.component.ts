@@ -1,50 +1,52 @@
-import { CommonModule, AsyncPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output, QueryList, Renderer2, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
 import { SwipeEvent, SwipeModule } from 'ng-swipe';
 @Component({
   selector: 'pgz-swipe-wrapper',
   standalone: true,
-  imports: [SwipeModule, CommonModule, AsyncPipe],
+  imports: [SwipeModule, CommonModule],
   templateUrl: './swipe-wrapper.component.html',
   styleUrl: './swipe-wrapper.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SwipeWrapperComponent {
-  @Input() set cards(items: any[]) {
-    this._cards = items;
-    console.log(items);
-  }
+  @Input() 
+  public cards: any[] = [];
+  @Output() 
+  public currentIndexChange = new EventEmitter<number>();
 
-  _cards: any[] = [];
-  @Output() currentIndexChange = new EventEmitter<number>();
-
-  
-  @ViewChildren('cardContainer', { read: ViewContainerRef }) cardContainers!: QueryList<ViewContainerRef>; // Отримуємо доступ до всіх контейнерів
   @ViewChild('slider') slider: ElementRef;
 
-  currentIndex = 0;
-  public cardComponents: any[] = [];
+  private currentIndex = 0;
   
   constructor(
     private renderer: Renderer2,
   ) {}
 
-  public onSwipeMove(event: SwipeEvent) {
-    if (this._cards.length <= 1) {
+  public onSwipeMove(event: SwipeEvent): void {
+    if (this.cards.length <= 1) {
       return; 
+    }
+
+    if (this.currentIndex === 0 && event.distance > 0) {
+      return;
+    }
+  
+    if (this.currentIndex === this.cards.length - 1 && event.distance < 0) {
+      return;
     }
 
     const moveDistance = -this.currentIndex * 100 + (event.distance / window.innerWidth) * 100;
     this.renderer.setStyle(this.slider.nativeElement, 'transform', `translateX(${moveDistance}%)`);
   }
 
-  public onSwipeEnd(event: SwipeEvent) {
-    if (this._cards.length <= 1) {
+  public onSwipeEnd(event: SwipeEvent): void {
+    if (this.cards.length <= 1) {
       return; 
     }
 
     const threshold = 50;
-    const maxIndex = this._cards.length - 1;
+    const maxIndex = this.cards.length - 1;
   
     const swipePercentage = (Math.abs(event.distance) / window.innerWidth) * 100;
   
@@ -61,9 +63,7 @@ export class SwipeWrapperComponent {
   }
 
   private updateSliderPosition(): void {
-    
-    if(this._cards.length > 0) {
-      
+    if(this.cards.length > 0) {
       const finalOffset = -this.currentIndex * 100;
       this.renderer.setStyle(this.slider.nativeElement, 'transform', `translateX(${finalOffset}%)`);
     }
