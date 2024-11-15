@@ -47,6 +47,7 @@ export class AppComponent implements OnInit {
     { name: 'custom_facebook', url: 'assets/expend/facebook.svg'},
     { name: 'custom_edit', url: 'assets/icons/edit.svg'},
     { name: 'custom_exit', url: 'assets/icons/exit.svg'},
+    { name: 'custom_arrow-in', url: 'assets/icons/arrow-inside-up.svg'}
   ]
 
   constructor(

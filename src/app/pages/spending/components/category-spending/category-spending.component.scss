@@ -1,6 +1,44 @@
 :host {
   display: block;
+  width: 90%;
+  margin: auto;
+  border-radius: 20px;
+  background-color: #fff;
+}
+
+.add-category {
   width: 100%;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: inherit;
+  border: 1px solid #6F6F6F;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.plus {
+  position: absolute;
+  background-color: #545454; 
+}
+
+.plus.horizontal {
+  width: 25px;
+  height: 1px; 
+}
+
+.plus.vertical {
+  width: 1px; 
+  height: 25px;
 }
 
 .categories-actions {

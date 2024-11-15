@@ -1,50 +1,28 @@
 <div class="category-card">
-    <div class="category-card-parent">
-        <div class="category-card-parent--category">
-            <pgz-icon class="category-icon" [name]="data.category.icon"></pgz-icon>
-            <p>{{data.category.title}}</p>
+    <div class="category-card-parent--category">
+        <div class="category-card--icon" [ngStyle]='{ "background-color": data.category.color }'>
+            <pgz-icon [name]="data.category.icon"></pgz-icon>
         </div>
-
-        <p>{{data.value}}</p>
-
-        <div class="category-card-info">
-            @if(data.category.title !== 'Other') {
-                <mat-icon [matMenuTriggerFor]="actionsMenu">more_vert</mat-icon>
-                <mat-menu #actionsMenu>
-                    <div class="category-card-info--item" (click)="onEdit(data.category)"><p>Edit</p></div>
-                    <div class="category-card-info--item" (click)="onEdit(data.category)"><p>Statistic</p></div>
-                    <div class="category-card-info--item" (click)="onDelete(data.category)"><p>Delete</p></div>
-                </mat-menu>
+        <div class="category-card--info">
+            <p>{{data.category.title}}</p>
+            @if(data.children) {
+                <p style="font-size: 14px;">{{data.children.length}} subcategories</p>
             }
         </div>
     </div>
-    @if(dataChildrens && dataChildrens.length > 0) {
-        <mat-expansion-panel (opened)="panelOpenState = true"
-                            (closed)="panelOpenState = false">
-        <mat-expansion-panel-header>
-        <mat-panel-title>
-            <p>Subcategories ({{dataChildrens.length}})</p>
-        </mat-panel-title>
-        </mat-expansion-panel-header>
-            <div class="category-card-childrens">
-                @for(children of dataChildrens; track children) {
-                    <div class="category-card-childrens--item">
-                        <div class="category-card-childrens--category">
-                            <pgz-icon class="category-icon" [name]="children.category.icon"></pgz-icon>
-                            <p>{{children.category.title}}</p>
-                        </div>
-                        <p>{{children.value}}</p>
-                        <div class="category-card-info">
-                            <mat-icon [matMenuTriggerFor]="actionsMenu">more_vert</mat-icon>
-                            <mat-menu #actionsMenu>
-                                <div class="category-card-info--item" (click)="onEdit(children.category)"><p>Edit</p></div>
-                                <div class="category-card-info--item" (click)="onEdit(children.category)"><p>Statistic</p></div>
-                                <div class="category-card-info--item" (click)="onDelete(children.category)"><p>Delete</p></div>
-                            </mat-menu>
-                        </div>
-                    </div>
-                }
+
+    <div class="category-card-info">
+        <p>
+            @if(data.value > 0) {
+                -
+            }
+            {{data.value}}
+            <span style="margin-left: 5px;">₴</span>
+        </p>
+        @if(data.category.title !== 'Other') {
+            <div (click)="onCardClick()">
+                <pgz-icon [name]="'custom_arrow-in'"></pgz-icon>
             </div>
-        </mat-expansion-panel>
-    }
+        }
+    </div>
 </div>

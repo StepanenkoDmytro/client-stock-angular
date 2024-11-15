@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { EditStateService } from '../../../service/edit-state.service';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 const UI_MODULES = [
   IconComponent
@@ -15,7 +16,8 @@ const UI_MODULES = [
 const MATERIAL_MODULES = [
   MatExpansionModule, 
   MatIconModule, 
-  MatMenuModule
+  MatMenuModule,
+  CommonModule
 ];
 
 @Component({
@@ -43,6 +45,9 @@ export class CategorySpendingCardComponent implements OnInit {
 
   public ngOnInit(): void {
     this.dataChildrens = this.data.children;
+  }
+
+  public onCardClick(): void {
   }
 
   public onEdit(category: Category): void {

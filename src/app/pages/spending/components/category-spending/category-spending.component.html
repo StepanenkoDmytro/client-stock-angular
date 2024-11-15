@@ -1,7 +1,13 @@
-<div class="categories-actions">
-    <button class="categories-actions--btn" [routerLink]="['add-category']">Add category</button>
-</div>
+<div style="margin: 10px;">
+    <div class="add-category" [routerLink]="['add-category']">
+        <div class="circle">
+            <div class="plus vertical"></div>
+            <div class="plus horizontal"></div>
+        </div>
+        Add category
+    </div>
 
-@for(category of spendingCategories; track category) {
-    <pgz-category-spending-card [data]="category" (onDeleteCategory)="onDeleteCategory($event)"></pgz-category-spending-card>
-}
+    @for(category of spendingCategories; track category) {
+        <pgz-category-spending-card [data]="category" (onDeleteCategory)="onDeleteCategory($event)"></pgz-category-spending-card>
+    }
+</div>
