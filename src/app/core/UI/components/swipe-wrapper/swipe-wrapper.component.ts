@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output, QueryList, Renderer2, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, QueryList, Renderer2, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
 import { SwipeEvent, SwipeModule } from 'ng-swipe';
 @Component({
   selector: 'pgz-swipe-wrapper',
@@ -12,15 +12,19 @@ import { SwipeEvent, SwipeModule } from 'ng-swipe';
 export class SwipeWrapperComponent {
   @Input() 
   public cards: any[] = [];
+  @Input()
+  public isVisibleDots: boolean = false;
+
   @Output() 
   public currentIndexChange = new EventEmitter<number>();
 
   @ViewChild('slider') slider: ElementRef;
 
-  private currentIndex = 0;
+  public currentIndex = 0;
   
   constructor(
     private renderer: Renderer2,
+    private cdr: ChangeDetectorRef
   ) {}
 
   public onSwipeMove(event: SwipeEvent): void {
@@ -66,7 +70,7 @@ export class SwipeWrapperComponent {
     if(this.cards.length > 0) {
       const finalOffset = -this.currentIndex * 100;
       this.renderer.setStyle(this.slider.nativeElement, 'transform', `translateX(${finalOffset}%)`);
+      this.cdr.detectChanges();
     }
   }
-
 }
