@@ -1,17 +1,7 @@
 <div class="spending">
   <pgz-total-balance-spending></pgz-total-balance-spending>
 
-  <pgz-button-toggle
-      [dataUnchecked]="'Spendings'"
-      [dataChecked]="'History'"
-      (buttonValue)="onChangeFrame($event)">
-  </pgz-button-toggle>
-
-  @if(isSpendingsFrame) {
-    <pgz-category-spending [spendings]="spendings" [categories]="categories"></pgz-category-spending>
-  } @else {
-    <pgz-history-spending [spendings]="spendings" [categories]="categories"></pgz-history-spending>
-  }
+  <pgz-swipe-wrapper [cards]="swipeComponents" [isVisibleDots]="true"></pgz-swipe-wrapper>
   
 </div>
 <button mat-flat-button class="add-btn" [routerLink]="['add']">{{ 'Add' }}</button>

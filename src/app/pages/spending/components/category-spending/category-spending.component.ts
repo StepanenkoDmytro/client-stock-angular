@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Category } from '../../../../domain/category.domain';
 import { CategorySpendingCardComponent } from './category-spending-card/category-spending-card.component';
 import { ICategoryStatistic } from '../../../statistic/model/SpendindStatistic';
@@ -8,7 +8,7 @@ import { SpendingCategoryHelperService } from '../../../../service/helpers/spend
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DeleteCategoryDialogComponent } from './delete-category-dialog/delete-category-dialog.component';
 import { SpendingsService } from '../../../../service/spendings.service';
-import { firstValueFrom } from 'rxjs';
+import { combineLatest, firstValueFrom } from 'rxjs';
 
 
 @Component({
@@ -20,9 +20,7 @@ import { firstValueFrom } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CategorySpendingComponent implements OnInit {
-  @Input()
   public spendings: Spending[];
-  @Input()
   public categories: Category[];
 
   public spendingCategories: ICategoryStatistic[];
@@ -35,9 +33,18 @@ export class CategorySpendingComponent implements OnInit {
   ) { }
 
   public async ngOnInit(): Promise<void> {
-    this.spendingCategories = await this.spendingCategoryHelper.calculateCategoryStatistic(this.spendings);
-    this.spendingCategories.sort((a,b) => b.value - a.value);
-    this.cdr.detectChanges();
+    combineLatest([
+      this.spendingsService.loadByCurrentMonth(),
+      this.spendingsService.getAllCategories()
+    ]).subscribe( async ([spendings, categories]) => {
+      
+      this.spendings = [...spendings];
+      this.categories = categories[1].children;
+
+      this.spendingCategories = await this.spendingCategoryHelper.calculateCategoryStatistic(spendings);
+      this.spendingCategories.sort((a,b) => b.value - a.value);
+       this.cdr.detectChanges();
+    });
   }
 
   public onDeleteCategory(category: Category): void {

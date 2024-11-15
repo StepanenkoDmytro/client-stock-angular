@@ -12,6 +12,7 @@ import { Spending } from './model/Spending';
 import { combineLatest } from 'rxjs';
 import { CategorySpendingComponent } from './components/category-spending/category-spending.component';
 import { Category } from '../../domain/category.domain';
+import { SwipeWrapperComponent } from '../../core/UI/components/swipe-wrapper/swipe-wrapper.component';
 
 
 const UI_COMPONENTS = [
@@ -20,6 +21,7 @@ const UI_COMPONENTS = [
   CategorySpendingComponent,
   HistorySpendingComponent,
   ButtonToggleComponent,
+  SwipeWrapperComponent
 ];
 
 const MATERIAL_MODULES = [
@@ -47,6 +49,9 @@ export class SpendingComponent implements OnInit {
 
   public spendingsDataModel: SimpleDataModel[];
 
+  public swipeComponents: any[] = [];
+  
+
   constructor(
     private spendingsService: SpendingsService,
     // private cdr: ChangeDetectorRef,
@@ -54,17 +59,13 @@ export class SpendingComponent implements OnInit {
 
   public ngOnInit(): void {
     this.spendingsService.init(); 
-    combineLatest([
-      this.spendingsService.getSpentByDay(),
-      this.spendingsService.loadByCurrentMonth(),
-      this.spendingsService.getAllCategories()
-    ]).subscribe(([spentByDay, spendings, categories]) => {
-      this.expends = {...this.expends, money: spentByDay};
-      this.spendings = [...spendings];
-      this.categories = categories[1].children;
-      // console.log(this.categories);
-      // this.cdr.detectChanges();
-    });
+
+    this.swipeComponents = [
+      CategorySpendingComponent,
+      HistorySpendingComponent 
+    ];
+
+    this.spendingsService.getSpentByDay().subscribe(spent => this.expends = {...this.expends, money: spent});
   }
 
   public onChangeFrame(frame: boolean): void {

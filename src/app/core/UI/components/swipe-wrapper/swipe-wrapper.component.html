@@ -1,0 +1,25 @@
+@if(isVisibleDots) {
+  <div class="dots-container">
+    @for(card of cards; track card; let index = $index) {
+      <div
+        class="dot"
+        [class.active]="currentIndex === index">
+      </div>
+    }
+  </div>
+}
+
+<div 
+  class="dashboard-slider-container" 
+  ngSwipe
+  (swipeMove)="onSwipeMove($event)"
+  (swipeEnd)="onSwipeEnd($event)">
+
+  <div #slider class="dashboard-slider">
+    @for(card of cards; track card; let index = $index) {
+      <div class="dashboard">
+        <ng-template *ngComponentOutlet="card"></ng-template>
+      </div>
+    }
+  </div>
+</div>

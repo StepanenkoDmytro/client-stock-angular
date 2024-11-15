@@ -12,6 +12,8 @@ import { Category } from '../../../../domain/category.domain';
 import { MatButtonModule } from '@angular/material/button';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import { DateFormatPipe } from '../../../../core/UI/calendar/date-format.pipe';
+import { combineLatest } from 'rxjs';
+import { SpendingsService } from '../../../../service/spendings.service';
 
 
 const UI_COMPONENTS = [
@@ -38,15 +40,7 @@ const MATERIAL_MODULES = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HistorySpendingComponent implements OnInit {
-  
-  @Input()
-  public set spendings(value: Spending[]) {
-    console.log(value);
-    this._spendings = value;
-    this.spendingsGroupedByDate = this.groupSpendingsByDate([...value]);
-  }
-
-  @Input()
+  private spendings: Spending[] = [];
   public categories: Category[];
 
   public selectedCategories: Category[] = [];
@@ -54,17 +48,30 @@ export class HistorySpendingComponent implements OnInit {
   public isAllCategoriesChecked: boolean = true; 
   public selectedCategoriesValue: string[] = [];
 
-  private _spendings: Spending[] = [];
+  constructor(
+    private spendingsService: SpendingsService,
+  ) { }
 
   public ngOnInit(): void {
-    this.selectedCategories = [...this.categories];
-    this.isAllCategoriesChecked = true;
+    combineLatest([
+      this.spendingsService.loadByCurrentMonth(),
+      this.spendingsService.getAllCategories()
+    ]).subscribe( async ([spendings, categories]) => {
+
+      this.spendings = [...spendings];
+      this.spendingsGroupedByDate = this.groupSpendingsByDate([...spendings]);
+      this.categories = categories[1].children;
+      
+      this.selectedCategories = [...this.categories];
+      this.isAllCategoriesChecked = true;
+    });
+    
   }
 
   public toggleAllCategories(): void {
     this.isAllCategoriesChecked = !this.isAllCategoriesChecked;
     this.selectedCategories = this.isAllCategoriesChecked ? [...this.categories] : [];
-    this.spendingsGroupedByDate = this.groupSpendingsByDate([...this._spendings]);
+    this.spendingsGroupedByDate = this.groupSpendingsByDate([...this.spendings]);
   }
 
   public onCategoryChange(category: Category, checked: boolean): void {
@@ -78,7 +85,7 @@ export class HistorySpendingComponent implements OnInit {
     }
 
     this.isAllCategoriesChecked = this.selectedCategories.length === this.categories.length;
-    this.spendingsGroupedByDate = this.groupSpendingsByDate([...this._spendings]);
+    this.spendingsGroupedByDate = this.groupSpendingsByDate([...this.spendings]);
   }
 
   private groupSpendingsByDate(spendings: Spending[]): Map<string, Spending[]> {

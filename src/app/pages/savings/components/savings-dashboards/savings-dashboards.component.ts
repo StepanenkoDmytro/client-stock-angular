@@ -1,10 +1,13 @@
-import { ChangeDetectionStrategy, Component, ComponentFactoryResolver, ComponentRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentRef, ElementRef, Input, OnChanges, OnInit, Renderer2, SimpleChanges, ViewChild, ViewContainerRef } from '@angular/core';
 import { SavingsDashboardsService } from './service/savings-dashboards.service';
+import { SwipeModule, SwipeEvent } from 'ng-swipe';
+import { AsyncPipe, CommonModule } from '@angular/common';
+import { SwipeWrapperComponent } from '../../../../core/UI/components/swipe-wrapper/swipe-wrapper.component';
 
 @Component({
   selector: 'pgz-savings-dashboards',
   standalone: true,
-  imports: [],
+  imports: [SwipeWrapperComponent],
   templateUrl: './savings-dashboards.component.html',
   styleUrl: './savings-dashboards.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -14,14 +17,13 @@ export class SavingsDashboardsComponent implements OnInit, OnChanges {
   public activeCard: string;
   @Input() 
   public userCards: Set<string>;
-  @ViewChild('cardContainer', { read: ViewContainerRef, static: true }) cardContainer: ViewContainerRef;
 
   currentIndex = 0;
   cardComponents: any[] = [];
-  componentRefs: ComponentRef<any>[] = [];
 
   constructor(
-    private cardService: SavingsDashboardsService
+    private cardService: SavingsDashboardsService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   public ngOnInit(): void {
@@ -30,19 +32,15 @@ export class SavingsDashboardsComponent implements OnInit, OnChanges {
       this.cardComponents.push(cardRef);
     });
 
-    this.loadComponent(this.activeCard);
+    this.cdr.detectChanges();
   }
 
+
+  //TODO: переписати, коли буде зрозуміло як треба перемикати chipsets для типів активів
   public ngOnChanges(changes: SimpleChanges): void {
-    if (changes['activeCard'] && changes['activeCard'].currentValue) {
-      this.loadComponent(changes['activeCard'].currentValue);
-    }
-  }
-
-  public loadComponent(cardName: string) {
-    this.cardContainer.clear();  
-    const cardRef = this.cardService.getCardComponent(cardName);
-    const componentRef = this.cardContainer.createComponent(cardRef);
-    this.componentRefs.push(componentRef);
+    // if (changes['activeCard'] && changes['activeCard'].currentValue) {
+    //   this.currentIndex = Array.from(this.userCards).indexOf(changes['activeCard'].currentValue);
+    //   this.renderer.setStyle(this.slider.nativeElement, 'transform', `translateX(${-this.currentIndex * 100}%)`);
+    // }
   }
 }
