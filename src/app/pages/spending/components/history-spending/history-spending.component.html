@@ -1,4 +1,4 @@
-<mat-drawer-container class="spendings-history" [hasBackdrop]="false" autosize>
+<!-- <mat-drawer-container class="spendings-history" [hasBackdrop]="false" autosize>
     <mat-drawer #drawer mode="over">
         <section class="spendings-history--filters">
             <mat-checkbox 
@@ -16,19 +16,19 @@
             </mat-checkbox>
         }
         </section>
-    </mat-drawer>
+    </mat-drawer> -->
     
-    <section class="d-flex justify-content-between">
+    <!-- <section class="d-flex justify-content-between">
         <div class="spendings-history--calendar">
             <a href="spending/calendar" class="calendar-btn">
             <p style="margin: 0">Calendar</p>
             <mat-icon>calendar_month</mat-icon>
             </a>
-        </div>
-        <button type="button" mat-button (click)="drawer.toggle()">
+        </div> -->
+        <!-- <button type="button" mat-button (click)="drawer.toggle()">
             Filter
-        </button>
-    </section>
+        </button> -->
+    <!-- </section> -->
 
     <div class="spendings-history--list">
         @for(dateSpending of spendingsGroupedByDate.keys(); track dateSpending) {
@@ -44,4 +44,4 @@
             <p style="text-align: center;">Empty list</p>
           }
     </div>
-</mat-drawer-container>
+<!-- </mat-drawer-container> -->

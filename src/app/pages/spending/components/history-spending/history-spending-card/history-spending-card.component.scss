@@ -13,20 +13,30 @@
   display: flex;
   justify-content: space-between;
 
-  &--info {
+  &--category {
     display: flex;
   }
 
+  &--info {
+    margin-left: auto;
+  }
+
   &--icon {
-    width: 24px;
+    border-radius: 50%;
+    padding: 4px;
   }
 
   &--title {
-    font-size: 16px;
+    font-size: 14px;
   }
 
   &--cost {
-    font-size: 14px;
+    font-size: 16px;
+  }
+
+  &--actions {
+    margin-left: 16px;
+    font-size: 20px;
   }
 }
 

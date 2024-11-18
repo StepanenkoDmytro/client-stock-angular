@@ -1,16 +1,25 @@
 <div class="spending-wrapper">
     <div class="spending">
-      <div class="spending--info">
-        <pgz-icon class="spending--icon" [name]="spending.category.icon"></pgz-icon>
+      <div class="spending--category">
+        <div class="spending--icon" [ngStyle]='{ "background-color": spending.category.color }'>
+          <pgz-icon [name]="spending.category.icon"></pgz-icon>
+        </div>
         <p class="text spending--title">{{ spending.category.title }}</p>
         <p class="text spending--title">{{ spending.comment }}</p>
       </div>
+
       <div class="spending--info">
-        <p class="text spending--cost">{{ spending.cost }}$</p>
-        
-        <pgz-icon class="spending--icon" [name]="'custom_edit'" (click)="onEdit()"></pgz-icon>
-        <mat-icon style="color: green" (click)="onDelete()">delete</mat-icon>
+        <p class="text spending--cost">{{ spending.cost }}<span  style="margin-left: 4px;">$</span></p>
       </div>
+
+      <!-- <div class=""> -->
+        <div class="spending--actions">
+          <pgz-icon [name]="'more_horiz'" [matMenuTriggerFor]="actionsMenu"></pgz-icon>
+        </div>
+        <mat-menu #actionsMenu>
+          <div (click)="onEdit()"><p>Edit</p></div>
+          <div (click)="onDelete()"><p>Delete</p></div>
+        </mat-menu>
+      <!-- </div> -->
     </div>
-    <div class="line"></div>
 </div>

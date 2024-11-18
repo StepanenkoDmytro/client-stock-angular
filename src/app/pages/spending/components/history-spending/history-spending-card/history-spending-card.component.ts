@@ -5,12 +5,13 @@ import { IconComponent } from '../../../../../core/UI/components/icon/icon.compo
 import { EditStateService } from '../../../service/edit-state.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Spending } from '../../../model/Spending';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'pgz-history-spending-card',
   standalone: true,
-  imports: [MatIconModule, MatMenuModule, IconComponent],
+  imports: [MatIconModule, MatMenuModule, IconComponent, CommonModule],
   templateUrl: './history-spending-card.component.html',
   styleUrl: './history-spending-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
