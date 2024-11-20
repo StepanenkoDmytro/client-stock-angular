@@ -6,7 +6,7 @@ import { ICategoryStatistic } from "../../../model/SpendindStatistic";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import moment from "moment";
-import { DateFormatPipe } from "../../../../../core/UI/calendar/date-format.pipe";
+import { DateFormatPipe } from "../../../../../pipe/date-format.pipe";
 import { IMultiLineData, MultiLineComponent } from "../../../../../core/UI/components/charts/multi-line/multi-line.component";
 
 

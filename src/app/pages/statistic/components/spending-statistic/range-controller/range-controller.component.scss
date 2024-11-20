@@ -5,11 +5,23 @@
 .range-controller {
   display: flex;
   flex-direction: column;
-}
 
-.range-controller p {
-  text-align: center;
-  font-size: 1.3rem;
+  &--date {
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  &--compare-date {
+    font-size: 12px;
+    font-weight: 400;
+  }
+
+  &--control {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
 }
 
 .range-controller button {

@@ -5,12 +5,21 @@ import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import moment from 'moment';
+import { DateFormatPipe } from '../../../../../pipe/date-format.pipe';
+import { IconComponent } from '../../../../../core/UI/components/icon/icon.component';
+
+const UI_COMPONENTS = [
+  IconComponent
+];
 
 const MATTERIAL_COMPONENTS = [
+  MatExpansionModule,
   MatFormFieldModule,
   MatDatepickerModule,
+
   ReactiveFormsModule,
   MatCheckboxModule
 ];
@@ -22,19 +31,19 @@ const MATTERIAL_COMPONENTS = [
     { provide: MAT_DATE_LOCALE, useValue: 'uk-UA' },
     provideMomentDateAdapter(),
   ],
-  imports: [...MATTERIAL_COMPONENTS, CommonModule],
+  imports: [...UI_COMPONENTS, ...MATTERIAL_COMPONENTS, CommonModule, DateFormatPipe],
   templateUrl: './range-controller.component.html',
   styleUrl: './range-controller.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RangeControllerComponent implements OnInit {
-  @Input()
-  public set isCompareEnabled(value: boolean) {
-    if(value) {
-      this.setCompareRange();
-    }
-    this.isCompareEnabledCtrl.setValue(value);
-  }
+  // @Input()
+  // public set isCompareEnabled(value: boolean) {
+  //   if(value) {
+  //     this.setCompareRange();
+  //   }
+  //   this.isCompareEnabledCtrl.setValue(value);
+  // }
   @Output()
   public rangeChange = new EventEmitter<{
     startDate: moment.Moment,
@@ -42,6 +51,8 @@ export class RangeControllerComponent implements OnInit {
     compareStartDate?: moment.Moment,
     compareEndDate?: moment.Moment
   }>();
+  @Output()
+  public isCompareEnabled = new EventEmitter<boolean>(false);
   
   public formRange: FormGroup;
   public startDateCtrl: FormControl<moment.Moment> = new FormControl(moment(new Date()).startOf('month'));
@@ -70,6 +81,13 @@ export class RangeControllerComponent implements OnInit {
 
     this.formRange.valueChanges.subscribe((range) => {
       this.emitRangeChange();
+    });
+
+    this.isCompareEnabledCtrl.valueChanges.subscribe((value) => {
+      this.isCompareEnabled.emit(value);
+      if (value) {
+        this.setCompareRange();
+      }
     });
 
     this.emitRangeChange();
@@ -140,6 +158,10 @@ export class RangeControllerComponent implements OnInit {
       compareStartDate,
       compareEndDate
     });
+  }
+
+  public toogleCompare(): void {
+    this.isCompareEnabledCtrl.setValue(!this.isCompareEnabledCtrl.value);
   }
   
 }

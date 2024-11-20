@@ -11,7 +11,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Category } from '../../../../domain/category.domain';
 import { MatButtonModule } from '@angular/material/button';
 import {MatSidenavModule} from '@angular/material/sidenav';
-import { DateFormatPipe } from '../../../../core/UI/calendar/date-format.pipe';
+import { DateFormatPipe } from '../../../../pipe/date-format.pipe';
 import { combineLatest } from 'rxjs';
 import { SpendingsService } from '../../../../service/spendings.service';
 

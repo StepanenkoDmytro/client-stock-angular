@@ -10,7 +10,6 @@ import { DonutComponent } from '../../../../core/UI/components/charts/donut/donu
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import moment from 'moment';
-import { DateFormatPipe } from '../../../../core/UI/calendar/date-format.pipe';
 import { ICategoryStatistic, RangeForm, initializeFormGroup } from '../../model/SpendindStatistic';
 import { Subscription, combineLatest, switchMap } from 'rxjs';
 import { SpendingCategoryHelperService } from '../../../../service/helpers/spending-category-helper.service';
@@ -28,6 +27,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { PrevRouteComponent } from '../prev-route/prev-route.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { DateFormatPipe } from '../../../../pipe/date-format.pipe';
 
 
 const UI_COMPONENTS = [
@@ -47,7 +47,7 @@ const MATERIAL_MODULES = [
   MatFormFieldModule,
   MatSelectModule,
   MatTabsModule,
-  MatExpansionModule,
+  
   MatIconModule,
   MatButtonModule,
   MatDatepickerModule, 
@@ -59,7 +59,7 @@ const MATERIAL_MODULES = [
 @Component({
   selector: 'pgz-spending-statistic',
   standalone: true,
-  imports: [...UI_COMPONENTS, ...MATERIAL_MODULES],
+  imports: [...UI_COMPONENTS, ...MATERIAL_MODULES, DateFormatPipe],
   templateUrl: './spending-statistic.component.html',
   styleUrl: './spending-statistic.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -67,7 +67,7 @@ const MATERIAL_MODULES = [
 export class SpendingStatisticComponent implements OnInit, OnDestroy {
   public currCategory: Category | null;
 
-  public chartTypeCtrl: 'pie' | 'multiline' = 'pie';
+  public chartTypeCtrl: 'pie' | 'multiline' = 'multiline';
   public isCompareEnabled: boolean = false;
 
   public isAscSort : boolean = true;

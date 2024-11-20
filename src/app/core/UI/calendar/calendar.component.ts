@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { SelectorComponent } from './selector/selector.component';
 import moment from 'moment';
 import { DateService } from '../../../service/date.service';
-import { DateFormatPipe } from './date-format.pipe';
+import { DateFormatPipe } from '../../../pipe/date-format.pipe';
 
 
 interface Day {

@@ -7,9 +7,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class DateFormatPipe implements PipeTransform {
 
-  public transform(m: moment.Moment | null, format: string = 'MMMM YYYY'): any {
-    if (m) {
-        return m.format(format);
+  public transform(firstDate: moment.Moment | null, format: string = 'MMMM YYYY'): any {
+    if (firstDate) {
+        return firstDate.format(format);
     }
   }
 
