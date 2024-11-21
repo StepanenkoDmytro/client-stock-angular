@@ -3,30 +3,15 @@ import * as d3 from 'd3';
 import { BehaviorSubject } from 'rxjs';
 import { Subscription } from 'rxjs/internal/Subscription';
 
-export interface DataValue {
-  date: Date;
-  price: number;
-}
+export interface DataValue { date: Date; price: number; }
 
-export interface DataCompareValue {
-  date: number;
-  price: number;
-}
+export interface DataCompareValue { date: number; price: number; }
 
-export interface IMultiLineCompareData {
-  name: string;
-  values: DataCompareValue[];
-}
+export interface IMultiLineCompareData { name: string; values: DataCompareValue[]; }
 
-export interface IMultiLineData {
-  name: string;
-  values: DataValue[];
-}
+export interface IMultiLineData { name: string; values: DataValue[]; }
 
-export const EmptyMultiLineData: IMultiLineData[] = [{
-  name: 'none',
-  values: []
-}];
+export const EmptyMultiLineData: IMultiLineData[] = [{ name: 'none', values: [] }];
 
 @Component({
   selector: 'pgz-multi-line',
@@ -39,25 +24,22 @@ export const EmptyMultiLineData: IMultiLineData[] = [{
 export class MultiLineComponent implements OnInit, AfterContentInit {
   @Input()
   public set data(value: IMultiLineData[]) {
-    console.log(value);
     if(value && value[0]) {
       this._data.next(value);
     }
-    
   }
+
+  public multiLineID: string = 'multi-line';
 
   @ViewChild('chartContainer', { static: true }) 
   private chartContainer!: ElementRef;
 
-  private sub: Subscription | null = null;
   private resizechartContainer: ResizeObserver | null = null;
   private _data: BehaviorSubject<IMultiLineData[]> = new BehaviorSubject(EmptyMultiLineData);
 
-  public multiLineID: string = 'multi-line';
-
-  width = 300;
-  height = 300;
-  margin = 50;
+  private width = 300;
+  private height = 300;
+  private margin = 50;
 
   constructor() { }
 
@@ -104,163 +86,75 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
       .append('g')
       .attr("transform", `translate(${this.margin}, ${this.margin})`);
       
-    if(data.length > 1) {
-      let maxDays = 0;
-      let firstDayOfRange: Date | null = null;
-      let lastDayOfRange: Date | null = null;
-
-      data.forEach((el: IMultiLineData) => {
-        const min: Date = new Date(el.values[0].date);
-        const max: Date = new Date(el.values[el.values.length - 1].date);
-      
-        const diffInMs = max.getTime() - min.getTime();
-        const dayDiff = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
-      
-        if (dayDiff > maxDays) {
-          maxDays = dayDiff;
-          firstDayOfRange = min;
-          lastDayOfRange = max;
-        }
-      });
-
-      const result: IMultiLineCompareData[] = [];
-
-      data.forEach((dataValue: IMultiLineData) => {
-        const firstDataDataValue = dataValue.values[0].date; 
-        let updatedValues;
-        if(firstDataDataValue.getTime() === firstDayOfRange.getTime()) {
-          updatedValues = dataValue.values.map(value => {
-            const result = (value.date.getTime() - firstDayOfRange.getTime())/(1000 * 60 * 60 * 24) + 1;
-            return {date: result, price: value.price};
-          });
-        } else {
-          const diffByDatas = firstDataDataValue.getTime() - firstDayOfRange.getTime();
-          updatedValues = dataValue.values.map(value => {
-            const dateResult = (new Date(value.date).getTime() - firstDayOfRange.getTime() - diffByDatas) / (1000 * 60 * 60 * 24) + 1;
-            console.log(dateResult);
-            return { date: dateResult, price: value.price };
-          });
-        }
-        result.push({name: dataValue.name, values: updatedValues});
-      });
-
-      const objectScales: any = this.createScales(data, isSingleData);
-
-      const color = d3.scaleOrdinal(d3.schemeCategory10);
-
-      const line: d3.Line<DataCompareValue> = d3.line<DataCompareValue>()
-        .x(d => objectScales.xScale(d.date))
-        .y(d => objectScales.yScale(d.price)!);
-    
-      /* Add Axis into SVG */
-      const xAxis = d3.axisBottom(objectScales.xScale).ticks(5);
-      const yAxis = d3.axisLeft(objectScales.yScale).ticks(5);
-      
-      svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", `translate(0, ${this.height - this.margin})`)
-        .call(xAxis);
-      
-      svg.append("g")
-        .attr("class", "y axis")
-        .call(yAxis);
-      
-      /* Add line into SVG */
-      
-
-      const lines = svg.append('g');
-
-      lines.append("g")
-        .attr("fill", "none")
-        .attr("stroke-width", 1)
-        .attr("stroke-linejoin", "round")
-        .attr("stroke-linecap", "round")
-        .selectAll("path")
-        .data(result)
-        .join("path")
-        .style("mix-blend-mode", "multiply")
-        .attr("d", d => line(d.values))
-        .attr("stroke", (d, i) => color(i.toString()));
-      
-      /* Add circles in the line */
-      lines.selectAll("circle-group")
-        .data(result)
-        .enter()
-        .append("g")
-        .style("fill", (d, i) => color(i.toString()))
-        .selectAll("circle")
-        .data(d => d.values)
-        .enter()
-        .append("circle")
-        .attr("cx", d => objectScales.xScale(d.date))
-        .attr("cy", d => objectScales.yScale(d.price))
-        .attr("r", 3)
-        .style('opacity', 0.85);
-
-      const textPadding = 10; 
-      let currentX = this.margin;
-
-      data.forEach((d, i) => {
-        const textElement = svg.append("text")
-          .attr("x", currentX) 
-          .attr("y", this.height)
-          .attr("fill", color(i.toString()))
-          .attr("font-size", '12px')
-          .text(`-${d.name}`);
-
-        currentX += textElement.node().getBBox().width + textPadding;
-      });
-    }
-
     if(data.length === 1) {
       const objectScales: any = this.createScales(data, isSingleData);
-        
-      const line: d3.Line<DataValue> = d3.line<DataValue>()
-        .x(d => objectScales.xScale(d.date)!)
-        .y(d => objectScales.yScale(d.price)!);
-
+    
+      this.drawAxes(svg, objectScales);
+      this.drawLinesAndCircles(svg, data, objectScales, isSingleData);
+    }
+    
+    if(data.length > 1) {
+      const rangeInfo = this.getRangeInfo(data);
+      const transformedCompareData: IMultiLineCompareData[] = this.transformToCompareData(data, rangeInfo.firstDay);
+      const objectScales: any = this.createScales(data, isSingleData, rangeInfo.maxDays);
       const color = d3.scaleOrdinal(d3.schemeCategory10);
     
-      const yTicks = objectScales.yScale.ticks(5); 
-      svg.append("g")
-        .selectAll("line")
-        .data(yTicks)
-        .enter()
-        .append("line")
-        .attr("x1", 0)
-        .attr("x2", this.width - this.margin) 
-        .attr("y1", d => objectScales.yScale(d)) 
-        .attr("y2", d => objectScales.yScale(d))
-        .attr("stroke", "#ccc") 
-        .attr("stroke-width", 1);
-    
-    /* Add Axis into SVG */
-      const xAxis = d3.axisBottom(objectScales.xScale).ticks(5);
-      const yAxis = d3.axisRight(objectScales.yScale).ticks(5);
-      
-      svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", `translate(0, ${this.height - this.margin})`)
-        .call(xAxis);
-      
-      svg.append("g")
-        .attr("class", "y axis")
-        .call(yAxis)
-        .select(".domain") 
-        .remove();
+      this.drawAxes(svg, objectScales);
+      this.drawLinesAndCircles(svg, transformedCompareData, objectScales, isSingleData);
+      this.drawColorDescriptionText(svg, transformedCompareData, color);
+    }
+  }
 
-      svg.selectAll(".y.axis .tick line") 
-        .remove();
-
-      svg.selectAll(".y.axis .tick text")
-        .attr("x", this.width - this.margin) 
-        .attr("text-anchor", "start");
+  private drawAxes(svg: any, objectScales: any): void {
+    const xAxis = d3.axisBottom(objectScales.xScale).ticks(5);
+    const yAxis = d3.axisRight(objectScales.yScale).ticks(5);
     
-    /* Add line into SVG */
+    svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", `translate(0, ${this.height - this.margin})`)
+      .call(xAxis);
     
-      const lines = svg.append('g');
+    svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+      .select(".domain") 
+      .remove();
 
-      lines.append("g")
+    svg.selectAll(".y.axis .tick line") 
+      .remove();
+
+    svg.selectAll(".y.axis .tick text")
+      .attr("x", this.width - this.margin) 
+      .attr("text-anchor", "start");
+
+    const yTicks = objectScales.yScale.ticks(5); 
+    
+    svg.append("g")
+      .selectAll("line")
+      .data(yTicks)
+      .enter()
+      .append("line")
+      .attr("x1", 0)
+      .attr("x2", this.width - this.margin) 
+      .attr("y1", (d: any) => objectScales.yScale(d)) 
+      .attr("y2", (d: any) => objectScales.yScale(d))
+      .attr("stroke", "#ccc") 
+      .attr("stroke-width", 1);
+  }
+
+  private drawLinesAndCircles(svg: any, data: any[], scales: any, isSingleData: boolean): void {
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
+    const lineGenerator = d3.line<DataValue>()
+          .x(d => scales.xScale(d.date))
+          .y(d => scales.yScale(d.price));
+
+    const lineCompareDataGenerator = d3.line<DataCompareValue>()
+          .x(d => scales.xScale(d.date))
+          .y(d => scales.yScale(d.price));
+  
+    const lines = svg.append('g');
+
+    lines.append("g")
         .attr("fill", "none")
         .attr("stroke-width", 1)
         .attr("stroke-linejoin", "round")
@@ -269,22 +163,59 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
         .data(data)
         .join("path")
         .style("mix-blend-mode", "multiply")
-        .attr("d", d => line(d.values))
-        .attr("stroke", (d, i) => color(i.toString()));
-    
+        .attr("d", (d: any) => {
+          if(isSingleData) {
+            return lineGenerator(d.values);
+          } else {
+            return lineCompareDataGenerator(d.values);
+          }
+        })
+        .attr("stroke", (d: any, i: any) => color(i.toString()));
+      
       lines.selectAll("circle-group")
         .data(data)
         .enter()
         .append("g")
-        .style("fill", (d, i) => color(i.toString()))
+        .style("fill", (d: any, i: any) => color(i.toString()))
         .selectAll("circle")
-        .data(d => d.values)
+        .data((d: any) => d.values)
         .enter()
         .append("circle")
-        .attr("cx", d => objectScales.xScale(d.date.getTime()))
-        .attr("cy", d => objectScales.yScale(d.price))
+        .attr("cx", (d: any) => scales.xScale(d.date))
+        .attr("cy", (d: any) => scales.yScale(d.price))
         .attr("r", 3)
         .style('opacity', 0.85);
+  }
+
+  private drawColorDescriptionText(svg: any, data: IMultiLineCompareData[],color: any) {
+    const textPadding = 10; 
+    let currentX = this.margin;
+
+    data.forEach((d, i) => {
+      const textElement = svg.append("text")
+        .attr("x", currentX) 
+        .attr("y", this.height)
+        .attr("fill", color(i.toString()))
+        .attr("font-size", '12px')
+        .text(`-${d.name}`);
+
+      currentX += textElement.node().getBBox().width + textPadding;
+    });
+  }
+
+  private createScales(data: IMultiLineData[], isSingleData: boolean, maxDays?: number) {
+    if (isSingleData) {
+      
+      const extent = d3.extent(data[0].values, d => d.date) as [Date, Date];
+      return {
+        xScale: d3.scaleTime().domain(extent).range([0, this.width - this.margin]),
+        yScale: this.createYScale(data)
+      };
+    } else {
+      return {
+        xScale: d3.scaleLinear().domain([1, maxDays + 2]).range([0, this.width - this.margin]),
+        yScale: this.createYScale(data)
+      };
     }
   }
 
@@ -294,38 +225,34 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
           .range([this.height - this.margin, 0]);
   }
 
-  private createScales(data: IMultiLineData[], isSingleData: boolean) {
-    if (isSingleData) {
-      
-      const extent = d3.extent(data[0].values, d => d.date) as [Date, Date];
-      return {
-        xScale: d3.scaleTime().domain(extent).range([0, this.width - this.margin]),
-        yScale: this.createYScale(data)
-      };
-    } else {
-      const { maxDays, firstDay } = this.getRangeInfo(data);
-      return {
-        xScale: d3.scaleLinear().domain([1, maxDays + 2]).range([0, this.width - this.margin]),
-        yScale: this.createYScale(data)
-      };
-    }
+  private transformToCompareData(data: IMultiLineData[], firstDay: Date): IMultiLineCompareData[] {
+    return data.map(({ name, values }) => {
+      const firstDataValue = values[0].date.getTime();
+      const updatedValues = values.map(({ date, price }) => {
+        const offsetDays = (date.getTime() - firstDay.getTime() - (firstDataValue - firstDay.getTime())) / (1000 * 60 * 60 * 24) + 1;
+        return { date: offsetDays, price };
+      });
+      return { name, values: updatedValues };
+    });
   }
-
 
   private getRangeInfo(data: IMultiLineData[]) {
     let maxDays = 0;
     let firstDay: Date | null = null;
-
-    data.forEach(el => {
-      const min = el.values[0].date;
-      const max = el.values[el.values.length - 1].date;
-      const dayDiff = Math.floor((max.getTime() - min.getTime()) / (1000 * 60 * 60 * 24));
-      if (dayDiff > maxDays) {
-        maxDays = dayDiff;
-        firstDay = min;
+  
+    data.forEach(dataset => {
+      const datasetFirstDay = dataset.values[0].date;
+      const datasetLastDay = dataset.values[dataset.values.length - 1].date;
+      const datasetDays = Math.floor((datasetLastDay.getTime() - datasetFirstDay.getTime()) / (1000 * 60 * 60 * 24));
+  
+      if (firstDay === null || datasetFirstDay < firstDay) {
+        firstDay = datasetFirstDay;
+      }
+      if (datasetDays > maxDays) {
+        maxDays = datasetDays;
       }
     });
-
+  
     return { maxDays, firstDay };
   }
 }
