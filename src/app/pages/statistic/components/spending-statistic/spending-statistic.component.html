@@ -19,11 +19,10 @@
   
       
     </div> -->
+
+    <pgz-toggle-switch [checked]="'multiline'" [unchecked]="'pie'" (buttonValue)="chartTypeChange($event)"></pgz-toggle-switch>
     <pgz-range-controller (isCompareEnabled)="toogleCompare()" (rangeChange)="onRangeChange($event)"></pgz-range-controller>
       
-    
-
-    
     <div class="chart-container--chart">
       @if(chartTypeCtrl === 'pie') { 
         <div>

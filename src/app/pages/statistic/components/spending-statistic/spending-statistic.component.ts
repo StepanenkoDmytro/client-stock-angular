@@ -28,6 +28,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { PrevRouteComponent } from '../prev-route/prev-route.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { DateFormatPipe } from '../../../../pipe/date-format.pipe';
+import { ToggleSwitchComponent } from '../../../../core/UI/components/toggle-switch/toggle-switch.component';
 
 
 const UI_COMPONENTS = [
@@ -40,7 +41,8 @@ const UI_COMPONENTS = [
   PieChartContainerComponent,
   SpendingStatisticCardComponent,
   RangeControllerComponent,
-  PrevRouteComponent
+  PrevRouteComponent,
+  ToggleSwitchComponent
 ];
 
 const MATERIAL_MODULES = [
@@ -197,6 +199,12 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();
+    }
+  }
+
+  public chartTypeChange(chartType: string): void {
+    if(chartType === 'pie' || chartType === 'multiline') {
+      this.chartTypeCtrl = chartType;
     }
   }
 
