@@ -10,6 +10,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import moment from 'moment';
 import { DateFormatPipe } from '../../../../../pipe/date-format.pipe';
 import { IconComponent } from '../../../../../core/UI/components/icon/icon.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import {MatRadioModule} from '@angular/material/radio';
 
 const UI_COMPONENTS = [
   IconComponent
@@ -19,9 +21,10 @@ const MATTERIAL_COMPONENTS = [
   MatExpansionModule,
   MatFormFieldModule,
   MatDatepickerModule,
-
+  MatSlideToggleModule,
   ReactiveFormsModule,
-  MatCheckboxModule
+  MatCheckboxModule,
+  MatRadioModule
 ];
 
 @Component({
@@ -160,8 +163,8 @@ export class RangeControllerComponent implements OnInit {
     });
   }
 
-  public toogleCompare(): void {
-    this.isCompareEnabledCtrl.setValue(!this.isCompareEnabledCtrl.value);
-  }
+  // public toogleCompare(): void {
+    
+  // }
   
 }

@@ -22,6 +22,12 @@
     align-items: center;
     text-align: center;
   }
+
+  &--compare {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+  }
 }
 
 .range-controller button {

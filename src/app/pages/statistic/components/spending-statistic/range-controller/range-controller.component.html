@@ -12,6 +12,7 @@
         </mat-expansion-panel-header>
         
         <div class="range-controller--control">
+            <p>Period 1</p>
             <mat-form-field appearance="outline">
                 <mat-date-range-input
                 [formGroup]="formRange"
@@ -25,11 +26,16 @@
                 <mat-date-range-picker #campaignOnePicker></mat-date-range-picker>
             </mat-form-field>
 
-            <div (click)="toogleCompare()">
-                <mat-checkbox class="example-margin">Compare</mat-checkbox>
+            <div class="range-controller--compare" [formGroup]="formRange">
+                <p>Compare</p>
+                <mat-slide-toggle
+                    class="example-margin"
+                    formControlName="isCompareEnabled">
+                </mat-slide-toggle>
             </div>
 
             @if(isCompareEnabledCtrl.value) {
+                <p>Period 2</p>
                 <mat-form-field appearance="outline">
                     <mat-date-range-input
                     [formGroup]="formRange"
