@@ -37,8 +37,8 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
   private _data: BehaviorSubject<IMultiLineData[]> = new BehaviorSubject(EmptyMultiLineData);
 
   private width = 300;
-  private height = 250;
-  private margin = 20;
+  private height = 220;
+  private margin = 40;
 
   constructor() { }
 
@@ -250,10 +250,17 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
   }
 
   private createYScale(data: IMultiLineData[]) {
+    const maxPrice = d3.max(data.flatMap(country => country.values), d => d.price) ?? 100;
+
+    const ticks = d3.scaleLinear().domain([0, maxPrice]).ticks();
+    const step = ticks[1] - ticks[0];
+    const extendedMax = Math.ceil(maxPrice / step) * step + step;
+
     return d3.scaleLinear()
-          .domain([0, d3.max(data.flatMap(country => country.values), d => d.price) ?? 100])
-          .range([this.height - this.margin, 0]);
-  }
+        .domain([0, extendedMax])
+        .range([this.height - this.margin, 0]);
+}
+
 
   private transformToCompareData(data: IMultiLineData[], firstDay: Date): IMultiLineCompareData[] {
     return data.map(({ name, values }) => {
