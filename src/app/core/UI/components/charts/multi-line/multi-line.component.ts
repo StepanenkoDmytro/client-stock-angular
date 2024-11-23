@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import * as d3 from 'd3';
 import { BehaviorSubject } from 'rxjs';
 
@@ -27,6 +27,9 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
       this._data.next(value);
     }
   }
+
+  @Output()
+  public chartColors: EventEmitter<{ [key: string]: string }> = new EventEmitter();
 
   public multiLineID: string = 'multi-line';
 
@@ -85,22 +88,25 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
       .attr("height", (height + this.margin) + "px")
       .append('g')
       .attr("transform", `translate(${this.margin}, ${this.margin})`);
+
+    
       
     if(data.length === 1) {
       const objectScales: any = this.createScales(data, isSingleData);
+      const color = this.createColors(data);
     
       this.drawAxes(svg, objectScales, isSingleData);
-      this.drawLinesAndCircles(svg, data, objectScales, isSingleData);
+      this.drawLinesAndCircles(svg, data, objectScales, color, isSingleData);
     }
     
     if(data.length > 1) {
       const rangeInfo = this.getRangeInfo(data);
       const transformedCompareData: IMultiLineCompareData[] = this.transformToCompareData(data, rangeInfo.firstDay);
       const objectScales: any = this.createScales(data, isSingleData, rangeInfo.maxDays);
-      const color = d3.scaleOrdinal(d3.schemeCategory10);
+      const color = this.createColors(transformedCompareData);
     
       this.drawAxes(svg, objectScales, isSingleData);
-      this.drawLinesAndCircles(svg, transformedCompareData, objectScales, isSingleData);
+      this.drawLinesAndCircles(svg, transformedCompareData, objectScales, color, isSingleData);
       this.drawColorDescriptionText(svg, transformedCompareData, color, height);
     }
   }
@@ -170,8 +176,7 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
       .attr("stroke-width", 1);
   }
 
-  private drawLinesAndCircles(svg: any, data: any[], scales: any, isSingleData: boolean): void {
-    const color = d3.scaleOrdinal(d3.schemeCategory10);
+  private drawLinesAndCircles(svg: any, data: any[], scales: any, color: any, isSingleData: boolean): void {
     const lineGenerator = d3.line<DataValue>()
           .x(d => scales.xScale(d.date))
           .y(d => scales.yScale(d.price));
@@ -290,5 +295,16 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
     });
   
     return { maxDays, firstDay };
+  }
+
+  private createColors(data: any[]) {
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
+    const colorToOutput = data.reduce((colors, d, i) => {
+      colors[d.name] = color(i.toString());
+      return colors;
+    }, {});
+
+    this.chartColors.emit(colorToOutput);
+    return color;
   }
 }

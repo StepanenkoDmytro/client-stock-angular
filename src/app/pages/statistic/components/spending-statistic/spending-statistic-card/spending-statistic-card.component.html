@@ -1,9 +1,10 @@
 
+<div style="padding: 10px;">
 <div class="spending-stat-card" [ngClass]="{
         'disabled': !isVisible,
         'spending-stat-card--compare-mode': isCompareMode
 }">
-    <div class="spending-stat-card--category" (click)="onClickCard()">
+    <div class="spending-stat-card--category">
         <div class="spending-stat-card--icon" [ngStyle]='{ "background-color": _data.category.color }'>
             <pgz-icon [name]="_data.category.icon"></pgz-icon>
         </div>
@@ -11,29 +12,40 @@
         <p>{{_data.category.title}}</p>
     </div>
 
-    @if(isCompareMode) {
-        <div class="spending-stat-card-value">
-            
-            
-            <div class="mx-2">
-                <div class="d-flex justify-content-between">
-                    <p class="spending-stat-card-value--compare-range">{{startRange.format('DD MMM YYYY')}}</p>
-                    <p>{{_data.value}}</p>
-                </div>
+    <div class="spending-stat-card--right-block">
+        @if(!isCompareMode) {
+            <p>{{_data.value}}<span  style="margin-left: 4px;">$</span></p>
+        }
 
-                <div class="d-flex justify-content-between">
-                    <p class="spending-stat-card-value--compare-range">{{startCompareRange.format('DD MMM YYYY')}}</p>
-                    <p>{{_compareData.value}}</p>
+        <button class="spending-stat-card--btn btn" (click)="onClickCard()">
+            <pgz-icon [name]="'custom_arrow-in'"></pgz-icon>
+        </button>
+    </div>
+</div>
+@if(isCompareMode) {
+    <div class="spending-stat-card-value">
+        
+        <div class="w-100">
+            <div class="spending-stat-card-value--compare-mode">
+                <p class="spending-stat-card-value--compare-mode__name">Primary</p>
+                <div 
+                    class="color-bar"
+                    [ngStyle]="{ 'background-color': chartsColors['Primary'] }">
                 </div>
-            
+                <p class="spending-stat-card-value--compare-mode__value">{{_data.value}}<span  style="margin-left: 4px;">$</span></p>
             </div>
-            
-        </div>
-    } @else {
-        <p style="margin-left: auto;">{{_data.value}}<span  style="margin-left: 4px;">$</span></p>
-    }
 
-    <button class="spending-stat-card--btn btn" (click)="onToggleCategory()">
-        <pgz-icon [name]="'custom_arrow-in'"></pgz-icon>
-    </button>
+            <div class="spending-stat-card-value--compare-mode">
+                <p class="spending-stat-card-value--compare-mode__name">Comparative</p>
+                <div 
+                    class="color-bar"
+                    [ngStyle]="{ 'background-color': chartsColors['Comparative'] }">
+                </div>
+                <p class="spending-stat-card-value--compare-mode__value">{{_compareData.value}}<span  style="margin-left: 4px;">$</span></p>
+            </div>
+        
+        </div>
+        
+    </div>
+}
 </div>

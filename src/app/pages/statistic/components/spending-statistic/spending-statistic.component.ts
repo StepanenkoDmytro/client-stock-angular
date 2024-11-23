@@ -84,6 +84,7 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
   public spendingsForMultiLineChart: Spending[] = [];
   public compareSpendingsForMultiLineChart: Spending[] = [];
   
+  public chartsColorsForCompare: { [key: string]: string; } = {};
   public subscription: Subscription;
   constructor(
     private route: ActivatedRoute,
@@ -272,5 +273,9 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
 
       return this.isAscSort ? SecondValue - firstValue : firstValue - SecondValue;
     });
+  }
+
+  public chartsColors(colors: { [key: string]: string; }) {
+    this.chartsColorsForCompare = colors;
   }
 }

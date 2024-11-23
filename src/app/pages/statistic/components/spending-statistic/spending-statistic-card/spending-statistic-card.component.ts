@@ -32,6 +32,9 @@ export class SpendingStatisticCardComponent {
   @Input()
   public startCompareRange:moment.Moment;
 
+  @Input()
+  public chartsColors: { [key: string]: string; } = {};
+
   @Output() 
   public toggleCategory: EventEmitter<string> = new EventEmitter();
   @Output()
@@ -40,10 +43,10 @@ export class SpendingStatisticCardComponent {
   public _data: ICategoryStatistic;
   public _compareData: ICategoryStatistic;
 
-  public onToggleCategory(): void {
-    this.isVisible = !this.isVisible;
-    this.toggleCategory.emit(this._data.category.id);
-  }
+  // public onToggleCategory(): void {
+  //   this.isVisible = !this.isVisible;
+  //   this.toggleCategory.emit(this._data.category.id);
+  // }
 
   public onClickCard(): void {
     this.clickCard.emit(this._data.category);

@@ -28,7 +28,6 @@ const MATERIAL_COMPONENTS = [
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MultiLineChartContainerComponent {
-
   @Input()
   public spendings: Spending[] = [];
   @Input()
@@ -42,6 +41,9 @@ export class MultiLineChartContainerComponent {
   @Input()
   public startCompareRange:moment.Moment;
 
+  @Output()
+  public chartColors: EventEmitter<{ [key: string]: string }> = new EventEmitter();
+
   public multiLineChartData: IMultiLineData[] = [];
   public multiLineChartDataByChildren: IMultiLineData[] = [];
 
@@ -51,15 +53,11 @@ export class MultiLineChartContainerComponent {
   ) { }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    // setTimeout(() => {
-      if (changes['spendings'] || changes['activeCategories'] || changes['isCompareEnabled'] || changes['compareSpendings']) {
-        this.updateChartData();
-        // this.cdr.markForCheck();
-      }
-    // });
+    if (changes['spendings'] || changes['activeCategories'] || changes['isCompareEnabled'] || changes['compareSpendings']) {
+      this.updateChartData();
+    }
   }
   
-
   private updateChartData(): void {
     const currentData = this.spendingsHelperService.mapCategoryStatisticToLineChartData(this.spendings, this.activeCategories);
     this.multiLineChartData = [this.spendingsHelperService.calculateLineChartByChildren("Primary", currentData)];
@@ -69,7 +67,9 @@ export class MultiLineChartContainerComponent {
       const compareLineData = this.spendingsHelperService.calculateLineChartByChildren("Comparative", compareData);
       this.multiLineChartData.push(compareLineData);
     }
+  }
 
-    console.log(this.multiLineChartData);
+  public getChartColors(colors: { [key: string]: string; }): void {
+    this.chartColors.emit(colors);
   }
 }

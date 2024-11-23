@@ -42,6 +42,7 @@
           [compareSpendings]="compareSpendingsForMultiLineChart"
           [startRange]="formRange.value.startDate"
           [startCompareRange]="formRange.value.compareStartDate"
+          (chartColors)="chartsColors($event)"
         ></pgz-multi-line-chart-container>
       }
     </div>
@@ -72,6 +73,7 @@
           [startRange]="formRange.value.startDate"
           [startCompareRange]="formRange.value.compareStartDate"
           [isVisible]="isVisibleCategory(data.category)" 
+          [chartsColors]="chartsColorsForCompare"
           (clickCard)="onCardClick($event)" 
           (toggleCategory)="toggleCategory($event)">
         </pgz-spending-statistic-card>
