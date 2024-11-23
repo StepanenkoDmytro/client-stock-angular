@@ -38,15 +38,11 @@ export class SpendingCategoryHelperService {
   }
 
   public mapCategoryStatisticToLineChartData(spendings: Spending[], categoryList: ICategoryStatistic[]): IMultiLineData[] {
-    
     const resultArray = categoryList.map(category => {
       const spendingsByCategory: Spending[] = this.spendingService.findSpendingsByCategoryIncludeChildren(spendings, category.category);
       
       const groupedSpendings: Map<string, number> = new Map();
       spendingsByCategory.forEach(spending => {
-        // const year = new Date(spending.date).getFullYear();
-        // const month = new Date(spending.date).getMonth();
-        // const day = new Date(spending.date).getMonth();
         
         const dayGroup = new Date(spending.date).toDateString();
         if(!groupedSpendings.has(dayGroup)) {

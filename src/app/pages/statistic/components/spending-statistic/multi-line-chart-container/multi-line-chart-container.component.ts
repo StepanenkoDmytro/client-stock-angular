@@ -62,12 +62,14 @@ export class MultiLineChartContainerComponent {
 
   private updateChartData(): void {
     const currentData = this.spendingsHelperService.mapCategoryStatisticToLineChartData(this.spendings, this.activeCategories);
-    this.multiLineChartData = [this.spendingsHelperService.calculateLineChartByChildren(`from ${this.startRange.format('DD MMM YYYY')}`, currentData)];
+    this.multiLineChartData = [this.spendingsHelperService.calculateLineChartByChildren("Primary", currentData)];
 
     if (this.isCompareEnabled && this.compareSpendings.length) {
       const compareData = this.spendingsHelperService.mapCategoryStatisticToLineChartData(this.compareSpendings, this.activeCategories);
-      const compareLineData = this.spendingsHelperService.calculateLineChartByChildren(`from ${this.startCompareRange.format('DD MMM YYYY')}`, compareData);
+      const compareLineData = this.spendingsHelperService.calculateLineChartByChildren("Comparative", compareData);
       this.multiLineChartData.push(compareLineData);
     }
+
+    console.log(this.multiLineChartData);
   }
 }

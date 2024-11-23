@@ -183,51 +183,50 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
     const lines = svg.append('g');
 
     lines.append("g")
-        .attr("fill", "none")
-        .attr("stroke-width", 1)
-        .attr("stroke-linejoin", "round")
-        .attr("stroke-linecap", "round")
-        .selectAll("path")
-        .data(data)
-        .join("path")
-        .style("mix-blend-mode", "multiply")
-        .attr("d", (d: any) => {
-          if(isSingleData) {
-            return lineGenerator(d.values);
-          } else {
-            return lineCompareDataGenerator(d.values);
-          }
-        })
-        .attr("stroke", (d: any, i: any) => color(i.toString()));
-      
-      lines.selectAll("circle-group")
-        .data(data)
-        .enter()
-        .append("g")
-        .style("fill", (d: any, i: any) => color(i.toString()))
-        .selectAll("circle")
-        .data((d: any) => d.values)
-        .enter()
-        .append("circle")
-        .attr("cx", (d: any) => scales.xScale(d.date))
-        .attr("cy", (d: any) => scales.yScale(d.price))
-        .attr("r", 3)
-        .style('opacity', 0.85);
+      .attr("fill", "none")
+      .attr("stroke-width", 3)
+      .attr("stroke-linejoin", "round")
+      .attr("stroke-linecap", "round")
+      .selectAll("path")
+      .data(data)
+      .join("path")
+      .style("mix-blend-mode", "multiply")
+      .attr("d", (d: any) => {
+        if(isSingleData) {
+          return lineGenerator(d.values);
+        } else {
+          return lineCompareDataGenerator(d.values);
+        }
+      })
+      .attr("stroke", (d: any, i: any) => color(i.toString()));
   }
 
   private drawColorDescriptionText(svg: any, data: IMultiLineCompareData[],color: any, height: number) {
     const textPadding = 10; 
+    const lineLength = 24; 
+    const linePadding = 10;
+
     let currentX = this.margin;
 
     data.forEach((d, i) => {
+      svg.append("line")
+            .attr("x1", currentX) 
+            .attr("y1", height - 5) 
+            .attr("x2", currentX + lineLength) 
+            .attr("y2", height - 5)
+            .attr("stroke", color(i.toString())) 
+            .attr("stroke-width", 8)
+            .attr("stroke-linecap", "round"); 
+
+      currentX += lineLength + linePadding;
+
       const textElement = svg.append("text")
         .attr("x", currentX) 
         .attr("y", height)
-        .attr("fill", color(i.toString()))
         .attr("font-size", '14px')
-        .text(`-${d.name}`);
+        .text(`${d.name}`);
 
-      currentX += textElement.node().getBBox().width + textPadding;
+      currentX += textElement.node().getBBox().width + textPadding*2;
     });
   }
 
