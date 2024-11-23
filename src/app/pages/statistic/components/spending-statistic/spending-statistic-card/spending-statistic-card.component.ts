@@ -17,7 +17,6 @@ import moment from 'moment';
 export class SpendingStatisticCardComponent {
   @Input()
   public set data(value: ICategoryStatistic) {
-    // console.log(value);
     this._data = value;
   }
   @Input()
