@@ -1,0 +1,21 @@
+<div class="toggle-container">
+    <div class="toggle-options">
+      <div 
+        class="toggle-option" 
+        [class.active]="activeChart === checked" 
+        (click)="switchChart(checked)">
+        {{checked.charAt(0).toUpperCase() + checked.slice(1).toLowerCase()}}
+      </div>
+      <div 
+        class="toggle-option" 
+        [class.active]="activeChart === unchecked" 
+        (click)="switchChart(unchecked)">
+        {{unchecked.charAt(0).toUpperCase() + unchecked.slice(1).toLowerCase()}}
+      </div>
+    </div>
+    <div 
+      class="toggle-bar" 
+      [style.transform]="activeChart === checked ? 'translateX(0%)' : 'translateX(100%)'">
+    </div>
+  </div>
+  

@@ -6,13 +6,21 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 22px;
-  font-weight: 500;
+  font-size: 14px;
   height: 50px;
-  border: 1px solid var(--bs-gray);
-  border-radius: 10px;
-  padding: 10px;
-  margin: 10px;
+  // padding: 10px;
+
+  &--icon {
+    border-radius: 50%;
+    padding: 4px;
+  }
+
+  &--right-block {
+    height: inherit;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+  }
 
   &--compare-mode {
     height: 100%;
@@ -31,9 +39,9 @@
   }
 
   &--btn {
-    margin-left: auto;
     display: flex;
     align-items: center;
+    padding: 0;
   }
 
   &--category p {
@@ -47,12 +55,26 @@
 
 .spending-stat-card-value {
   display: flex;
-  // margin-left: auto;
+  width: 85%;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: 10px;
+  font-size: 14px;
 
-  &--compare-range {
-    font-size: 17px;
-    align-self: center;
-    margin-right: 15px;
+  &--compare-mode {
+    display: flex;
+    align-items: center;
+  }
+
+  &--compare-mode__name {
+    text-align: left;
+    flex: 2;
+  }
+
+  &--compare-mode__value {
+    text-align: right;
+    flex: 1;
   }
 }
 
@@ -60,3 +82,9 @@
   background-color: var(--bs-border-color);
   color: var(--bs-border-color-translucent);
 }
+
+.color-bar {
+  height: 2px;
+  flex: 4;
+}
+

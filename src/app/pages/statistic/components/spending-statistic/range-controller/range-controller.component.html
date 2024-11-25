@@ -1,35 +1,62 @@
 <div class="range-controller">
-    <div>
-        <mat-form-field appearance="outline" class="w-100">
-            <mat-date-range-input
-              [formGroup]="formRange"
-              [rangePicker]="campaignOnePicker"
-              [comparisonStart]="formRange.value.startDate"
-              [comparisonEnd]="formRange.value.endDate">
-              <input matStartDate placeholder="Start date" formControlName="startDate">
-              <input matEndDate placeholder="End date" formControlName="endDate">
-            </mat-date-range-input>
-            <mat-datepicker-toggle matIconSuffix [for]="campaignOnePicker"></mat-datepicker-toggle>
-            <mat-date-range-picker #campaignOnePicker></mat-date-range-picker>
-        </mat-form-field>
+    <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <div>
+                <p class="range-controller--date">{{ startDateCtrl.value | dateFormat: 'DD.MM.YY' }} - {{ endDateCtrl.value | dateFormat: 'DD.MM.YY' }}</p>
+                <p class="range-controller--compare-date">compare with {{ compareStartDateCtrl.value | dateFormat: 'DD.MM.YY' }} - {{ compareEndDateCtrl.value | dateFormat: 'DD.MM.YY' }}</p>
+            </div>
 
-        @if(isCompareEnabledCtrl.value) {
-            <mat-form-field appearance="outline" class="w-100">
+            <div style="margin-left: auto;"><pgz-icon [name]="'custom_settings'"></pgz-icon></div>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        
+        <div class="range-controller--control" style="margin-top: 18px;">
+            <p>Period 1</p>
+            <mat-form-field appearance="outline">
                 <mat-date-range-input
-                  [formGroup]="formRange"
-                  [rangePicker]="campaignOTwoPicker"
-                  [comparisonStart]="formRange.value.compareStartDate"
-                  [comparisonEnd]="formRange.value.compareEndDate">
-                  <input matStartDate placeholder="Start date" formControlName="compareStartDate">
-                  <input matEndDate placeholder="End date" formControlName="compareEndDate">
+                [formGroup]="formRange"
+                [rangePicker]="campaignOnePicker"
+                [comparisonStart]="formRange.value.startDate"
+                [comparisonEnd]="formRange.value.endDate">
+                <input matStartDate placeholder="Start date" formControlName="startDate">
+                <input matEndDate placeholder="End date" formControlName="endDate">
                 </mat-date-range-input>
-                <mat-datepicker-toggle matIconSuffix [for]="campaignOTwoPicker"></mat-datepicker-toggle>
-                <mat-date-range-picker #campaignOTwoPicker></mat-date-range-picker>
+                <mat-datepicker-toggle matIconSuffix [for]="campaignOnePicker"></mat-datepicker-toggle>
+                <mat-date-range-picker #campaignOnePicker></mat-date-range-picker>
             </mat-form-field>
-        }
-    </div>
+
+            <div class="range-controller--compare" [formGroup]="formRange">
+                <p>Compare</p>
+                <mat-slide-toggle
+                    class="example-margin"
+                    formControlName="isCompareEnabled">
+                </mat-slide-toggle>
+            </div>
+
+        
+            <!-- @if(isCompareEnabledCtrl.value) { -->
+            <div style="margin-top: 18px;">
+                <p>Period 2</p>
+                <mat-form-field appearance="outline">
+                    <mat-date-range-input
+                    [disabled]="!isCompareEnabledCtrl.value"
+                    [formGroup]="formRange"
+                    [rangePicker]="campaignOTwoPicker"
+                    [comparisonStart]="formRange.value.compareStartDate"
+                    [comparisonEnd]="formRange.value.compareEndDate">
+                    <input matStartDate placeholder="Start date" formControlName="compareStartDate">
+                    <input matEndDate placeholder="End date" formControlName="compareEndDate">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matIconSuffix [for]="campaignOTwoPicker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #campaignOTwoPicker></mat-date-range-picker>
+                </mat-form-field>
+            <!-- } -->
+            </div>
+        </div>
+    </mat-expansion-panel>
     
-    <div class="range-controller--btns">
+    <!-- <div class="range-controller--btns">
         <button
             class="btn" 
             [ngClass]="{'active': selectedRange.value === 'month'}" 
@@ -53,5 +80,5 @@
             [ngClass]="{'active': selectedRange.value === '365'}" 
             [disabled]="selectedRange.value === '365'"
             (click)="changeTo360DayRange()">365 days</button>
-    </div>
+    </div> -->
 </div>

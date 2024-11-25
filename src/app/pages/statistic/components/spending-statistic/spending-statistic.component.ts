@@ -10,7 +10,6 @@ import { DonutComponent } from '../../../../core/UI/components/charts/donut/donu
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import moment from 'moment';
-import { DateFormatPipe } from '../../../../core/UI/calendar/date-format.pipe';
 import { ICategoryStatistic, RangeForm, initializeFormGroup } from '../../model/SpendindStatistic';
 import { Subscription, combineLatest, switchMap } from 'rxjs';
 import { SpendingCategoryHelperService } from '../../../../service/helpers/spending-category-helper.service';
@@ -28,6 +27,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { PrevRouteComponent } from '../prev-route/prev-route.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { DateFormatPipe } from '../../../../pipe/date-format.pipe';
+import { ToggleSwitchComponent } from '../../../../core/UI/components/toggle-switch/toggle-switch.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 
 const UI_COMPONENTS = [
@@ -40,14 +42,15 @@ const UI_COMPONENTS = [
   PieChartContainerComponent,
   SpendingStatisticCardComponent,
   RangeControllerComponent,
-  PrevRouteComponent
+  PrevRouteComponent,
+  ToggleSwitchComponent
 ];
 
 const MATERIAL_MODULES = [
   MatFormFieldModule,
   MatSelectModule,
   MatTabsModule,
-  MatExpansionModule,
+  MatSidenavModule,
   MatIconModule,
   MatButtonModule,
   MatDatepickerModule, 
@@ -55,22 +58,23 @@ const MATERIAL_MODULES = [
   ReactiveFormsModule,
   MatCheckboxModule
 ];
-
 @Component({
   selector: 'pgz-spending-statistic',
   standalone: true,
-  imports: [...UI_COMPONENTS, ...MATERIAL_MODULES],
+  imports: [...UI_COMPONENTS, ...MATERIAL_MODULES, DateFormatPipe],
   templateUrl: './spending-statistic.component.html',
   styleUrl: './spending-statistic.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SpendingStatisticComponent implements OnInit, OnDestroy {
+
   public currCategory: Category | null;
 
-  public chartTypeCtrl: 'pie' | 'multiline' = 'pie';
+  public chartTypeCtrl: 'pie' | 'multiline' = 'multiline';
   public isCompareEnabled: boolean = false;
 
   public isAscSort : boolean = true;
+  public isAllCategoriesChecked: boolean = true;
   public disabledCategories: Set<string> = new Set<string>();
   public filteredSpendings: Spending[] = [];
 
@@ -81,7 +85,8 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
   public compareCategoryStatisticForPieChart: ICategoryStatistic[] = [];
   public spendingsForMultiLineChart: Spending[] = [];
   public compareSpendingsForMultiLineChart: Spending[] = [];
-  
+
+  public chartsColorsForCompare: { [key: string]: string; } = {};
   public subscription: Subscription;
   constructor(
     private route: ActivatedRoute,
@@ -134,37 +139,35 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
     this.updateFormGroup(range);
   }
 
-  public allCategoriesVisible(): void {
-    this.disabledCategories = new Set();
-    this.updateFilteredSpendings();
-    this.setCategoryStatistic();
+  // public allCategoriesVisible(): void {
+  //   this.disabledCategories = new Set();
+  //   this.updateFilteredSpendings();
+  //   this.setCategoryStatistic();
 
-    this.cdr.markForCheck();
+  //   this.cdr.markForCheck();
+  // }
+
+  // public changeSortBy(): void {
+  //   this.isAscSort = !this.isAscSort;
+  //   this.sortCategoryStatistic();
+  //   this.cdr.detectChanges();
+  // }
+
+  public isVisibleCategory(categoryId: string): boolean {
+    return !this.disabledCategories.has(categoryId);
   }
 
-  public changeSortBy(): void {
-    this.isAscSort = !this.isAscSort;
-    this.sortCategoryStatistic();
-    this.cdr.detectChanges();
-  }
+  
 
-  public isVisibleCategory(category: Category): boolean {
-    return !this.disabledCategories.has(category.id);
-  }
-
-  public toogleCompare(): void {
-    this.isCompareEnabled = !this.isCompareEnabled;
-    this.cdr.markForCheck();
-  }
-
-  public toggleCategory(categoryId: string): void {
-    if (this.disabledCategories.has(categoryId)) {
-      this.disabledCategories.delete(categoryId);
+  public toggleCategory(category: ICategoryStatistic, checked: boolean): void {
+    if(checked) {
+      this.disabledCategories.delete(category.category.id);
     } else {
-      this.disabledCategories.add(categoryId);
+      this.disabledCategories.add(category.category.id);
     }
 
     this.setChartsData();
+    this.cdr.detectChanges();
   }
 
   public onCardClick(category: Category): void {
@@ -174,6 +177,11 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
 
     this.statisticStateHelper.addBreadCrumb(category);
     this.router.navigate(['/statistic/details', category.id]);
+  }
+
+  public toogleCompare(): void {
+    this.isCompareEnabled = !this.isCompareEnabled;
+    this.cdr.markForCheck();
   }
 
   public getCompareDataForCard(categoryId: string): ICategoryStatistic {
@@ -197,6 +205,12 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();
+    }
+  }
+
+  public chartTypeChange(chartType: string): void {
+    if(chartType === 'pie' || chartType === 'multiline') {
+      this.chartTypeCtrl = chartType;
     }
   }
 
@@ -264,5 +278,13 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
 
       return this.isAscSort ? SecondValue - firstValue : firstValue - SecondValue;
     });
+  }
+
+  public chartsColors(colors: { [key: string]: string; }) {
+    this.chartsColorsForCompare = colors;
+  }
+
+  public toggleAllCategories(): boolean {
+    return this.disabledCategories.size === this.categoryStatisticForPeriod.length;
   }
 }

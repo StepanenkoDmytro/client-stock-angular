@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
 import { DateService } from '../../../../service/date.service';
 import { AsyncPipe } from '@angular/common';
-import { DateFormatPipe } from '../date-format.pipe';
+import { DateFormatPipe } from '../../../../pipe/date-format.pipe';
 
 
 @Component({

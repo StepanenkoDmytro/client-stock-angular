@@ -4,29 +4,15 @@
     <pgz-prev-route></pgz-prev-route>
     <h2>{{currCategory.title}} statistic</h2>
   }@else {
-    <h2>Spending statistic</h2>
+    <h2>Statistic</h2>
   }
   
-
-  
-
   <div class="chart-container--chart">
 
-    <div class="chart-container--type">
-      <mat-form-field appearance="outline" floatLabel="always">
-        <mat-select [(ngModel)]="chartTypeCtrl">
-          <mat-option value="pie">Pie chart</mat-option>
-          <mat-option value="multiline">Multi line chart</mat-option>
-        </mat-select>
-      </mat-form-field>
-  
-      <div (click)="toogleCompare()">
-        <mat-checkbox class="example-margin">Compare</mat-checkbox>
-      </div>
-    </div>
+    <pgz-toggle-switch style="margin-top: 18px;" [checked]="'multiline'" [unchecked]="'pie'" (buttonValue)="chartTypeChange($event)"></pgz-toggle-switch>
 
-    <pgz-range-controller [isCompareEnabled]="isCompareEnabled" (rangeChange)="onRangeChange($event)"></pgz-range-controller>
-    
+    <pgz-range-controller style="margin-top: 18px;" (isCompareEnabled)="toogleCompare()" (rangeChange)="onRangeChange($event)"></pgz-range-controller>
+
     <div class="chart-container--chart">
       @if(chartTypeCtrl === 'pie') { 
         <div>
@@ -46,27 +32,40 @@
           [compareSpendings]="compareSpendingsForMultiLineChart"
           [startRange]="formRange.value.startDate"
           [startCompareRange]="formRange.value.compareStartDate"
+          (chartColors)="chartsColors($event)"
         ></pgz-multi-line-chart-container>
       }
     </div>
   </div>
 
-  <section>
-    <div class="d-flex justify-content-between">
-      <button class="btn" (click)="changeSortBy()">
-        @if(isAscSort){
-          <pgz-icon [name]="'arrow_drop_up'"></pgz-icon>
-        } @else {
-          <pgz-icon [name]="'arrow_drop_down'"></pgz-icon>
+  <mat-drawer-container class="spending-statistic-list" [hasBackdrop]="false" autosize>
+    <mat-drawer #drawer mode="over" position="end">
+      <section class="spending-statistic-list--filters">
+        <mat-checkbox 
+            [checked]="isAllCategoriesChecked"
+            (change)="toggleAllCategories()"
+            >
+            <p>All Categories</p>
+        </mat-checkbox>
+        @for(categoryStatistic of categoryStatisticForPeriod; track categoryStatistic) {
+            <mat-checkbox 
+                [checked]="isVisibleCategory(categoryStatistic.category.id)"
+                (change)="toggleCategory(categoryStatistic, $event.checked)"
+                >
+                <p>{{ categoryStatistic.category.title }}</p>
+            </mat-checkbox>
         }
-      </button>
-
-      <button class="btn d-flex" (click)="allCategoriesVisible()">
-        All visible
-        <pgz-icon [name]="'visibility'"></pgz-icon>
-      </button>
-    </div>
-
+    </section>
+</mat-drawer>
+  <section style="display: flex; flex-direction: column;">
+    <section class="d-flex">
+      <div class="d-flex" style="margin-left: 20px;" (click)="drawer.toggle()">
+        <pgz-icon [name]="'custom_filter'"></pgz-icon>
+        <p style="font-size: 16px; margin-left: 10px;">Filter</p>
+      </div>
+      <div style="margin-left: auto; margin-right: 20px;"><p>Sum</p></div>
+    </section>
+    
     @for(data of categoryStatisticForPeriod; let i = $index; track data) {
       <!-- @if(data.value !== 0) { -->
         <pgz-spending-statistic-card 
@@ -75,13 +74,14 @@
           [isCompareMode]="isCompareEnabled"
           [startRange]="formRange.value.startDate"
           [startCompareRange]="formRange.value.compareStartDate"
-          [isVisible]="isVisibleCategory(data.category)" 
-          (clickCard)="onCardClick($event)" 
-          (toggleCategory)="toggleCategory($event)">
+          [isVisible]="isVisibleCategory(data.category.id)" 
+          [chartsColors]="chartsColorsForCompare"
+          (clickCard)="onCardClick($event)" >
         </pgz-spending-statistic-card>
       <!-- } -->
     } @empty {
       <p style="text-align: center;">You don't have any spendings</p>
     }
   </section>
+</mat-drawer-container>
 </main>

@@ -17,7 +17,6 @@ import moment from 'moment';
 export class SpendingStatisticCardComponent {
   @Input()
   public set data(value: ICategoryStatistic) {
-    // console.log(value);
     this._data = value;
   }
   @Input()
@@ -33,18 +32,14 @@ export class SpendingStatisticCardComponent {
   @Input()
   public startCompareRange:moment.Moment;
 
-  @Output() 
-  public toggleCategory: EventEmitter<string> = new EventEmitter();
+  @Input()
+  public chartsColors: { [key: string]: string; } = {};
+
   @Output()
   public clickCard: EventEmitter<Category> = new EventEmitter();
 
   public _data: ICategoryStatistic;
   public _compareData: ICategoryStatistic;
-
-  public onToggleCategory(): void {
-    this.isVisible = !this.isVisible;
-    this.toggleCategory.emit(this._data.category.id);
-  }
 
   public onClickCard(): void {
     this.clickCard.emit(this._data.category);
