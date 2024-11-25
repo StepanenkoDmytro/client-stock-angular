@@ -11,7 +11,7 @@
           </mat-panel-title>
         </mat-expansion-panel-header>
         
-        <div class="range-controller--control">
+        <div class="range-controller--control" style="margin-top: 18px;">
             <p>Period 1</p>
             <mat-form-field appearance="outline">
                 <mat-date-range-input
@@ -34,10 +34,13 @@
                 </mat-slide-toggle>
             </div>
 
-            @if(isCompareEnabledCtrl.value) {
+        
+            <!-- @if(isCompareEnabledCtrl.value) { -->
+            <div style="margin-top: 18px;">
                 <p>Period 2</p>
                 <mat-form-field appearance="outline">
                     <mat-date-range-input
+                    [disabled]="!isCompareEnabledCtrl.value"
                     [formGroup]="formRange"
                     [rangePicker]="campaignOTwoPicker"
                     [comparisonStart]="formRange.value.compareStartDate"
@@ -48,7 +51,8 @@
                     <mat-datepicker-toggle matIconSuffix [for]="campaignOTwoPicker"></mat-datepicker-toggle>
                     <mat-date-range-picker #campaignOTwoPicker></mat-date-range-picker>
                 </mat-form-field>
-            }
+            <!-- } -->
+            </div>
         </div>
     </mat-expansion-panel>
     

@@ -41,7 +41,8 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
 
   private width = 300;
   private height = 220;
-  private margin = 40;
+  private marginInline = 20;
+  private marginBottom = 40;
 
   constructor() { }
 
@@ -82,12 +83,12 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
     });
 
     const isSingleData = data.length === 1;
-    const height = isSingleData ? this.height : this.height + 30;
+    const height = isSingleData ? this.height : this.height + 40;
     const svg = d3.select(`#${this.multiLineID}`).append("svg")
-      .attr("width", (this.width + this.margin) + "px")
-      .attr("height", (height + this.margin) + "px")
+      .attr("width", (this.width + this.marginInline) + "px")
+      .attr("height", (height + this.marginBottom) + "px")
       .append('g')
-      .attr("transform", `translate(${this.margin}, ${this.margin})`);
+      .attr("transform", `translate(${this.marginInline}, ${this.marginInline})`);
 
     
       
@@ -136,7 +137,7 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
     
     svg.append("g")
       .attr("class", "x axis")
-      .attr("transform", `translate(0, ${this.height - this.margin - 2.5})`)
+      .attr("transform", `translate(0, ${this.height - this.marginInline - 2.5})`)
       .call(xAxis)
       .selectAll("text")
       .style("font-size", "14px");
@@ -157,7 +158,7 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
       .remove();
 
     svg.selectAll(".y.axis .tick text")
-      .attr("x", this.width - this.margin + 5) 
+      .attr("x", this.width - this.marginInline + 5) 
       .attr("text-anchor", "start")
       .style("font-size", "14px");;
 
@@ -169,7 +170,7 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
       .enter()
       .append("line")
       .attr("x1", 0)
-      .attr("x2", this.width - this.margin) 
+      .attr("x2", this.width - this.marginInline) 
       .attr("y1", (d: any) => objectScales.yScale(d)) 
       .attr("y2", (d: any) => objectScales.yScale(d))
       .attr("stroke", "#ccc") 
@@ -209,16 +210,17 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
   private drawColorDescriptionText(svg: any, data: IMultiLineCompareData[],color: any, height: number) {
     const textPadding = 10; 
     const lineLength = 24; 
+    
     const linePadding = 10;
 
-    let currentX = this.margin;
+    let currentX = this.marginInline + 50;
 
     data.forEach((d, i) => {
       svg.append("line")
             .attr("x1", currentX) 
-            .attr("y1", height - 5) 
+            .attr("y1", height - 10) 
             .attr("x2", currentX + lineLength) 
-            .attr("y2", height - 5)
+            .attr("y2", height - 10)
             .attr("stroke", color(i.toString())) 
             .attr("stroke-width", 8)
             .attr("stroke-linecap", "round"); 
@@ -227,7 +229,7 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
 
       const textElement = svg.append("text")
         .attr("x", currentX) 
-        .attr("y", height)
+        .attr("y", height - 5)
         .attr("font-size", '14px')
         .text(`${d.name}`);
 
@@ -242,12 +244,12 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
       const endDate = d3.timeDay.offset(lastDate, -1);
 
       return {
-          xScale: d3.scaleTime().domain([firstDate, endDate]).range([0, this.width - this.margin]),
+          xScale: d3.scaleTime().domain([firstDate, endDate]).range([0, this.width - this.marginInline]),
           yScale: this.createYScale(data),
       };
     } else {
       return {
-        xScale: d3.scaleLinear().domain([1, maxDays + 2]).range([0, this.width - this.margin]),
+        xScale: d3.scaleLinear().domain([1, maxDays + 2]).range([0, this.width - this.marginInline]),
         yScale: this.createYScale(data),
       };
     }
@@ -262,7 +264,7 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
 
     return d3.scaleLinear()
         .domain([0, extendedMax])
-        .range([this.height - this.margin, 0]);
+        .range([this.height - this.marginInline, 0]);
 }
 
 

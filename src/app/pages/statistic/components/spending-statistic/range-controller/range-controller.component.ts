@@ -24,7 +24,8 @@ const MATTERIAL_COMPONENTS = [
   MatSlideToggleModule,
   ReactiveFormsModule,
   MatCheckboxModule,
-  MatRadioModule
+  MatRadioModule,
+  CommonModule
 ];
 
 @Component({
@@ -40,13 +41,8 @@ const MATTERIAL_COMPONENTS = [
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RangeControllerComponent implements OnInit {
-  // @Input()
-  // public set isCompareEnabled(value: boolean) {
-  //   if(value) {
-  //     this.setCompareRange();
-  //   }
-  //   this.isCompareEnabledCtrl.setValue(value);
-  // }
+  @Input()
+  public isPosibleCompare: boolean = true;
   @Output()
   public rangeChange = new EventEmitter<{
     startDate: moment.Moment,
@@ -72,7 +68,6 @@ export class RangeControllerComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
- 
     this.formRange = this.formBuilder.group({
       startDate: this.startDateCtrl,
       endDate: this.endDateCtrl,

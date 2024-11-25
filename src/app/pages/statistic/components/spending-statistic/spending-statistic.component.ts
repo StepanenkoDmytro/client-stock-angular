@@ -160,7 +160,6 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
   
 
   public toggleCategory(category: ICategoryStatistic, checked: boolean): void {
-    // debugger;
     if(checked) {
       this.disabledCategories.delete(category.category.id);
     } else {
