@@ -29,6 +29,7 @@ import { PrevRouteComponent } from '../prev-route/prev-route.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { DateFormatPipe } from '../../../../pipe/date-format.pipe';
 import { ToggleSwitchComponent } from '../../../../core/UI/components/toggle-switch/toggle-switch.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 
 const UI_COMPONENTS = [
@@ -49,7 +50,7 @@ const MATERIAL_MODULES = [
   MatFormFieldModule,
   MatSelectModule,
   MatTabsModule,
-  
+  MatSidenavModule,
   MatIconModule,
   MatButtonModule,
   MatDatepickerModule, 
@@ -57,7 +58,6 @@ const MATERIAL_MODULES = [
   ReactiveFormsModule,
   MatCheckboxModule
 ];
-
 @Component({
   selector: 'pgz-spending-statistic',
   standalone: true,
@@ -67,12 +67,14 @@ const MATERIAL_MODULES = [
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SpendingStatisticComponent implements OnInit, OnDestroy {
+
   public currCategory: Category | null;
 
   public chartTypeCtrl: 'pie' | 'multiline' = 'multiline';
   public isCompareEnabled: boolean = false;
 
   public isAscSort : boolean = true;
+  public isAllCategoriesChecked: boolean = true;
   public disabledCategories: Set<string> = new Set<string>();
   public filteredSpendings: Spending[] = [];
 
@@ -83,7 +85,7 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
   public compareCategoryStatisticForPieChart: ICategoryStatistic[] = [];
   public spendingsForMultiLineChart: Spending[] = [];
   public compareSpendingsForMultiLineChart: Spending[] = [];
-  
+
   public chartsColorsForCompare: { [key: string]: string; } = {};
   public subscription: Subscription;
   constructor(
@@ -137,37 +139,36 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
     this.updateFormGroup(range);
   }
 
-  public allCategoriesVisible(): void {
-    this.disabledCategories = new Set();
-    this.updateFilteredSpendings();
-    this.setCategoryStatistic();
+  // public allCategoriesVisible(): void {
+  //   this.disabledCategories = new Set();
+  //   this.updateFilteredSpendings();
+  //   this.setCategoryStatistic();
 
-    this.cdr.markForCheck();
+  //   this.cdr.markForCheck();
+  // }
+
+  // public changeSortBy(): void {
+  //   this.isAscSort = !this.isAscSort;
+  //   this.sortCategoryStatistic();
+  //   this.cdr.detectChanges();
+  // }
+
+  public isVisibleCategory(categoryId: string): boolean {
+    return !this.disabledCategories.has(categoryId);
   }
 
-  public changeSortBy(): void {
-    this.isAscSort = !this.isAscSort;
-    this.sortCategoryStatistic();
-    this.cdr.detectChanges();
-  }
+  
 
-  public isVisibleCategory(category: Category): boolean {
-    return !this.disabledCategories.has(category.id);
-  }
-
-  public toogleCompare(): void {
-    this.isCompareEnabled = !this.isCompareEnabled;
-    this.cdr.markForCheck();
-  }
-
-  public toggleCategory(categoryId: string): void {
-    if (this.disabledCategories.has(categoryId)) {
-      this.disabledCategories.delete(categoryId);
+  public toggleCategory(category: ICategoryStatistic, checked: boolean): void {
+    // debugger;
+    if(checked) {
+      this.disabledCategories.delete(category.category.id);
     } else {
-      this.disabledCategories.add(categoryId);
+      this.disabledCategories.add(category.category.id);
     }
 
     this.setChartsData();
+    this.cdr.detectChanges();
   }
 
   public onCardClick(category: Category): void {
@@ -177,6 +178,11 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
 
     this.statisticStateHelper.addBreadCrumb(category);
     this.router.navigate(['/statistic/details', category.id]);
+  }
+
+  public toogleCompare(): void {
+    this.isCompareEnabled = !this.isCompareEnabled;
+    this.cdr.markForCheck();
   }
 
   public getCompareDataForCard(categoryId: string): ICategoryStatistic {
@@ -277,5 +283,9 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
 
   public chartsColors(colors: { [key: string]: string; }) {
     this.chartsColorsForCompare = colors;
+  }
+
+  public toggleAllCategories(): boolean {
+    return this.disabledCategories.size === this.categoryStatisticForPeriod.length;
   }
 }

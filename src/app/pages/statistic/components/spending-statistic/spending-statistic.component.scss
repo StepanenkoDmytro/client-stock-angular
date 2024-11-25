@@ -4,8 +4,14 @@
 
 
 
-.spending-statistic {
-  
+.spending-statistic-list {
+  height: 100%;
+
+  &--filters {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+  }
 }
 
 .spending-statistic h2 {
