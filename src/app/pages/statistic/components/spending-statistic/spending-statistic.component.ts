@@ -11,7 +11,7 @@ import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import moment from 'moment';
 import { ICategoryStatistic, RangeForm, initializeFormGroup } from '../../model/SpendindStatistic';
-import { Subscription, combineLatest, switchMap } from 'rxjs';
+import { BehaviorSubject, Subscription, combineLatest, switchMap } from 'rxjs';
 import { SpendingCategoryHelperService } from '../../../../service/helpers/spending-category-helper.service';
 import { IconComponent } from '../../../../core/UI/components/icon/icon.component';
 import { MatButtonModule } from '@angular/material/button';
@@ -30,6 +30,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { DateFormatPipe } from '../../../../pipe/date-format.pipe';
 import { ToggleSwitchComponent } from '../../../../core/UI/components/toggle-switch/toggle-switch.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { FilterWrapperComponent } from '../../../../core/UI/components/filter-wrapper/filter-wrapper.component';
+import { AsyncPipe, CommonModule } from '@angular/common';
 
 
 const UI_COMPONENTS = [
@@ -43,7 +45,8 @@ const UI_COMPONENTS = [
   SpendingStatisticCardComponent,
   RangeControllerComponent,
   PrevRouteComponent,
-  ToggleSwitchComponent
+  ToggleSwitchComponent,
+  FilterWrapperComponent
 ];
 
 const MATERIAL_MODULES = [
@@ -56,12 +59,13 @@ const MATERIAL_MODULES = [
   MatDatepickerModule, 
   FormsModule, 
   ReactiveFormsModule,
-  MatCheckboxModule
+  MatCheckboxModule,
+  CommonModule
 ];
 @Component({
   selector: 'pgz-spending-statistic',
   standalone: true,
-  imports: [...UI_COMPONENTS, ...MATERIAL_MODULES, DateFormatPipe],
+  imports: [...UI_COMPONENTS, ...MATERIAL_MODULES, DateFormatPipe, AsyncPipe],
   templateUrl: './spending-statistic.component.html',
   styleUrl: './spending-statistic.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -74,8 +78,19 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
   public isCompareEnabled: boolean = false;
 
   public isAscSort : boolean = true;
+  get categoriesForFilter(): { id: string; title: string }[] {
+    return this.categoryStatisticForPeriod.map(category => ({
+      id: category.category.id,
+      title: category.category.title,
+    }));
+  }
+
+  get selectedCategoriesSet(): Set<string> {
+    return new Set(this.categoryStatisticForPeriod.map(category => category.category.id).filter(category => !this.disabledCategories.has(category)));
+  }
   public isAllCategoriesChecked: boolean = true;
   public disabledCategories: Set<string> = new Set<string>();
+  // public disabledCategories$: BehaviorSubject<Set<string>> = new BehaviorSubject<Set<string>>(new Set<string>());
   public filteredSpendings: Spending[] = [];
 
   public spendings: Spending[] = [];
@@ -96,6 +111,16 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
     private spendingsHelperService: SpendingCategoryHelperService,
     private cdr: ChangeDetectorRef
   ) { }
+
+  public updateDisabledCategories(selectedIds: Set<string>): void {
+    const disabled = this.categoriesForFilter
+        .filter(category => !selectedIds.has(category.id))
+        .map(category => category.id);
+    this.disabledCategories = new Set(disabled);
+
+    this.setChartsData();
+    this.cdr.detectChanges();
+  } 
 
   public ngOnInit(): void {
     this.spendingsService.init();
@@ -139,25 +164,9 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
     this.updateFormGroup(range);
   }
 
-  // public allCategoriesVisible(): void {
-  //   this.disabledCategories = new Set();
-  //   this.updateFilteredSpendings();
-  //   this.setCategoryStatistic();
-
-  //   this.cdr.markForCheck();
-  // }
-
-  // public changeSortBy(): void {
-  //   this.isAscSort = !this.isAscSort;
-  //   this.sortCategoryStatistic();
-  //   this.cdr.detectChanges();
-  // }
-
   public isVisibleCategory(categoryId: string): boolean {
     return !this.disabledCategories.has(categoryId);
   }
-
-  
 
   public toggleCategory(category: ICategoryStatistic, checked: boolean): void {
     if(checked) {

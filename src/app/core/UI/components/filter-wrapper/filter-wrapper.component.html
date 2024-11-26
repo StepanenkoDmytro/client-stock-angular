@@ -1,0 +1,32 @@
+<div class="filter-container">
+  <mat-drawer-container style="height: 100%;" [hasBackdrop]="false" autosize>
+    <mat-drawer #drawer mode="over" position="end">
+      <section class="filter-container--filters">
+        <mat-checkbox 
+            [checked]="isAllSelected"
+            (change)="toggleAllSelection()">
+            <p>All Categories</p>
+        </mat-checkbox>
+        @for(item of items; track item.id) {
+            <ng-container>
+                <mat-checkbox 
+                    [checked]="selectedIds.has(item.id)"
+                    (change)="toggleItem(item.id, $event.checked)">
+                    <p>{{ item.title }}</p>
+                </mat-checkbox>
+              </ng-container>
+        }
+        
+      </section>
+    </mat-drawer>
+    <section class="filter-container--header">
+      
+      <div class="d-flex" mat-button (click)="drawer.toggle()">
+        <pgz-icon [name]="'custom_filter'"></pgz-icon>
+        <p style="font-size: 16px; margin-left: 10px;">Filter</p>
+      </div>
+      <ng-content></ng-content>
+    </section>
+    <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
+    </mat-drawer-container>
+</div>

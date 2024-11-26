@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import moment from 'moment';
 import { HistorySpendingCardComponent } from './history-spending-card/history-spending-card.component';
@@ -14,10 +14,12 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import { DateFormatPipe } from '../../../../pipe/date-format.pipe';
 import { combineLatest } from 'rxjs';
 import { SpendingsService } from '../../../../service/spendings.service';
+import { FilterWrapperComponent } from '../../../../core/UI/components/filter-wrapper/filter-wrapper.component';
 
 
 const UI_COMPONENTS = [
   HistorySpendingCardComponent,
+  FilterWrapperComponent
 ];
 
 const MATERIAL_MODULES = [
@@ -43,6 +45,13 @@ export class HistorySpendingComponent implements OnInit {
   private spendings: Spending[] = [];
   public categories: Category[];
 
+  get categoriesForFilter(): { id: string; title: string }[] {
+    return this.categories.map(category => ({
+      id: category.id,
+      title: category.title,
+    }));
+  }
+
   public selectedCategories: Category[] = [];
   public spendingsGroupedByDate: Map<string, Spending[]> = new Map();
   public isAllCategoriesChecked: boolean = true; 
@@ -50,7 +59,13 @@ export class HistorySpendingComponent implements OnInit {
 
   constructor(
     private spendingsService: SpendingsService,
+    private cdr: ChangeDetectorRef
   ) { }
+
+  get selectedCategoriesSet(): Set<string> {
+    // this.selectedCategories.map()
+    return new Set(this.selectedCategories.map(category => category.id));
+  }
 
   public ngOnInit(): void {
     combineLatest([
@@ -86,6 +101,25 @@ export class HistorySpendingComponent implements OnInit {
 
     this.isAllCategoriesChecked = this.selectedCategories.length === this.categories.length;
     this.spendingsGroupedByDate = this.groupSpendingsByDate([...this.spendings]);
+  }
+
+  public updateSelectedCategories(selectedCategories: Set<string>): void {
+    // if (checked) {
+    //   this.selectedCategories.push(category);
+    // } else {
+    //   const index = this.selectedCategories.findIndex(c => c.id === category.id);
+    //   if (index > -1) {
+    //     this.selectedCategories.splice(index, 1);
+    //   }
+    // }
+    // debugger;
+
+    this.selectedCategories = this.selectedCategories.filter(selectedCategory => selectedCategories.has(selectedCategory.id));
+    // this.selectedCategories = Array.from(selectedCategories) as Category[];
+
+    this.isAllCategoriesChecked = this.selectedCategories.length === this.categories.length;
+    this.spendingsGroupedByDate = this.groupSpendingsByDate([...this.spendings]);
+    this.cdr.detectChanges();
   }
 
   private groupSpendingsByDate(spendings: Spending[]): Map<string, Spending[]> {
