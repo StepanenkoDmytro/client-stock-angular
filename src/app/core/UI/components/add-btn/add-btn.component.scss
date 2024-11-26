@@ -1,0 +1,30 @@
+:host {
+  display: block;
+}
+
+.circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: inherit;
+  border: 1px solid #6F6F6F;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.plus {
+  position: absolute;
+  background-color: #545454; 
+}
+
+.plus.horizontal {
+  width: 25px;
+  height: 1px; 
+}
+
+.plus.vertical {
+  width: 1px; 
+  height: 25px;
+}

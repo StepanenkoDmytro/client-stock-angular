@@ -9,12 +9,13 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DeleteCategoryDialogComponent } from './delete-category-dialog/delete-category-dialog.component';
 import { SpendingsService } from '../../../../service/spendings.service';
 import { combineLatest, firstValueFrom } from 'rxjs';
+import { AddBtnComponent } from '../../../../core/UI/components/add-btn/add-btn.component';
 
 
 @Component({
   selector: 'pgz-category-spending',
   standalone: true,
-  imports: [CategorySpendingCardComponent, RouterModule],
+  imports: [CategorySpendingCardComponent, AddBtnComponent, RouterModule],
   templateUrl: './category-spending.component.html',
   styleUrl: './category-spending.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

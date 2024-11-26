@@ -4,6 +4,7 @@ import { AppRoutes } from '../../../../app.routes';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { AddTriggerService } from '../../../../service/helpers/add-trigger.service';
+import { AddBtnComponent } from '../add-btn/add-btn.component';
 
 
 export interface INavigationItem {
@@ -17,14 +18,21 @@ export interface INavigationItem {
   styleUrl: './navigation.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [CommonModule, RouterModule, MatIconModule],
+  imports: [CommonModule, RouterModule, MatIconModule, AddBtnComponent],
 })
 export class NavigationComponent {
-  public navigationItems: INavigationItem[] = [
+  public navigationItemsLeft: INavigationItem[] = [
     { path: AppRoutes.SPENDING, icon: 'account_balance_wallet' },
     { path: AppRoutes.SAVINGS, icon: 'savings' },
+    // { path: AppRoutes.GOALS, icon: 'crisis_alert' },
+    // { path: AppRoutes.PROFILE, icon: 'account_circle' },
+  ];
+
+  public navigationItemsRight: INavigationItem[] = [
+    // { path: AppRoutes.SPENDING, icon: 'account_balance_wallet' },
+    // { path: AppRoutes.SAVINGS, icon: 'savings' },
     { path: AppRoutes.GOALS, icon: 'crisis_alert' },
-    { path: AppRoutes.STATISTIC, icon: 'equalizer' },
+    // { path: AppRoutes.STATISTIC, icon: 'equalizer' },
     { path: AppRoutes.PROFILE, icon: 'account_circle' },
   ];
 

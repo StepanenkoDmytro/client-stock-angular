@@ -2,12 +2,13 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { TotalBalanceComponent } from '../../core/UI/components/total-balance/total-balance.component';
 import { GoalCardComponent } from './components/goal-card/goal-card.component';
 import { IGoal } from '../../domain/goals.domain';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { ButtonToggleComponent } from '../../core/UI/components/button-toggle/button-toggle.component';
 import { MatButtonModule } from '@angular/material/button';
 import { SavingsService } from '../../service/savings.service';
 import { GoalsService } from '../../service/goals.service';
+import { AddTriggerService } from '../../service/helpers/add-trigger.service';
 
 
 const UI_COMPONENTS = [
@@ -36,15 +37,18 @@ export class GoalsComponent implements OnInit {
 
   constructor(
     private savingsService: SavingsService,
-    private goalsService: GoalsService
+    private goalsService: GoalsService,
+    private addTriggerService: AddTriggerService,
+    private router: Router,
   ) { }
   public ngOnInit(): void {
     
-    // this.savingsService.getCostOfAllAssets().subscribe(val => {
-    //   if(val) {
-    //     this.portfolioCost = val;
-    //   }
-    // });
+    this.addTriggerService.buttonClick$.subscribe((path) => {
+      if(path === '/goals') {
+        this.router.navigate(['/goals/add']);
+        this.addTriggerService.resetButtonClick();
+      }
+    });
 
     this.goalsService.getAll().subscribe(goals => {
       this.goals = goals;

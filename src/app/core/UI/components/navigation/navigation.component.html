@@ -1,8 +1,15 @@
 <div class="navigation">
-  <mat-icon class="navigation--element" *ngFor="let item of navigationItems"
+  <mat-icon class="navigation--element" *ngFor="let item of navigationItemsLeft"
             [routerLink]="item.path" [routerLinkActive]="'navigation--element__active'">
     {{ item.icon }}
   </mat-icon>
 
-  <div (click)="onButtonClick()"><p>Add</p></div>
+  <div (click)="onButtonClick()">
+    <pgz-add-btn></pgz-add-btn>
+  </div>
+
+  <mat-icon class="navigation--element" *ngFor="let item of navigationItemsRight"
+            [routerLink]="item.path" [routerLinkActive]="'navigation--element__active'">
+    {{ item.icon }}
+  </mat-icon>
 </div>

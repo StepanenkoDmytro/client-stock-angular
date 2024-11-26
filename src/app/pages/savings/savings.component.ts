@@ -18,6 +18,7 @@ import {
 import { SelectMarketDialogComponent } from './components/select-market-dialog/select-market-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { SavingsDashboardsComponent } from './components/savings-dashboards/savings-dashboards.component';
+import { AddTriggerService } from '../../service/helpers/add-trigger.service';
 
 
 const UI_COMPONENTS = [
@@ -58,6 +59,7 @@ export class SavingsComponent implements OnInit {
   constructor(
     private assetStateService: MarketService,
     private savingsService: SavingsService,
+    private addTriggerService: AddTriggerService,
     private router: Router,
   ) { }
 
@@ -67,6 +69,13 @@ export class SavingsComponent implements OnInit {
       this.assets = portfolio;
       this.filteredAssets = portfolio;
       this.getAssetTypes();
+    });
+
+    this.addTriggerService.buttonClick$.subscribe((path) => {
+      if(path === '/savings') {
+        this.openSelectedFilter();
+        this.addTriggerService.resetButtonClick();
+      }
     });
   }
 
@@ -99,8 +108,11 @@ export class SavingsComponent implements OnInit {
       const dialogRef = this.dialog.open(SelectMarketDialogComponent);
 
       dialogRef.afterClosed().subscribe(result => {
-        this.selectedFilter = result;
-        this.openSelectedFilter();      });
+        if(result) {
+          this.selectedFilter = result;
+          this.openSelectedFilter();      
+        }
+      });
     } else {
       this.router.navigate(['savings/',this.selectedFilter.toLocaleLowerCase()]);
     }

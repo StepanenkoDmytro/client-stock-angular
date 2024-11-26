@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ProgressComponent } from '../../core/UI/components/progress/progress.component';
 import { MatButtonModule } from '@angular/material/button';
 import { ButtonToggleComponent } from '../../core/UI/components/button-toggle/button-toggle.component';
@@ -52,12 +52,10 @@ export class SpendingComponent implements OnInit {
 
   public swipeComponents: any[] = [];
   
-
   constructor(
     private spendingsService: SpendingsService,
     private addTriggerService: AddTriggerService,
     private router: Router
-    // private cdr: ChangeDetectorRef,
   ) { }
 
   public ngOnInit(): void {
@@ -69,9 +67,13 @@ export class SpendingComponent implements OnInit {
     ];
 
     this.spendingsService.getSpentByDay().subscribe(spent => this.expends = {...this.expends, money: spent});
-    this.addTriggerService.buttonClick$.subscribe(() => {
-      this.router.navigate(['/spending/add']);
-    })
+    this.addTriggerService.buttonClick$.subscribe((path) => {
+      if(path == '/spending') {
+        this.router.navigate(['/spending/add']);
+        this.addTriggerService.resetButtonClick();
+      }
+      
+    });
   }
 
   public onChangeFrame(frame: boolean): void {
