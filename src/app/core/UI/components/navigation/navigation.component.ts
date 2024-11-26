@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AppRoutes } from '../../../../app.routes';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { AddTriggerService } from '../../../../service/helpers/add-trigger.service';
 
 
 export interface INavigationItem {
@@ -25,5 +26,11 @@ export class NavigationComponent {
     { path: AppRoutes.GOALS, icon: 'crisis_alert' },
     { path: AppRoutes.STATISTIC, icon: 'equalizer' },
     { path: AppRoutes.PROFILE, icon: 'account_circle' },
-  ]
+  ];
+
+  constructor(private addTriggerService: AddTriggerService) { }
+
+  public onButtonClick(): void {
+    this.addTriggerService.triggerButtonClick();
+  }
 }

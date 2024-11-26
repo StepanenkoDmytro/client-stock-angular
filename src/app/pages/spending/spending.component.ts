@@ -6,13 +6,14 @@ import { HistorySpendingComponent } from './components/history-spending/history-
 import { ID3Value, SimpleDataModel } from '../../domain/d3.domain';
 import { SpendingsService } from '../../service/spendings.service';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterModule } from '@angular/router';
+import { Route, Router, RouterModule } from '@angular/router';
 import { TotalBalanceSpendingComponent } from './components/total-balance-spending/total-balance-spending.component';
 import { Spending } from './model/Spending';
 import { combineLatest } from 'rxjs';
 import { CategorySpendingComponent } from './components/category-spending/category-spending.component';
 import { Category } from '../../domain/category.domain';
 import { SwipeWrapperComponent } from '../../core/UI/components/swipe-wrapper/swipe-wrapper.component';
+import { AddTriggerService } from '../../service/helpers/add-trigger.service';
 
 
 const UI_COMPONENTS = [
@@ -54,6 +55,8 @@ export class SpendingComponent implements OnInit {
 
   constructor(
     private spendingsService: SpendingsService,
+    private addTriggerService: AddTriggerService,
+    private router: Router
     // private cdr: ChangeDetectorRef,
   ) { }
 
@@ -66,6 +69,9 @@ export class SpendingComponent implements OnInit {
     ];
 
     this.spendingsService.getSpentByDay().subscribe(spent => this.expends = {...this.expends, money: spent});
+    this.addTriggerService.buttonClick$.subscribe(() => {
+      this.router.navigate(['/spending/add']);
+    })
   }
 
   public onChangeFrame(frame: boolean): void {
