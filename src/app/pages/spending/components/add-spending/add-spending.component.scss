@@ -1,5 +1,9 @@
 :host {
   display: block;
+  position: absolute;
+  background-color: #fff;
+  height: 100%;
+  z-index: 1;
 }
 
 .add-spending {

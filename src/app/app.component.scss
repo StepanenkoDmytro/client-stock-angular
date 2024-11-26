@@ -19,5 +19,7 @@ $bottom-navigation-height: 60px;
 
   &--bottom-navigation {
     height: $bottom-navigation-height;
+    align-self: end;
+    width: 100%;
   }
 }
