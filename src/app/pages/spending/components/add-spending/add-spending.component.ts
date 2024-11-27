@@ -16,11 +16,14 @@ import { EditStateService } from '../../service/edit-state.service';
 import { HttpClientModule } from '@angular/common/http';
 import { Spending } from '../../model/Spending';
 import { MoneyDirective } from '../../../../directive/money.directive';
+import { IconComponent } from "../../../../core/UI/components/icon/icon.component";
+import { ArrowBackComponent } from '../../../../core/UI/components/arrow-back/arrow-back.component';
 
 
 const UI_MODULES = [
   MoneyDirective,
   CategorySelectComponent,
+  ArrowBackComponent,
 ];
 
 const MATERIAL_MODULES = [
@@ -37,7 +40,7 @@ const MATERIAL_MODULES = [
 @Component({
   selector: 'pgz-add-spending',
   standalone: true,
-  imports: [...UI_MODULES, ...MATERIAL_MODULES, HttpClientModule],
+  imports: [...UI_MODULES, ...MATERIAL_MODULES, HttpClientModule, IconComponent],
   templateUrl: './add-spending.component.html',
   styleUrl: './add-spending.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

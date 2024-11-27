@@ -8,6 +8,43 @@
 
 .add-spending {
   margin: 1.5rem;
+
+  &--header {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 47px;
+  }
+
+  &--header-btn {
+    position: absolute;
+    left: 0;
+  }
+
+  &--input {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    padding: 8px 12px;
+    font-size: 40px;
+  }
+
+  &--amount-input {
+    border: none;
+    outline: none;
+    font-size: inherit;
+    color: #333;
+    padding: 0;
+    width: 200px;
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+  }
+
+  &--currency {
+    margin-left: 5px;
+    color: #938E8E;
+  }
 }
 
 .no-category {

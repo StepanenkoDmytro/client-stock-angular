@@ -1,0 +1,19 @@
+:host {
+  display: block;
+}
+
+.arrow-container {
+  margin: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrow {
+  width: 15px;
+  height: 15px;
+  border-left: 1px solid black;
+  border-bottom: 1px solid black;
+  transform: rotate(45deg);
+}
+
