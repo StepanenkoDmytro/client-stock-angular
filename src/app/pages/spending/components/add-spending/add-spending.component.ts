@@ -18,12 +18,14 @@ import { Spending } from '../../model/Spending';
 import { MoneyDirective } from '../../../../directive/money.directive';
 import { IconComponent } from "../../../../core/UI/components/icon/icon.component";
 import { ArrowBackComponent } from '../../../../core/UI/components/arrow-back/arrow-back.component';
+import { AcceptBtnComponent } from '../../../../core/UI/components/accept-btn/accept-btn.component';
 
 
 const UI_MODULES = [
   MoneyDirective,
   CategorySelectComponent,
   ArrowBackComponent,
+  AcceptBtnComponent
 ];
 
 const MATERIAL_MODULES = [
