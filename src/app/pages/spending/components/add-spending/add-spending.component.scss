@@ -26,14 +26,29 @@
     left: 0;
   }
 
+  &--title-value {
+    margin-top: 32px;
+    font-size: 18px;
+    font-weight: 500;
+  }
+
   &--input {
     align-self: center;
-    margin-bottom: 32px;
     display: flex;
     align-items: center;
     width: max-content;
     padding: 8px 12px;
     font-size: 40px;
+  }
+
+  &--input-date {
+    vertical-align: middle;
+    text-align: center;
+    font-size: 16px;
+    width: 85px;
+    height: 50px;
+    border: none;
+    padding: 0;
   }
 
   &--amount-input {

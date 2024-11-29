@@ -212,6 +212,19 @@ p {
   background-color: var(--bs-success) !important;
 }
 
+.category-bottom-sheet {
+  min-height: 60vh;
+  margin: 0 8px;
+  width: calc(100% - 16px);
+  border-radius: 20px;
+}
+
+.mat-bottom-sheet-container {
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  min-width: 100%!important;
+}
+
 /* Material form field-form css */
 /* Change the material background-color */
 .mat-mdc-text-field-wrapper {

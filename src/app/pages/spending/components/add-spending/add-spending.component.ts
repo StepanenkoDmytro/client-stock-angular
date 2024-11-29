@@ -19,13 +19,16 @@ import { MoneyDirective } from '../../../../directive/money.directive';
 import { IconComponent } from "../../../../core/UI/components/icon/icon.component";
 import { ArrowBackComponent } from '../../../../core/UI/components/arrow-back/arrow-back.component';
 import { AcceptBtnComponent } from '../../../../core/UI/components/accept-btn/accept-btn.component';
+import { CategoryBottomSheetComponent } from '../../../../core/UI/components/category-bottom-sheet/category-bottom-sheet.component';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 
 const UI_MODULES = [
   MoneyDirective,
   CategorySelectComponent,
   ArrowBackComponent,
-  AcceptBtnComponent
+  AcceptBtnComponent,
+  CategoryBottomSheetComponent
 ];
 
 const MATERIAL_MODULES = [
@@ -60,6 +63,7 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
     private spendingsService: SpendingsService,
     private router: Router,
     private editStateSpendingService: EditStateService,
+    private bottomSheet: MatBottomSheet
   ) { }
 
   public async ngOnInit(): Promise<void> {
@@ -76,6 +80,18 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
       this.costOfProduct = this.editSpending.cost.toString();
       this.date = this.editSpending.date;
     }
+  }
+
+  public openBottomSheet(): void {
+    const activeCategory = this.editSpending?.category || null; 
+
+    this.bottomSheet.open(CategoryBottomSheetComponent, {
+      data: {
+        categories: this.categories, 
+        activeCategory: activeCategory
+      },
+      panelClass: 'category-bottom-sheet'
+    });
   }
 
   public save(): void {

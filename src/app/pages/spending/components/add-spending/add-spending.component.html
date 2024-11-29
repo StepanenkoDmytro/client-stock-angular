@@ -18,19 +18,26 @@
         </div>
     <!-- </mat-form-field> -->
 
-    <pgz-category-select [categories]="categories" [selectedCategory]="selectedCategory" [(ngModel)]="selectedCategory"></pgz-category-select>
+    <p class="add-spending--title-value">Category</p>
+    <button (click)="openBottomSheet()"></button>
+    <!-- <pgz-category-select [categories]="categories" [selectedCategory]="selectedCategory" [(ngModel)]="selectedCategory"></pgz-category-select> -->
 
-    <mat-form-field appearance="outline" class="w-100">
-        <!-- <mat-label>Choose a date</mat-label> -->
-        <input matInput [matDatepicker]="picker" [(ngModel)]="date">
-        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
+    <!-- <mat-form-field appearance="outline" class="w-100"> -->
+    <!-- <div> -->
+        <p class="add-spending--title-value">Date:</p>
+        <div class="d-flex">
+            <!-- <mat-label>Choose a date</mat-label> -->
+            <input class="add-spending--input-date" [matDatepicker]="picker" [(ngModel)]="date">
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </div>
+    <!-- </div> -->
+    <!-- </mat-form-field> -->
 
     <!-- <mat-form-field appearance="outline" floatLabel="always" class="w-100">
         <mat-label>Comment</mat-label> -->
-        <div class="add-spending--input-comment">
-            <p>Comment (optional)</p>
+        <div>
+            <p class="add-spending--title-value">Comment (optional)</p>
             <textarea class="add-spending--text-area" matInput placeholder="Ex. It makes me feel..." [(ngModel)]="commentOfProduct"></textarea>
         </div>
     <!-- </mat-form-field> -->

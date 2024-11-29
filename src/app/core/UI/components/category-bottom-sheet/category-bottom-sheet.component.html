@@ -1,0 +1,23 @@
+<div>
+    @if(history.length > 0) {
+        <button mat-button (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon> Назад
+        </button>
+
+        <h3>{{ currentTitle }}</h3>
+    }
+    
+    @for(category of currentCategories; track category ) {
+        <div class="category" (click)="selectCategory(category)">
+            <div class="category--icon" [class.active]="category === activeCategory" [ngStyle]='{ "background-color": category.color }'>
+                <pgz-icon [name]="category.icon"></pgz-icon>
+            </div>
+            <p class="category--title">{{ category.title }}</p>
+            @if(activeCategory && category.title === activeCategory.title) {
+                <div class="category--selected">
+                    <pgz-icon [name]="'check'"></pgz-icon>
+                </div>
+            }
+        </div>
+    }
+</div>
