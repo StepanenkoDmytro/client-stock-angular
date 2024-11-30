@@ -4,8 +4,13 @@
 
 .category {
   display: flex;
-  align-items: center;
-  margin-bottom: 16px;
+  flex-direction: column;
+  padding: 10px;
+
+  &--curr {
+    display: flex;
+    align-items: center;
+  }
 
   &--icon {
     border-radius: 50%;

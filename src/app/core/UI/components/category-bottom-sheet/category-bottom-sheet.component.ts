@@ -4,21 +4,24 @@ import { MatIconModule } from '@angular/material/icon';
 import { Category } from '../../../../domain/category.domain';
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../icon/icon.component';
+import { RouterModule } from '@angular/router';
+import { AddBtnComponent } from '../add-btn/add-btn.component';
+import { CategorySpendingCardComponent } from '../../../../pages/spending/components/category-spending/category-spending-card/category-spending-card.component';
 
 @Component({
   selector: 'pgz-category-bottom-sheet',
   standalone: true,
-  imports: [MatIconModule, CommonModule, IconComponent],
+  imports: [MatIconModule, CommonModule, IconComponent, RouterModule, AddBtnComponent],
   templateUrl: './category-bottom-sheet.component.html',
   styleUrl: './category-bottom-sheet.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CategoryBottomSheetComponent {
-  currentCategories: Category[] = [];
-  currentTitle: string = 'Категорії';
-  history: { title: string; categories: Category[] }[] = [];
+  public currentCategories: Category[] = [];
+  public currentTitle: string = 'Категорії';
+  public history: { title: string; categories: Category[] }[] = [];
 
-  activeCategory: Category | null = null;
+  public activeCategory: Category | null = null;
 
   constructor(
     private bottomSheetRef: MatBottomSheetRef<CategoryBottomSheetComponent>,
@@ -42,7 +45,15 @@ export class CategoryBottomSheetComponent {
       this.history.push({ title: this.currentTitle, categories: this.currentCategories });
       this.currentCategories = category.children;
       this.currentTitle = category.title;
+    } else {
+      // Якщо категорія не має дочірніх категорій, вибираємо її як активну
+      this.activeCategory = category;
+      this.closeBottomSheet();
     }
+  }
+
+  closeBottomSheet(): void {
+    this.bottomSheetRef.dismiss(this.activeCategory);
   }
 
   goBack(): void {

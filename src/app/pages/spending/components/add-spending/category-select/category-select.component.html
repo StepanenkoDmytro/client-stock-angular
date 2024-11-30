@@ -1,0 +1,21 @@
+
+<div class="category" (click)="openBottomSheet()">
+    @if(activeCategory) {
+        <div class="category--icon" [ngStyle]='{ "background-color": activeCategory.color }'>
+            <pgz-icon [name]="activeCategory.icon"></pgz-icon>
+        </div>
+        <div class="category--selected">
+            <div class="category--ancestors">
+                @for(ancestor of ancestors; track ancestor) {
+                    <p>{{ancestor.title}} <span style="margin-left: 8px;">></span></p>
+                }
+            </div>
+            <p class="category--title">{{ activeCategory.title }}</p>
+        </div>
+    } @else {
+        <div class="category--empty"></div>
+        <p class="category--title" style="color: #ACACAC">Not selected</p>
+    }
+    
+    <!-- <div class="line"></div> -->
+</div>

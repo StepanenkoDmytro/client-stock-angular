@@ -202,6 +202,14 @@ p {
   padding: 20px;
 }
 
+.add-category {
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .add-btn {
   position: absolute !important;
   bottom: 70px;

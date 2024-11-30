@@ -6,18 +6,32 @@
 
         <h3>{{ currentTitle }}</h3>
     }
+
+    <div class="add-category" [routerLink]="['add-category']">
+        <pgz-add-btn></pgz-add-btn>
+        Add category
+    </div>
     
     @for(category of currentCategories; track category ) {
         <div class="category" (click)="selectCategory(category)">
-            <div class="category--icon" [class.active]="category === activeCategory" [ngStyle]='{ "background-color": category.color }'>
-                <pgz-icon [name]="category.icon"></pgz-icon>
+            <div class="category--curr">
+                <div class="category--icon" [class.active]="category === activeCategory" [ngStyle]='{ "background-color": category.color }'>
+                    <pgz-icon [name]="category.icon"></pgz-icon>
+                </div>
+                <div>
+                    <p class="category--title">{{ category.title }}</p>
+                    
+                    @if(category.children && category.children.length > 0) {
+                        <p style="font-size: 12px; margin-left: 10px;">{{category.children.length}} subcategories</p>
+                    }
+                </div>
             </div>
-            <p class="category--title">{{ category.title }}</p>
             @if(activeCategory && category.title === activeCategory.title) {
                 <div class="category--selected">
                     <pgz-icon [name]="'check'"></pgz-icon>
                 </div>
             }
         </div>
+        
     }
 </div>

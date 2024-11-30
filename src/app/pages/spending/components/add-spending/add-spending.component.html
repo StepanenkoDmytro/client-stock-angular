@@ -19,7 +19,7 @@
     <!-- </mat-form-field> -->
 
     <p class="add-spending--title-value">Category</p>
-    <button (click)="openBottomSheet()"></button>
+    <pgz-category-selector [categories]="categories" [activeCategory]="this.editSpending?.category" (selectedCategory)="selectCategory($event)"></pgz-category-selector>
     <!-- <pgz-category-select [categories]="categories" [selectedCategory]="selectedCategory" [(ngModel)]="selectedCategory"></pgz-category-select> -->
 
     <!-- <mat-form-field appearance="outline" class="w-100"> -->

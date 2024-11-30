@@ -1,0 +1,46 @@
+:host {
+  display: block;
+}
+
+
+
+.category {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+
+  &--ancestors {
+    margin-right: 8px;
+    
+    font-weight: 200;
+    color: #ccc;
+  }
+
+  &--selected {
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+  }
+
+  &--icon {
+    padding: 8px;
+    border-radius: 50%;
+  }
+
+  &--empty {
+    width: 40px;
+    height: 40px;
+    background-color: #ACACAC;
+    border-radius: 50%;
+  }
+}
+
+.line {
+  position: absolute;
+  border-bottom: 1px solid #000;
+  left: 48px;
+  top: 40px;
+  width: 160px;
+}

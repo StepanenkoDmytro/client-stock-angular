@@ -10,7 +10,6 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import moment from 'moment';
 import { Category } from '../../../../domain/category.domain';
-import { CategorySelectComponent } from '../../../../core/UI/components/category-select/category-select.component';
 import { Router } from '@angular/router';
 import { EditStateService } from '../../service/edit-state.service';
 import { HttpClientModule } from '@angular/common/http';
@@ -21,14 +20,15 @@ import { ArrowBackComponent } from '../../../../core/UI/components/arrow-back/ar
 import { AcceptBtnComponent } from '../../../../core/UI/components/accept-btn/accept-btn.component';
 import { CategoryBottomSheetComponent } from '../../../../core/UI/components/category-bottom-sheet/category-bottom-sheet.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { CategorySelectorComponent } from './category-select/category-select.component';
 
 
 const UI_MODULES = [
   MoneyDirective,
-  CategorySelectComponent,
   ArrowBackComponent,
   AcceptBtnComponent,
-  CategoryBottomSheetComponent
+  CategoryBottomSheetComponent,
+  CategorySelectorComponent
 ];
 
 const MATERIAL_MODULES = [
@@ -45,12 +45,17 @@ const MATERIAL_MODULES = [
 @Component({
   selector: 'pgz-add-spending',
   standalone: true,
-  imports: [...UI_MODULES, ...MATERIAL_MODULES, HttpClientModule, IconComponent],
+  imports: [...UI_MODULES, ...MATERIAL_MODULES, HttpClientModule],
   templateUrl: './add-spending.component.html',
   styleUrl: './add-spending.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddSpendingComponent implements OnInit, OnDestroy {
+selectCategory(selectedCategory: Category) {
+  if(selectedCategory) {
+    this.selectedCategory = selectedCategory;
+  }
+}
   public categories: Category[];
   public selectedCategory: Category;
   public commentOfProduct: string = '';
@@ -63,7 +68,6 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
     private spendingsService: SpendingsService,
     private router: Router,
     private editStateSpendingService: EditStateService,
-    private bottomSheet: MatBottomSheet
   ) { }
 
   public async ngOnInit(): Promise<void> {
@@ -82,17 +86,6 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
     }
   }
 
-  public openBottomSheet(): void {
-    const activeCategory = this.editSpending?.category || null; 
-
-    this.bottomSheet.open(CategoryBottomSheetComponent, {
-      data: {
-        categories: this.categories, 
-        activeCategory: activeCategory
-      },
-      panelClass: 'category-bottom-sheet'
-    });
-  }
 
   public save(): void {
     this.saveSpending();
