@@ -1,38 +1,36 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTabsModule } from '@angular/material/tabs';
-import { BarComponent } from '../../../../core/UI/components/charts/bar/bar.component';
-import { SpendingsService } from '../../../../service/spendings.service';
-import { HistorySpendingCardComponent } from '../history-spending/history-spending-card/history-spending-card.component';
-import { MultiLineComponent } from '../../../../core/UI/components/charts/multi-line/multi-line.component';
-import { DonutComponent } from '../../../../core/UI/components/charts/donut/donut.component';
-import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import moment from 'moment';
-import { ICategoryStatistic, RangeForm, initializeFormGroup } from '../../../statistic/model/SpendindStatistic';
-import { BehaviorSubject, Subscription, combineLatest, switchMap } from 'rxjs';
-import { SpendingCategoryHelperService } from '../../../../service/helpers/spending-category-helper.service';
-import { IconComponent } from '../../../../core/UI/components/icon/icon.component';
-import { MatButtonModule } from '@angular/material/button';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { StatisticStateService } from '../../../statistic/service/statistic-state.service';
-import { Spending } from '../../model/Spending';
-import { PieChartContainerComponent } from './pie-chart-container/pie-chart-container.component';
-import { SpendingStatisticCardComponent } from './spending-statistic-card/spending-statistic-card.component';
-import { Category } from '../../../../domain/category.domain';
-import { MultiLineChartContainerComponent } from './multi-line-chart-container/multi-line-chart-container.component';
-import { RangeControllerComponent } from './range-controller/range-controller.component';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
-import { PrevRouteComponent } from '../../../statistic/components/prev-route/prev-route.component';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { DateFormatPipe } from '../../../../pipe/date-format.pipe';
-import { ToggleSwitchComponent } from '../../../../core/UI/components/toggle-switch/toggle-switch.component';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { FilterWrapperComponent } from '../../../../core/UI/components/filter-wrapper/filter-wrapper.component';
-import { AsyncPipe, CommonModule } from '@angular/common';
-import { ArrowBackComponent } from '../../../../core/UI/components/arrow-back/arrow-back.component';
+import { CommonModule, AsyncPipe } from "@angular/common";
+import { Component, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef } from "@angular/core";
+import { FormsModule, ReactiveFormsModule, FormGroup } from "@angular/forms";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from "@angular/material/icon";
+import { MatSelectModule } from "@angular/material/select";
+import { MatSidenavModule } from "@angular/material/sidenav";
+import { MatTabsModule } from "@angular/material/tabs";
+import { RouterModule, ActivatedRoute, Router } from "@angular/router";
+import { Subscription, combineLatest, switchMap } from "rxjs";
+import { ArrowBackComponent } from "../../../../core/UI/components/arrow-back/arrow-back.component";
+import { BarComponent } from "../../../../core/UI/components/charts/bar/bar.component";
+import { DonutComponent } from "../../../../core/UI/components/charts/donut/donut.component";
+import { MultiLineComponent } from "../../../../core/UI/components/charts/multi-line/multi-line.component";
+import { FilterWrapperComponent } from "../../../../core/UI/components/filter-wrapper/filter-wrapper.component";
+import { IconComponent } from "../../../../core/UI/components/icon/icon.component";
+import { ToggleSwitchComponent } from "../../../../core/UI/components/toggle-switch/toggle-switch.component";
+import { Category } from "../../../../domain/category.domain";
+import { DateFormatPipe } from "../../../../pipe/date-format.pipe";
+import { SpendingCategoryHelperService } from "../../../../service/helpers/spending-category-helper.service";
+import { SpendingsService } from "../../../../service/spendings.service";
+import { PrevRouteComponent } from "../../../savings/components/prev-route/prev-route.component";
+import { RangeForm, ICategoryStatistic, initializeFormGroup } from "../../../statistic/model/SpendindStatistic";
+import { StatisticStateService } from "../../../statistic/service/statistic-state.service";
+import { Spending } from "../../model/Spending";
+import { HistorySpendingCardComponent } from "../history-spending/history-spending-card/history-spending-card.component";
+import { MultiLineChartContainerComponent } from "./multi-line-chart-container/multi-line-chart-container.component";
+import { PieChartContainerComponent } from "./pie-chart-container/pie-chart-container.component";
+import { RangeControllerComponent } from "./range-controller/range-controller.component";
+import { SpendingStatisticCardComponent } from "./spending-statistic-card/spending-statistic-card.component";
 
 
 const UI_COMPONENTS = [
@@ -125,6 +123,7 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
   } 
 
   public ngOnInit(): void {
+    
     this.spendingsService.init();
     this.formRange = initializeFormGroup();
 
