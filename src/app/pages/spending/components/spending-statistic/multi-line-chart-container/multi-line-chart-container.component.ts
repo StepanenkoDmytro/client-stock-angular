@@ -1,8 +1,8 @@
 import { Component, ChangeDetectionStrategy, OnInit, Input, Output, EventEmitter, ChangeDetectorRef, OnChanges, SimpleChanges, ViewChild, AfterViewInit } from "@angular/core";
 
 import { SpendingCategoryHelperService } from "../../../../../service/helpers/spending-category-helper.service";
-import { Spending } from "../../../../spending/model/Spending";
-import { ICategoryStatistic } from "../../../model/SpendindStatistic";
+import { Spending } from "../../../model/Spending";
+import { ICategoryStatistic } from "../../../../statistic/model/SpendindStatistic";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import moment from "moment";

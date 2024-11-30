@@ -4,20 +4,20 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { BarComponent } from '../../../../core/UI/components/charts/bar/bar.component';
 import { SpendingsService } from '../../../../service/spendings.service';
-import { HistorySpendingCardComponent } from '../../../spending/components/history-spending/history-spending-card/history-spending-card.component';
+import { HistorySpendingCardComponent } from '../history-spending/history-spending-card/history-spending-card.component';
 import { MultiLineComponent } from '../../../../core/UI/components/charts/multi-line/multi-line.component';
 import { DonutComponent } from '../../../../core/UI/components/charts/donut/donut.component';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import moment from 'moment';
-import { ICategoryStatistic, RangeForm, initializeFormGroup } from '../../model/SpendindStatistic';
+import { ICategoryStatistic, RangeForm, initializeFormGroup } from '../../../statistic/model/SpendindStatistic';
 import { BehaviorSubject, Subscription, combineLatest, switchMap } from 'rxjs';
 import { SpendingCategoryHelperService } from '../../../../service/helpers/spending-category-helper.service';
 import { IconComponent } from '../../../../core/UI/components/icon/icon.component';
 import { MatButtonModule } from '@angular/material/button';
-import { ActivatedRoute, Router } from '@angular/router';
-import { StatisticStateService } from '../../service/statistic-state.service';
-import { Spending } from '../../../spending/model/Spending';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { StatisticStateService } from '../../../statistic/service/statistic-state.service';
+import { Spending } from '../../model/Spending';
 import { PieChartContainerComponent } from './pie-chart-container/pie-chart-container.component';
 import { SpendingStatisticCardComponent } from './spending-statistic-card/spending-statistic-card.component';
 import { Category } from '../../../../domain/category.domain';
@@ -25,13 +25,14 @@ import { MultiLineChartContainerComponent } from './multi-line-chart-container/m
 import { RangeControllerComponent } from './range-controller/range-controller.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { PrevRouteComponent } from '../prev-route/prev-route.component';
+import { PrevRouteComponent } from '../../../statistic/components/prev-route/prev-route.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { DateFormatPipe } from '../../../../pipe/date-format.pipe';
 import { ToggleSwitchComponent } from '../../../../core/UI/components/toggle-switch/toggle-switch.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { FilterWrapperComponent } from '../../../../core/UI/components/filter-wrapper/filter-wrapper.component';
 import { AsyncPipe, CommonModule } from '@angular/common';
+import { ArrowBackComponent } from '../../../../core/UI/components/arrow-back/arrow-back.component';
 
 
 const UI_COMPONENTS = [
@@ -46,7 +47,8 @@ const UI_COMPONENTS = [
   RangeControllerComponent,
   PrevRouteComponent,
   ToggleSwitchComponent,
-  FilterWrapperComponent
+  FilterWrapperComponent,
+  ArrowBackComponent
 ];
 
 const MATERIAL_MODULES = [
@@ -65,7 +67,7 @@ const MATERIAL_MODULES = [
 @Component({
   selector: 'pgz-spending-statistic',
   standalone: true,
-  imports: [...UI_COMPONENTS, ...MATERIAL_MODULES, DateFormatPipe, AsyncPipe],
+  imports: [...UI_COMPONENTS, ...MATERIAL_MODULES, DateFormatPipe, AsyncPipe, RouterModule],
   templateUrl: './spending-statistic.component.html',
   styleUrl: './spending-statistic.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

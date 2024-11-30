@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { IconComponent } from '../../../../../core/UI/components/icon/icon.component';
-import { ICategoryStatistic } from '../../../model/SpendindStatistic';
+import { ICategoryStatistic } from '../../../../statistic/model/SpendindStatistic';
 import { Category } from '../../../../../domain/category.domain';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';

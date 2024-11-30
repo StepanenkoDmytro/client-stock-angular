@@ -1,8 +1,18 @@
 :host {
   display: block;
+  position: absolute;
+  background-color: #fff;
+  height: 100%;
+  width: 100%;
+  z-index: 1;
 }
 
-
+.spending-statistic {
+  &--prev {
+    display: flex;
+    align-items: center;
+  }
+}
 
 .spending-statistic-list {
   height: 100%;

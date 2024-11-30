@@ -11,6 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { IconComponent } from '../../../../core/UI/components/icon/icon.component';
+import { RouterModule } from '@angular/router';
 
 const MATERIAL_MODULES = [
   MatExpansionModule,
@@ -26,7 +27,7 @@ const MATERIAL_MODULES = [
 @Component({
   selector: 'pgz-total-balance-spending',
   standalone: true,
-  imports: [IconComponent, ...MATERIAL_MODULES, MoneyPipe],
+  imports: [IconComponent, ...MATERIAL_MODULES, MoneyPipe, RouterModule],
   templateUrl: './total-balance-spending.component.html',
   styleUrl: './total-balance-spending.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
