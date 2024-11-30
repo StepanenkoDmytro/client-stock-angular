@@ -2,11 +2,31 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { MoneyPipe } from '../../../../pipe/money.pipe';
 import { TotalBalanceService } from '../../../../core/UI/components/total-balance/total-balance.service';
 import { combineLatest } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { IconComponent } from '../../../../core/UI/components/icon/icon.component';
+
+const MATERIAL_MODULES = [
+  MatExpansionModule,
+  MatFormFieldModule,
+  MatDatepickerModule,
+  MatSlideToggleModule,
+  ReactiveFormsModule,
+  MatCheckboxModule,
+  MatRadioModule,
+  CommonModule
+];
 
 @Component({
   selector: 'pgz-total-balance-spending',
   standalone: true,
-  imports: [MoneyPipe],
+  imports: [IconComponent, ...MATERIAL_MODULES, MoneyPipe],
   templateUrl: './total-balance-spending.component.html',
   styleUrl: './total-balance-spending.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
