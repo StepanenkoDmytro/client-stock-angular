@@ -3,21 +3,33 @@
         <span><pgz-icon [name]="'keyboard_backspace'"></pgz-icon></span>
         <span>Back</span>
     </div>
-    <div class="category">
-        <mat-form-field appearance="outline" floatLabel="always" class="w-100">
-            <mat-label>Name category</mat-label>
-            <input matInput type="text" class="category--name" placeholder="Enter name of category" style="font-size: 1.5rem;" [formControl]="categoryTitleCtrl">
-        </mat-form-field>
+    <div class="category-item">
+        <!-- <mat-form-field appearance="outline" floatLabel="always" class="w-100"> -->
+        <p class="category-item--title">Name category</p>
+        <input matInput type="text" class="category--name" placeholder="Enter name of category" style="font-size: 1.5rem;" [formControl]="categoryTitleCtrl">
+        <!-- </mat-form-field> -->
     </div>
-    <div style="display: flex; position: relative;">
-        <p>Selected icon for category: </p>
-        <pgz-icon class="category--icon" [name]="selectedIcon"></pgz-icon>
-        <pgz-icon-picker (onSelectIcon)="onSelectIcon($event)"></pgz-icon-picker>
+    <div class="category-item">
+        <p class="category-item--title">Icon</p>
+        <div class="d-flex">
+            <pgz-icon class="category--icon" [name]="selectedIcon"></pgz-icon>
+            <!-- <button (click)="openIconPicker()">Choose icon</button> -->
+            <pgz-icon-picker id="iconPicker" (onSelectIcon)="onSelectIcon($event)"></pgz-icon-picker>
+        </div>
     </div>
 
-    <div>
-        <label for="colorInput">Select Color:</label>
-        <input id="colorInput" type="color" [(ngModel)]="selectedColor">
+    <div class="category-item">
+        <p class="category-item--title">Color</p>
+        <div class="d-flex">
+            <div class="add-edit-category--choose-color">
+                <pgz-icon [name]="'custom_color_icon'"></pgz-icon>
+                <div class="add-edit-category--selected-color" [ngStyle]='{ "background-color": selectedColor }'></div>
+                
+            </div>
+            <input id="colorInput" type="color" [(ngModel)]="selectedColor" style="display: none;">
+            <button (click)="openColorPicker()">Choose color</button>
+        </div>
+        
     </div>
     
     <div class="add-edit-category--actions">

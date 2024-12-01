@@ -23,10 +23,21 @@
     border: 1px solid var(--bs-success);
     padding: 1.5rem;
   }
+
+  &--choose-color {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &--selected-color {
+    height: 8px;
+    width: 100%;
+  }
 }
 
-.category {
-  margin-top: 1rem;
+.category-item {
+  margin-bottom: 32px;
 
   &--name::placeholder {
     font-size: 1rem;
@@ -38,7 +49,17 @@
     height: 50px;
     line-height: 50px;
   }
+
+  &--title {
+    font-size: 18px;
+    font-weight: 500;
+  }
   
+}
+
+.category-item input {
+  border: none;
+  border-bottom: 1px solid #C1C1C1;
 }
 
 .back {

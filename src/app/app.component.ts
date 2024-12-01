@@ -50,7 +50,8 @@ export class AppComponent implements OnInit {
     { name: 'custom_arrow-in', url: 'assets/icons/arrow-inside-up.svg'},
     { name: 'custom_settings', url: 'assets/icons/settings.svg'},
     { name: 'custom_filter', url: 'assets/icons/filter.svg'},
-    { name: 'custom_statistic', url: 'assets/icons/statistic.svg'}
+    { name: 'custom_statistic', url: 'assets/icons/statistic.svg'},
+    { name: 'custom_color_icon', url: 'assets/icons/color_icon.svg'},
   ]
 
   constructor(

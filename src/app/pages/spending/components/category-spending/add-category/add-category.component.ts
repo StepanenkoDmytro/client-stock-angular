@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { IconPickerComponent } from '../../../../../core/UI/components/icon-picker/icon-picker.component';
 import { EditStateService } from '../../../service/edit-state.service';
 import { combineLatest } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 
 const UI_MODULES = [
@@ -29,6 +30,7 @@ const MATERIAL_MODULES = [
   MatButtonModule,
   MatInputModule,
   FormsModule,
+  CommonModule
 ];
 
 @Component({
@@ -96,5 +98,19 @@ export class AddCategoryComponent implements OnInit {
 
   public onSelectIcon(icon: string): void {
     this.selectedIcon = icon;
+  }
+
+  public openIconPicker(): void {
+    const iconPicker = document.getElementById('iconPicker') as HTMLInputElement;
+    if (iconPicker) {
+      iconPicker.click(); 
+    }
+  }
+
+  public openColorPicker(): void {
+    const colorInput = document.getElementById('colorInput') as HTMLInputElement;
+    if (colorInput) {
+      colorInput.click(); 
+    }
   }
 }

@@ -1,5 +1,7 @@
 <div class="icon-select">
-    <pgz-icon (click)="showPicker()" class="icon-select--icon" [name]="'edit'"></pgz-icon>
+    <div style="border-radius: 16px;
+background: #EAEAEA; padding: 10px;" (click)="showPicker()">Choose icon</div>
+    <!-- <pgz-icon (click)="showPicker()" class="icon-select--icon" [name]="'edit'"></pgz-icon> -->
     @if(showIconPicker) {
         <div id="icon-picker" class="icon-picker">
             <div class="icon-picker--search">
