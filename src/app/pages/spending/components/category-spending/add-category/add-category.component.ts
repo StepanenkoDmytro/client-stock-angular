@@ -5,12 +5,13 @@ import { Category } from '../../../../../domain/category.domain';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CategorySelectComponent } from '../../../../../core/UI/components/category-select/category-select.component';
 import { IconComponent } from '../../../../../core/UI/components/icon/icon.component';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { SpendingsService } from '../../../../../service/spendings.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { IconPickerComponent } from '../../../../../core/UI/components/icon-picker/icon-picker.component';
 import { EditStateService } from '../../../service/edit-state.service';
+import { combineLatest } from 'rxjs';
 
 
 const UI_MODULES = [
@@ -51,15 +52,22 @@ export class AddCategoryComponent implements OnInit {
     private spendingService: SpendingsService,
     private editStateCategory: EditStateService,
     private router: Router,
+    private route: ActivatedRoute,
   ) {}
 
   public ngOnInit(): void {
     this.editCategory = this.editStateCategory.editStateCategory;
 
-    this.spendingService.getAllCategories().subscribe(categories => {
+    combineLatest([
+      this.route.paramMap,
+      this.spendingService.getAllCategories()
+    ]).subscribe(async ([paramMap, categories]) => {
       this.categories = categories;
-      this.selectedParentCategory = categories[1];
-    });
+      const categoryId = paramMap.get('id');
+      if(categoryId) {
+        this.selectedParentCategory = await this.spendingService.findCategoryById(categoryId);
+      }
+    }) 
 
     if(!!this.editCategory) {
       this.selectedParentCategory = Category.findCategoryById(this.editCategory.parent, this.categories);

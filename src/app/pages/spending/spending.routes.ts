@@ -16,7 +16,7 @@ export const SPENDING_ROUTES: Route[] = [
     component: AddSpendingComponent,
   },
   {
-    path: 'add-category',
+    path: 'add-category/:id',
     component: AddCategoryComponent
   },
   {

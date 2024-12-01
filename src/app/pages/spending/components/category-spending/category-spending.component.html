@@ -1,17 +1,26 @@
 <div [class.category-spending]="currCategory">
     @if(currCategory) {
-        <pgz-prev-route></pgz-prev-route>
-        <h2>{{currCategory.title}} statistic</h2>
+        <div class="category--routing">
+            <pgz-prev-route></pgz-prev-route>
+            <h2>{{currCategory.title}} statistic</h2>
+            <div (click)="onEdit()">
+                <pgz-icon [name]="'custom_edit'"></pgz-icon>
+            </div>
+
+            <div (click)="onDeleteCategory()">
+                <pgz-icon [name]="'delete'"></pgz-icon>
+            </div>
+        </div>
     } 
     <div style="margin: 10px;">
-        <div class="add-category" [routerLink]="['add-category']">
+        <div class="add-category" (click)="addCategory()">
             <pgz-add-btn></pgz-add-btn>
             Add category
         </div>
 
         @for(category of spendingCategories; track category) {
             <div (click)="onCategoryClick(category)">
-                <pgz-category-spending-card [data]="category" (onDeleteCategory)="onDeleteCategory($event)"></pgz-category-spending-card>
+                <pgz-category-spending-card [data]="category"></pgz-category-spending-card>
             </div>
         }
     </div>

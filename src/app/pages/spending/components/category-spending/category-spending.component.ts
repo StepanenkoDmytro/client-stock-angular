@@ -13,11 +13,14 @@ import { AddBtnComponent } from '../../../../core/UI/components/add-btn/add-btn.
 import { CommonModule } from '@angular/common';
 import { StatisticStateService } from '../../../statistic/service/statistic-state.service';
 import { PrevRouteComponent } from '../../../statistic/components/prev-route/prev-route.component';
+import { EditStateService } from '../../service/edit-state.service';
+import { IconComponent } from '../../../../core/UI/components/icon/icon.component';
 
 const UI_COMPONENTS = [
   CategorySpendingCardComponent,
   AddBtnComponent,
-  PrevRouteComponent
+  PrevRouteComponent,
+  IconComponent
 ];
 
 const MATERIAL_MODULES = [
@@ -45,11 +48,14 @@ export class CategorySpendingComponent implements OnInit {
     private spendingCategoryHelper: SpendingCategoryHelperService,
     private router: Router,
     private categoryStateHelper: StatisticStateService,
+
+    private editStateCategoryService: EditStateService,
     private dialog: MatDialog,
     private cdr: ChangeDetectorRef
   ) { }
 
   public async ngOnInit(): Promise<void> {
+    this.spendingsService.init();
     combineLatest([
       this.route.paramMap,
       this.spendingsService.loadByCurrentMonth(),
@@ -83,8 +89,22 @@ export class CategorySpendingComponent implements OnInit {
     this.router.navigate(['/spending/category', category.category.id]);
   }
 
-  public onDeleteCategory(category: Category): void {
-    this.showDeleteCategoryDialod(category);
+  public addCategory(): void {
+    if(this.currCategory) {
+      this.router.navigate(['/spending/add-category', this.currCategory.id]);
+    } else {
+      const parentCategoryId = this.categories[0].parent;
+      this.router.navigate(['/spending/add-category', parentCategoryId]);
+    }
+  }
+
+  public onEdit(): void {
+    this.categoryStateHelper.addBreadCrumb(this.currCategory);
+    this.router.navigate(['/spending/add-category', this.currCategory.id]);
+  }
+
+  public onDeleteCategory(): void {
+    this.showDeleteCategoryDialod(this.currCategory);
   }
 
   private showDeleteCategoryDialod(category: Category): void {

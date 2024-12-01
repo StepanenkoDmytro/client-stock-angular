@@ -32,14 +32,13 @@ export class CategorySpendingCardComponent implements OnInit {
   @Input()
   public data: ICategoryStatistic;
 
-  @Output()
-  public onDeleteCategory: EventEmitter<Category> = new EventEmitter<Category>();
+  // @Output()
+  // public onDeleteCategory: EventEmitter<Category> = new EventEmitter<Category>();
 
   public dataChildrens: ICategoryStatistic[];
   public panelOpenState: boolean = false;
 
   constructor(
-    private editStateCategoryService: EditStateService,
     private router: Router,
   ) { }
 
@@ -50,12 +49,9 @@ export class CategorySpendingCardComponent implements OnInit {
   public onCardClick(): void {
   }
 
-  public onEdit(category: Category): void {
-    this.editStateCategoryService.saveEditStateCategory(category);
-    this.router.navigate(['/spending/add-category']);
-  }
+  
 
-  public onDelete(category: Category): void {
-    this.onDeleteCategory.emit(category);
-  }
+  // public onDelete(category: Category): void {
+  //   this.onDeleteCategory.emit(category);
+  // }
 }
