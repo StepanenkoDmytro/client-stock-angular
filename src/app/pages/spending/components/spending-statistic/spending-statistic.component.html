@@ -3,13 +3,12 @@
   @if(currCategory) {
     <pgz-prev-route></pgz-prev-route>
     <h2>{{currCategory.title}} statistic</h2>
-  }@else {
+  } @else {
 
     <div class="spending-statistic--prev" [routerLink]="['/spending']">
       <pgz-arrow-back></pgz-arrow-back>
       <h2>Statistic</h2>
     </div>
-    
   }
   
   <div class="chart-container--chart">
