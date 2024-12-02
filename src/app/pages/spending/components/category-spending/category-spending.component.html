@@ -15,7 +15,7 @@
                 <p>{{ currCategory.limit }}</p>
             </div>
 
-            <div>
+            <div class="d-flex justify-content-between">
                 <p>Use</p>
                 <p>unknown</p>
             </div>
@@ -32,8 +32,8 @@
         </div>
     }
 
-    <div style="display: flex; margin-top: 32px; color: red;" (click)="onDeleteCategory()">
-        <pgz-icon [name]="'delete'"></pgz-icon>
+    <div style="display: flex; margin-left: 16px; margin-top: 32px; color: red;" (click)="onDeleteCategory()">
+        <pgz-icon style="font-size: 24px;" [name]="'delete'"></pgz-icon>
         <p style="margin-left: 16px;">Delete Category</p>
     </div>
 </div>
