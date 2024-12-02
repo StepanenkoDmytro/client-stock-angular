@@ -70,6 +70,7 @@ export class CategorySelectorComponent implements OnInit {
         this.activeCategory = selectedCategory;
         this.selectedCategory.emit(selectedCategory);
         this.ancestors = this.getAncestors(this.activeCategory, this.categories);
+        this.cdr.detectChanges();
       }
     });
   }

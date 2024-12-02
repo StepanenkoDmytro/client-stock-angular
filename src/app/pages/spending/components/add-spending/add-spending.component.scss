@@ -31,7 +31,8 @@
     display: flex;
     align-items: center;
     width: max-content;
-    padding: 8px 12px;
+    margin-top: 32px;
+    padding: 0px 12px;
     font-size: 40px;
   }
 
@@ -76,6 +77,10 @@
     margin-left: 5px;
     color: #938E8E;
   }
+}
+.add-spending--amount-input:focus ~ .add-spending--currency,
+.add-spending--amount-input:not(:placeholder-shown) ~ .add-spending--currency {
+  color: #000; 
 }
 
 .no-category {

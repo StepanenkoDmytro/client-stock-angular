@@ -51,7 +51,7 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
   public categories: Category[];
   public selectedCategory: Category;
   public commentOfProduct: string = '';
-  public costOfProduct: string = '0';
+  public costOfProduct: string = '';
   public date: Date = moment().toDate();
 
   public editSpending: Spending = null;
@@ -64,6 +64,7 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
   ) { }
 
   public async ngOnInit(): Promise<void> {
+    this.spendingsService.init();
     this.spendingsService.getAllCategories().subscribe(categories => {
       this.categories = categories[1].children;
 
