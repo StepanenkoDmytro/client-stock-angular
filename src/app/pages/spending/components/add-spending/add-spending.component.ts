@@ -66,6 +66,8 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
   public async ngOnInit(): Promise<void> {
     this.spendingsService.getAllCategories().subscribe(categories => {
       this.categories = categories[1].children;
+
+      //TODO: or unselected?
       this.selectedCategory = this.categories.find(category => category.title === 'Other');
 
       if(this.editSpending && this.editSpending.category) {

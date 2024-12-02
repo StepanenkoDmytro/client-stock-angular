@@ -25,16 +25,14 @@
             </div>
         </section>
     } 
-    <div style="margin: 10px;">
-        <div class="add-category" (click)="addCategory()">
-            <pgz-add-btn></pgz-add-btn>
-            Add category
-        </div>
-
-        @for(category of spendingCategories; track category) {
-            <div (click)="onCategoryClick(category)">
-                <pgz-category-spending-card [data]="category"></pgz-category-spending-card>
-            </div>
-        }
+    <div class="add-category" (click)="addCategory()">
+        <pgz-add-btn></pgz-add-btn>
+        Add category
     </div>
+
+    @for(category of spendingCategories; track category) {
+        <div (click)="onCategoryClick(category)">
+            <pgz-category-spending-card [data]="category"></pgz-category-spending-card>
+        </div>
+    }
 </div>

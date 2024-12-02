@@ -1,4 +1,4 @@
-<div style="padding: 10px; height: 100%;">
+<div class="spendings-history">
     
     <pgz-filter-wrapper 
         [items]="categoriesForFilter"
@@ -6,69 +6,23 @@
         (selectedIdsChange)="updateSelectedCategories($event)"
         [contentTemplate]="statisticTemplate">
         <a href="spending/calendar" class="spendings-history--calendar">
-            <p style="margin: 0">Calendar</p>
-            <mat-icon>calendar_month</mat-icon>
+            <pgz-icon [name]="'custom_calendar'"></pgz-icon>
         </a>
     </pgz-filter-wrapper>
 
     <ng-template #statisticTemplate>
-        <section>
-            <div class="spendings-history--list">
-                @for(dateSpending of spendingsGroupedByDate.keys(); track dateSpending) {
-                    <p class="spendings-history--list-item">{{ dateSpending }}</p>
+        <section class="spendings-history--list">
+            @for(dateSpending of spendingsGroupedByDate.keys(); track dateSpending) {
+                <p class="spendings-history--list-item">{{ dateSpending }}</p>
 
-                    @for(spending of spendingsGroupedByDate.get(dateSpending); track spending) {
-                        <pgz-history-spending-card  [spending]="spending"></pgz-history-spending-card>
-
-                    }
+                @for(spending of spendingsGroupedByDate.get(dateSpending); track spending) {
+                    <pgz-history-spending-card  [spending]="spending"></pgz-history-spending-card>
                 }
+            }
 
-                @if(spendingsGroupedByDate.size === 0) {
-                    <p style="text-align: center;">Empty list</p>
-                }
-            </div>
+            @if(spendingsGroupedByDate.size === 0) {
+                <p>Empty list</p>
+            }
         </section>
     </ng-template>
-<!-- <mat-drawer-container class="spendings-history" [hasBackdrop]="false" autosize>
-    <mat-drawer #drawer mode="over">
-        <section class="spendings-history--filters">
-            <mat-checkbox 
-                [checked]="isAllCategoriesChecked"
-                (change)="toggleAllCategories()"
-                >
-                <p>All Categories</p>
-            </mat-checkbox>
-            @for(category of categories; track category) {
-                <mat-checkbox 
-                    [checked]="selectedCategories.includes(category)"
-                    (change)="onCategoryChange(category, $event.checked)"
-                    >
-                    <p>{{ category.title }}</p>
-                </mat-checkbox>
-            }
-        </section>
-    </mat-drawer>
-    
-    <section class="d-flex justify-content-between">
-        
-        <button type="button" mat-button (click)="drawer.toggle()">
-            Filter
-        </button>
-    </section>
-
-    <div class="spendings-history--list">
-        @for(dateSpending of spendingsGroupedByDate.keys(); track dateSpending) {
-            <p class="spendings-history--list-item">{{ dateSpending }}</p>
-
-            @for(spending of spendingsGroupedByDate.get(dateSpending); track spending) {
-                <pgz-history-spending-card  [spending]="spending"></pgz-history-spending-card>
-
-            }
-        }
-
-        @if(spendingsGroupedByDate.size === 0) {
-            <p style="text-align: center;">Empty list</p>
-          }
-    </div>
-</mat-drawer-container> -->
 </div>

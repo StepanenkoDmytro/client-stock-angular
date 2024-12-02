@@ -15,11 +15,13 @@ import { DateFormatPipe } from '../../../../pipe/date-format.pipe';
 import { combineLatest } from 'rxjs';
 import { SpendingsService } from '../../../../service/spendings.service';
 import { FilterWrapperComponent } from '../../../../core/UI/components/filter-wrapper/filter-wrapper.component';
+import { IconComponent } from '../../../../core/UI/components/icon/icon.component';
 
 
 const UI_COMPONENTS = [
   HistorySpendingCardComponent,
-  FilterWrapperComponent
+  FilterWrapperComponent,
+  IconComponent
 ];
 
 const MATERIAL_MODULES = [
@@ -63,7 +65,6 @@ export class HistorySpendingComponent implements OnInit {
   ) { }
 
   get selectedCategoriesSet(): Set<string> {
-    // this.selectedCategories.map()
     return new Set(this.selectedCategories.map(category => category.id));
   }
 

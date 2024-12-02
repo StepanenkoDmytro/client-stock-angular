@@ -291,9 +291,21 @@ p {
   background: inherit !important;
 }
 
-  .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:not([aria-disabled=true]):hover {
-      background: inherit!important;
-  }
+.mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:not([aria-disabled=true]):hover {
+  background: inherit!important;
+}
+
+.mat-expansion-panel-header {
+  padding: 0!important;
+}
+
+.mat-content.mat-content-hide-toggle {
+  margin-right: 0!important;
+}
+
+.mat-expansion-panel-header-title, .mat-expansion-panel-header-description {
+  margin-right: 0!important;
+}
 
 
 /** Styles for D3 Library **/
