@@ -7,10 +7,6 @@
             <div (click)="onEdit()">
                 <pgz-icon [name]="'custom_edit'"></pgz-icon>
             </div>
-
-            <div (click)="onDeleteCategory()">
-                <pgz-icon [name]="'delete'"></pgz-icon>
-            </div>
         </div>
 
         <section class="category-limit">
@@ -35,4 +31,9 @@
             <pgz-category-spending-card [data]="category"></pgz-category-spending-card>
         </div>
     }
+
+    <div style="display: flex; margin-top: 32px; color: red;" (click)="onDeleteCategory()">
+        <pgz-icon [name]="'delete'"></pgz-icon>
+        <p style="margin-left: 16px;">Delete Category</p>
+    </div>
 </div>
