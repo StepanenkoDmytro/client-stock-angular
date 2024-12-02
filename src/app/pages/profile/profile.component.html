@@ -25,22 +25,20 @@
             } @else {
                 <p>-</p>
             }
+
+            <div>
+                <mat-slide-toggle [(ngModel)]="isChecked" (ngModelChange)="onToggleChange()">
+                    {{ isChecked ? 'Dev Mode' : 'Stage Mode' }}
+                </mat-slide-toggle>
+        
+            </div>
         </div>
     </section>
-
-    <!-- <div class="d-flex">
-        <mat-form-field class="w-100" appearance="outline">
-            <mat-label>Monthly budget</mat-label>
-            <input matInput type="number" [(ngModel)]="monthlyBudget">
-        </mat-form-field>
-        <button class="profile--btn" mat-flat-button (click)="saveMonthlyBudget()">Save</button>
-    </div>  -->
 
     <pgz-general></pgz-general>
     <pgz-system></pgz-system>
     <pgz-feedback></pgz-feedback>
-
-    <!-- <mat-slide-toggle [formControl]="isDarkMode">Slide me!</mat-slide-toggle>-->
+      
 
 
     @if(isAuthorizedUser) {

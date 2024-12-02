@@ -33,6 +33,7 @@
   
   &--email {
     display: flex;
+    justify-content: space-between;
     color: var(--bs-success);
     margin-top: 10px;
   }

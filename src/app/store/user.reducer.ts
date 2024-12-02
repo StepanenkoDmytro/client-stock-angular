@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { IUser } from "../model/User";
+import { IUser, UserMode } from "../model/User";
 
 import { loadUser, logout, saveUser } from "./user.actions";
 
@@ -11,7 +11,8 @@ export interface IUserState {
 
 const initialUser: IUser = {
     email: '',
-    portfolioID: null
+    portfolioID: null,
+    mode: UserMode.Stage
 }
 
 const initialUserState: IUserState = {

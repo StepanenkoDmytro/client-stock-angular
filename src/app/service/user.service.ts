@@ -30,6 +30,10 @@ export class UserService {
     this.store$.dispatch(saveUser({user: newUser}));
   }
 
+  public saveIUser(user: IUser): void {
+    this.store$.dispatch(saveUser({user: user}));
+  }
+
   public logout(): void {
     this.store$.dispatch(logout());
   }

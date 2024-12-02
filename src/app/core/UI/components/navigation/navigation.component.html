@@ -1,15 +1,35 @@
-<div class="navigation">
-  <mat-icon class="navigation--element" *ngFor="let item of navigationItemsLeft"
-            [routerLink]="item.path" [routerLinkActive]="'navigation--element__active'">
-    {{ item.icon }}
+<div class="navigation" 
+    [class.flipping]="isFlipping"
+    >
+  <mat-icon class="navigation--element"
+            [routerLink]="SPENDING_NAV_ITEM.path" 
+            [routerLinkActive]="'navigation--element__active'">
+    {{ SPENDING_NAV_ITEM.icon }}
   </mat-icon>
+
+  @if(currentMode === UserMode.Dev) {
+    <mat-icon class="navigation--element"
+              [routerLink]="SAVINGS_NAV_ITEM.path" 
+              [routerLinkActive]="'navigation--element__active'">
+      {{ SAVINGS_NAV_ITEM.icon }}
+    </mat-icon>
+  }
 
   <div (click)="onButtonClick()">
     <pgz-add-btn></pgz-add-btn>
   </div>
 
-  <mat-icon class="navigation--element" *ngFor="let item of navigationItemsRight"
-            [routerLink]="item.path" [routerLinkActive]="'navigation--element__active'">
-    {{ item.icon }}
+  @if(currentMode === UserMode.Dev) {
+    <mat-icon class="navigation--element"
+              [routerLink]="GOALS_NAV_ITEM.path"
+              [routerLinkActive]="'navigation--element__active'">
+      {{ GOALS_NAV_ITEM.icon }}
+    </mat-icon>
+  }
+
+  <mat-icon class="navigation--element"
+            [routerLink]="SETTINGS_NAV_ITEM.path" 
+            [routerLinkActive]="'navigation--element__active'">
+    {{ SETTINGS_NAV_ITEM.icon }}
   </mat-icon>
 </div>

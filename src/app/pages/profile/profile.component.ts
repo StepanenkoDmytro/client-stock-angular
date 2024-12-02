@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -12,6 +12,7 @@ import { FeedbackComponent } from './components/feedback/feedback.component';
 import { IconComponent } from '../../core/UI/components/icon/icon.component';
 import { GeneralComponent } from './components/general/general.component';
 import { SystemComponent } from './components/system/system.component';
+import { IUser, UserMode } from '../../model/User';
 
 
 const UI_MODULES = [
@@ -39,6 +40,10 @@ const MATERIAL_MODULES = [
   imports: [...UI_MODULES, ...MATERIAL_MODULES],
 })
 export class ProfileComponent implements OnInit {
+  public userMode: UserMode = UserMode.Stage;
+  public isChecked: boolean = false;
+
+  public user: IUser | null = null;
   public userEmail: string; 
   public isAuthorizedUser: boolean = false;
 
@@ -46,20 +51,35 @@ export class ProfileComponent implements OnInit {
     private authService: AuthService,
     private userService: UserService,
     private router: Router,
+    private cdr: ChangeDetectorRef
   ) { }
 
   public ngOnInit(): void {
     this.userService.getUser().subscribe(user => {
-      if(user && user.email) {
+      this.user = user;
+      this.userMode = user.mode;
+      if(user && user.email && user.mode) {
         this.userEmail = user.email;
         this.isAuthorizedUser = true;
+        
       } else {
         this.userEmail = 'User not registered';
         this.isAuthorizedUser = false;
       }
     });
+  }
 
-  
+  public onToggleChange(): void {
+    const newMode = this.isChecked ? UserMode.Dev : UserMode.Stage;
+    this.changeMode(newMode);
+  }
+
+  public changeMode(newMode: UserMode): void {
+    if (this.userMode) {
+      const updatedUser: IUser = { ...this.user, mode: newMode };
+      this.userService.saveIUser(updatedUser);
+      this.cdr.detectChanges();
+    }
   }
 
   public logout(): void {
