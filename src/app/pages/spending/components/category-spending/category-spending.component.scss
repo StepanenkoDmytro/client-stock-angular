@@ -6,6 +6,15 @@
   background-color: #fff;
 }
 
+.category-limit {
+  margin-bottom: 32px;
+
+  &--field {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
 .category {
 
   &--routing {

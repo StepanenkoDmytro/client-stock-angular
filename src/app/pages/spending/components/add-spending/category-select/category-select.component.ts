@@ -32,7 +32,6 @@ export class CategorySelectorComponent implements OnInit {
   public ngOnInit(): void {
     if(this.activeCategory) {
       this.ancestors = this.getAncestors(this.activeCategory, this.categories);
-      console.log(this.ancestors);
     }
   }
 
@@ -70,8 +69,7 @@ export class CategorySelectorComponent implements OnInit {
       if (selectedCategory) {
         this.activeCategory = selectedCategory;
         this.selectedCategory.emit(selectedCategory);
-        // this.ancestors = this.getAncestors(this.activeCategory, this.categories);
-        // this.cdr.detectChanges();
+        this.ancestors = this.getAncestors(this.activeCategory, this.categories);
       }
     });
   }

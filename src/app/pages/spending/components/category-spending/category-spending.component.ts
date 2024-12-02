@@ -48,7 +48,6 @@ export class CategorySpendingComponent implements OnInit {
     private spendingCategoryHelper: SpendingCategoryHelperService,
     private router: Router,
     private categoryStateHelper: StatisticStateService,
-
     private editStateCategoryService: EditStateService,
     private dialog: MatDialog,
     private cdr: ChangeDetectorRef
@@ -61,7 +60,7 @@ export class CategorySpendingComponent implements OnInit {
       this.spendingsService.loadByCurrentMonth(),
       this.spendingsService.getAllCategories()
     ]).subscribe( async ([paramMap, spendings, categories]) => {
-      // debugger;
+
       const categoryId = paramMap.get('id');
       
       this.spendings = [...spendings];
@@ -100,6 +99,7 @@ export class CategorySpendingComponent implements OnInit {
 
   public onEdit(): void {
     this.categoryStateHelper.addBreadCrumb(this.currCategory);
+    this.editStateCategoryService.saveEditStateCategory(this.currCategory);
     this.router.navigate(['/spending/add-category', this.currCategory.id]);
   }
 

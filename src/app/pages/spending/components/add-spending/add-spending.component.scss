@@ -1,15 +1,8 @@
 :host {
   display: block;
-  position: absolute;
-  background-color: #fff;
-  height: 100%;
-  width: 100%;
-  z-index: 1;
 }
 
 .add-spending {
-  margin: 1.5rem;
-  height: 100%;
   display: flex;
   flex-direction: column;
 

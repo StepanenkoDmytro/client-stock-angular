@@ -67,6 +67,8 @@ export class AppComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    //for nav height menu
+    // const userAgent = window.navigator.userAgent;
     const isFirstVisit = this.darkLightModeService.mode === null;
     if(isFirstVisit) {
       this.darkLightModeService.set('light');

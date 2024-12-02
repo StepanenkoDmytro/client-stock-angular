@@ -4,16 +4,13 @@
         <span>Back</span>
     </div>
     <div class="category-item">
-        <!-- <mat-form-field appearance="outline" floatLabel="always" class="w-100"> -->
         <p class="category-item--title">Name category</p>
         <input matInput type="text" class="category--name" placeholder="Enter name of category" style="font-size: 1.5rem;" [formControl]="categoryTitleCtrl">
-        <!-- </mat-form-field> -->
     </div>
     <div class="category-item">
         <p class="category-item--title">Icon</p>
         <div class="d-flex">
             <pgz-icon class="category--icon" [name]="selectedIcon"></pgz-icon>
-            <!-- <button (click)="openIconPicker()">Choose icon</button> -->
             <pgz-icon-picker id="iconPicker" (onSelectIcon)="onSelectIcon($event)"></pgz-icon-picker>
         </div>
     </div>
@@ -30,6 +27,14 @@
             <button (click)="openColorPicker()">Choose color</button>
         </div>
         
+    </div>
+
+    <div class="category-item">
+        <p class="category-item--title">Limit category</p>
+        <div class="d-flex">
+            <input type="number" inputmode="numeric" placeholder="0" [(ngModel)]="limitOfCaregory" pgzMoney>
+            <p class="add-spending--currency">$</p>
+        </div>
     </div>
     
     <div class="add-edit-category--actions">

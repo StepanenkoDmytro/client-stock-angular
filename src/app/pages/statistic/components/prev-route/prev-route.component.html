@@ -1,6 +1,6 @@
 <section class="bread-crumbs">
     @if(breadCrumbs.length <= 1) {
-        <div [routerLink]="'/statistic'">
+        <div [routerLink]="'/spending'">
             <span><mat-icon>keyboard_backspace</mat-icon></span>
             <span>Back</span>
         </div>
@@ -9,7 +9,7 @@
     @if(breadCrumbs.length > 1) {
         <div class="d-flex">
             <div class="bread-crumb">
-                <a [routerLink]="'/statistic'">Global</a>
+                <a [routerLink]="'/spending'">Global</a>
             </div>
             @for(crumb of breadCrumbs;let idx = $index; track crumb) {
                 <div class="bread-crumb">

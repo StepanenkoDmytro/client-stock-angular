@@ -1,3 +1,4 @@
+<section class="add-spending page">
 <div class="add-spending--header" (click)="prevRoute()">
     <div class="add-spending--header-btn"> 
         <pgz-arrow-back></pgz-arrow-back>
@@ -9,44 +10,31 @@
         <p>Add spending</p>
     }
 </div>
-<section class="add-spending">
-    <!-- <mat-form-field appearance="outline" floatLabel="always" class="w-100"> -->
-        <!-- <mat-label>Sum</mat-label> -->
-        <div class="add-spending--input">
-            <input class="add-spending--amount-input" type="number" inputmode="numeric" placeholder="0"[(ngModel)]="costOfProduct" pgzMoney>
-            <p class="add-spending--currency">$</p>
-        </div>
-    <!-- </mat-form-field> -->
+
+    <div class="add-spending--input">
+        <input class="add-spending--amount-input" type="number" inputmode="numeric" placeholder="0"[(ngModel)]="costOfProduct" pgzMoney>
+        <p class="add-spending--currency">$</p>
+    </div>
 
     <p class="add-spending--title-value">Category</p>
-    <pgz-category-selector [categories]="categories" [activeCategory]="this.editSpending?.category" (selectedCategory)="selectCategory($event)"></pgz-category-selector>
-    <!-- <pgz-category-select [categories]="categories" [selectedCategory]="selectedCategory" [(ngModel)]="selectedCategory"></pgz-category-select> -->
+    <pgz-category-selector [categories]="categories" [activeCategory]="selectedCategory" (selectedCategory)="selectCategory($event)"></pgz-category-selector>
+    
+    <p class="add-spending--title-value">Date:</p>
+    <div class="d-flex">
+        <!-- <mat-label>Choose a date</mat-label> -->
+        <input class="add-spending--input-date" [matDatepicker]="picker" [(ngModel)]="date">
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </div>
 
-    <!-- <mat-form-field appearance="outline" class="w-100"> -->
-    <!-- <div> -->
-        <p class="add-spending--title-value">Date:</p>
-        <div class="d-flex">
-            <!-- <mat-label>Choose a date</mat-label> -->
-            <input class="add-spending--input-date" [matDatepicker]="picker" [(ngModel)]="date">
-            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-        </div>
-    <!-- </div> -->
-    <!-- </mat-form-field> -->
-
-    <!-- <mat-form-field appearance="outline" floatLabel="always" class="w-100">
-        <mat-label>Comment</mat-label> -->
-        <div>
-            <p class="add-spending--title-value">Comment (optional)</p>
-            <textarea class="add-spending--text-area" matInput placeholder="Ex. It makes me feel..." [(ngModel)]="commentOfProduct"></textarea>
-        </div>
-    <!-- </mat-form-field> -->
+    <div>
+        <p class="add-spending--title-value">Comment (optional)</p>
+        <textarea class="add-spending--text-area" matInput placeholder="Ex. It makes me feel..." [(ngModel)]="commentOfProduct"></textarea>
+    </div>
 
     <div class="choise-btn">
         <div (click)="save()">
             <pgz-accept-btn></pgz-accept-btn>
         </div>
-        <!-- <button mat-flat-button class="spending-btn" (click)="saveAndNew()">{{ 'Save + New' }}</button>
-        <button mat-flat-button class="spending-btn spending-btn--save" (click)="save()">{{ 'Save' }}</button> -->
     </div>
 </section>

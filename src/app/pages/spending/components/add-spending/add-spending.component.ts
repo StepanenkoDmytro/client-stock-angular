@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,11 +15,8 @@ import { EditStateService } from '../../service/edit-state.service';
 import { HttpClientModule } from '@angular/common/http';
 import { Spending } from '../../model/Spending';
 import { MoneyDirective } from '../../../../directive/money.directive';
-import { IconComponent } from "../../../../core/UI/components/icon/icon.component";
 import { ArrowBackComponent } from '../../../../core/UI/components/arrow-back/arrow-back.component';
 import { AcceptBtnComponent } from '../../../../core/UI/components/accept-btn/accept-btn.component';
-import { CategoryBottomSheetComponent } from '../../../../core/UI/components/category-bottom-sheet/category-bottom-sheet.component';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { CategorySelectorComponent } from './category-select/category-select.component';
 
 
@@ -27,7 +24,6 @@ const UI_MODULES = [
   MoneyDirective,
   ArrowBackComponent,
   AcceptBtnComponent,
-  CategoryBottomSheetComponent,
   CategorySelectorComponent
 ];
 
@@ -51,11 +47,7 @@ const MATERIAL_MODULES = [
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddSpendingComponent implements OnInit, OnDestroy {
-selectCategory(selectedCategory: Category) {
-  if(selectedCategory) {
-    this.selectedCategory = selectedCategory;
-  }
-}
+
   public categories: Category[];
   public selectedCategory: Category;
   public commentOfProduct: string = '';
@@ -68,12 +60,17 @@ selectCategory(selectedCategory: Category) {
     private spendingsService: SpendingsService,
     private router: Router,
     private editStateSpendingService: EditStateService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   public async ngOnInit(): Promise<void> {
     this.spendingsService.getAllCategories().subscribe(categories => {
       this.categories = categories[1].children;
       this.selectedCategory = this.categories.find(category => category.title === 'Other');
+
+      if(this.editSpending && this.editSpending.category) {
+        this.selectedCategory = this.editSpending.category;
+      }
     });
 
     this.editSpending = this.editStateSpendingService.editStateSpending;
@@ -86,15 +83,16 @@ selectCategory(selectedCategory: Category) {
     }
   }
 
+  public selectCategory(selectedCategory: Category): void {
+    if(selectedCategory) {
+      this.selectedCategory = selectedCategory;
+    }
+  }
+
 
   public save(): void {
     this.saveSpending();
     this.prevRoute();
-  }
-
-  public saveAndNew(): void {
-    this.saveSpending();
-    this.resetForm();
   }
 
   private saveSpending(): void {
@@ -106,14 +104,6 @@ selectCategory(selectedCategory: Category) {
     
     const newSpending = this.buildNewSpending();
     this.spendingsService.addSpending(newSpending);
-  }
-
-  private resetForm(): void {
-    this.selectedCategory = Category.default;
-    this.commentOfProduct = '';
-    this.costOfProduct = null;
-    this.date = new Date();
-    this.editStateSpendingService.editStateSpending = null;
   }
 
   private buildNewSpending(id?: string): Spending {

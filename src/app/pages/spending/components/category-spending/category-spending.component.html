@@ -1,4 +1,5 @@
-<div [class.category-spending]="currCategory">
+<div [class.category-spending]="currCategory"
+    [class.page]="currCategory">
     @if(currCategory) {
         <div class="category--routing">
             <pgz-prev-route></pgz-prev-route>
@@ -11,6 +12,18 @@
                 <pgz-icon [name]="'delete'"></pgz-icon>
             </div>
         </div>
+
+        <section class="category-limit">
+            <div class="category-limit--field">
+                <p>Limit</p>
+                <p>{{ currCategory.limit }}</p>
+            </div>
+
+            <div>
+                <p>Use</p>
+                <p>unknown</p>
+            </div>
+        </section>
     } 
     <div style="margin: 10px;">
         <div class="add-category" (click)="addCategory()">

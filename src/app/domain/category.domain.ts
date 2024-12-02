@@ -11,6 +11,7 @@ export interface ICategoryApi {
   title: string;
   icon: string;
   color: string;
+  limit: number;
   parent: string,
   saved: boolean,
 }
@@ -45,6 +46,7 @@ export class Category implements ICategory {
   public parent: string | null = null;
   public children: Category[] = [];
   public color: string | null = null;
+  public limit: number = 0;
 
   constructor(
     public title: string = '',
@@ -53,7 +55,8 @@ export class Category implements ICategory {
     public isSaved: boolean = false,
     id?: string | null,
     parent?: string | null,
-    color?: string | null
+    color?: string | null,
+    limit?: number | null
   ) {
 
     if(id) {
@@ -64,6 +67,7 @@ export class Category implements ICategory {
     this.parent = parent;
     this.children = children;
     this.setColor(color);
+    this.setLimit(limit);
   }
 
   public get isRoot(): boolean {
@@ -72,6 +76,12 @@ export class Category implements ICategory {
 
   public setParent(parentId: string | null): void {
     this.parent = parentId;
+  }
+
+  public setLimit(limit: number | null): void {
+    if(limit) {
+      this.limit = limit;
+    }
   }
 
   public setColor(colorId: string | null): void {
@@ -108,6 +118,7 @@ export class Category implements ICategory {
       title: category.title,
       icon: category.icon,
       color: category.color,
+      limit: category.limit,
       parent: category.parent,
       saved: category.isSaved,
     }
@@ -122,6 +133,7 @@ export class Category implements ICategory {
       category.id,
       category.parent,
       category.color,
+      category.limit
     );
 
     return serverCategory;
