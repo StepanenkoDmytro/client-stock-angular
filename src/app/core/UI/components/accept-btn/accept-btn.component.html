@@ -1,4 +1,5 @@
-<button class="circle-button">
-    <span class="checkmark">✔</span>
-  </button>
-  
+<button 
+  class="circle-button" 
+  [ngStyle]="{ 'background-color': active ? 'var(--bs-success)' : 'var(--bs-gray-200)' }">
+    <span class="checkmark" [ngStyle]="{ 'color': active ? '#fff' : '#757575' }">✔</span>
+</button>

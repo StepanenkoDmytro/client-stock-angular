@@ -32,9 +32,8 @@
         <textarea class="add-spending--text-area" matInput placeholder="Ex. It makes me feel..." [(ngModel)]="commentOfProduct"></textarea>
     </div>
 
-    <div class="choise-btn">
-        <div (click)="save()">
-            <pgz-accept-btn></pgz-accept-btn>
-        </div>
+    <div class="choise-btn" (click)="save()">
+        
+        <pgz-accept-btn [active]="canSave"></pgz-accept-btn>
     </div>
 </section>

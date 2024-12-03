@@ -92,6 +92,13 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
     }
   }
 
+  get canSave(): boolean {
+    if(this.selectedCategory !== null && this.costOfProduct !== null && parseInt(this.costOfProduct) > 0 ) {
+      return true;
+    }
+    return false;
+  }
+
 
   public save(): void {
     this.saveSpending();
