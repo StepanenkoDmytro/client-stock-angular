@@ -1,51 +1,53 @@
-<section class="add-edit-category">
-    <div class="back" [routerLink]="['/spending']">
-        <span><pgz-icon [name]="'keyboard_backspace'"></pgz-icon></span>
-        <span>Back</span>
+<section class="add-edit-category page">
+    <div class="add-edit-category--header" [routerLink]="['/spending']">
+        <div class="add-edit-category--header-btn"> 
+            <pgz-arrow-back></pgz-arrow-back>
+        </div> 
+            
+        @if(editCategory) {
+            <p>Edit category</p>
+        } @else {
+            <p>Add category</p>
+        }
     </div>
-    <div class="category-item">
-        <p class="category-item--title">Name category</p>
-        <input matInput type="text" class="category--name" placeholder="Enter name of category" style="font-size: 1.5rem;" [formControl]="categoryTitleCtrl">
-    </div>
-    <div class="category-item">
-        <p class="category-item--title">Icon</p>
-        <div class="d-flex">
-            <pgz-icon class="category--icon" [name]="selectedIcon"></pgz-icon>
+    
+    <pgz-form-field>
+        <label style="margin-top: 32px;">Name category</label>
+        <div  style="margin-top: 16px;">
+            <input type="text" class="add-edit-category--name" placeholder="Enter name of category" style="font-size: 18px;" [formControl]="categoryTitleCtrl">
+        </div>
+    </pgz-form-field>
+
+    <pgz-form-field>
+        <label style="margin-top: 32px;">Icon</label>
+        <div class="d-flex"  style="margin-top: 16px; align-items: center;">
+            <pgz-icon class="category--icon" style="margin-right: 8px;" [name]="selectedIcon"></pgz-icon>
             <pgz-icon-picker id="iconPicker" (onSelectIcon)="onSelectIcon($event)"></pgz-icon-picker>
         </div>
-    </div>
+    </pgz-form-field>
 
-    <div class="category-item">
-        <p class="category-item--title">Color</p>
-        <div class="d-flex">
+    <pgz-form-field>
+        <label style="margin-top: 32px;">Color</label>
+        <div class="d-flex"  style="margin-top: 16px;  align-items: center;">
             <div class="add-edit-category--choose-color">
                 <pgz-icon [name]="'custom_color_icon'"></pgz-icon>
                 <div class="add-edit-category--selected-color" [ngStyle]='{ "background-color": selectedColor }'></div>
-                
             </div>
             <input id="colorInput" type="color" [(ngModel)]="selectedColor" style="display: none;">
-            <button (click)="openColorPicker()">Choose color</button>
+            <button class="add-edit-category--choose-color__btn" (click)="openColorPicker()">Choose color</button>
         </div>
         
-    </div>
+    </pgz-form-field>
 
-    <div class="category-item">
-        <p class="category-item--title">Limit category</p>
-        <div class="d-flex">
-            <input type="number" inputmode="numeric" placeholder="0" [(ngModel)]="limitOfCaregory" pgzMoney>
+    <pgz-form-field>
+        <label style="margin-top: 32px;">Limit category</label>
+        <div class="add-edit-category--limit" style="margin-top: 16px;">
+            <input class="add-edit-category--name" type="number" inputmode="numeric" placeholder="0" [(ngModel)]="limitOfCaregory" pgzMoney>
             <p class="add-spending--currency">$</p>
         </div>
-    </div>
+    </pgz-form-field>
     
-    <div class="add-edit-category--actions">
-        <button class="add-edit-category--btn" mat-button [routerLink]="['/spending']">Cancel</button>
-        
-        <button class="add-edit-category--btn save" mat-button (click)="onAdd()">
-            @if(!!!this.editCategory) {
-                Add
-            } @else {
-                Save
-            }
-        </button>
+    <div class="choise-btn" (click)="onAdd()">
+        <pgz-accept-btn [active]="canSave"></pgz-accept-btn>
     </div>
 </section>

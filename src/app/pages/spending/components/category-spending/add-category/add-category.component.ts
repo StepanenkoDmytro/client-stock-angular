@@ -12,11 +12,17 @@ import { IconPickerComponent } from '../../../../../core/UI/components/icon-pick
 import { EditStateService } from '../../../service/edit-state.service';
 import { combineLatest } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { FormFieldComponent } from '../../../../../core/UI/components/form-field/form-field.component';
+import { AcceptBtnComponent } from '../../../../../core/UI/components/accept-btn/accept-btn.component';
+import { ArrowBackComponent } from '../../../../../core/UI/components/arrow-back/arrow-back.component';
 
 
 const UI_MODULES = [
   IconComponent,
-  IconPickerComponent
+  IconPickerComponent,
+  FormFieldComponent,
+  AcceptBtnComponent,
+  ArrowBackComponent
 ];
 
 const MATERIAL_MODULES = [
@@ -114,5 +120,12 @@ export class AddCategoryComponent implements OnInit {
     if (colorInput) {
       colorInput.click(); 
     }
+  }
+  
+  get canSave(): boolean {
+    if(this.selectedParentCategory !== null && this.categoryTitleCtrl.value.length > 0) {
+      return true;
+    }
+    return false;
   }
 }

@@ -11,6 +11,11 @@
     height: 50px;
     line-height: 50px;
   }
+
+  &--btn {
+    border-radius: 20px;
+    background: #EAEAEA; padding: 10px;
+  }
 }
 
 .icon-picker {

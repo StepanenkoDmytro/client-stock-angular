@@ -18,13 +18,15 @@ import { MoneyDirective } from '../../../../directive/money.directive';
 import { ArrowBackComponent } from '../../../../core/UI/components/arrow-back/arrow-back.component';
 import { AcceptBtnComponent } from '../../../../core/UI/components/accept-btn/accept-btn.component';
 import { CategorySelectorComponent } from './category-select/category-select.component';
+import { FormFieldComponent } from '../../../../core/UI/components/form-field/form-field.component';
 
 
 const UI_MODULES = [
   MoneyDirective,
   ArrowBackComponent,
   AcceptBtnComponent,
-  CategorySelectorComponent
+  CategorySelectorComponent,
+  FormFieldComponent
 ];
 
 const MATERIAL_MODULES = [

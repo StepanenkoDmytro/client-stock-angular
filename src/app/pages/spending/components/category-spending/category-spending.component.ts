@@ -20,7 +20,7 @@ const UI_COMPONENTS = [
   CategorySpendingCardComponent,
   AddBtnComponent,
   PrevRouteComponent,
-  IconComponent
+  IconComponent,
 ];
 
 const MATERIAL_MODULES = [

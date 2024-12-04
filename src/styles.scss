@@ -197,6 +197,11 @@ p {
   margin: 0;
 }
 
+input {
+  border: none;
+  background-color: inherit;
+}
+
 .btn {
   font-size: 17px;
   padding: 20px;
@@ -209,6 +214,14 @@ p {
   width: 100%;
   height: 100%;
   z-index: 1;
+}
+
+.choise-btn {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin-top: 100px;
+  margin-bottom: 15px;
 }
 
 .add-category {
