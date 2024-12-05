@@ -2,7 +2,7 @@
     <div class="total-card-header">
         <div class="total-card-header--info">
             <p>Spent</p>
-            <p class="total-card-header--val">10000$</p>
+            <p class="total-card-header--val">{{ 10000 | moneyFormat}}$</p>
         </div>
         <div class="total-card-header--btn" [routerLink]="['statistic']">
             <pgz-icon [name]="'custom_statistic'"></pgz-icon>

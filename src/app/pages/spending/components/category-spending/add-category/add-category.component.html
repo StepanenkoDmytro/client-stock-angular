@@ -28,7 +28,7 @@
 
     <pgz-form-field>
         <label style="margin-top: 32px;">Color</label>
-        <div class="d-flex"  style="margin-top: 16px;  align-items: center;">
+        <div class="d-flex"  style="margin-top: 16px; align-items: center;">
             <div class="add-edit-category--choose-color">
                 <pgz-icon [name]="'custom_color_icon'"></pgz-icon>
                 <div class="add-edit-category--selected-color" [ngStyle]='{ "background-color": selectedColor }'></div>
@@ -46,6 +46,11 @@
             <p class="add-spending--currency">$</p>
         </div>
     </pgz-form-field>
+
+    <div style="display: flex; margin-left: 16px; margin-top: 32px; color: red;" (click)="onDeleteCategory()">
+        <pgz-icon style="font-size: 24px;" [name]="'delete'"></pgz-icon>
+        <p style="margin-left: 16px;">Delete Category</p>
+    </div>
     
     <div class="choise-btn" (click)="onAdd()">
         <pgz-accept-btn [active]="canSave"></pgz-accept-btn>

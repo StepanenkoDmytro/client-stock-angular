@@ -3,7 +3,7 @@
     @if(currCategory) {
         <div class="category--routing">
             <pgz-prev-route></pgz-prev-route>
-            <h2>{{currCategory.title}} statistic</h2>
+            <h2>{{currCategory.title}}</h2>
             <div (click)="onEdit()">
                 <pgz-icon [name]="'custom_edit'"></pgz-icon>
             </div>
@@ -31,9 +31,4 @@
             <pgz-category-spending-card [data]="category"></pgz-category-spending-card>
         </div>
     }
-
-    <div style="display: flex; margin-left: 16px; margin-top: 32px; color: red;" (click)="onDeleteCategory()">
-        <pgz-icon style="font-size: 24px;" [name]="'delete'"></pgz-icon>
-        <p style="margin-left: 16px;">Delete Category</p>
-    </div>
 </div>

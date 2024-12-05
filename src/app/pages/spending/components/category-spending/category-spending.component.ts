@@ -49,7 +49,6 @@ export class CategorySpendingComponent implements OnInit {
     private router: Router,
     private categoryStateHelper: StatisticStateService,
     private editStateCategoryService: EditStateService,
-    private dialog: MatDialog,
     private cdr: ChangeDetectorRef
   ) { }
 
@@ -100,30 +99,6 @@ export class CategorySpendingComponent implements OnInit {
   public onEdit(): void {
     this.categoryStateHelper.addBreadCrumb(this.currCategory);
     this.editStateCategoryService.saveEditStateCategory(this.currCategory);
-    this.router.navigate(['/spending/add-category', this.currCategory.id]);
-  }
-
-  public onDeleteCategory(): void {
-    this.showDeleteCategoryDialod(this.currCategory);
-  }
-
-  private showDeleteCategoryDialod(category: Category): void {
-    const dialogRef: MatDialogRef<DeleteCategoryDialogComponent> = this.dialog.open(DeleteCategoryDialogComponent, {
-      width: '400px',
-      disableClose: true
-    });
-
-    dialogRef.afterClosed().subscribe(async result => {
-      const allSpendings: Spending[] = await firstValueFrom(this.spendingsService.getAllSpendings());
-      const spendingsToUpdate: Spending[] = this.spendingsService.findSpendingsByCategoryIncludeChildren(allSpendings, category);
-      
-      if(result === 'save') {
-        const otherCategory = this.categories.find(category => category.title === 'Other');
-        this.spendingsService.replaceCategoryInSpendings(otherCategory, spendingsToUpdate);
-      } else if (result === 'delete') {
-        spendingsToUpdate.forEach(spending => this.spendingsService.deleteSpending(spending));
-      }
-      this.spendingsService.deleteCategory(category);
-    });
+    this.router.navigate(['/spending/add-category', this.currCategory.parent]);
   }
 }
