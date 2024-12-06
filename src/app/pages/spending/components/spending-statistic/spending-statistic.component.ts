@@ -101,6 +101,8 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
   public spendingsForMultiLineChart: Spending[] = [];
   public compareSpendingsForMultiLineChart: Spending[] = [];
 
+  public rootPage: string = '/spending/statistic';
+
   public chartsColorsForCompare: { [key: string]: string; } = {};
   public subscription: Subscription;
   constructor(
@@ -133,6 +135,7 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
       this.formRange.valueChanges
     ]).pipe(
       switchMap(async ([paramMap, spendings]) => {
+        // debugger
         const categoryId = paramMap.get('id');
   
         if (categoryId) {
@@ -180,13 +183,22 @@ export class SpendingStatisticComponent implements OnInit, OnDestroy {
     this.cdr.detectChanges();
   }
 
+  public prevRoute(): void {
+    if(this.currCategory && this.currCategory.parent) {
+      this.router.navigate([this.rootPage, this.currCategory.parent]);
+    } else {
+      this.router.navigate(['/spending']);
+    }
+    
+  }
+
   public onCardClick(category: Category): void {
     if(category.title === 'Other') {
       return;
     }
 
     this.statisticStateHelper.addBreadCrumb(category);
-    this.router.navigate(['/statistic/details', category.id]);
+    this.router.navigate([this.rootPage, category.id]);
   }
 
   public toogleCompare(): void {

@@ -1,4 +1,10 @@
-<div class="route btn" [routerLink]="'/savings'">
+<div class="route btn">
     <span class="route--icon"><pgz-icon [name]="'keyboard_backspace'"></pgz-icon></span>
-    <p class="route--title">{{title}}</p>
+    <div style="margin: auto;">
+        <ng-content select="h2"></ng-content>
+    </div>
+    
+    <div class="">
+        <ng-content select="div"></ng-content>
+    </div>
 </div>

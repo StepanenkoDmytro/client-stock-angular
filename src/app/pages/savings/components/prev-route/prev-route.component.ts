@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { IconComponent } from "../../../../core/UI/components/icon/icon.component";
 import { RouterModule } from '@angular/router';
 
@@ -11,6 +11,4 @@ import { RouterModule } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PrevRouteComponent {
-  @Input()
-  public title: string = '';
 }

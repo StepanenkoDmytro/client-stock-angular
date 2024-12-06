@@ -11,7 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { IconComponent } from '../../../../core/UI/components/icon/icon.component';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 const MATERIAL_MODULES = [
   MatExpansionModule,
@@ -39,6 +39,7 @@ export class TotalBalanceSpendingComponent implements OnInit {
 
   constructor(
     private totalBalanceService: TotalBalanceService,
+    private router: Router,
     private cdr: ChangeDetectorRef
   ) { }
 
@@ -53,5 +54,9 @@ export class TotalBalanceSpendingComponent implements OnInit {
       this.balance = monthlyBudget - spentByMonth;
       this.cdr.markForCheck();
     });
+  }
+
+  public routeToStatisticPage(): void {
+    this.router.navigate(['/spending/statistic']);
   }
 }

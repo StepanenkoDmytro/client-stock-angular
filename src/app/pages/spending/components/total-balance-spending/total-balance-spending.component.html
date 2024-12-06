@@ -4,7 +4,7 @@
             <p>Spent</p>
             <p class="total-card-header--val">{{ 10000 | moneyFormat}}$</p>
         </div>
-        <div class="total-card-header--btn" [routerLink]="['statistic']">
+        <div class="total-card-header--btn" (click)="routeToStatisticPage()">
             <pgz-icon [name]="'custom_statistic'"></pgz-icon>
         </div>
     </div>

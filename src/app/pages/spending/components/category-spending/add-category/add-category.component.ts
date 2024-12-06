@@ -80,10 +80,9 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
         this.fillFields();
       } 
 
+      //rewrite to await spendingService.findCategoryById
       this.selectedParentCategory = Category.findCategoryById(parentCategoryId, categories);
     }) ;
-    
-    
   }
 
   public onAdd(): void {
@@ -141,6 +140,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(async result => {
+      //move all code to one spendingService method
       const allSpendings: Spending[] = await firstValueFrom(this.spendingService.getAllSpendings());
       const spendingsToUpdate: Spending[] = this.spendingService.findSpendingsByCategoryIncludeChildren(allSpendings, category);
       
@@ -151,6 +151,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
         spendingsToUpdate.forEach(spending => this.spendingService.deleteSpending(spending));
       }
       this.spendingService.deleteCategory(category);
+      this.router.navigate(['spending']);
     });
   }
 

@@ -23,6 +23,10 @@ export const SPENDING_ROUTES: Route[] = [
     path: 'statistic',
     component: SpendingStatisticComponent
   },
+  {
+    path: 'statistic/:id',
+    component: SpendingStatisticComponent, 
+  },
   { 
     path: 'category/:id', 
     component: CategorySpendingComponent,
