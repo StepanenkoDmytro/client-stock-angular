@@ -22,7 +22,7 @@ import { Category } from "../../../../domain/category.domain";
 import { DateFormatPipe } from "../../../../pipe/date-format.pipe";
 import { SpendingCategoryHelperService } from "../../../../service/helpers/spending-category-helper.service";
 import { SpendingsService } from "../../../../service/spendings.service";
-import { PrevRouteComponent } from "../../../savings/components/prev-route/prev-route.component";
+import { PrevRouteComponent } from "../../../../core/UI/components/prev-route/prev-route.component";
 import { RangeForm, ICategoryStatistic, initializeFormGroup } from "../../../statistic/model/SpendindStatistic";
 import { StatisticStateService } from "../../../statistic/service/statistic-state.service";
 import { Spending } from "../../model/Spending";

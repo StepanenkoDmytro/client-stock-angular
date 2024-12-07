@@ -18,6 +18,7 @@ import { ArrowBackComponent } from '../../../../../core/UI/components/arrow-back
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Spending } from '../../../model/Spending';
 import { DeleteCategoryDialogComponent } from '../delete-category-dialog/delete-category-dialog.component';
+import { PrevRouteComponent } from '../../../../../core/UI/components/prev-route/prev-route.component';
 
 
 const UI_MODULES = [
@@ -25,7 +26,8 @@ const UI_MODULES = [
   IconPickerComponent,
   FormFieldComponent,
   AcceptBtnComponent,
-  ArrowBackComponent
+  ArrowBackComponent,
+  PrevRouteComponent
 ];
 
 const MATERIAL_MODULES = [
@@ -57,6 +59,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
   public limitOfCaregory: number = 0;
 
   public editCategory: Category;
+  private rootPage: string = '/spending/category';
 
   constructor(
     private spendingService: SpendingsService,
@@ -83,6 +86,14 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       //rewrite to await spendingService.findCategoryById
       this.selectedParentCategory = Category.findCategoryById(parentCategoryId, categories);
     }) ;
+  }
+
+  public prevRoute(): void {
+    if(this.editCategory && this.editCategory.parent) {
+      this.router.navigate([this.rootPage, this.editCategory.parent]);
+    } else {
+      this.router.navigate(['/spending']);
+    }
   }
 
   public onAdd(): void {

@@ -11,7 +11,7 @@ import { IPortfolioStock, IAsset, IMarket, ICompanyList } from '../../../../../d
 import { StockAssetComponent } from './stock-asset/stock-asset.component';
 import { Router, RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
-import { PrevRouteComponent } from '../../prev-route/prev-route.component';
+import { PrevRouteComponent } from '../../../../../core/UI/components/prev-route/prev-route.component';
 
 
 const UI_COMPONENTS = [

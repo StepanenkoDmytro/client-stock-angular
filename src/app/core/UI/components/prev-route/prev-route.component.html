@@ -1,7 +1,10 @@
 <div class="route btn">
-    <span class="route--icon"><pgz-icon [name]="'keyboard_backspace'"></pgz-icon></span>
+    <span class="route--icon">
+        <pgz-arrow-back></pgz-arrow-back>
+    </span>
+    
     <div style="margin: auto;">
-        <ng-content select="h2"></ng-content>
+        <ng-content select="p"></ng-content>
     </div>
     
     <div class="">

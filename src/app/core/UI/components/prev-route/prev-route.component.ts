@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { IconComponent } from "../../../../core/UI/components/icon/icon.component";
+import { IconComponent } from "../icon/icon.component";
 import { RouterModule } from '@angular/router';
+import { ArrowBackComponent } from '../arrow-back/arrow-back.component';
 
 @Component({
   selector: 'pgz-prev-route',
   standalone: true,
-  imports: [IconComponent, RouterModule],
+  imports: [RouterModule, ArrowBackComponent],
   templateUrl: './prev-route.component.html',
   styleUrl: './prev-route.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

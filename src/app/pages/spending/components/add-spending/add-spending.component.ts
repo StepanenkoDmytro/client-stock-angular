@@ -19,6 +19,7 @@ import { ArrowBackComponent } from '../../../../core/UI/components/arrow-back/ar
 import { AcceptBtnComponent } from '../../../../core/UI/components/accept-btn/accept-btn.component';
 import { CategorySelectorComponent } from './category-select/category-select.component';
 import { FormFieldComponent } from '../../../../core/UI/components/form-field/form-field.component';
+import { PrevRouteComponent } from '../../../../core/UI/components/prev-route/prev-route.component';
 
 
 const UI_MODULES = [
@@ -26,7 +27,8 @@ const UI_MODULES = [
   ArrowBackComponent,
   AcceptBtnComponent,
   CategorySelectorComponent,
-  FormFieldComponent
+  FormFieldComponent,
+  PrevRouteComponent
 ];
 
 const MATERIAL_MODULES = [

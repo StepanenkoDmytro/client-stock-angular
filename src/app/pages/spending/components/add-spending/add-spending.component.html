@@ -1,14 +1,13 @@
 <section class="add-spending page">
-    <div class="add-spending--header" (click)="prevRoute()">
-        <div class="add-spending--header-btn"> 
-            <pgz-arrow-back></pgz-arrow-back>
-        </div> 
+    <div (click)="prevRoute()">
+        <pgz-prev-route>
             
-        @if(editSpending) {
-            <p>Edit spending</p>
-        } @else {
-            <p>Add spending</p>
-        }
+            @if(editSpending) {
+                <p>Edit spending</p>
+            } @else {
+                <p>Add spending</p>
+            }
+        </pgz-prev-route>
     </div>
 
     <div class="add-spending--input">

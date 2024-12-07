@@ -10,7 +10,7 @@ import { AssetMarketCardComponent } from '../asset-market-card/asset-market-card
 import { ICoin } from '../../../../../domain/savings.domain';
 import { Router, RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
-import { PrevRouteComponent } from '../../prev-route/prev-route.component';
+import { PrevRouteComponent } from '../../../../../core/UI/components/prev-route/prev-route.component';
 
 
 const UI_COMPONENTS = [

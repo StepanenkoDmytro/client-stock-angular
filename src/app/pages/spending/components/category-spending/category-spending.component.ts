@@ -12,9 +12,9 @@ import { combineLatest, firstValueFrom } from 'rxjs';
 import { AddBtnComponent } from '../../../../core/UI/components/add-btn/add-btn.component';
 import { CommonModule } from '@angular/common';
 import { StatisticStateService } from '../../../statistic/service/statistic-state.service';
-import { PrevRouteComponent } from '../../../statistic/components/prev-route/prev-route.component';
 import { EditStateService } from '../../service/edit-state.service';
 import { IconComponent } from '../../../../core/UI/components/icon/icon.component';
+import { PrevRouteComponent } from '../../../../core/UI/components/prev-route/prev-route.component';
 
 const UI_COMPONENTS = [
   CategorySpendingCardComponent,
@@ -67,6 +67,9 @@ export class CategorySpendingComponent implements OnInit {
 
       if (categoryId) {
         this.currCategory = await this.spendingsService.findCategoryById(categoryId);
+        if(!this.currCategory.parent) {
+          this.router.navigate(['/spending']);
+        }
         this.spendings = this.spendingsService.findSpendingsByCategoryIncludeChildren(this.spendings, this.currCategory);
         this.spendingCategories = this.spendingCategoryHelper.calculateCategoryStatisticByCategory(this.spendings, this.currCategory);
       } else {
@@ -100,5 +103,13 @@ export class CategorySpendingComponent implements OnInit {
     this.categoryStateHelper.addBreadCrumb(this.currCategory);
     this.editStateCategoryService.saveEditStateCategory(this.currCategory);
     this.router.navigate(['/spending/add-category', this.currCategory.parent]);
+  }
+
+  public prevRoute(): void {
+    if(this.currCategory && this.currCategory.parent) {
+      this.router.navigate(['/spending/category', this.currCategory.parent]);
+    } else {
+      this.router.navigate(['/spending']);
+    }
   }
 }

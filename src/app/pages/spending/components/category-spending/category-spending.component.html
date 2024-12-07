@@ -1,12 +1,14 @@
 <div [class.category-spending]="currCategory"
-    [class.page]="currCategory">
+    >
     @if(currCategory) {
-        <div class="category--routing">
-            <pgz-prev-route></pgz-prev-route>
-            <h2>{{currCategory.title}}</h2>
-            <div (click)="onEdit()">
-                <pgz-icon [name]="'custom_edit'"></pgz-icon>
-            </div>
+        <div (click)="prevRoute()">
+            <pgz-prev-route>
+                <p>{{currCategory.title}}</p>
+
+                <div (click)="onEdit()">
+                    <pgz-icon [name]="'custom_edit'"></pgz-icon>
+                </div>
+            </pgz-prev-route>
         </div>
 
         <section class="category-limit">

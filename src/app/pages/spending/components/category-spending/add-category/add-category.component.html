@@ -1,14 +1,13 @@
 <section class="add-edit-category page">
-    <div class="add-edit-category--header" [routerLink]="['/spending']">
-        <div class="add-edit-category--header-btn"> 
-            <pgz-arrow-back></pgz-arrow-back>
-        </div> 
+    <div (click)="prevRoute()">
+        <pgz-prev-route>
             
-        @if(editCategory) {
-            <p>Edit category</p>
-        } @else {
-            <p>Add category</p>
-        }
+            @if(editCategory) {
+                <p>Edit category</p>
+            } @else {
+                <p>Add category</p>
+            }
+        </pgz-prev-route>
     </div>
     
     <pgz-form-field>
