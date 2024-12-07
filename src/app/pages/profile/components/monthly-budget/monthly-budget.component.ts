@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { TotalBalanceService } from '../../../../core/UI/components/total-balance/total-balance.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AcceptBtnComponent } from '../../../../core/UI/components/accept-btn/accept-btn.component';
 
 @Component({
   selector: 'pgz-monthly-budget',
   standalone: true,
-  imports: [PrevRouteComponent, FormsModule],
+  imports: [PrevRouteComponent, FormsModule, AcceptBtnComponent],
   templateUrl: './monthly-budget.component.html',
   styleUrl: './monthly-budget.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -31,6 +32,10 @@ export class MonthlyBudgetComponent implements OnInit {
     this.totalBalanceService.getMonthlyBudget().subscribe(budget => {
       this.monthlyBudget = budget;
     })
+  }
+
+  public save(): void {
+    
   }
 
   public prevRoute(): void {
