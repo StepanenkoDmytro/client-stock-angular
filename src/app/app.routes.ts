@@ -18,6 +18,7 @@ export const routes: Routes = [
   { path: AppRoutes.STATISTIC, loadChildren: () => import('./pages/statistic/statistic.routes').then(c => c.STATISTIC_ROUTES) },
   { path: AppRoutes.GOALS, loadChildren: () => import('./pages/goals/goals.routes').then(c => c.GOALS_ROUTES) },
   { path: AppRoutes.CALENDAR, loadComponent: () => import('./pages/spending/components/calendar-spending/calendar-spending.component').then(c => c.CalendarSpendingComponent) },
-  { path: AppRoutes.PROFILE, loadComponent: () => import('./pages/profile/profile.component').then(c => c.ProfileComponent) },
+  // { path: AppRoutes.PROFILE, loadComponent: () => import('./pages/profile/profile.component').then(c => c.ProfileComponent) },
+  { path: AppRoutes.PROFILE, loadChildren: () => import('./pages/profile/profile.routes').then(c => c.PROFILE_ROUTES) },
   { path: '**', loadComponent: () => import('./pages/not-found/not-found.component').then(c => c.NotFoundComponent) },
 ];

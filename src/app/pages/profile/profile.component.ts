@@ -45,8 +45,6 @@ export class ProfileComponent implements OnInit {
   public userEmail: string; 
   public isAuthorizedUser: boolean = false;
 
-  public monthlyBudget: number = 0;
-
   constructor(
     private authService: AuthService,
     private userService: UserService,
@@ -93,18 +91,6 @@ export class ProfileComponent implements OnInit {
   }
 
   public changeMonthlyBudget(): void {
-    const currentBudget = this.monthlyBudget.toString();
-
-    const dialogRef = this.dialog.open(PopupMonthlyBudgetComponent, {
-      maxWidth: '300px',
-      maxHeight: '500px',
-      data: { currentBudget },
-    });
-
-    dialogRef.afterClosed().subscribe((result: string) => {
-      const monthlyBudget = parseInt(result);
-      this.totalBalanceService.saveMonthlyBudget(monthlyBudget);
-      this.cdr.detectChanges();
-    });
+    this.router.navigate(['/profile/monthly-budget']);
   }
 }

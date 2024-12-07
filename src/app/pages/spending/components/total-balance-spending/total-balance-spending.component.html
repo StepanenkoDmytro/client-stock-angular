@@ -10,32 +10,12 @@
     </div>
     
     @if(monthlyBudget > 0) {
-        <mat-expansion-panel hideToggle>
-            <mat-expansion-panel-header>
-            <mat-panel-title>
-                <div class="total-card-budget">
-                    <div style="margin-left: auto;"><pgz-icon [name]="'custom_settings'"></pgz-icon></div>
-                    <div class="total-card-budget--info">
-                        <p>Monthly budget</p>
-                        <p class="total-card-budget--info-val">{{ monthlyBudget }}</p>
-                    </div>
-                </div>
-            </mat-panel-title>
-            </mat-expansion-panel-header>
-            
-            <div class="range-controller--control" style="margin-top: 18px;">
-                
-
-                <div>
-                    <p>Monthly budget</p>
-                    <p>unknown</p>
-                </div>
-                
-                <div>
-                    <p>Date update:</p>
-                    <p>unknown</p>
-                </div>
+        <div class="total-card-budget">
+            <div style="margin-left: auto;" [routerLink]="'/profile/monthly-budget'"><pgz-icon [name]="'custom_settings'"></pgz-icon></div>
+            <div class="total-card-budget--info">
+                <p>Monthly budget</p>
+                <p class="total-card-budget--info-val">{{ monthlyBudget }}</p>
             </div>
-        </mat-expansion-panel>
+        </div>]
     }
 </main>
