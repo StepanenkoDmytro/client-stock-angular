@@ -34,11 +34,79 @@
             </div>
         </div>
     </section>
+    
+    <div class="settings-box">
+        <div class="general-item">
+            <p>Profile settings</p>
+            <div class="general-item--value">
+                <div class="arrow-box">
+                    <div class="arrow-up"></div>
+                    <div class="arrow-down"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <pgz-general></pgz-general>
+    <div class="settings-box">
+        <div class="general-item" (click)="changeMonthlyBudget()">
+            <p>Monthly budget</p>
+            <div class="general-item--value">
+                <!-- <p>{{ monthlyBudget }}</p> -->
+                <div class="arrow-box">
+                    <div class="arrow-up"></div>
+                    <div class="arrow-down"></div>
+                </div>
+            </div>
+        </div>
+    </div>
     <pgz-system></pgz-system>
-    <pgz-feedback></pgz-feedback>
-      
+    <!-- <pgz-general></pgz-general>
+     
+    
+    <pgz-feedback></pgz-feedback> -->
+    <div class="settings-box">
+        <div class="general-item">
+            <p>Export / Import data</p>
+            <div class="general-item--value">
+                <div class="arrow-box">
+                    <div class="arrow-up"></div>
+                    <div class="arrow-down"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="settings-box disabled">
+        <div class="general-item">
+            <p>Write to us</p>
+            <div class="general-item--value">
+                <div class="arrow-box">
+                    <div class="arrow-up"></div>
+                    <div class="arrow-down"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="general-item">
+            <p>Rate the app</p>
+            <div class="general-item--value">
+                <div class="arrow-box">
+                    <div class="arrow-up"></div>
+                    <div class="arrow-down"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="general-item">
+            <p>Subscription / Donate</p>
+            <div class="general-item--value">
+                <div class="arrow-box">
+                    <div class="arrow-up"></div>
+                    <div class="arrow-down"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     @if(isAuthorizedUser) {

@@ -14,8 +14,8 @@ export class TotalBalanceService {
     private spendingsService: SpendingsService
   ) { }
 
-    public getMonthlyBudget(): Observable<number> {
-      
+  public getMonthlyBudget(): Observable<number> {
+    
     const budgetStoredData = localStorage.getItem(this.budgetLocalStorageKey);
     const parseBudget: number = JSON.parse(budgetStoredData);
     

@@ -8,17 +8,15 @@ import { AuthService } from '../../service/auth.service';
 import { UserService } from '../../service/user.service';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
-import { FeedbackComponent } from './components/feedback/feedback.component';
 import { IconComponent } from '../../core/UI/components/icon/icon.component';
-import { GeneralComponent } from './components/general/general.component';
 import { SystemComponent } from './components/system/system.component';
 import { IUser, UserMode } from '../../model/User';
+import { MatDialog } from '@angular/material/dialog';
+import { PopupMonthlyBudgetComponent } from './components/ui-settings/popup-monthly-budget/popup-monthly-budget.component';
 
 
 const UI_MODULES = [
-  GeneralComponent,
   SystemComponent,
-  FeedbackComponent,
   IconComponent
 ];
 
@@ -47,9 +45,13 @@ export class ProfileComponent implements OnInit {
   public userEmail: string; 
   public isAuthorizedUser: boolean = false;
 
+  public monthlyBudget: number = 0;
+
   constructor(
     private authService: AuthService,
     private userService: UserService,
+    private totalBalanceService: TotalBalanceService,
+    private dialog: MatDialog,
     private router: Router,
     private cdr: ChangeDetectorRef
   ) { }
@@ -88,5 +90,21 @@ export class ProfileComponent implements OnInit {
 
   public login(): void {
     this.router.navigate(['/auth']);
+  }
+
+  public changeMonthlyBudget(): void {
+    const currentBudget = this.monthlyBudget.toString();
+
+    const dialogRef = this.dialog.open(PopupMonthlyBudgetComponent, {
+      maxWidth: '300px',
+      maxHeight: '500px',
+      data: { currentBudget },
+    });
+
+    dialogRef.afterClosed().subscribe((result: string) => {
+      const monthlyBudget = parseInt(result);
+      this.totalBalanceService.saveMonthlyBudget(monthlyBudget);
+      this.cdr.detectChanges();
+    });
   }
 }

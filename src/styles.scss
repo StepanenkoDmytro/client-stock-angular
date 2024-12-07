@@ -167,18 +167,27 @@ $light-theme: mat.define-light-theme((
   --bs-gray-400: #212529;
   --bs-text: #e9ecef;
   --bs-text-100: #bdbdbd;
+
+  body {
+    background-color: $pgz-dark-background;
+  }
 }
 
 .light-theme {
   @include mat.all-component-themes($light-theme);
   @include mat.core-theme($light-theme);
   @include mat.button-theme($light-theme);
-  $mat-background: $pgz-light-background;
+  $mat-app-background-color: $pgz-light-background;
+  // background-color: $pgz-light-background;
   --bs-success: #5DB075;
   --bs-gray-100: #fff;
   --bs-gray-200: #e9ecef;
   --bs-text: #000000;
   --bs-text-100: #bdbdbd;
+
+  body {
+    background-color: $pgz-light-background;
+  }
 }
 
 html, body { height: 100%; }

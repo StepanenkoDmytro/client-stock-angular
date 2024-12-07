@@ -37,7 +37,10 @@
   display: flex;
   justify-content: center;
   font-size: 20px;
-  margin-bottom: 32px;
+
+  &--full {
+    margin-bottom: 32px;
+  }
 
   &--info {
     margin-top: 20px;

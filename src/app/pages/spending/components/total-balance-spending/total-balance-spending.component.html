@@ -1,40 +1,41 @@
 <main class="total-card">
-    <div class="total-card-header">
+    <div class="total-card-header" [class.total-card-header--full]="monthlyBudget > 0">
         <div class="total-card-header--info">
             <p>Spent</p>
-            <p class="total-card-header--val">{{ 10000 | moneyFormat}}$</p>
+            <p class="total-card-header--val">-{{ spentByMonth | moneyFormat}}$</p>
         </div>
         <div class="total-card-header--btn" (click)="routeToStatisticPage()">
             <pgz-icon [name]="'custom_statistic'"></pgz-icon>
         </div>
     </div>
     
+    @if(monthlyBudget > 0) {
+        <mat-expansion-panel hideToggle>
+            <mat-expansion-panel-header>
+            <mat-panel-title>
+                <div class="total-card-budget">
+                    <div style="margin-left: auto;"><pgz-icon [name]="'custom_settings'"></pgz-icon></div>
+                    <div class="total-card-budget--info">
+                        <p>Monthly budget</p>
+                        <p class="total-card-budget--info-val">{{ monthlyBudget }}</p>
+                    </div>
+                </div>
+            </mat-panel-title>
+            </mat-expansion-panel-header>
+            
+            <div class="range-controller--control" style="margin-top: 18px;">
+                
 
-    <mat-expansion-panel hideToggle>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            <div class="total-card-budget">
-                <div style="margin-left: auto;"><pgz-icon [name]="'custom_settings'"></pgz-icon></div>
-                <div class="total-card-budget--info">
+                <div>
                     <p>Monthly budget</p>
-                    <p class="total-card-budget--info-val">unknown</p>
+                    <p>unknown</p>
+                </div>
+                
+                <div>
+                    <p>Date update:</p>
+                    <p>unknown</p>
                 </div>
             </div>
-        </mat-panel-title>
-        </mat-expansion-panel-header>
-        
-        <div class="range-controller--control" style="margin-top: 18px;">
-            
-
-            <div>
-                <p>Monthly budget</p>
-                <p>unknown</p>
-            </div>
-            
-            <div>
-                <p>Date update:</p>
-                <p>unknown</p>
-            </div>
-        </div>
-    </mat-expansion-panel>
+        </mat-expansion-panel>
+    }
 </main>

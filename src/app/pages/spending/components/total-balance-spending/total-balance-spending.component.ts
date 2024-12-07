@@ -33,7 +33,6 @@ const MATERIAL_MODULES = [
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TotalBalanceSpendingComponent implements OnInit {
-  public balance: number = 0;
   public spentByMonth: number = 0;
   public monthlyBudget: number = 0;
 
@@ -44,14 +43,14 @@ export class TotalBalanceSpendingComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    combineLatest(
-      [this.totalBalanceService.getMonthlyBudget(),
-      this.totalBalanceService.getSpentByMonth()]
+    combineLatest([
+      this.totalBalanceService.getMonthlyBudget(),
+      this.totalBalanceService.getSpentByMonth()
+    ]
     ).subscribe(([ monthlyBudget, spentByMonth ]) => {
       this.monthlyBudget = monthlyBudget;
       this.spentByMonth = spentByMonth;
 
-      this.balance = monthlyBudget - spentByMonth;
       this.cdr.markForCheck();
     });
   }
