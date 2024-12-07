@@ -7,11 +7,12 @@ import { IconComponent } from '../icon/icon.component';
 import { RouterModule } from '@angular/router';
 import { AddBtnComponent } from '../add-btn/add-btn.component';
 import { CategorySpendingCardComponent } from '../../../../pages/spending/components/category-spending/category-spending-card/category-spending-card.component';
+import { PrevRouteComponent } from '../prev-route/prev-route.component';
 
 @Component({
   selector: 'pgz-category-bottom-sheet',
   standalone: true,
-  imports: [MatIconModule, CommonModule, IconComponent, RouterModule, AddBtnComponent],
+  imports: [MatIconModule, CommonModule, IconComponent, RouterModule, AddBtnComponent, PrevRouteComponent],
   templateUrl: './category-bottom-sheet.component.html',
   styleUrl: './category-bottom-sheet.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
