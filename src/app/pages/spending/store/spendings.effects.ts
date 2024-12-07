@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { EMPTY } from 'rxjs';
-import { filter, mergeMap, switchMap, withLatestFrom} from 'rxjs/operators';
+import { filter, mergeMap, switchMap, tap, withLatestFrom} from 'rxjs/operators';
 import { addCategory, addSpending, deleteCategory, deleteSpending, editSpending, loadCategories, loadSpending } from './spendings.actions';
 import { AuthService } from '../../../service/auth.service';
 import { Store } from '@ngrx/store';

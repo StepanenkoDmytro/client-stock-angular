@@ -15,16 +15,17 @@ import { EditStateService } from '../../service/edit-state.service';
 import { HttpClientModule } from '@angular/common/http';
 import { Spending } from '../../model/Spending';
 import { MoneyDirective } from '../../../../directive/money.directive';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ArrowBackComponent } from '../../../../core/UI/components/arrow-back/arrow-back.component';
 import { AcceptBtnComponent } from '../../../../core/UI/components/accept-btn/accept-btn.component';
 import { CategorySelectorComponent } from './category-select/category-select.component';
 import { FormFieldComponent } from '../../../../core/UI/components/form-field/form-field.component';
 import { PrevRouteComponent } from '../../../../core/UI/components/prev-route/prev-route.component';
+import { NotificationComponent } from '../../../../core/UI/components/notification/notification.component';
 
 
 const UI_MODULES = [
   MoneyDirective,
-  ArrowBackComponent,
   AcceptBtnComponent,
   CategorySelectorComponent,
   FormFieldComponent,
@@ -40,6 +41,7 @@ const MATERIAL_MODULES = [
   FormsModule,
   MatNativeDateModule,
   MatDatepickerModule,
+  MatSnackBarModule
 ];
 
 @Component({
@@ -64,6 +66,7 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
     private spendingsService: SpendingsService,
     private router: Router,
     private editStateSpendingService: EditStateService,
+    private snackBar: MatSnackBar,
     private cdr: ChangeDetectorRef
   ) { }
 
@@ -106,6 +109,7 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
 
   public save(): void {
     this.saveSpending();
+    this.showNotification();
     this.prevRoute();
   }
 
@@ -118,6 +122,14 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
     
     const newSpending = this.buildNewSpending();
     this.spendingsService.addSpending(newSpending);
+  }
+
+  private showNotification(): void {
+    this.snackBar.openFromComponent(NotificationComponent, {
+      duration: 2000,
+      data: { message: 'Spending successfully added!' },
+      panelClass: 'custom-snackbar'
+    });
   }
 
   private buildNewSpending(id?: string): Spending {

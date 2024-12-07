@@ -19,6 +19,8 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Spending } from '../../../model/Spending';
 import { DeleteCategoryDialogComponent } from '../delete-category-dialog/delete-category-dialog.component';
 import { PrevRouteComponent } from '../../../../../core/UI/components/prev-route/prev-route.component';
+import { NotificationComponent } from '../../../../../core/UI/components/notification/notification.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 const UI_MODULES = [
@@ -64,6 +66,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
   constructor(
     private spendingService: SpendingsService,
     private editStateCategory: EditStateService,
+    private snackBar: MatSnackBar,
     private router: Router,
     private route: ActivatedRoute,
     private dialog: MatDialog,
@@ -112,6 +115,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
 
       this.spendingService.addCategory(newCategory);
     }
+    this.showNotification('added');
     this.router.navigate(['spending']);
   }
 
@@ -162,6 +166,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
         spendingsToUpdate.forEach(spending => this.spendingService.deleteSpending(spending));
       }
       this.spendingService.deleteCategory(category);
+      this.showNotification('deleted');
       this.router.navigate(['spending']);
     });
   }
@@ -178,5 +183,13 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       this.selectedColor = this.editCategory.color;
       this.limitOfCaregory = this.editCategory.limit;
     }
+  }
+
+  private showNotification(action: string): void {
+    this.snackBar.openFromComponent(NotificationComponent, {
+      duration: 2000,
+      data: { message: `Category successfully ${action}!` },
+      panelClass: 'custom-snackbar'
+    });
   }
 }
