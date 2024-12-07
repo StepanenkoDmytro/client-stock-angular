@@ -10,43 +10,39 @@
       }
     </pgz-prev-route>
   </div>
-  
-  <div class="chart-container--chart">
 
-    <pgz-toggle-switch style="margin-top: 18px;" [checked]="'multiline'" [unchecked]="'pie'" (buttonValue)="chartTypeChange($event)"></pgz-toggle-switch>
+  <pgz-toggle-switch style="margin-top: 18px;" [checked]="'multiline'" [unchecked]="'pie'" (buttonValue)="chartTypeChange($event)"></pgz-toggle-switch>
 
-    <pgz-range-controller style="margin-top: 18px;" (isCompareEnabled)="toogleCompare()" (rangeChange)="onRangeChange($event)"></pgz-range-controller>
+  <pgz-range-controller style="margin-top: 18px;" (isCompareEnabled)="toogleCompare()" (rangeChange)="onRangeChange($event)"></pgz-range-controller>
 
-    <div class="chart-container--chart">
-      @if(chartTypeCtrl === 'pie') { 
-        <div>
-          <pgz-pie-chart-container 
-            [categoryData]="categoryStatisticForPieChart" 
-            [isCompareEnabled]="isCompareEnabled" 
-            [compareCategoryData]="getCompareCategoryStatisticForPieChart()"
-          ></pgz-pie-chart-container>
-        </div>
-      }
-
-      @if(chartTypeCtrl === 'multiline') {
-        <pgz-multi-line-chart-container 
-          [activeCategories]="categoryStatisticForPeriod" 
-          [isCompareEnabled]="isCompareEnabled"
-          [spendings]="spendingsForMultiLineChart"
-          [compareSpendings]="compareSpendingsForMultiLineChart"
-          [startRange]="formRange.value.startDate"
-          [startCompareRange]="formRange.value.compareStartDate"
-          (chartColors)="chartsColors($event)"
-        ></pgz-multi-line-chart-container>
-      }
+  @if(chartTypeCtrl === 'pie') { 
+    <div>
+      <pgz-pie-chart-container 
+        [categoryData]="categoryStatisticForPieChart" 
+        [isCompareEnabled]="isCompareEnabled" 
+        [compareCategoryData]="getCompareCategoryStatisticForPieChart()"
+      ></pgz-pie-chart-container>
     </div>
-  </div>
+  }
+
+  @if(chartTypeCtrl === 'multiline') {
+    <pgz-multi-line-chart-container 
+      [activeCategories]="categoryStatisticForPeriod" 
+      [isCompareEnabled]="isCompareEnabled"
+      [spendings]="spendingsForMultiLineChart"
+      [compareSpendings]="compareSpendingsForMultiLineChart"
+      [startRange]="formRange.value.startDate"
+      [startCompareRange]="formRange.value.compareStartDate"
+      (chartColors)="chartsColors($event)"
+    ></pgz-multi-line-chart-container>
+  }
 
   <pgz-filter-wrapper 
     [items]="categoriesForFilter"
     [selectedIds]="selectedCategoriesSet"
     (selectedIdsChange)="updateDisabledCategories($event)"
     [contentTemplate]="statisticTemplate">
+    <p style="margin-right: 40px;">Sum</p>
   </pgz-filter-wrapper>
 
   <ng-template #statisticTemplate>

@@ -61,7 +61,7 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
   public ngAfterContentInit(): void {
     this.resizechartContainer = new ResizeObserver(entries => {
       if (entries[0].target.clientWidth > 200) {
-        this.width = entries[0].target.clientWidth - 30;
+        this.width = entries[0].target.clientWidth - 36;
       }
       this.createChart();
     });

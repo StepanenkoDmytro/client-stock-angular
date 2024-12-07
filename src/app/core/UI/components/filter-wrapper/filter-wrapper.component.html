@@ -21,10 +21,10 @@
     </mat-drawer>
     <section class="filter-container--header">
       
-      <div class="d-flex" mat-button (click)="drawer.toggle()">
+      <div class="d-flex" style="margin-left: 16px;" mat-button (click)="drawer.toggle()">
         <pgz-icon [name]="'custom_filter'"></pgz-icon>
       </div>
-      <ng-content></ng-content>
+      <ng-content style="overflow: hidden;"></ng-content>
     </section>
     <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
     </mat-drawer-container>

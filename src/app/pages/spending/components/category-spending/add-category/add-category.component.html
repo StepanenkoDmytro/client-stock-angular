@@ -1,15 +1,14 @@
+<div (click)="prevRoute()">
+    <pgz-prev-route>
+        
+        @if(editCategory) {
+            <p>Edit category</p>
+        } @else {
+            <p>Add category</p>
+        }
+    </pgz-prev-route>
+</div>
 <section class="add-edit-category page">
-    <div (click)="prevRoute()">
-        <pgz-prev-route>
-            
-            @if(editCategory) {
-                <p>Edit category</p>
-            } @else {
-                <p>Add category</p>
-            }
-        </pgz-prev-route>
-    </div>
-    
     <pgz-form-field>
         <label style="margin-top: 32px;">Name category</label>
         <div  style="margin-top: 16px;">
