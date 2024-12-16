@@ -1,1 +1,8 @@
-<div #chartContainer [attr.id]="multiLineID"></div>
+<div #chartContainer [attr.id]="multiLineID" [class.empty-state--blur]="isEmptyState"></div>
+@if(isEmptyState) {
+    <div class="empty-state">
+        <img src="assets/img/multi-line-empty-state.png" 
+            alt="No data available">
+        <p>You don't have spendings by current period</p>
+    </div>
+}

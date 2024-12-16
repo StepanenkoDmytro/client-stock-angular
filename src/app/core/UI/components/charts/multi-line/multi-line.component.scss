@@ -1,5 +1,30 @@
 :host {
   display: block;
+  position: relative;
+}
+
+.empty-state {
+  border: 1px solid var(--bs-gray-200);
+  border-radius: 25px;
+  padding: 45px 45px 25px 45px;
+  position: absolute;
+  top: 20%;
+  left: 15%;
+  background-color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  
+  &--blur {
+    filter: blur(1.5px);
+  }
+}
+
+.empty-state p {
+  width: 190px;
+}
+
+.empty-state img {
+  margin: auto;
 }
 
 svg {

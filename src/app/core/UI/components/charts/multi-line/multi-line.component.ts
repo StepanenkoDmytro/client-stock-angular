@@ -46,6 +46,11 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
 
   constructor() { }
 
+  get isEmptyState(): boolean {
+    return this._data.value.every(item => item.values.length === 0 || item.values.length === 1);
+  }
+  
+
   public ngOnInit(): void {
     const randomNum = Math.floor(Math.random() * 100);
 
@@ -70,13 +75,9 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
   }
 
   private createChart(): void {
+    // debugger;
     d3.select(`#${this.multiLineID}`).selectAll("svg").remove();
     const data = this._data.value;
-    
-    if (!data || data.length === 0) {
-      console.warn('Data is undefined or empty.');
-      return;
-    }
 
     data.forEach(country => {
       country.values.sort((a, b) => a.date.getTime() - b.date.getTime());
@@ -91,7 +92,7 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
       .attr("transform", `translate(${this.marginInline}, ${this.marginInline})`);
 
     
-      
+
     if(data.length === 1) {
       const objectScales: any = this.createScales(data, isSingleData);
       const color = this.createColors(data);
@@ -175,6 +176,8 @@ export class MultiLineComponent implements OnInit, AfterContentInit {
       .attr("y2", (d: any) => objectScales.yScale(d))
       .attr("stroke", "#ccc") 
       .attr("stroke-width", 1);
+
+      
   }
 
   private drawLinesAndCircles(svg: any, data: any[], scales: any, color: any, isSingleData: boolean): void {
