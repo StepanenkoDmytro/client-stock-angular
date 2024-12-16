@@ -1,4 +1,4 @@
-
+@if(isCardHaveData()) {
 <div style="padding: 16px;">
     <div class="spending-stat-card" [ngClass]="{
             'disabled': !isVisible,
@@ -49,3 +49,4 @@
         </div>
     }
 </div>
+}
