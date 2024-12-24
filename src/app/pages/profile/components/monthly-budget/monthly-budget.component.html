@@ -1,47 +1,40 @@
-<div (click)="prevRoute()">
-    <pgz-prev-route>
-        <p>Monthly budget</p>
-    </pgz-prev-route>
-</div>
-<div class="budget-container">
-    <div class="budget-fields budget-fields--box" style="display: flex; justify-content: space-between;">
-        <label class="toggle-container"><span>Місячний бюджет</span></label>
-        <label class="toggle-button">
-            <input type="checkbox" [ngModel]="isMonthlyBudgetEnabled" (change)="toggleBudget()">
-            <span class="slider"></span>
-        </label>
+<section class="page">
+    <div (click)="prevRoute()">
+        <pgz-prev-route>
+            <p>Monthly budget</p>
+        </pgz-prev-route>
     </div>
-  
-    
-
-    <div class="budget-fields">
-        <label>Сума бюджету</label>
-        <div class="budget-fields--box">
-            <input
-            type="number"
-            [ngModel]="monthlyBudget"
-            placeholder="0.00"
-            [disabled]="!isMonthlyBudgetEnabled"
-          />
+    <div class="budget-container">
+        <div class="budget-fields budget-fields--box" style="display: flex; justify-content: space-between;">
+            <label class="toggle-container"><span>Місячний бюджет</span></label>
+            <label class="toggle-button">
+                <input type="checkbox" [ngModel]="isMonthlyBudgetEnabled" (change)="toggleBudget()">
+                <span class="slider"></span>
+            </label>
         </div>
-      
-    </div>
 
-    
-    <div class="budget-fields">
-        <label>Дата оновлення</label>
-        <div class="budget-fields--box">
-          <input
-              type="number"
-              [ngModel]="updateDay"
-              placeholder="01"
-              [disabled]="!isMonthlyBudgetEnabled"/>
+        <div class="budget-fields">
+            <label>Сума бюджету</label>
+            <div class="budget-fields--box">
+                <input matInput type="text" inputmode="numeric" class="line" placeholder="0" style="font-size: 1.5rem;" [(ngModel)]="monthlyBudget" pgzMoney>
+                <span matTextSuffix style="font-size: 1.5rem;">$</span>
+            </div>
         </div>
-    </div>
-  </div>
 
-  <div class="choise-btn" (click)="save()">
         
-    <pgz-accept-btn [active]="true"></pgz-accept-btn>
-</div>
-  
+        <div class="budget-fields">
+            <label>Дата оновлення</label>
+            <div class="budget-fields--box">
+            <input
+                type="number"
+                [ngModel]="updateDay"
+                placeholder="01"/>
+            </div>
+        </div>
+    </div>
+
+    <div class="choise-btn" (click)="save()">
+            
+        <pgz-accept-btn [active]="true"></pgz-accept-btn>
+    </div>
+</section>

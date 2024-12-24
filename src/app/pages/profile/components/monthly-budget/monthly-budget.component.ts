@@ -2,14 +2,16 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { PrevRouteComponent } from '../../../../core/UI/components/prev-route/prev-route.component';
 import { Router } from '@angular/router';
 import { TotalBalanceService } from '../../../../core/UI/components/total-balance/total-balance.service';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AcceptBtnComponent } from '../../../../core/UI/components/accept-btn/accept-btn.component';
+import { MoneyDirective } from '../../../../directive/money.directive';
+import { MatInputModule } from '@angular/material/input';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'pgz-monthly-budget',
   standalone: true,
-  imports: [PrevRouteComponent, FormsModule, AcceptBtnComponent],
+  imports: [CommonModule, PrevRouteComponent, FormsModule, AcceptBtnComponent, MoneyDirective, MatInputModule],
   templateUrl: './monthly-budget.component.html',
   styleUrl: './monthly-budget.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -30,12 +32,17 @@ export class MonthlyBudgetComponent implements OnInit {
 
   public ngOnInit(): void {
     this.totalBalanceService.getMonthlyBudget().subscribe(budget => {
+      console.log('hello')
+      if(budget > 0) {
+        this.isMonthlyBudgetEnabled = true;
+      }
       this.monthlyBudget = budget;
     })
   }
 
   public save(): void {
-    
+    console.log(this.monthlyBudget);
+    this.changeMonthlyBudget();
   }
 
   public prevRoute(): void {

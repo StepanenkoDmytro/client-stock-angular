@@ -66,7 +66,6 @@ $pgz-light-accent: (
     A700 : #000000,
   )
 );
-$pgz-light-background: #e5f7f3;
 
 $pgz-dark-primary: (
   50 : #e0e7e4,
@@ -133,7 +132,6 @@ $pgz-dark-accent: (
     A700 : #000000,
   )
 );
-$pgz-dark-background: #001a11;
 
 $dark-theme: mat.define-dark-theme((
   color: (
@@ -161,7 +159,7 @@ $light-theme: mat.define-light-theme((
   @include mat.all-component-themes($dark-theme);
   @include mat.core-theme($dark-theme);
   @include mat.button-theme($dark-theme);
-  $mat-background: $pgz-dark-background;
+  // $mat-background: $pgz-dark-background;
   --bs-success: #5DB075;
   --bs-gray-100: #6c757d;
   --bs-gray-200: #495057;
@@ -172,7 +170,7 @@ $light-theme: mat.define-light-theme((
 
   
   body {
-    background-color: $pgz-dark-background;
+    // background-color: $pgz-dark-background;
   }
 }
 
@@ -181,7 +179,8 @@ $light-theme: mat.define-light-theme((
   @include mat.core-theme($light-theme);
   @include mat.button-theme($light-theme);
   
-  $mat-app-background-color: $pgz-light-background;
+  
+  // $mat-app-background-color: $pgz-light-background;
   // background-color: $pgz-light-background;
   --bs-success: #5DB075;
   --bs-gray-100: #fff;
@@ -190,14 +189,30 @@ $light-theme: mat.define-light-theme((
   --bs-text-100: #bdbdbd;
 
   body {
-    background-color: $pgz-light-background;
+    background: conic-gradient(from 145deg at 45.33% 38.73%, #407DA4 0deg, #C6D8E3 360deg);
   }
+  
 }
 
 html, body { height: 100%; }
+
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+body::after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-image: url('assets/img/cubs.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center 80px;
 }
 
 ul {
@@ -225,7 +240,7 @@ input {
   position: absolute;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100%!important;
   z-index: 1;
 }
 
