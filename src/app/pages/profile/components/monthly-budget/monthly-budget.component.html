@@ -4,6 +4,7 @@
             <p>Monthly budget</p>
         </pgz-prev-route>
     </div>
+    
     <div class="budget-container">
         <div class="budget-fields budget-fields--box" style="display: flex; justify-content: space-between;">
             <label class="toggle-container"><span>Місячний бюджет</span></label>
@@ -12,7 +13,8 @@
                 <span class="slider"></span>
             </label>
         </div>
-
+        
+        @if(isMonthlyBudgetEnabled) {
         <div class="budget-fields">
             <label>Сума бюджету</label>
             <div class="budget-fields--box">
@@ -31,8 +33,10 @@
                 placeholder="01"/>
             </div>
         </div>
+        }
     </div>
-
+   
+    
     <div class="choise-btn" (click)="save()">
             
         <pgz-accept-btn [active]="true"></pgz-accept-btn>

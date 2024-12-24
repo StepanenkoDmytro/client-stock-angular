@@ -17,9 +17,9 @@ import { CommonModule } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MonthlyBudgetComponent implements OnInit {
-  isMonthlyBudgetEnabled: boolean = false;
+  public isMonthlyBudgetEnabled: boolean = false;
   public monthlyBudget: number = 0;
-  updateDay: number = 1;
+  public updateDay: number = 1;
 
   constructor(
     private totalBalanceService: TotalBalanceService,
@@ -28,6 +28,7 @@ export class MonthlyBudgetComponent implements OnInit {
 
   public toggleBudget(): void {
     this.isMonthlyBudgetEnabled = !this.isMonthlyBudgetEnabled;
+
   }
 
   public ngOnInit(): void {
