@@ -3,21 +3,32 @@
     <section class="profile">
 
         @if(isAuthorizedUser) {
-            <div class="profile--exit" (click)="logout()">
+            <div class="profile-header--exit" (click)="logout()">
                 <p>Exit</p>
-                <pgz-icon class="profile--edit" [name]="'logout'"></pgz-icon>
+                <pgz-icon class="profile-header--edit" [name]="'logout'"></pgz-icon>
             </div>
-        } @else { 
-            <div class="profile--exit" (click)="login()">
+        } @else {
+            <div class="profile-header--unauthorized">
+                <div class="profile-header--unauthorized__warning">
+                    <div class="profile-header--unauthorized__priority-icon">!</div>
+                    <p>Log in to save data</p>
+                </div>
+                <div class="profile-header--unauthorized__btns">
+                    <div class="profile-header--unauthorized__btn" (click)="login()">Login</div>
+                    <div class="profile-header--unauthorized__btn" (click)="registration()">Registration</div>
+                </div>
+            </div>
+            
+            <!-- <div class="profile-header--exit" >
                 <p>Login</p>
-                <pgz-icon class="profile--edit" [name]="'login'"></pgz-icon>
-            </div>
+                <pgz-icon class="profile-header--edit" [name]="'login'"></pgz-icon>
+            </div> -->
         }
 
-        <div class="profile--username">
+        <!-- <div class="profile--username">
             <p>User912</p>
             <pgz-icon class="profile--edit" [name]="'custom_edit'"></pgz-icon>
-        </div>
+        </div> -->
 
         <div class="profile--email">
             @if(isAuthorizedUser) {

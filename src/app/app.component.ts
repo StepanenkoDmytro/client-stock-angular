@@ -53,6 +53,7 @@ export class AppComponent implements OnInit {
     { name: 'custom_statistic', url: 'assets/icons/statistic.svg'},
     { name: 'custom_color_icon', url: 'assets/icons/color_icon.svg'},
     { name: 'custom_calendar', url: 'assets/icons/calendar.svg'},
+    { name: 'custom_priority', url: 'assets/icons/priority.svg'},
   ]
 
   constructor(
