@@ -1,13 +1,9 @@
 :host {
   display: block;
-  // height: inherit;
+  height: 100%;
+  background: var(--back-blue, linear-gradient(180deg, #DAECF8 0%, #FFF 100%));
 }
 
-.profile-container {
-  height: inherit;
-  // display: flex; 
-  // flex-direction: column;
-}
 
 .profile {
   margin: 0px 15px 40px 25px;

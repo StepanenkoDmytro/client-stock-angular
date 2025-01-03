@@ -33,7 +33,6 @@ export class MonthlyBudgetComponent implements OnInit {
 
   public ngOnInit(): void {
     this.totalBalanceService.getMonthlyBudget().subscribe(budget => {
-      console.log('hello')
       if(budget > 0) {
         this.isMonthlyBudgetEnabled = true;
       }
@@ -42,7 +41,6 @@ export class MonthlyBudgetComponent implements OnInit {
   }
 
   public save(): void {
-    console.log(this.monthlyBudget);
     this.changeMonthlyBudget();
   }
 

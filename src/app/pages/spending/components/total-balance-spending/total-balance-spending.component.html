@@ -1,12 +1,18 @@
 <main class="total-card">
+    <div class="total-card-header--btn" (click)="routeToStatisticPage()">
+        <pgz-icon [name]="'custom_statistic'"></pgz-icon>
+    </div>
     <div class="total-card-header" [class.total-card-header--full]="monthlyBudget > 0">
         <div class="total-card-header--info">
             <p>Spent</p>
-            <p class="total-card-header--val">-{{ spentByMonth | moneyFormat}}$</p>
+            <p class="total-card-header--val">
+                @if(spentByMonth > 0) {
+                    -
+                }
+                {{ spentByMonth | moneyFormat}}$
+            </p>
         </div>
-        <div class="total-card-header--btn" (click)="routeToStatisticPage()">
-            <pgz-icon [name]="'custom_statistic'"></pgz-icon>
-        </div>
+        
     </div>
     
     @if(monthlyBudget > 0) {
