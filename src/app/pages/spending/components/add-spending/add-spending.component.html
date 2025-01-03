@@ -1,4 +1,4 @@
-<section class="add-spending page">
+<section class="page">
     <div (click)="prevRoute()">
         <pgz-prev-route>
             
@@ -9,37 +9,40 @@
             }
         </pgz-prev-route>
     </div>
-
-    <div class="add-spending--input">
-        <input class="add-spending--amount-input" type="number" inputmode="numeric" placeholder="0"[(ngModel)]="costOfProduct" pgzMoney>
-        <p class="add-spending--currency">$</p>
-    </div>
-
-    <pgz-form-field>
-        <label style="margin-top: 32px;">Category</label>
-        <div style="margin-top: 16px;">
-            <pgz-category-selector [categories]="categories" [activeCategory]="selectedCategory" (selectedCategory)="selectCategory($event)"></pgz-category-selector>
-        </div>
-    </pgz-form-field>
-    
-    <pgz-form-field>
-        <label style="margin-top: 32px;">Date:</label>
-        <div class="d-flex">
-            <input class="add-spending--input-date" [matDatepicker]="picker" [(ngModel)]="date">
-            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-        </div>
-    </pgz-form-field>
-
-    <pgz-form-field>
-        <label style="margin-top: 24px;">Comment (optional)</label>
-        <div>
-            <textarea class="add-spending--text-area" matInput placeholder="Ex. It makes me feel..." [(ngModel)]="commentOfProduct"></textarea>
-        </div>
-    </pgz-form-field>
-
-    <div class="choise-btn" (click)="save()">
+    <section class="add-spending">
         
-        <pgz-accept-btn [active]="canSave"></pgz-accept-btn>
-    </div>
+
+        <div class="add-spending--input">
+            <input class="add-spending--amount-input" type="number" inputmode="numeric" placeholder="0"[(ngModel)]="costOfProduct" pgzMoney>
+            <p class="add-spending--currency">$</p>
+        </div>
+
+        <pgz-form-field>
+            <label style="margin-top: 32px;">Category</label>
+            <div style="margin-top: 16px;">
+                <pgz-category-selector [categories]="categories" [activeCategory]="selectedCategory" (selectedCategory)="selectCategory($event)"></pgz-category-selector>
+            </div>
+        </pgz-form-field>
+        
+        <pgz-form-field>
+            <label style="margin-top: 32px;">Date:</label>
+            <div class="d-flex">
+                <input class="add-spending--input-date" [matDatepicker]="picker" [(ngModel)]="date">
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </div>
+        </pgz-form-field>
+
+        <pgz-form-field>
+            <label style="margin-top: 24px;">Comment (optional)</label>
+            <div>
+                <textarea class="add-spending--text-area" matInput placeholder="Ex. It makes me feel..." [(ngModel)]="commentOfProduct"></textarea>
+            </div>
+        </pgz-form-field>
+
+        <div class="choise-btn" (click)="save()">
+            
+            <pgz-accept-btn [active]="canSave"></pgz-accept-btn>
+        </div>
+    </section>
 </section>

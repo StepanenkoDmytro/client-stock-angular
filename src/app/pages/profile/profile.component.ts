@@ -12,12 +12,13 @@ import { IconComponent } from '../../core/UI/components/icon/icon.component';
 import { SystemComponent } from './components/system/system.component';
 import { IUser, UserMode } from '../../model/User';
 import { MatDialog } from '@angular/material/dialog';
-import { PopupMonthlyBudgetComponent } from './components/ui-settings/popup-monthly-budget/popup-monthly-budget.component';
+import { PrevRouteComponent } from '../../core/UI/components/prev-route/prev-route.component';
 
 
 const UI_MODULES = [
   SystemComponent,
-  IconComponent
+  IconComponent,
+  PrevRouteComponent
 ];
 
 const MATERIAL_MODULES = [

@@ -1,11 +1,15 @@
 <section>
-    <p>Settings</p>
+    <pgz-prev-route><p>Settings</p></pgz-prev-route>
     <section class="profile">
 
         @if(isAuthorizedUser) {
             <div class="profile-header--exit" (click)="logout()">
                 <p>Exit</p>
                 <pgz-icon class="profile-header--edit" [name]="'logout'"></pgz-icon>
+            </div>
+            <div>
+                <p>{{ userEmail }}</p>
+                <pgz-icon class="profile--edit" [name]="'custom_edit'"></pgz-icon>
             </div>
         } @else {
             <div class="profile-header--unauthorized">
@@ -14,37 +18,11 @@
                     <p>Log in to save data</p>
                 </div>
                 <div class="profile-header--unauthorized__btns">
-                    <div class="profile-header--unauthorized__btn" (click)="login()">Login</div>
-                    <div class="profile-header--unauthorized__btn" (click)="registration()">Registration</div>
+                    <div class="profile-header--unauthorized__btn montserrat" (click)="login()">Login</div>
+                    <div class="profile-header--unauthorized__btn montserrat" (click)="registration()">Registration</div>
                 </div>
             </div>
-            
-            <!-- <div class="profile-header--exit" >
-                <p>Login</p>
-                <pgz-icon class="profile-header--edit" [name]="'login'"></pgz-icon>
-            </div> -->
         }
-
-        <!-- <div class="profile--username">
-            <p>User912</p>
-            <pgz-icon class="profile--edit" [name]="'custom_edit'"></pgz-icon>
-        </div> -->
-
-        <div class="profile--email">
-            @if(isAuthorizedUser) {
-                <p>{{ userEmail }}</p>
-                <pgz-icon class="profile--edit" [name]="'custom_edit'"></pgz-icon>
-            } @else {
-                <p>-</p>
-            }
-
-            <div>
-                <mat-slide-toggle [(ngModel)]="isChecked" (ngModelChange)="onToggleChange()">
-                    {{ isChecked ? 'Dev Mode' : 'Stage Mode' }}
-                </mat-slide-toggle>
-        
-            </div>
-        </div>
     </section>
     
     <div class="settings-box">
@@ -63,7 +41,6 @@
         <div class="general-item" (click)="changeMonthlyBudget()">
             <p>Monthly budget</p>
             <div class="general-item--value">
-                <!-- <p>{{ monthlyBudget }}</p> -->
                 <div class="arrow-box">
                     <div class="arrow-up"></div>
                     <div class="arrow-down"></div>
@@ -122,3 +99,9 @@
         <p class="profile--delete">Delete profile</p>
     }
 </section>
+<div style="margin-left: 20px;">
+    <mat-slide-toggle [(ngModel)]="isChecked" (ngModelChange)="onToggleChange()">
+        {{ isChecked ? 'Dev Mode' : 'Stage Mode' }}
+    </mat-slide-toggle>
+
+</div>
