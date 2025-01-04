@@ -1,8 +1,9 @@
 <div class="route btn">
-    <span class="route--icon">
-        <pgz-arrow-back></pgz-arrow-back>
-    </span>
-    
+    @if(showArrow) {
+        <span class="route--icon">
+            <pgz-arrow-back></pgz-arrow-back>
+        </span>
+    }
     <div style="margin: auto;">
         <ng-content select="p"></ng-content>
     </div>

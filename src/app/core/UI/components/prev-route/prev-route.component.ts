@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { IconComponent } from "../icon/icon.component";
 import { RouterModule } from '@angular/router';
 import { ArrowBackComponent } from '../arrow-back/arrow-back.component';
@@ -12,4 +12,6 @@ import { ArrowBackComponent } from '../arrow-back/arrow-back.component';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PrevRouteComponent {
+  @Input()
+  public showArrow: boolean = true;
 }
