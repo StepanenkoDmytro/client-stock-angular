@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { ArrowBackComponent } from '../../../../core/UI/components/arrow-back/arrow-back.component';
-import { AppRoutes } from '../../../../app.routes';
 
 @Component({
   selector: 'pgz-auth-container',
@@ -12,7 +11,6 @@ import { AppRoutes } from '../../../../app.routes';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AuthContainerComponent implements OnInit, OnDestroy {
-  public PROFILE_LINK = AppRoutes.PROFILE;
   public ngOnInit(): void {
     document.body.classList.add('hide-after');
   }
