@@ -5,54 +5,57 @@
     font-size: 30px;
 }
 
+.auth-form-container {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.auth-out-from {
+  margin-top: auto;
+  margin-bottom: 40px;
+}
+
 .auth-form {
+  width: 100%;
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+
+  &--field {
     width: 100%;
-    font-size: 16px;
-    margin-bottom: 1.5rem;
+  }
+
+  &--forget-password {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &--link {
+    display: flex;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  &--errors {
+    min-height: 80px;
     display: flex;
     flex-direction: column;
-  
-    &--field {
-      width: 100%;
-    }
+  }
 
-    &--login {
-        margin-bottom: 1rem;
-        display: flex;
-        justify-content: center;
-        font-size: 18px;
-      }
-  
-    &--forget-password {
-      display: flex;
-      justify-content: flex-end;
-    }
-  
-    &--registration {
-      margin-bottom: 40px;
-      display: flex;
-      justify-content: center;
-      font-size: 18px;
-    }
-  
-    &--errors {
-      min-height: 80px;
-      display: flex;
-      flex-direction: column;
-    }
-  
-    &--error {
-      margin-top: 10px;
-      align-self: center;
-      color: var(--bs-danger);
-      font-weight: 500;
-    }
-  
-    &--text-link {
-      color: var(--bs-success);
-      font-weight: 500;
-      text-decoration: none;
-    }
+  &--error {
+    margin-top: 10px;
+    align-self: center;
+    color: var(--bs-danger);
+    font-weight: 500;
+  }
+
+  &--text-link {
+    color: var(--bs-success);
+    font-weight: 500;
+    text-decoration: none;
+  }
 }
 
 .auth-btn {
@@ -63,11 +66,19 @@
 
   &--submit {
     width: 100%;
-    height: 50px;
+    height: 42px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 14px;
   }
 
   &--submit-enabled {
-    background-color: var(--bs-success) !important;
+    background: var(--linear-blue-dark, linear-gradient(257deg, #243A95 -36.28%, #547BAD 136.28%)) !important;
+    color: var(--bs-white) !important;
+  }
+
+  &--submit-disabled {
+    background-color: #908E91 !important;
     color: var(--bs-white) !important;
   }
 }

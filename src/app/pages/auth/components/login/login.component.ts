@@ -15,10 +15,11 @@ import { deleteUnsavedData } from '../../../../store/sync-data.actions';
 import { spendingsHistorySelector } from '../../../spending/store/spendings.selectors';
 import { Spending } from '../../../spending/model/Spending';
 import { Validator } from '../../validator/Validator';
+import { GoogleBtnComponent } from '../social-login-wrapper/google-btn/google-btn.component';
 
 
 const UI_COMPONENTS = [
-  SocialLoginWrapperComponent
+  GoogleBtnComponent
 ];
 
 const MATERIAL_MODULES = [

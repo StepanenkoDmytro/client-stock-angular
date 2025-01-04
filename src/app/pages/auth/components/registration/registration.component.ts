@@ -7,9 +7,9 @@ import { AuthService } from '../../../../service/auth.service';
 import { Router, RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { AppRoutes } from '../../../../app.routes';
-import { SocialLoginWrapperComponent } from '../social-login-wrapper/social-login-wrapper.component';
 import { MatIconModule } from '@angular/material/icon';
 import { Validator } from '../../validator/Validator';
+import { GoogleBtnComponent } from '../social-login-wrapper/google-btn/google-btn.component';
 
 
 const MATERIAL_MODULES = [
@@ -23,7 +23,7 @@ const MATERIAL_MODULES = [
 @Component({
   selector: 'pgz-registration',
   standalone: true,
-  imports: [SocialLoginWrapperComponent, ...MATERIAL_MODULES, RouterModule],
+  imports: [GoogleBtnComponent, ...MATERIAL_MODULES, RouterModule],
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.scss', '../auth.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

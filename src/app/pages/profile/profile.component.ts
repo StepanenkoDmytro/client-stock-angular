@@ -88,6 +88,7 @@ export class ProfileComponent implements OnInit {
   }
 
   public login(): void {
+    console.log('here')
     this.router.navigate(['/auth']);
   }
 

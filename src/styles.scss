@@ -191,7 +191,7 @@ $light-theme: mat.define-light-theme((
   --bs-text-100: #bdbdbd;
 
   body {
-    background: conic-gradient(from 145deg at 45.33% 38.73%, #407DA4 0deg, #C6D8E3 360deg);
+    background: radial-gradient(63.8% 235.47% at 50% 50%, #407DA4 0%, #C6D8E3 100%);
   }
   
 }
@@ -218,6 +218,11 @@ body::after {
   background-size: contain;
   background-position: center 80px;
 }
+
+body.hide-after::after {
+  display: none;
+}
+
 
 ul {
   list-style: none;
