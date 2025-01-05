@@ -1,6 +1,16 @@
 :host {
   display: block;
   width: 100%;
+
+  ::ng-deep {
+    .mdc-linear-progress__buffer-bar {
+      background-color: #fff;
+    }
+
+    .mdc-linear-progress__bar-inner {
+      border-color: #243A95;
+    }
+  }
 }
 
 .total-card {

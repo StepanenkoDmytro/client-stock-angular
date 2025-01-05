@@ -12,12 +12,14 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { IconComponent } from '../../../../core/UI/components/icon/icon.component';
 import { Router, RouterModule } from '@angular/router';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 const MATERIAL_MODULES = [
   MatExpansionModule,
   MatFormFieldModule,
   MatDatepickerModule,
   MatSlideToggleModule,
+  MatProgressBarModule,
   ReactiveFormsModule,
   MatCheckboxModule,
   MatRadioModule,

@@ -18,6 +18,13 @@
     @if(monthlyBudget > 0) {
         <div class="total-card-budget">
             <div style="margin-left: auto;" [routerLink]="'/profile/monthly-budget'"><pgz-icon [name]="'custom_settings'"></pgz-icon></div>
+            <div>
+                <mat-progress-bar
+                    [mode]="'determinate'"
+                    [value]="(spentByMonth/monthlyBudget)*100"
+                    [color]="'primary'">
+                </mat-progress-bar>
+            </div>
             <div class="total-card-budget--info">
                 <p>Monthly budget</p>
                 <p class="total-card-budget--info-val">{{ monthlyBudget }}</p>
