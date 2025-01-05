@@ -57,7 +57,7 @@ export class ProfileComponent implements OnInit {
       this.currentMode = user?.mode;
       this.isStageMode = this.currentMode === UserMode.Stage;
 
-      if(user && user.email && user.mode) {
+      if(user && user.email) {
         this.userEmail = user.email;
         this.isAuthorizedUser = true;
         
