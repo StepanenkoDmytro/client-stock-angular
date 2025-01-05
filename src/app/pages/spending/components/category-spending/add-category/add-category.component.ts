@@ -58,6 +58,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
   public categoryTitleCtrl: FormControl<string> = new FormControl('');
   public selectedIcon: string = 'payment';
   public selectedColor: string = '#000000';
+  public isLimitCategoryEnebled: boolean = false;
   public limitOfCaregory: number = 0;
 
   public editCategory: Category;
@@ -181,6 +182,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       this.categoryTitleCtrl.setValue(this.editCategory.title);
       this.selectedIcon = this.editCategory.icon;
       this.selectedColor = this.editCategory.color;
+      this.isLimitCategoryEnebled = this.editCategory.limit > 0 ? true : false;
       this.limitOfCaregory = this.editCategory.limit;
     }
   }
@@ -191,5 +193,9 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       data: { message: `Category successfully ${action}!` },
       panelClass: 'custom-snackbar'
     });
+  }
+
+  public toggleLimitCategory(): void {
+    this.isLimitCategoryEnebled = !this.isLimitCategoryEnebled;
   }
 }

@@ -1,4 +1,4 @@
-<div [class.category-spending]="!currCategory"
+<div [class.page]="currCategory" [class.category-spending]="!currCategory"
     >
     @if(currCategory) {
         <div (click)="prevRoute()">

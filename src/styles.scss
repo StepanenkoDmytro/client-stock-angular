@@ -280,6 +280,28 @@ input {
   background-color: var(--bs-success) !important;
 }
 
+.pgz-btn {
+  width: 100%;
+  height: 42px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 14px;
+
+  &--option {
+    border: 1px solid #908E91 !important;
+  }
+
+  &--submit-enabled {
+    background: var(--linear-blue-dark, linear-gradient(257deg, #243A95 -36.28%, #547BAD 136.28%)) !important;
+    color: var(--bs-white) !important;
+  }
+
+  &--submit-disabled {
+    background-color: #908E91 !important;
+    color: var(--bs-white) !important;
+  }
+}
+
 .category-bottom-sheet {
   min-height: 60vh;
   margin: 0 8px;
@@ -392,4 +414,57 @@ input {
 
 // *
 
+// ****btn toggle
+/* Контейнер для перемикача */
+.toggle-text {
+  font-size: 16px;
+}
 
+.toggle-button {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+/* Сама кнопка */
+.toggle-button input {
+  opacity: 0; /* Ховаємо стандартний checkbox */
+  width: 0;
+  height: 0;
+}
+
+/* Фон перемикача */
+.slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  border-radius: 34px;
+  cursor: pointer;
+  transition: 0.4s;
+}
+
+/* Коло перемикача */
+.slider:before {
+  position: absolute;
+  content: '';
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.4s;
+}
+
+/* Активний стан (ON) */
+input:checked + .slider {
+  background-color: #8db7e3;
+}
+
+input:checked + .slider:before {
+  transform: translateX(24px);
+}

@@ -4,6 +4,8 @@
 
 .add-edit-category {
   padding-inline: 16px;
+  display: flex;
+  flex-direction: column;
 
   &--header {
     position: relative;
@@ -26,10 +28,11 @@
   }
 
   &--actions {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-bottom: 15px;
+    margin-top: auto;
+    margin-bottom: 116px;
+    display: flex; 
+    flex-direction: column; 
+    gap: 24px;
   }
 
   &--btn {

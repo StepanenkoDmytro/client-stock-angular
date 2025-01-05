@@ -71,16 +71,6 @@
     font-weight: 600;
     border-radius: 14px;
   }
-
-  &--submit-enabled {
-    background: var(--linear-blue-dark, linear-gradient(257deg, #243A95 -36.28%, #547BAD 136.28%)) !important;
-    color: var(--bs-white) !important;
-  }
-
-  &--submit-disabled {
-    background-color: #908E91 !important;
-    color: var(--bs-white) !important;
-  }
 }
 
 .auth-text {

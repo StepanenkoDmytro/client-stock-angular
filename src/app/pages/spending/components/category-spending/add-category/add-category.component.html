@@ -37,20 +37,50 @@
         
     </pgz-form-field>
 
-    <pgz-form-field>
-        <label style="margin-top: 32px;">Limit category</label>
-        <div class="add-edit-category--limit" style="margin-top: 16px;">
+    <div style="display: flex; justify-content: space-between; margin-top: 32px;">
+        <label class="toggle-text"><span>Limit category</span></label>
+        <label class="toggle-button">
+            <input type="checkbox" [ngModel]="isLimitCategoryEnebled" (change)="toggleLimitCategory()">
+            <span class="slider"></span>
+        </label>
+    </div>
+        <!-- <div class="add-edit-category--limit" style="margin-top: 16px;">
             <input class="add-edit-category--name" type="number" inputmode="numeric" placeholder="0" [(ngModel)]="limitOfCaregory" pgzMoney>
             <p class="add-spending--currency">$</p>
-        </div>
-    </pgz-form-field>
+        </div> -->
+    <!-- </pgz-form-field> -->
 
-    <div style="display: flex; margin-left: 16px; margin-top: 32px; color: red;" (click)="onDeleteCategory()">
+    @if(isLimitCategoryEnebled) {
+        <pgz-form-field>
+            <div class="add-edit-category--limit" style="margin-top: 16px;">
+                <input class="add-edit-category--name" type="number" inputmode="numeric" placeholder="0" [(ngModel)]="limitOfCaregory" pgzMoney>
+                <p class="add-spending--currency">$</p>
+            </div>
+        </pgz-form-field>
+    }
+
+    <!-- <div style="display: flex; margin-left: 16px; margin-top: 32px; color: red;" (click)="onDeleteCategory()">
         <pgz-icon style="font-size: 24px;" [name]="'delete'"></pgz-icon>
         <p style="margin-left: 16px;">Delete Category</p>
-    </div>
+    </div> -->
     
-    <div class="choise-btn" (click)="onAdd()">
+    <!-- <div class="choise-btn" (click)="onAdd()">
         <pgz-accept-btn [active]="canSave"></pgz-accept-btn>
+    </div> -->
+
+    <div class="add-edit-category--actions">
+        <button mat-flat-button
+                type="submit" class="pgz-btn pgz-btn--option montserrat" 
+                (click)="onDeleteCategory()">
+        {{ 'Delete Category' }}
+        </button>
+
+        <button mat-flat-button
+                [class.pgz-btn--submit-enabled]="canSave"
+                [class.pgz-btn--submit-disabled]="!canSave"
+                type="submit" class="pgz-btn montserrat" 
+                (click)="onAdd()">
+        {{ 'Save' }}
+        </button>
     </div>
 </section>
