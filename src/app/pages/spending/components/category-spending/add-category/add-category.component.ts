@@ -56,8 +56,8 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
   public categories: Category[];
   public selectedParentCategory: Category;
   public categoryTitleCtrl: FormControl<string> = new FormControl('');
-  public selectedIcon: string = 'payment';
-  public selectedColor: string = '#000000';
+  public selectedIcon: string = '';
+  public selectedColor: string = '#908E91';
   public isLimitCategoryEnebled: boolean = false;
   public limitOfCaregory: number = 0;
 

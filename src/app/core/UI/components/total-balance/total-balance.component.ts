@@ -18,6 +18,7 @@ export class TotalBalanceComponent implements OnInit {
   public balance: number = 0;
   public portfolioCost: number = 0;
   public monthlyBudget: number = 0;
+  public isMonthlyBudgetEnabled: boolean = false;
   public spentByMonth: number = 0;
 
   constructor(
@@ -32,10 +33,11 @@ export class TotalBalanceComponent implements OnInit {
       this.totalBalanceService.getSpentByMonth()]
     ).subscribe(([ monthlyBudget, spentByMonth ]) => {
       // this.portfolioCost = portfolioCost;
-      this.monthlyBudget = monthlyBudget;
+      this.isMonthlyBudgetEnabled = monthlyBudget.isEnabled;
+      this.monthlyBudget = monthlyBudget.amount;
       this.spentByMonth = spentByMonth;
 
-      this.balance = monthlyBudget - spentByMonth;
+      this.balance = monthlyBudget.amount - spentByMonth;
     });
   }
 }

@@ -15,7 +15,7 @@
         
     </div>
     
-    @if(monthlyBudget > 0) {
+    @if(isMonthlyBudgetEnabled) {
         <div class="total-card-budget">
             <div style="margin-left: auto;" [routerLink]="'/profile/monthly-budget'"><pgz-icon [name]="'custom_settings'"></pgz-icon></div>
             <div>

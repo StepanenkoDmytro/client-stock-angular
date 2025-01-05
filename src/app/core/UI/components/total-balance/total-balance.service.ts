@@ -2,31 +2,37 @@ import { Injectable } from '@angular/core';
 import { SpendingsService } from '../../../../service/spendings.service';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 
+export interface MonthlyBudget {
+  amount: number;
+  isEnabled: boolean;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class TotalBalanceService {
 
   private readonly budgetLocalStorageKey = 'spending_budget';
-  private monthlyBudget$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  private monthlyBudget$: BehaviorSubject<MonthlyBudget> = new BehaviorSubject<MonthlyBudget>({
+    amount: 0,
+    isEnabled: false,
+  });
 
   constructor(
     private spendingsService: SpendingsService
   ) { }
 
-  public getMonthlyBudget(): Observable<number> {
+  public getMonthlyBudget(): Observable<MonthlyBudget> {
     
     const budgetStoredData = localStorage.getItem(this.budgetLocalStorageKey);
-    const parseBudget: number = JSON.parse(budgetStoredData);
-    
-    if(parseBudget) {
-      this.monthlyBudget$.next(parseBudget);
+    if (budgetStoredData) {
+      const parsedBudget: MonthlyBudget = JSON.parse(budgetStoredData);
+      this.monthlyBudget$.next(parsedBudget);
     }
-    
-    return this.monthlyBudget$;
+    return this.monthlyBudget$.asObservable();
   }
 
-  public saveMonthlyBudget(budget: number): void {
+  public saveMonthlyBudget(budget: MonthlyBudget): void {
     localStorage.setItem(this.budgetLocalStorageKey, JSON.stringify(budget));
     this.monthlyBudget$.next(budget);
   }

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { PrevRouteComponent } from '../../../../core/UI/components/prev-route/prev-route.component';
 import { Router } from '@angular/router';
-import { TotalBalanceService } from '../../../../core/UI/components/total-balance/total-balance.service';
+import { MonthlyBudget, TotalBalanceService } from '../../../../core/UI/components/total-balance/total-balance.service';
 import { FormsModule } from '@angular/forms';
 import { AcceptBtnComponent } from '../../../../core/UI/components/accept-btn/accept-btn.component';
 import { MoneyDirective } from '../../../../directive/money.directive';
@@ -28,15 +28,12 @@ export class MonthlyBudgetComponent implements OnInit {
 
   public toggleBudget(): void {
     this.isMonthlyBudgetEnabled = !this.isMonthlyBudgetEnabled;
-
   }
 
   public ngOnInit(): void {
     this.totalBalanceService.getMonthlyBudget().subscribe(budget => {
-      if(budget > 0) {
-        this.isMonthlyBudgetEnabled = true;
-      }
-      this.monthlyBudget = budget;
+      this.isMonthlyBudgetEnabled = budget.isEnabled;
+      this.monthlyBudget = budget.amount;
     })
   }
 
@@ -49,6 +46,10 @@ export class MonthlyBudgetComponent implements OnInit {
   }
 
   public changeMonthlyBudget(): void {
-    this.totalBalanceService.saveMonthlyBudget(this.monthlyBudget);
+    const budgetData: MonthlyBudget = {
+      amount: this.monthlyBudget,
+      isEnabled: this.isMonthlyBudgetEnabled
+    };
+    this.totalBalanceService.saveMonthlyBudget(budgetData);
   }
 }

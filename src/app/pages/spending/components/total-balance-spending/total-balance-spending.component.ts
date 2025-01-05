@@ -36,6 +36,7 @@ const MATERIAL_MODULES = [
 })
 export class TotalBalanceSpendingComponent implements OnInit {
   public spentByMonth: number = 0;
+  public isMonthlyBudgetEnabled: boolean = false;
   public monthlyBudget: number = 0;
 
   constructor(
@@ -50,7 +51,8 @@ export class TotalBalanceSpendingComponent implements OnInit {
       this.totalBalanceService.getSpentByMonth()
     ]
     ).subscribe(([ monthlyBudget, spentByMonth ]) => {
-      this.monthlyBudget = monthlyBudget;
+      this.isMonthlyBudgetEnabled = monthlyBudget.isEnabled;
+      this.monthlyBudget = monthlyBudget.amount;
       this.spentByMonth = spentByMonth;
 
       this.cdr.markForCheck();

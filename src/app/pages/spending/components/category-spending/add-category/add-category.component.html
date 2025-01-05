@@ -17,25 +17,28 @@
     </pgz-form-field>
 
     <pgz-form-field>
-        <label style="margin-top: 32px;">Icon</label>
-        <div class="d-flex"  style="margin-top: 16px; align-items: center;">
-            <pgz-icon class="category--icon" style="margin-right: 8px;" [name]="selectedIcon"></pgz-icon>
-            <pgz-icon-picker id="iconPicker" (onSelectIcon)="onSelectIcon($event)"></pgz-icon-picker>
-        </div>
-    </pgz-form-field>
-
-    <pgz-form-field>
         <label style="margin-top: 32px;">Color</label>
         <div class="d-flex"  style="margin-top: 16px; align-items: center;">
-            <div class="add-edit-category--choose-color">
+            <div class="add-edit-category--choose-color" [ngStyle]='{ "background-color": selectedColor }'>
                 <pgz-icon [name]="'custom_color_icon'"></pgz-icon>
-                <div class="add-edit-category--selected-color" [ngStyle]='{ "background-color": selectedColor }'></div>
             </div>
             <input id="colorInput" type="color" [(ngModel)]="selectedColor" style="display: none;">
             <button class="add-edit-category--choose-color__btn" (click)="openColorPicker()">Choose color</button>
         </div>
         
     </pgz-form-field>
+
+    <pgz-form-field>
+        <label style="margin-top: 32px;">Icon</label>
+        <div class="d-flex"  style="margin-top: 16px; align-items: center;">
+            <div class="add-edit-category--choose-color" [ngStyle]='{ "background-color": selectedColor }'>
+                <pgz-icon class="category--icon" [name]="selectedIcon"></pgz-icon>
+            </div>
+            <pgz-icon-picker id="iconPicker" (onSelectIcon)="onSelectIcon($event)"></pgz-icon-picker>
+        </div>
+    </pgz-form-field>
+
+    
 
     <div style="display: flex; justify-content: space-between; margin-top: 32px;">
         <label class="toggle-text"><span>Limit category</span></label>
@@ -44,11 +47,6 @@
             <span class="slider"></span>
         </label>
     </div>
-        <!-- <div class="add-edit-category--limit" style="margin-top: 16px;">
-            <input class="add-edit-category--name" type="number" inputmode="numeric" placeholder="0" [(ngModel)]="limitOfCaregory" pgzMoney>
-            <p class="add-spending--currency">$</p>
-        </div> -->
-    <!-- </pgz-form-field> -->
 
     @if(isLimitCategoryEnebled) {
         <pgz-form-field>
@@ -58,15 +56,6 @@
             </div>
         </pgz-form-field>
     }
-
-    <!-- <div style="display: flex; margin-left: 16px; margin-top: 32px; color: red;" (click)="onDeleteCategory()">
-        <pgz-icon style="font-size: 24px;" [name]="'delete'"></pgz-icon>
-        <p style="margin-left: 16px;">Delete Category</p>
-    </div> -->
-    
-    <!-- <div class="choise-btn" (click)="onAdd()">
-        <pgz-accept-btn [active]="canSave"></pgz-accept-btn>
-    </div> -->
 
     <div class="add-edit-category--actions">
         <button mat-flat-button
