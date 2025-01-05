@@ -39,8 +39,13 @@
         </pgz-form-field>
 
         <div class="choise-btn" (click)="save()">
-            
-            <pgz-accept-btn [active]="canSave"></pgz-accept-btn>
+            <button mat-flat-button
+                    [class.pgz-btn--submit-enabled]="canSave"
+                    [class.pgz-btn--submit-disabled]="!canSave"
+                    type="submit" class="pgz-btn montserrat" 
+                    (click)="save()">
+            {{ 'Save' }}
+            </button>
         </div>
     </section>
 </section>

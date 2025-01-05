@@ -100,8 +100,8 @@
     }
 </section>
 <div style="margin-left: 20px;">
-    <mat-slide-toggle [(ngModel)]="isChecked" (ngModelChange)="onToggleChange()">
-        {{ isChecked ? 'Dev Mode' : 'Stage Mode' }}
+    <mat-slide-toggle [(ngModel)]="isStageMode" (ngModelChange)="onToggleChange()">
+        {{ isStageMode ? 'Stage Mode' : 'Dev Mode' }}
     </mat-slide-toggle>
 
 </div>

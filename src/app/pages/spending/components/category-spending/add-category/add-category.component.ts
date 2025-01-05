@@ -21,15 +21,15 @@ import { DeleteCategoryDialogComponent } from '../delete-category-dialog/delete-
 import { PrevRouteComponent } from '../../../../../core/UI/components/prev-route/prev-route.component';
 import { NotificationComponent } from '../../../../../core/UI/components/notification/notification.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MoneyDirective } from '../../../../../directive/money.directive';
 
 
 const UI_MODULES = [
   IconComponent,
   IconPickerComponent,
   FormFieldComponent,
-  AcceptBtnComponent,
-  ArrowBackComponent,
-  PrevRouteComponent
+  PrevRouteComponent,
+  MoneyDirective
 ];
 
 const MATERIAL_MODULES = [
