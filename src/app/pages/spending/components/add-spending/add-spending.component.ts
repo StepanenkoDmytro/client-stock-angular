@@ -26,7 +26,6 @@ import { NotificationComponent } from '../../../../core/UI/components/notificati
 
 const UI_MODULES = [
   MoneyDirective,
-  AcceptBtnComponent,
   CategorySelectorComponent,
   FormFieldComponent,
   PrevRouteComponent

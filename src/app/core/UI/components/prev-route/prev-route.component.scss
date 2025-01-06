@@ -1,7 +1,12 @@
 :host {
   display: block;
   height: 60px;
-  background: var(--linear-blue, linear-gradient(90deg, #568CAE 0%, #9DBCD0 100%));
+}
+
+.background-hide {
+  background: inherit!important;
+  color: black!important;
+  font-weight: 400!important;
 }
 
 .route {
@@ -13,6 +18,9 @@
   font-weight: 600;
   padding: 16px;
   color: #fff;
+  border-radius: 0%;
+  background: var(--linear-blue, linear-gradient(90deg, #568CAE 0%, #9DBCD0 100%));
+
 
   &--icon {
     position: absolute;

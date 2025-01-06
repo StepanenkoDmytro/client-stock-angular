@@ -1,7 +1,7 @@
 <div>
     @if(history.length > 0) {
         <div (click)="goBack()">
-            <pgz-prev-route>
+            <pgz-prev-route [hideBackgroundColor]="true">
                 <p>{{ currentTitle }}</p>
             </pgz-prev-route>
         </div>
@@ -33,7 +33,7 @@
             }
         </div>
     }
-    <!-- @if() {
-
-    } -->
+    @if(history.length > 0) {
+        
+    } 
 </div>

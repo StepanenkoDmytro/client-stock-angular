@@ -1,7 +1,7 @@
-<div class="route btn">
+<div class="route btn" [ngClass]="{ 'background-hide': hideBackgroundColor }">
     @if(showArrow) {
         <span class="route--icon">
-            <pgz-arrow-back></pgz-arrow-back>
+            <pgz-arrow-back [useBlackColor]="hideBackgroundColor"></pgz-arrow-back>
         </span>
     }
     <div style="margin: auto;">
