@@ -39,6 +39,7 @@ export class CategorySpendingComponent implements OnInit {
   public currCategory: Category | null;
   public spendings: Spending[];
   public categories: Category[];
+  public spendByCategory: number = 0;
 
   public spendingCategories: ICategoryStatistic[];
 
@@ -63,7 +64,7 @@ export class CategorySpendingComponent implements OnInit {
       const categoryId = paramMap.get('id');
       
       this.spendings = [...spendings];
-      this.categories = categories[1].children;
+      this.categories = categories.find(category => category.title === 'Spending').children;
 
       if (categoryId) {
         this.currCategory = await this.spendingsService.findCategoryById(categoryId);
@@ -72,6 +73,8 @@ export class CategorySpendingComponent implements OnInit {
         }
         this.spendings = this.spendingsService.findSpendingsByCategoryIncludeChildren(this.spendings, this.currCategory);
         this.spendingCategories = this.spendingCategoryHelper.calculateCategoryStatisticByCategory(this.spendings, this.currCategory);
+        this.spendByCategory = this.spendings.reduce((accumulator, spending) => accumulator + spending.cost, 0);
+
       } else {
         this.spendingCategories = await this.spendingCategoryHelper.calculateCategoryStatistic(this.spendings);
       }

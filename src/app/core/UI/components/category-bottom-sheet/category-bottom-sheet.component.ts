@@ -4,9 +4,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { Category } from '../../../../domain/category.domain';
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../icon/icon.component';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AddBtnComponent } from '../add-btn/add-btn.component';
-import { CategorySpendingCardComponent } from '../../../../pages/spending/components/category-spending/category-spending-card/category-spending-card.component';
 import { PrevRouteComponent } from '../prev-route/prev-route.component';
 
 @Component({
@@ -25,22 +24,26 @@ export class CategoryBottomSheetComponent {
   public activeCategory: Category | null = null;
 
   constructor(
+    private router: Router,
     private bottomSheetRef: MatBottomSheetRef<CategoryBottomSheetComponent>,
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: { categories: Category[]; activeCategory?: Category }
   ) {
     this.currentCategories = data.categories;
-
     if (data.activeCategory) {
 
       //TODO: прописати зміну currentCategories при activeCategory 
       this.activeCategory = data.activeCategory;
       // this.navigateToActiveCategory(data.activeCategory);
     }
-    console.log(data);
+  }
+
+  public addCategory(): void {
+    const parentId = this.currentCategories[0].parent;
+    this.closeBottomSheet();
+    this.router.navigate(['/spending/add-category', parentId]);
   }
 
   selectCategory(category: Category): void {
-    console.log('here');
     // debugger;
     if (category.children && category.children.length > 0) {
       this.history.push({ title: this.currentTitle, categories: this.currentCategories });

@@ -7,7 +7,7 @@
         </div>
     }
 
-    <div class="add-category" [routerLink]="['add-category']">
+    <div class="add-category" (click)="addCategory()">
         <pgz-add-btn></pgz-add-btn>
         Add category
     </div>
@@ -32,6 +32,8 @@
                 </div>
             }
         </div>
-        
     }
+    <!-- @if() {
+
+    } -->
 </div>

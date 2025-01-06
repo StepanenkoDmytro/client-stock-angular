@@ -31,7 +31,6 @@ export class InputRecoveryCodeComponent implements OnInit {
     this.userEmail = this.emailStateService.userEmail;
     try {
       const recoveryCode: string = await lastValueFrom(this.authService.sendRecoveryCode(this.userEmail));
-      console.log(recoveryCode);
       this.recoveryCode = recoveryCode;
       this.emailStateService.recoveryCode = recoveryCode;
       

@@ -73,7 +73,7 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
   public async ngOnInit(): Promise<void> {
     this.spendingsService.init();
     this.spendingsService.getAllCategories().subscribe(categories => {
-      this.categories = categories[1].children;
+      this.categories = categories.find(category => category.title === 'Spending').children;
 
       //TODO: or unselected?
       this.selectedCategory = this.categories.find(category => category.title === 'Other');
@@ -108,9 +108,11 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
 
 
   public save(): void {
-    this.saveSpending();
-    this.showNotification();
-    this.prevRoute();
+    if(this.costOfProduct) {
+      this.saveSpending();
+      this.showNotification();
+      this.prevRoute();
+    }
   }
 
   private saveSpending(): void {

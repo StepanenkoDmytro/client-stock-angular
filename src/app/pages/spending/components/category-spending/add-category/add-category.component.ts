@@ -104,7 +104,6 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
     const parentId = this.selectedParentCategory.id;
     
     if(!!this.editCategory) {
-      debugger;
       const editedCategory = new Category(this.categoryTitleCtrl.value, this.selectedIcon, this.editCategory.children, false, this.editCategory.id, parentId, this.selectedColor, this.limitOfCaregory);
       
       this.spendingService.editCategory(editedCategory);
