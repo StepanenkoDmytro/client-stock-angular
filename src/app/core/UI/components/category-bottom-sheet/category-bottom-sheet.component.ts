@@ -22,6 +22,7 @@ export class CategoryBottomSheetComponent {
   public history: { title: string; categories: Category[] }[] = [];
 
   public activeCategory: Category | null = null;
+  public proposedActiveCategory: Category | null = null;
 
   constructor(
     private router: Router,
@@ -47,13 +48,19 @@ export class CategoryBottomSheetComponent {
     // debugger;
     if (category.children && category.children.length > 0) {
       this.history.push({ title: this.currentTitle, categories: this.currentCategories });
+      this.proposedActiveCategory = category;
       this.currentCategories = category.children;
       this.currentTitle = category.title;
     } else {
-      // Якщо категорія не має дочірніх категорій, вибираємо її як активну
       this.activeCategory = category;
       this.closeBottomSheet();
     }
+  }
+
+  selectParentCategory(): void {
+
+    this.activeCategory = this.proposedActiveCategory;
+    this.closeBottomSheet();
   }
 
   closeBottomSheet(): void {

@@ -34,6 +34,15 @@
         </div>
     }
     @if(history.length > 0) {
-        
+        <div class="category" (click)="selectParentCategory()">
+            <div class="category--curr">
+                <div class="category--icon" [ngStyle]="{ 'background-color': proposedActiveCategory.color}">
+                    <pgz-icon [name]="proposedActiveCategory.icon"></pgz-icon>
+                </div>
+                <div>
+                    <p class="category--title">Other</p>
+                </div>
+            </div>
+        </div>
     } 
 </div>
