@@ -21,6 +21,7 @@ export class SwipeWrapperComponent {
   @ViewChild('slider') slider: ElementRef;
 
   public currentIndex = 0;
+  public isVerticalMove: boolean = false;
   
   constructor(
     private renderer: Renderer2,
@@ -28,6 +29,13 @@ export class SwipeWrapperComponent {
   ) {}
 
   public onSwipeMove(event: SwipeEvent): void {
+    if(event.direction === 'y') {
+      this.isVerticalMove = true;
+      return;
+    } else {
+      this.isVerticalMove = false;
+    }
+
     if (this.cards.length <= 1) {
       return; 
     }
@@ -45,6 +53,10 @@ export class SwipeWrapperComponent {
   }
 
   public onSwipeEnd(event: SwipeEvent): void {
+    if(this.isVerticalMove) {
+      return;
+    }
+
     if (this.cards.length <= 1) {
       return; 
     }
@@ -53,7 +65,6 @@ export class SwipeWrapperComponent {
     const maxIndex = this.cards.length - 1;
   
     const swipePercentage = (Math.abs(event.distance) / window.innerWidth) * 100;
-  
     if (swipePercentage > threshold) {
       if (event.distance < 0 && this.currentIndex < maxIndex) {
         this.currentIndex++;
