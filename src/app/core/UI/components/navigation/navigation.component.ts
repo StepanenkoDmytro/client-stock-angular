@@ -27,6 +27,7 @@ export class NavigationComponent implements OnInit {
   public isFlipping: boolean = false;
   public UserMode = UserMode;
   public currentMode: UserMode = UserMode.Stage;
+  public isActive: boolean = false;
 
   public SPENDING_NAV_ITEM: INavigationItem = {
     path: AppRoutes.SPENDING,

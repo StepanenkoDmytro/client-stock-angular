@@ -8,9 +8,12 @@
     <!-- {{  }} -->
   <!-- </mat-icon> -->
   <div class="navigation--element"
-  [routerLink]="SPENDING_NAV_ITEM.path" 
-  [routerLinkActive]="'navigation--element__active'">
-  <pgz-icon class="navigation--element__icon" [name]="SPENDING_NAV_ITEM.icon"></pgz-icon>
+       [routerLink]="SPENDING_NAV_ITEM.path" >
+    <pgz-icon [stroke]="rla.isActive ? '#243A95' : '#000'"
+              #rla="routerLinkActive" 
+              class="navigation--element__icon" 
+              [routerLinkActive]="'navigation--element__active'" 
+              [name]="SPENDING_NAV_ITEM.icon"></pgz-icon>
 </div>
 
   @if(currentMode === UserMode.Dev) {
@@ -38,9 +41,14 @@
     {{  }}
   </mat-icon> -->
 
-  <div class="navigation--element"
-  [routerLink]="SETTINGS_NAV_ITEM.path" 
-            [routerLinkActive]="'navigation--element__active'">
-  <pgz-icon class="navigation--element__icon" [name]="SETTINGS_NAV_ITEM.icon"></pgz-icon>
-</div>
+  <div class="navigation--element" [routerLink]="SETTINGS_NAV_ITEM.path">
+    <pgz-icon 
+      [stroke]="rla1.isActive ? '#243A95' : '#000'"
+      #rla1="routerLinkActive"
+      class="navigation--element__icon" 
+      [routerLinkActive]="'navigation--element__active'" 
+      [name]="SETTINGS_NAV_ITEM.icon">
+    </pgz-icon>
+  </div>
+  
 </div>

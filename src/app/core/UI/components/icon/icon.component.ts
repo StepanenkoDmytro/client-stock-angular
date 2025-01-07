@@ -1,10 +1,11 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'pgz-icon',
   standalone: true,
-  imports: [MatIconModule],
+  imports: [MatIconModule, CommonModule],
   templateUrl: './icon.component.html',
   styleUrl: './icon.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -19,4 +20,5 @@ export class IconComponent {
     this._src = src;
     this._isSVG = src.startsWith('custom_');
   }
+  @Input('stroke') strokeColor: string = '';
 }
