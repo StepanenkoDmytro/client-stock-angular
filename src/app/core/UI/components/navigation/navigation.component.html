@@ -1,11 +1,17 @@
 <div class="navigation" 
     [class.flipping]="isFlipping"
     >
-  <mat-icon class="navigation--element"
+  <!-- <mat-icon class="navigation--element"
             [routerLink]="SPENDING_NAV_ITEM.path" 
-            [routerLinkActive]="'navigation--element__active'">
-    {{ SPENDING_NAV_ITEM.icon }}
-  </mat-icon>
+            [routerLinkActive]="'navigation--element__active'"
+            svgIcon="{{ _src }}" [inline]="true"> -->
+    <!-- {{  }} -->
+  <!-- </mat-icon> -->
+  <div class="navigation--element"
+  [routerLink]="SPENDING_NAV_ITEM.path" 
+  [routerLinkActive]="'navigation--element__active'">
+  <pgz-icon class="navigation--element__icon" [name]="SPENDING_NAV_ITEM.icon"></pgz-icon>
+</div>
 
   @if(currentMode === UserMode.Dev) {
     <mat-icon class="navigation--element"
@@ -16,7 +22,7 @@
   }
 
   <div (click)="onButtonClick()">
-    <pgz-add-btn></pgz-add-btn>
+    <pgz-add-btn [width]="48" [strokeColor]="'#FDFEFF'" [strokeWidth]="2" [backgroundColor]="'#243A95'"></pgz-add-btn>
   </div>
 
   @if(currentMode === UserMode.Dev) {
@@ -27,9 +33,14 @@
     </mat-icon>
   }
 
-  <mat-icon class="navigation--element"
-            [routerLink]="SETTINGS_NAV_ITEM.path" 
+  <!-- <mat-icon class="navigation--element"
+            >
+    {{  }}
+  </mat-icon> -->
+
+  <div class="navigation--element"
+  [routerLink]="SETTINGS_NAV_ITEM.path" 
             [routerLinkActive]="'navigation--element__active'">
-    {{ SETTINGS_NAV_ITEM.icon }}
-  </mat-icon>
+  <pgz-icon class="navigation--element__icon" [name]="SETTINGS_NAV_ITEM.icon"></pgz-icon>
+</div>
 </div>

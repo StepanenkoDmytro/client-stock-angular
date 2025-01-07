@@ -1,4 +1,14 @@
-<div class="circle">
-    <div class="plus vertical"></div>
-    <div class="plus horizontal"></div>
+<div class="circle" [ngStyle]="{
+    'width.px': width, 
+    'height.px': width,
+    'background-color': backgroundColor,
+    }">
+  <div 
+  class="plus vertical" 
+  [ngStyle]="{'width.px': strokeWidth, 'background-color': strokeColor}">
+</div>
+<div 
+  class="plus horizontal" 
+  [ngStyle]="{'height.px': strokeWidth, 'background-color': strokeColor}">
+</div> 
 </div>

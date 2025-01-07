@@ -7,6 +7,7 @@ import { AddTriggerService } from '../../../../service/helpers/add-trigger.servi
 import { AddBtnComponent } from '../add-btn/add-btn.component';
 import { UserService } from '../../../../service/user.service';
 import { UserMode } from '../../../../model/User';
+import { IconComponent } from '../icon/icon.component';
 
 
 export interface INavigationItem {
@@ -20,7 +21,7 @@ export interface INavigationItem {
   styleUrl: './navigation.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [CommonModule, RouterModule, MatIconModule, AddBtnComponent],
+  imports: [CommonModule, RouterModule, IconComponent, AddBtnComponent],
 })
 export class NavigationComponent implements OnInit {
   public isFlipping: boolean = false;
@@ -29,7 +30,7 @@ export class NavigationComponent implements OnInit {
 
   public SPENDING_NAV_ITEM: INavigationItem = {
     path: AppRoutes.SPENDING,
-    icon: 'account_balance_wallet',
+    icon: 'custom_wallet',
   };
   
   public SAVINGS_NAV_ITEM: INavigationItem = {
@@ -44,7 +45,7 @@ export class NavigationComponent implements OnInit {
   
   public SETTINGS_NAV_ITEM: INavigationItem = {
     path: AppRoutes.PROFILE,
-    icon: 'account_circle',
+    icon: 'custom_profile-settings',
   };
 
   constructor(
