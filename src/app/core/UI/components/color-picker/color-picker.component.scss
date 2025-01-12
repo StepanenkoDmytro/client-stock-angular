@@ -1,0 +1,55 @@
+:host {
+  display: block;
+}
+
+.color-picker {
+  position: relative;
+
+  .selected-color {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    color: #fff;
+    font-weight: bold;
+  }
+  .color-grid {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: max-content;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+    border-radius: 8px;
+    z-index: 10;
+  }
+
+  .color-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: scale(1.1);
+      border-color: #000;
+    }
+  }
+
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9;
+  }
+}

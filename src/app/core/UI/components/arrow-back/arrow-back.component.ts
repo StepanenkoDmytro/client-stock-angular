@@ -12,4 +12,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 export class ArrowBackComponent {
   @Input()
   public useBlackColor: boolean = false;
+  @Input()
+  public rotateAngle: string = '45';
 }

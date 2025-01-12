@@ -1,0 +1,18 @@
+<div class="color-picker">
+    <!-- <div class="selected-color" [style.backgroundColor]="selectedColor" (click)="toggleDropdown()">
+      {{ selectedColor ? selectedColor : 'Виберіть колір' }}
+    </div> -->
+    <!-- <div>
+        <ng-content select="div"></ng-content>
+    </div> -->
+  
+    @if(isDropdownOpen) {
+    <div class="overlay"></div>
+    <div class="color-grid">
+        @for(color of colors; track color) {
+            <div class="color-circle" (click)="selectColor(color)" [style.backgroundColor]="color"></div>
+        }
+    </div>
+    }
+  </div>
+  

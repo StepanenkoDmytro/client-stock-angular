@@ -22,6 +22,7 @@ import { PrevRouteComponent } from '../../../../../core/UI/components/prev-route
 import { NotificationComponent } from '../../../../../core/UI/components/notification/notification.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MoneyDirective } from '../../../../../directive/money.directive';
+import { ColorPickerComponent } from '../../../../../core/UI/components/color-picker/color-picker.component';
 
 
 const UI_MODULES = [
@@ -29,7 +30,8 @@ const UI_MODULES = [
   IconPickerComponent,
   FormFieldComponent,
   PrevRouteComponent,
-  MoneyDirective
+  MoneyDirective,
+  ColorPickerComponent
 ];
 
 const MATERIAL_MODULES = [
@@ -47,7 +49,7 @@ const MATERIAL_MODULES = [
 @Component({
   selector: 'pgz-add-category',
   standalone: true,
-  imports: [...UI_MODULES, ...MATERIAL_MODULES ,RouterModule],
+  imports: [...UI_MODULES, ...MATERIAL_MODULES, RouterModule, ArrowBackComponent],
   templateUrl: './add-category.component.html',
   styleUrl: './add-category.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -60,6 +62,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
   public selectedColor: string = '#908E91';
   public isLimitCategoryEnebled: boolean = false;
   public limitOfCaregory: number = 0;
+  public isColorDropdownOpen: boolean = false;
 
   public editCategory: Category;
   private rootPage: string = '/spending/category';
@@ -129,19 +132,20 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       iconPicker.click(); 
     }
   }
-
-  public openColorPicker(): void {
-    const colorInput = document.getElementById('colorInput') as HTMLInputElement;
-    if (colorInput) {
-      colorInput.click(); 
-    }
-  }
   
   get canSave(): boolean {
     if(this.selectedParentCategory !== null && this.categoryTitleCtrl.value.length > 0) {
       return true;
     }
     return false;
+  }
+
+  public toggleColorPicker(): void {
+    this.isColorDropdownOpen = !this.isColorDropdownOpen;
+  }
+
+  public selectColor(color: string) {
+    this.selectedColor = color;
   }
 
   public onDeleteCategory(): void {

@@ -16,14 +16,19 @@
         </div>
     </pgz-form-field>
 
-    <pgz-form-field>
+    <pgz-form-field (click)="toggleColorPicker()">
         <label style="margin-top: 32px;">Color</label>
+        
         <div class="d-flex"  style="margin-top: 16px; align-items: center;">
+            
             <div class="add-edit-category--choose-color" [ngStyle]='{ "background-color": selectedColor }'>
                 <pgz-icon [name]="'custom_color_icon'"></pgz-icon>
             </div>
-            <input id="colorInput" type="color" [(ngModel)]="selectedColor" style="display: none;">
-            <button class="add-edit-category--choose-color__btn" (click)="openColorPicker()">Choose color</button>
+            <pgz-color-picker [isDropdownOpen]="isColorDropdownOpen" (colorSelected)="selectColor($event)"></pgz-color-picker>
+            <p>Change color</p>
+            <div style="margin-left: auto;">
+                <pgz-arrow-back [rotateAngle]="'-45'" [useBlackColor]="true"></pgz-arrow-back>
+            </div>
         </div>
         
     </pgz-form-field>
@@ -35,6 +40,9 @@
                 <pgz-icon class="category--icon" [name]="selectedIcon"></pgz-icon>
             </div>
             <pgz-icon-picker id="iconPicker" (onSelectIcon)="onSelectIcon($event)"></pgz-icon-picker>
+            <div style="margin-left: auto;">
+                <pgz-arrow-back [rotateAngle]="'-45'" [useBlackColor]="true"></pgz-arrow-back>
+            </div>
         </div>
     </pgz-form-field>
 
