@@ -85,6 +85,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
 
       this.categories = categories;
       const parentCategoryId = paramMap.get('id');
+      //rewrite editStateCategory to paramMap
       if(this.editStateCategory.editStateCategory) {
         this.editCategory = this.editStateCategory.editStateCategory;
         this.fillFields();

@@ -16,7 +16,7 @@
         </div>
     </pgz-form-field>
 
-    <pgz-form-field (click)="toggleColorPicker()">
+    <pgz-form-field (click)="toggleColorPicker()" [widthBorder]="85">
         <label style="margin-top: 32px;">Color</label>
         
         <div class="d-flex"  style="margin-top: 16px; align-items: center;">
@@ -33,7 +33,7 @@
         
     </pgz-form-field>
 
-    <pgz-form-field>
+    <pgz-form-field [widthBorder]="85">
         <label style="margin-top: 32px;">Icon</label>
         <div class="d-flex"  style="margin-top: 16px; align-items: center;">
             <div class="add-edit-category--choose-color" [ngStyle]='{ "background-color": selectedColor }'>

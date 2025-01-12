@@ -1,9 +1,10 @@
 <div class="form-field">
-    <div class="form-field--label montserrat">
-      <ng-content select="label"></ng-content>
-    </div>
-    <div class="form-field--content">
-      <ng-content select="div"></ng-content>
-    </div>
+  <div class="form-field--label montserrat">
+    <ng-content select="label"></ng-content>
   </div>
+  <div class="form-field--content">
+    <ng-content select="div"></ng-content>
+    <div class="form-field--border" [ngStyle]="{'width': widthBorder + '%'}"></div>
+  </div>
+</div>
   
