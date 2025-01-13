@@ -9,12 +9,10 @@
     </pgz-prev-route>
 </div>
 <section class="add-edit-category page">
-    <pgz-form-field>
+    <pgz-form-input>
         <label style="margin-top: 32px;">Name category</label>
-        <div  style="margin-top: 16px;">
-            <input type="text" class="add-edit-category--name" placeholder="Enter name of category" style="font-size: 18px;" [formControl]="categoryTitleCtrl">
-        </div>
-    </pgz-form-field>
+        <input type="text" placeholder="Enter name of category" [formControl]="categoryTitleCtrl">
+    </pgz-form-input>
 
     <pgz-form-field (click)="toggleColorPicker()" [widthBorder]="85">
         <label style="margin-top: 32px;">Color</label>
@@ -57,17 +55,16 @@
     </div>
 
     @if(isLimitCategoryEnebled) {
-        <pgz-form-field>
-            <div class="add-edit-category--limit" style="margin-top: 16px;">
-                <input class="add-edit-category--name" type="number" inputmode="numeric" placeholder="0" [(ngModel)]="limitOfCaregory" pgzMoney>
-                <p class="add-spending--currency">$</p>
-            </div>
-        </pgz-form-field>
+        <pgz-form-input>
+            <input class="add-edit-category--name" type="number" inputmode="numeric" placeholder="0" [(ngModel)]="limitOfCaregory" pgzMoney>
+            <span class="add-spending--currency">$</span>
+        </pgz-form-input>
     }
 
     <div class="add-edit-category--actions">
         <button mat-flat-button
                 type="submit" class="pgz-btn pgz-btn--option montserrat" 
+                style="color: #BB4545;"
                 (click)="onDeleteCategory()">
         {{ 'Delete Category' }}
         </button>

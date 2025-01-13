@@ -6,7 +6,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './form-field.component.html',
-  styleUrl: './form-field.component.scss',
+  styleUrls: ['./form-field.component.scss', '../form.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FormFieldComponent {

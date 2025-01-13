@@ -13,7 +13,6 @@ import { EditStateService } from '../../../service/edit-state.service';
 import { combineLatest, firstValueFrom } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormFieldComponent } from '../../../../../core/UI/components/form-field/form-field.component';
-import { AcceptBtnComponent } from '../../../../../core/UI/components/accept-btn/accept-btn.component';
 import { ArrowBackComponent } from '../../../../../core/UI/components/arrow-back/arrow-back.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Spending } from '../../../model/Spending';
@@ -23,6 +22,7 @@ import { NotificationComponent } from '../../../../../core/UI/components/notific
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MoneyDirective } from '../../../../../directive/money.directive';
 import { ColorPickerComponent } from '../../../../../core/UI/components/color-picker/color-picker.component';
+import { FormInputComponent } from '../../../../../core/UI/components/form-input/form-input.component';
 
 
 const UI_MODULES = [
@@ -31,7 +31,8 @@ const UI_MODULES = [
   FormFieldComponent,
   PrevRouteComponent,
   MoneyDirective,
-  ColorPickerComponent
+  ColorPickerComponent,
+  FormInputComponent
 ];
 
 const MATERIAL_MODULES = [
