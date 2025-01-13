@@ -1,28 +1,31 @@
 .form {
-    display: flex;
-    flex-direction: column;
-    letter-spacing: 0.16px;
-  
-    &--label {
-      font-size: 16px;
-      font-weight: 400;
-      color: #000;
-    }
-  
-    &--content {
-      display: block;
-    }
+  display: flex;
+  flex-direction: column;
+  letter-spacing: 0.16px;
 
-    &--content-input {
-        display: flex;
-        margin-top: 16px;
-        padding: 10px;
-        border-radius: 14px;
-        border: 1px solid var(--light-blue, #DAECF8);
-    }
-  
-    &--border {
-      margin-left: auto;
-      border-bottom: 1px solid #DAECF8;
-    }
+  &--label {
+    font-size: 16px;
+    font-weight: 400;
+    color: #000;
   }
+
+  &--content {
+    display: block;
+  }
+
+  &--content-input {
+    display: flex;
+    margin-top: 16px;
+    padding: 10px;
+    border-radius: 14px;
+    border: 1px solid var(--light-blue, #DAECF8);
+  }
+
+  // &
+
+  &--border {
+    margin-left: auto;
+    border-bottom: 1px solid #DAECF8;
+  }
+}
+

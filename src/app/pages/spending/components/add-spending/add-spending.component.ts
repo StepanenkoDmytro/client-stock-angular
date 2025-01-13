@@ -22,12 +22,15 @@ import { CategorySelectorComponent } from './category-select/category-select.com
 import { FormFieldComponent } from '../../../../core/UI/components/form-field/form-field.component';
 import { PrevRouteComponent } from '../../../../core/UI/components/prev-route/prev-route.component';
 import { NotificationComponent } from '../../../../core/UI/components/notification/notification.component';
+import { IconComponent } from "../../../../core/UI/components/icon/icon.component";
+import { FormInputComponent } from '../../../../core/UI/components/form-input/form-input.component';
 
 
 const UI_MODULES = [
   MoneyDirective,
   CategorySelectorComponent,
   FormFieldComponent,
+  FormInputComponent,
   PrevRouteComponent
 ];
 
@@ -46,7 +49,7 @@ const MATERIAL_MODULES = [
 @Component({
   selector: 'pgz-add-spending',
   standalone: true,
-  imports: [...UI_MODULES, ...MATERIAL_MODULES, HttpClientModule],
+  imports: [...UI_MODULES, ...MATERIAL_MODULES, HttpClientModule, IconComponent],
   templateUrl: './add-spending.component.html',
   styleUrl: './add-spending.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

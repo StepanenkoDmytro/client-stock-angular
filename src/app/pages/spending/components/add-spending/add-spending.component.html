@@ -24,19 +24,22 @@
         
         <pgz-form-field>
             <label style="margin-top: 32px;">Date:</label>
-            <div class="d-flex">
+            <div class="d-flex" (click)="picker.open()">
                 <input class="add-spending--input-date" [matDatepicker]="picker" [(ngModel)]="date">
-                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker-toggle matIconSuffix [for]="picker" style="margin-left: auto;">
+                    <mat-icon matDatepickerToggleIcon svgIcon="{{ 'custom_calendar' }}"></mat-icon>
+                    <!-- <pgz-icon></pgz-icon> -->
+                </mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
             </div>
         </pgz-form-field>
 
-        <pgz-form-field>
+        <pgz-form-input>
             <label style="margin-top: 24px;">Comment (optional)</label>
-            <div>
-                <textarea class="add-spending--text-area" matInput placeholder="Ex. It makes me feel..." [(ngModel)]="commentOfProduct"></textarea>
-            </div>
-        </pgz-form-field>
+            <!-- <div> -->
+                <textarea matInput placeholder="Enter comment..." [(ngModel)]="commentOfProduct"></textarea>
+            <!-- </div> -->
+        </pgz-form-input>
 
         <div class="choise-btn" (click)="save()">
             <button mat-flat-button

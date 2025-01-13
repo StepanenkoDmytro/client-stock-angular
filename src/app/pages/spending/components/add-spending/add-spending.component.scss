@@ -1,5 +1,12 @@
 :host {
   display: block;
+
+  ::ng-deep {
+    .mat-datepicker-toggle button {
+      line-height: 24px;
+    }
+    
+  }
 }
 
 .add-spending {
@@ -58,17 +65,6 @@
   &--input-comment {
     font-size: 18px;
     font-weight: 500;
-  }
-
-  &--text-area {
-    width: 70%;
-    border: none;
-    text-align: start;
-    color: #333;
-    padding-top: 15px;
-    padding-left: 10px;
-    margin: 0;
-    border-bottom: 1px solid #ccc;
   }
 
   &--currency {

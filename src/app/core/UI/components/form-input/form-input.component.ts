@@ -16,5 +16,16 @@ export class FormInputComponent implements AfterViewInit {
     if (input) {
       this.renderer.setStyle(input, 'width', '100%');
     }
+
+    const textarea = this.el.nativeElement.querySelector('textarea');
+    if (textarea) {
+      this.renderer.setStyle(textarea, 'width', '100%');
+      this.renderer.setStyle(textarea, 'border', 'none');
+      this.renderer.setStyle(textarea, 'text-align', 'start');
+      this.renderer.setStyle(textarea, 'color', '#333');
+      this.renderer.setStyle(textarea, 'padding-top', '15px');
+      this.renderer.setStyle(textarea, 'padding-left', '10px');
+      this.renderer.setStyle(textarea, 'margin', '0');
+    }
   }
 }
