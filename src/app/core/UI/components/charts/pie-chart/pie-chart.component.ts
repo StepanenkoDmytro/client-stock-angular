@@ -16,7 +16,7 @@ export interface DataModel {
   standalone: true,
   imports: [],
   templateUrl: './pie-chart.component.html',
-  styleUrl: './pie-chart.component.scss',
+  styleUrls: ['./pie-chart.component.scss', '../chart.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PieChartComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -27,6 +27,10 @@ export class PieChartComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   @Input()
   public showNames: boolean = false;
+
+  get isEmptyState(): boolean {
+    return this._data$.value.length === 0 || this._data$.value.length === 1;
+  }
 
   public totalSum: number = 0;
   public donutID: string = 'donut';

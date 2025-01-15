@@ -2,9 +2,11 @@
     <mat-expansion-panel hideToggle>
         <mat-expansion-panel-header>
           <mat-panel-title>
-            <div>
+            <div class="range-controller--title">
                 <p class="range-controller--date">{{ startDateCtrl.value | dateFormat: 'DD.MM.YY' }} - {{ endDateCtrl.value | dateFormat: 'DD.MM.YY' }}</p>
-                <p class="range-controller--compare-date">compare with {{ compareStartDateCtrl.value | dateFormat: 'DD.MM.YY' }} - {{ compareEndDateCtrl.value | dateFormat: 'DD.MM.YY' }}</p>
+                @if(isCompareEnabledCtrl.value) {
+                    <p class="range-controller--compare-date">compare with {{ compareStartDateCtrl.value | dateFormat: 'DD.MM.YY' }} - {{ compareEndDateCtrl.value | dateFormat: 'DD.MM.YY' }}</p>
+                }
             </div>
 
             <div style="margin-left: auto;"><pgz-icon [name]="'custom_settings'"></pgz-icon></div>

@@ -1,4 +1,11 @@
-<div class="donut-wrapper">
+<div class="donut-wrapper" [class.empty-state--blur]="isEmptyState">
     <div class="donut" [attr.id]="donutID"></div>
     <div class="donut-names" [attr.id]="donutNamesID"></div>
 </div>
+@if(isEmptyState) {
+    <div class="empty-state" style="left: -15%; top: 9%;">
+        <img src="assets/img/multi-line-empty-state.png" 
+            alt="No data available">
+        <p>You don't have spendings by current period</p>
+    </div>
+}

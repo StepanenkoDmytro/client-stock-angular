@@ -17,7 +17,7 @@ export const EmptyMultiLineData: IMultiLineData[] = [{ name: 'none', values: [] 
   standalone: true,
   imports: [],
   templateUrl: './multi-line.component.html',
-  styleUrl: './multi-line.component.scss',
+  styleUrls: ['./multi-line.component.scss', '../chart.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MultiLineComponent implements OnInit, AfterContentInit {
