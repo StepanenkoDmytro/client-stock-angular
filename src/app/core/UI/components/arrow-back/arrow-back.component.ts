@@ -14,4 +14,6 @@ export class ArrowBackComponent {
   public useBlackColor: boolean = false;
   @Input()
   public rotateAngle: string = '45';
+  @Input()
+  public stroke: number = 2;
 }

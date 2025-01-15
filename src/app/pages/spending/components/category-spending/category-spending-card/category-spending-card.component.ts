@@ -8,9 +8,11 @@ import { MatMenuModule } from '@angular/material/menu';
 import { EditStateService } from '../../../service/edit-state.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ArrowBackComponent } from '../../../../../core/UI/components/arrow-back/arrow-back.component';
 
 const UI_MODULES = [
-  IconComponent
+  IconComponent,
+  ArrowBackComponent
 ];
 
 const MATERIAL_MODULES = [
@@ -31,9 +33,6 @@ const MATERIAL_MODULES = [
 export class CategorySpendingCardComponent implements OnInit {
   @Input()
   public data: ICategoryStatistic;
-
-  // @Output()
-  // public onDeleteCategory: EventEmitter<Category> = new EventEmitter<Category>();
 
   public dataChildrens: ICategoryStatistic[];
   public panelOpenState: boolean = false;

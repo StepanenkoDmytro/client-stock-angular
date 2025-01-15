@@ -21,7 +21,8 @@
         </p>
         @if(data.category.title !== 'Other') {
             <div (click)="onCardClick()">
-                <pgz-icon [name]="'custom_arrow-in'"></pgz-icon>
+                <pgz-arrow-back [stroke]="1.5" [useBlackColor]="true" [rotateAngle]="'225'"></pgz-arrow-back>
+                <!-- <pgz-icon [name]="'custom_arrow-in'"></pgz-icon> -->
             </div>
         }
     </div>

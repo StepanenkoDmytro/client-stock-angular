@@ -15,7 +15,7 @@
             <p class="add-spending--currency">$</p>
         </div>
 
-        <pgz-form-field>
+        <pgz-form-field [widthBorder]="85">
             <label style="margin-top: 32px;">Category</label>
             <div style="margin-top: 16px;">
                 <pgz-category-selector [categories]="categories" [activeCategory]="selectedCategory" (selectedCategory)="selectCategory($event)"></pgz-category-selector>
