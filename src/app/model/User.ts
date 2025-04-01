@@ -1,5 +1,7 @@
 export interface IUser {
+    name?: string;
     email: string;
+    isConfirmaEmail?: boolean;
     portfolioID: number;
     mode?: UserMode;
 }

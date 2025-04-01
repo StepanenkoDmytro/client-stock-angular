@@ -5,6 +5,19 @@
 }
 
 .profile-header {
+
+  &--authorized {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 24px;
+    margin-bottom: 24px;
+    // padding-inline: 8px;
+  }
+
+  &--authorized-name {
+    font-size: 16px;
+  }
+
   &--unauthorized {
     margin-top: 24px;
     display: flex;
@@ -43,13 +56,9 @@
   }
 
   &--exit {
-    position: relative;
-    bottom: -15px;
-    align-self: end;
     display: flex;
     align-items: center;
-    font-size: 22px;
-    color: var(--bs-gray-600);
+    font-size: 14px;
   }
 
   &--edit {

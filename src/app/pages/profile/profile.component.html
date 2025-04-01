@@ -3,18 +3,37 @@
     <section class="profile">
 
         @if(isAuthorizedUser) {
-            <div class="profile-header--exit" (click)="logout()">
-                <p>Exit</p>
-                <pgz-icon class="profile-header--edit" [name]="'logout'"></pgz-icon>
+            <div class="profile-header--authorized">
+                <p class="profile-header--authorized-name">{{userName}}</p>
+                <div class="profile-header--exit" (click)="logout()">
+                    <p style="align-self: baseline;">Exit</p>
+                    <pgz-icon class="profile-header--edit" [name]="'logout'"></pgz-icon>
+                </div>
             </div>
-            <div>
-                <p>{{ userEmail }}</p>
-                <pgz-icon class="profile--edit" [name]="'custom_edit'"></pgz-icon>
+            <div class="d-flex justify-space-between">
+                <div>
+                    <p>{{ userEmail }}</p>
+                    @if(!isConfirmaEmail) {
+                        <div style="display: flex; align-items: center;">
+                            <pgz-icon class="profile-header--icon" class="profile--edit" [name]="'custom_priority'"></pgz-icon>
+                            <p style="margin-left: 8px; font-size: 14px; color: #5A5A5A;">Email not confirm</p>
+                        </div>
+                    }
+                </div>
+                
+                @if(!isConfirmaEmail) {
+                    <div class="profile-header--unauthorized__btn montserrat">Confirm</div>
+                } @else {
+                    <div class="d-flex" style="align-items: center;">
+                        <pgz-icon class="profile-header--icon" style="color: green" class="profile--edit" [name]="'check'"></pgz-icon>
+                        <p style="margin-left: 8px; font-size: 14px; color: #5A5A5A;">Confirmed</p>
+                    </div>
+                }
             </div>
         } @else {
             <div class="profile-header--unauthorized">
                 <div class="profile-header--unauthorized__warning">
-                    <div class="profile-header--unauthorized__priority-icon">!</div>
+                    <pgz-icon style="width: 16px; height: 17px; line-height: 15px;" class="profile--edit" [name]="'custom_priority'"></pgz-icon>
                     <p>Log in to save data</p>
                 </div>
                 <div class="profile-header--unauthorized__btns">

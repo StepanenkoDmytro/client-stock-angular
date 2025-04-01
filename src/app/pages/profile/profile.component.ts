@@ -41,7 +41,9 @@ export class ProfileComponent implements OnInit {
   public currentMode: UserMode = UserMode.Stage;
 
   public user: IUser | null = null;
+  public userName: string = 'User0123';
   public userEmail: string; 
+  public isConfirmaEmail: boolean = true;
   public isAuthorizedUser: boolean = false;
 
   constructor(
@@ -54,6 +56,8 @@ export class ProfileComponent implements OnInit {
   public ngOnInit(): void {
     this.userService.getUser().subscribe(user => {
       this.user = user;
+      // this.userName = user?.name;
+      // this.isConfirmaEmail = user?.isConfirmaEmail;
       this.currentMode = user?.mode;
       this.isStageMode = this.currentMode === UserMode.Stage;
 

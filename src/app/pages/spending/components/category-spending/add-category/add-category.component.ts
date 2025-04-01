@@ -62,7 +62,6 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
 
   public selectedIcon: string = '';
 
-
   public isLimitCategoryEnebled: boolean = false;
   public limitOfCaregory: number = 0;
 
