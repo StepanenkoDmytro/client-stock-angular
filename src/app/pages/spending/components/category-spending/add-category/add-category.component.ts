@@ -59,10 +59,15 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
   public categories: Category[];
   public selectedParentCategory: Category;
   public categoryTitleCtrl: FormControl<string> = new FormControl('');
+
   public selectedIcon: string = '';
-  public selectedColor: string = '#908E91';
+
+
   public isLimitCategoryEnebled: boolean = false;
   public limitOfCaregory: number = 0;
+
+  public selectedColor: string = '#908E91';
+  public occupiedColors: string[] = [];
   public isColorDropdownOpen: boolean = false;
 
   public editCategory: Category;
@@ -91,9 +96,12 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
         this.editCategory = this.editStateCategory.editStateCategory;
         this.fillFields();
       } 
-
+      
       //rewrite to await spendingService.findCategoryById
       this.selectedParentCategory = Category.findCategoryById(parentCategoryId, categories);
+      
+      this.occupiedColors = this.selectedParentCategory.children.map(category => category.color);
+      console.log(this.selectedParentCategory, this.occupiedColors);
     }) ;
   }
 

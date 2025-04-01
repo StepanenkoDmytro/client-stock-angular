@@ -22,7 +22,7 @@
             <div class="add-edit-category--choose-color" [ngStyle]='{ "background-color": selectedColor }'>
                 <pgz-icon [name]="'custom_color_icon'"></pgz-icon>
             </div>
-            <pgz-color-picker [isDropdownOpen]="isColorDropdownOpen" (colorSelected)="selectColor($event)"></pgz-color-picker>
+            <pgz-color-picker [isDropdownOpen]="isColorDropdownOpen" [occupiedColors]="occupiedColors" (colorSelected)="selectColor($event)"></pgz-color-picker>
             <p>Change color</p>
             <div style="margin-left: auto;">
                 <pgz-arrow-back [stroke]="1" [rotateAngle]="'-45'" [useBlackColor]="true"></pgz-arrow-back>

@@ -1,9 +1,10 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'pgz-color-picker',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './color-picker.component.html',
   styleUrl: './color-picker.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -11,9 +12,14 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 export class ColorPickerComponent {
   @Input() 
   public isDropdownOpen: boolean = false;
+  @Input()
+  public set occupiedColors(value: string[]) {
+    this._occupiedColors = new Set(value);
+  }
   @Output() 
   colorSelected: EventEmitter<string> = new EventEmitter<string>();
 
+  public _occupiedColors: Set<string>;
   public colors: string[] = 
   [
     '#D5DB24', '#B60D0D', '#C14619', '#88400C', '#A36A10', '#D3680B', '#F29500',
@@ -33,5 +39,9 @@ export class ColorPickerComponent {
     this.selectedColor = color;
     this.colorSelected.emit(color);
     this.isDropdownOpen = false; 
+  }
+
+  public isOccupiedColor(color: string): boolean {
+    return this._occupiedColors.has(color.toLocaleUpperCase());
   }
 }

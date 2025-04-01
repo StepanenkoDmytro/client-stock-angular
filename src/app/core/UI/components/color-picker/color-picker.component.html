@@ -10,7 +10,11 @@
     <div class="overlay"></div>
     <div class="color-grid">
         @for(color of colors; track color) {
-            <div class="color-circle" (click)="selectColor(color)" [style.backgroundColor]="color"></div>
+            <div class="color-circle" [ngClass]="{'color-circle--occupied': isOccupiedColor(color)}" (click)="selectColor(color)" [style.backgroundColor]="color">
+                @if(isOccupiedColor(color)) {
+                    <div class="occupied-cross"></div>
+                }
+            </div>
         }
     </div>
     }
