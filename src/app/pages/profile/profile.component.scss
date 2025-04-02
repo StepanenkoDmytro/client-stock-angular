@@ -6,6 +6,12 @@
 
 .profile-header {
 
+  &--icon {
+    width: 16px; 
+    height: 17px; 
+    line-height: 15px;
+  }
+
   &--authorized {
     display: flex;
     justify-content: space-between;
@@ -35,6 +41,7 @@
   &--unauthorized__warning {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 8px;
     color: #E82933;
     font-size: 14px;

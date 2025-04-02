@@ -18,7 +18,7 @@ export class IconComponent {
   @Input('name')
   public set name(src: string) {
     this._src = src;
-    this._isSVG = src.startsWith('custom_');
+    this._isSVG = src.startsWith('custom_') || src.startsWith('icon_');
   }
-  @Input('stroke') strokeColor: string = '';
+  @Input('stroke') strokeColor: string = 'white';
 }

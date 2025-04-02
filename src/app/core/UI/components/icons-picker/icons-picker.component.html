@@ -1,0 +1,11 @@
+<div class="icon-picker">
+    @if(isDropdownOpen) {
+        <div class="icon-grid">
+            @for(icon of CUSTOM_ICONS; track icon) {
+                <div (click)="selectIcon(icon.name)">
+                    <pgz-icon [name]="icon.name" [stroke]="'black'"></pgz-icon>
+                </div>
+            }
+        </div>
+    }
+</div>

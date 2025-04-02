@@ -31,13 +31,14 @@
         
     </pgz-form-field>
 
-    <pgz-form-field [widthBorder]="85">
+    <pgz-form-field (click)="toggleIconPicker()" [widthBorder]="85">
         <label style="margin-top: 32px;">Icon</label>
         <div class="d-flex"  style="margin-top: 16px; align-items: center;">
             <div class="add-edit-category--choose-color" [ngStyle]='{ "background-color": selectedColor }'>
                 <pgz-icon class="category--icon" [name]="selectedIcon"></pgz-icon>
             </div>
-            <pgz-icon-picker id="iconPicker" (onSelectIcon)="onSelectIcon($event)"></pgz-icon-picker>
+            <pgz-icons-picker [isDropdownOpen]="isIconDropdownOpen" (iconSelected)="selectIcon($event)"></pgz-icons-picker>
+            <!-- <pgz-icon-picker id="iconPicker" (onSelectIcon)="onSelectIcon($event)"></pgz-icon-picker> -->
             <div style="margin-left: auto;">
                 <pgz-arrow-back [rotateAngle]="'-45'" [useBlackColor]="true"></pgz-arrow-back>
             </div>

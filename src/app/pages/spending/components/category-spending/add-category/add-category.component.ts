@@ -23,11 +23,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MoneyDirective } from '../../../../../directive/money.directive';
 import { ColorPickerComponent } from '../../../../../core/UI/components/color-picker/color-picker.component';
 import { FormInputComponent } from '../../../../../core/UI/components/form-input/form-input.component';
+import { IconsPickerComponent } from "../../../../../core/UI/components/icons-picker/icons-picker.component";
 
 
 const UI_MODULES = [
   IconComponent,
   IconPickerComponent,
+  IconsPickerComponent,
   FormFieldComponent,
   PrevRouteComponent,
   MoneyDirective,
@@ -50,7 +52,7 @@ const MATERIAL_MODULES = [
 @Component({
   selector: 'pgz-add-category',
   standalone: true,
-  imports: [...UI_MODULES, ...MATERIAL_MODULES, RouterModule, ArrowBackComponent],
+  imports: [...UI_MODULES, ...MATERIAL_MODULES, RouterModule, ArrowBackComponent, IconsPickerComponent],
   templateUrl: './add-category.component.html',
   styleUrl: './add-category.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -68,6 +70,8 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
   public selectedColor: string = '#908E91';
   public occupiedColors: string[] = [];
   public isColorDropdownOpen: boolean = false;
+
+  public isIconDropdownOpen: boolean = false;
 
   public editCategory: Category;
   private rootPage: string = '/spending/category';
@@ -153,8 +157,16 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
     this.isColorDropdownOpen = !this.isColorDropdownOpen;
   }
 
+  public toggleIconPicker(): void {
+    this.isIconDropdownOpen = !this.isIconDropdownOpen;
+  }
+
   public selectColor(color: string) {
     this.selectedColor = color;
+  }
+
+  public selectIcon(icon: string) {
+    this.selectedIcon = icon;
   }
 
   public onDeleteCategory(): void {
