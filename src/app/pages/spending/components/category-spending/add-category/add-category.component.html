@@ -38,9 +38,9 @@
                 <pgz-icon class="category--icon" [name]="selectedIcon"></pgz-icon>
             </div>
             <pgz-icons-picker [isDropdownOpen]="isIconDropdownOpen" (iconSelected)="selectIcon($event)"></pgz-icons-picker>
-            <!-- <pgz-icon-picker id="iconPicker" (onSelectIcon)="onSelectIcon($event)"></pgz-icon-picker> -->
+            <p>Change icon</p>
             <div style="margin-left: auto;">
-                <pgz-arrow-back [rotateAngle]="'-45'" [useBlackColor]="true"></pgz-arrow-back>
+                <pgz-arrow-back [stroke]="1" [rotateAngle]="'-45'" [useBlackColor]="true"></pgz-arrow-back>
             </div>
         </div>
     </pgz-form-field>

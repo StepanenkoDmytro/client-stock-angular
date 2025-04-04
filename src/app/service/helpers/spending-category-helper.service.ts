@@ -6,7 +6,7 @@ import { ICategoryStatistic } from '../../pages/statistic/model/SpendindStatisti
 import { SpendingsService } from '../spendings.service';
 import { firstValueFrom } from 'rxjs';
 import { IDonutData } from '../../core/UI/components/charts/donut/donut.component';
-import { DataValue, IMultiLineData } from '../../core/UI/components/charts/multi-line/multi-line.component';
+import { IMultiLineData } from '../../core/UI/components/charts/multi-line/multi-line.component';
 import moment from 'moment';
 
 @Injectable({
@@ -114,7 +114,7 @@ export class SpendingCategoryHelperService {
     
     let otherCategory = category.children.find(child => child.title === category.title);
     if(spendingCategoriesList.length === 0) {
-      otherCategory = new Category('Other', 'payment', undefined, false, 'Other');
+      otherCategory = new Category('Other', 'icon_group', undefined, false, 'Other', undefined, '#ABA3A3');
       return [{
         category: otherCategory,
         value: otherCategoryValue,
@@ -130,7 +130,7 @@ export class SpendingCategoryHelperService {
         otherCategoryStatistic.value += otherCategoryValue;
     } else {
         result.push({
-            category: otherCategory = new Category('Other', 'payment', undefined, false, 'Other'),
+            category: otherCategory = new Category('Other', 'icon_group', undefined, false, 'Other', undefined, '#ABA3A3'),
             value: otherCategoryValue,
             children: undefined
         });

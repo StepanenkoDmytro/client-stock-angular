@@ -8,6 +8,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { DarkLightModeService } from './service/dark-light-mode.service';
 import { UserService } from './service/user.service';
+import { CUSTOM_ICONS } from './domain/icons.domain';
 
 
 const ANGULAR_MODULES = [
@@ -66,6 +67,10 @@ export class AppComponent implements OnInit {
     private router: Router,
   ) {
     this.CUSTOM_SVG_ICONS.forEach(icon => {
+      this.iconRegistry.addSvgIcon(icon.name, this.sanitizer.bypassSecurityTrustResourceUrl(icon.url));
+    });
+
+    CUSTOM_ICONS.forEach(icon => {
       this.iconRegistry.addSvgIcon(icon.name, this.sanitizer.bypassSecurityTrustResourceUrl(icon.url));
     });
   }

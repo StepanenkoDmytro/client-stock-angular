@@ -28,16 +28,16 @@ export class Category implements ICategory {
     new Category( 'Income', 'paid', [
       new Category('Salary', 'money')
     ]),
-    new Category('Spending', 'payments', [
-      new Category('Other', 'payments'),
-      new Category('Clothes', 'custom_clothes'),
-      new Category('Drink', 'custom_drink'),
-      new Category('Gift', 'custom_gift'),
-      new Category('Car', 'custom_car'),
-      new Category('Health', 'custom_health'),
-      new Category('Food', 'custom_food'),
-      new Category('House', 'custom_house'),
-      new Category('Pet', 'custom_pet'),
+    new Category('Spending', 'icon_hugeicons_briefcase-dolla', [
+      new Category('Other', 'icon_group'),
+      new Category('Clothes', 'icon_t-shirt'),
+      new Category('Drink', 'icon_hugeicons_drink'),
+      new Category('Gift', 'icon_hugeicons_gift'),
+      new Category('Car', 'icon_hugeicons_car'),
+      new Category('Health', 'icon_hand-heart'),
+      new Category('Food', 'icon_hugeicons_hamburger2'),
+      new Category('House', 'icon_hugeicons_house4'),
+      new Category('Pet', 'icon_trace'),
     ]),
   ];
   public static default: Category = Category.defaultList[1];
@@ -50,7 +50,7 @@ export class Category implements ICategory {
 
   constructor(
     public title: string = '',
-    public icon: string = 'payments',
+    public icon: string = 'icon_group',
     children: Category[] = [],
     public isSaved: boolean = false,
     id?: string | null,
@@ -86,13 +86,16 @@ export class Category implements ICategory {
 
   public setColor(colorId: string | null): void {
     if(!colorId) {
-      const randomIndex = Math.floor(Math.random() * colorPalette.length);
-      const color = colorPalette[randomIndex % colorPalette.length]; 
-      this.color = color;
       return;
     }
     
     this.color = colorId;
+  }
+
+  private static isColorOccupied(colorId: string, category: Category[]): boolean {
+    const siblingColors = category.map(child => child.color).filter(c => c);
+    
+    return siblingColors.includes(colorId);
   }
 
   public setChildren(children :Category[]): void {
@@ -101,11 +104,12 @@ export class Category implements ICategory {
 
   public static getCategoryDefaultList(): Category[] {
     this.defaultList.forEach(category => {
-      category.children.map((children, index) => {
+      category.children.map((children) => {
         children.setParent(category.id);
-        
-        const color = colorPalette[index % colorPalette.length]; 
-        children.setColor(color);
+
+        const availableColors = colorPalette.filter(color => !this.isColorOccupied(color, category.children));
+        const randomIndex = Math.floor(Math.random() * colorPalette.length);
+        children.setColor(availableColors.length > 0 ? availableColors[randomIndex % availableColors.length] : null);
       });
     });
     
