@@ -17,7 +17,6 @@
     justify-content: space-between;
     margin-top: 24px;
     margin-bottom: 24px;
-    // padding-inline: 8px;
   }
 
   &--authorized-name {
@@ -73,14 +72,11 @@
   }
 }
 
-
 .profile {
   margin: 0px 15px 40px 25px;
   position: relative;
   display: flex;
   flex-direction: column;
-
-  
 
   &--username {
     display: flex;
@@ -94,14 +90,6 @@
     color: var(--bs-success);
     margin-top: 10px;
   }
-
-  
-
-  // &--btn {
-  //   height: 50px;
-  //   background-color: var(--bs-success) !important;
-  //   color: var(--bs-white) !important;
-  // }
 
   &--delete {
     padding: 25px;

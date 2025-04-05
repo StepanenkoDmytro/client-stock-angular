@@ -7,13 +7,15 @@ import { AcceptBtnComponent } from '../../../../core/UI/components/accept-btn/ac
 import { MoneyDirective } from '../../../../directive/money.directive';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
+import { FormFieldComponent } from '../../../../core/UI/components/form-field/form-field.component';
+import { FormInputComponent } from '../../../../core/UI/components/form-input/form-input.component';
 
 @Component({
   selector: 'pgz-monthly-budget',
   standalone: true,
-  imports: [CommonModule, PrevRouteComponent, FormsModule, AcceptBtnComponent, MoneyDirective, MatInputModule],
+  imports: [CommonModule, PrevRouteComponent, FormFieldComponent, FormInputComponent, FormsModule, AcceptBtnComponent, MoneyDirective, MatInputModule],
   templateUrl: './monthly-budget.component.html',
-  styleUrl: './monthly-budget.component.scss',
+  styleUrls: ['./monthly-budget.component.scss', '../settings.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MonthlyBudgetComponent implements OnInit {

@@ -24,7 +24,7 @@
                 @if(!isConfirmaEmail) {
                     <div class="profile-header--unauthorized__btn montserrat">Confirm</div>
                 } @else {
-                    <div class="d-flex" style="align-items: center;">
+                    <div class="d-flex ms-auto" style="align-items: center;">
                         <pgz-icon class="profile-header--icon" style="color: green" class="profile--edit" [name]="'check'"></pgz-icon>
                         <p style="margin-left: 8px; font-size: 14px; color: #5A5A5A;">Confirmed</p>
                     </div>
@@ -45,7 +45,7 @@
     </section>
     
     <div class="settings-box">
-        <div class="general-item">
+        <div class="general-item" (click)="changeProfileSettings()">
             <p>Profile settings</p>
             <div class="general-item--value">
                 <div class="arrow-box">

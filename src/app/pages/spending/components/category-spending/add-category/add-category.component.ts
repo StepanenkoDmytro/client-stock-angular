@@ -8,7 +8,6 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { SpendingsService } from '../../../../../service/spendings.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-import { IconPickerComponent } from '../../../../../core/UI/components/icon-picker/icon-picker.component';
 import { EditStateService } from '../../../service/edit-state.service';
 import { combineLatest, firstValueFrom } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -28,7 +27,6 @@ import { IconsPickerComponent } from "../../../../../core/UI/components/icons-pi
 
 const UI_MODULES = [
   IconComponent,
-  IconPickerComponent,
   IconsPickerComponent,
   FormFieldComponent,
   PrevRouteComponent,

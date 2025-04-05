@@ -2,11 +2,6 @@
   display: block;
 }
 
-.budget-container {
-  margin-top: 32px;
-  margin-inline: 16px;
-}
-
 .toggle-container {
   display: flex;
   justify-content: space-between;
@@ -14,17 +9,7 @@
   margin-bottom: 16px;
 }
 
-.budget-fields {
-  margin-top: 16px;
 
-  &--box {
-    display: flex;
-    padding: 16px;
-    background-color: #fff;
-    border-radius: 14px;
-    padding: 8px;
-  }
-}
 
 
 

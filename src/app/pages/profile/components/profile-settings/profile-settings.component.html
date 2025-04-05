@@ -1,0 +1,35 @@
+<section class="page settings-page">
+    <div (click)="prevRoute()">
+        <pgz-prev-route>
+            <p>Profile settings</p>
+        </pgz-prev-route>
+    </div>
+
+    <div class="settings-container">
+        <div class="settings-fields">
+            <pgz-form-input>
+                <label>Name</label>
+                <input matInput type="text" class="line" placeholder="Enter your name">
+            </pgz-form-input>
+        </div>
+
+        <div class="settings-fields">
+            <pgz-form-input>
+                <label>Email</label>
+                <input matInput type="text" class="line" placeholder="Enter email">
+            </pgz-form-input>
+        </div>
+
+        <div class="settings-box settings-fields" (click)="changeCurrency()">
+            <div class="d-flex">
+                <p>Currency</p>
+                <div class="general-item--value">
+                    <div class="arrow-box">
+                        <div class="arrow-up"></div>
+                        <div class="arrow-down"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

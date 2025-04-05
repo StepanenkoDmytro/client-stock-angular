@@ -1,0 +1,26 @@
+.settings-container {
+    margin-top: 32px;
+    margin-inline: 16px;
+}
+
+.settings-page {
+  background: var(--light-grey, #F3F5F8);
+}
+
+.settings-fields {
+  margin-top: 16px;
+
+  &--box {
+    display: flex;
+    padding: 16px;
+    background-color: #fff;
+    border-radius: 14px;
+    padding: 8px;
+  }
+}
+
+.settings-box {
+  background-color: #fff;
+  padding: 8px;
+  border-radius: 14px;
+}

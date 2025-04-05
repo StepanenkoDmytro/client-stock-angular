@@ -95,6 +95,10 @@ export class ProfileComponent implements OnInit {
     this.router.navigate(['/auth/registration']);
   }
 
+  public changeProfileSettings(): void {
+    this.router.navigate(['/profile/profile-settings']);
+  }
+
   public changeMonthlyBudget(): void {
     this.router.navigate(['/profile/monthly-budget']);
   }
