@@ -60,7 +60,6 @@ export class UserService {
   }
 
   private loadFromStorage(): void {
-    
     const storageState = localStorage.getItem(this.userLocalStorageKey);
     if(storageState) {
       const userState: IUserState = JSON.parse(storageState);
@@ -74,6 +73,7 @@ export class UserService {
 
   private mapUserFromApi(user: IUserApi): IUser {
     return {
+      id: user.id,
       email: user.email,
       portfolioID: user.portfolio[0].id,
     };

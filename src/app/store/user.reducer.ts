@@ -10,6 +10,7 @@ export interface IUserState {
 }
 
 const initialUser: IUser = {
+    id: 0,
     email: '',
     portfolioID: null,
     mode: UserMode.Stage
