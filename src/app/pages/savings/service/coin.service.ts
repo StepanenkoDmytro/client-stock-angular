@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { MarketCoinInfo } from '../model/MarketCoinInfo';
+import { environment } from '../../../../environments/environment';
 
 
 interface IMarketCoinData {
@@ -15,7 +16,7 @@ interface IMarketCoinData {
   providedIn: 'root'
 })
 export class CoinService {
-  private readonly url: string = 'https://pegazzo.online/money-life-cycle/api/v1/markets/coins';
+  private readonly url: string = `${environment.apiBaseUrl}/markets/coins`;
 
   constructor(private readonly httpClient: HttpClient) { }
 

@@ -2,13 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { ICompany, ICompanyList, IMarket } from '../../../domain/savings.domain';
+import { environment } from '../../../../environments/environment';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class StockService {
-  private readonly url: string = 'https://pegazzo.online/money-life-cycle/api/v1/markets/stocks';
+  private readonly url: string = `${environment.apiBaseUrl}/markets/stocks`;
 
   constructor(private readonly httpClient: HttpClient) { }
 

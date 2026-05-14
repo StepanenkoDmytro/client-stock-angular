@@ -5,13 +5,14 @@ import { ISpendingsState } from '../store/spendings.reducer';
 import { HttpClient } from '@angular/common/http';
 import { Category, ICategoryApi } from '../../../domain/category.domain';
 import { Store } from '@ngrx/store';
+import { environment } from '../../../../environments/environment';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategiriesSyncService {
-  private readonly url: string = 'https://pegazzo.online/money-life-cycle/api/v1/profile/';
+  private readonly url: string = `${environment.apiBaseUrl}/profile/`;
 
   constructor(
     private http: HttpClient,

@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { ILoginFormData } from '../domain/auth.domain';
 import { UserService } from './user.service';
 import { IUserApiResponse } from '../domain/user.domain';
+import { environment } from '../../environments/environment';
 
 
 @Injectable({
@@ -11,7 +12,7 @@ import { IUserApiResponse } from '../domain/user.domain';
 })
 export class AuthService {
   private readonly authTokenKey = 'authToken';
-  private readonly url: string = 'https://pegazzo.online/money-life-cycle/api/v1/auth/';
+  private readonly url: string = `${environment.apiBaseUrl}/auth/`;
 
   private _authToken: string = '';
 
