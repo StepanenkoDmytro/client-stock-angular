@@ -127,6 +127,81 @@ export class HoldingsListComponent implements OnInit {
     () => this.filteredHoldings().length,
   );
 
+  // ---- Portfolio summary ----
+
+  /**
+   * Per-class breakdown for the summary card. Always computed against the
+   * FULL holdings set (not filtered) — the summary represents the entire
+   * portfolio, filters below only narrow the visible list.
+   *
+   * `value` is current market value (quantity × currentPrice). `costBasis`
+   * is what the user paid. `pnl` = value - costBasis. `share` is value's
+   * fraction of the total portfolio (0..1). Sorted by value desc.
+   */
+  public readonly summary = computed(() => {
+    const all = this.holdingsView();
+    const byClass = new Map<AssetClass, { value: number; costBasis: number }>();
+
+    for (const h of all) {
+      const currentPrice =
+        this.holdings.getCurrentPrice(h.instrument.symbol) ?? h.averageBuyPrice;
+      const value = h.quantity * currentPrice;
+      const cost = h.quantity * h.averageBuyPrice;
+      const existing = byClass.get(h.instrument.assetClass) ?? {
+        value: 0,
+        costBasis: 0,
+      };
+      byClass.set(h.instrument.assetClass, {
+        value: existing.value + value,
+        costBasis: existing.costBasis + cost,
+      });
+    }
+
+    const totalValue = Array.from(byClass.values()).reduce(
+      (s, c) => s + c.value,
+      0,
+    );
+    const totalCost = Array.from(byClass.values()).reduce(
+      (s, c) => s + c.costBasis,
+      0,
+    );
+    const totalPnL = totalValue - totalCost;
+    const totalPnLPercent =
+      totalCost > 0 ? (totalPnL / totalCost) * 100 : 0;
+
+    const breakdown = Array.from(byClass.entries())
+      .map(([assetClass, { value, costBasis }]) => ({
+        assetClass,
+        label: this.assetClassLabel(assetClass),
+        color: this.assetClassBadgeColor(assetClass),
+        value,
+        costBasis,
+        pnl: value - costBasis,
+        pnlPercent: costBasis > 0 ? ((value - costBasis) / costBasis) * 100 : 0,
+        share: totalValue > 0 ? value / totalValue : 0,
+      }))
+      .sort((a, b) => b.value - a.value);
+
+    return {
+      totalValue,
+      totalCost,
+      totalPnL,
+      totalPnLPercent,
+      breakdown,
+    };
+  });
+
+  public abs(n: number): number {
+    return Math.abs(n);
+  }
+
+  public formatPercent(value: number, fractionDigits = 1): string {
+    return value.toLocaleString('en-US', {
+      minimumFractionDigits: fractionDigits,
+      maximumFractionDigits: fractionDigits,
+    }) + '%';
+  }
+
   ngOnInit(): void {
     this.tags.init();
     this.instruments.init();

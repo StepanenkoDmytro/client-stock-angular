@@ -115,6 +115,30 @@ export class HoldingService {
    * so re-seed creates them fresh), then re-runs the seed path.
    * Used by the "Reset demo data" button on `/savings/holdings`.
    */
+  /**
+   * Mock "current market price" lookup. Returns a hardcoded value for the
+   * 5 demo holdings, undefined otherwise. Stands in for the future
+   * `PriceFeedService` (ADR-0003) until the real market integration lands.
+   *
+   * Prices chosen to produce a realistic mixed P&L picture for the demo
+   * (stocks up, crypto up, real estate up, cash flat).
+   */
+  getCurrentPrice(symbol: string): number | undefined {
+    return HoldingService.MOCK_CURRENT_PRICES[symbol];
+  }
+
+  /**
+   * Internal lookup table for the demo. Keys match the seeded mock
+   * instrument symbols; values are "as-of today" prices.
+   */
+  private static readonly MOCK_CURRENT_PRICES: Record<string, number> = {
+    AAPL: 175.0,
+    MSFT: 410.0,
+    BTC: 58000.0,
+    USD: 1.0,
+    'KYIV-APT-1': 110000.0,
+  };
+
   resetDemoData(): void {
     localStorage.removeItem(HoldingService.STORAGE_KEY);
     // Force the instrument cache back to empty so getOrCreate produces
@@ -224,12 +248,14 @@ export class HoldingService {
         tags: ['Speculative', 'Growth', 'Trading'],
       },
       {
-        symbol: 'UAH',
+        // Pre-M3 (no FxRateService): keep cash in USD so portfolio summary
+        // aggregates cleanly. When FX lands we'll add UAH/EUR/PLN variants.
+        symbol: 'USD',
         assetClass: AssetClass.CASH,
-        name: 'UAH Cash',
-        currency: 'UAH',
-        metadata: { kind: AssetClass.CASH, currency: 'UAH' },
-        quantity: 50000,
+        name: 'USD Cash',
+        currency: 'USD',
+        metadata: { kind: AssetClass.CASH, currency: 'USD' },
+        quantity: 5000,
         avgBuyPrice: 1,
         tags: ['Emergency', 'Fixed income'],
       },

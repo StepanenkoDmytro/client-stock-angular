@@ -19,6 +19,136 @@
   border-radius: 4px;
 }
 
+// ---- Portfolio summary card ----
+
+.holdings-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px 18px;
+  border: 1px solid var(--bs-gray-300, rgba(0, 0, 0, 0.12));
+  border-radius: 12px;
+  background-color: var(--bs-gray-200, #f0f2f5);
+}
+
+.holdings-summary__top {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.holdings-summary__total-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.holdings-summary__label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #5A5A5A;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.holdings-summary__total {
+  font-size: 26px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.holdings-summary__pnl-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.holdings-summary__cost {
+  color: #5A5A5A;
+}
+
+.holdings-summary__pnl {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+
+  &.positive {
+    color: #2E7D32;
+  }
+
+  &.negative {
+    color: #C62828;
+  }
+}
+
+.holdings-summary__bar {
+  display: flex;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
+.holdings-summary__slice {
+  min-width: 2px;
+  height: 100%;
+  transition: flex-grow 0.2s ease;
+}
+
+.holdings-summary__legend {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.holdings-summary__legend-row {
+  display: grid;
+  grid-template-columns: 12px 1fr auto auto auto;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.holdings-summary__legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.holdings-summary__legend-name {
+  font-weight: 500;
+}
+
+.holdings-summary__legend-share {
+  color: #5A5A5A;
+  min-width: 40px;
+  text-align: right;
+}
+
+.holdings-summary__legend-value {
+  font-weight: 600;
+  min-width: 64px;
+  text-align: right;
+}
+
+.holdings-summary__legend-pnl {
+  font-weight: 600;
+  min-width: 56px;
+  text-align: right;
+  font-size: 12px;
+
+  &.positive {
+    color: #2E7D32;
+  }
+
+  &.negative {
+    color: #C62828;
+  }
+}
+
 .holdings-page__empty {
   text-align: center;
   color: #888;
