@@ -1,0 +1,35 @@
+<div class="delete-tag">
+  <div class="delete-tag__icon">
+    <mat-icon>{{ hasChildren ? 'block' : 'report' }}</mat-icon>
+  </div>
+
+  @if (hasChildren) {
+    <h3 class="delete-tag__title">Cannot delete «{{ data.tagName }}»</h3>
+    <p class="delete-tag__message">
+      Has {{ data.childrenCount }} sub-tag{{ data.childrenCount === 1 ? '' : 's' }}.
+      Delete or move them first.
+    </p>
+    <div class="delete-tag__actions">
+      <button mat-flat-button class="delete-tag__btn delete-tag__btn--neutral"
+              (click)="onCancel()">OK</button>
+    </div>
+  } @else {
+    <h3 class="delete-tag__title">Delete tag «{{ data.tagName }}»?</h3>
+    @if (data.usageCount > 0) {
+      <p class="delete-tag__message">
+        Used in {{ data.usageCount }} saving{{ data.usageCount === 1 ? '' : 's' }}.
+        Deleting will remove it from all of them. This action cannot be undone.
+      </p>
+    } @else {
+      <p class="delete-tag__message">
+        This action cannot be undone.
+      </p>
+    }
+    <div class="delete-tag__actions">
+      <button mat-stroked-button class="delete-tag__btn"
+              (click)="onCancel()">Cancel</button>
+      <button mat-flat-button class="delete-tag__btn delete-tag__btn--destructive"
+              (click)="onDelete()">Delete</button>
+    </div>
+  }
+</div>

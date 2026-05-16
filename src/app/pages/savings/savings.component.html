@@ -8,6 +8,13 @@
         (click)="toggleChip(filter)">{{filter}}</mat-chip>
       }
     </mat-chip-set>
+    <button type="button"
+            class="savings--tags-btn"
+            aria-label="Manage tags"
+            matTooltip="Manage tags"
+            (click)="openTagsManage()">
+      <mat-icon>local_offer</mat-icon>
+    </button>
   </div>
 
   @if(assets.length === 0) {

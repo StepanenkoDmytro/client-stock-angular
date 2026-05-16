@@ -1,0 +1,60 @@
+.delete-tag {
+  padding: 24px 20px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+}
+
+.delete-tag__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(187, 69, 69, 0.1);
+
+  mat-icon {
+    color: #BB4545;
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
+}
+
+.delete-tag__title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.delete-tag__message {
+  margin: 0;
+  font-size: 14px;
+  color: #5A5A5A;
+  line-height: 1.4;
+}
+
+.delete-tag__actions {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  margin-top: 8px;
+  justify-content: center;
+}
+
+.delete-tag__btn {
+  min-width: 120px;
+}
+
+.delete-tag__btn--destructive {
+  background-color: #BB4545;
+  color: white;
+}
+
+.delete-tag__btn--neutral {
+  background-color: #E0E0E0;
+  color: #333;
+}

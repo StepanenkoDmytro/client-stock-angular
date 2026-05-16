@@ -19,6 +19,7 @@ import { SelectMarketDialogComponent } from './components/select-market-dialog/s
 import { MatDialog } from '@angular/material/dialog';
 import { SavingsDashboardsComponent } from './components/savings-dashboards/savings-dashboards.component';
 import { AddTriggerService } from '../../service/helpers/add-trigger.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 const UI_COMPONENTS = [
@@ -35,7 +36,8 @@ const MATERIAL_MODULES = [
   MatFormFieldModule,
   MatButtonModule,
   MatBottomSheetModule,
-  MatChipsModule
+  MatChipsModule,
+  MatTooltipModule,
 ];
 
 
@@ -101,6 +103,10 @@ export class SavingsComponent implements OnInit {
     this.assetStateService.selectPortfolioAsset(asset);
     const newRoute = '/savings/' + asset.assetType.toLocaleLowerCase() + '-asset';
     this.router.navigate([newRoute]);
+  }
+
+  public openTagsManage(): void {
+    this.router.navigate(['/savings/tags']);
   }
 
   public openSelectedFilter(): void {

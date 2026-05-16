@@ -1,0 +1,107 @@
+<section class="page tag-form">
+  <div (click)="goBack()">
+    <pgz-prev-route>
+      @if (isEdit()) {
+        <p>{{ isSystem() ? 'System tag' : 'Edit tag' }}</p>
+      } @else {
+        <p>Add tag</p>
+      }
+    </pgz-prev-route>
+  </div>
+
+  <form class="tag-form__body" [formGroup]="form" (ngSubmit)="onSave()">
+    <mat-form-field appearance="outline" class="tag-form__field">
+      <mat-label>Name</mat-label>
+      <input matInput
+             type="text"
+             maxlength="30"
+             placeholder="e.g. Long-term"
+             [formControl]="nameCtrl">
+      @if (nameCtrl.invalid && nameCtrl.touched) {
+        @if (nameCtrl.hasError('required')) {
+          <mat-error>Name is required</mat-error>
+        } @else if (nameCtrl.hasError('maxLength')) {
+          <mat-error>Max 30 characters</mat-error>
+        }
+      }
+      @if (form.hasError('duplicateName')) {
+        <mat-error>Tag with this name already exists in the same group</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="tag-form__field">
+      <mat-label>Parent</mat-label>
+      <mat-select [formControl]="parentCtrl">
+        @for (option of parentOptions(); track option.key) {
+          <mat-option [value]="option.id">{{ option.label }}</mat-option>
+        }
+      </mat-select>
+      @if (parentCtrl.hasError('parentCycle')) {
+        <mat-error>Cannot set a descendant as parent</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="tag-form__field tag-form__color-row"
+         (click)="toggleColorPicker()">
+      <div class="tag-form__color-preview"
+           [style.background-color]="colorCtrl.value"></div>
+      <span class="tag-form__color-label">Color</span>
+      @if (!isSystem()) {
+        <pgz-arrow-back [stroke]="1" [rotateAngle]="'-45'" [useBlackColor]="true"></pgz-arrow-back>
+      }
+      <!-- Picker is rendered outside the click-toggle row so clicks inside
+           it don't bubble back up and re-toggle the row. -->
+      <div class="tag-form__picker-host" (click)="$event.stopPropagation()">
+        <pgz-color-picker
+          [isDropdownOpen]="isColorPickerOpen()"
+          [occupiedColors]="occupiedColors()"
+          (colorSelected)="onColorSelected($event)">
+        </pgz-color-picker>
+      </div>
+    </div>
+
+    <div class="tag-form__field tag-form__icon-row"
+         (click)="toggleIconPicker()">
+      <div class="tag-form__icon-preview"
+           [style.background-color]="colorCtrl.value">
+        @if (iconCtrl.value) {
+          <pgz-icon [name]="iconCtrl.value"></pgz-icon>
+        } @else {
+          <mat-icon class="tag-form__icon-placeholder">label</mat-icon>
+        }
+      </div>
+      <span class="tag-form__icon-label">Icon (optional)</span>
+      @if (iconCtrl.value && !isSystem()) {
+        <button type="button" mat-icon-button class="tag-form__icon-clear"
+                (click)="onClearIcon(); $event.stopPropagation()">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+      <div class="tag-form__picker-host" (click)="$event.stopPropagation()">
+        <pgz-icons-picker
+          [isDropdownOpen]="isIconPickerOpen()"
+          (iconSelected)="onIconSelected($event)">
+        </pgz-icons-picker>
+      </div>
+    </div>
+
+    @if (isEdit() && ancestorsLabel()) {
+      <p class="tag-form__breadcrumb">Path: {{ ancestorsLabel() }}</p>
+    }
+
+    @if (isSystem()) {
+      <p class="tag-form__system-note">
+        System tags are read-only. You can use them in your savings but cannot edit or delete them.
+      </p>
+    } @else {
+      <div class="tag-form__actions">
+        <button type="submit"
+                mat-flat-button
+                class="tag-form__save"
+                [disabled]="!canSave()">
+          {{ isEdit() ? 'Save' : 'Add tag' }}
+        </button>
+      </div>
+    }
+  </form>
+</section>

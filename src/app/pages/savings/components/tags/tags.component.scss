@@ -1,0 +1,105 @@
+.tags-page {
+  // `.page` from styles.scss handles position/background/size.
+  // We only add internal layout here.
+  overflow-y: auto;
+}
+
+.tags-page__body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.tags-page__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.tags-page__add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tags-page__empty {
+  text-align: center;
+  color: #888;
+  padding: 24px 0;
+}
+
+.tags-page__accordion {
+  display: block;
+}
+
+.tags-page__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.tags-page__row-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  justify-content: flex-end;
+}
+
+.tags-page__swatch {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.tags-page__name {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.tags-page__badge {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #5A5A5A;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+  padding: 2px 6px;
+  letter-spacing: 0.5px;
+}
+
+.tags-page__children {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tags-page__child {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.02);
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+}
+
+.tags-page__child-delete {
+  margin-left: auto;
+}
+
+.tags-page__no-children {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #888;
+  padding-left: 16px;
+}

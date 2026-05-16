@@ -29,4 +29,16 @@ export const SAVINGS_ROUTES: Route[] = [
         path: 'stock-asset',
         component: StockAssetComponent
     },
+    {
+        path: 'tags',
+        loadComponent: () => import('./components/tags/tags.component').then(c => c.TagsComponent),
+    },
+    {
+        path: 'tags/add',
+        loadComponent: () => import('./components/tags/tag-form/tag-form.component').then(c => c.TagFormComponent),
+    },
+    {
+        path: 'tags/edit/:id',
+        loadComponent: () => import('./components/tags/tag-form/tag-form.component').then(c => c.TagFormComponent),
+    },
 ];

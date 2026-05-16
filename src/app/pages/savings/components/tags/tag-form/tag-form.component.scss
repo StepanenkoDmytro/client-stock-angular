@@ -1,0 +1,104 @@
+.tag-form {
+  // `.page` from styles.scss handles position/background/size.
+  overflow-y: auto;
+}
+
+.tag-form__body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.tag-form__field {
+  width: 100%;
+}
+
+.tag-form__color-row,
+.tag-form__icon-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.02);
+  }
+}
+
+.tag-form__color-preview,
+.tag-form__icon-preview {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.tag-form__icon-placeholder {
+  color: white;
+  opacity: 0.85;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.tag-form__color-label,
+.tag-form__icon-label {
+  font-size: 15px;
+  flex: 1;
+}
+
+.tag-form__picker-host {
+  // Pickers position themselves absolutely via their own SCSS when open,
+  // so this host is a positioning anchor without taking layout space.
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+.tag-form__icon-clear {
+  margin-left: auto;
+}
+
+.tag-form__breadcrumb {
+  font-size: 13px;
+  color: #5A5A5A;
+  margin: 0;
+}
+
+.tag-form__system-note {
+  margin: 24px 0 0;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.04);
+  border-left: 3px solid #5A5A5A;
+  color: #5A5A5A;
+  font-size: 13px;
+  line-height: 1.4;
+  border-radius: 4px;
+}
+
+.tag-form__actions {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.tag-form__save {
+  min-width: 140px;
+  background-color: #4285F4;
+  color: white;
+
+  &:disabled {
+    background-color: rgba(0, 0, 0, 0.12);
+    color: rgba(0, 0, 0, 0.38);
+  }
+}

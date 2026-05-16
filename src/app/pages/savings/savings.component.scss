@@ -13,6 +13,45 @@
 
     &--types {
       margin: 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      mat-chip-set {
+        flex: 1;
+        min-width: 0;
+      }
+    }
+
+    &--tags-btn {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      border-radius: 50%;
+      border: 1px solid #6F6F6F;
+      background-color: #FDFEFF;
+      color: #000;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.15s ease, transform 0.05s ease;
+
+      &:hover {
+        background-color: #FFFFFF;
+      }
+
+      &:active {
+        transform: scale(0.95);
+      }
+
+      mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+      }
     }
 }
 

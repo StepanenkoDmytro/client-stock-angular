@@ -1,0 +1,70 @@
+<section class="page tags-page">
+  <div (click)="goBack()">
+    <pgz-prev-route>
+      <p>Manage tags</p>
+    </pgz-prev-route>
+  </div>
+
+  <section class="tags-page__body">
+    <div class="tags-page__actions">
+      <button mat-flat-button class="tags-page__add-btn" (click)="onAdd()">
+        <mat-icon>add</mat-icon>
+        Add tag
+      </button>
+    </div>
+
+    @if (tagTree().length === 0) {
+      <p class="tags-page__empty">No tags yet.</p>
+    } @else {
+      <mat-accordion class="tags-page__accordion" multi>
+        @for (root of tagTree(); track root.id) {
+          <mat-expansion-panel [expanded]="root.system">
+            <mat-expansion-panel-header>
+              <mat-panel-title class="tags-page__row">
+                <span class="tags-page__swatch" [style.background-color]="root.color"></span>
+                <span class="tags-page__name">{{ root.name }}</span>
+                @if (root.system) {
+                  <span class="tags-page__badge">system</span>
+                }
+              </mat-panel-title>
+              <mat-panel-description class="tags-page__row-actions">
+                @if (canEdit(root)) {
+                  <button mat-icon-button (click)="onEdit(root); $event.stopPropagation()">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                }
+                @if (canDelete(root)) {
+                  <button mat-icon-button (click)="onDelete(root, $event)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                }
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            @if (hasChildren(root)) {
+              <ul class="tags-page__children">
+                @for (child of root.children; track child.id) {
+                  <li class="tags-page__child" (click)="onEdit(child)">
+                    <span class="tags-page__swatch" [style.background-color]="child.color"></span>
+                    <span class="tags-page__name">{{ child.name }}</span>
+                    @if (child.system) {
+                      <span class="tags-page__badge">system</span>
+                    }
+                    @if (canDelete(child)) {
+                      <button mat-icon-button class="tags-page__child-delete"
+                              (click)="onDelete(child, $event)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    }
+                  </li>
+                }
+              </ul>
+            } @else {
+              <p class="tags-page__no-children">No sub-tags.</p>
+            }
+          </mat-expansion-panel>
+        }
+      </mat-accordion>
+    }
+  </section>
+</section>
