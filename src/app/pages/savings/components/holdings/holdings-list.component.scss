@@ -6,7 +6,7 @@
   padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 
 .holdings-page__hint {
@@ -37,6 +37,95 @@
   gap: 6px;
   font-size: 13px;
 }
+
+// ---- Filters ----
+
+.holdings-page__filter {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.holdings-page__filter-label {
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #888;
+  font-weight: 600;
+}
+
+.holdings-page__chip-set {
+  // Material chip-set is already flex-wrap by default.
+}
+
+.holdings-page__class-chip {
+  cursor: pointer;
+  --chip-color: #5A5A5A;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+
+  &.selected {
+    background-color: var(--chip-color) !important;
+    color: #fff !important;
+  }
+}
+
+.holdings-page__tag-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.holdings-page__tag-chip {
+  --chip-color: #908E91;
+  border: 1.5px solid var(--chip-color);
+  background: transparent;
+  color: var(--chip-color);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, transform 0.05s ease;
+  white-space: nowrap;
+  font-family: inherit;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+
+  &.selected {
+    background-color: var(--chip-color);
+    color: #fff;
+    text-shadow: 0 0 1px rgba(0, 0, 0, 0.25);
+  }
+}
+
+// ---- Result row ----
+
+.holdings-page__result-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 13px;
+  color: #5A5A5A;
+}
+
+.holdings-page__count {
+  font-variant-numeric: tabular-nums;
+}
+
+.holdings-page__clear-btn {
+  font-size: 12px;
+  min-width: 0;
+  padding: 0 8px;
+}
+
+// ---- Holding cards (unchanged from before) ----
 
 .holdings-page__list {
   list-style: none;
@@ -156,6 +245,5 @@
   border-radius: 12px;
   font-weight: 500;
   white-space: nowrap;
-  // Ensure contrast for light-colored tags
   text-shadow: 0 0 1px rgba(0, 0, 0, 0.25);
 }

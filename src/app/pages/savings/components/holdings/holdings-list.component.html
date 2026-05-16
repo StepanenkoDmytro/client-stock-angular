@@ -16,69 +16,127 @@
       </button>
     </div>
 
-    @if (holdingsView().length === 0) {
+    @if (totalCount() === 0) {
       <p class="holdings-page__empty">
         No holdings yet. Press <strong>Reset demo data</strong> above to
         re-seed 5 example positions.
       </p>
     } @else {
-      <p class="holdings-page__hint">
-        Demo data — these holdings illustrate the new model (Instrument +
-        Holding + Tag).
-      </p>
+      <!-- Class filter row -->
+      <div class="holdings-page__filter">
+        <span class="holdings-page__filter-label">By class</span>
+        <mat-chip-set class="holdings-page__chip-set">
+          <mat-chip class="holdings-page__class-chip"
+                    [class.selected]="selectedClass() === 'ALL'"
+                    (click)="onSelectClass('ALL')">
+            All
+          </mat-chip>
+          @for (ac of availableClasses(); track ac) {
+            <mat-chip class="holdings-page__class-chip"
+                      [class.selected]="selectedClass() === ac"
+                      [style.--chip-color]="assetClassBadgeColor(ac)"
+                      (click)="onSelectClass(ac)">
+              {{ assetClassLabel(ac) }}
+            </mat-chip>
+          }
+        </mat-chip-set>
+      </div>
 
-      <ul class="holdings-page__list">
-        @for (h of holdingsView(); track h.id) {
-          <li class="holding-card">
-            <div class="holding-card__top">
-              <span class="holding-card__symbol">{{ h.instrument.symbol }}</span>
-              <span class="holding-card__badge"
-                    [style.background-color]="assetClassBadgeColor(h.instrument.assetClass)">
-                {{ assetClassLabel(h.instrument.assetClass) }}
-              </span>
-            </div>
-
-            <p class="holding-card__name">{{ h.instrument.name }}</p>
-
-            <div class="holding-card__numbers">
-              <div class="holding-card__number">
-                <span class="holding-card__number-label">Quantity</span>
-                <span class="holding-card__number-value">{{ formatQuantity(h) }}</span>
-              </div>
-              <div class="holding-card__number">
-                <span class="holding-card__number-label">Avg buy</span>
-                <span class="holding-card__number-value">
-                  {{ formatNumber(h.averageBuyPrice) }} {{ h.currency }}
-                </span>
-              </div>
-              <div class="holding-card__number holding-card__number--total">
-                <span class="holding-card__number-label">Total cost</span>
-                <span class="holding-card__number-value">
-                  {{ formatNumber(totalCost(h)) }} {{ h.currency }}
-                </span>
-              </div>
-            </div>
-
-            <div class="holding-card__meta">
-              <span class="holding-card__account">
-                <mat-icon class="holding-card__account-icon">account_balance</mat-icon>
-                {{ h.accountId ?? 'manual' }}
-              </span>
-            </div>
-
-            @if (h.tags.length > 0) {
-              <div class="holding-card__tags">
-                @for (tag of h.tags; track tag.id) {
-                  <span class="holding-card__tag"
-                        [style.background-color]="tag.color">
-                    {{ tag.name }}
-                  </span>
-                }
-              </div>
+      <!-- Tag filter row -->
+      @if (availableTags().length > 0) {
+        <div class="holdings-page__filter">
+          <span class="holdings-page__filter-label">By tag</span>
+          <div class="holdings-page__tag-chips">
+            @for (tag of availableTags(); track tag.id) {
+              <button type="button"
+                      class="holdings-page__tag-chip"
+                      [class.selected]="isTagSelected(tag.id)"
+                      [style.--chip-color]="tag.color"
+                      (click)="onToggleTag(tag.id)">
+                {{ tag.name }}
+              </button>
             }
-          </li>
+          </div>
+        </div>
+      }
+
+      <!-- Result count + Clear -->
+      <div class="holdings-page__result-row">
+        @if (hasActiveFilters()) {
+          <span class="holdings-page__count">
+            Showing {{ filteredCount() }} of {{ totalCount() }}
+          </span>
+          <button mat-button class="holdings-page__clear-btn"
+                  type="button"
+                  (click)="clearFilters()">
+            Clear filters
+          </button>
+        } @else {
+          <span class="holdings-page__count">
+            {{ totalCount() }} holding{{ totalCount() === 1 ? '' : 's' }}
+          </span>
         }
-      </ul>
+      </div>
+
+      <!-- Holdings list -->
+      @if (filteredCount() === 0) {
+        <p class="holdings-page__empty">
+          No holdings match the selected filters.
+        </p>
+      } @else {
+        <ul class="holdings-page__list">
+          @for (h of filteredHoldings(); track h.id) {
+            <li class="holding-card">
+              <div class="holding-card__top">
+                <span class="holding-card__symbol">{{ h.instrument.symbol }}</span>
+                <span class="holding-card__badge"
+                      [style.background-color]="assetClassBadgeColor(h.instrument.assetClass)">
+                  {{ assetClassLabel(h.instrument.assetClass) }}
+                </span>
+              </div>
+
+              <p class="holding-card__name">{{ h.instrument.name }}</p>
+
+              <div class="holding-card__numbers">
+                <div class="holding-card__number">
+                  <span class="holding-card__number-label">Quantity</span>
+                  <span class="holding-card__number-value">{{ formatQuantity(h) }}</span>
+                </div>
+                <div class="holding-card__number">
+                  <span class="holding-card__number-label">Avg buy</span>
+                  <span class="holding-card__number-value">
+                    {{ formatNumber(h.averageBuyPrice) }} {{ h.currency }}
+                  </span>
+                </div>
+                <div class="holding-card__number holding-card__number--total">
+                  <span class="holding-card__number-label">Total cost</span>
+                  <span class="holding-card__number-value">
+                    {{ formatNumber(totalCost(h)) }} {{ h.currency }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="holding-card__meta">
+                <span class="holding-card__account">
+                  <mat-icon class="holding-card__account-icon">account_balance</mat-icon>
+                  {{ h.accountId ?? 'manual' }}
+                </span>
+              </div>
+
+              @if (h.tags.length > 0) {
+                <div class="holding-card__tags">
+                  @for (tag of h.tags; track tag.id) {
+                    <span class="holding-card__tag"
+                          [style.background-color]="tag.color">
+                      {{ tag.name }}
+                    </span>
+                  }
+                </div>
+              }
+            </li>
+          }
+        </ul>
+      }
     }
   </section>
 </section>
