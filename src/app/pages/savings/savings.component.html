@@ -10,6 +10,13 @@
     </mat-chip-set>
     <button type="button"
             class="savings--tags-btn"
+            aria-label="View holdings (new model)"
+            matTooltip="View holdings (new model)"
+            (click)="openHoldings()">
+      <mat-icon>account_balance_wallet</mat-icon>
+    </button>
+    <button type="button"
+            class="savings--tags-btn"
             aria-label="Manage tags"
             matTooltip="Manage tags"
             (click)="openTagsManage()">

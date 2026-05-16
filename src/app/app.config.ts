@@ -10,6 +10,7 @@ import { provideEffects } from '@ngrx/effects';
 import { userReducer } from './store/user.reducer';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { assetReducer } from './pages/savings/store/asset.reducer';
+import { holdingsReducer } from './pages/savings/store/holdings.reducer';
 import { tagsReducer } from './pages/savings/store/tags.reducer';
 import { spendingsReducer } from './pages/spending/store/spendings.reducer';
 import { JwtInterceptor } from './pages/auth/jwt.interceptor';
@@ -32,6 +33,7 @@ export const appConfig: ApplicationConfig = {
     provideState({ name: 'spending', reducer: spendingsReducer }),
     provideState({ name: 'assets', reducer: assetReducer }),
     provideState({ name: 'tags', reducer: tagsReducer }),
+    provideState({ name: 'holdings', reducer: holdingsReducer }),
     provideEffects([UserEffects, SpendingsEffects, SyncDataEffects]),
     provideStoreDevtools({
       maxAge: 25, 

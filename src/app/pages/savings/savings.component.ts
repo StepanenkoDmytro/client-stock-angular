@@ -109,6 +109,10 @@ export class SavingsComponent implements OnInit {
     this.router.navigate(['/savings/tags']);
   }
 
+  public openHoldings(): void {
+    this.router.navigate(['/savings/holdings']);
+  }
+
   public openSelectedFilter(): void {
     if(this.selectedFilter === 'All') {
       const dialogRef = this.dialog.open(SelectMarketDialogComponent);

@@ -30,6 +30,10 @@ export const SAVINGS_ROUTES: Route[] = [
         component: StockAssetComponent
     },
     {
+        path: 'holdings',
+        loadComponent: () => import('./components/holdings/holdings-list.component').then(c => c.HoldingsListComponent),
+    },
+    {
         path: 'tags',
         loadComponent: () => import('./components/tags/tags.component').then(c => c.TagsComponent),
     },
