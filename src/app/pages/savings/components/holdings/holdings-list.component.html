@@ -1,9 +1,11 @@
-<section class="page holdings-page">
-  <div (click)="goBack()">
-    <pgz-prev-route>
-      <p>My holdings</p>
-    </pgz-prev-route>
-  </div>
+<section [class.page]="showHeader" class="holdings-page" [class.holdings-page--embedded]="!showHeader">
+  @if (showHeader) {
+    <div (click)="goBack()">
+      <pgz-prev-route>
+        <p>My holdings</p>
+      </pgz-prev-route>
+    </div>
+  }
 
   <section class="holdings-page__body">
     <div class="holdings-page__actions">

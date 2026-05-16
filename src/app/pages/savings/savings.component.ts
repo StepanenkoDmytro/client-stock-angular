@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { ButtonToggleComponent } from '../../core/UI/components/button-toggle/button-toggle.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -18,16 +18,18 @@ import {
 import { SelectMarketDialogComponent } from './components/select-market-dialog/select-market-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { SavingsDashboardsComponent } from './components/savings-dashboards/savings-dashboards.component';
+import { HoldingsListComponent } from './components/holdings/holdings-list.component';
 import { AddTriggerService } from '../../service/helpers/add-trigger.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
+type SavingsView = 'classes' | 'holdings';
 
 const UI_COMPONENTS = [
   TotalBalanceComponent,
   ButtonToggleComponent,
-  ButtonToggleComponent,
   AssetCardComponent,
-  SavingsDashboardsComponent
+  SavingsDashboardsComponent,
+  HoldingsListComponent,
 ];
 
 const MATERIAL_MODULES = [
@@ -57,6 +59,23 @@ export class SavingsComponent implements OnInit {
   public filters: Set<string> = new Set<string>();
   public selectedFilter: string = 'All';
   public isPortfolioFrame: boolean = true;
+
+  /**
+   * View toggle state. 'classes' renders the legacy chip-filter + asset
+   * cards view (will be reworked into a proper "by Class" drill-down in
+   * a future iteration). 'holdings' renders the new HoldingsListComponent
+   * embedded (without its own back-arrow header — toggle handles
+   * navigation between the two states).
+   *
+   * Mapping to ButtonToggleComponent:
+   *   `dataUnchecked = 'Classes'`  →  view === 'classes'  (initial)
+   *   `dataChecked   = 'Holdings'` →  view === 'holdings'
+   *
+   * The toggle emits the inverted boolean of its `checked` state per its
+   * implementation in `core/UI/components/button-toggle`. We translate
+   * back to the named view here.
+   */
+  public readonly view = signal<SavingsView>('classes');
 
   constructor(
     private assetStateService: MarketService,
@@ -109,8 +128,13 @@ export class SavingsComponent implements OnInit {
     this.router.navigate(['/savings/tags']);
   }
 
-  public openHoldings(): void {
-    this.router.navigate(['/savings/holdings']);
+  /**
+   * Handler for pgz-button-toggle. Per the component's contract, it emits
+   * the new internal boolean after a click. true ↔ "Classes" highlighted
+   * (data-unchecked). false ↔ "Holdings" highlighted (data-checked).
+   */
+  public onViewToggle(isUnchecked: boolean): void {
+    this.view.set(isUnchecked ? 'classes' : 'holdings');
   }
 
   public openSelectedFilter(): void {

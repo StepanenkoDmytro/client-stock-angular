@@ -2,11 +2,23 @@
   overflow-y: auto;
 }
 
+.holdings-page--embedded {
+  // When embedded inside SavingsComponent toggle — no own .page chrome,
+  // parent handles positioning/background.
+  overflow-y: visible;
+}
+
 .holdings-page__body {
   padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 14px;
+}
+
+.holdings-page--embedded .holdings-page__body {
+  // Slimmer top padding when embedded (parent already provides margin
+  // via the toggle row above).
+  padding: 8px 16px 16px;
 }
 
 .holdings-page__hint {

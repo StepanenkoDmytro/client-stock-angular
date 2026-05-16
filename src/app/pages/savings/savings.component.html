@@ -1,34 +1,41 @@
 <section class="savings">
-<pgz-savings-dashboards [activeCard]="selectedFilter" [userCards]="filters"></pgz-savings-dashboards>
-
-  <div class="savings--types">
-    <mat-chip-set>
-      @for (filter of filters; track filter) {
-        <mat-chip class="filters" [class.selected]="isSelected(filter)"
-        (click)="toggleChip(filter)">{{filter}}</mat-chip>
-      }
-    </mat-chip-set>
-    <button type="button"
-            class="savings--tags-btn"
-            aria-label="View holdings (new model)"
-            matTooltip="View holdings (new model)"
-            (click)="openHoldings()">
-      <mat-icon>account_balance_wallet</mat-icon>
-    </button>
-    <button type="button"
-            class="savings--tags-btn"
-            aria-label="Manage tags"
-            matTooltip="Manage tags"
-            (click)="openTagsManage()">
-      <mat-icon>local_offer</mat-icon>
-    </button>
+  <div class="savings__view-toggle">
+    <pgz-button-toggle
+      [dataUnchecked]="'Classes'"
+      [dataChecked]="'Holdings'"
+      (buttonValue)="onViewToggle($event)">
+    </pgz-button-toggle>
   </div>
 
-  @if(assets.length === 0) {
-    <p style="text-align: center;">Empty list</p>
+  @if (view() === 'classes') {
+    <pgz-savings-dashboards [activeCard]="selectedFilter" [userCards]="filters"></pgz-savings-dashboards>
+
+    <div class="savings--types">
+      <mat-chip-set>
+        @for (filter of filters; track filter) {
+          <mat-chip class="filters" [class.selected]="isSelected(filter)"
+                    (click)="toggleChip(filter)">{{filter}}</mat-chip>
+        }
+      </mat-chip-set>
+      <button type="button"
+              class="savings--tags-btn"
+              aria-label="Manage tags"
+              matTooltip="Manage tags"
+              (click)="openTagsManage()">
+        <mat-icon>local_offer</mat-icon>
+      </button>
+    </div>
+
+    @if (assets && assets.length === 0) {
+      <p style="text-align: center;">Empty list</p>
+    }
+    @for (asset of filteredAssets; track asset) {
+      <pgz-asset-card [asset]="asset"
+                      (deleteAsset)="onDeleteAsset($event)"
+                      (editAsset)="onEditAsset($event)"></pgz-asset-card>
+    }
+  } @else {
+    <pgz-holdings-list [showHeader]="false"></pgz-holdings-list>
   }
-  @for(asset of filteredAssets; track asset) {
-    <pgz-asset-card [asset]="asset" (deleteAsset)="onDeleteAsset($event)" (editAsset)="onEditAsset($event)"></pgz-asset-card>
-  }
-  </section>
+</section>
 <!-- <button mat-flat-button class="add-btn" (click)="openSelectedFilter()">{{ selectedFilterMarket() }}</button> -->

@@ -11,6 +11,10 @@
     // align-items: center;
     height: inherit;
 
+    &__view-toggle {
+      padding: 12px 20px 6px;
+    }
+
     &--types {
       margin: 0 20px;
       display: flex;

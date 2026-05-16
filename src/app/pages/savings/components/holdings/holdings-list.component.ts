@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  Input,
   OnInit,
   computed,
   inject,
@@ -39,6 +40,14 @@ type ClassFilter = AssetClass | 'ALL';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HoldingsListComponent implements OnInit {
+  /**
+   * When false (embedded inside SavingsComponent's toggle), hide the
+   * pgz-prev-route header and the .page wrapper — the parent handles
+   * page chrome. When true (standalone route /savings/holdings), render
+   * the full screen with back-arrow header.
+   */
+  @Input() public showHeader: boolean = true;
+
   private readonly router = inject(Router);
   private readonly store = inject(Store);
   private readonly holdings = inject(HoldingService);
