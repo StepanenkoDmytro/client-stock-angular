@@ -6,61 +6,180 @@
 
 .savings {
   justify-content: flex-start;
+  display: flex;
+  flex-direction: column;
+  height: inherit;
+  overflow-y: auto;
+
+  &__view-toggle {
+    padding: 12px 20px 6px;
+  }
+
+  &__summary-wrap {
+    padding: 8px 16px 4px;
+  }
+
+  &__class-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px 4px;
+  }
+
+  &__class-title {
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--pgz-text-muted);
+    font-weight: 600;
+  }
+
+  &__empty {
+    text-align: center;
+    color: var(--pgz-text-muted);
+    padding: 32px 20px;
+    line-height: 1.5;
+  }
+
+  &__classes {
+    display: block;
+    padding: 4px 16px 24px;
+  }
+
+  &__class-panel {
+    margin-bottom: 12px;
+    // !important needed because styles.scss line ~374 has a global
+    // `background: inherit !important` for any mat-expansion-panel
+    // without an explicit elevation class — without it, our white card
+    // is transparent and the page gradient + cubs.png bleed through.
+    background: var(--pgz-card-bg) !important;
+    border: 1px solid var(--pgz-card-border);
+    border-radius: 12px !important;
+    overflow: hidden;
+    box-shadow: var(--pgz-card-shadow) !important;
+    padding: 4px 12px 10px;
+  }
+
+  // Restore some breathing room — global styles force header padding to 0.
+  ::ng-deep .savings__class-panel .mat-expansion-panel-header {
+    padding: 12px 4px 12px 6px !important;
+  }
+
+  &__class-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+  }
+
+  &__class-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 1px var(--pgz-card-border);
+  }
+
+  &__class-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--pgz-text-primary);
+  }
+
+  &__class-share {
+    font-size: 12px;
+    color: var(--pgz-text-secondary);
+    background: var(--pgz-card-bg-sub);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__class-desc {
+    margin: 0;
+    font-weight: 600;
+    color: var(--pgz-accent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__class-cards {
     display: flex;
     flex-direction: column;
-    // align-items: center;
-    height: inherit;
+    gap: 8px;
+    padding: 4px 0 4px;
+  }
 
-    &__view-toggle {
-      padding: 12px 20px 6px;
+  // Inner holding-cards inside a class panel: render as "sub-items" with
+  // a tinted background + no own shadow. The parent panel already provides
+  // the white card visual; nested children should look attached, not free-
+  // floating. Targets the host element of pgz-holding-card.
+  ::ng-deep .savings__class-cards pgz-holding-card .holding-card {
+    background-color: var(--pgz-card-bg-sub) !important;
+    box-shadow: none !important;
+    border-color: var(--pgz-card-border) !important;
+    padding: 12px 14px !important;
+    gap: 8px !important;
+  }
+
+  &__class-more {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 1px dashed var(--pgz-card-border);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--pgz-accent);
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: rgba(25, 118, 210, 0.06);
+    }
+  }
+
+  &__class-more-dots {
+    font-size: 18px;
+    line-height: 1;
+    color: var(--pgz-text-secondary);
+  }
+
+  &__class-more-label {
+    flex: 1;
+    text-align: left;
+  }
+
+  &--tags-btn {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: 50%;
+    border: 1px solid #6F6F6F;
+    background-color: var(--pgz-card-bg);
+    color: var(--pgz-text-primary);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.15s ease, transform 0.05s ease;
+
+    &:hover {
+      background-color: var(--pgz-card-bg);
     }
 
-    &--types {
-      margin: 0 20px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-
-      mat-chip-set {
-        flex: 1;
-        min-width: 0;
-      }
+    &:active {
+      transform: scale(0.95);
     }
 
-    &--tags-btn {
-      flex-shrink: 0;
-      width: 36px;
-      height: 36px;
-      padding: 0;
-      border-radius: 50%;
-      border: 1px solid #6F6F6F;
-      background-color: #FDFEFF;
-      color: #000;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      transition: background-color 0.15s ease, transform 0.05s ease;
-
-      &:hover {
-        background-color: #FFFFFF;
-      }
-
-      &:active {
-        transform: scale(0.95);
-      }
-
-      mat-icon {
-        font-size: 20px;
-        width: 20px;
-        height: 20px;
-        line-height: 20px;
-      }
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
     }
+  }
 }
-
-.filters.selected {
-  background-color: #5DB075; 
-  color: #fff; 
-}
-

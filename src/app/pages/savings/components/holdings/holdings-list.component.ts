@@ -22,6 +22,8 @@ import { InstrumentService } from '../../service/instrument.service';
 import { TagsService } from '../../service/tags.service';
 import { selectHoldingsList } from '../../store/holdings.selectors';
 import { selectTagsList } from '../../store/tags.selectors';
+import { HoldingCardComponent } from './holding-card/holding-card.component';
+import { PortfolioSummaryComponent } from './portfolio-summary/portfolio-summary.component';
 
 type ClassFilter = AssetClass | 'ALL';
 
@@ -34,6 +36,8 @@ type ClassFilter = AssetClass | 'ALL';
     MatButtonModule,
     MatChipsModule,
     PrevRouteComponent,
+    HoldingCardComponent,
+    PortfolioSummaryComponent,
   ],
   templateUrl: './holdings-list.component.html',
   styleUrl: './holdings-list.component.scss',
@@ -47,6 +51,30 @@ export class HoldingsListComponent implements OnInit {
    * the full screen with back-arrow header.
    */
   @Input() public showHeader: boolean = true;
+
+  /**
+   * When false, skip the internal portfolio summary card. Used when the
+   * component is embedded inside SavingsComponent, where the parent
+   * renders the summary above both views so it persists across the
+   * toggle without re-mounting.
+   */
+  @Input() public showSummary: boolean = true;
+
+  /**
+   * When set on mount, applies the given AssetClass to the class filter
+   * immediately, so the user lands with the desired narrow view. Used by
+   * the Classes-accordion "Show all N" links in SavingsComponent.
+   *
+   * Set via a setter to apply at the moment the input is bound, because
+   * the inner `selectedClass` signal needs to be updated before first
+   * paint to avoid a flash of unfiltered content.
+   */
+  @Input()
+  public set initialClassFilter(value: AssetClass | null | undefined) {
+    if (value) {
+      this.selectedClass.set(value);
+    }
+  }
 
   private readonly router = inject(Router);
   private readonly store = inject(Store);
@@ -88,6 +116,14 @@ export class HoldingsListComponent implements OnInit {
   public readonly selectedClass = signal<ClassFilter>('ALL');
   public readonly selectedTagIds = signal<ReadonlySet<string>>(new Set());
 
+  /**
+   * Whether the tag filter card is expanded to show all tags or collapsed
+   * to a single row. Defaults to collapsed — most users will rarely use
+   * more than the top few tags, and a tall always-expanded grid eats
+   * vertical space on mobile.
+   */
+  public readonly tagsExpanded = signal(false);
+
   /** AssetClass values that actually appear in current holdings — drives chip row. */
   public readonly availableClasses = computed<AssetClass[]>(() => {
     const set = new Set<AssetClass>();
@@ -107,6 +143,18 @@ export class HoldingsListComponent implements OnInit {
     }
     return Array.from(byId.values()).sort(tagSort);
   });
+
+  /**
+   * Show the expand/collapse chevron only when there are enough tags to
+   * actually overflow a single row. Below threshold, the toggle would do
+   * nothing and just adds visual noise.
+   */
+  private static readonly TAGS_OVERFLOW_THRESHOLD = 5;
+  public readonly tagsHaveOverflow = computed(
+    () =>
+      this.availableTags().length >
+      HoldingsListComponent.TAGS_OVERFLOW_THRESHOLD,
+  );
 
   /**
    * Apply both filter axes. AND between axes (class AND tag), OR inside the
@@ -242,6 +290,10 @@ export class HoldingsListComponent implements OnInit {
   public clearFilters(): void {
     this.selectedClass.set('ALL');
     this.selectedTagIds.set(new Set());
+  }
+
+  public toggleTagsExpanded(): void {
+    this.tagsExpanded.update((v) => !v);
   }
 
   // ---- Navigation / actions ----

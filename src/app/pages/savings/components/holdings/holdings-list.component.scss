@@ -24,146 +24,16 @@
 .holdings-page__hint {
   margin: 0;
   font-size: 13px;
-  color: #5A5A5A;
+  color: var(--pgz-text-secondary);
   padding: 8px 12px;
-  background: rgba(0, 0, 0, 0.04);
-  border-left: 3px solid #5A5A5A;
+  background: var(--pgz-card-bg-sub);
+  border-left: 3px solid var(--pgz-text-secondary);
   border-radius: 4px;
-}
-
-// ---- Portfolio summary card ----
-
-.holdings-summary {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  padding: 16px 18px;
-  border: 1px solid var(--bs-gray-300, rgba(0, 0, 0, 0.12));
-  border-radius: 12px;
-  background-color: var(--bs-gray-200, #f0f2f5);
-}
-
-.holdings-summary__top {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.holdings-summary__total-row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-}
-
-.holdings-summary__label {
-  font-size: 14px;
-  font-weight: 600;
-  color: #5A5A5A;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.holdings-summary__total {
-  font-size: 26px;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  font-family: 'Montserrat', sans-serif;
-}
-
-.holdings-summary__pnl-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 12px;
-}
-
-.holdings-summary__cost {
-  color: #5A5A5A;
-}
-
-.holdings-summary__pnl {
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-
-  &.positive {
-    color: #2E7D32;
-  }
-
-  &.negative {
-    color: #C62828;
-  }
-}
-
-.holdings-summary__bar {
-  display: flex;
-  width: 100%;
-  height: 8px;
-  border-radius: 4px;
-  overflow: hidden;
-  background-color: rgba(0, 0, 0, 0.06);
-}
-
-.holdings-summary__slice {
-  min-width: 2px;
-  height: 100%;
-  transition: flex-grow 0.2s ease;
-}
-
-.holdings-summary__legend {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.holdings-summary__legend-row {
-  display: grid;
-  grid-template-columns: 12px 1fr auto auto auto;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  font-variant-numeric: tabular-nums;
-}
-
-.holdings-summary__legend-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-}
-
-.holdings-summary__legend-name {
-  font-weight: 500;
-}
-
-.holdings-summary__legend-share {
-  color: #5A5A5A;
-  min-width: 40px;
-  text-align: right;
-}
-
-.holdings-summary__legend-value {
-  font-weight: 600;
-  min-width: 64px;
-  text-align: right;
-}
-
-.holdings-summary__legend-pnl {
-  font-weight: 600;
-  min-width: 56px;
-  text-align: right;
-  font-size: 12px;
-
-  &.positive {
-    color: #2E7D32;
-  }
-
-  &.negative {
-    color: #C62828;
-  }
 }
 
 .holdings-page__empty {
   text-align: center;
-  color: #888;
+  color: var(--pgz-text-muted);
   padding: 24px 16px;
   line-height: 1.5;
 }
@@ -182,18 +52,19 @@
 
 // ---- Filters ----
 
-.holdings-page__filter {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
 .holdings-page__filter-label {
   font-size: 11px;
   letter-spacing: 0.5px;
   text-transform: uppercase;
-  color: #888;
+  color: var(--pgz-text-muted);
   font-weight: 600;
+}
+
+// By class: no card bg — chips float directly on page surface.
+.holdings-page__class-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .holdings-page__chip-set {
@@ -202,7 +73,7 @@
 
 .holdings-page__class-chip {
   cursor: pointer;
-  --chip-color: #5A5A5A;
+  --chip-color: var(--pgz-text-secondary);
   transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 
   &.selected {
@@ -211,10 +82,63 @@
   }
 }
 
+// By tag: white card with collapsible chip grid.
+.holdings-page__tag-filter-card {
+  background-color: var(--pgz-card-bg);
+  border: 1px solid var(--pgz-card-border);
+  border-radius: 12px;
+  box-shadow: var(--pgz-card-shadow);
+  padding: 10px 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.holdings-page__tag-filter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.holdings-page__tag-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--pgz-text-secondary);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: var(--pgz-card-bg-sub);
+  }
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+  }
+}
+
 .holdings-page__tag-chips {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+  max-height: 1000px;          // effectively unbounded when expanded
+  overflow: hidden;
+  transition: max-height 0.25s ease;
+
+  // Collapsed: clip to a single row of chips (~30px tall including gap).
+  &.clipped {
+    max-height: 30px;
+  }
 }
 
 .holdings-page__tag-chip {
@@ -254,7 +178,7 @@
   justify-content: space-between;
   padding: 4px 0;
   font-size: 13px;
-  color: #5A5A5A;
+  color: var(--pgz-text-secondary);
 }
 
 .holdings-page__count {
@@ -267,7 +191,8 @@
   padding: 0 8px;
 }
 
-// ---- Holding cards (unchanged from before) ----
+// ---- Holdings list wrapper ----
+// (Card visuals now live in HoldingCardComponent's own SCSS.)
 
 .holdings-page__list {
   list-style: none;
@@ -276,116 +201,4 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-}
-
-.holding-card {
-  background: #fff;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 12px;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-}
-
-.holding-card__top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.holding-card__symbol {
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: 0.3px;
-  font-family: 'Montserrat', sans-serif;
-}
-
-.holding-card__badge {
-  color: #fff;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  padding: 3px 8px;
-  border-radius: 10px;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.holding-card__name {
-  margin: 0;
-  font-size: 14px;
-  color: #5A5A5A;
-}
-
-.holding-card__numbers {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  padding: 8px 0;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-.holding-card__number {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.holding-card__number-label {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-  color: #888;
-}
-
-.holding-card__number-value {
-  font-size: 14px;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-}
-
-.holding-card__number--total .holding-card__number-value {
-  color: #1976D2;
-  font-size: 15px;
-}
-
-.holding-card__meta {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.holding-card__account {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 12px;
-  color: #5A5A5A;
-}
-
-.holding-card__account-icon {
-  font-size: 16px;
-  width: 16px;
-  height: 16px;
-  line-height: 16px;
-}
-
-.holding-card__tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.holding-card__tag {
-  color: #fff;
-  font-size: 12px;
-  padding: 3px 10px;
-  border-radius: 12px;
-  font-weight: 500;
-  white-space: nowrap;
-  text-shadow: 0 0 1px rgba(0, 0, 0, 0.25);
 }

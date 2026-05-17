@@ -157,7 +157,7 @@ $light-theme: mat.define-light-theme((
 
 
 .dark-theme {
-  
+
   @include mat.all-component-themes($dark-theme);
   @include mat.core-theme($dark-theme);
   @include mat.button-theme($dark-theme);
@@ -170,7 +170,27 @@ $light-theme: mat.define-light-theme((
   --bs-text: #e9ecef;
   --bs-text-100: #bdbdbd;
 
-  
+  // ---- Semantic tokens (pgz / color-*) ----
+  // Card surfaces — the white-card visual language used across savings
+  // (portfolio summary, class panels, holding cards, filter sections).
+  --pgz-card-bg: #1e1e1e;
+  --pgz-card-bg-sub: #262626;
+  --pgz-card-border: rgba(255, 255, 255, 0.08);
+  --pgz-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+
+  // Text hierarchy.
+  --pgz-text-primary: var(--bs-text);
+  --pgz-text-secondary: var(--bs-text-100);
+  --pgz-text-muted: #888888;
+
+  // P&L / status semantics per ux-principles §5.
+  --color-positive: #66BB6A;
+  --color-negative: #EF5350;
+  --color-warning: #FFA726;
+
+  // Brand accent (used for active CTA, primary numbers like Total cost).
+  --pgz-accent: #42A5F5;
+
   body {
     // background-color: $pgz-dark-background;
   }
@@ -180,8 +200,8 @@ $light-theme: mat.define-light-theme((
   @include mat.all-component-themes($light-theme);
   @include mat.core-theme($light-theme);
   @include mat.button-theme($light-theme);
-  
-  
+
+
   // $mat-app-background-color: $pgz-light-background;
   // background-color: $pgz-light-background;
   --bs-success: #5DB075;
@@ -190,10 +210,26 @@ $light-theme: mat.define-light-theme((
   --bs-text: #000000;
   --bs-text-100: #bdbdbd;
 
+  // ---- Semantic tokens (pgz / color-*) ----
+  --pgz-card-bg: #FFFFFF;
+  --pgz-card-bg-sub: #F5F7FA;
+  --pgz-card-border: rgba(0, 0, 0, 0.08);
+  --pgz-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+
+  --pgz-text-primary: #1A1A1A;
+  --pgz-text-secondary: #5A5A5A;
+  --pgz-text-muted: #888888;
+
+  --color-positive: #2E7D32;
+  --color-negative: #C62828;
+  --color-warning: #E65100;
+
+  --pgz-accent: #1976D2;
+
   body {
     background: radial-gradient(63.8% 235.47% at 50% 50%, #407DA4 0%, #C6D8E3 100%);
   }
-  
+
 }
 
 html, body { height: 100%; }

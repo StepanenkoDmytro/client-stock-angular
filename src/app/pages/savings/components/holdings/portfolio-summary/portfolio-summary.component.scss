@@ -1,0 +1,134 @@
+:host {
+  display: block;
+}
+
+.holdings-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px 18px;
+  border: 1px solid var(--pgz-card-border);
+  border-radius: 12px;
+  background-color: var(--pgz-card-bg);
+  box-shadow: var(--pgz-card-shadow);
+}
+
+.holdings-summary__top {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.holdings-summary__total-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.holdings-summary__label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pgz-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.holdings-summary__total {
+  font-size: 26px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  font-family: 'Montserrat', sans-serif;
+  color: var(--pgz-text-primary);
+}
+
+.holdings-summary__pnl-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.holdings-summary__cost {
+  color: var(--pgz-text-secondary);
+}
+
+.holdings-summary__pnl {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+
+  &.positive {
+    color: var(--color-positive);
+  }
+
+  &.negative {
+    color: var(--color-negative);
+  }
+}
+
+.holdings-summary__bar {
+  display: flex;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: var(--pgz-card-bg-sub);
+}
+
+.holdings-summary__slice {
+  min-width: 2px;
+  height: 100%;
+  transition: flex-grow 0.2s ease;
+}
+
+.holdings-summary__legend {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.holdings-summary__legend-row {
+  display: grid;
+  grid-template-columns: 12px 1fr auto auto auto;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  color: var(--pgz-text-primary);
+}
+
+.holdings-summary__legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.holdings-summary__legend-name {
+  font-weight: 500;
+}
+
+.holdings-summary__legend-share {
+  color: var(--pgz-text-secondary);
+  min-width: 40px;
+  text-align: right;
+}
+
+.holdings-summary__legend-value {
+  font-weight: 600;
+  min-width: 64px;
+  text-align: right;
+}
+
+.holdings-summary__legend-pnl {
+  font-weight: 600;
+  min-width: 56px;
+  text-align: right;
+  font-size: 12px;
+
+  &.positive {
+    color: var(--color-positive);
+  }
+
+  &.negative {
+    color: var(--color-negative);
+  }
+}

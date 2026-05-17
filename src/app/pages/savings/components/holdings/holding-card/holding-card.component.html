@@ -1,0 +1,48 @@
+<article class="holding-card">
+  <div class="holding-card__top">
+    <span class="holding-card__symbol">{{ holding.instrument.symbol }}</span>
+    <span class="holding-card__badge"
+          [style.background-color]="assetClassBadgeColor()">
+      {{ assetClassLabel() }}
+    </span>
+  </div>
+
+  <p class="holding-card__name">{{ holding.instrument.name }}</p>
+
+  <div class="holding-card__numbers">
+    <div class="holding-card__number">
+      <span class="holding-card__number-label">Quantity</span>
+      <span class="holding-card__number-value">{{ formatQuantity() }}</span>
+    </div>
+    <div class="holding-card__number">
+      <span class="holding-card__number-label">Avg buy</span>
+      <span class="holding-card__number-value">
+        {{ formatNumber(holding.averageBuyPrice) }} {{ holding.currency }}
+      </span>
+    </div>
+    <div class="holding-card__number holding-card__number--total">
+      <span class="holding-card__number-label">Total cost</span>
+      <span class="holding-card__number-value">
+        {{ formatNumber(totalCost()) }} {{ holding.currency }}
+      </span>
+    </div>
+  </div>
+
+  <div class="holding-card__meta">
+    <span class="holding-card__account">
+      <mat-icon class="holding-card__account-icon">account_balance</mat-icon>
+      {{ holding.accountId ?? 'manual' }}
+    </span>
+  </div>
+
+  @if (holding.tags.length > 0) {
+    <div class="holding-card__tags">
+      @for (tag of holding.tags; track tag.id) {
+        <span class="holding-card__tag"
+              [style.background-color]="tag.color">
+          {{ tag.name }}
+        </span>
+      }
+    </div>
+  }
+</article>

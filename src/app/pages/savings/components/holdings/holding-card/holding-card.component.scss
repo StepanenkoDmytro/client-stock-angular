@@ -1,0 +1,116 @@
+:host {
+  display: block;
+}
+
+.holding-card {
+  background: var(--pgz-card-bg);
+  border: 1px solid var(--pgz-card-border);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: var(--pgz-card-shadow);
+  color: var(--pgz-text-primary);
+}
+
+.holding-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.holding-card__symbol {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.holding-card__badge {
+  color: #fff;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.holding-card__name {
+  margin: 0;
+  font-size: 14px;
+  color: var(--pgz-text-secondary);
+}
+
+.holding-card__numbers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 8px 0;
+  border-top: 1px solid var(--pgz-card-border);
+  border-bottom: 1px solid var(--pgz-card-border);
+}
+
+.holding-card__number {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.holding-card__number-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--pgz-text-muted);
+}
+
+.holding-card__number-value {
+  font-size: 14px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.holding-card__number--total .holding-card__number-value {
+  color: var(--pgz-accent);
+  font-size: 15px;
+}
+
+.holding-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.holding-card__account {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--pgz-text-secondary);
+}
+
+.holding-card__account-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+}
+
+.holding-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.holding-card__tag {
+  color: #fff;
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.25);
+}

@@ -24,67 +24,12 @@
         re-seed 5 example positions.
       </p>
     } @else {
-      <!-- Portfolio summary card -->
-      <aside class="holdings-summary">
-        <div class="holdings-summary__top">
-          <div class="holdings-summary__total-row">
-            <span class="holdings-summary__label">Portfolio</span>
-            <span class="holdings-summary__total">
-              ${{ formatNumber(summary().totalValue, 0) }}
-            </span>
-          </div>
-          <div class="holdings-summary__pnl-row">
-            <span class="holdings-summary__cost">
-              cost basis: ${{ formatNumber(summary().totalCost, 0) }}
-            </span>
-            <span class="holdings-summary__pnl"
-                  [class.positive]="summary().totalPnL > 0"
-                  [class.negative]="summary().totalPnL < 0">
-              {{ summary().totalPnL >= 0 ? '+' : '−' }}${{ formatNumber(abs(summary().totalPnL), 0) }}
-              ({{ summary().totalPnL >= 0 ? '+' : '−' }}{{ formatPercent(abs(summary().totalPnLPercent)) }})
-            </span>
-          </div>
-        </div>
+      @if (showSummary) {
+        <pgz-portfolio-summary></pgz-portfolio-summary>
+      }
 
-        <div class="holdings-summary__bar">
-          @for (slice of summary().breakdown; track slice.assetClass) {
-            <div class="holdings-summary__slice"
-                 [style.background-color]="slice.color"
-                 [style.flex-grow]="slice.share"
-                 [title]="slice.label + ' ' + formatPercent(slice.share * 100)"></div>
-          }
-        </div>
-
-        <div class="holdings-summary__legend">
-          @for (slice of summary().breakdown; track slice.assetClass) {
-            <div class="holdings-summary__legend-row">
-              <span class="holdings-summary__legend-dot"
-                    [style.background-color]="slice.color"></span>
-              <span class="holdings-summary__legend-name">{{ slice.label }}</span>
-              <span class="holdings-summary__legend-share">
-                {{ formatPercent(slice.share * 100) }}
-              </span>
-              <span class="holdings-summary__legend-value">
-                ${{ formatNumber(slice.value, 0) }}
-              </span>
-              @if (slice.costBasis > 0) {
-                <span class="holdings-summary__legend-pnl"
-                      [class.positive]="slice.pnl > 0"
-                      [class.negative]="slice.pnl < 0">
-                  @if (slice.pnl === 0) {
-                    —
-                  } @else {
-                    {{ slice.pnl >= 0 ? '+' : '−' }}{{ formatPercent(abs(slice.pnlPercent)) }}
-                  }
-                </span>
-              }
-            </div>
-          }
-        </div>
-      </aside>
-
-      <!-- Class filter row -->
-      <div class="holdings-page__filter">
+      <!-- By class — standalone (no card bg), chips float on page surface -->
+      <div class="holdings-page__class-filter">
         <span class="holdings-page__filter-label">By class</span>
         <mat-chip-set class="holdings-page__chip-set">
           <mat-chip class="holdings-page__class-chip"
@@ -103,11 +48,24 @@
         </mat-chip-set>
       </div>
 
-      <!-- Tag filter row -->
+      <!-- By tag — white card, collapsible when many tags -->
       @if (availableTags().length > 0) {
-        <div class="holdings-page__filter">
-          <span class="holdings-page__filter-label">By tag</span>
-          <div class="holdings-page__tag-chips">
+        <div class="holdings-page__tag-filter-card"
+             [class.expanded]="tagsExpanded()">
+          <div class="holdings-page__tag-filter-header">
+            <span class="holdings-page__filter-label">By tag</span>
+            @if (tagsHaveOverflow()) {
+              <button type="button"
+                      class="holdings-page__tag-toggle"
+                      [attr.aria-expanded]="tagsExpanded()"
+                      aria-label="Toggle tags"
+                      (click)="toggleTagsExpanded()">
+                <mat-icon>{{ tagsExpanded() ? 'expand_less' : 'expand_more' }}</mat-icon>
+              </button>
+            }
+          </div>
+          <div class="holdings-page__tag-chips"
+               [class.clipped]="tagsHaveOverflow() && !tagsExpanded()">
             @for (tag of availableTags(); track tag.id) {
               <button type="button"
                       class="holdings-page__tag-chip"
@@ -147,53 +105,8 @@
       } @else {
         <ul class="holdings-page__list">
           @for (h of filteredHoldings(); track h.id) {
-            <li class="holding-card">
-              <div class="holding-card__top">
-                <span class="holding-card__symbol">{{ h.instrument.symbol }}</span>
-                <span class="holding-card__badge"
-                      [style.background-color]="assetClassBadgeColor(h.instrument.assetClass)">
-                  {{ assetClassLabel(h.instrument.assetClass) }}
-                </span>
-              </div>
-
-              <p class="holding-card__name">{{ h.instrument.name }}</p>
-
-              <div class="holding-card__numbers">
-                <div class="holding-card__number">
-                  <span class="holding-card__number-label">Quantity</span>
-                  <span class="holding-card__number-value">{{ formatQuantity(h) }}</span>
-                </div>
-                <div class="holding-card__number">
-                  <span class="holding-card__number-label">Avg buy</span>
-                  <span class="holding-card__number-value">
-                    {{ formatNumber(h.averageBuyPrice) }} {{ h.currency }}
-                  </span>
-                </div>
-                <div class="holding-card__number holding-card__number--total">
-                  <span class="holding-card__number-label">Total cost</span>
-                  <span class="holding-card__number-value">
-                    {{ formatNumber(totalCost(h)) }} {{ h.currency }}
-                  </span>
-                </div>
-              </div>
-
-              <div class="holding-card__meta">
-                <span class="holding-card__account">
-                  <mat-icon class="holding-card__account-icon">account_balance</mat-icon>
-                  {{ h.accountId ?? 'manual' }}
-                </span>
-              </div>
-
-              @if (h.tags.length > 0) {
-                <div class="holding-card__tags">
-                  @for (tag of h.tags; track tag.id) {
-                    <span class="holding-card__tag"
-                          [style.background-color]="tag.color">
-                      {{ tag.name }}
-                    </span>
-                  }
-                </div>
-              }
+            <li>
+              <pgz-holding-card [holding]="h"></pgz-holding-card>
             </li>
           }
         </ul>

@@ -1,0 +1,59 @@
+<aside class="holdings-summary">
+  <div class="holdings-summary__top">
+    <div class="holdings-summary__total-row">
+      <span class="holdings-summary__label">Portfolio</span>
+      <span class="holdings-summary__total">
+        ${{ formatNumber(summary().totalValue) }}
+      </span>
+    </div>
+    <div class="holdings-summary__pnl-row">
+      <span class="holdings-summary__cost">
+        cost basis: ${{ formatNumber(summary().totalCost) }}
+      </span>
+      <span class="holdings-summary__pnl"
+            [class.positive]="summary().totalPnL > 0"
+            [class.negative]="summary().totalPnL < 0">
+        {{ summary().totalPnL >= 0 ? '+' : '−' }}${{ formatNumber(abs(summary().totalPnL)) }}
+        ({{ summary().totalPnL >= 0 ? '+' : '−' }}{{ formatPercent(abs(summary().totalPnLPercent)) }})
+      </span>
+    </div>
+  </div>
+
+  @if (summary().breakdown.length > 0) {
+    <div class="holdings-summary__bar">
+      @for (slice of summary().breakdown; track slice.assetClass) {
+        <div class="holdings-summary__slice"
+             [style.background-color]="slice.color"
+             [style.flex-grow]="slice.share"
+             [title]="slice.label + ' ' + formatPercent(slice.share * 100)"></div>
+      }
+    </div>
+
+    <div class="holdings-summary__legend">
+      @for (slice of summary().breakdown; track slice.assetClass) {
+        <div class="holdings-summary__legend-row">
+          <span class="holdings-summary__legend-dot"
+                [style.background-color]="slice.color"></span>
+          <span class="holdings-summary__legend-name">{{ slice.label }}</span>
+          <span class="holdings-summary__legend-share">
+            {{ formatPercent(slice.share * 100) }}
+          </span>
+          <span class="holdings-summary__legend-value">
+            ${{ formatNumber(slice.value) }}
+          </span>
+          @if (slice.costBasis > 0) {
+            <span class="holdings-summary__legend-pnl"
+                  [class.positive]="slice.pnl > 0"
+                  [class.negative]="slice.pnl < 0">
+              @if (slice.pnl === 0) {
+                —
+              } @else {
+                {{ slice.pnl >= 0 ? '+' : '−' }}{{ formatPercent(abs(slice.pnlPercent)) }}
+              }
+            </span>
+          }
+        </div>
+      }
+    </div>
+  }
+</aside>

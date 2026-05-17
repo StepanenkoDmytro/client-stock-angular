@@ -7,16 +7,16 @@
     </pgz-button-toggle>
   </div>
 
-  @if (view() === 'classes') {
-    <pgz-savings-dashboards [activeCard]="selectedFilter" [userCards]="filters"></pgz-savings-dashboards>
+  <!-- Always-on portfolio summary — lives outside the @if branches so it
+       persists across toggle flips without re-mounting (no flicker, no
+       redundant recompute). -->
+  <div class="savings__summary-wrap">
+    <pgz-portfolio-summary></pgz-portfolio-summary>
+  </div>
 
-    <div class="savings--types">
-      <mat-chip-set>
-        @for (filter of filters; track filter) {
-          <mat-chip class="filters" [class.selected]="isSelected(filter)"
-                    (click)="toggleChip(filter)">{{filter}}</mat-chip>
-        }
-      </mat-chip-set>
+  @if (view() === 'classes') {
+    <div class="savings__class-header">
+      <span class="savings__class-title">By asset class</span>
       <button type="button"
               class="savings--tags-btn"
               aria-label="Manage tags"
@@ -26,16 +26,55 @@
       </button>
     </div>
 
-    @if (assets && assets.length === 0) {
-      <p style="text-align: center;">Empty list</p>
-    }
-    @for (asset of filteredAssets; track asset) {
-      <pgz-asset-card [asset]="asset"
-                      (deleteAsset)="onDeleteAsset($event)"
-                      (editAsset)="onEditAsset($event)"></pgz-asset-card>
+    @if (classGroups().length === 0) {
+      <p class="savings__empty">
+        No holdings yet. Switch to <strong>Holdings</strong> and press
+        «Reset demo data» to re-seed.
+      </p>
+    } @else {
+      <mat-accordion class="savings__classes" multi>
+        @for (group of classGroups(); track group.assetClass) {
+          <mat-expansion-panel class="savings__class-panel">
+            <mat-expansion-panel-header>
+              <mat-panel-title class="savings__class-title-row">
+                <span class="savings__class-dot"
+                      [style.background-color]="group.color"></span>
+                <span class="savings__class-name">{{ group.label }}</span>
+                <span class="savings__class-share">
+                  {{ formatPercent(group.share * 100) }}
+                </span>
+              </mat-panel-title>
+              <mat-panel-description class="savings__class-desc">
+                ${{ formatNumber(group.totalValue) }}
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <div class="savings__class-cards">
+              @for (h of group.visibleHoldings; track h.id) {
+                <pgz-holding-card [holding]="h"></pgz-holding-card>
+              }
+
+              @if (group.hiddenCount > 0) {
+                <button type="button"
+                        class="savings__class-more"
+                        (click)="goToHoldings(group.assetClass)">
+                  <span class="savings__class-more-dots" aria-hidden="true">⋯</span>
+                  <span class="savings__class-more-label">
+                    Show all {{ group.totalCount }} {{ group.label }}
+                    holding{{ group.totalCount === 1 ? '' : 's' }}
+                  </span>
+                </button>
+              }
+            </div>
+          </mat-expansion-panel>
+        }
+      </mat-accordion>
     }
   } @else {
-    <pgz-holdings-list [showHeader]="false"></pgz-holdings-list>
+    <pgz-holdings-list
+      [showHeader]="false"
+      [showSummary]="false"
+      [initialClassFilter]="initialHoldingsClass()">
+    </pgz-holdings-list>
   }
 </section>
-<!-- <button mat-flat-button class="add-btn" (click)="openSelectedFilter()">{{ selectedFilterMarket() }}</button> -->
