@@ -1,0 +1,20 @@
+<div class="pr">
+  <div class="pr__head">
+    @if (flag().icon) {
+      <span class="pr__icon"
+            [style.color]="flag().colorVar"
+            aria-hidden="true">{{ flag().icon }}</span>
+    } @else {
+      <!-- Empty slot keeps account names aligned across rows of mixed kinds. -->
+      <span class="pr__icon pr__icon--empty" aria-hidden="true"></span>
+    }
+    <span class="pr__name">{{ accountLabel() }}</span>
+    @if (chipLabel()) {
+      <span class="pr__chip"
+            [style.borderColor]="flag().colorVar"
+            [style.color]="flag().colorVar">{{ chipLabel() }}</span>
+    }
+    <span class="pr__value">${{ formatNumber(value) }}</span>
+  </div>
+  <div class="pr__meta">{{ metaLine() }}</div>
+</div>

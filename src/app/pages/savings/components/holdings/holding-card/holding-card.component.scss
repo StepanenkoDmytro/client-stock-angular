@@ -22,6 +22,15 @@
   background: var(--pgz-card-bg-sub);
   border-color: var(--pgz-card-border);
   box-shadow: none;
+  // Slightly tighter padding when nested in a class panel — the parent
+  // panel already supplies the white-card visual, so the sub-item just
+  // needs to read as "row".
+  padding: 10px 12px;
+  gap: 6px;
+}
+
+.hc--subcard .hc__divider {
+  margin: 6px 0;
 }
 
 // ---- Top row: symbol + tag-dots + value ----

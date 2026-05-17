@@ -19,14 +19,16 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AssetClass } from '../../../../domain/asset-class.domain';
 import { IHoldingView } from '../../../../domain/holding.domain';
+import { IPosition } from '../../../../domain/position.domain';
 import { ITag } from '../../../../domain/tag.domain';
 import { PrevRouteComponent } from '../../../../core/UI/components/prev-route/prev-route.component';
+import { PositionCardComponent } from '../positions/position-card/position-card.component';
 import { HoldingService } from '../../service/holding.service';
 import { InstrumentService } from '../../service/instrument.service';
+import { PositionsService } from '../../service/positions.service';
 import { TagsService } from '../../service/tags.service';
 import { selectHoldingsList } from '../../store/holdings.selectors';
 import { selectTagsList } from '../../store/tags.selectors';
-import { HoldingCardComponent } from './holding-card/holding-card.component';
 import {
   HoldingsFilterSheetComponent,
   HoldingsFilterSheetData,
@@ -66,7 +68,7 @@ const SORT_OPTIONS: SortOption[] = [
     MatBottomSheetModule,
     MatMenuModule,
     PrevRouteComponent,
-    HoldingCardComponent,
+    PositionCardComponent,
     PortfolioSummaryComponent,
   ],
   templateUrl: './holdings-list.component.html',
@@ -92,6 +94,7 @@ export class HoldingsListComponent implements OnInit {
   private readonly store = inject(Store);
   private readonly holdings = inject(HoldingService);
   private readonly instruments = inject(InstrumentService);
+  private readonly positionsSvc = inject(PositionsService);
   private readonly tags = inject(TagsService);
   private readonly bottomSheet = inject(MatBottomSheet);
 
@@ -117,6 +120,18 @@ export class HoldingsListComponent implements OnInit {
     return result;
   });
 
+  /**
+   * Holdings re-bucketed per Instrument via PositionsService. This is the
+   * basis for both filtering and rendering in flat view — we never show
+   * raw `IHoldingView` rows at this level anymore (each Position-card
+   * already exposes per-Account holdings via expand/collapse).
+   */
+  public readonly allPositions = computed<IPosition[]>(() => {
+    const priceFor = (symbol: string): number | undefined =>
+      this.holdings.getCurrentPrice(symbol);
+    return this.positionsSvc.fromHoldings(this.holdingsView(), priceFor);
+  });
+
   // ---- Filter + sort state ----
 
   public readonly selectedClass = signal<ClassFilter>('ALL');
@@ -127,48 +142,46 @@ export class HoldingsListComponent implements OnInit {
 
   public readonly availableClasses = computed<AssetClass[]>(() => {
     const set = new Set<AssetClass>();
-    for (const h of this.holdingsView()) {
-      set.add(h.instrument.assetClass);
+    for (const p of this.allPositions()) {
+      set.add(p.instrument.assetClass);
     }
     return Array.from(set).sort();
   });
 
   public readonly availableTags = computed<ITag[]>(() => {
     const byId = new Map<string, ITag>();
-    for (const h of this.holdingsView()) {
-      for (const t of h.tags) {
+    for (const p of this.allPositions()) {
+      for (const t of p.tags) {
         byId.set(t.id, t);
       }
     }
     return Array.from(byId.values()).sort(tagSort);
   });
 
-  public readonly filteredHoldings = computed<IHoldingView[]>(() => {
+  public readonly filteredPositions = computed<IPosition[]>(() => {
     const klass = this.selectedClass();
     const tagIds = this.selectedTagIds();
-    return this.holdingsView().filter((h) => {
-      if (klass !== 'ALL' && h.instrument.assetClass !== klass) {
+    return this.allPositions().filter((p) => {
+      if (klass !== 'ALL' && p.instrument.assetClass !== klass) {
         return false;
       }
-      if (tagIds.size > 0 && !h.tagIds.some((id) => tagIds.has(id))) {
+      if (tagIds.size > 0 && !p.tags.some((t) => tagIds.has(t.id))) {
         return false;
       }
       return true;
     });
   });
 
-  /** Sorted variant of `filteredHoldings`, drives the actual list render. */
-  public readonly sortedFilteredHoldings = computed<IHoldingView[]>(() => {
-    const list = this.filteredHoldings().slice();
+  /** Sorted variant of `filteredPositions` — drives the rendered list. */
+  public readonly sortedFilteredPositions = computed<IPosition[]>(() => {
+    const list = this.filteredPositions().slice();
     const key = this.sortBy();
 
     switch (key) {
       case 'value':
-        return list.sort(
-          (a, b) => this.currentValue(b) - this.currentValue(a),
-        );
+        return list.sort((a, b) => b.totalValue - a.totalValue);
       case 'lifetime':
-        return list.sort((a, b) => this.pnl(b) - this.pnl(a));
+        return list.sort((a, b) => b.paperPnL - a.paperPnL);
       case 'income':
         // Stub: no real income data yet. Preserve incoming order.
         return list;
@@ -177,7 +190,9 @@ export class HoldingsListComponent implements OnInit {
           a.instrument.name.localeCompare(b.instrument.name),
         );
       case 'recent':
-        return list.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+        // Position has no createdAt — use the newest createdAt across its
+        // holdings as a proxy for "recently added".
+        return list.sort((a, b) => newestHoldingAt(b) - newestHoldingAt(a));
     }
   });
 
@@ -192,9 +207,9 @@ export class HoldingsListComponent implements OnInit {
     return count;
   });
 
-  public readonly totalCount = computed(() => this.holdingsView().length);
+  public readonly totalCount = computed(() => this.allPositions().length);
   public readonly filteredCount = computed(
-    () => this.filteredHoldings().length,
+    () => this.filteredPositions().length,
   );
 
   public readonly sortLabel = computed<string>(() => {
@@ -204,18 +219,17 @@ export class HoldingsListComponent implements OnInit {
 
   /**
    * Live "show N" preview for the Filter bottom sheet. Recomputes the
-   * filtered count as the user toggles tags inside the sheet — the sheet
-   * passes back its current selection through this callback.
+   * filtered position count as the user toggles tags inside the sheet.
    */
   public readonly previewMatchCount = (
     selectedTags: ReadonlySet<string>,
   ): number => {
     const klass = this.selectedClass();
-    return this.holdingsView().filter((h) => {
-      if (klass !== 'ALL' && h.instrument.assetClass !== klass) {
+    return this.allPositions().filter((p) => {
+      if (klass !== 'ALL' && p.instrument.assetClass !== klass) {
         return false;
       }
-      if (selectedTags.size > 0 && !h.tagIds.some((id) => selectedTags.has(id))) {
+      if (selectedTags.size > 0 && !p.tags.some((t) => selectedTags.has(t.id))) {
         return false;
       }
       return true;
@@ -318,17 +332,6 @@ export class HoldingsListComponent implements OnInit {
     }
   }
 
-  // ---- Internals ----
-
-  private currentValue(h: IHoldingView): number {
-    const price =
-      this.holdings.getCurrentPrice(h.instrument.symbol) ?? h.averageBuyPrice;
-    return h.quantity * price;
-  }
-
-  private pnl(h: IHoldingView): number {
-    return this.currentValue(h) - h.quantity * h.averageBuyPrice;
-  }
 }
 
 function tagSort(a: ITag, b: ITag): number {
@@ -336,4 +339,18 @@ function tagSort(a: ITag, b: ITag): number {
     return a.system ? -1 : 1;
   }
   return a.name.localeCompare(b.name);
+}
+
+/** Newest holding timestamp inside a Position (ISO-8601 comparison via
+ *  Date.parse). 0 when the position has no holdings (defensive — shouldn't
+ *  happen in practice since PositionsService never emits empty groups). */
+function newestHoldingAt(p: IPosition): number {
+  let max = 0;
+  for (const h of p.holdings) {
+    const t = Date.parse(h.createdAt);
+    if (!Number.isNaN(t) && t > max) {
+      max = t;
+    }
+  }
+  return max;
 }

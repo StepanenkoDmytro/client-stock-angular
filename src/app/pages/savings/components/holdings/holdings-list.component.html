@@ -20,8 +20,8 @@
 
     @if (totalCount() === 0) {
       <p class="hl__empty">
-        No holdings yet. Press <strong>Reset demo data</strong> above to
-        re-seed 5 example positions.
+        No positions yet. Press <strong>Reset demo data</strong> above to
+        re-seed a few example positions.
       </p>
     } @else {
       @if (showSummary) {
@@ -83,7 +83,7 @@
       <div class="hl__result-row">
         @if (hasActiveFilters()) {
           <span class="hl__result-text">
-            {{ filteredCount() }} of {{ totalCount() }} holdings ·
+            {{ filteredCount() }} of {{ totalCount() }} positions ·
             {{ activeFilterCount() }} filter{{ activeFilterCount() === 1 ? '' : 's' }} active
           </span>
           <button class="hl__clear-btn"
@@ -93,22 +93,22 @@
           </button>
         } @else {
           <span class="hl__result-text">
-            All {{ totalCount() }} holding{{ totalCount() === 1 ? '' : 's' }} ·
+            All {{ totalCount() }} position{{ totalCount() === 1 ? '' : 's' }} ·
             sorted by {{ sortLabel().toLowerCase() }}
           </span>
         }
       </div>
 
-      <!-- Holdings list -->
+      <!-- Positions list -->
       @if (filteredCount() === 0) {
         <p class="hl__empty">
-          No holdings match the selected filters.
+          No positions match the selected filters.
         </p>
       } @else {
         <ul class="hl__list">
-          @for (h of sortedFilteredHoldings(); track h.id) {
+          @for (p of sortedFilteredPositions(); track p.instrument.id) {
             <li>
-              <pgz-holding-card [holding]="h"></pgz-holding-card>
+              <pgz-position-card [position]="p" variant="card"></pgz-position-card>
             </li>
           }
         </ul>

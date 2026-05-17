@@ -131,21 +131,41 @@
   }
 
   // Reference: design/savings/01-portfolio-dashboard-mobile.svg lines 135-210.
-  // Collapsed panel: 348×52 white card. Layout: dot + name + value + pnl% + chevron.
+  // Collapsed panel: 348×60 white card. Layout: dot + name + value + pnl% + chevron.
 
   &__class-panel {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     // Override global `background: inherit !important` from styles.scss
     // for non-elevation mat-expansion-panels.
     background: var(--pgz-card-bg) !important;
     border: 0.5px solid var(--pgz-card-border);
-    border-radius: 12px !important;
+    border-radius: 14px !important;
     overflow: hidden;
     box-shadow: var(--pgz-card-shadow) !important;
   }
 
+  // Header padding: more breathing room than the cramped default.
   ::ng-deep .savings__class-panel-header {
-    padding: 0 14px !important;
+    padding: 0 16px !important;
+  }
+
+  // Material gives `mat-panel-description` flex:2 by default which squashes
+  // the title (asset-class name). We want title to take the available room
+  // and description (value + pnl) to size to content on the right.
+  ::ng-deep .savings__class-panel-header .mat-content {
+    align-items: center;
+  }
+
+  ::ng-deep .savings__class-panel-header .mat-expansion-panel-header-description {
+    flex-grow: 0;
+    margin-right: 12px;
+  }
+
+  // Material wraps expanded content in `.mat-expansion-panel-body` with its
+  // own default padding; we zero it out and control all internal spacing
+  // via `__class-cards` so the sub-card hugs predictable margins.
+  ::ng-deep .savings__class-panel .mat-expansion-panel-body {
+    padding: 0 !important;
   }
 
   &__class-title-row {
@@ -157,14 +177,14 @@
   }
 
   &__class-dot {
-    width: 10px;
-    height: 10px;
+    width: 14px;
+    height: 14px;
     border-radius: 50%;
     flex-shrink: 0;
   }
 
   &__class-name {
-    font-size: 15px;
+    font-size: 17px;
     font-weight: 500;
     color: var(--pgz-text-primary);
     white-space: nowrap;
@@ -183,15 +203,15 @@
   }
 
   &__class-value {
-    font-size: 15px;
+    font-size: 17px;
     font-weight: 500;
     color: var(--pgz-text-primary);
   }
 
   &__class-pnl {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 500;
-    min-width: 36px;
+    min-width: 42px;
     text-align: right;
 
     &.positive {
@@ -210,8 +230,11 @@
   &__class-cards {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    padding: 0 16px 12px;
+    gap: 10px;
+    // 4px top — small breath under the header so the first sub-card
+    // doesn't kiss the bottom of the title row; symmetric horizontal 12px;
+    // 14px bottom to balance the visual weight of the header row above.
+    padding: 4px 12px 14px;
   }
 
   // "Show all N" dashed-outline accent link.

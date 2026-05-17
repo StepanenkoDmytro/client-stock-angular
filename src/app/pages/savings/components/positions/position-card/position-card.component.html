@@ -1,0 +1,39 @@
+<div class="pc"
+     [class.pc--subcard]="variant === 'subcard'"
+     [class.pc--expanded]="expanded()">
+  <button type="button"
+          class="pc__head"
+          [class.pc__head--interactive]="isMulti()"
+          [attr.aria-expanded]="isMulti() ? expanded() : null"
+          (click)="toggle()">
+    <span class="pc__symbol">{{ position.instrument.symbol }}</span>
+
+    <span class="pc__tag-dots">
+      @for (t of tagDots(); track t.id) {
+        <span class="pc__tag-dot"
+              [style.background-color]="t.color"
+              [title]="t.name"></span>
+      }
+    </span>
+
+    <span class="pc__value">${{ formatNumber(position.totalValue) }}</span>
+
+    @if (isMulti()) {
+      <span class="pc__chevron"
+            [class.pc__chevron--open]="expanded()"
+            aria-hidden="true">▾</span>
+    }
+  </button>
+
+  <p class="pc__subline">{{ subline() }}</p>
+
+  @if (isMulti() && expanded()) {
+    <hr class="pc__divider" />
+    <div class="pc__breakdown">
+      @for (h of position.holdings; track h.id; let i = $index) {
+        <pgz-position-row [holding]="h"
+                          [value]="position.holdingValues[i]"></pgz-position-row>
+      }
+    </div>
+  }
+</div>

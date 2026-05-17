@@ -93,7 +93,13 @@ export class HoldingCardComponent {
     return cb > 0 ? (this.pnl() / cb) * 100 : 0;
   });
 
-  /** Per-class subline that summarises the position in one line. */
+  /** Per-class subline that summarises the position in one line.
+   *
+   * In Holdings flat view the same Instrument can show up multiple times
+   * (e.g. BTC on cold wallet + Bybit Earn + Bybit Spot). To keep those
+   * rows visually distinct we append the account name as a final segment
+   * whenever the holding lives on something other than the legacy
+   * "MANUAL" bucket — for MANUAL holdings the suffix would be noise. */
   public readonly subline = computed<string>(() => {
     const h = this._holding();
     if (!h) {
@@ -102,37 +108,48 @@ export class HoldingCardComponent {
     const inst = h.instrument;
     const meta = inst.metadata;
 
-    switch (inst.assetClass) {
-      case AssetClass.STOCK:
-      case AssetClass.TOKENIZED_STOCK:
-        return `${inst.name} · ${this.formatShareCount(h.quantity)} sh`;
+    const base = ((): string => {
+      switch (inst.assetClass) {
+        case AssetClass.STOCK:
+        case AssetClass.TOKENIZED_STOCK:
+          return `${inst.name} · ${this.formatShareCount(h.quantity)} sh`;
 
-      case AssetClass.CRYPTO:
-        if (isCryptoMetadata(meta)) {
-          const px =
-            this.holdings.getCurrentPrice(inst.symbol) ?? h.averageBuyPrice;
-          return `${this.formatCryptoQty(h.quantity)} ${inst.symbol} × $${this.formatNumber(px)}`;
-        }
-        return inst.name;
+        case AssetClass.CRYPTO:
+          if (isCryptoMetadata(meta)) {
+            const px =
+              this.holdings.getCurrentPrice(inst.symbol) ?? h.averageBuyPrice;
+            return `${this.formatCryptoQty(h.quantity)} ${inst.symbol} × $${this.formatNumber(px)}`;
+          }
+          return inst.name;
 
-      case AssetClass.CASH:
-        return inst.name;
+        case AssetClass.CASH:
+          return inst.name;
 
-      case AssetClass.DEPOSIT:
-        if (isDepositMetadata(meta)) {
-          return `${inst.name} · ${this.formatPercent(meta.interestRate, 1)} APY`;
-        }
-        return inst.name;
+        case AssetClass.DEPOSIT:
+          if (isDepositMetadata(meta)) {
+            return `${inst.name} · ${this.formatPercent(meta.interestRate, 1)} APY`;
+          }
+          return inst.name;
 
-      case AssetClass.REAL_ESTATE:
-        if (isRealEstateMetadata(meta) && meta.country) {
-          return `${inst.name} · ${meta.country}`;
-        }
-        return inst.name;
+        case AssetClass.REAL_ESTATE:
+          if (isRealEstateMetadata(meta) && meta.country) {
+            return `${inst.name} · ${meta.country}`;
+          }
+          return inst.name;
 
-      case AssetClass.OTHER:
-        return `${inst.name} · Manual entry`;
+        case AssetClass.OTHER:
+          return `${inst.name} · Manual entry`;
+      }
+    })();
+
+    if (
+      h.accountName &&
+      h.accountKind &&
+      h.accountKind !== 'MANUAL'
+    ) {
+      return `${base} · ${h.accountName}`;
     }
+    return base;
   });
 
   /**

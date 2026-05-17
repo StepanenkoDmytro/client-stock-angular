@@ -69,8 +69,8 @@
           <mat-expansion-panel class="savings__class-panel">
             <mat-expansion-panel-header
               class="savings__class-panel-header"
-              collapsedHeight="52px"
-              expandedHeight="52px">
+              collapsedHeight="72px"
+              expandedHeight="72px">
               <mat-panel-title class="savings__class-title-row">
                 <span class="savings__class-dot"
                       [style.background-color]="group.color"></span>
@@ -93,16 +93,16 @@
             </mat-expansion-panel-header>
 
             <div class="savings__class-cards">
-              @for (h of group.visibleHoldings; track h.id) {
-                <pgz-holding-card [holding]="h" variant="subcard"></pgz-holding-card>
+              @for (p of group.visiblePositions; track p.instrument.id) {
+                <pgz-position-card [position]="p" variant="subcard"></pgz-position-card>
               }
 
-              @if (group.hiddenCount > 0) {
+              @if (group.hiddenPositionCount > 0) {
                 <button type="button"
                         class="savings__class-more"
                         (click)="goToHoldings(group.assetClass)">
-                  Show all {{ group.totalCount }} {{ group.label }}
-                  holding{{ group.totalCount === 1 ? '' : 's' }} →
+                  Show all {{ group.positions.length }} {{ group.label }}
+                  position{{ group.positions.length === 1 ? '' : 's' }} →
                 </button>
               }
             </div>

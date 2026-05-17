@@ -19,17 +19,19 @@ import { Router, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AssetClass } from '../../domain/asset-class.domain';
 import { IHoldingView } from '../../domain/holding.domain';
+import { IPosition } from '../../domain/position.domain';
 import { ITag } from '../../domain/tag.domain';
 import { ButtonToggleComponent } from '../../core/UI/components/button-toggle/button-toggle.component';
 import { SegmentedToggleComponent } from '../../core/UI/components/segmented-toggle/segmented-toggle.component';
 import { SelectMarketDialogComponent } from './components/select-market-dialog/select-market-dialog.component';
-import { HoldingCardComponent } from './components/holdings/holding-card/holding-card.component';
 import { HoldingsListComponent } from './components/holdings/holdings-list.component';
 import { KpiRowComponent } from './components/holdings/kpi-row/kpi-row.component';
 import { PortfolioSummaryComponent } from './components/holdings/portfolio-summary/portfolio-summary.component';
 import { WealthChartMiniComponent } from './components/holdings/wealth-chart-mini/wealth-chart-mini.component';
+import { PositionCardComponent } from './components/positions/position-card/position-card.component';
 import { HoldingService } from './service/holding.service';
 import { InstrumentService } from './service/instrument.service';
+import { PositionsService } from './service/positions.service';
 import { TagsService } from './service/tags.service';
 import { AddTriggerService } from '../../service/helpers/add-trigger.service';
 import { selectHoldingsList } from './store/holdings.selectors';
@@ -57,9 +59,10 @@ interface ClassGroup {
   label: string;
   color: string;
   holdings: IHoldingView[];        // all holdings in this class, sorted desc by current value
-  visibleHoldings: IHoldingView[]; // first VISIBLE_PER_CLASS items
-  hiddenCount: number;             // holdings.length - VISIBLE_PER_CLASS, or 0
-  totalCount: number;
+  positions: IPosition[];          // holdings re-bucketed per Instrument, sorted desc by totalValue
+  visiblePositions: IPosition[];   // first VISIBLE_PER_CLASS positions
+  hiddenPositionCount: number;     // positions.length - VISIBLE_PER_CLASS, or 0
+  totalCount: number;              // total number of underlying holdings (for "Show all N" copy)
   totalValue: number;              // current market value
   costBasis: number;               // sum of quantity × avgBuyPrice
   pnl: number;                     // totalValue - costBasis
@@ -72,7 +75,7 @@ const VISIBLE_PER_CLASS = 5;
 const UI_COMPONENTS = [
   ButtonToggleComponent,
   SegmentedToggleComponent,
-  HoldingCardComponent,
+  PositionCardComponent,
   HoldingsListComponent,
   PortfolioSummaryComponent,
   KpiRowComponent,
@@ -109,6 +112,7 @@ export class SavingsComponent implements OnInit {
   private readonly addTriggerService = inject(AddTriggerService);
   private readonly holdings = inject(HoldingService);
   private readonly instruments = inject(InstrumentService);
+  private readonly positionsSvc = inject(PositionsService);
   private readonly tags = inject(TagsService);
 
   /**
@@ -234,6 +238,9 @@ export class SavingsComponent implements OnInit {
       0,
     );
 
+    const priceFor = (symbol: string): number | undefined =>
+      this.holdings.getCurrentPrice(symbol);
+
     const groups: ClassGroup[] = [];
     for (const [assetClass, list] of buckets.entries()) {
       list.sort((a, b) => b.currentValue - a.currentValue);
@@ -242,16 +249,23 @@ export class SavingsComponent implements OnInit {
       const costBasis = list.reduce((s, x) => s + x.cost, 0);
       const pnl = totalValue - costBasis;
       const pnlPercent = costBasis > 0 ? (pnl / costBasis) * 100 : 0;
-      const visibleHoldings = holdings.slice(0, VISIBLE_PER_CLASS);
-      const hiddenCount = Math.max(0, holdings.length - VISIBLE_PER_CLASS);
+      // PositionsService re-buckets holdings per Instrument so two BTC
+      // holdings (cold wallet + earn) collapse into a single Position card.
+      const positions = this.positionsSvc.fromHoldings(holdings, priceFor);
+      const visiblePositions = positions.slice(0, VISIBLE_PER_CLASS);
+      const hiddenPositionCount = Math.max(
+        0,
+        positions.length - VISIBLE_PER_CLASS,
+      );
 
       groups.push({
         assetClass,
         label: this.assetClassLabel(assetClass),
         color: this.assetClassBadgeColor(assetClass),
         holdings,
-        visibleHoldings,
-        hiddenCount,
+        positions,
+        visiblePositions,
+        hiddenPositionCount,
         totalCount: holdings.length,
         totalValue,
         costBasis,

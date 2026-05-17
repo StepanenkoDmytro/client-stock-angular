@@ -1,0 +1,76 @@
+:host {
+  display: block;
+}
+
+// Reference: design/savings/02-position-card-btc.svg right frame — each
+// per-Account row inside the BTC breakdown.
+//
+// Two-line layout, ~48h: head (icon + name + chip + value) on top,
+// meta (qty + lock countdown) on bottom in muted colour.
+
+.pr {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 0;
+}
+
+.pr__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.pr__icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.pr__icon--empty {
+  // Keeps name column aligned when this row's kind has no glyph.
+}
+
+.pr__name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--pgz-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.pr__chip {
+  flex-shrink: 0;
+  border: 0.5px solid var(--pgz-card-border);
+  border-radius: 999px;
+  padding: 1px 8px;
+  font-size: 10px;
+  line-height: 1.4;
+  letter-spacing: 0.2px;
+  background: transparent;
+}
+
+.pr__value {
+  margin-left: auto;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--pgz-text-primary);
+  flex-shrink: 0;
+}
+
+.pr__meta {
+  // Visually attached to the row above; muted secondary colour so the
+  // user reads "value of position" first and "how/why" second.
+  padding-left: 24px; // 16px icon + 8px gap = aligns under account name
+  font-size: 11px;
+  color: var(--pgz-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
