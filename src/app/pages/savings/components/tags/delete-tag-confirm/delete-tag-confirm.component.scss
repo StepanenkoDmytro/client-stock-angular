@@ -14,10 +14,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(187, 69, 69, 0.1);
+  // Tinted backdrop derived from --color-negative.
+  background: color-mix(in srgb, var(--color-negative) 14%, transparent);
 
   mat-icon {
-    color: #BB4545;
+    color: var(--color-negative);
     font-size: 28px;
     width: 28px;
     height: 28px;
@@ -28,12 +29,13 @@
   margin: 0;
   font-size: 18px;
   font-weight: 600;
+  color: var(--pgz-text-primary);
 }
 
 .delete-tag__message {
   margin: 0;
   font-size: 14px;
-  color: #5A5A5A;
+  color: var(--pgz-text-secondary);
   line-height: 1.4;
 }
 
@@ -50,11 +52,11 @@
 }
 
 .delete-tag__btn--destructive {
-  background-color: #BB4545;
-  color: white;
+  background-color: var(--color-negative);
+  color: var(--pgz-card-bg);
 }
 
 .delete-tag__btn--neutral {
-  background-color: #E0E0E0;
-  color: #333;
+  background-color: var(--pgz-card-bg-sub);
+  color: var(--pgz-text-primary);
 }

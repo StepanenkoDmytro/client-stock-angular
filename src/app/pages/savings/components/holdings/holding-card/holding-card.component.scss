@@ -2,115 +2,116 @@
   display: block;
 }
 
-.holding-card {
-  background: var(--pgz-card-bg);
-  border: 1px solid var(--pgz-card-border);
-  border-radius: 12px;
-  padding: 16px;
+// Reference: design/savings/01-portfolio-dashboard-mobile.svg lines 153-187.
+// Card 88h, 3-row layout (top numbers · subline · lifetime row), dashed
+// internal divider. Two surface variants for use in flat Holdings list
+// (`card`) vs nested inside class accordion (`subcard`).
+
+.hc {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--pgz-card-bg);
+  border: 0.5px solid var(--pgz-card-border);
   box-shadow: var(--pgz-card-shadow);
   color: var(--pgz-text-primary);
 }
 
-.holding-card__top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+.hc--subcard {
+  background: var(--pgz-card-bg-sub);
+  border-color: var(--pgz-card-border);
+  box-shadow: none;
 }
 
-.holding-card__symbol {
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: 0.3px;
+// ---- Top row: symbol + tag-dots + value ----
+
+.hc__top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hc__symbol {
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  color: var(--pgz-text-primary);
   font-family: 'Montserrat', sans-serif;
 }
 
-.holding-card__badge {
-  color: #fff;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  padding: 3px 8px;
-  border-radius: 10px;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.holding-card__name {
-  margin: 0;
-  font-size: 14px;
-  color: var(--pgz-text-secondary);
-}
-
-.holding-card__numbers {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  padding: 8px 0;
-  border-top: 1px solid var(--pgz-card-border);
-  border-bottom: 1px solid var(--pgz-card-border);
-}
-
-.holding-card__number {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.holding-card__number-label {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-  color: var(--pgz-text-muted);
-}
-
-.holding-card__number-value {
-  font-size: 14px;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-}
-
-.holding-card__number--total .holding-card__number-value {
-  color: var(--pgz-accent);
-  font-size: 15px;
-}
-
-.holding-card__meta {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.holding-card__account {
+.hc__tag-dots {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 12px;
-  color: var(--pgz-text-secondary);
+  flex: 1;
+  min-width: 0;
 }
 
-.holding-card__account-icon {
-  font-size: 16px;
-  width: 16px;
-  height: 16px;
-  line-height: 16px;
+.hc__tag-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.06);
 }
 
-.holding-card__tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.holding-card__tag {
-  color: #fff;
-  font-size: 12px;
-  padding: 3px 10px;
-  border-radius: 12px;
+.hc__value {
+  margin-left: auto;
+  font-size: 18px;
   font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--pgz-text-primary);
+}
+
+// ---- Subline (per-class one-liner) ----
+
+.hc__subline {
+  margin: 4px 0 0;
+  font-size: 11px;
+  color: var(--pgz-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
-  text-shadow: 0 0 1px rgba(0, 0, 0, 0.25);
+}
+
+// ---- Divider ----
+
+.hc__divider {
+  border: none;
+  border-top: 0.5px dashed var(--pgz-card-border);
+  margin: 10px 0;
+}
+
+// ---- Lifetime row ----
+
+.hc__lifetime {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.hc__pnl {
+  font-weight: 500;
+
+  &.positive {
+    color: var(--color-positive);
+  }
+
+  &.negative {
+    color: var(--color-negative);
+  }
+}
+
+.hc__period {
+  font-size: 11px;
+  color: var(--pgz-text-muted);
+}
+
+.hc__income {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--pgz-text-secondary);
 }

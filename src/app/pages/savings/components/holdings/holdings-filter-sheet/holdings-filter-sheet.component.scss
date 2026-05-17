@@ -1,0 +1,147 @@
+// Reference: design/savings/01-portfolio-dashboard-mobile-holdings.svg
+// lines 250-303 — bottom sheet with drag handle, title row, tag grid 3×3,
+// Apply CTA.
+
+.sheet {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 20px 20px;
+  background: var(--pgz-card-bg);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+.sheet__handle {
+  width: 40px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--pgz-card-border);
+  align-self: center;
+  margin-bottom: 16px;
+}
+
+.sheet__title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.sheet__title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--pgz-text-primary);
+}
+
+.sheet__close {
+  border: none;
+  background: transparent;
+  color: var(--pgz-text-secondary);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px 8px;
+  line-height: 1;
+}
+
+.sheet__counter-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.sheet__counter {
+  font-size: 11px;
+  color: var(--pgz-text-secondary);
+}
+
+.sheet__clear {
+  border: none;
+  background: transparent;
+  color: var(--pgz-accent);
+  font-size: 11px;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+  font-weight: 500;
+}
+
+.sheet__empty {
+  text-align: center;
+  color: var(--pgz-text-muted);
+  padding: 16px 0;
+  font-size: 13px;
+}
+
+.sheet__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.sheet__chip {
+  --chip-color: #908E91;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 14px;
+  border: 0.5px solid var(--pgz-card-border);
+  background: transparent;
+  color: var(--pgz-text-secondary);
+  font-size: 11px;
+  font-weight: 400;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  &:hover:not(.selected) {
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+
+  &.selected {
+    background-color: color-mix(in srgb, var(--chip-color) 18%, var(--pgz-card-bg));
+    border-color: var(--chip-color);
+    color: var(--chip-color);
+    font-weight: 500;
+  }
+}
+
+.sheet__chip-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.sheet__chip-check {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.sheet__apply {
+  width: 100%;
+  height: 48px;
+  border: none;
+  border-radius: 10px;
+  background: var(--pgz-text-primary);
+  color: var(--pgz-card-bg);
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  margin-top: 4px;
+
+  &:hover {
+    opacity: 0.92;
+  }
+
+  &:active {
+    transform: scale(0.99);
+  }
+}

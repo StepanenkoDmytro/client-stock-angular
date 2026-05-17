@@ -1,86 +1,72 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AppRoutes } from '../../../../app.routes';
-import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
+import { AppRoutes } from '../../../../app.routes';
 import { AddTriggerService } from '../../../../service/helpers/add-trigger.service';
 import { AddBtnComponent } from '../add-btn/add-btn.component';
-import { UserService } from '../../../../service/user.service';
-import { UserMode } from '../../../../model/User';
-import { IconComponent } from '../icon/icon.component';
-
 
 export interface INavigationItem {
   path: AppRoutes;
   icon: string;
+  label: string;
 }
 
+/**
+ * 5-slot mobile bottom navigation.
+ *
+ * Reference: design/savings/00-mobile-shell-baseline.svg lines 80-117.
+ * Order: Savings · Spending · + (FAB) · Stats · Profile.
+ *
+ * Behaviour:
+ *  - Each link uses `routerLinkActive` to switch to the accented state
+ *    (light-blue pill behind icon + accent label color).
+ *  - FAB centre slot delegates to AddTriggerService — pages subscribe
+ *    to its `buttonClick$` and decide what "Add" means in their context
+ *    (Savings → market dialog, Spending → add-spending form, etc.).
+ *
+ * No more UserMode.Dev gating — all 5 slots are visible to every user.
+ */
 @Component({
   selector: 'pgz-navigation',
+  standalone: true,
+  imports: [CommonModule, RouterModule, MatIconModule, AddBtnComponent],
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [CommonModule, RouterModule, IconComponent, AddBtnComponent],
 })
-export class NavigationComponent implements OnInit {
-  public isFlipping: boolean = false;
-  public UserMode = UserMode;
-  public currentMode: UserMode = UserMode.Stage;
-  public isActive: boolean = false;
+export class NavigationComponent {
+  private readonly addTriggerService = inject(AddTriggerService);
 
-  public SPENDING_NAV_ITEM: INavigationItem = {
-    path: AppRoutes.SPENDING,
-    icon: 'custom_wallet',
-  };
-  
-  public SAVINGS_NAV_ITEM: INavigationItem = {
+  public readonly SAVINGS: INavigationItem = {
     path: AppRoutes.SAVINGS,
-    icon: 'savings',
+    icon: 'account_balance_wallet',
+    label: 'Savings',
   };
-  
-  public GOALS_NAV_ITEM: INavigationItem = {
-    path: AppRoutes.GOALS,
-    icon: 'crisis_alert',
+
+  public readonly SPENDING: INavigationItem = {
+    path: AppRoutes.SPENDING,
+    icon: 'receipt_long',
+    label: 'Spending',
   };
-  
-  public SETTINGS_NAV_ITEM: INavigationItem = {
+
+  public readonly STATS: INavigationItem = {
+    path: AppRoutes.STATISTIC,
+    icon: 'bar_chart',
+    label: 'Stats',
+  };
+
+  public readonly PROFILE: INavigationItem = {
     path: AppRoutes.PROFILE,
-    icon: 'custom_profile-settings',
+    icon: 'person_outline',
+    label: 'Profile',
   };
 
-  constructor(
-    private addTriggerService: AddTriggerService,
-    private userService: UserService,
-    private cdr: ChangeDetectorRef
-  ) { }
-
-  public ngOnInit(): void {
-    this.userService.getUser().subscribe((user) => {
-      console.log('dsada');
-      this.triggerFlipAnimation(); // Запускаємо анімацію
-      setTimeout(() => {
-        this.currentMode = user?.mode;
-        this.cdr.detectChanges();
-      }, 600); // Затримка для синхронізації зі стилем
-    });
-  }
-
-  private triggerFlipAnimation(): void {
-    if (this.isFlipping) return; // Якщо анімація вже запущена, не запускаємо повторно
-  
-    this.isFlipping = true; // Активуємо анімацію
-    this.cdr.detectChanges(); // Сигналізуємо Angular про зміну стану
-  
-    // Після завершення анімації скидаємо стан
-    setTimeout(() => {
-      this.isFlipping = false;
-      this.cdr.detectChanges(); // Оновлюємо DOM
-    }, 600); // 600ms — тривалість анімації в CSS
-  }
-  
-
-  public onButtonClick(): void {
+  public onAddClick(): void {
     this.addTriggerService.triggerButtonClick();
   }
 }

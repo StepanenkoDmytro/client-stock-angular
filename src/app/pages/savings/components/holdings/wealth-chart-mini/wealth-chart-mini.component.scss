@@ -1,0 +1,64 @@
+:host {
+  display: block;
+}
+
+// Reference: design/savings/01-portfolio-dashboard-mobile.svg lines 103-131.
+// MVP stub: card slot with decorative skeleton chart + helper message.
+
+.wealth-mini {
+  background: var(--pgz-card-bg);
+  border: 0.5px solid var(--pgz-card-border);
+  border-radius: 12px;
+  box-shadow: var(--pgz-card-shadow);
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.wealth-mini__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.wealth-mini__caption {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1.2px;
+  color: var(--pgz-text-secondary);
+}
+
+.wealth-mini__range {
+  font-size: 11px;
+  color: var(--pgz-text-muted);
+}
+
+.wealth-mini__placeholder {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.wealth-mini__sketch {
+  width: 100%;
+  height: 70px;
+  display: block;
+}
+
+.wealth-mini__note {
+  margin: 0;
+  font-size: 11px;
+  color: var(--pgz-text-secondary);
+  line-height: 1.4;
+  font-style: italic;
+}
+
+.wealth-mini__milestone {
+  display: block;
+  font-style: normal;
+  font-size: 10px;
+  letter-spacing: 0.8px;
+  color: var(--pgz-text-muted);
+  margin-top: 2px;
+}

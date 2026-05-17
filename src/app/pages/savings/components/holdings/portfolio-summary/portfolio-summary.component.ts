@@ -181,22 +181,23 @@ export class PortfolioSummaryComponent implements OnInit {
     }
   }
 
+  /** Theme-aware AssetClass colour (CSS var resolved in inline styles). */
   public assetClassBadgeColor(ac: AssetClass): string {
     switch (ac) {
       case AssetClass.STOCK:
-        return '#1976D2';
+        return 'var(--asset-stock)';
       case AssetClass.TOKENIZED_STOCK:
-        return '#7B1FA2';
+        return 'var(--asset-tokenized-stock)';
       case AssetClass.CRYPTO:
-        return '#F57C00';
+        return 'var(--asset-crypto)';
       case AssetClass.CASH:
-        return '#388E3C';
+        return 'var(--asset-cash)';
       case AssetClass.DEPOSIT:
-        return '#5D4037';
+        return 'var(--asset-deposit)';
       case AssetClass.REAL_ESTATE:
-        return '#00796B';
+        return 'var(--asset-real-estate)';
       case AssetClass.OTHER:
-        return '#616161';
+        return 'var(--asset-other)';
     }
   }
 }

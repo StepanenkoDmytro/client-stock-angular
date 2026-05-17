@@ -1,0 +1,34 @@
+<section class="wealth-mini">
+  <header class="wealth-mini__header">
+    <span class="wealth-mini__caption">WEALTH OVER TIME</span>
+    <span class="wealth-mini__range">All time</span>
+  </header>
+
+  <div class="wealth-mini__placeholder">
+    <svg class="wealth-mini__sketch"
+         viewBox="0 0 300 70"
+         aria-hidden="true">
+      <!-- Decorative skeleton: invested line (accent) + value line (positive).
+           SVG presentation attributes don't resolve var() — colours are set
+           via inline `style` so they pick up theme tokens. -->
+      <polyline points="0,55 60,48 120,40 180,30 240,22 300,16"
+                fill="none"
+                stroke-width="1.5"
+                stroke-dasharray="4 3"
+                opacity="0.4"
+                style="stroke: var(--pgz-accent);"/>
+      <polyline points="0,55 60,46 120,38 180,28 240,18 300,10"
+                fill="none"
+                stroke-width="2"
+                opacity="0.55"
+                style="stroke: var(--color-positive);"/>
+      <circle cx="300" cy="10" r="3"
+              opacity="0.55"
+              style="fill: var(--color-positive);"/>
+    </svg>
+    <p class="wealth-mini__note">
+      Wealth-over-time chart appears after you log a few cash flows.
+      <span class="wealth-mini__milestone">Available after M5.5</span>
+    </p>
+  </div>
+</section>

@@ -1,0 +1,47 @@
+<div class="sheet">
+  <div class="sheet__handle" aria-hidden="true"></div>
+
+  <div class="sheet__title-row">
+    <h3 class="sheet__title">Filter by tag</h3>
+    <button type="button"
+            class="sheet__close"
+            aria-label="Close"
+            (click)="close()">✕</button>
+  </div>
+
+  <div class="sheet__counter-row">
+    <span class="sheet__counter">
+      {{ selectedCount() }} of {{ totalCount }} selected
+    </span>
+    @if (selectedCount() > 0) {
+      <button type="button"
+              class="sheet__clear"
+              (click)="clear()">Clear</button>
+    }
+  </div>
+
+  @if (availableTags.length === 0) {
+    <p class="sheet__empty">No tags in use yet.</p>
+  } @else {
+    <div class="sheet__grid">
+      @for (tag of availableTags; track tag.id) {
+        <button type="button"
+                class="sheet__chip"
+                [class.selected]="isSelected(tag.id)"
+                [style.--chip-color]="tag.color"
+                (click)="toggle(tag.id)">
+          <span class="sheet__chip-label">{{ tag.name }}</span>
+          @if (isSelected(tag.id)) {
+            <span class="sheet__chip-check" aria-hidden="true">✓</span>
+          }
+        </button>
+      }
+    </div>
+  }
+
+  <button type="button"
+          class="sheet__apply"
+          (click)="apply()">
+    Apply · show {{ matchCountLive() }} match{{ matchCountLive() === 1 ? '' : 'es' }}
+  </button>
+</div>

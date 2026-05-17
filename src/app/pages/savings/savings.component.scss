@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  background-color: var(--pgz-bg-page);
 }
 
 .savings {
@@ -10,28 +11,111 @@
   flex-direction: column;
   height: inherit;
   overflow-y: auto;
+  background-color: var(--pgz-bg-page);
+
+  // ---- Header (Portfolio · date · Hide-$ pill) ----
+  // Reference: design/savings/00-mobile-shell-baseline.svg lines 23-28.
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 16px 8px;
+    gap: 12px;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--pgz-text-primary);
+    font-family: inherit;
+  }
+
+  &__hide-pill {
+    flex-shrink: 0;
+    border: 0.5px solid var(--pgz-card-border);
+    background: transparent;
+    border-radius: 11px;
+    padding: 0 12px;
+    height: 22px;
+    font-size: 11px;
+    color: var(--pgz-text-secondary);
+    font-family: inherit;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    &:not(:disabled):hover {
+      background-color: rgba(0, 0, 0, 0.03);
+    }
+
+    &.active:not(:disabled) {
+      background-color: var(--pgz-text-primary);
+      color: var(--pgz-card-bg);
+      border-color: var(--pgz-text-primary);
+    }
+  }
 
   &__view-toggle {
-    padding: 12px 20px 6px;
+    padding: 4px 16px 4px;
   }
 
   &__summary-wrap {
     padding: 8px 16px 4px;
   }
 
-  &__class-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 20px 4px;
+  &__kpi-wrap {
+    padding: 12px 16px 4px;
   }
 
-  &__class-title {
-    font-size: 11px;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
+  &__wealth-wrap {
+    padding: 4px 16px 4px;
+  }
+
+  // Consolidated stub for portfolios where individual investor KPIs
+  // would never get data (cash-only, crypto-only).
+  &__metrics-placeholder {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px 16px 16px;
+    background: var(--pgz-card-bg-sub);
+    border-radius: 10px;
+  }
+
+  &__metrics-caption {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1.2px;
+    color: var(--pgz-text-secondary);
+  }
+
+  &__metrics-body {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--pgz-text-secondary);
+  }
+
+  &__metrics-milestone {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.8px;
     color: var(--pgz-text-muted);
-    font-weight: 600;
+    margin-top: 4px;
+  }
+
+  &__class-caption {
+    margin: 16px 16px 8px;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1.2px;
+    color: var(--pgz-text-secondary);
   }
 
   &__empty {
@@ -43,143 +127,115 @@
 
   &__classes {
     display: block;
-    padding: 4px 16px 24px;
+    padding: 0 16px 24px;
   }
+
+  // Reference: design/savings/01-portfolio-dashboard-mobile.svg lines 135-210.
+  // Collapsed panel: 348×52 white card. Layout: dot + name + value + pnl% + chevron.
 
   &__class-panel {
     margin-bottom: 12px;
-    // !important needed because styles.scss line ~374 has a global
-    // `background: inherit !important` for any mat-expansion-panel
-    // without an explicit elevation class — without it, our white card
-    // is transparent and the page gradient + cubs.png bleed through.
+    // Override global `background: inherit !important` from styles.scss
+    // for non-elevation mat-expansion-panels.
     background: var(--pgz-card-bg) !important;
-    border: 1px solid var(--pgz-card-border);
+    border: 0.5px solid var(--pgz-card-border);
     border-radius: 12px !important;
     overflow: hidden;
     box-shadow: var(--pgz-card-shadow) !important;
-    padding: 4px 12px 10px;
   }
 
-  // Restore some breathing room — global styles force header padding to 0.
-  ::ng-deep .savings__class-panel .mat-expansion-panel-header {
-    padding: 12px 4px 12px 6px !important;
+  ::ng-deep .savings__class-panel-header {
+    padding: 0 14px !important;
   }
 
   &__class-title-row {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     flex: 1;
+    min-width: 0;
   }
 
   &__class-dot {
-    width: 12px;
-    height: 12px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
     flex-shrink: 0;
-    box-shadow: 0 0 0 1px var(--pgz-card-border);
   }
 
   &__class-name {
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 500;
     color: var(--pgz-text-primary);
-  }
-
-  &__class-share {
-    font-size: 12px;
-    color: var(--pgz-text-secondary);
-    background: var(--pgz-card-bg-sub);
-    padding: 2px 8px;
-    border-radius: 10px;
-    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
   }
 
   &__class-desc {
     margin: 0;
-    font-weight: 600;
-    color: var(--pgz-accent);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
     font-variant-numeric: tabular-nums;
+  }
+
+  &__class-value {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--pgz-text-primary);
+  }
+
+  &__class-pnl {
+    font-size: 12px;
+    font-weight: 500;
+    min-width: 36px;
+    text-align: right;
+
+    &.positive {
+      color: var(--color-positive);
+    }
+
+    &.negative {
+      color: var(--color-negative);
+    }
+
+    &--muted {
+      color: var(--pgz-text-muted);
+    }
   }
 
   &__class-cards {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    padding: 4px 0 4px;
+    padding: 0 16px 12px;
   }
 
-  // Inner holding-cards inside a class panel: render as "sub-items" with
-  // a tinted background + no own shadow. The parent panel already provides
-  // the white card visual; nested children should look attached, not free-
-  // floating. Targets the host element of pgz-holding-card.
-  ::ng-deep .savings__class-cards pgz-holding-card .holding-card {
-    background-color: var(--pgz-card-bg-sub) !important;
-    box-shadow: none !important;
-    border-color: var(--pgz-card-border) !important;
-    padding: 12px 14px !important;
-    gap: 8px !important;
-  }
+  // "Show all N" dashed-outline accent link.
+  // Reference: design/savings/01-portfolio-dashboard-mobile.svg lines 189-192.
 
   &__class-more {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 14px;
-    border: 1px dashed var(--pgz-card-border);
-    border-radius: 10px;
+    display: block;
+    width: 100%;
+    padding: 4px 12px;
+    border: 0.5px dashed var(--pgz-card-border);
+    border-radius: 8px;
     background: transparent;
     color: var(--pgz-accent);
     font-weight: 500;
     cursor: pointer;
     font-family: inherit;
-    font-size: 14px;
+    font-size: 11px;
+    line-height: 24px;
+    text-align: center;
     transition: background-color 0.15s ease;
+    margin-top: 4px;
 
     &:hover {
-      background-color: rgba(25, 118, 210, 0.06);
-    }
-  }
-
-  &__class-more-dots {
-    font-size: 18px;
-    line-height: 1;
-    color: var(--pgz-text-secondary);
-  }
-
-  &__class-more-label {
-    flex: 1;
-    text-align: left;
-  }
-
-  &--tags-btn {
-    flex-shrink: 0;
-    width: 36px;
-    height: 36px;
-    padding: 0;
-    border-radius: 50%;
-    border: 1px solid #6F6F6F;
-    background-color: var(--pgz-card-bg);
-    color: var(--pgz-text-primary);
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.15s ease, transform 0.05s ease;
-
-    &:hover {
-      background-color: var(--pgz-card-bg);
-    }
-
-    &:active {
-      transform: scale(0.95);
-    }
-
-    mat-icon {
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
-      line-height: 20px;
+      background-color: rgba(24, 95, 165, 0.06);
     }
   }
 }

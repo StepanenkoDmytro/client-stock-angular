@@ -1,0 +1,9 @@
+<div class="kpi-row">
+  @for (kpi of kpis; track kpi.caption) {
+    <div class="kpi-row__cell">
+      <span class="kpi-row__caption">{{ kpi.caption }}</span>
+      <span class="kpi-row__value">{{ kpi.value }}</span>
+      <span class="kpi-row__subtext">{{ kpi.subtext }}</span>
+    </div>
+  }
+</div>

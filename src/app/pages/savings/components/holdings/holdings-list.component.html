@@ -1,4 +1,4 @@
-<section [class.page]="showHeader" class="holdings-page" [class.holdings-page--embedded]="!showHeader">
+<section [class.page]="showHeader" class="hl" [class.hl--embedded]="!showHeader">
   @if (showHeader) {
     <div (click)="goBack()">
       <pgz-prev-route>
@@ -7,10 +7,10 @@
     </div>
   }
 
-  <section class="holdings-page__body">
-    <div class="holdings-page__actions">
+  <section class="hl__body">
+    <div class="hl__actions">
       <button mat-stroked-button
-              class="holdings-page__reset-btn"
+              class="hl__reset-btn"
               type="button"
               (click)="resetDemo()">
         <mat-icon>refresh</mat-icon>
@@ -19,7 +19,7 @@
     </div>
 
     @if (totalCount() === 0) {
-      <p class="holdings-page__empty">
+      <p class="hl__empty">
         No holdings yet. Press <strong>Reset demo data</strong> above to
         re-seed 5 example positions.
       </p>
@@ -28,83 +28,85 @@
         <pgz-portfolio-summary></pgz-portfolio-summary>
       }
 
-      <!-- By class — standalone (no card bg), chips float on page surface -->
-      <div class="holdings-page__class-filter">
-        <span class="holdings-page__filter-label">By class</span>
-        <mat-chip-set class="holdings-page__chip-set">
-          <mat-chip class="holdings-page__class-chip"
-                    [class.selected]="selectedClass() === 'ALL'"
-                    (click)="onSelectClass('ALL')">
-            All
-          </mat-chip>
-          @for (ac of availableClasses(); track ac) {
-            <mat-chip class="holdings-page__class-chip"
-                      [class.selected]="selectedClass() === ac"
-                      [style.--chip-color]="assetClassBadgeColor(ac)"
-                      (click)="onSelectClass(ac)">
-              {{ assetClassLabel(ac) }}
-            </mat-chip>
-          }
-        </mat-chip-set>
+      <!-- Class chips row (single-select). Reference: design/savings/
+           01-portfolio-dashboard-mobile-holdings.svg lines 46-65. -->
+      <div class="hl__class-chips">
+        <button type="button"
+                class="hl__class-chip hl__class-chip--all"
+                [class.selected]="selectedClass() === 'ALL'"
+                (click)="onSelectClass('ALL')">
+          All
+        </button>
+        @for (ac of availableClasses(); track ac) {
+          <button type="button"
+                  class="hl__class-chip"
+                  [class.selected]="selectedClass() === ac"
+                  [style.--chip-color]="assetClassBadgeColor(ac)"
+                  (click)="onSelectClass(ac)">
+            <span class="hl__class-chip-dot"
+                  [style.background-color]="assetClassBadgeColor(ac)"></span>
+            {{ assetClassLabel(ac) }}
+          </button>
+        }
       </div>
 
-      <!-- By tag — white card, collapsible when many tags -->
-      @if (availableTags().length > 0) {
-        <div class="holdings-page__tag-filter-card"
-             [class.expanded]="tagsExpanded()">
-          <div class="holdings-page__tag-filter-header">
-            <span class="holdings-page__filter-label">By tag</span>
-            @if (tagsHaveOverflow()) {
-              <button type="button"
-                      class="holdings-page__tag-toggle"
-                      [attr.aria-expanded]="tagsExpanded()"
-                      aria-label="Toggle tags"
-                      (click)="toggleTagsExpanded()">
-                <mat-icon>{{ tagsExpanded() ? 'expand_less' : 'expand_more' }}</mat-icon>
-              </button>
-            }
-          </div>
-          <div class="holdings-page__tag-chips"
-               [class.clipped]="tagsHaveOverflow() && !tagsExpanded()">
-            @for (tag of availableTags(); track tag.id) {
-              <button type="button"
-                      class="holdings-page__tag-chip"
-                      [class.selected]="isTagSelected(tag.id)"
-                      [style.--chip-color]="tag.color"
-                      (click)="onToggleTag(tag.id)">
-                {{ tag.name }}
-              </button>
-            }
-          </div>
-        </div>
-      }
+      <!-- Filters button + Sort dropdown row. Reference: same mockup lines 67-81. -->
+      <div class="hl__filter-row">
+        <button type="button"
+                class="hl__filters-btn"
+                [class.active]="selectedTagIds().size > 0"
+                (click)="openFilterSheet()">
+          <mat-icon class="hl__filters-icon">tune</mat-icon>
+          <span class="hl__filters-label">Filters</span>
+          <span class="hl__filters-pill">{{ selectedTagIds().size }}</span>
+        </button>
 
-      <!-- Result count + Clear -->
-      <div class="holdings-page__result-row">
+        <button type="button"
+                class="hl__sort-btn"
+                [matMenuTriggerFor]="sortMenu">
+          <span class="hl__sort-label">Sort:</span>
+          <span class="hl__sort-value">{{ sortLabel() }}</span>
+          <span class="hl__sort-caret">▾</span>
+        </button>
+        <mat-menu #sortMenu="matMenu">
+          @for (opt of sortOptions; track opt.key) {
+            <button mat-menu-item
+                    type="button"
+                    (click)="onSelectSort(opt.key)">
+              {{ opt.label }}
+            </button>
+          }
+        </mat-menu>
+      </div>
+
+      <!-- Result row -->
+      <div class="hl__result-row">
         @if (hasActiveFilters()) {
-          <span class="holdings-page__count">
-            Showing {{ filteredCount() }} of {{ totalCount() }}
+          <span class="hl__result-text">
+            {{ filteredCount() }} of {{ totalCount() }} holdings ·
+            {{ activeFilterCount() }} filter{{ activeFilterCount() === 1 ? '' : 's' }} active
           </span>
-          <button mat-button class="holdings-page__clear-btn"
+          <button class="hl__clear-btn"
                   type="button"
                   (click)="clearFilters()">
-            Clear filters
+            Clear
           </button>
         } @else {
-          <span class="holdings-page__count">
-            {{ totalCount() }} holding{{ totalCount() === 1 ? '' : 's' }}
+          <span class="hl__result-text">
+            All {{ totalCount() }} holding{{ totalCount() === 1 ? '' : 's' }} ·
+            sorted by {{ sortLabel().toLowerCase() }}
           </span>
         }
       </div>
 
       <!-- Holdings list -->
       @if (filteredCount() === 0) {
-        <p class="holdings-page__empty">
+        <p class="hl__empty">
           No holdings match the selected filters.
         </p>
       } @else {
-        <ul class="holdings-page__list">
-          @for (h of filteredHoldings(); track h.id) {
+        <ul class="hl__list">
+          @for (h of sortedFilteredHoldings(); track h.id) {
             <li>
               <pgz-holding-card [holding]="h"></pgz-holding-card>
             </li>

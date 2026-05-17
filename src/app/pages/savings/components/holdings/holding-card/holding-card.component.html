@@ -1,48 +1,32 @@
-<article class="holding-card">
-  <div class="holding-card__top">
-    <span class="holding-card__symbol">{{ holding.instrument.symbol }}</span>
-    <span class="holding-card__badge"
-          [style.background-color]="assetClassBadgeColor()">
-      {{ assetClassLabel() }}
-    </span>
-  </div>
-
-  <p class="holding-card__name">{{ holding.instrument.name }}</p>
-
-  <div class="holding-card__numbers">
-    <div class="holding-card__number">
-      <span class="holding-card__number-label">Quantity</span>
-      <span class="holding-card__number-value">{{ formatQuantity() }}</span>
-    </div>
-    <div class="holding-card__number">
-      <span class="holding-card__number-label">Avg buy</span>
-      <span class="holding-card__number-value">
-        {{ formatNumber(holding.averageBuyPrice) }} {{ holding.currency }}
+<article class="hc" [class.hc--subcard]="variant === 'subcard'">
+  <div class="hc__top">
+    <span class="hc__symbol">{{ holding.instrument.symbol }}</span>
+    @if (tagDots().length > 0) {
+      <span class="hc__tag-dots" aria-label="Tags">
+        @for (tag of tagDots(); track tag.id) {
+          <span class="hc__tag-dot"
+                [style.background-color]="tag.color"
+                [title]="tag.name"></span>
+        }
       </span>
-    </div>
-    <div class="holding-card__number holding-card__number--total">
-      <span class="holding-card__number-label">Total cost</span>
-      <span class="holding-card__number-value">
-        {{ formatNumber(totalCost()) }} {{ holding.currency }}
-      </span>
-    </div>
+    }
+    <span class="hc__value">${{ formatNumber(currentValue()) }}</span>
   </div>
 
-  <div class="holding-card__meta">
-    <span class="holding-card__account">
-      <mat-icon class="holding-card__account-icon">account_balance</mat-icon>
-      {{ holding.accountId ?? 'manual' }}
+  <p class="hc__subline">{{ subline() }}</p>
+
+  <hr class="hc__divider" />
+
+  <div class="hc__lifetime">
+    <span class="hc__pnl"
+          [class.positive]="pnl() > 0"
+          [class.negative]="pnl() < 0">
+      {{ pnlSign() }}${{ formatNumber(abs(pnl())) }}
+      ({{ pnlSign() }}{{ formatPercent(abs(pnlPercent())) }})
     </span>
+    <span class="hc__period">lifetime · {{ periodLabel() }}</span>
+    <!-- div/income — stub until M5.5 (CashFlow integration). Reserved
+         visual slot so the row geometry doesn't reflow later. -->
+    <span class="hc__income">div —</span>
   </div>
-
-  @if (holding.tags.length > 0) {
-    <div class="holding-card__tags">
-      @for (tag of holding.tags; track tag.id) {
-        <span class="holding-card__tag"
-              [style.background-color]="tag.color">
-          {{ tag.name }}
-        </span>
-      }
-    </div>
-  }
 </article>

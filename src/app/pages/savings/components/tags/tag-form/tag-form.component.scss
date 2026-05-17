@@ -21,13 +21,13 @@
   align-items: center;
   gap: 12px;
   padding: 10px 12px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  border: 1px solid var(--pgz-card-border);
   border-radius: 8px;
   cursor: pointer;
   position: relative;
 
   &:hover {
-    background: rgba(0, 0, 0, 0.02);
+    background: var(--pgz-card-bg-sub);
   }
 }
 
@@ -40,11 +40,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--pgz-card-border);
 }
 
 .tag-form__icon-placeholder {
-  color: white;
+  color: var(--pgz-card-bg);
   opacity: 0.85;
   font-size: 20px;
   width: 20px;
@@ -55,6 +55,7 @@
 .tag-form__icon-label {
   font-size: 15px;
   flex: 1;
+  color: var(--pgz-text-primary);
 }
 
 .tag-form__picker-host {
@@ -71,16 +72,16 @@
 
 .tag-form__breadcrumb {
   font-size: 13px;
-  color: #5A5A5A;
+  color: var(--pgz-text-secondary);
   margin: 0;
 }
 
 .tag-form__system-note {
   margin: 24px 0 0;
   padding: 12px;
-  background: rgba(0, 0, 0, 0.04);
-  border-left: 3px solid #5A5A5A;
-  color: #5A5A5A;
+  background: var(--pgz-card-bg-sub);
+  border-left: 3px solid var(--pgz-text-secondary);
+  color: var(--pgz-text-secondary);
   font-size: 13px;
   line-height: 1.4;
   border-radius: 4px;
@@ -94,11 +95,11 @@
 
 .tag-form__save {
   min-width: 140px;
-  background-color: #4285F4;
-  color: white;
+  background-color: var(--pgz-accent);
+  color: var(--pgz-card-bg);
 
   &:disabled {
-    background-color: rgba(0, 0, 0, 0.12);
-    color: rgba(0, 0, 0, 0.38);
+    background-color: var(--pgz-card-bg-sub);
+    color: var(--pgz-text-muted);
   }
 }

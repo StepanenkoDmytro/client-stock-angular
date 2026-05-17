@@ -1,0 +1,44 @@
+:host {
+  display: block;
+}
+
+// Reference: design/savings/00-mobile-shell-baseline.svg lines 30-35.
+// Outer pill 32h white with subtle border. Inner active segment 26h dark
+// pill with white text. Inactive segments — secondary-text color, transparent bg.
+
+.segmented-toggle {
+  display: flex;
+  height: 32px;
+  background-color: var(--pgz-card-bg);
+  border: 0.5px solid var(--pgz-card-border);
+  border-radius: 8px;
+  padding: 3px;
+  gap: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.segmented-toggle__seg {
+  flex: 1;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--pgz-text-secondary);
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: 0.2px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  padding: 0 12px;
+  min-width: 0;
+
+  &:hover:not(.active) {
+    color: var(--pgz-text-primary);
+  }
+
+  &.active {
+    background-color: var(--pgz-text-primary);
+    color: var(--pgz-card-bg);
+  }
+}

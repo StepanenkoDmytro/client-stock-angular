@@ -1,59 +1,63 @@
-<aside class="holdings-summary">
-  <div class="holdings-summary__top">
-    <div class="holdings-summary__total-row">
-      <span class="holdings-summary__label">Portfolio</span>
-      <span class="holdings-summary__total">
-        ${{ formatNumber(summary().totalValue) }}
-      </span>
-    </div>
-    <div class="holdings-summary__pnl-row">
-      <span class="holdings-summary__cost">
-        cost basis: ${{ formatNumber(summary().totalCost) }}
-      </span>
-      <span class="holdings-summary__pnl"
-            [class.positive]="summary().totalPnL > 0"
-            [class.negative]="summary().totalPnL < 0">
-        {{ summary().totalPnL >= 0 ? '+' : '−' }}${{ formatNumber(abs(summary().totalPnL)) }}
-        ({{ summary().totalPnL >= 0 ? '+' : '−' }}{{ formatPercent(abs(summary().totalPnLPercent)) }})
-      </span>
-    </div>
+<aside class="summary">
+  <!-- Now tier: total value + today's paper P&L + per-class breakdown -->
+  <header class="summary__now-header">
+    <span class="summary__caption">PORTFOLIO</span>
+    <span class="summary__total">${{ formatNumber(summary().totalValue) }}</span>
+  </header>
+
+  <div class="summary__pnl-row">
+    <span class="summary__pnl"
+          [class.positive]="summary().totalPnL > 0"
+          [class.negative]="summary().totalPnL < 0">
+      {{ summary().totalPnL >= 0 ? '+' : '−' }}${{ formatNumber(abs(summary().totalPnL)) }}
+      ({{ summary().totalPnL >= 0 ? '+' : '−' }}{{ formatPercent(abs(summary().totalPnLPercent)) }})
+      today
+    </span>
   </div>
 
   @if (summary().breakdown.length > 0) {
-    <div class="holdings-summary__bar">
+    <div class="summary__bar">
       @for (slice of summary().breakdown; track slice.assetClass) {
-        <div class="holdings-summary__slice"
+        <div class="summary__slice"
              [style.background-color]="slice.color"
              [style.flex-grow]="slice.share"
              [title]="slice.label + ' ' + formatPercent(slice.share * 100)"></div>
       }
     </div>
 
-    <div class="holdings-summary__legend">
+    <div class="summary__legend">
       @for (slice of summary().breakdown; track slice.assetClass) {
-        <div class="holdings-summary__legend-row">
-          <span class="holdings-summary__legend-dot"
+        <div class="summary__legend-row">
+          <span class="summary__legend-dot"
                 [style.background-color]="slice.color"></span>
-          <span class="holdings-summary__legend-name">{{ slice.label }}</span>
-          <span class="holdings-summary__legend-share">
-            {{ formatPercent(slice.share * 100) }}
-          </span>
-          <span class="holdings-summary__legend-value">
-            ${{ formatNumber(slice.value) }}
-          </span>
+          <span class="summary__legend-name">{{ slice.label }}</span>
+          <span class="summary__legend-value">${{ formatNumber(slice.value) }}</span>
           @if (slice.costBasis > 0) {
-            <span class="holdings-summary__legend-pnl"
+            <span class="summary__legend-pnl"
                   [class.positive]="slice.pnl > 0"
                   [class.negative]="slice.pnl < 0">
               @if (slice.pnl === 0) {
                 —
               } @else {
-                {{ slice.pnl >= 0 ? '+' : '−' }}{{ formatPercent(abs(slice.pnlPercent)) }}
+                {{ slice.pnl >= 0 ? '+' : '−' }}{{ formatPercent(abs(slice.pnlPercent), 0) }}
               }
             </span>
+          } @else {
+            <span class="summary__legend-pnl summary__legend-pnl--muted">—</span>
           }
         </div>
       }
     </div>
   }
+
+  <!-- Lifetime tier: stub until M5.5 CashFlow integration lands -->
+  <hr class="summary__divider" />
+
+  <header class="summary__lifetime-header">
+    <span class="summary__caption">LIFETIME RETURN</span>
+  </header>
+  <div class="summary__lifetime-row">
+    <span class="summary__lifetime-value summary__lifetime-value--stub">$0</span>
+    <span class="summary__lifetime-note">Add deposits to see lifetime metrics</span>
+  </div>
 </aside>

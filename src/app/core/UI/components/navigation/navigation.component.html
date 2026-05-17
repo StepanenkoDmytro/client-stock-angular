@@ -1,54 +1,53 @@
-<div class="navigation" 
-    [class.flipping]="isFlipping"
-    >
-  <!-- <mat-icon class="navigation--element"
-            [routerLink]="SPENDING_NAV_ITEM.path" 
-            [routerLinkActive]="'navigation--element__active'"
-            svgIcon="{{ _src }}" [inline]="true"> -->
-    <!-- {{  }} -->
-  <!-- </mat-icon> -->
-  <div class="navigation--element"
-       [routerLink]="SPENDING_NAV_ITEM.path" >
-    <pgz-icon [stroke]="rla.isActive ? '#243A95' : '#000'"
-              #rla="routerLinkActive" 
-              class="navigation--element__icon" 
-              [routerLinkActive]="'navigation--element__active'" 
-              [name]="SPENDING_NAV_ITEM.icon"></pgz-icon>
-</div>
+<nav class="navigation" role="navigation" aria-label="Main">
+  <a class="navigation__slot"
+     [routerLink]="['/', SAVINGS.path]"
+     routerLinkActive="active"
+     #savingsActive="routerLinkActive">
+    <span class="navigation__icon-wrap">
+      <mat-icon>{{ SAVINGS.icon }}</mat-icon>
+    </span>
+    <span class="navigation__label">{{ SAVINGS.label }}</span>
+  </a>
 
-  @if(currentMode === UserMode.Dev) {
-    <mat-icon class="navigation--element"
-              [routerLink]="SAVINGS_NAV_ITEM.path" 
-              [routerLinkActive]="'navigation--element__active'">
-      {{ SAVINGS_NAV_ITEM.icon }}
-    </mat-icon>
-  }
+  <a class="navigation__slot"
+     [routerLink]="['/', SPENDING.path]"
+     routerLinkActive="active"
+     #spendingActive="routerLinkActive">
+    <span class="navigation__icon-wrap">
+      <mat-icon>{{ SPENDING.icon }}</mat-icon>
+    </span>
+    <span class="navigation__label">{{ SPENDING.label }}</span>
+  </a>
 
-  <div (click)="onButtonClick()">
-    <pgz-add-btn [width]="48" [strokeColor]="'#FDFEFF'" [strokeWidth]="2" [backgroundColor]="'#243A95'"></pgz-add-btn>
-  </div>
+  <button type="button"
+          class="navigation__fab"
+          aria-label="Add"
+          (click)="onAddClick()">
+    <pgz-add-btn
+      [width]="48"
+      [strokeColor]="'#FDFEFF'"
+      [strokeWidth]="2"
+      [backgroundColor]="'#243A95'">
+    </pgz-add-btn>
+  </button>
 
-  @if(currentMode === UserMode.Dev) {
-    <mat-icon class="navigation--element"
-              [routerLink]="GOALS_NAV_ITEM.path"
-              [routerLinkActive]="'navigation--element__active'">
-      {{ GOALS_NAV_ITEM.icon }}
-    </mat-icon>
-  }
+  <a class="navigation__slot"
+     [routerLink]="['/', STATS.path]"
+     routerLinkActive="active"
+     #statsActive="routerLinkActive">
+    <span class="navigation__icon-wrap">
+      <mat-icon>{{ STATS.icon }}</mat-icon>
+    </span>
+    <span class="navigation__label">{{ STATS.label }}</span>
+  </a>
 
-  <!-- <mat-icon class="navigation--element"
-            >
-    {{  }}
-  </mat-icon> -->
-
-  <div class="navigation--element" [routerLink]="SETTINGS_NAV_ITEM.path">
-    <pgz-icon 
-      [stroke]="rla1.isActive ? '#243A95' : '#000'"
-      #rla1="routerLinkActive"
-      class="navigation--element__icon" 
-      [routerLinkActive]="'navigation--element__active'" 
-      [name]="SETTINGS_NAV_ITEM.icon">
-    </pgz-icon>
-  </div>
-  
-</div>
+  <a class="navigation__slot"
+     [routerLink]="['/', PROFILE.path]"
+     routerLinkActive="active"
+     #profileActive="routerLinkActive">
+    <span class="navigation__icon-wrap">
+      <mat-icon>{{ PROFILE.icon }}</mat-icon>
+    </span>
+    <span class="navigation__label">{{ PROFILE.label }}</span>
+  </a>
+</nav>

@@ -1,0 +1,42 @@
+:host {
+  display: block;
+}
+
+// Reference: design/savings/01-portfolio-dashboard-mobile.svg lines 81-101.
+// 2×2 grid, each cell 168×60, rx=10, bg --pgz-card-bg-sub.
+
+.kpi-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.kpi-row__cell {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 60px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--pgz-card-bg-sub);
+}
+
+.kpi-row__caption {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1.2px;
+  color: var(--pgz-text-secondary);
+}
+
+.kpi-row__value {
+  font-size: 18px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--pgz-text-muted);
+  margin-top: 4px;
+}
+
+.kpi-row__subtext {
+  font-size: 11px;
+  color: var(--pgz-text-muted);
+}

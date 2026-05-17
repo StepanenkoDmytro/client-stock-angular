@@ -1,204 +1,233 @@
-.holdings-page {
+.hl {
   overflow-y: auto;
 }
 
-.holdings-page--embedded {
-  // When embedded inside SavingsComponent toggle — no own .page chrome,
-  // parent handles positioning/background.
+.hl--embedded {
   overflow-y: visible;
 }
 
-.holdings-page__body {
-  padding: 16px;
+.hl__body {
+  padding: 8px 16px 16px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
-.holdings-page--embedded .holdings-page__body {
-  // Slimmer top padding when embedded (parent already provides margin
-  // via the toggle row above).
-  padding: 8px 16px 16px;
-}
-
-.holdings-page__hint {
-  margin: 0;
-  font-size: 13px;
-  color: var(--pgz-text-secondary);
-  padding: 8px 12px;
-  background: var(--pgz-card-bg-sub);
-  border-left: 3px solid var(--pgz-text-secondary);
-  border-radius: 4px;
-}
-
-.holdings-page__empty {
+.hl__empty {
   text-align: center;
   color: var(--pgz-text-muted);
   padding: 24px 16px;
   line-height: 1.5;
 }
 
-.holdings-page__actions {
+.hl__actions {
   display: flex;
   justify-content: flex-end;
 }
 
-.holdings-page__reset-btn {
+.hl__reset-btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
+  font-size: 12px;
 }
 
-// ---- Filters ----
+// ---- Class chips row (single-select). ----
+// Reference: design/savings/01-portfolio-dashboard-mobile-holdings.svg
+// lines 46-65. "All" pill — filled dark; class chips — outline + color-dot.
 
-.holdings-page__filter-label {
-  font-size: 11px;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  color: var(--pgz-text-muted);
-  font-weight: 600;
-}
-
-// By class: no card bg — chips float directly on page surface.
-.holdings-page__class-filter {
+.hl__class-chips {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
 }
 
-.holdings-page__chip-set {
-  // Material chip-set is already flex-wrap by default.
-}
-
-.holdings-page__class-chip {
-  cursor: pointer;
+.hl__class-chip {
   --chip-color: var(--pgz-text-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 14px;
+  border: 0.5px solid var(--pgz-card-border);
+  background: transparent;
+  color: var(--pgz-text-secondary);
+  font-size: 11px;
+  font-family: inherit;
+  cursor: pointer;
   transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  font-weight: 400;
+
+  &:hover:not(.selected) {
+    background-color: rgba(0, 0, 0, 0.03);
+  }
 
   &.selected {
-    background-color: var(--chip-color) !important;
-    color: #fff !important;
+    background-color: var(--chip-color);
+    color: var(--pgz-card-bg);
+    border-color: var(--chip-color);
+    font-weight: 500;
+  }
+
+  &--all {
+    --chip-color: var(--pgz-text-primary);
   }
 }
 
-// By tag: white card with collapsible chip grid.
-.holdings-page__tag-filter-card {
-  background-color: var(--pgz-card-bg);
-  border: 1px solid var(--pgz-card-border);
-  border-radius: 12px;
-  box-shadow: var(--pgz-card-shadow);
-  padding: 10px 14px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+.hl__class-chip-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+
+  // Hide the dot when selected — the chip itself is fully colored.
+  .hl__class-chip.selected & {
+    display: none;
+  }
 }
 
-.holdings-page__tag-filter-header {
+// ---- Filters button + Sort dropdown row ----
+// Reference: same mockup lines 67-81.
+
+.hl__filter-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 8px;
 }
 
-.holdings-page__tag-toggle {
+.hl__filters-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 0.5px solid var(--pgz-card-border);
+  background: var(--pgz-card-bg);
+  color: var(--pgz-text-secondary);
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+
+  &:hover:not(.active) {
+    background-color: var(--pgz-card-bg-sub);
+  }
+
+  &.active {
+    background-color: var(--pgz-text-primary);
+    color: var(--pgz-card-bg);
+    border-color: var(--pgz-text-primary);
+
+    .hl__filters-icon {
+      color: var(--pgz-card-bg);
+    }
+
+    .hl__filters-pill {
+      background: var(--pgz-card-bg);
+      color: var(--pgz-text-primary);
+    }
+  }
+}
+
+.hl__filters-icon {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+  line-height: 14px;
+  color: var(--pgz-text-secondary);
+}
+
+.hl__filters-label {
+  font-weight: 400;
+}
+
+.hl__filters-pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  padding: 0;
-  border: none;
-  border-radius: 50%;
-  background: transparent;
+  min-width: 22px;
+  height: 16px;
+  padding: 0 6px;
+  border-radius: 8px;
+  background: var(--pgz-bg-page);
+  color: var(--pgz-text-muted);
+  font-size: 10px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.hl__sort-btn {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 0.5px solid var(--pgz-card-border);
+  background: var(--pgz-card-bg);
   color: var(--pgz-text-secondary);
+  font-size: 12px;
+  font-family: inherit;
   cursor: pointer;
   transition: background-color 0.15s ease;
 
   &:hover {
     background-color: var(--pgz-card-bg-sub);
   }
-
-  mat-icon {
-    font-size: 20px;
-    width: 20px;
-    height: 20px;
-    line-height: 20px;
-  }
 }
 
-.holdings-page__tag-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  max-height: 1000px;          // effectively unbounded when expanded
-  overflow: hidden;
-  transition: max-height 0.25s ease;
-
-  // Collapsed: clip to a single row of chips (~30px tall including gap).
-  &.clipped {
-    max-height: 30px;
-  }
+.hl__sort-label {
+  color: var(--pgz-text-secondary);
 }
 
-.holdings-page__tag-chip {
-  --chip-color: #908E91;
-  border: 1.5px solid var(--chip-color);
-  background: transparent;
-  color: var(--chip-color);
-  font-size: 13px;
+.hl__sort-value {
+  color: var(--pgz-text-primary);
   font-weight: 500;
-  padding: 4px 12px;
-  border-radius: 14px;
-  cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease, transform 0.05s ease;
-  white-space: nowrap;
-  font-family: inherit;
+}
 
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.03);
-  }
-
-  &:active {
-    transform: scale(0.96);
-  }
-
-  &.selected {
-    background-color: var(--chip-color);
-    color: #fff;
-    text-shadow: 0 0 1px rgba(0, 0, 0, 0.25);
-  }
+.hl__sort-caret {
+  color: var(--pgz-text-secondary);
+  font-size: 10px;
 }
 
 // ---- Result row ----
 
-.holdings-page__result-row {
+.hl__result-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 4px 0;
-  font-size: 13px;
+  font-size: 11px;
   color: var(--pgz-text-secondary);
-}
-
-.holdings-page__count {
+  padding: 4px 0;
   font-variant-numeric: tabular-nums;
 }
 
-.holdings-page__clear-btn {
-  font-size: 12px;
+.hl__result-text {
+  flex: 1;
   min-width: 0;
-  padding: 0 8px;
 }
 
-// ---- Holdings list wrapper ----
-// (Card visuals now live in HoldingCardComponent's own SCSS.)
+.hl__clear-btn {
+  border: none;
+  background: transparent;
+  color: var(--pgz-accent);
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0 4px;
+  font-family: inherit;
+}
 
-.holdings-page__list {
+// ---- Holdings list ----
+
+.hl__list {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }

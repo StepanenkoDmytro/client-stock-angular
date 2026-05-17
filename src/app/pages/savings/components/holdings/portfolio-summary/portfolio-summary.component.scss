@@ -2,58 +2,54 @@
   display: block;
 }
 
-.holdings-summary {
+// Reference: design/savings/01-portfolio-dashboard-mobile.svg lines 40-79.
+// Two-tier card: Now (total + today PnL + stacked bar + class legend),
+// dashed divider, Lifetime (caption + value + note). Lifetime is a stub
+// until M5.5 CashFlow integration; today we render `$0` + helper copy.
+
+.summary {
   display: flex;
   flex-direction: column;
-  gap: 14px;
   padding: 16px 18px;
-  border: 1px solid var(--pgz-card-border);
+  border: 0.5px solid var(--pgz-card-border);
   border-radius: 12px;
   background-color: var(--pgz-card-bg);
   box-shadow: var(--pgz-card-shadow);
 }
 
-.holdings-summary__top {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
+// ---- Now tier ----
 
-.holdings-summary__total-row {
+.summary__now-header {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+  gap: 12px;
 }
 
-.holdings-summary__label {
-  font-size: 14px;
-  font-weight: 600;
+.summary__caption {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1.2px;
   color: var(--pgz-text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
-.holdings-summary__total {
+.summary__total {
   font-size: 26px;
-  font-weight: 700;
+  font-weight: 500;
   font-variant-numeric: tabular-nums;
-  font-family: 'Montserrat', sans-serif;
   color: var(--pgz-text-primary);
+  font-family: 'Montserrat', sans-serif;
 }
 
-.holdings-summary__pnl-row {
+.summary__pnl-row {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 12px;
+  justify-content: flex-end;
+  margin-top: 4px;
+  font-size: 11px;
 }
 
-.holdings-summary__cost {
-  color: var(--pgz-text-secondary);
-}
-
-.holdings-summary__pnl {
-  font-weight: 600;
+.summary__pnl {
+  font-weight: 500;
   font-variant-numeric: tabular-nums;
 
   &.positive {
@@ -65,64 +61,57 @@
   }
 }
 
-.holdings-summary__bar {
+.summary__bar {
   display: flex;
   width: 100%;
   height: 8px;
   border-radius: 4px;
   overflow: hidden;
-  background-color: var(--pgz-card-bg-sub);
+  background-color: var(--pgz-bg-page);
+  margin-top: 12px;
 }
 
-.holdings-summary__slice {
+.summary__slice {
   min-width: 2px;
   height: 100%;
   transition: flex-grow 0.2s ease;
 }
 
-.holdings-summary__legend {
+.summary__legend {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  margin-top: 14px;
+  gap: 4px;
 }
 
-.holdings-summary__legend-row {
+.summary__legend-row {
   display: grid;
-  grid-template-columns: 12px 1fr auto auto auto;
+  grid-template-columns: 14px 1fr auto 56px;
   align-items: center;
   gap: 8px;
-  font-size: 13px;
+  font-size: 12px;
   font-variant-numeric: tabular-nums;
   color: var(--pgz-text-primary);
+  padding: 2px 0;
 }
 
-.holdings-summary__legend-dot {
-  width: 10px;
-  height: 10px;
+.summary__legend-dot {
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
 }
 
-.holdings-summary__legend-name {
+.summary__legend-name {
+  font-weight: 400;
+}
+
+.summary__legend-value {
+  text-align: right;
+}
+
+.summary__legend-pnl {
+  text-align: right;
   font-weight: 500;
-}
-
-.holdings-summary__legend-share {
-  color: var(--pgz-text-secondary);
-  min-width: 40px;
-  text-align: right;
-}
-
-.holdings-summary__legend-value {
-  font-weight: 600;
-  min-width: 64px;
-  text-align: right;
-}
-
-.holdings-summary__legend-pnl {
-  font-weight: 600;
-  min-width: 56px;
-  text-align: right;
-  font-size: 12px;
 
   &.positive {
     color: var(--color-positive);
@@ -131,4 +120,51 @@
   &.negative {
     color: var(--color-negative);
   }
+
+  &--muted {
+    color: var(--pgz-text-muted);
+    font-weight: 400;
+  }
+}
+
+// ---- Divider ----
+
+.summary__divider {
+  border: none;
+  border-top: 0.5px dashed var(--pgz-card-border);
+  margin: 16px 0 0;
+}
+
+// ---- Lifetime tier (stub) ----
+
+.summary__lifetime-header {
+  margin-top: 12px;
+}
+
+.summary__lifetime-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.summary__lifetime-value {
+  font-size: 18px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-positive);
+
+  &--stub {
+    // Visual cue: lifetime is not yet meaningful — dim the placeholder
+    // so it doesn't look like authoritative data.
+    color: var(--pgz-text-muted);
+  }
+}
+
+.summary__lifetime-note {
+  font-size: 11px;
+  color: var(--pgz-text-secondary);
+  font-style: italic;
+  text-align: right;
 }

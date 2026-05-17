@@ -21,10 +21,13 @@ import { AssetClass } from '../../domain/asset-class.domain';
 import { IHoldingView } from '../../domain/holding.domain';
 import { ITag } from '../../domain/tag.domain';
 import { ButtonToggleComponent } from '../../core/UI/components/button-toggle/button-toggle.component';
+import { SegmentedToggleComponent } from '../../core/UI/components/segmented-toggle/segmented-toggle.component';
 import { SelectMarketDialogComponent } from './components/select-market-dialog/select-market-dialog.component';
 import { HoldingCardComponent } from './components/holdings/holding-card/holding-card.component';
 import { HoldingsListComponent } from './components/holdings/holdings-list.component';
+import { KpiRowComponent } from './components/holdings/kpi-row/kpi-row.component';
 import { PortfolioSummaryComponent } from './components/holdings/portfolio-summary/portfolio-summary.component';
+import { WealthChartMiniComponent } from './components/holdings/wealth-chart-mini/wealth-chart-mini.component';
 import { HoldingService } from './service/holding.service';
 import { InstrumentService } from './service/instrument.service';
 import { TagsService } from './service/tags.service';
@@ -33,6 +36,21 @@ import { selectHoldingsList } from './store/holdings.selectors';
 import { selectTagsList } from './store/tags.selectors';
 
 type SavingsView = 'classes' | 'holdings';
+
+/**
+ * Header date format: "Saturday · May 16, 2026"
+ * Mockup reference: design/savings/00-mobile-shell-baseline.svg
+ */
+function formatHeaderDate(d: Date = new Date()): string {
+  const parts = d.toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  });
+  // Intl uses ", " between weekday and rest; mockup uses " · " separator.
+  return parts.replace(', ', ' · ');
+}
 
 interface ClassGroup {
   assetClass: AssetClass;
@@ -43,6 +61,9 @@ interface ClassGroup {
   hiddenCount: number;             // holdings.length - VISIBLE_PER_CLASS, or 0
   totalCount: number;
   totalValue: number;              // current market value
+  costBasis: number;               // sum of quantity × avgBuyPrice
+  pnl: number;                     // totalValue - costBasis
+  pnlPercent: number;              // (pnl / costBasis) * 100, 0 when costBasis = 0
   share: number;                   // value as fraction of portfolio (0..1)
 }
 
@@ -50,9 +71,12 @@ const VISIBLE_PER_CLASS = 5;
 
 const UI_COMPONENTS = [
   ButtonToggleComponent,
+  SegmentedToggleComponent,
   HoldingCardComponent,
   HoldingsListComponent,
   PortfolioSummaryComponent,
+  KpiRowComponent,
+  WealthChartMiniComponent,
 ];
 
 const MATERIAL_MODULES = [
@@ -99,6 +123,50 @@ export class SavingsComponent implements OnInit {
   public readonly view = signal<SavingsView>('classes');
 
   /**
+   * Header date — computed once at component creation. We're rendering a
+   * dashboard, not a real-time clock, so daily granularity is enough; no
+   * need for an interval ticker.
+   */
+  public readonly todayLabel = formatHeaderDate();
+
+  /**
+   * Hide-balance toggle — visual stub for PR1. Real privacy feature lands
+   * in a follow-up (see portfolio-screen-plan §5 Open Question 2).
+   */
+  public readonly hideBalances = signal(false);
+
+  /**
+   * Does the portfolio contain any instrument that will eventually produce
+   * income or realised-gain data? Drives whether to render the full 4-card
+   * KPI row or a consolidated "metrics coming soon" placeholder.
+   *
+   * UX decision (2026-05-17): showing 4 empty stub cards forever to a
+   * crypto-only or cash-only user is dishonest. Instead we detect that
+   * the portfolio has dividend-yielding instruments (the only source of
+   * income data we'll ever have pre-M5.5 trade journal) and show the
+   * KPI row only when the user actually has assets relevant to those
+   * metrics. Otherwise: a single grouped placeholder.
+   */
+  public readonly hasInvestorMetrics = computed<boolean>(() => {
+    const instrMap = this.instruments.instruments();
+    const holdings = this.rawHoldings();
+    for (const h of holdings) {
+      const inst = instrMap.get(h.instrumentId);
+      if (!inst) {
+        continue;
+      }
+      const meta = inst.metadata;
+      // Right now "investor metrics" = anything related to dividend payouts.
+      // When realised-gains tracking lands (M5.5), expand this to also
+      // include any holding with a closed-position history.
+      if ('dividendYield' in meta && meta.dividendYield && meta.dividendYield > 0) {
+        return true;
+      }
+    }
+    return false;
+  });
+
+  /**
    * When the user clicks "Show all N" on a class accordion, we set this
    * to the target AssetClass before flipping the view. HoldingsListComponent
    * reads it via @Input and pre-applies the class filter on mount.
@@ -143,20 +211,21 @@ export class SavingsComponent implements OnInit {
       return [];
     }
 
-    // Bucket holdings by AssetClass and compute per-holding current value.
-    const buckets = new Map<
-      AssetClass,
-      Array<{ h: IHoldingView; currentValue: number }>
-    >();
+    // Bucket holdings by AssetClass with per-holding current + cost values.
+    interface Row {
+      h: IHoldingView;
+      currentValue: number;
+      cost: number;
+    }
+    const buckets = new Map<AssetClass, Row[]>();
     for (const h of all) {
       const currentPrice =
         this.holdings.getCurrentPrice(h.instrument.symbol) ??
         h.averageBuyPrice;
       const currentValue = h.quantity * currentPrice;
-      const list =
-        buckets.get(h.instrument.assetClass) ??
-        ([] as Array<{ h: IHoldingView; currentValue: number }>);
-      list.push({ h, currentValue });
+      const cost = h.quantity * h.averageBuyPrice;
+      const list = buckets.get(h.instrument.assetClass) ?? [];
+      list.push({ h, currentValue, cost });
       buckets.set(h.instrument.assetClass, list);
     }
 
@@ -170,6 +239,9 @@ export class SavingsComponent implements OnInit {
       list.sort((a, b) => b.currentValue - a.currentValue);
       const holdings = list.map((x) => x.h);
       const totalValue = list.reduce((s, x) => s + x.currentValue, 0);
+      const costBasis = list.reduce((s, x) => s + x.cost, 0);
+      const pnl = totalValue - costBasis;
+      const pnlPercent = costBasis > 0 ? (pnl / costBasis) * 100 : 0;
       const visibleHoldings = holdings.slice(0, VISIBLE_PER_CLASS);
       const hiddenCount = Math.max(0, holdings.length - VISIBLE_PER_CLASS);
 
@@ -182,6 +254,9 @@ export class SavingsComponent implements OnInit {
         hiddenCount,
         totalCount: holdings.length,
         totalValue,
+        costBasis,
+        pnl,
+        pnlPercent,
         share: totalPortfolioValue > 0 ? totalValue / totalPortfolioValue : 0,
       });
     }
@@ -206,14 +281,22 @@ export class SavingsComponent implements OnInit {
     });
   }
 
-  /** Handler for pgz-button-toggle (see field doc above). */
-  public onViewToggle(isUnchecked: boolean): void {
-    this.view.set(isUnchecked ? 'classes' : 'holdings');
-    if (this.view() === 'classes') {
+  /**
+   * Handler for pgz-segmented-toggle — emits the selected label.
+   * Map 'Classes' → 'classes', 'Holdings' → 'holdings'.
+   */
+  public onViewToggle(label: string): void {
+    const next: SavingsView = label === 'Holdings' ? 'holdings' : 'classes';
+    this.view.set(next);
+    if (next === 'classes') {
       // Leaving Holdings — clear pending filter so next entry starts fresh
       // unless user clicks "Show all N" again.
       this.initialHoldingsClass.set(null);
     }
+  }
+
+  public viewLabel(): string {
+    return this.view() === 'classes' ? 'Classes' : 'Holdings';
   }
 
   /**
@@ -262,23 +345,35 @@ export class SavingsComponent implements OnInit {
     }
   }
 
+  /**
+   * Returns the AssetClass color as a CSS variable reference. Concrete hex
+   * values live in `styles.scss` per theme (light + dark), so this colour
+   * adapts automatically when the user switches theme.
+   *
+   * The browser resolves `var(...)` in inline `style` attributes, so this
+   * works seamlessly via `[style.background-color]="assetClassBadgeColor(ac)"`.
+   */
   public assetClassBadgeColor(ac: AssetClass): string {
     switch (ac) {
       case AssetClass.STOCK:
-        return '#1976D2';
+        return 'var(--asset-stock)';
       case AssetClass.TOKENIZED_STOCK:
-        return '#7B1FA2';
+        return 'var(--asset-tokenized-stock)';
       case AssetClass.CRYPTO:
-        return '#F57C00';
+        return 'var(--asset-crypto)';
       case AssetClass.CASH:
-        return '#388E3C';
+        return 'var(--asset-cash)';
       case AssetClass.DEPOSIT:
-        return '#5D4037';
+        return 'var(--asset-deposit)';
       case AssetClass.REAL_ESTATE:
-        return '#00796B';
+        return 'var(--asset-real-estate)';
       case AssetClass.OTHER:
-        return '#616161';
+        return 'var(--asset-other)';
     }
+  }
+
+  public abs(n: number): number {
+    return Math.abs(n);
   }
 
   public formatNumber(value: number, fractionDigits = 0): string {

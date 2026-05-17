@@ -1,0 +1,12 @@
+<div class="segmented-toggle" role="tablist">
+  @for (option of options; track option) {
+    <button type="button"
+            role="tab"
+            class="segmented-toggle__seg"
+            [class.active]="isActive(option)"
+            [attr.aria-selected]="isActive(option)"
+            (click)="select(option)">
+      {{ option }}
+    </button>
+  }
+</div>
