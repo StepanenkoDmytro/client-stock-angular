@@ -33,6 +33,7 @@ import { WealthChartMiniComponent } from './components/holdings/wealth-chart-min
 import { PositionCardComponent } from './components/positions/position-card/position-card.component';
 import { HoldingService } from './service/holding.service';
 import { InstrumentService } from './service/instrument.service';
+import { LivePriceService } from './service/live-price.service';
 import { PositionsService } from './service/positions.service';
 import { TagsService } from './service/tags.service';
 import { AddTriggerService } from '../../service/helpers/add-trigger.service';
@@ -115,6 +116,7 @@ export class SavingsComponent implements OnInit {
   private readonly addTriggerService = inject(AddTriggerService);
   private readonly holdings = inject(HoldingService);
   private readonly instruments = inject(InstrumentService);
+  private readonly livePrice = inject(LivePriceService);
   private readonly positionsSvc = inject(PositionsService);
   private readonly tags = inject(TagsService);
 
@@ -289,6 +291,10 @@ export class SavingsComponent implements OnInit {
     this.tags.init();
     this.instruments.init();
     this.holdings.init();
+    // Start live-price polling. Tracked instrument-id set is derived
+    // from the NgRx holdings signal, so it automatically follows
+    // add/edit/delete of holdings without any extra plumbing here.
+    this.livePrice.init();
 
     this.addTriggerService.buttonClick$
       .pipe(takeUntilDestroyed(this.destroyRef))

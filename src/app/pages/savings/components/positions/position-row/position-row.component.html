@@ -14,7 +14,9 @@
             [style.borderColor]="flag().colorVar"
             [style.color]="flag().colorVar">{{ chipLabel() }}</span>
     }
-    <span class="pr__value">${{ formatNumber(value) }}</span>
+    <span class="pr__value"
+          [class.pr__value--flash-up]="flashDirection() === 'up'"
+          [class.pr__value--flash-down]="flashDirection() === 'down'">${{ formatNumber(value) }}</span>
     <button mat-icon-button
             type="button"
             class="pr__more"

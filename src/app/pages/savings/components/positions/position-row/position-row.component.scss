@@ -64,6 +64,28 @@
   font-weight: 500;
   color: var(--pgz-text-primary);
   flex-shrink: 0;
+  border-radius: 4px;
+  padding: 0 2px;
+}
+
+// Flash hint synced with the parent Position-card — both pulse together
+// because they share the same instrument and therefore the same price.
+.pr__value--flash-up {
+  animation: pgz-price-flash-up 600ms ease-out;
+}
+
+.pr__value--flash-down {
+  animation: pgz-price-flash-down 600ms ease-out;
+}
+
+@keyframes pgz-price-flash-up {
+  0% { background-color: rgba(16, 185, 129, 0.22); color: #10b981; }
+  100% { background-color: transparent; color: var(--pgz-text-primary); }
+}
+
+@keyframes pgz-price-flash-down {
+  0% { background-color: rgba(239, 68, 68, 0.22); color: #ef4444; }
+  100% { background-color: transparent; color: var(--pgz-text-primary); }
 }
 
 // 3-dot overflow trigger for Edit/Delete. Compact 28px so it doesn't

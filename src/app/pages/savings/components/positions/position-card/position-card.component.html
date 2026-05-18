@@ -19,7 +19,9 @@
       }
     </span>
 
-    <span class="pc__value">${{ formatNumber(position.totalValue) }}</span>
+    <span class="pc__value"
+          [class.pc__value--flash-up]="flashDirection() === 'up'"
+          [class.pc__value--flash-down]="flashDirection() === 'down'">${{ formatNumber(position.totalValue) }}</span>
 
     @if (canExpand()) {
       <span class="pc__chevron"

@@ -22,6 +22,7 @@ import {
 } from '../store/holdings.selectors';
 import { selectTagsList } from '../store/tags.selectors';
 import { InstrumentService } from './instrument.service';
+import { LivePriceService } from './live-price.service';
 import { TagsService } from './tags.service';
 
 /**
@@ -63,6 +64,7 @@ export class HoldingService {
 
   private readonly store$ = inject(Store<{ holdings: IHoldingsState }>);
   private readonly instruments = inject(InstrumentService);
+  private readonly livePrice = inject(LivePriceService);
   private readonly tags = inject(TagsService);
 
   private isInit = false;
@@ -133,20 +135,29 @@ export class HoldingService {
    * Used by the "Reset demo data" button on `/savings/holdings`.
    */
   /**
-   * Mock "current market price" lookup. Returns a hardcoded value for the
-   * 5 demo holdings, undefined otherwise. Stands in for the future
-   * `PriceFeedService` (ADR-0003) until the real market integration lands.
+   * Current market price for a symbol. Resolution order (PR-A4 / ADR-0003):
    *
-   * Prices chosen to produce a realistic mixed P&L picture for the demo
-   * (stocks up, crypto up, real estate up, cash flat).
+   *   1. {@link LivePriceService} — live polled value from the backend
+   *      `/api/v1/prices/batch` endpoint, refreshed every 30s once the
+   *      caller has invoked `livePrice.init()`. This is the canonical
+   *      path for instruments that exist in the backend catalog.
+   *   2. {@link HoldingService.MOCK_CURRENT_PRICES} — hardcoded fallback
+   *      for the demo seed (whose instruments have client-side UUIDs that
+   *      don't match anything in the backend DB). Goes away once the
+   *      seed itself is removed (post-M5).
    */
   getCurrentPrice(symbol: string): number | undefined {
+    const live = this.livePrice.getCurrentPriceBySymbol(symbol);
+    if (live !== undefined) {
+      return live;
+    }
     return HoldingService.MOCK_CURRENT_PRICES[symbol];
   }
 
   /**
-   * Internal lookup table for the demo. Keys match the seeded mock
-   * instrument symbols; values are "as-of today" prices.
+   * Demo-only fallback prices for the seeded mock holdings. Used when
+   * the live price feed has no data for a symbol (typical for the
+   * client-side UUID seed which doesn't exist server-side).
    */
   private static readonly MOCK_CURRENT_PRICES: Record<string, number> = {
     AAPL: 175.0,

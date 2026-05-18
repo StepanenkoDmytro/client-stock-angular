@@ -15,12 +15,14 @@ import {
   IHoldingLockMeta,
   IHoldingView,
 } from '../../../../../domain/holding.domain';
+import { PriceDirection } from '../../../../../domain/price-quote.domain';
 import {
   ACCOUNT_KIND_FLAGS,
   AccountKindFlag,
   accountKindOf,
 } from '../../../const/account-kind.const';
 import { HoldingActionsService } from '../../../service/holding-actions.service';
+import { LivePriceService } from '../../../service/live-price.service';
 
 /**
  * One per-Account row inside an expanded `pgz-position-card`.
@@ -47,6 +49,7 @@ import { HoldingActionsService } from '../../../service/holding-actions.service'
 })
 export class PositionRowComponent {
   private readonly actions = inject(HoldingActionsService);
+  private readonly livePrice = inject(LivePriceService);
 
   // ---- Inputs ----
 
@@ -126,6 +129,20 @@ export class PositionRowComponent {
     }
 
     return parts.join(' · ');
+  });
+
+  /**
+   * Auto-clearing flash hint from the live price service — keyed by the
+   * holding's instrument (so all rows in the same Position card flash
+   * together on a price tick, which matches user intuition since they
+   * all share the same underlying price).
+   */
+  public readonly flashDirection = computed<PriceDirection | null>(() => {
+    const inst = this._holding().instrument;
+    if (!inst) {
+      return null;
+    }
+    return this.livePrice.getFlashDirection(inst.id);
   });
 
   // ---- Actions (overflow menu) ----

@@ -111,6 +111,29 @@
   font-weight: 500;
   font-variant-numeric: tabular-nums;
   color: var(--pgz-text-primary);
+  border-radius: 4px;
+  padding: 0 2px;
+}
+
+// Flash hint set by LivePriceService when a new poll brings a different
+// price for this position's instrument. Auto-clears after 600ms so the
+// pulse fades back to neutral on its own.
+.pc__value--flash-up {
+  animation: pgz-price-flash-up 600ms ease-out;
+}
+
+.pc__value--flash-down {
+  animation: pgz-price-flash-down 600ms ease-out;
+}
+
+@keyframes pgz-price-flash-up {
+  0% { background-color: rgba(16, 185, 129, 0.22); color: #10b981; }
+  100% { background-color: transparent; color: var(--pgz-text-primary); }
+}
+
+@keyframes pgz-price-flash-down {
+  0% { background-color: rgba(239, 68, 68, 0.22); color: #ef4444; }
+  100% { background-color: transparent; color: var(--pgz-text-primary); }
 }
 
 .pc__chevron {

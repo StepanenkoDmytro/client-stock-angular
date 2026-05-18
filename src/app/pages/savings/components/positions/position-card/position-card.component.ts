@@ -12,6 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { AssetClass } from '../../../../../domain/asset-class.domain';
 import { IPosition } from '../../../../../domain/position.domain';
+import { PriceDirection } from '../../../../../domain/price-quote.domain';
 import { ITag } from '../../../../../domain/tag.domain';
 import {
   isCryptoMetadata,
@@ -19,6 +20,7 @@ import {
   isRealEstateMetadata,
 } from '../../../model/InstrumentMetadata';
 import { HoldingActionsService } from '../../../service/holding-actions.service';
+import { LivePriceService } from '../../../service/live-price.service';
 import { PositionRowComponent } from '../position-row/position-row.component';
 
 /**
@@ -62,6 +64,7 @@ export class PositionCardComponent {
   private static readonly MAX_TAG_DOTS = 4;
 
   private readonly actions = inject(HoldingActionsService);
+  private readonly livePrice = inject(LivePriceService);
 
   // ---- Inputs ----
 
@@ -179,6 +182,20 @@ export class PositionCardComponent {
   public pnlSign(): string {
     return this._position().paperPnL >= 0 ? '+' : '−';
   }
+
+  /**
+   * Auto-clearing flash hint from the live price service. Drives the
+   * subtle green/red pulse on the value cell when a new poll brings a
+   * different price for this position's instrument. {@code null} when
+   * no recent change or no live data yet.
+   */
+  public readonly flashDirection = computed<PriceDirection | null>(() => {
+    const inst = this._position().instrument;
+    if (!inst) {
+      return null;
+    }
+    return this.livePrice.getFlashDirection(inst.id);
+  });
 
   // ---- Actions ----
 
