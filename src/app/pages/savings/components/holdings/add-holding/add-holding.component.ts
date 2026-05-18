@@ -142,8 +142,21 @@ export class AddHoldingComponent implements OnInit {
     this.archetypeState().valid,
   );
 
+  /**
+   * Sticky flag: becomes {@code true} the first time the active archetype
+   * reaches a valid submission (or emits any non-null submission). Used by
+   * {@link #onChangeClass} to decide whether to confirm before discarding
+   * form data. Stays {@code true} for the rest of the form session — we
+   * don't try to detect "field cleared back to empty" because partial
+   * progress is still worth a confirm.
+   */
+  private readonly hasFormChanges = signal<boolean>(false);
+
   public onArchetypeStateChange(state: ArchetypeState): void {
     this.archetypeState.set(state);
+    if (state.valid || state.submission !== null) {
+      this.hasFormChanges.set(true);
+    }
   }
 
   /**
@@ -246,12 +259,23 @@ export class AddHoldingComponent implements OnInit {
   }
 
   /**
-   * Handler for the class-chip-breadcrumb's "change ▾" click — navigates
-   * back to the class-grid entry point. Form state is discarded; we don't
-   * confirm-prompt yet because the prevailing UX with the old dropdown
-   * also discarded on back-navigation, so this isn't a regression.
+   * Handler for the class-chip-breadcrumb's "change ▾" click. Confirms
+   * before discarding when the active archetype already has user-entered
+   * data (drives off {@link #hasFormChanges}); otherwise navigates
+   * straight back to the class-grid entry point.
+   *
+   * <p>Uses a native {@code window.confirm} for now — switching to a
+   * Material dialog later is a one-line change in PR5b polish.
    */
   public onChangeClass(): void {
+    if (this.hasFormChanges()) {
+      const ok = typeof window !== 'undefined' && typeof window.confirm === 'function'
+        ? window.confirm('Discard the changes you entered for this asset class?')
+        : true;
+      if (!ok) {
+        return;
+      }
+    }
     this.router.navigate(['/savings/add-holding']);
   }
 
