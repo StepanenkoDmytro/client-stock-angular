@@ -1,0 +1,43 @@
+:host {
+  display: inline-flex;
+}
+
+// Compact pill so it sits comfortably under the price without dominating
+// the row. 11px text matches the secondary metadata typography (subline,
+// counter rows) used elsewhere on the card.
+.msb {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  line-height: 14px;
+  color: var(--pgz-text-secondary);
+  white-space: nowrap;
+}
+
+.msb__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  // Open state — green dot. Closed — neutral gray. Concrete hex values
+  // mirror the price-flash colours from PR-A4 (the green is the only
+  // semantic "all good" green on /savings so far).
+}
+
+.msb--open .msb__dot {
+  background-color: #10b981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.15);
+}
+
+.msb--closed .msb__dot {
+  background-color: var(--pgz-text-muted);
+}
+
+.msb--open .msb__label {
+  color: var(--pgz-text-primary);
+}
+
+.msb__label {
+  font-variant-numeric: tabular-nums;
+}

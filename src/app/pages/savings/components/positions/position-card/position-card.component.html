@@ -53,6 +53,11 @@
 
   <p class="pc__subline">{{ subline() }}</p>
 
+  @if (exchangeCode()) {
+    <pgz-market-status-badge class="pc__market"
+                             [exchangeCode]="exchangeCode()!"></pgz-market-status-badge>
+  }
+
   <hr class="pc__divider" />
 
   <div class="pc__lifetime">

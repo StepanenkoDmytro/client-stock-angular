@@ -1,0 +1,9 @@
+@if (tone() !== 'hidden') {
+  <span class="msb"
+        [class.msb--open]="tone() === 'open'"
+        [class.msb--closed]="tone() === 'closed'"
+        [title]="label()">
+    <span class="msb__dot" aria-hidden="true"></span>
+    <span class="msb__label">{{ label() }}</span>
+  </span>
+}

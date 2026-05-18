@@ -136,6 +136,14 @@
   100% { background-color: transparent; color: var(--pgz-text-primary); }
 }
 
+// Market-status badge — sits between the subline and the lifetime
+// divider. Tight top margin so it visually attaches to the symbol/price
+// header rather than the lifetime row below.
+.pc__market {
+  margin-top: 2px;
+  margin-bottom: 6px;
+}
+
 .pc__chevron {
   margin-left: 6px;
   font-size: 14px;

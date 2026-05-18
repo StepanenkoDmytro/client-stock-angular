@@ -14,12 +14,14 @@ import {
 import { environment } from '../../../../environments/environment';
 import { AssetClass } from '../../../domain/asset-class.domain';
 import { IHolding } from '../../../domain/holding.domain';
+import { IInstrument } from '../../../domain/instrument.domain';
 import {
   PriceDirection,
   PriceQuote,
 } from '../../../domain/price-quote.domain';
 import { selectHoldingsList } from '../store/holdings.selectors';
 import { InstrumentService } from './instrument.service';
+import { MarketStatusService } from './market-status.service';
 
 /**
  * Wire shape of one row in `GET /api/v1/prices/batch`. Mirror of Java
@@ -68,6 +70,7 @@ export class LivePriceService {
   private readonly http = inject(HttpClient);
   private readonly store = inject(Store);
   private readonly instruments = inject(InstrumentService);
+  private readonly marketStatus = inject(MarketStatusService);
 
   /** Holdings list mirrored as a signal so we can derive tracked ids. */
   private readonly holdings = toSignal(
@@ -75,14 +78,47 @@ export class LivePriceService {
     { initialValue: [] as IHolding[] },
   );
 
-  /** Distinct instrument ids that appear in any current holding. */
+  /**
+   * Distinct instrument ids that appear in any current holding AND whose
+   * exchange is currently open (PR-A5 smart polling). Closed venues are
+   * skipped so we don't burn Finnhub free-tier quota on stocks that
+   * haven't moved since Friday close. CRYPTO and TOKENIZED_STOCK are
+   * always included — they trade 24/7. Manual classes (CASH / DEPOSIT /
+   * REAL_ESTATE / OTHER) are included unconditionally — their feeds
+   * return a deterministic value with no upstream rate-limit cost.
+   */
   private readonly trackedIds = computed<string[]>(() => {
     const ids = new Set<string>();
+    const instMap = this.instruments.instruments();
     for (const h of this.holdings()) {
+      const inst = instMap.get(h.instrumentId);
+      if (inst && this.shouldSkip(inst)) {
+        continue;
+      }
       ids.add(h.instrumentId);
     }
     return Array.from(ids);
   });
+
+  /** True when this instrument's exchange is known-closed at this tick. */
+  private shouldSkip(inst: IInstrument): boolean {
+    const code = MarketStatusService.exchangeOf(inst);
+    if (!code) {
+      // Manual asset classes — nothing to poll, but the price feed is
+      // trivial server-side and gives us back a clean value (CASH=1.0,
+      // OTHER=empty). Including is cheap and keeps the response shape
+      // stable for the frontend.
+      return false;
+    }
+    const status = this.marketStatus.getStatus(code);
+    if (!status) {
+      // No status fetched yet — don't gate the very first tick on it,
+      // otherwise we'd never start. Status will land in <60s and the
+      // next tick will apply the filter.
+      return false;
+    }
+    return !status.isOpen;
+  }
 
   /** id → most recent quote from the backend. */
   private readonly _quotes = signal<Map<string, PriceQuote>>(new Map());

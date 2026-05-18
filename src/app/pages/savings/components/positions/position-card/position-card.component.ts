@@ -21,6 +21,8 @@ import {
 } from '../../../model/InstrumentMetadata';
 import { HoldingActionsService } from '../../../service/holding-actions.service';
 import { LivePriceService } from '../../../service/live-price.service';
+import { MarketStatusService } from '../../../service/market-status.service';
+import { MarketStatusBadgeComponent } from '../../market-status-badge/market-status-badge.component';
 import { PositionRowComponent } from '../position-row/position-row.component';
 
 /**
@@ -54,6 +56,7 @@ import { PositionRowComponent } from '../position-row/position-row.component';
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
+    MarketStatusBadgeComponent,
     PositionRowComponent,
   ],
   templateUrl: './position-card.component.html',
@@ -195,6 +198,20 @@ export class PositionCardComponent {
       return null;
     }
     return this.livePrice.getFlashDirection(inst.id);
+  });
+
+  /**
+   * Exchange code feeding the `pgz-market-status-badge`. Returns
+   * {@code undefined} for asset classes that don't track market hours
+   * (CASH / DEPOSIT / REAL_ESTATE / OTHER) — the badge then renders
+   * nothing.
+   */
+  public readonly exchangeCode = computed<string | undefined>(() => {
+    const inst = this._position().instrument;
+    if (!inst) {
+      return undefined;
+    }
+    return MarketStatusService.exchangeOf(inst);
   });
 
   // ---- Actions ----
