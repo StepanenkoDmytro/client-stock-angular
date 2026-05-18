@@ -1,0 +1,77 @@
+:host {
+  display: block;
+  height: 100%;
+  background-color: var(--pgz-bg-page);
+}
+
+// MVP Add-Holding form. Pads + radius match the rest of /savings cards
+// (portfolio-summary 16/18, wealth-mini 14/16). Fields stretch full
+// width; quantity + buy-price share a row.
+
+.ah {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+  background-color: var(--pgz-bg-page);
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 16px 24px;
+  }
+
+  &__field {
+    width: 100%;
+  }
+
+  &__row {
+    display: flex;
+    gap: 12px;
+
+    .ah__field--qty,
+    .ah__field--price {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+
+  &__total {
+    margin: 8px 0 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--pgz-text-primary);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+
+  // Top-up expansion panel — collapsed by default; same surface tokens
+  // as other cards on /savings (sub-bg fill, faint border, no shadow
+  // because the page itself is on cream paper).
+  &__topup {
+    margin: 4px 0 12px;
+    background: var(--pgz-card-bg-sub) !important;
+    border: 0.5px solid var(--pgz-card-border);
+    border-radius: 10px !important;
+    box-shadow: none !important;
+  }
+
+  &__topup-hint {
+    margin: 0 0 8px;
+    font-size: 12px;
+    color: var(--pgz-text-secondary);
+    line-height: 1.4;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 4px;
+  }
+
+  &__cancel,
+  &__save {
+    flex: 1;
+  }
+}

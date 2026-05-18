@@ -4,8 +4,12 @@ import {
   Component,
   Input,
   computed,
+  inject,
   signal,
 } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 import { AssetClass } from '../../../../../domain/asset-class.domain';
 import { IPosition } from '../../../../../domain/position.domain';
 import { ITag } from '../../../../../domain/tag.domain';
@@ -14,6 +18,7 @@ import {
   isDepositMetadata,
   isRealEstateMetadata,
 } from '../../../model/InstrumentMetadata';
+import { HoldingActionsService } from '../../../service/holding-actions.service';
 import { PositionRowComponent } from '../position-row/position-row.component';
 
 /**
@@ -42,13 +47,21 @@ import { PositionRowComponent } from '../position-row/position-row.component';
 @Component({
   selector: 'pgz-position-card',
   standalone: true,
-  imports: [CommonModule, PositionRowComponent],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
+    PositionRowComponent,
+  ],
   templateUrl: './position-card.component.html',
   styleUrl: './position-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PositionCardComponent {
   private static readonly MAX_TAG_DOTS = 4;
+
+  private readonly actions = inject(HoldingActionsService);
 
   // ---- Inputs ----
 
@@ -173,6 +186,34 @@ export class PositionCardComponent {
     if (this.canExpand()) {
       this._expanded.update((v) => !v);
     }
+  }
+
+  /**
+   * Single-holding Positions surface the overflow menu directly on the
+   * card (no per-row drill-down needed). Multi-holding Positions get
+   * the menu on each `pgz-position-row` instead — we deliberately don't
+   * show "Edit Position" because Position is a computed aggregate, not
+   * a stored entity (ADR-0001).
+   */
+  public readonly hasSingleHoldingActions = computed<boolean>(() => {
+    return (this._position().holdings ?? []).length === 1;
+  });
+
+  public onEditSingle(): void {
+    const holdings = this._position().holdings ?? [];
+    if (holdings.length !== 1) {
+      return;
+    }
+    this.actions.editHolding(holdings[0].id);
+  }
+
+  public onDeleteSingle(): void {
+    const pos = this._position();
+    const holdings = pos.holdings ?? [];
+    if (holdings.length !== 1) {
+      return;
+    }
+    this.actions.deleteHolding(holdings[0], pos.holdingValues[0] ?? 0);
   }
 
   // ---- Display helpers (template) ----

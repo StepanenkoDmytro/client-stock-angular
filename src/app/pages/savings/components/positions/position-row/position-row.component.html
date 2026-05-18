@@ -15,6 +15,23 @@
             [style.color]="flag().colorVar">{{ chipLabel() }}</span>
     }
     <span class="pr__value">${{ formatNumber(value) }}</span>
+    <button mat-icon-button
+            type="button"
+            class="pr__more"
+            aria-label="Holding actions"
+            [matMenuTriggerFor]="menu">
+      <mat-icon>more_horiz</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item type="button" (click)="onEdit()">
+        <mat-icon>edit</mat-icon>
+        <span>Edit</span>
+      </button>
+      <button mat-menu-item type="button" (click)="onDelete()">
+        <mat-icon>delete_outline</mat-icon>
+        <span>Delete</span>
+      </button>
+    </mat-menu>
   </div>
   <div class="pr__meta">{{ metaLine() }}</div>
 </div>

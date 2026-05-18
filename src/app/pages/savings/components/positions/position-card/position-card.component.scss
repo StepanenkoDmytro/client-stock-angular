@@ -21,6 +21,29 @@
   color: var(--pgz-text-primary);
 }
 
+// 3-dot overflow trigger that sits inline at the right edge of the
+// header row. Only shown for single-holding Positions — multi-holding
+// ones surface Edit/Delete on each `pgz-position-row` instead, because
+// "edit Position" doesn't make sense for an aggregate of N holdings.
+//
+// Note: `.pc__head` is a <div role="button">, not a <button>, precisely
+// so this child <button mat-icon-button> can nest cleanly inside it.
+.pc__more {
+  margin-left: 4px;
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  color: var(--pgz-text-muted);
+  flex-shrink: 0;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+  }
+}
+
 // Used when a Position-card sits inside an already-elevated container
 // (the Classes-view accordion panel). The parent panel is white +
 // shadow, so subcards switch to the cream sub-surface to read as a

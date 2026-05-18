@@ -1,0 +1,67 @@
+// Mirrors `pgz-delete-tag-confirm` layout so destructive bottom-sheets
+// across the app feel identical — same icon size + tint, same title
+// weight, same Cancel/Destroy button affordance.
+
+.delete-holding {
+  padding: 24px 20px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+}
+
+.delete-holding__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--color-negative) 14%, transparent);
+
+  mat-icon {
+    color: var(--color-negative);
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
+}
+
+.delete-holding__title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--pgz-text-primary);
+}
+
+.delete-holding__details {
+  margin: 0;
+  font-size: 14px;
+  color: var(--pgz-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.delete-holding__message {
+  margin: 0;
+  font-size: 13px;
+  color: var(--pgz-text-secondary);
+  line-height: 1.4;
+}
+
+.delete-holding__actions {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  margin-top: 8px;
+  justify-content: center;
+}
+
+.delete-holding__btn {
+  min-width: 120px;
+}
+
+.delete-holding__btn--destructive {
+  background-color: var(--color-negative);
+  color: var(--pgz-card-bg);
+}

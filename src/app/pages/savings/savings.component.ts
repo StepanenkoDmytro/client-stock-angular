@@ -289,7 +289,12 @@ export class SavingsComponent implements OnInit {
 
     this.addTriggerService.buttonClick$.subscribe((path) => {
       if (path === '/savings') {
-        this.openSelectedFilter();
+        // The + FAB now lands on the universal Add Holding form. The
+        // legacy SelectMarketDialog (stock-asset / crypto-asset routes)
+        // stays in the codebase as a fallback until M6 deletes it
+        // entirely — those routes remain reachable by URL but no longer
+        // accessible from the bottom nav.
+        this.router.navigate(['/savings/add-holding']);
         this.addTriggerService.resetButtonClick();
       }
     });

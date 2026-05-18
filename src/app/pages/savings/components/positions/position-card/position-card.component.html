@@ -1,11 +1,14 @@
 <div class="pc"
      [class.pc--subcard]="variant === 'subcard'"
      [class.pc--expanded]="expanded()">
-  <button type="button"
-          class="pc__head"
-          [class.pc__head--interactive]="canExpand()"
-          [attr.aria-expanded]="canExpand() ? expanded() : null"
-          (click)="toggle()">
+  <div class="pc__head"
+       [class.pc__head--interactive]="canExpand()"
+       [attr.role]="canExpand() ? 'button' : null"
+       [attr.tabindex]="canExpand() ? 0 : null"
+       [attr.aria-expanded]="canExpand() ? expanded() : null"
+       (click)="toggle()"
+       (keydown.enter)="toggle()"
+       (keydown.space)="toggle(); $event.preventDefault()">
     <span class="pc__symbol">{{ position.instrument.symbol }}</span>
 
     <span class="pc__tag-dots">
@@ -23,7 +26,28 @@
             [class.pc__chevron--open]="expanded()"
             aria-hidden="true">▾</span>
     }
-  </button>
+
+    @if (hasSingleHoldingActions()) {
+      <button mat-icon-button
+              type="button"
+              class="pc__more"
+              aria-label="Position actions"
+              [matMenuTriggerFor]="menu"
+              (click)="$event.stopPropagation()">
+        <mat-icon>more_horiz</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item type="button" (click)="onEditSingle()">
+          <mat-icon>edit</mat-icon>
+          <span>Edit</span>
+        </button>
+        <button mat-menu-item type="button" (click)="onDeleteSingle()">
+          <mat-icon>delete_outline</mat-icon>
+          <span>Delete</span>
+        </button>
+      </mat-menu>
+    }
+  </div>
 
   <p class="pc__subline">{{ subline() }}</p>
 

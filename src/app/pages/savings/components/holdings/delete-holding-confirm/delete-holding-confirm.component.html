@@ -1,0 +1,32 @@
+<div class="delete-holding">
+  <div class="delete-holding__icon">
+    <mat-icon>report</mat-icon>
+  </div>
+
+  <h3 class="delete-holding__title">
+    @if (data.accountName) {
+      Delete «{{ data.symbol }}» at {{ data.accountName }}?
+    } @else {
+      Delete «{{ data.symbol }}»?
+    }
+  </h3>
+
+  <p class="delete-holding__details">
+    {{ formatQty(data.quantity) }} ×
+    ${{ formatMoney(data.averageBuyPrice) }}
+    = ${{ formatMoney(data.currentValue) }}
+  </p>
+
+  <p class="delete-holding__message">
+    This action cannot be undone.
+  </p>
+
+  <div class="delete-holding__actions">
+    <button mat-stroked-button
+            class="delete-holding__btn"
+            (click)="onCancel()">Cancel</button>
+    <button mat-flat-button
+            class="delete-holding__btn delete-holding__btn--destructive"
+            (click)="onDelete()">Delete</button>
+  </div>
+</div>

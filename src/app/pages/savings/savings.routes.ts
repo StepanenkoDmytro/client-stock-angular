@@ -34,6 +34,14 @@ export const SAVINGS_ROUTES: Route[] = [
         loadComponent: () => import('./components/holdings/holdings-list.component').then(c => c.HoldingsListComponent),
     },
     {
+        path: 'add-holding',
+        loadComponent: () => import('./components/holdings/add-holding/add-holding.component').then(c => c.AddHoldingComponent),
+    },
+    {
+        path: 'edit-holding/:id',
+        loadComponent: () => import('./components/holdings/add-holding/add-holding.component').then(c => c.AddHoldingComponent),
+    },
+    {
         path: 'tags',
         loadComponent: () => import('./components/tags/tags.component').then(c => c.TagsComponent),
     },

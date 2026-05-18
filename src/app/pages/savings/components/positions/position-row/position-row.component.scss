@@ -66,6 +66,25 @@
   flex-shrink: 0;
 }
 
+// 3-dot overflow trigger for Edit/Delete. Compact 28px so it doesn't
+// fight the row's 48h footprint; gray-out by default, lifts to primary
+// on hover via Material's built-in mat-icon-button states.
+.pr__more {
+  margin-left: 2px;
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+  color: var(--pgz-text-muted);
+  flex-shrink: 0;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+}
+
 .pr__meta {
   // Visually attached to the row above; muted secondary colour so the
   // user reads "value of position" first and "how/why" second.

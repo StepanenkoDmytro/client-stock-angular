@@ -4,8 +4,12 @@ import {
   Component,
   Input,
   computed,
+  inject,
   signal,
 } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 import { AssetClass } from '../../../../../domain/asset-class.domain';
 import {
   IHoldingLockMeta,
@@ -16,6 +20,7 @@ import {
   AccountKindFlag,
   accountKindOf,
 } from '../../../const/account-kind.const';
+import { HoldingActionsService } from '../../../service/holding-actions.service';
 
 /**
  * One per-Account row inside an expanded `pgz-position-card`.
@@ -35,12 +40,14 @@ import {
 @Component({
   selector: 'pgz-position-row',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatButtonModule, MatIconModule, MatMenuModule],
   templateUrl: './position-row.component.html',
   styleUrl: './position-row.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PositionRowComponent {
+  private readonly actions = inject(HoldingActionsService);
+
   // ---- Inputs ----
 
   @Input({ required: true })
@@ -120,6 +127,16 @@ export class PositionRowComponent {
 
     return parts.join(' · ');
   });
+
+  // ---- Actions (overflow menu) ----
+
+  public onEdit(): void {
+    this.actions.editHolding(this._holding().id);
+  }
+
+  public onDelete(): void {
+    this.actions.deleteHolding(this._holding(), this._value());
+  }
 
   // ---- Display helpers ----
 
