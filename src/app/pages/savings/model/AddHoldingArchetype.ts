@@ -1,4 +1,31 @@
+import { AccountKind } from '../../../domain/account-kind.domain';
 import { AssetClass } from '../../../domain/asset-class.domain';
+import { IHoldingLockMeta } from '../../../domain/holding.domain';
+import { IInstrument } from '../../../domain/instrument.domain';
+
+/**
+ * Payload an archetype component emits via {@code (stateChange)} once its
+ * form is valid. Orchestrator (`AddHoldingComponent`) wraps this into a
+ * full `IHolding` with id / createdAt / updatedAt and dispatches to
+ * {@code HoldingService.addHolding}.
+ */
+export interface ArchetypeSubmission {
+  instrument: IInstrument;
+  quantity: number;
+  averageBuyPrice: number;
+  currency: string;
+  accountId: string;
+  accountName: string;
+  accountKind: AccountKind;
+  tagIds: string[];
+  lockMeta?: IHoldingLockMeta;
+}
+
+/** Payload of the `(stateChange)` event archetypes emit. */
+export interface ArchetypeState {
+  valid: boolean;
+  submission: ArchetypeSubmission | null;
+}
 
 /**
  * One of three form shapes the Add Holding flow renders, after the user

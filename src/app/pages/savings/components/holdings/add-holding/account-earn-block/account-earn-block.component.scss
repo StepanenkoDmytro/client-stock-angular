@@ -1,0 +1,33 @@
+:host {
+  display: block;
+}
+
+// Soft-tint card matching the design's "EARN" card (#FAEEDA bg, #E5DAB8
+// border). Sits inset relative to the regular form fields so it visually
+// "belongs to" the Account field above.
+.earn {
+  margin: 4px 0 12px;
+  padding: 10px 14px 4px;
+  background: #FAEEDA;
+  border: 0.5px solid #E5DAB8;
+  border-radius: 10px;
+}
+
+.earn__caption {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1.2px;
+  color: #6B5A30;
+  padding: 0 6px;
+  margin-bottom: 4px;
+}
+
+.earn__field {
+  width: 100%;
+
+  // Compact field height inside the earn block so two stacked fields
+  // don't dominate the form. Material's default 56h is a lot here.
+  &:not(:last-child) {
+    margin-bottom: 4px;
+  }
+}

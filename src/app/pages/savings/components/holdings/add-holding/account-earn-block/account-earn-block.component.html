@@ -1,0 +1,27 @@
+@if (visible()) {
+  <fieldset class="earn">
+    <legend class="earn__caption">EARN · {{ lockDays() ? 'STAKING' : 'FLEXIBLE' }}</legend>
+
+    <mat-form-field appearance="outline" class="earn__field">
+      <mat-label>APR (%)</mat-label>
+      <input matInput
+             type="number"
+             step="0.1"
+             min="0"
+             max="100"
+             autocomplete="off"
+             [ngModel]="apr()"
+             (ngModelChange)="onAprInput($event ?? '')"
+             (blur)="onBlur()" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="earn__field">
+      <mat-label>Lock period</mat-label>
+      <mat-select [ngModel]="lockDays()" (ngModelChange)="onLockChange($event)">
+        @for (p of lockPeriods; track p.days) {
+          <mat-option [value]="p.days">{{ p.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </fieldset>
+}

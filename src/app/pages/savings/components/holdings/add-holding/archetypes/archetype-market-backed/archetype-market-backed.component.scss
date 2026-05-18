@@ -1,0 +1,33 @@
+:host {
+  display: block;
+}
+
+.amb {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.amb__field {
+  width: 100%;
+}
+
+.amb__row {
+  display: flex;
+  gap: 12px;
+
+  .amb__field--qty,
+  .amb__field--price {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+.amb__total {
+  margin: 8px 0 4px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--pgz-text-primary);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}

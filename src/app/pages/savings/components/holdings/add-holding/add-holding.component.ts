@@ -36,11 +36,18 @@ import { InstrumentService } from '../../../service/instrument.service';
 import { TagsService } from '../../../service/tags.service';
 import { selectHoldingsList } from '../../../store/holdings.selectors';
 import { HoldingValidator } from '../../../validator/HoldingValidator';
-import { CreateInstrumentInlineComponent } from '../create-instrument-inline/create-instrument-inline.component';
-import { InstrumentAutocompleteComponent } from '../instrument-autocomplete/instrument-autocomplete.component';
 import { TagChipsComponent } from '../tag-chips/tag-chips.component';
 import { IInstrument } from '../../../../../domain/instrument.domain';
-import { assetClassFromSlug } from '../../../model/AddHoldingArchetype';
+import {
+  AddHoldingArchetype,
+  ArchetypeState,
+  ArchetypeSubmission,
+  archetypeForClass,
+  assetClassFromSlug,
+} from '../../../model/AddHoldingArchetype';
+import { ArchetypeMarketBackedComponent } from './archetypes/archetype-market-backed/archetype-market-backed.component';
+import { ArchetypeManualCreateComponent } from './archetypes/archetype-manual-create/archetype-manual-create.component';
+import { ArchetypeSingleAmountComponent } from './archetypes/archetype-single-amount/archetype-single-amount.component';
 import { ClassChipBreadcrumbComponent } from './class-chip-breadcrumb/class-chip-breadcrumb.component';
 
 interface AccountChoice {
@@ -78,9 +85,10 @@ interface AccountChoice {
     MatExpansionModule,
     PrevRouteComponent,
     TagChipsComponent,
-    InstrumentAutocompleteComponent,
-    CreateInstrumentInlineComponent,
     ClassChipBreadcrumbComponent,
+    ArchetypeMarketBackedComponent,
+    ArchetypeManualCreateComponent,
+    ArchetypeSingleAmountComponent,
   ],
   templateUrl: './add-holding.component.html',
   styleUrl: './add-holding.component.scss',
@@ -109,16 +117,34 @@ export class AddHoldingComponent implements OnInit {
    *  controls for validation. */
   public readonly selectedInstrument = signal<IInstrument | null>(null);
 
-  /** Toggles the inline create-instrument panel inside the form. */
-  public readonly showCreateInline = signal<boolean>(false);
-
-  /** Prefill text for the inline form — taken from whatever the user
-   *  typed before clicking «Create custom». */
-  public readonly inlinePrefillSymbol = signal<string>('');
-
   public readonly title = computed<string>(() => {
     return this.isEditMode() ? 'Edit saving' : 'Add saving';
   });
+
+  /**
+   * Which of the three archetype components renders in Add mode. Derived
+   * from {@link assetClass} via {@link archetypeForClass}.
+   */
+  public readonly archetype = computed<AddHoldingArchetype>(() =>
+    archetypeForClass(this.assetClass()),
+  );
+
+  /** Expose enum to the template's `@switch`. */
+  public readonly Archetype = AddHoldingArchetype;
+
+  /** Latest state from the active archetype — drives Save button + dispatch. */
+  public readonly archetypeState = signal<ArchetypeState>({
+    valid: false,
+    submission: null,
+  });
+
+  public readonly archetypeCanSave = computed<boolean>(() =>
+    this.archetypeState().valid,
+  );
+
+  public onArchetypeStateChange(state: ArchetypeState): void {
+    this.archetypeState.set(state);
+  }
 
   /**
    * Seed list of accounts. Account CRUD UI is out of scope for this PR
@@ -313,110 +339,63 @@ export class AddHoldingComponent implements OnInit {
     if (!this.form || !this.form.valid) {
       return false;
     }
-    // For Add mode the user must have an instrument selected (either
-    // existing or freshly created inline). In Edit mode the instrument
-    // came from the route and is fixed, so we skip this check.
-    if (!this.isEditMode() && this.selectedInstrument() === null) {
-      return false;
-    }
+    // In Add mode `canSave()` is not consulted any more — Save button is
+    // gated by {@link archetypeCanSave} (driven by the active archetype's
+    // (stateChange) event). This guard remains for edit-mode form validity.
     return true;
-  }
-
-  // ---- Autocomplete + create-custom flow ----
-
-  public onInstrumentSelected(inst: IInstrument | null): void {
-    this.selectedInstrument.set(inst);
-    if (inst) {
-      // Mirror into the form so the HoldingValidator.nonEmpty checks
-      // for symbol/name pass. Sync currency suggestion if the form's
-      // currency is still the default.
-      this.form.patchValue({
-        symbol: inst.symbol,
-        name: inst.name,
-      });
-      if (!this.form.get('currency')?.dirty) {
-        this.form.patchValue({ currency: inst.currency });
-      }
-    } else {
-      this.form.patchValue({ symbol: '', name: '' });
-    }
-  }
-
-  public onCreateCustomRequested(symbolGuess: string): void {
-    this.inlinePrefillSymbol.set(symbolGuess);
-    this.showCreateInline.set(true);
-  }
-
-  public onInstrumentCreated(payload: { instrument: IInstrument }): void {
-    this.showCreateInline.set(false);
-    this.onInstrumentSelected(payload.instrument);
-  }
-
-  public onInstrumentCreateCancelled(): void {
-    this.showCreateInline.set(false);
   }
 
   // ---- Actions ----
 
   public onSave(): void {
-    if (!this.form.valid) {
-      this.form.markAllAsTouched();
-      return;
-    }
-
     if (this.isEditMode()) {
+      if (!this.form.valid) {
+        this.form.markAllAsTouched();
+        return;
+      }
       this.saveEdit();
     } else {
-      this.saveAdd();
+      this.onSaveArchetype();
     }
   }
 
-  private saveAdd(): void {
-    const v = this.form.value as {
-      assetClass: AssetClass;
-      symbol: string;
-      name: string;
-      quantity: number;
-      buyPrice: number;
-      currency: string;
-      accountId: string;
-      tagIds: string[];
-    };
-
-    const account = this.accounts.find((a) => a.id === v.accountId)!;
-
-    // The autocomplete / inline-create flow guarantees a selected
-    // instrument by the time canSave() returns true. We use the
-    // pre-resolved reference instead of getOrCreate to avoid an
-    // accidental second instrument being created if the user typed
-    // a slightly different symbol after picking.
-    const instrument = this.selectedInstrument();
-    if (!instrument) {
-      // Shouldn't happen — canSave() guards this. Defensive return.
+  /**
+   * Add-mode save: pulls the latest {@link ArchetypeSubmission} from the
+   * active archetype, wraps it into a full {@link IHolding} (id +
+   * timestamps), and dispatches to the holdings store.
+   */
+  public onSaveArchetype(): void {
+    const sub = this.archetypeState().submission;
+    if (!sub) {
       return;
     }
-
-    const now = new Date().toISOString();
-    const holding: IHolding = {
-      id: uuid(),
-      instrumentId: instrument.id,
-      accountId: account.id,
-      accountName: account.name,
-      accountKind: account.kind,
-      quantity: Number(v.quantity),
-      averageBuyPrice: Number(v.buyPrice),
-      currency: v.currency,
-      tagIds: v.tagIds ?? [],
-      createdAt: now,
-      updatedAt: now,
-    };
-
+    const holding: IHolding = this.toHolding(sub);
     this.holdings.addHolding(holding);
-    this.snackBar.open(`${instrument.symbol} added`, 'Dismiss', {
+    this.snackBar.open(`${sub.instrument.symbol} added`, 'Dismiss', {
       duration: 3000,
     });
     this.router.navigate(['/savings']);
   }
+
+  private toHolding(sub: ArchetypeSubmission): IHolding {
+    const now = new Date().toISOString();
+    return {
+      id: uuid(),
+      instrumentId: sub.instrument.id,
+      accountId: sub.accountId,
+      accountName: sub.accountName,
+      accountKind: sub.accountKind,
+      quantity: sub.quantity,
+      averageBuyPrice: sub.averageBuyPrice,
+      currency: sub.currency,
+      tagIds: sub.tagIds,
+      createdAt: now,
+      updatedAt: now,
+      ...(sub.lockMeta ? { lockMeta: sub.lockMeta } : {}),
+    };
+  }
+
+  // Add-mode save lives in `onSaveArchetype` above — archetype-driven.
 
   /**
    * Edit / top-up save. Distinguishes between:
