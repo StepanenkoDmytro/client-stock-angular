@@ -94,7 +94,9 @@
 
             <div class="savings__class-cards">
               @for (p of group.visiblePositions; track p.instrument.id) {
-                <pgz-position-card [position]="p" variant="subcard"></pgz-position-card>
+                <pgz-position-card [position]="p"
+                                   variant="subcard"
+                                   [expandable]="false"></pgz-position-card>
               }
 
               @if (group.hiddenPositionCount > 0) {

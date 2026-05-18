@@ -135,8 +135,11 @@
 
   &__class-panel {
     margin-bottom: 10px;
-    // Override global `background: inherit !important` from styles.scss
-    // for non-elevation mat-expansion-panels.
+    // Class panel is a *real* card (white + shadow). Position subcards
+    // inside switch to the cream sub-surface for contrast — see
+    // `pc--subcard` in position-card.component.scss. Override global
+    // `background: inherit !important` from styles.scss for
+    // non-elevation mat-expansion-panels.
     background: var(--pgz-card-bg) !important;
     border: 0.5px solid var(--pgz-card-border);
     border-radius: 14px !important;
@@ -176,6 +179,10 @@
     min-width: 0;
   }
 
+  // We bump above the SVG's 14/14/r=5 spec because at native mobile size
+  // the design pill reads as too thin against the surrounding KPI tiles
+  // and summary card (user feedback "сплюснуті"). Numbers chosen to
+  // match the visual weight of `portfolio-summary` / kpi-row values.
   &__class-dot {
     width: 14px;
     height: 14px;
@@ -184,7 +191,7 @@
   }
 
   &__class-name {
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 500;
     color: var(--pgz-text-primary);
     white-space: nowrap;
@@ -203,7 +210,7 @@
   }
 
   &__class-value {
-    font-size: 17px;
+    font-size: 18px;
     font-weight: 500;
     color: var(--pgz-text-primary);
   }

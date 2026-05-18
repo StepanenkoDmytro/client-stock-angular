@@ -8,16 +8,6 @@
   }
 
   <section class="hl__body">
-    <div class="hl__actions">
-      <button mat-stroked-button
-              class="hl__reset-btn"
-              type="button"
-              (click)="resetDemo()">
-        <mat-icon>refresh</mat-icon>
-        Reset demo data
-      </button>
-    </div>
-
     @if (totalCount() === 0) {
       <p class="hl__empty">
         No positions yet. Press <strong>Reset demo data</strong> above to

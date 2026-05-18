@@ -63,6 +63,25 @@ export class PositionCardComponent {
 
   @Input() public variant: 'card' | 'subcard' = 'card';
 
+  /**
+   * Whether the user can expand a multi-holding Position into per-Account
+   * rows. Default `true` — needed in Holdings flat view where the card
+   * stands alone. We turn it OFF in Classes view because the class
+   * accordion already supplies a layer of expand/collapse navigation;
+   * adding a second one inside each position would be one click too many
+   * for the same information density. In Classes view the user sees the
+   * collapsed Position with its subline ("0.32 BTC across 3 locations")
+   * and drills into per-Account detail by switching to Holdings view.
+   */
+  @Input()
+  public set expandable(v: boolean) {
+    this._expandable.set(v);
+  }
+  public get expandable(): boolean {
+    return this._expandable();
+  }
+  private readonly _expandable = signal(true);
+
   // ---- Local state ----
 
   private readonly _expanded = signal(false);
@@ -72,6 +91,12 @@ export class PositionCardComponent {
 
   public readonly isMulti = computed<boolean>(() => {
     return (this._position().holdings ?? []).length > 1;
+  });
+
+  /** Whether the user can actually trigger an expand. Drives the chevron
+   *  visibility and `toggle()` behaviour. */
+  public readonly canExpand = computed<boolean>(() => {
+    return this.isMulti() && this._expandable();
   });
 
   public readonly tagDots = computed<ITag[]>(() => {
@@ -103,10 +128,49 @@ export class PositionCardComponent {
     return singleHoldingSubline(pos);
   });
 
+  /**
+   * Position's lifetime period — formatted as "today" / "3d" / "5m" /
+   * "2y 4m" based on the *oldest* holding inside the Position. We pick
+   * oldest (not newest) because the user's intuition of "how long I've
+   * held this" is anchored to when they first opened the position, not
+   * when they last topped it up.
+   */
+  public readonly periodLabel = computed<string>(() => {
+    const holdings = this._position().holdings ?? [];
+    if (holdings.length === 0) {
+      return '';
+    }
+    const oldestMs = holdings.reduce((min, h) => {
+      const t = Date.parse(h.openedAt ?? h.createdAt);
+      return Number.isFinite(t) && t < min ? t : min;
+    }, Date.now());
+    const days = Math.floor(
+      (Date.now() - oldestMs) / (1000 * 60 * 60 * 24),
+    );
+    if (days < 1) {
+      return 'today';
+    }
+    if (days < 30) {
+      return `${days}d`;
+    }
+    const months = Math.floor(days / 30);
+    if (months < 12) {
+      return `${months}m`;
+    }
+    const years = Math.floor(months / 12);
+    const rem = months % 12;
+    return rem > 0 ? `${years}y ${rem}m` : `${years}y`;
+  });
+
+  /** Sign character used in the lifetime row (matches HoldingCard). */
+  public pnlSign(): string {
+    return this._position().paperPnL >= 0 ? '+' : '−';
+  }
+
   // ---- Actions ----
 
   public toggle(): void {
-    if (this.isMulti()) {
+    if (this.canExpand()) {
       this._expanded.update((v) => !v);
     }
   }

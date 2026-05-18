@@ -3,8 +3,8 @@
      [class.pc--expanded]="expanded()">
   <button type="button"
           class="pc__head"
-          [class.pc__head--interactive]="isMulti()"
-          [attr.aria-expanded]="isMulti() ? expanded() : null"
+          [class.pc__head--interactive]="canExpand()"
+          [attr.aria-expanded]="canExpand() ? expanded() : null"
           (click)="toggle()">
     <span class="pc__symbol">{{ position.instrument.symbol }}</span>
 
@@ -18,7 +18,7 @@
 
     <span class="pc__value">${{ formatNumber(position.totalValue) }}</span>
 
-    @if (isMulti()) {
+    @if (canExpand()) {
       <span class="pc__chevron"
             [class.pc__chevron--open]="expanded()"
             aria-hidden="true">▾</span>
@@ -27,8 +27,25 @@
 
   <p class="pc__subline">{{ subline() }}</p>
 
-  @if (isMulti() && expanded()) {
-    <hr class="pc__divider" />
+  <hr class="pc__divider" />
+
+  <div class="pc__lifetime">
+    @if (position.totalCostBasis > 0) {
+      <span class="pc__pnl"
+            [class.positive]="position.paperPnL > 0"
+            [class.negative]="position.paperPnL < 0">
+        {{ pnlSign() }}${{ formatNumber(abs(position.paperPnL)) }}
+        ({{ pnlSign() }}{{ formatPercent(abs(position.paperPnLPct * 100), 1) }})
+      </span>
+    } @else {
+      <span class="pc__pnl pc__pnl--muted">—</span>
+    }
+    <span class="pc__period">lifetime · {{ periodLabel() }}</span>
+    <span class="pc__income">div —</span>
+  </div>
+
+  @if (canExpand() && expanded()) {
+    <hr class="pc__divider pc__divider--breakdown" />
     <div class="pc__breakdown">
       @for (h of position.holdings; track h.id; let i = $index) {
         <pgz-position-row [holding]="h"
