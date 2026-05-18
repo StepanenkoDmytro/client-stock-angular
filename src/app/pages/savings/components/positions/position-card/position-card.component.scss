@@ -53,6 +53,27 @@
   background: var(--pgz-card-bg-sub);
   border-color: var(--pgz-card-border);
   box-shadow: none;
+  // Subcard sits inside an already-elevated accordion panel — tighten
+  // padding so vertical rhythm reads as "row" rather than "duplicated card".
+  padding: 12px 14px;
+}
+
+// Real-estate compact variant: no row-3 (no PnL, no period, no income).
+// Card collapses to header + subline + optional badge.
+.pc--compact {
+  padding-bottom: 14px;
+}
+
+// Class indicator dot — first item on row 1, before symbol. Drives the
+// "what kind of asset" mental anchor used in both Classes accordion
+// headers and Holdings flat list. Colour comes from `assetClassBadgeColor`.
+.pc__class-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.08);
 }
 
 // ---- Header row (button-form so a single click on the whole bar
@@ -103,16 +124,36 @@
   box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.06);
 }
 
+// Value stack — vertical (value over second-line). Sits at the right edge
+// of row 1 via `margin-left: auto`.
+.pc__value-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-left: auto;
+  min-width: 0;
+}
+
 // Value — 19px matches the visual weight of the kpi-row value (18px)
 // and stays readable next to the bumped symbol on the same row.
 .pc__value {
-  margin-left: auto;
-  font-size: 19px;
+  font-size: 18px;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
   color: var(--pgz-text-primary);
   border-radius: 4px;
   padding: 0 2px;
+  line-height: 1.2;
+}
+
+// Second line under the value — "{qty} sh × $price" / "≈ ${amount}" /
+// "matures {Mon YYYY}". Composed by `card-display.helper.ts`.
+.pc__value-second {
+  margin-top: 2px;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: var(--pgz-text-secondary);
+  white-space: nowrap;
 }
 
 // Flash hint set by LivePriceService when a new poll brings a different
@@ -144,12 +185,18 @@
   margin-bottom: 6px;
 }
 
+// Material `expand_more` icon — sized 18×18 to match the design's 12×6
+// chevron while keeping the font-icon (proper accessibility, theme-aware
+// stroke). Rotates 180° on expand to become `expand_less`.
 .pc__chevron {
   margin-left: 6px;
-  font-size: 14px;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
   color: var(--pgz-text-secondary);
   transition: transform 0.15s ease;
-  display: inline-block;
+  flex-shrink: 0;
 }
 
 .pc__chevron--open {

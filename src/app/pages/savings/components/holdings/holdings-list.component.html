@@ -48,7 +48,9 @@
                 (click)="openFilterSheet()">
           <mat-icon class="hl__filters-icon">tune</mat-icon>
           <span class="hl__filters-label">Filters</span>
-          <span class="hl__filters-pill">{{ selectedTagIds().size }}</span>
+          @if (selectedTagIds().size > 0) {
+            <span class="hl__filters-pill">{{ selectedTagIds().size }}</span>
+          }
         </button>
 
         <button type="button"
@@ -84,7 +86,7 @@
         } @else {
           <span class="hl__result-text">
             All {{ totalCount() }} position{{ totalCount() === 1 ? '' : 's' }} ·
-            sorted by {{ sortLabel().toLowerCase() }}
+            sorted by {{ sortLabelShort() }}
           </span>
         }
       </div>

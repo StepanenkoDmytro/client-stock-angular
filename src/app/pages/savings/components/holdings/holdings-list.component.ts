@@ -212,9 +212,20 @@ export class HoldingsListComponent implements OnInit {
     () => this.filteredPositions().length,
   );
 
+  /** Full label for the Sort dropdown button (e.g. "By value"). */
   public readonly sortLabel = computed<string>(() => {
     const opt = SORT_OPTIONS.find((o) => o.key === this.sortBy());
     return opt?.label ?? 'Sort';
+  });
+
+  /**
+   * "sortLabel" with the leading "By " stripped — used by the result-row
+   * line `... sorted by {sortLabelShort}` to avoid the "sorted by by value"
+   * duplication (PR5c §5).
+   */
+  public readonly sortLabelShort = computed<string>(() => {
+    const label = this.sortLabel();
+    return label.replace(/^by\s+/i, '').toLowerCase();
   });
 
   /**

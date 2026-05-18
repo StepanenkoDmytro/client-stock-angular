@@ -27,9 +27,10 @@ import { ButtonToggleComponent } from '../../core/UI/components/button-toggle/bu
 import { SegmentedToggleComponent } from '../../core/UI/components/segmented-toggle/segmented-toggle.component';
 import { SelectMarketDialogComponent } from './components/select-market-dialog/select-market-dialog.component';
 import { HoldingsListComponent } from './components/holdings/holdings-list.component';
-import { KpiRowComponent } from './components/holdings/kpi-row/kpi-row.component';
+// PR5c: kpi-row and wealth-chart-mini imports removed — they remain in the
+// codebase under `components/holdings/{kpi-row,wealth-chart-mini}/` for the
+// future /analytics screen (M5+) but are no longer rendered on /savings.
 import { PortfolioSummaryComponent } from './components/holdings/portfolio-summary/portfolio-summary.component';
-import { WealthChartMiniComponent } from './components/holdings/wealth-chart-mini/wealth-chart-mini.component';
 import { PositionCardComponent } from './components/positions/position-card/position-card.component';
 import { HoldingService } from './service/holding.service';
 import { InstrumentService } from './service/instrument.service';
@@ -82,8 +83,6 @@ const UI_COMPONENTS = [
   PositionCardComponent,
   HoldingsListComponent,
   PortfolioSummaryComponent,
-  KpiRowComponent,
-  WealthChartMiniComponent,
 ];
 
 const MATERIAL_MODULES = [
@@ -145,37 +144,6 @@ export class SavingsComponent implements OnInit {
    * in a follow-up (see portfolio-screen-plan §5 Open Question 2).
    */
   public readonly hideBalances = signal(false);
-
-  /**
-   * Does the portfolio contain any instrument that will eventually produce
-   * income or realised-gain data? Drives whether to render the full 4-card
-   * KPI row or a consolidated "metrics coming soon" placeholder.
-   *
-   * UX decision (2026-05-17): showing 4 empty stub cards forever to a
-   * crypto-only or cash-only user is dishonest. Instead we detect that
-   * the portfolio has dividend-yielding instruments (the only source of
-   * income data we'll ever have pre-M5.5 trade journal) and show the
-   * KPI row only when the user actually has assets relevant to those
-   * metrics. Otherwise: a single grouped placeholder.
-   */
-  public readonly hasInvestorMetrics = computed<boolean>(() => {
-    const instrMap = this.instruments.instruments();
-    const holdings = this.rawHoldings();
-    for (const h of holdings) {
-      const inst = instrMap.get(h.instrumentId);
-      if (!inst) {
-        continue;
-      }
-      const meta = inst.metadata;
-      // Right now "investor metrics" = anything related to dividend payouts.
-      // When realised-gains tracking lands (M5.5), expand this to also
-      // include any holding with a closed-position history.
-      if ('dividendYield' in meta && meta.dividendYield && meta.dividendYield > 0) {
-        return true;
-      }
-    }
-    return false;
-  });
 
   /**
    * When the user clicks "Show all N" on a class accordion, we set this

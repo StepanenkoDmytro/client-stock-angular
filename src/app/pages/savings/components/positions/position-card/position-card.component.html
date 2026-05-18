@@ -1,6 +1,8 @@
 <div class="pc"
      [class.pc--subcard]="variant === 'subcard'"
-     [class.pc--expanded]="expanded()">
+     [class.pc--expanded]="expanded()"
+     [class.pc--compact]="hideRowThree()"
+     [style.min-height.px]="cardHeight()">
   <div class="pc__head"
        [class.pc__head--interactive]="canExpand()"
        [attr.role]="canExpand() ? 'button' : null"
@@ -9,27 +11,38 @@
        (click)="toggle()"
        (keydown.enter)="toggle()"
        (keydown.space)="toggle(); $event.preventDefault()">
+    <span class="pc__class-dot"
+          [style.background-color]="classDotColor()"
+          [attr.aria-label]="assetClassLabel(position.instrument.assetClass)"></span>
+
     <span class="pc__symbol">{{ position.instrument.symbol }}</span>
 
-    <span class="pc__tag-dots">
-      @for (t of tagDots(); track t.id) {
-        <span class="pc__tag-dot"
-              [style.background-color]="t.color"
-              [title]="t.name"></span>
-      }
-    </span>
-
-    <span class="pc__value"
-          [class.pc__value--flash-up]="flashDirection() === 'up'"
-          [class.pc__value--flash-down]="flashDirection() === 'down'">${{ formatNumber(position.totalValue) }}</span>
-
-    @if (canExpand()) {
-      <span class="pc__chevron"
-            [class.pc__chevron--open]="expanded()"
-            aria-hidden="true">▾</span>
+    @if (showTags) {
+      <span class="pc__tag-dots">
+        @for (t of tagDots(); track t.id) {
+          <span class="pc__tag-dot"
+                [style.background-color]="t.color"
+                [title]="t.name"></span>
+        }
+      </span>
     }
 
-    @if (hasSingleHoldingActions()) {
+    <div class="pc__value-stack">
+      <span class="pc__value"
+            [class.pc__value--flash-up]="flashDirection() === 'up'"
+            [class.pc__value--flash-down]="flashDirection() === 'down'">${{ formatNumber(position.totalValue) }}</span>
+      @if (secondLine()) {
+        <span class="pc__value-second">{{ secondLine() }}</span>
+      }
+    </div>
+
+    @if (canExpand()) {
+      <mat-icon class="pc__chevron"
+                [class.pc__chevron--open]="expanded()"
+                aria-hidden="true">expand_more</mat-icon>
+    }
+
+    @if (showActions && hasSingleHoldingActions()) {
       <button mat-icon-button
               type="button"
               class="pc__more"
@@ -53,27 +66,31 @@
 
   <p class="pc__subline">{{ subline() }}</p>
 
-  @if (exchangeCode()) {
+  @if (showMarketStatus && exchangeCode()) {
     <pgz-market-status-badge class="pc__market"
                              [exchangeCode]="exchangeCode()!"></pgz-market-status-badge>
   }
 
-  <hr class="pc__divider" />
+  @if (!hideRowThree()) {
+    <hr class="pc__divider" />
 
-  <div class="pc__lifetime">
-    @if (position.totalCostBasis > 0) {
-      <span class="pc__pnl"
-            [class.positive]="position.paperPnL > 0"
-            [class.negative]="position.paperPnL < 0">
-        {{ pnlSign() }}${{ formatNumber(abs(position.paperPnL)) }}
-        ({{ pnlSign() }}{{ formatPercent(abs(position.paperPnLPct * 100), 1) }})
-      </span>
-    } @else {
-      <span class="pc__pnl pc__pnl--muted">—</span>
-    }
-    <span class="pc__period">lifetime · {{ periodLabel() }}</span>
-    <span class="pc__income">div —</span>
-  </div>
+    <div class="pc__lifetime">
+      @if (position.totalCostBasis > 0) {
+        <span class="pc__pnl"
+              [class.positive]="position.paperPnL > 0"
+              [class.negative]="position.paperPnL < 0">
+          {{ pnlSign() }}${{ formatNumber(abs(position.paperPnL)) }}
+          ({{ pnlSign() }}{{ formatPercent(abs(position.paperPnLPct * 100), 1) }})
+        </span>
+      } @else {
+        <span class="pc__pnl pc__pnl--muted">—</span>
+      }
+      <span class="pc__period">{{ periodLabel() }}</span>
+      @if (incomeLine().show) {
+        <span class="pc__income">{{ incomeLine().label }}</span>
+      }
+    </div>
+  }
 
   @if (canExpand() && expanded()) {
     <hr class="pc__divider pc__divider--breakdown" />

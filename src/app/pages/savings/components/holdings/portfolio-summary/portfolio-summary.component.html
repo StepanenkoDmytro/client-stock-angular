@@ -25,6 +25,8 @@
       }
     </div>
 
+    <!-- PR5c: % column removed — lifetime% lives only on the class
+         accordion header now. Legend keeps the per-class dot + name + $. -->
     <div class="summary__legend">
       @for (slice of summary().breakdown; track slice.assetClass) {
         <div class="summary__legend-row">
@@ -32,32 +34,8 @@
                 [style.background-color]="slice.color"></span>
           <span class="summary__legend-name">{{ slice.label }}</span>
           <span class="summary__legend-value">${{ formatNumber(slice.value) }}</span>
-          @if (slice.costBasis > 0) {
-            <span class="summary__legend-pnl"
-                  [class.positive]="slice.pnl > 0"
-                  [class.negative]="slice.pnl < 0">
-              @if (slice.pnl === 0) {
-                —
-              } @else {
-                {{ slice.pnl >= 0 ? '+' : '−' }}{{ formatPercent(abs(slice.pnlPercent), 0) }}
-              }
-            </span>
-          } @else {
-            <span class="summary__legend-pnl summary__legend-pnl--muted">—</span>
-          }
         </div>
       }
     </div>
   }
-
-  <!-- Lifetime tier: stub until M5.5 CashFlow integration lands -->
-  <hr class="summary__divider" />
-
-  <header class="summary__lifetime-header">
-    <span class="summary__caption">LIFETIME RETURN</span>
-  </header>
-  <div class="summary__lifetime-row">
-    <span class="summary__lifetime-value summary__lifetime-value--stub">$0</span>
-    <span class="summary__lifetime-note">Add deposits to see lifetime metrics</span>
-  </div>
 </aside>

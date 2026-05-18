@@ -15,15 +15,16 @@ import { IPosition } from '../../../../../domain/position.domain';
 import { PriceDirection } from '../../../../../domain/price-quote.domain';
 import { ITag } from '../../../../../domain/tag.domain';
 import {
-  isCryptoMetadata,
-  isDepositMetadata,
-  isRealEstateMetadata,
-} from '../../../model/InstrumentMetadata';
+  rightColumnSecondLineFor,
+  sublineFor,
+} from '../../../model/card-display.helper';
 import { HoldingActionsService } from '../../../service/holding-actions.service';
+import { HoldingService } from '../../../service/holding.service';
 import { LivePriceService } from '../../../service/live-price.service';
 import { MarketStatusService } from '../../../service/market-status.service';
 import { MarketStatusBadgeComponent } from '../../market-status-badge/market-status-badge.component';
 import { PositionRowComponent } from '../position-row/position-row.component';
+import { IncomeLine, incomeLineFor } from './income-line.helper';
 
 /**
  * Aggregate card for one Instrument's holdings — a "Position" in
@@ -67,6 +68,7 @@ export class PositionCardComponent {
   private static readonly MAX_TAG_DOTS = 4;
 
   private readonly actions = inject(HoldingActionsService);
+  private readonly holdings = inject(HoldingService);
   private readonly livePrice = inject(LivePriceService);
 
   // ---- Inputs ----
@@ -101,6 +103,48 @@ export class PositionCardComponent {
   }
   private readonly _expandable = signal(true);
 
+  /**
+   * Render the row-1 tag dots? Off in the Classes accordion subcard variant
+   * (`savings.component.html` passes `false`) — tag filter context isn't
+   * relevant inside an already-grouped class panel.
+   */
+  @Input()
+  public set showTags(v: boolean) {
+    this._showTags.set(v);
+  }
+  public get showTags(): boolean {
+    return this._showTags();
+  }
+  private readonly _showTags = signal(true);
+
+  /**
+   * Render the ⋯ overflow menu (Edit / Delete)? Off in the subcard variant —
+   * edit/delete are reachable via the Holdings flat view's per-card menu
+   * instead, so the accordion stays visually quieter.
+   */
+  @Input()
+  public set showActions(v: boolean) {
+    this._showActions.set(v);
+  }
+  public get showActions(): boolean {
+    return this._showActions();
+  }
+  private readonly _showActions = signal(true);
+
+  /**
+   * Render the `pgz-market-status-badge`? Off in the subcard variant per
+   * PR5c §10 #8 — the accordion already groups by class, and a row of
+   * "Market open" badges inside one expanded panel adds noise.
+   */
+  @Input()
+  public set showMarketStatus(v: boolean) {
+    this._showMarketStatus.set(v);
+  }
+  public get showMarketStatus(): boolean {
+    return this._showMarketStatus();
+  }
+  private readonly _showMarketStatus = signal(true);
+
   // ---- Local state ----
 
   private readonly _expanded = signal(false);
@@ -123,28 +167,51 @@ export class PositionCardComponent {
     return tags.slice(0, PositionCardComponent.MAX_TAG_DOTS);
   });
 
+  /** Row-2 left subline. Delegates to {@link sublineFor} helper (PR5c §4). */
+  public readonly subline = computed<string>(() => sublineFor(this._position()));
+
   /**
-   * The single-line description under the symbol row.
+   * Right-column second line under the value cell — "{qty} sh × $price"
+   * for market-backed classes, "≈ ${amount}" for cash, maturity date for
+   * deposits, empty for real-estate / other.
    *
-   * Multi-holding: prefix with instrument name, suffix with the total
-   * quantity in the canonical unit + "across N locations".
-   * Single-holding: defer to the per-class subline below.
+   * Price source: {@link HoldingService.getCurrentPrice}, which since
+   * PR-A4 delegates to {@link LivePriceService} (30s polling) with mock
+   * fallback. Recomputes on every live tick.
    */
-  public readonly subline = computed<string>(() => {
-    const pos = this._position();
-    if (!pos.instrument) {
-      return '';
-    }
-    if ((pos.holdings ?? []).length > 1) {
-      const unit = unitFor(pos.instrument.assetClass, pos.instrument.symbol);
-      const qty = formatQuantity(
-        pos.totalQuantity,
-        pos.instrument.assetClass,
-      );
-      const count = pos.holdings.length;
-      return `${pos.instrument.name} · ${qty} ${unit} across ${count} locations`;
-    }
-    return singleHoldingSubline(pos);
+  public readonly secondLine = computed<string>(() =>
+    rightColumnSecondLineFor(this._position(), (symbol) =>
+      this.holdings.getCurrentPrice(symbol),
+    ),
+  );
+
+  /**
+   * Row-3 right slot ("3.0% yield" / "5% APR · 30-day lock" / etc.).
+   * See {@link incomeLineFor} for the per-class policy.
+   */
+  public readonly incomeLine = computed<IncomeLine>(() =>
+    incomeLineFor(this._position()),
+  );
+
+  /**
+   * Card height policy (PR5c §4): real-estate is compact 72h (no row 3),
+   * everything else is the standard 88h with row 3 visible.
+   */
+  public readonly cardHeight = computed<88 | 72>(() => {
+    const ac = this._position().instrument?.assetClass;
+    return ac === AssetClass.REAL_ESTATE ? 72 : 88;
+  });
+
+  /** Skip the PnL + period + income row for compact-height classes. */
+  public readonly hideRowThree = computed<boolean>(() => {
+    const ac = this._position().instrument?.assetClass;
+    return ac === AssetClass.REAL_ESTATE;
+  });
+
+  /** AssetClass colour for the leading class-dot. */
+  public readonly classDotColor = computed<string>(() => {
+    const ac = this._position().instrument?.assetClass ?? AssetClass.OTHER;
+    return this.assetClassBadgeColor(ac);
   });
 
   /**
@@ -271,82 +338,56 @@ export class PositionCardComponent {
   public abs(n: number): number {
     return Math.abs(n);
   }
-}
 
-// ---- Pure helpers — module scope ----
+  /** Human-readable class label — drives the class-dot `aria-label`. */
+  public assetClassLabel(ac: AssetClass): string {
+    switch (ac) {
+      case AssetClass.STOCK:
+        return 'Stock';
+      case AssetClass.ETF:
+        return 'ETF';
+      case AssetClass.TOKENIZED_STOCK:
+        return 'Tokenized stock';
+      case AssetClass.CRYPTO:
+        return 'Crypto';
+      case AssetClass.CASH:
+        return 'Cash';
+      case AssetClass.DEPOSIT:
+        return 'Deposit';
+      case AssetClass.REAL_ESTATE:
+        return 'Real estate';
+      case AssetClass.OTHER:
+        return 'Other';
+    }
+  }
 
-function unitFor(cls: AssetClass, symbol: string): string {
-  switch (cls) {
-    case AssetClass.STOCK:
-    case AssetClass.ETF:
-    case AssetClass.TOKENIZED_STOCK:
-      return 'sh';
-    case AssetClass.CRYPTO:
-      return symbol;
-    case AssetClass.CASH:
-      return symbol;
-    case AssetClass.DEPOSIT:
-      return symbol;
-    case AssetClass.REAL_ESTATE:
-      return 'units';
-    case AssetClass.OTHER:
-      return 'units';
+  /**
+   * Theme-aware AssetClass colour (resolves to a CSS custom property).
+   * Mirrors the same mapping used by `savings.component` and
+   * `holdings-list.component` so dots stay consistent across screens.
+   */
+  public assetClassBadgeColor(ac: AssetClass): string {
+    switch (ac) {
+      case AssetClass.STOCK:
+        return 'var(--asset-stock)';
+      case AssetClass.ETF:
+        return 'var(--asset-etf, var(--asset-stock))';
+      case AssetClass.TOKENIZED_STOCK:
+        return 'var(--asset-tokenized-stock)';
+      case AssetClass.CRYPTO:
+        return 'var(--asset-crypto)';
+      case AssetClass.CASH:
+        return 'var(--asset-cash)';
+      case AssetClass.DEPOSIT:
+        return 'var(--asset-deposit)';
+      case AssetClass.REAL_ESTATE:
+        return 'var(--asset-real-estate)';
+      case AssetClass.OTHER:
+        return 'var(--asset-other)';
+    }
   }
 }
 
-function formatQuantity(qty: number, cls: AssetClass): string {
-  if (cls === AssetClass.CRYPTO) {
-    return qty.toLocaleString('en-US', { maximumFractionDigits: 8 });
-  }
-  if (Number.isInteger(qty)) {
-    return qty.toLocaleString('en-US');
-  }
-  return qty.toLocaleString('en-US', { maximumFractionDigits: 4 });
-}
-
-/**
- * Per-class one-liner for a single-holding Position. Same shape as
- * `HoldingCardComponent.subline` so the two cards read consistently
- * when the user mixes views. We can't share the code yet — the
- * holding-card pulls live price from HoldingService inline, which we
- * don't want in PositionCard (the parent already gave us the value).
- */
-function singleHoldingSubline(pos: IPosition): string {
-  const inst = pos.instrument;
-  const meta = inst.metadata;
-  switch (inst.assetClass) {
-    case AssetClass.STOCK:
-    case AssetClass.ETF:
-    case AssetClass.TOKENIZED_STOCK:
-      return `${inst.name} · ${formatQuantity(pos.totalQuantity, inst.assetClass)} sh`;
-    case AssetClass.CRYPTO:
-      if (isCryptoMetadata(meta)) {
-        const avg =
-          pos.totalQuantity > 0 ? pos.totalValue / pos.totalQuantity : 0;
-        const avgLabel = avg.toLocaleString('en-US', {
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 0,
-        });
-        return `${formatQuantity(pos.totalQuantity, inst.assetClass)} ${inst.symbol} × $${avgLabel}`;
-      }
-      return inst.name;
-    case AssetClass.CASH:
-      return inst.name;
-    case AssetClass.DEPOSIT:
-      if (isDepositMetadata(meta)) {
-        const rate = meta.interestRate.toLocaleString('en-US', {
-          minimumFractionDigits: 1,
-          maximumFractionDigits: 1,
-        });
-        return `${inst.name} · ${rate}% APY`;
-      }
-      return inst.name;
-    case AssetClass.REAL_ESTATE:
-      if (isRealEstateMetadata(meta) && meta.country) {
-        return `${inst.name} · ${meta.country}`;
-      }
-      return inst.name;
-    case AssetClass.OTHER:
-      return `${inst.name} · Manual entry`;
-  }
-}
+// All subline / second-line / income-line logic moved to pure helpers in
+// `pages/savings/model/card-display.helper.ts` and
+// `./income-line.helper.ts` (PR5c).

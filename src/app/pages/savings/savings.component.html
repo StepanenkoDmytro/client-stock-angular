@@ -28,35 +28,12 @@
       <pgz-portfolio-summary></pgz-portfolio-summary>
     </div>
 
-    <!-- Investor KPI strip + wealth-over-time mini chart. Both stubs until
-         M5.5 (CashFlow journal) lands. Rendered conditionally: full 4-card
-         row when the portfolio actually has dividend-paying assets;
-         consolidated "investor metrics" placeholder otherwise — so users
-         with cash-only or crypto-only portfolios don't stare at 4 empty
-         stub cards forever (UX decision 2026-05-17). -->
-    @if (hasInvestorMetrics()) {
-      <div class="savings__kpi-wrap">
-        <pgz-kpi-row></pgz-kpi-row>
-      </div>
-    } @else {
-      <div class="savings__kpi-wrap">
-        <aside class="savings__metrics-placeholder">
-          <span class="savings__metrics-caption">INVESTOR METRICS</span>
-          <p class="savings__metrics-body">
-            Income, realized gains, forward yield and top dividend source
-            will appear here when you add dividend-paying assets or close
-            positions.
-            <span class="savings__metrics-milestone">Available after M5.5</span>
-          </p>
-        </aside>
-      </div>
-    }
+    <!-- PR5c: KPI row, wealth chart mini and investor-metrics placeholder
+         all moved out of /savings. They live in the codebase (under
+         components/holdings/{kpi-row,wealth-chart-mini}/) and will be
+         used on the future /analytics screen in M5+. -->
 
-    <div class="savings__wealth-wrap">
-      <pgz-wealth-chart-mini></pgz-wealth-chart-mini>
-    </div>
-
-    <p class="savings__class-caption">BY ASSET CLASS</p>
+    <p class="savings__class-caption">BY ASSET CLASS · LIFETIME</p>
 
     @if (classGroups().length === 0) {
       <p class="savings__empty">
@@ -96,12 +73,15 @@
               @for (p of group.visiblePositions; track p.instrument.id) {
                 <pgz-position-card [position]="p"
                                    variant="subcard"
-                                   [expandable]="false"></pgz-position-card>
+                                   [expandable]="false"
+                                   [showTags]="false"
+                                   [showActions]="false"
+                                   [showMarketStatus]="false"></pgz-position-card>
               }
 
               @if (group.hiddenPositionCount > 0) {
                 <button type="button"
-                        class="savings__class-more"
+                        class="savings__class-more savings__class-more--link"
                         (click)="goToHoldings(group.assetClass)">
                   Show all {{ group.positions.length }} {{ group.label }}
                   position{{ group.positions.length === 1 ? '' : 's' }} →
