@@ -1,0 +1,36 @@
+<section class="page grid">
+  <div (click)="goBack()">
+    <pgz-prev-route>
+      <p>Add saving</p>
+    </pgz-prev-route>
+  </div>
+
+  <p class="grid__caption">WHAT KIND OF ASSET?</p>
+
+  <div class="grid__cards">
+    @for (c of cards; track c.assetClass) {
+      <button type="button"
+              class="grid__card"
+              [style.--card-tint]="'var(' + c.tintVar + ')'"
+              (click)="onPick(c.assetClass)">
+        <mat-icon class="grid__card-icon">{{ c.icon }}</mat-icon>
+        <span class="grid__card-label">{{ c.label }}</span>
+        <span class="grid__card-sub">{{ c.subtitle }}</span>
+      </button>
+    }
+  </div>
+
+  <p class="grid__future-caption">FUTURE CLASSES</p>
+
+  <div class="grid__cards grid__cards--future">
+    @for (f of future; track f.label) {
+      <button type="button"
+              class="grid__card grid__card--future"
+              (click)="onPickFuture(f.label)">
+        <mat-icon class="grid__card-icon">{{ f.icon }}</mat-icon>
+        <span class="grid__card-label">{{ f.label }}</span>
+        <span class="grid__card-sub">coming</span>
+      </button>
+    }
+  </div>
+</section>

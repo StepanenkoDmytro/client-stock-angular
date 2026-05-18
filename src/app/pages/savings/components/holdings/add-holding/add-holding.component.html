@@ -6,14 +6,27 @@
   </div>
 
   <form class="ah__form" [formGroup]="form" (ngSubmit)="onSave()">
-    <mat-form-field appearance="outline" class="ah__field">
-      <mat-label>Asset class</mat-label>
-      <mat-select formControlName="assetClass">
-        @for (ac of assetClasses; track ac) {
-          <mat-option [value]="ac">{{ assetClassLabel(ac) }}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
+    @if (!isEditMode()) {
+      <!-- PR5b: AssetClass arrives from /savings/add-holding/:class. Chip
+           breadcrumb shows the picked class + a "change ▾" affordance back
+           to the class-grid picker; no inline dropdown. -->
+      <pgz-class-chip-breadcrumb
+        class="ah__breadcrumb"
+        [assetClass]="assetClass()"
+        (changeRequested)="onChangeClass()">
+      </pgz-class-chip-breadcrumb>
+    } @else {
+      <!-- Edit-mode: class is fixed for the lifetime of the edit; display
+           the disabled dropdown so the user sees what they're editing. -->
+      <mat-form-field appearance="outline" class="ah__field">
+        <mat-label>Asset class</mat-label>
+        <mat-select formControlName="assetClass">
+          @for (ac of assetClasses; track ac) {
+            <mat-option [value]="ac">{{ assetClassLabel(ac) }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
 
     @if (!isEditMode()) {
       <pgz-instrument-autocomplete

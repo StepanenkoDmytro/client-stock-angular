@@ -1,0 +1,103 @@
+:host {
+  display: block;
+}
+
+.grid {
+  padding: 0 16px 24px;
+}
+
+// Caption styling matches `.savings__class-caption` for visual continuity
+// across the Savings flow.
+.grid__caption,
+.grid__future-caption {
+  margin: 16px 0 12px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1.2px;
+  color: var(--pgz-text-secondary);
+}
+
+.grid__future-caption {
+  margin-top: 28px;
+}
+
+.grid__cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.grid__card {
+  --card-tint: var(--pgz-card-border);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  // ~120h gives room for icon + label + subtitle without crowding;
+  // matches mockup grid card height.
+  min-height: 110px;
+  padding: 14px;
+  background: var(--pgz-card-bg);
+  border: 0.5px solid var(--pgz-card-border);
+  border-radius: 14px;
+  color: var(--pgz-text-primary);
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--pgz-card-shadow);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.grid__card-icon {
+  // Soft-tint chip matching the AssetClass colour.
+  width: 36px;
+  height: 36px;
+  font-size: 22px;
+  line-height: 36px;
+  text-align: center;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--card-tint) 18%, transparent);
+  color: var(--card-tint);
+  margin-bottom: 6px;
+}
+
+.grid__card-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--pgz-text-primary);
+}
+
+.grid__card-sub {
+  font-size: 11px;
+  color: var(--pgz-text-secondary);
+}
+
+// Future placeholders — desaturated + dashed border to read as
+// "not yet available" without screaming.
+.grid__cards--future {
+  opacity: 0.55;
+}
+
+.grid__card--future {
+  border-style: dashed;
+  background: transparent;
+  cursor: default;
+
+  &:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .grid__card-icon {
+    background: var(--pgz-card-border);
+    color: var(--pgz-text-muted);
+  }
+}

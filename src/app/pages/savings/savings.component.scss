@@ -244,28 +244,27 @@
     padding: 4px 12px 14px;
   }
 
-  // "Show all N" dashed-outline accent link.
-  // Reference: design/savings/01-portfolio-dashboard-mobile.svg lines 189-192.
+  // "Show all N" — plain centered text link, no border.
+  // Reference: design/savings/02-portfolio-dashboard-mobile.svg line 124.
+  // Previously dashed-outlined which read like an "add new" placeholder
+  // (PR5c §10 #2).
 
   &__class-more {
     display: block;
     width: 100%;
-    padding: 4px 12px;
-    border: 0.5px dashed var(--pgz-card-border);
-    border-radius: 8px;
+    padding: 6px 12px 2px;
+    border: none;
     background: transparent;
-    color: var(--pgz-accent);
+    color: #185FA5;
     font-weight: 500;
     cursor: pointer;
     font-family: inherit;
     font-size: 11px;
-    line-height: 24px;
+    line-height: 16px;
     text-align: center;
-    transition: background-color 0.15s ease;
-    margin-top: 4px;
 
     &:hover {
-      background-color: rgba(24, 95, 165, 0.06);
+      text-decoration: underline;
     }
   }
 }

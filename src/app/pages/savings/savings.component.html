@@ -81,7 +81,7 @@
 
               @if (group.hiddenPositionCount > 0) {
                 <button type="button"
-                        class="savings__class-more savings__class-more--link"
+                        class="savings__class-more"
                         (click)="goToHoldings(group.assetClass)">
                   Show all {{ group.positions.length }} {{ group.label }}
                   position{{ group.positions.length === 1 ? '' : 's' }} →

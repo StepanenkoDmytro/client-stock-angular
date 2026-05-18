@@ -34,7 +34,17 @@ export const SAVINGS_ROUTES: Route[] = [
         loadComponent: () => import('./components/holdings/holdings-list.component').then(c => c.HoldingsListComponent),
     },
     {
+        // PR5b entry point: class-grid (6 active cards + future placeholders).
         path: 'add-holding',
+        loadComponent: () =>
+            import('./components/holdings/add-holding/add-holding-class-grid/add-holding-class-grid.component')
+                .then(c => c.AddHoldingClassGridComponent),
+    },
+    {
+        // PR5b form route. `:class` is a lowercase slug from ASSET_CLASS_SLUGS
+        // (e.g. `stock`, `real-estate`, `tokenized-stock`). AddHoldingComponent
+        // reads it and pre-fills the AssetClass control.
+        path: 'add-holding/:class',
         loadComponent: () => import('./components/holdings/add-holding/add-holding.component').then(c => c.AddHoldingComponent),
     },
     {

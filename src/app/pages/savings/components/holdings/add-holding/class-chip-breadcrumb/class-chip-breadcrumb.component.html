@@ -1,0 +1,10 @@
+<button type="button"
+        class="chip"
+        [style.--chip-tint]="'var(' + tintVar() + ')'"
+        (click)="onChange()">
+  <span class="chip__icon-wrap">
+    <mat-icon class="chip__icon">{{ icon() }}</mat-icon>
+  </span>
+  <span class="chip__label">{{ label() }}</span>
+  <span class="chip__change">change <mat-icon class="chip__caret">expand_more</mat-icon></span>
+</button>

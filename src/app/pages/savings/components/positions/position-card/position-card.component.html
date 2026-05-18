@@ -11,9 +11,15 @@
        (click)="toggle()"
        (keydown.enter)="toggle()"
        (keydown.space)="toggle(); $event.preventDefault()">
-    <span class="pc__class-dot"
-          [style.background-color]="classDotColor()"
-          [attr.aria-label]="assetClassLabel(position.instrument.assetClass)"></span>
+    <!-- Class dot only on full cards (Holdings flat view). Inside a Classes
+         accordion the class is implied by the parent panel header — see
+         design/savings/02-portfolio-dashboard-mobile.svg (sub-cards in the
+         Stock / Cash panels have no class dot). -->
+    @if (variant !== 'subcard') {
+      <span class="pc__class-dot"
+            [style.background-color]="classDotColor()"
+            [attr.aria-label]="assetClassLabel(position.instrument.assetClass)"></span>
+    }
 
     <span class="pc__symbol">{{ position.instrument.symbol }}</span>
 

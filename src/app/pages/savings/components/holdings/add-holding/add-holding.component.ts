@@ -40,6 +40,8 @@ import { CreateInstrumentInlineComponent } from '../create-instrument-inline/cre
 import { InstrumentAutocompleteComponent } from '../instrument-autocomplete/instrument-autocomplete.component';
 import { TagChipsComponent } from '../tag-chips/tag-chips.component';
 import { IInstrument } from '../../../../../domain/instrument.domain';
+import { assetClassFromSlug } from '../../../model/AddHoldingArchetype';
+import { ClassChipBreadcrumbComponent } from './class-chip-breadcrumb/class-chip-breadcrumb.component';
 
 interface AccountChoice {
   id: string;
@@ -78,6 +80,7 @@ interface AccountChoice {
     TagChipsComponent,
     InstrumentAutocompleteComponent,
     CreateInstrumentInlineComponent,
+    ClassChipBreadcrumbComponent,
   ],
   templateUrl: './add-holding.component.html',
   styleUrl: './add-holding.component.scss',
@@ -195,7 +198,35 @@ export class AddHoldingComponent implements OnInit {
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam) {
       this.bootstrapEditMode(idParam);
+      return;
     }
+
+    // PR5b: `/savings/add-holding/:class` — pre-fill AssetClass from the
+    // URL slug. Class is fixed for this form session; user "changes class"
+    // by going back to the class grid via the breadcrumb chip.
+    const classSlug = this.route.snapshot.paramMap.get('class');
+    if (classSlug) {
+      const ac = assetClassFromSlug(classSlug);
+      if (ac) {
+        this.assetClass.set(ac);
+        this.form.patchValue({ assetClass: ac });
+        // Quantity validator re-binds via the valueChanges subscription above.
+      } else {
+        // Unknown slug — bounce back to the picker rather than render a
+        // form in an undefined state.
+        this.router.navigate(['/savings/add-holding']);
+      }
+    }
+  }
+
+  /**
+   * Handler for the class-chip-breadcrumb's "change ▾" click — navigates
+   * back to the class-grid entry point. Form state is discarded; we don't
+   * confirm-prompt yet because the prevailing UX with the old dropdown
+   * also discarded on back-navigation, so this isn't a regression.
+   */
+  public onChangeClass(): void {
+    this.router.navigate(['/savings/add-holding']);
   }
 
   /**

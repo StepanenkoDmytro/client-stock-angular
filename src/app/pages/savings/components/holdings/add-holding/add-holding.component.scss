@@ -74,4 +74,11 @@
   &__save {
     flex: 1;
   }
+
+  // PR5b: class-chip breadcrumb spacing. Sits flush-left at the top of
+  // the form, with a small bottom margin to detach it from the next field.
+  &__breadcrumb {
+    align-self: flex-start;
+    margin: 0 0 14px;
+  }
 }
