@@ -38,6 +38,7 @@ import { LivePriceService } from './service/live-price.service';
 import { MarketStatusService } from './service/market-status.service';
 import { PositionsService } from './service/positions.service';
 import { TagsService } from './service/tags.service';
+import { UserPreferencesService } from './service/user-preferences.service';
 import { AddTriggerService } from '../../service/helpers/add-trigger.service';
 import { selectHoldingsList } from './store/holdings.selectors';
 import { selectTagsList } from './store/tags.selectors';
@@ -120,6 +121,7 @@ export class SavingsComponent implements OnInit {
   private readonly marketStatus = inject(MarketStatusService);
   private readonly positionsSvc = inject(PositionsService);
   private readonly tags = inject(TagsService);
+  private readonly userPrefs = inject(UserPreferencesService);
 
   /**
    * View toggle state.
@@ -268,6 +270,14 @@ export class SavingsComponent implements OnInit {
     // from the NgRx holdings signal, so it automatically follows
     // add/edit/delete of holdings without any extra plumbing here.
     this.livePrice.init();
+    // Bootstrap user-preferences (baseCurrency etc.). Single fire — the
+    // service caches as a signal so subsequent components read straight
+    // from `userPrefs.baseCurrency()` without their own HTTP. Errors
+    // (no auth, network) leave the cached value at null; UI continues
+    // using its local default until a successful login.
+    this.userPrefs.load()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe();
 
     this.addTriggerService.buttonClick$
       .pipe(takeUntilDestroyed(this.destroyRef))
