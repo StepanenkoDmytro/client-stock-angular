@@ -3,6 +3,7 @@ import {
   CashMetadata,
   CryptoMetadata,
   DepositMetadata,
+  EtfMetadata,
   InstrumentMetadata,
   OtherMetadata,
   RealEstateMetadata,
@@ -23,6 +24,10 @@ import {
 
 export function isStockMetadata(m: InstrumentMetadata): m is StockMetadata {
   return m.kind === AssetClass.STOCK;
+}
+
+export function isEtfMetadata(m: InstrumentMetadata): m is EtfMetadata {
+  return m.kind === AssetClass.ETF;
 }
 
 export function isTokenizedStockMetadata(
@@ -68,6 +73,8 @@ export function defaultMetadataFor(
   switch (assetClass) {
     case AssetClass.STOCK:
       return { kind: AssetClass.STOCK, exchange: '', currency };
+    case AssetClass.ETF:
+      return { kind: AssetClass.ETF, exchange: '', currency };
     case AssetClass.TOKENIZED_STOCK:
       return {
         kind: AssetClass.TOKENIZED_STOCK,

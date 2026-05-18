@@ -25,6 +25,7 @@ export class HoldingValidator {
   static decimalsForClass(assetClass: AssetClass): number {
     switch (assetClass) {
       case AssetClass.STOCK:
+      case AssetClass.ETF:
       case AssetClass.TOKENIZED_STOCK:
         // Default is "whole shares" (most brokers historically). Fractional
         // shares come from a few brokers (IBKR, Robinhood) — accept 4

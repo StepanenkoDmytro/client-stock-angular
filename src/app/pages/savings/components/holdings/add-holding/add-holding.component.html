@@ -15,27 +15,32 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="ah__field">
-      <mat-label>Symbol</mat-label>
-      <input matInput
-             formControlName="symbol"
-             placeholder="AAPL, BTC, UAH, KYIV-APT-1"
-             autocomplete="off" />
-      @if (form.get('symbol')?.touched && form.get('symbol')?.hasError('required')) {
-        <mat-error>Symbol is required</mat-error>
-      }
-    </mat-form-field>
+    @if (!isEditMode()) {
+      <pgz-instrument-autocomplete
+        [assetClass]="assetClass()"
+        [value]="selectedInstrument()"
+        (valueChange)="onInstrumentSelected($event)"
+        (createCustom)="onCreateCustomRequested($event)">
+      </pgz-instrument-autocomplete>
 
-    <mat-form-field appearance="outline" class="ah__field">
-      <mat-label>Name</mat-label>
-      <input matInput
-             formControlName="name"
-             placeholder="Apple Inc. · Bitcoin · UAH Cash"
-             autocomplete="off" />
-      @if (form.get('name')?.touched && form.get('name')?.hasError('required')) {
-        <mat-error>Name is required</mat-error>
+      @if (showCreateInline()) {
+        <pgz-create-instrument-inline
+          [assetClass]="assetClass()"
+          [initialSymbol]="inlinePrefillSymbol()"
+          [initialCurrency]="form.get('currency')?.value ?? 'USD'"
+          (created)="onInstrumentCreated($event)"
+          (cancelled)="onInstrumentCreateCancelled()">
+        </pgz-create-instrument-inline>
       }
-    </mat-form-field>
+    } @else {
+      <!-- Edit mode: instrument is fixed. Show as read-only field. -->
+      <mat-form-field appearance="outline" class="ah__field">
+        <mat-label>Instrument</mat-label>
+        <input matInput
+               [value]="(selectedInstrument()?.symbol ?? '') + ' — ' + (selectedInstrument()?.name ?? '')"
+               readonly />
+      </mat-form-field>
+    }
 
     <div class="ah__row">
       <mat-form-field appearance="outline" class="ah__field ah__field--qty">
@@ -96,6 +101,11 @@
       </mat-select>
       <mat-hint>{{ selectedAccount().kind }}</mat-hint>
     </mat-form-field>
+
+    <pgz-tag-chips
+      [value]="form.get('tagIds')?.value ?? []"
+      (valueChange)="form.get('tagIds')?.setValue($event)">
+    </pgz-tag-chips>
 
     @if (!isEditMode() && totalCost() > 0) {
       <p class="ah__total">Total: ${{ totalCost() | number:'1.2-2' }}</p>

@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TotalBalanceComponent } from '../../core/UI/components/total-balance/total-balance.component';
 import { GoalCardComponent } from './components/goal-card/goal-card.component';
 import { IGoal } from '../../domain/goals.domain';
@@ -35,6 +36,8 @@ export class GoalsComponent implements OnInit {
   public goals: IGoal[];
   public portfolioCost: number = 0;
 
+  private readonly destroyRef = inject(DestroyRef);
+
   constructor(
     private savingsService: SavingsService,
     private goalsService: GoalsService,
@@ -42,17 +45,21 @@ export class GoalsComponent implements OnInit {
     private router: Router,
   ) { }
   public ngOnInit(): void {
-    
-    this.addTriggerService.buttonClick$.subscribe((path) => {
-      if(path === '/goals') {
-        this.router.navigate(['/goals/add']);
-        this.addTriggerService.resetButtonClick();
-      }
-    });
 
-    this.goalsService.getAll().subscribe(goals => {
-      this.goals = goals;
-    });
+    this.addTriggerService.buttonClick$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((path) => {
+        if(path === '/goals') {
+          this.router.navigate(['/goals/add']);
+          this.addTriggerService.resetButtonClick();
+        }
+      });
+
+    this.goalsService.getAll()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(goals => {
+        this.goals = goals;
+      });
   }
 
   public onDeleteGoal(deletedGoal: IGoal) {

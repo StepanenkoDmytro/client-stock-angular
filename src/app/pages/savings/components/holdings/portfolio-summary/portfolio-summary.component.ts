@@ -166,6 +166,8 @@ export class PortfolioSummaryComponent implements OnInit {
     switch (ac) {
       case AssetClass.STOCK:
         return 'Stock';
+      case AssetClass.ETF:
+        return 'ETF';
       case AssetClass.TOKENIZED_STOCK:
         return 'Tokenized stock';
       case AssetClass.CRYPTO:
@@ -186,6 +188,8 @@ export class PortfolioSummaryComponent implements OnInit {
     switch (ac) {
       case AssetClass.STOCK:
         return 'var(--asset-stock)';
+      case AssetClass.ETF:
+        return 'var(--asset-etf, var(--asset-stock))';
       case AssetClass.TOKENIZED_STOCK:
         return 'var(--asset-tokenized-stock)';
       case AssetClass.CRYPTO:

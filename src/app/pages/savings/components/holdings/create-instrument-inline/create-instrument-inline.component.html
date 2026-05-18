@@ -1,0 +1,100 @@
+<section class="ci" [formGroup]="form">
+  <header class="ci__header">
+    <h4 class="ci__title">Create custom instrument</h4>
+    <p class="ci__hint">
+      You're creating a new private instrument that only your account will
+      see. Symbol stays unique within the class.
+    </p>
+  </header>
+
+  <div class="ci__body">
+    <mat-form-field appearance="outline" class="ci__field">
+      <mat-label>Symbol</mat-label>
+      <input matInput formControlName="symbol" autocomplete="off" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="ci__field">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" autocomplete="off" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="ci__field">
+      <mat-label>Currency</mat-label>
+      <mat-select formControlName="currency">
+        @for (c of currencies; track c) {
+          <mat-option [value]="c">{{ c }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    @if (showExchange()) {
+      <mat-form-field appearance="outline" class="ci__field">
+        <mat-label>Exchange</mat-label>
+        <input matInput formControlName="exchange"
+               placeholder="NASDAQ, NYSE, Warsaw…"
+               autocomplete="off" />
+      </mat-form-field>
+    }
+
+    @if (showTokenized()) {
+      <mat-form-field appearance="outline" class="ci__field">
+        <mat-label>Underlying symbol</mat-label>
+        <input matInput formControlName="underlyingSymbol"
+               placeholder="AAPL"
+               autocomplete="off" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="ci__field">
+        <mat-label>Blockchain</mat-label>
+        <input matInput formControlName="blockchain"
+               placeholder="Ethereum, Solana…"
+               autocomplete="off" />
+      </mat-form-field>
+    }
+
+    @if (showDeposit()) {
+      <mat-form-field appearance="outline" class="ci__field">
+        <mat-label>Interest rate (% APY)</mat-label>
+        <input matInput type="number"
+               formControlName="interestRate"
+               step="any" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="ci__field">
+        <mat-label>Maturity date</mat-label>
+        <input matInput type="date" formControlName="maturityDate" />
+      </mat-form-field>
+    }
+
+    @if (showRealEstate()) {
+      <mat-form-field appearance="outline" class="ci__field">
+        <mat-label>Country</mat-label>
+        <input matInput formControlName="country"
+               placeholder="UA, PL, DE…"
+               autocomplete="off" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="ci__field">
+        <mat-label>Property type</mat-label>
+        <mat-select formControlName="propertyType">
+          <mat-option [value]="''">—</mat-option>
+          @for (p of propertyTypes; track p) {
+            <mat-option [value]="p">{{ p }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
+  </div>
+
+  <div class="ci__actions">
+    <button mat-stroked-button type="button" (click)="onCancel()">
+      Cancel
+    </button>
+    <button mat-flat-button color="primary"
+            type="button"
+            [disabled]="!form.valid"
+            (click)="onSave()">
+      Create instrument
+    </button>
+  </div>
+</section>

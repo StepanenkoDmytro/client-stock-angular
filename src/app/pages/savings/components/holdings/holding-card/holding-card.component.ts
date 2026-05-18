@@ -111,6 +111,7 @@ export class HoldingCardComponent {
     const base = ((): string => {
       switch (inst.assetClass) {
         case AssetClass.STOCK:
+        case AssetClass.ETF:
         case AssetClass.TOKENIZED_STOCK:
           return `${inst.name} · ${this.formatShareCount(h.quantity)} sh`;
 

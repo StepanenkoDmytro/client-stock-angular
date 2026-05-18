@@ -152,6 +152,7 @@ export class PositionRowComponent {
     const inst = h.instrument;
     switch (inst.assetClass) {
       case AssetClass.STOCK:
+      case AssetClass.ETF:
       case AssetClass.TOKENIZED_STOCK:
         return `${formatShares(h.quantity)} sh`;
       case AssetClass.CRYPTO:

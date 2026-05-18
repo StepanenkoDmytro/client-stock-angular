@@ -297,6 +297,8 @@ export class HoldingsListComponent implements OnInit {
     switch (ac) {
       case AssetClass.STOCK:
         return 'Stock';
+      case AssetClass.ETF:
+        return 'ETF';
       case AssetClass.TOKENIZED_STOCK:
         return 'Tokenized stock';
       case AssetClass.CRYPTO:
@@ -317,6 +319,10 @@ export class HoldingsListComponent implements OnInit {
     switch (ac) {
       case AssetClass.STOCK:
         return 'var(--asset-stock)';
+      case AssetClass.ETF:
+        // ETF visually grouped with STOCK (same blue family) but with
+        // a distinct token so designer can re-tint later if needed.
+        return 'var(--asset-etf, var(--asset-stock))';
       case AssetClass.TOKENIZED_STOCK:
         return 'var(--asset-tokenized-stock)';
       case AssetClass.CRYPTO:

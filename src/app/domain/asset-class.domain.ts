@@ -7,6 +7,7 @@
  */
 export enum AssetClass {
   STOCK = 'STOCK',
+  ETF = 'ETF',
   TOKENIZED_STOCK = 'TOKENIZED_STOCK',
   CRYPTO = 'CRYPTO',
   CASH = 'CASH',
@@ -18,6 +19,7 @@ export enum AssetClass {
 /** All AssetClass values in canonical order for UI selects, iteration, etc. */
 export const ASSET_CLASSES: readonly AssetClass[] = [
   AssetClass.STOCK,
+  AssetClass.ETF,
   AssetClass.TOKENIZED_STOCK,
   AssetClass.CRYPTO,
   AssetClass.CASH,
@@ -33,10 +35,29 @@ export const ASSET_CLASSES: readonly AssetClass[] = [
  */
 export const GLOBAL_ASSET_CLASSES: ReadonlySet<AssetClass> = new Set([
   AssetClass.STOCK,
+  AssetClass.ETF,
   AssetClass.TOKENIZED_STOCK,
   AssetClass.CRYPTO,
   AssetClass.CASH,
 ]);
+
+/**
+ * Classes that have a market-data feed behind them (Alpha Vantage / CoinGecko
+ * — bekend PR8). The UI autocomplete switches into "market" HTTP mode for
+ * these; manual classes stay on local sync search + inline create.
+ *
+ * Keep in sync with backend `MarketSearchProvider.supportedClasses()`.
+ */
+export const MARKET_BACKED_ASSET_CLASSES: ReadonlySet<AssetClass> = new Set([
+  AssetClass.STOCK,
+  AssetClass.ETF,
+  AssetClass.TOKENIZED_STOCK,
+  AssetClass.CRYPTO,
+]);
+
+export function isMarketBackedAssetClass(assetClass: AssetClass): boolean {
+  return MARKET_BACKED_ASSET_CLASSES.has(assetClass);
+}
 
 /**
  * Per-user-scope classes: instrument is private to its creator (a specific

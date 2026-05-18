@@ -14,6 +14,7 @@ import { AssetClass } from './asset-class.domain';
  */
 export type InstrumentMetadata =
   | StockMetadata
+  | EtfMetadata
   | TokenizedStockMetadata
   | CryptoMetadata
   | CashMetadata
@@ -29,6 +30,27 @@ export interface StockMetadata {
   sector?: string;
   industry?: string;
   dividendYield?: number;
+  /** ISIN if available — Alpha Vantage SYMBOL_SEARCH does not return it; comes from OVERVIEW only. */
+  isin?: string;
+}
+
+/**
+ * Exchange-traded fund metadata. Mirrors the backend `EtfMetadata` record
+ * (PR8a done report §1). Behaviourally close to STOCK, but with fund-level
+ * disclosures (expense ratio, AUM, fund family).
+ */
+export interface EtfMetadata {
+  kind: AssetClass.ETF;
+  exchange: string;
+  currency: string;
+  country?: string;
+  fundFamily?: string;
+  /** Annual expense ratio as a fraction (0.0003 = 0.03%). */
+  expenseRatio?: number;
+  /** Net assets under management, in the fund's reporting currency. */
+  netAssets?: number;
+  dividendYield?: number;
+  isin?: string;
 }
 
 export interface TokenizedStockMetadata {

@@ -82,7 +82,7 @@
 }
 
 .sheet__chip {
-  --chip-color: #908E91;
+  --chip-color: var(--pgz-text-secondary);
   display: inline-flex;
   align-items: center;
   justify-content: center;

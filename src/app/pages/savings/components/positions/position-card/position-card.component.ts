@@ -244,6 +244,7 @@ export class PositionCardComponent {
 function unitFor(cls: AssetClass, symbol: string): string {
   switch (cls) {
     case AssetClass.STOCK:
+    case AssetClass.ETF:
     case AssetClass.TOKENIZED_STOCK:
       return 'sh';
     case AssetClass.CRYPTO:
@@ -281,6 +282,7 @@ function singleHoldingSubline(pos: IPosition): string {
   const meta = inst.metadata;
   switch (inst.assetClass) {
     case AssetClass.STOCK:
+    case AssetClass.ETF:
     case AssetClass.TOKENIZED_STOCK:
       return `${inst.name} · ${formatQuantity(pos.totalQuantity, inst.assetClass)} sh`;
     case AssetClass.CRYPTO:

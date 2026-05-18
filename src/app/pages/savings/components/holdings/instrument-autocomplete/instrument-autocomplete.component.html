@@ -1,0 +1,56 @@
+<mat-form-field appearance="outline" class="ia__field">
+  <mat-label>Instrument</mat-label>
+  <input matInput
+         type="text"
+         [formControl]="searchCtrl"
+         [matAutocomplete]="auto"
+         placeholder="Search by symbol or name…"
+         autocomplete="off" />
+  @if (isLoading()) {
+    <mat-spinner matSuffix
+                 diameter="18"
+                 class="ia__spinner"
+                 aria-label="Searching market data"></mat-spinner>
+  } @else if (showClear()) {
+    <button mat-icon-button
+            matSuffix
+            type="button"
+            class="ia__clear"
+            aria-label="Clear instrument"
+            (click)="onClear()">
+      <mat-icon>close</mat-icon>
+    </button>
+  }
+  @if (isStale() && !isLoading()) {
+    <mat-hint class="ia__stale">Cached results — market refresh paused</mat-hint>
+  }
+  <mat-autocomplete #auto="matAutocomplete"
+                    [displayWith]="displayWith"
+                    (optionSelected)="onSelect($event)">
+    @if (showPopular()) {
+      <!-- Popular tickers shown when the input is empty + market mode.
+           Each option's `[value]` is the symbol string, so Material's
+           displayWith propagates it into the input and the debounced
+           market-search pipeline fires automatically. -->
+      @for (s of popularTickers(); track s) {
+        <mat-option [value]="s">
+          <span class="ia__symbol">{{ s }}</span>
+          <span class="ia__name">— popular</span>
+        </mat-option>
+      }
+    } @else {
+      @for (i of suggestions(); track i.id) {
+        <mat-option [value]="i">
+          <span class="ia__symbol">{{ i.symbol }}</span>
+          <span class="ia__name">— {{ i.name }}</span>
+        </mat-option>
+      }
+      @if (showCreateCta()) {
+        <mat-option [value]="null" (click)="onCreateCustom()">
+          <mat-icon class="ia__plus">add</mat-icon>
+          Create custom «{{ searchCtrl.value }}»
+        </mat-option>
+      }
+    }
+  </mat-autocomplete>
+</mat-form-field>

@@ -1,0 +1,41 @@
+<div class="tc">
+  <mat-form-field appearance="outline" class="tc__field">
+    <mat-label>Tags</mat-label>
+    <mat-chip-grid #grid aria-label="Holding tags">
+      @for (t of selectedTags(); track t.id) {
+        <mat-chip-row [removable]="true" (removed)="onRemove(t.id)">
+          <span class="tc__dot"
+                [style.background-color]="t.color"
+                aria-hidden="true"></span>
+          {{ t.name }}
+          <button matChipRemove [attr.aria-label]="'Remove ' + t.name">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip-row>
+      }
+      <input matInput
+             [formControl]="searchCtrl"
+             [matChipInputFor]="grid"
+             [matAutocomplete]="auto"
+             placeholder="Add tag…"
+             autocomplete="off" />
+    </mat-chip-grid>
+    <mat-autocomplete #auto="matAutocomplete"
+                      (optionSelected)="onSelect($event)">
+      @for (t of suggestions(); track t.id) {
+        <mat-option [value]="t.id">
+          <span class="tc__dot"
+                [style.background-color]="t.color"
+                aria-hidden="true"></span>
+          {{ t.name }}
+        </mat-option>
+      }
+      @if (showCreateCta()) {
+        <mat-option [value]="null" (click)="onCreateNew()">
+          <mat-icon class="tc__plus">add</mat-icon>
+          Create new tag
+        </mat-option>
+      }
+    </mat-autocomplete>
+  </mat-form-field>
+</div>

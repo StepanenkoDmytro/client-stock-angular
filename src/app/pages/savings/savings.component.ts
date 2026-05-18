@@ -1,11 +1,13 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   OnInit,
   computed,
   inject,
   signal,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatButtonModule } from '@angular/material/button';
@@ -109,6 +111,7 @@ export class SavingsComponent implements OnInit {
   private readonly dialog = inject(MatDialog);
   private readonly router = inject(Router);
   private readonly store = inject(Store);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly addTriggerService = inject(AddTriggerService);
   private readonly holdings = inject(HoldingService);
   private readonly instruments = inject(InstrumentService);
@@ -287,17 +290,19 @@ export class SavingsComponent implements OnInit {
     this.instruments.init();
     this.holdings.init();
 
-    this.addTriggerService.buttonClick$.subscribe((path) => {
-      if (path === '/savings') {
-        // The + FAB now lands on the universal Add Holding form. The
-        // legacy SelectMarketDialog (stock-asset / crypto-asset routes)
-        // stays in the codebase as a fallback until M6 deletes it
-        // entirely — those routes remain reachable by URL but no longer
-        // accessible from the bottom nav.
-        this.router.navigate(['/savings/add-holding']);
-        this.addTriggerService.resetButtonClick();
-      }
-    });
+    this.addTriggerService.buttonClick$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((path) => {
+        if (path === '/savings') {
+          // The + FAB now lands on the universal Add Holding form. The
+          // legacy SelectMarketDialog (stock-asset / crypto-asset routes)
+          // stays in the codebase as a fallback until M6 deletes it
+          // entirely — those routes remain reachable by URL but no longer
+          // accessible from the bottom nav.
+          this.router.navigate(['/savings/add-holding']);
+          this.addTriggerService.resetButtonClick();
+        }
+      });
   }
 
   /**
@@ -349,6 +354,8 @@ export class SavingsComponent implements OnInit {
     switch (ac) {
       case AssetClass.STOCK:
         return 'Stock';
+      case AssetClass.ETF:
+        return 'ETF';
       case AssetClass.TOKENIZED_STOCK:
         return 'Tokenized stock';
       case AssetClass.CRYPTO:
@@ -376,6 +383,8 @@ export class SavingsComponent implements OnInit {
     switch (ac) {
       case AssetClass.STOCK:
         return 'var(--asset-stock)';
+      case AssetClass.ETF:
+        return 'var(--asset-etf, var(--asset-stock))';
       case AssetClass.TOKENIZED_STOCK:
         return 'var(--asset-tokenized-stock)';
       case AssetClass.CRYPTO:

@@ -36,6 +36,10 @@ import { InstrumentService } from '../../../service/instrument.service';
 import { TagsService } from '../../../service/tags.service';
 import { selectHoldingsList } from '../../../store/holdings.selectors';
 import { HoldingValidator } from '../../../validator/HoldingValidator';
+import { CreateInstrumentInlineComponent } from '../create-instrument-inline/create-instrument-inline.component';
+import { InstrumentAutocompleteComponent } from '../instrument-autocomplete/instrument-autocomplete.component';
+import { TagChipsComponent } from '../tag-chips/tag-chips.component';
+import { IInstrument } from '../../../../../domain/instrument.domain';
 
 interface AccountChoice {
   id: string;
@@ -71,6 +75,9 @@ interface AccountChoice {
     MatSelectModule,
     MatExpansionModule,
     PrevRouteComponent,
+    TagChipsComponent,
+    InstrumentAutocompleteComponent,
+    CreateInstrumentInlineComponent,
   ],
   templateUrl: './add-holding.component.html',
   styleUrl: './add-holding.component.scss',
@@ -91,6 +98,20 @@ export class AddHoldingComponent implements OnInit {
   private readonly editing = signal<IHolding | null>(null);
 
   public readonly isEditMode = computed<boolean>(() => this.editing() !== null);
+
+  /** The Instrument the user picked / created via the autocomplete. We
+   *  hold a direct reference (not just symbol+name) so `saveAdd` doesn't
+   *  need to re-resolve via `getOrCreate` for instruments that already
+   *  came from the cache. Stays in sync with the form's `symbol`/`name`
+   *  controls for validation. */
+  public readonly selectedInstrument = signal<IInstrument | null>(null);
+
+  /** Toggles the inline create-instrument panel inside the form. */
+  public readonly showCreateInline = signal<boolean>(false);
+
+  /** Prefill text for the inline form — taken from whatever the user
+   *  typed before clicking «Create custom». */
+  public readonly inlinePrefillSymbol = signal<string>('');
 
   public readonly title = computed<string>(() => {
     return this.isEditMode() ? 'Edit saving' : 'Add saving';
@@ -153,6 +174,7 @@ export class AddHoldingComponent implements OnInit {
       buyPrice:      [null, HoldingValidator.buyPrice],
       currency:      ['USD', Validators.required],
       accountId:     ['manual', Validators.required],
+      tagIds:        [[] as string[]],
       // Top-up section (edit mode only). Optional — empty means
       // "pure edit, no avg-price recalc".
       addQuantity:   [null],
@@ -207,6 +229,9 @@ export class AddHoldingComponent implements OnInit {
 
     this.editing.set(snapshot);
     this.assetClass.set(ac);
+    // Selected instrument is "the one we're editing against" — fixed
+    // for the lifetime of the edit page.
+    this.selectedInstrument.set(instrument ?? null);
 
     this.form.patchValue({
       assetClass: ac,
@@ -216,6 +241,7 @@ export class AddHoldingComponent implements OnInit {
       buyPrice: snapshot.averageBuyPrice,
       currency: snapshot.currency,
       accountId: snapshot.accountId ?? 'manual',
+      tagIds: [...snapshot.tagIds],
     });
 
     // Lock the identity fields — switching class / symbol on an existing
@@ -242,6 +268,7 @@ export class AddHoldingComponent implements OnInit {
   public assetClassLabel(ac: AssetClass): string {
     switch (ac) {
       case AssetClass.STOCK:           return 'Stock';
+      case AssetClass.ETF:             return 'ETF';
       case AssetClass.TOKENIZED_STOCK: return 'Tokenized stock';
       case AssetClass.CRYPTO:          return 'Crypto';
       case AssetClass.CASH:            return 'Cash';
@@ -252,7 +279,50 @@ export class AddHoldingComponent implements OnInit {
   }
 
   public canSave(): boolean {
-    return !!this.form && this.form.valid;
+    if (!this.form || !this.form.valid) {
+      return false;
+    }
+    // For Add mode the user must have an instrument selected (either
+    // existing or freshly created inline). In Edit mode the instrument
+    // came from the route and is fixed, so we skip this check.
+    if (!this.isEditMode() && this.selectedInstrument() === null) {
+      return false;
+    }
+    return true;
+  }
+
+  // ---- Autocomplete + create-custom flow ----
+
+  public onInstrumentSelected(inst: IInstrument | null): void {
+    this.selectedInstrument.set(inst);
+    if (inst) {
+      // Mirror into the form so the HoldingValidator.nonEmpty checks
+      // for symbol/name pass. Sync currency suggestion if the form's
+      // currency is still the default.
+      this.form.patchValue({
+        symbol: inst.symbol,
+        name: inst.name,
+      });
+      if (!this.form.get('currency')?.dirty) {
+        this.form.patchValue({ currency: inst.currency });
+      }
+    } else {
+      this.form.patchValue({ symbol: '', name: '' });
+    }
+  }
+
+  public onCreateCustomRequested(symbolGuess: string): void {
+    this.inlinePrefillSymbol.set(symbolGuess);
+    this.showCreateInline.set(true);
+  }
+
+  public onInstrumentCreated(payload: { instrument: IInstrument }): void {
+    this.showCreateInline.set(false);
+    this.onInstrumentSelected(payload.instrument);
+  }
+
+  public onInstrumentCreateCancelled(): void {
+    this.showCreateInline.set(false);
   }
 
   // ---- Actions ----
@@ -279,20 +349,21 @@ export class AddHoldingComponent implements OnInit {
       buyPrice: number;
       currency: string;
       accountId: string;
+      tagIds: string[];
     };
 
     const account = this.accounts.find((a) => a.id === v.accountId)!;
 
-    // Resolve / create the Instrument first — this is what makes Holding
-    // safe to address by `instrumentId` regardless of whether the symbol
-    // was previously seen.
-    const instrument = this.instruments.getOrCreate({
-      symbol: v.symbol.trim().toUpperCase(),
-      assetClass: v.assetClass,
-      name: v.name.trim(),
-      currency: v.currency,
-      metadata: defaultMetadataFor(v.assetClass, v.currency),
-    });
+    // The autocomplete / inline-create flow guarantees a selected
+    // instrument by the time canSave() returns true. We use the
+    // pre-resolved reference instead of getOrCreate to avoid an
+    // accidental second instrument being created if the user typed
+    // a slightly different symbol after picking.
+    const instrument = this.selectedInstrument();
+    if (!instrument) {
+      // Shouldn't happen — canSave() guards this. Defensive return.
+      return;
+    }
 
     const now = new Date().toISOString();
     const holding: IHolding = {
@@ -304,7 +375,7 @@ export class AddHoldingComponent implements OnInit {
       quantity: Number(v.quantity),
       averageBuyPrice: Number(v.buyPrice),
       currency: v.currency,
-      tagIds: [], // tag-chips wired in PR7.5
+      tagIds: v.tagIds ?? [],
       createdAt: now,
       updatedAt: now,
     };
@@ -338,6 +409,7 @@ export class AddHoldingComponent implements OnInit {
       buyPrice: number;
       currency: string;
       accountId: string;
+      tagIds: string[];
       addQuantity: number | null;
       addBuyPrice: number | null;
     };
@@ -362,6 +434,7 @@ export class AddHoldingComponent implements OnInit {
       accountName: account.name,
       accountKind: account.kind,
       currency: raw.currency,
+      tagIds: raw.tagIds ?? [],
       updatedAt: new Date().toISOString(),
     };
 

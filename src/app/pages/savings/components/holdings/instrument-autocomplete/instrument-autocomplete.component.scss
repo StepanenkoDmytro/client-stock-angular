@@ -1,0 +1,61 @@
+:host {
+  display: block;
+}
+
+.ia__field {
+  width: 100%;
+}
+
+.ia__symbol {
+  font-weight: 500;
+  color: var(--pgz-text-primary);
+}
+
+.ia__name {
+  margin-left: 6px;
+  color: var(--pgz-text-secondary);
+}
+
+.ia__plus {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+  vertical-align: middle;
+  margin-right: 4px;
+  color: var(--pgz-accent);
+}
+
+// Loading spinner shown as a suffix while the debounced market search
+// is in flight. Stays small (18px) so it doesn't push the field height.
+.ia__spinner {
+  margin-right: 4px;
+}
+
+// Subtle hint when the backend returned `stale: true` (cached results
+// because Alpha Vantage / CoinGecko daily budget was exhausted, or the
+// upstream provider was unreachable). Not an error — the user can still
+// pick from results, they just may be a bit out of date.
+.ia__stale {
+  color: var(--pgz-text-muted);
+  font-style: italic;
+}
+
+// Compact × suffix button to clear the selection / typed text.
+.ia__clear {
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  color: var(--pgz-text-muted);
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+}
+
+// (Popular tickers now render inline as `mat-option` rows inside the
+// autocomplete dropdown — see template. No separate chip-row styles
+// needed; they re-use `.ia__symbol` / `.ia__name` from regular options.)
