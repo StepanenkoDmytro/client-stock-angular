@@ -84,6 +84,15 @@
   white-space: nowrap;
 }
 
+// Separate line hosting <pgz-account-link-chip>. Only rendered for
+// holdings that carry an `accountId` — orphan rows (e.g. legacy demo
+// cash) skip the slot entirely so the divider sits flush with the
+// subline as before.
+.hc__account-line {
+  margin-top: 6px;
+  display: flex;
+}
+
 // ---- Divider ----
 
 .hc__divider {

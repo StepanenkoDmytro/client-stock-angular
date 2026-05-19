@@ -24,6 +24,7 @@ import { LivePriceService } from '../../../service/live-price.service';
 import { MarketStatusService } from '../../../service/market-status.service';
 import { MarketStatusBadgeComponent } from '../../market-status-badge/market-status-badge.component';
 import { PositionRowComponent } from '../position-row/position-row.component';
+import { AccountLinkChipComponent } from '../../accounts/account-link-chip/account-link-chip.component';
 import { IncomeLine, incomeLineFor } from './income-line.helper';
 
 /**
@@ -59,6 +60,7 @@ import { IncomeLine, incomeLineFor } from './income-line.helper';
     MatMenuModule,
     MarketStatusBadgeComponent,
     PositionRowComponent,
+    AccountLinkChipComponent,
   ],
   templateUrl: './position-card.component.html',
   styleUrl: './position-card.component.scss',
@@ -186,6 +188,19 @@ export class PositionCardComponent {
 
   /** Row-2 left subline. Delegates to {@link sublineFor} helper (PR5c §4). */
   public readonly subline = computed<string>(() => sublineFor(this._position()));
+
+  /**
+   * `accountId` for the single-holding case — drives the
+   * `<pgz-account-link-chip>` rendered under the subline. Returns null
+   * for multi-holding positions (those expose per-account chips inside
+   * the breakdown rows instead) and for holdings without an account
+   * (legacy seed cash sometimes has `accountId === undefined`).
+   */
+  public readonly singleAccountId = computed<string | null>(() => {
+    const holdings = this._position().holdings ?? [];
+    if (holdings.length !== 1) return null;
+    return holdings[0].accountId ?? null;
+  });
 
   /**
    * Right-column second line under the value cell — "{qty} sh × $price"

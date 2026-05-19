@@ -15,6 +15,12 @@
 
   <p class="hc__subline">{{ subline() }}</p>
 
+  @if (holding.accountId) {
+    <div class="hc__account-line">
+      <pgz-account-link-chip [accountId]="holding.accountId"></pgz-account-link-chip>
+    </div>
+  }
+
   <hr class="hc__divider" />
 
   <div class="hc__lifetime">

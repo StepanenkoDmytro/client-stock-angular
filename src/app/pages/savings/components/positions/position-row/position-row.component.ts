@@ -23,6 +23,7 @@ import {
 } from '../../../const/account-kind.const';
 import { HoldingActionsService } from '../../../service/holding-actions.service';
 import { LivePriceService } from '../../../service/live-price.service';
+import { AccountLinkChipComponent } from '../../accounts/account-link-chip/account-link-chip.component';
 
 /**
  * One per-Account row inside an expanded `pgz-position-card`.
@@ -42,7 +43,13 @@ import { LivePriceService } from '../../../service/live-price.service';
 @Component({
   selector: 'pgz-position-row',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule, MatMenuModule],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
+    AccountLinkChipComponent,
+  ],
   templateUrl: './position-row.component.html',
   styleUrl: './position-row.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

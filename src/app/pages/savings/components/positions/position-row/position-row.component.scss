@@ -37,6 +37,11 @@
   // Keeps name column aligned when this row's kind has no glyph.
 }
 
+.pr__account {
+  min-width: 0;
+  flex: 0 1 auto;
+}
+
 .pr__name {
   font-size: 13px;
   font-weight: 500;
@@ -109,8 +114,9 @@
 
 .pr__meta {
   // Visually attached to the row above; muted secondary colour so the
-  // user reads "value of position" first and "how/why" second.
-  padding-left: 24px; // 16px icon + 8px gap = aligns under account name
+  // user reads "value of position" first and "how/why" second. No
+  // left-padding now that the leading kind-glyph is gone (chip is full
+  // width); meta starts at the row edge under the chip.
   font-size: 11px;
   color: var(--pgz-text-secondary);
   font-variant-numeric: tabular-nums;

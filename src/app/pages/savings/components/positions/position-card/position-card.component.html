@@ -73,6 +73,12 @@
 
   <p class="pc__subline">{{ subline() }}</p>
 
+  @if (!isMulti() && singleAccountId()) {
+    <div class="pc__account-line">
+      <pgz-account-link-chip [accountId]="singleAccountId()"></pgz-account-link-chip>
+    </div>
+  }
+
   @if (showMarketStatus && exchangeCode()) {
     <pgz-market-status-badge class="pc__market"
                              [exchangeCode]="exchangeCode()!"></pgz-market-status-badge>

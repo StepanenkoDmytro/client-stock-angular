@@ -1,0 +1,31 @@
+:host {
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.alc {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px 2px 6px;
+  border-radius: 999px;
+  background: var(--pgz-chip-bg, rgba(0, 0, 0, 0.04));
+  border: 0.5px solid var(--pgz-chip-border, rgba(0, 0, 0, 0.08));
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--pgz-text-primary, #2c2c2a);
+  max-width: 100%;
+
+  &__icon {
+    font-size: 12px;
+    line-height: 1;
+    flex: 0 0 auto;
+  }
+
+  &__label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+}

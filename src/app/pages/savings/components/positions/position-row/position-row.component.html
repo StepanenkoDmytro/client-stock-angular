@@ -1,14 +1,13 @@
 <div class="pr">
   <div class="pr__head">
-    @if (flag().icon) {
-      <span class="pr__icon"
-            [style.color]="flag().colorVar"
-            aria-hidden="true">{{ flag().icon }}</span>
+    @if (holding.accountId) {
+      <pgz-account-link-chip class="pr__account"
+                             [accountId]="holding.accountId"></pgz-account-link-chip>
     } @else {
-      <!-- Empty slot keeps account names aligned across rows of mixed kinds. -->
-      <span class="pr__icon pr__icon--empty" aria-hidden="true"></span>
+      <!-- No account on this holding — fall back to the legacy text label
+           (e.g. seeded "Manual" cash) so the row never goes nameless. -->
+      <span class="pr__name">{{ accountLabel() }}</span>
     }
-    <span class="pr__name">{{ accountLabel() }}</span>
     @if (chipLabel()) {
       <span class="pr__chip"
             [style.borderColor]="flag().colorVar"

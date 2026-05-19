@@ -16,6 +16,7 @@ import {
   isRealEstateMetadata,
 } from '../../../model/InstrumentMetadata';
 import { HoldingService } from '../../../service/holding.service';
+import { AccountLinkChipComponent } from '../../accounts/account-link-chip/account-link-chip.component';
 
 /**
  * Single holding card.
@@ -36,7 +37,7 @@ import { HoldingService } from '../../../service/holding.service';
 @Component({
   selector: 'pgz-holding-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, AccountLinkChipComponent],
   templateUrl: './holding-card.component.html',
   styleUrl: './holding-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -143,13 +144,9 @@ export class HoldingCardComponent {
       }
     })();
 
-    if (
-      h.accountName &&
-      h.accountKind &&
-      h.accountKind !== 'MANUAL'
-    ) {
-      return `${base} · ${h.accountName}`;
-    }
+    // Account name no longer appended here — rendered as a separate
+    // `<pgz-account-link-chip>` row in the template so users get the
+    // type icon + clickable affordance, not just an extra " · text".
     return base;
   });
 
