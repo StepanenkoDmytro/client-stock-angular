@@ -1,10 +1,13 @@
 import { Injectable, inject } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { Observable, filter, map, tap } from 'rxjs';
+import { Observable, filter, firstValueFrom, map, tap } from 'rxjs';
 import { v4 as uuid } from 'uuid';
 import { environment } from '../../../../environments/environment';
 import { AccountKind } from '../../../domain/account-kind.domain';
-import { AssetClass } from '../../../domain/asset-class.domain';
+import {
+  AssetClass,
+  isMarketBackedAssetClass,
+} from '../../../domain/asset-class.domain';
 import { IHolding, IHoldingLockMeta } from '../../../domain/holding.domain';
 import { IInstrument } from '../../../domain/instrument.domain';
 import { ITag } from '../../../domain/tag.domain';
@@ -54,6 +57,14 @@ import { TagsService } from './tags.service';
 export class HoldingService {
   private static readonly STORAGE_KEY = 'holdings-list';
   private static readonly SEED_VERSION_KEY = 'holdings-seed-version';
+  /**
+   * Side cache for the seed's market-backed Instrument resolutions. Lives
+   * separately from `'custom-instruments'` (manual classes only) and is
+   * intentionally **not** wiped by `resetDemoData()` / `InstrumentService.reset()`
+   * so dev resets don't repeatedly burn the Alpha Vantage 25 req/day quota
+   * (see live-prices doc §8 — quota mitigation).
+   */
+  private static readonly SEED_INSTRUMENTS_KEY = 'holdings-seed-market-instruments';
 
   /**
    * Bumps every time the mock-seed shape or contents change in a way that
@@ -69,10 +80,16 @@ export class HoldingService {
    *      smaller cash dust + the apartment. Ensures every demo account
    *      has ≥1 holding so the new portfolio-stats widgets (W1/W2/W3)
    *      render a full distribution out of the box.
+   *  v4: PR1 live-prices cleanup — market-backed seed instruments now
+   *      resolve through `instrumentService.searchMarket()` so their ids
+   *      match the backend catalog and the `/prices/batch` poll returns
+   *      real Alpha Vantage / CoinGecko quotes. Pre-v4 snapshots reference
+   *      client-UUID instruments that the backend doesn't know about, so
+   *      we wipe and re-seed.
    *
    * Goes away when M5 wires real backend data — seed disappears with it.
    */
-  private static readonly SEED_VERSION = 3;
+  private static readonly SEED_VERSION = 4;
 
   private readonly store$ = inject(Store<{ holdings: IHoldingsState }>);
   private readonly instruments = inject(InstrumentService);
@@ -277,45 +294,26 @@ export class HoldingService {
   }
 
   /**
+   * Current market price for a symbol — thin wrapper over
+   * {@link LivePriceService.getCurrentPriceBySymbol}. Returns `undefined`
+   * when no live quote is available; callers fall back to the holding's
+   * `averageBuyPrice` per live-prices doc §3 Rule 2. The hardcoded
+   * `MOCK_CURRENT_PRICES` table that used to live here was removed in
+   * PR7 of the live-prices cleanup — market-backed seed instruments now
+   * resolve through `searchMarket()` and get real backend quotes, manual
+   * classes (CASH / DEPOSIT / REAL_ESTATE / OTHER) silently fall back
+   * to cost basis with no per-card noise.
+   */
+  getCurrentPrice(symbol: string): number | undefined {
+    return this.livePrice.getCurrentPriceBySymbol(symbol);
+  }
+
+  /**
    * Public reset for the holdings-list screen. Wipes the holdings
    * snapshot from localStorage (and the user-instruments side-cache
    * so re-seed creates them fresh), then re-runs the seed path.
    * Used by the "Reset demo data" button on `/savings/holdings`.
    */
-  /**
-   * Current market price for a symbol. Resolution order (PR-A4 / ADR-0003):
-   *
-   *   1. {@link LivePriceService} — live polled value from the backend
-   *      `/api/v1/prices/batch` endpoint, refreshed every 30s once the
-   *      caller has invoked `livePrice.init()`. This is the canonical
-   *      path for instruments that exist in the backend catalog.
-   *   2. {@link HoldingService.MOCK_CURRENT_PRICES} — hardcoded fallback
-   *      for the demo seed (whose instruments have client-side UUIDs that
-   *      don't match anything in the backend DB). Goes away once the
-   *      seed itself is removed (post-M5).
-   */
-  getCurrentPrice(symbol: string): number | undefined {
-    const live = this.livePrice.getCurrentPriceBySymbol(symbol);
-    if (live !== undefined) {
-      return live;
-    }
-    return HoldingService.MOCK_CURRENT_PRICES[symbol];
-  }
-
-  /**
-   * Demo-only fallback prices for the seeded mock holdings. Used when
-   * the live price feed has no data for a symbol (typical for the
-   * client-side UUID seed which doesn't exist server-side).
-   */
-  private static readonly MOCK_CURRENT_PRICES: Record<string, number> = {
-    AAPL: 175.0,
-    'AAPL.X': 176.0,
-    MSFT: 410.0,
-    BTC: 58000.0,
-    USD: 1.0,
-    'KYIV-APT-1': 110000.0,
-  };
-
   resetDemoData(): void {
     if (!environment.demoData) {
       // Guard against the "Reset demo data" button being wired up in a
@@ -448,16 +446,23 @@ export class HoldingService {
   /**
    * Materialises the demo seed and persists the seed version so the next
    * bootstrap doesn't re-trigger the migration path.
+   *
+   * Async since v4 — market-backed instruments are resolved through the
+   * backend search endpoints so their ids match the catalog. The UI shows
+   * an empty store for the ~one-round-trip it takes (or longer if the
+   * backend is offline + nothing in the seed cache — then we fall back to
+   * client-UUID getOrCreate just like v3).
    */
   private runSeed(): void {
-    const seeded = this.seedMockHoldings();
-    this.store$.dispatch(
-      loadHoldings({ state: { holdingsList: seeded } }),
-    );
-    localStorage.setItem(
-      HoldingService.SEED_VERSION_KEY,
-      String(HoldingService.SEED_VERSION),
-    );
+    this.seedMockHoldings().then((seeded) => {
+      this.store$.dispatch(
+        loadHoldings({ state: { holdingsList: seeded } }),
+      );
+      localStorage.setItem(
+        HoldingService.SEED_VERSION_KEY,
+        String(HoldingService.SEED_VERSION),
+      );
+    });
   }
 
   /**
@@ -475,14 +480,20 @@ export class HoldingService {
    *  - **MSFT / USD / KYIV-APT-1** stay single-location so single-holding
    *    Position-card path is also covered.
    *
-   * The seed creates Instruments via `InstrumentService.getOrCreate` (which
-   * caches by symbol+class so repeated calls for the same symbol return
-   * the same Instrument). Tags resolved by name against the snapshot
-   * captured at seed-time. Each holding carries `accountKind`/`accountName`
-   * directly — heuristic inference (ADR-0001) waits for the real Account
-   * model in M2.
+   * The seed resolves market-backed Instruments (STOCK / ETF / CRYPTO /
+   * TOKENIZED_STOCK) through `InstrumentService.searchMarket()` so their
+   * ids match the backend catalog and live polling returns real Alpha
+   * Vantage / CoinGecko quotes (live-prices doc §2, Option B). Resolutions
+   * are persisted in {@link HoldingService.SEED_INSTRUMENTS_KEY} so dev
+   * resets don't re-hit the API and burn the 25 req/day quota. On failure
+   * (server down, network, empty results, non-market class) the seed falls
+   * back to `getOrCreate` with a client-side UUID — those holdings won't
+   * get live prices but the dashboard still renders. Tags resolved by name
+   * against the snapshot captured at seed-time. Each holding carries
+   * `accountKind`/`accountName` directly — heuristic inference (ADR-0001)
+   * waits for the real Account model in M2.
    */
-  private seedMockHoldings(): IHolding[] {
+  private async seedMockHoldings(): Promise<IHolding[]> {
     const now = new Date().toISOString();
     const allTags = this.readTagsSnapshot();
     const tagId = (name: string): string | undefined =>
@@ -695,8 +706,22 @@ export class HoldingService {
     ];
 
     // Materialise instruments once each, then build holdings against them.
+    // Market-backed classes (STOCK / ETF / CRYPTO / TOKENIZED_STOCK) try the
+    // backend search first so the resulting id matches the canonical catalog
+    // entry and `/prices/batch` returns real quotes. Manual classes (CASH /
+    // DEPOSIT / REAL_ESTATE / OTHER) and market-class fallback (server
+    // offline, quota exhausted, no exact-symbol match) go through
+    // `getOrCreate` with a client UUID — those holdings won't get live
+    // prices but the rest of the seed still works.
+    const seedCache = this.readSeedInstrumentCache();
     const instrumentBySymbol = new Map<string, IInstrument>();
     for (const spec of instruments) {
+      const resolved = await this.resolveMarketInstrument(spec, seedCache);
+      if (resolved) {
+        this.instruments.addMarketInstruments([resolved]);
+        instrumentBySymbol.set(spec.symbol, resolved);
+        continue;
+      }
       instrumentBySymbol.set(
         spec.symbol,
         this.instruments.getOrCreate({
@@ -708,6 +733,7 @@ export class HoldingService {
         }),
       );
     }
+    this.persistSeedInstrumentCache(seedCache);
 
     const holdings: IHolding[] = [];
     for (const spec of holdingSpecs) {
@@ -752,5 +778,74 @@ export class HoldingService {
       })
       .unsubscribe();
     return snapshot;
+  }
+
+  /**
+   * Resolve a market-backed seed instrument through
+   * {@link InstrumentService.searchMarket}. Mutates `cache` in-place when
+   * a fresh resolution succeeds so the caller can persist the full snapshot
+   * after the loop. Returns `undefined` for manual classes and on any
+   * failure path so the caller falls back to `getOrCreate`.
+   */
+  private async resolveMarketInstrument(
+    spec: { symbol: string; assetClass: AssetClass },
+    cache: Map<string, IInstrument>,
+  ): Promise<IInstrument | undefined> {
+    const key = HoldingService.seedCacheKey(spec.symbol, spec.assetClass);
+    const cached = cache.get(key);
+    if (cached) {
+      return cached;
+    }
+    if (!isMarketBackedAssetClass(spec.assetClass)) {
+      return undefined;
+    }
+    try {
+      const res = await firstValueFrom(
+        this.instruments.searchMarket(spec.symbol, spec.assetClass, 5),
+      );
+      // Prefer an exact symbol match (Alpha Vantage often returns related
+      // tickers like AAPLU / AAPLW alongside AAPL). Fall back to first
+      // result if the exact symbol isn't there — better a wrong-but-real
+      // instrument than a client-UUID stub for the demo seed.
+      const match =
+        res.results.find((r) => r.symbol === spec.symbol) ?? res.results[0];
+      if (match) {
+        cache.set(key, match);
+        return match;
+      }
+    } catch {
+      // Network error / server offline / unexpected throw — caller falls
+      // back to getOrCreate with a client UUID. The miss is silent on
+      // purpose: seed is a dev-only convenience, not a user-facing flow.
+    }
+    return undefined;
+  }
+
+  private readSeedInstrumentCache(): Map<string, IInstrument> {
+    const raw = localStorage.getItem(HoldingService.SEED_INSTRUMENTS_KEY);
+    const map = new Map<string, IInstrument>();
+    if (!raw) {
+      return map;
+    }
+    try {
+      const list = JSON.parse(raw) as IInstrument[];
+      for (const inst of list) {
+        map.set(HoldingService.seedCacheKey(inst.symbol, inst.assetClass), inst);
+      }
+    } catch {
+      // Corrupted — start fresh, next successful resolution will overwrite.
+    }
+    return map;
+  }
+
+  private persistSeedInstrumentCache(cache: Map<string, IInstrument>): void {
+    localStorage.setItem(
+      HoldingService.SEED_INSTRUMENTS_KEY,
+      JSON.stringify(Array.from(cache.values())),
+    );
+  }
+
+  private static seedCacheKey(symbol: string, assetClass: AssetClass): string {
+    return `${symbol}|${assetClass}`;
   }
 }
