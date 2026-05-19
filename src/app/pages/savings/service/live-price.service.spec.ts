@@ -103,6 +103,9 @@ describe('LivePriceService', () => {
   let marketStatus: FakeMarketStatusService;
 
   beforeEach(() => {
+    // `init()` now hydrates `_quotes` from localStorage (PR2). Tests share
+    // the host's storage, so wipe per-test to avoid cross-contamination.
+    localStorage.clear();
     store = new FakeStore();
     instruments = new FakeInstrumentService();
     marketStatus = new FakeMarketStatusService();

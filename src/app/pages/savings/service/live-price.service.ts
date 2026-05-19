@@ -66,6 +66,18 @@ export class LivePriceService {
   private static readonly POLL_INTERVAL_MS = 30_000;
   /** How long a flash hint stays in the map after a price change. */
   private static readonly FLASH_TIMEOUT_MS = 600;
+  /**
+   * localStorage key for persisted quote snapshot (live-prices doc §4,
+   * PR2). Survives reloads so an offline reload sees yesterday's prices
+   * instead of an empty `/savings` placeholder.
+   */
+  private static readonly QUOTES_STORAGE_KEY = 'live-prices-cache';
+  /**
+   * Whole-snapshot TTL. If the persisted blob is older than this we drop
+   * it — better to show "no prices available" than render last month's
+   * AAPL on a forgotten tab.
+   */
+  private static readonly QUOTES_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
   private readonly http = inject(HttpClient);
   private readonly store = inject(Store);
@@ -132,11 +144,18 @@ export class LivePriceService {
    * Idempotent. First call starts the polling loop (one immediate fetch
    * plus every 30s after). Subsequent calls are no-ops — the service is
    * `providedIn: 'root'`, so a singleton already exists.
+   *
+   * Hydrates `_quotes` from localStorage **before** subscribing so a
+   * reload-with-no-connectivity still has yesterday's prices available
+   * to render `/savings` instead of an empty placeholder (live-prices
+   * doc §4, PR2). The very next poll on reconnect overwrites whatever
+   * the cache held.
    */
   init(): void {
     if (this.pollSubscription) {
       return;
     }
+    this.hydrateQuotesFromStorage();
     this.pollSubscription = interval(LivePriceService.POLL_INTERVAL_MS)
       .pipe(
         startWith(0),
@@ -148,6 +167,28 @@ export class LivePriceService {
   /** Read-only access to the current price for one instrument. */
   getCurrentPrice(instrumentId: string): number | undefined {
     return this._quotes().get(instrumentId)?.price;
+  }
+
+  /**
+   * Reactive count of quotes currently held in memory (live or hydrated
+   * from localStorage by {@link #init}). `/savings` uses this to decide
+   * whether to render the blocking offline placeholder — if we have any
+   * cached quotes the dashboard can still render with last-known values
+   * (live-prices doc §3, PR3).
+   */
+  public readonly quoteCount = computed(() => this._quotes().size);
+
+  /**
+   * Fire one extra fetch outside the regular interval. Used by the offline
+   * placeholder's "Retry" button so the user doesn't have to wait up to
+   * 30s for the next scheduled tick after reconnecting. Idempotent if
+   * polling hasn't started yet (no-op until {@link #init} is called).
+   */
+  refresh(): void {
+    if (!this.pollSubscription) {
+      return;
+    }
+    this.fetchOnce().subscribe((quotes) => this.absorb(quotes));
   }
 
   /**
@@ -234,6 +275,7 @@ export class LivePriceService {
     }
 
     this._quotes.set(next);
+    this.persistQuotes(next);
 
     if (flashes.size > 0) {
       this._flashing.set(flashes);
@@ -243,6 +285,59 @@ export class LivePriceService {
       this.flashTimeout = setTimeout(() => {
         this._flashing.set(new Map());
       }, LivePriceService.FLASH_TIMEOUT_MS);
+    }
+  }
+
+  /**
+   * Read the persisted quote snapshot into `_quotes`. Whole-blob TTL: if
+   * `savedAt` is older than {@link LivePriceService.QUOTES_TTL_MS} we drop
+   * the entire snapshot. Per-quote `capturedAt` is ignored here on purpose
+   * — wire-format inconsistency (epoch+nanos vs ISO string, PR8a §5 QoL)
+   * makes per-row TTL fragile; whole-blob age is good enough.
+   */
+  private hydrateQuotesFromStorage(): void {
+    const raw = localStorage.getItem(LivePriceService.QUOTES_STORAGE_KEY);
+    if (!raw) {
+      return;
+    }
+    try {
+      const env = JSON.parse(raw) as {
+        savedAt?: unknown;
+        quotes?: unknown;
+      };
+      if (
+        typeof env.savedAt !== 'number' ||
+        Date.now() - env.savedAt > LivePriceService.QUOTES_TTL_MS ||
+        !Array.isArray(env.quotes)
+      ) {
+        localStorage.removeItem(LivePriceService.QUOTES_STORAGE_KEY);
+        return;
+      }
+      const next = new Map<string, PriceQuote>();
+      for (const q of env.quotes as PriceQuote[]) {
+        if (q && typeof q.instrumentId === 'string') {
+          next.set(q.instrumentId, q);
+        }
+      }
+      this._quotes.set(next);
+    } catch {
+      // Corrupted blob — wipe so we don't retry next session.
+      localStorage.removeItem(LivePriceService.QUOTES_STORAGE_KEY);
+    }
+  }
+
+  private persistQuotes(quotes: Map<string, PriceQuote>): void {
+    try {
+      localStorage.setItem(
+        LivePriceService.QUOTES_STORAGE_KEY,
+        JSON.stringify({
+          savedAt: Date.now(),
+          quotes: Array.from(quotes.values()),
+        }),
+      );
+    } catch {
+      // localStorage quota / serialization failure — best-effort. The
+      // in-memory map still works for the rest of the session.
     }
   }
 }
