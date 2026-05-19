@@ -1,0 +1,18 @@
+<div class="confirm">
+  <h3 class="confirm__title">Delete account «{{ data.label }}»?</h3>
+
+  @if (data.holdingsCount > 0) {
+    <p class="confirm__warn">
+      This will also delete <strong>{{ data.holdingsCount }}</strong>
+      holding{{ data.holdingsCount === 1 ? '' : 's' }} on this account.
+      This action cannot be undone.
+    </p>
+  } @else {
+    <p class="confirm__hint">This account has no holdings — safe to delete.</p>
+  }
+
+  <div class="confirm__actions">
+    <button mat-stroked-button (click)="onCancel()">Cancel</button>
+    <button mat-flat-button color="warn" (click)="onConfirm()">Delete</button>
+  </div>
+</div>

@@ -32,6 +32,7 @@ import { HoldingsListComponent } from './components/holdings/holdings-list.compo
 // future /analytics screen (M5+) but are no longer rendered on /savings.
 import { PortfolioSummaryComponent } from './components/holdings/portfolio-summary/portfolio-summary.component';
 import { PositionCardComponent } from './components/positions/position-card/position-card.component';
+import { AccountsService } from './service/accounts.service';
 import { HoldingService } from './service/holding.service';
 import { InstrumentService } from './service/instrument.service';
 import { LivePriceService } from './service/live-price.service';
@@ -121,6 +122,7 @@ export class SavingsComponent implements OnInit {
   private readonly marketStatus = inject(MarketStatusService);
   private readonly positionsSvc = inject(PositionsService);
   private readonly tags = inject(TagsService);
+  private readonly accounts = inject(AccountsService);
   private readonly userPrefs = inject(UserPreferencesService);
 
   /**
@@ -261,6 +263,7 @@ export class SavingsComponent implements OnInit {
     // (so HoldingService.seedMockHoldings can read system tag IDs by name),
     // then instruments, then holdings.
     this.tags.init();
+    this.accounts.init();
     this.instruments.init();
     this.holdings.init();
     // Market status comes up first so the live-price service can read
@@ -324,6 +327,10 @@ export class SavingsComponent implements OnInit {
 
   public openTagsManage(): void {
     this.router.navigate(['/savings/tags']);
+  }
+
+  public openAccountsManage(): void {
+    this.router.navigate(['/savings/accounts']);
   }
 
   // ---- Legacy FAB-driven Add flow (until PR5 ships the new Add Holding form) ----

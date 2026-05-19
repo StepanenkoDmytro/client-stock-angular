@@ -1,0 +1,41 @@
+:host {
+  display: block;
+  height: 100%;
+  background-color: var(--pgz-bg-page);
+}
+
+.af {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 16px 24px;
+  }
+
+  &__field {
+    width: 100%;
+  }
+
+  &__currency-hint {
+    margin-right: 6px;
+    opacity: 0.7;
+
+    &:not(:last-child)::after {
+      content: ' ·';
+      margin-left: 6px;
+      opacity: 0.5;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 16px;
+  }
+}

@@ -9,6 +9,7 @@ import { provideState, provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { userReducer } from './store/user.reducer';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { accountsReducer } from './pages/savings/store/accounts.reducer';
 import { assetReducer } from './pages/savings/store/asset.reducer';
 import { holdingsReducer } from './pages/savings/store/holdings.reducer';
 import { tagsReducer } from './pages/savings/store/tags.reducer';
@@ -35,6 +36,7 @@ export const appConfig: ApplicationConfig = {
     provideState({ name: 'assets', reducer: assetReducer }),
     provideState({ name: 'tags', reducer: tagsReducer }),
     provideState({ name: 'holdings', reducer: holdingsReducer }),
+    provideState({ name: 'accounts', reducer: accountsReducer }),
     provideEffects([UserEffects, SpendingsEffects, SyncDataEffects]),
     provideStoreDevtools({
       maxAge: 25, 

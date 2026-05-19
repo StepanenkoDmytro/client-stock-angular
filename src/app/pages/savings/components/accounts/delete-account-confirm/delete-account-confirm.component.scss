@@ -1,0 +1,32 @@
+.confirm {
+  padding: 16px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  &__title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  &__warn {
+    margin: 0;
+    color: var(--pgz-text-danger, #d32f2f);
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  &__hint {
+    margin: 0;
+    color: var(--pgz-text-muted, rgba(0, 0, 0, 0.6));
+    font-size: 14px;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 8px;
+  }
+}

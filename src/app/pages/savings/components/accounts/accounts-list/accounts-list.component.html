@@ -1,0 +1,58 @@
+<section class="page al">
+  <div (click)="goBack()">
+    <pgz-prev-route>
+      <p>Manage accounts</p>
+    </pgz-prev-route>
+  </div>
+
+  <div class="al__body">
+    <button mat-flat-button color="primary" class="al__add" (click)="onAdd()">
+      <mat-icon>add</mat-icon>
+      Add account
+    </button>
+
+    @if (accounts().length === 0) {
+      <div class="al__empty">
+        <mat-icon class="al__empty-icon">account_balance_wallet</mat-icon>
+        <p class="al__empty-title">No accounts yet</p>
+        <p class="al__empty-hint">
+          Tap "Add account" to register an IBKR brokerage, Mono bank,
+          Bybit exchange, or your own manual bucket.
+        </p>
+      </div>
+    } @else {
+      <ul class="al__list">
+        @for (a of accounts(); track a.id) {
+          <li class="al__item" (click)="onEdit(a)">
+            <div class="al__info">
+              <p class="al__name">{{ displayName(a) }}</p>
+              <p class="al__meta">
+                <span class="al__type">{{ a.accountType }}</span>
+                @if (a.provider) {
+                  <span class="al__sep">·</span>
+                  <span class="al__provider">{{ a.provider }}</span>
+                }
+                @if (a.currency) {
+                  <span class="al__sep">·</span>
+                  <span class="al__currency">{{ a.currency }}</span>
+                }
+              </p>
+            </div>
+            <div class="al__actions">
+              <button mat-icon-button
+                      aria-label="Edit"
+                      (click)="onEdit(a); $event.stopPropagation()">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button
+                      aria-label="Delete"
+                      (click)="onDelete(a, $event)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+</section>

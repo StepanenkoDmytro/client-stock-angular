@@ -63,4 +63,16 @@ export const SAVINGS_ROUTES: Route[] = [
         path: 'tags/edit/:id',
         loadComponent: () => import('./components/tags/tag-form/tag-form.component').then(c => c.TagFormComponent),
     },
+    {
+        path: 'accounts',
+        loadComponent: () => import('./components/accounts/accounts-list/accounts-list.component').then(c => c.AccountsListComponent),
+    },
+    {
+        path: 'accounts/add',
+        loadComponent: () => import('./components/accounts/account-form/account-form.component').then(c => c.AccountFormComponent),
+    },
+    {
+        path: 'accounts/edit/:id',
+        loadComponent: () => import('./components/accounts/account-form/account-form.component').then(c => c.AccountFormComponent),
+    },
 ];

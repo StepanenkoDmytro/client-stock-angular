@@ -1,0 +1,67 @@
+<section class="page af">
+  <div (click)="onCancel()">
+    <pgz-prev-route>
+      <p>{{ title() }}</p>
+    </pgz-prev-route>
+  </div>
+
+  <form class="af__form" [formGroup]="form" (ngSubmit)="onSave()">
+    <mat-form-field appearance="outline" class="af__field">
+      <mat-label>Account type</mat-label>
+      <mat-select formControlName="accountType">
+        @for (t of accountTypes; track t) {
+          <mat-option [value]="t">{{ t }}</mat-option>
+        }
+      </mat-select>
+      <mat-hint>
+        Manual = you track manually. Brokerage / Exchange / Bank / Wallet
+        — pair with the vendor short id below for future auto-sync.
+      </mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="af__field">
+      <mat-label>Display name / account number</mat-label>
+      <input matInput
+             formControlName="accountNumber"
+             placeholder="e.g. IBKR U1234 · Bybit Spot · Mono UAH"
+             autocomplete="off" />
+      <mat-hint>Optional. Falls back to "{{ form.value.provider || '—' }} {{ form.value.accountType }}" in lists.</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="af__field">
+      <mat-label>Provider</mat-label>
+      <input matInput
+             formControlName="provider"
+             placeholder="IBKR · BYBIT · MONO"
+             autocomplete="off" />
+      <mat-hint>Short vendor id. Null for Manual.</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="af__field">
+      <mat-label>Currency</mat-label>
+      <input matInput
+             formControlName="currency"
+             placeholder="USD"
+             autocomplete="off"
+             maxlength="8" />
+      <mat-hint>
+        ISO 4217. Popular:
+        @for (c of currencies; track c) {
+          <span class="af__currency-hint">{{ c }}</span>
+        }
+      </mat-hint>
+    </mat-form-field>
+
+    <div class="af__actions">
+      <button mat-stroked-button type="button" (click)="onCancel()">
+        Cancel
+      </button>
+      <button mat-flat-button
+              color="primary"
+              type="submit"
+              [disabled]="!form.valid || saving()">
+        {{ isEdit() ? 'Save changes' : 'Add account' }}
+      </button>
+    </div>
+  </form>
+</section>
