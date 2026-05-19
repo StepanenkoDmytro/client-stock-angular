@@ -3,6 +3,7 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { Observable, catchError, of, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { UserPreferences } from '../../../domain/user-preferences.domain';
+import { AuthService } from '../../../service/auth.service';
 
 /**
  * Frontend client for `GET / PUT /api/v1/me/preferences` (M3 backend).
@@ -12,6 +13,7 @@ import { UserPreferences } from '../../../domain/user-preferences.domain';
 @Injectable({ providedIn: 'root' })
 export class UserPreferencesService {
   private readonly http = inject(HttpClient);
+  private readonly auth = inject(AuthService);
 
   /** Latest fetched preferences; `null` before first {@link load}. */
   private readonly _current = signal<UserPreferences | null>(null);
@@ -26,8 +28,17 @@ export class UserPreferencesService {
    * Idempotent fetch — issue once per session typically (from a top-level
    * component). Returns an observable for first-load awaiters; the
    * cached signal also updates.
+   *
+   * Anonymous (no auth token): short-circuit to `null`. Hitting
+   * `/me/preferences` without auth would 401, the interceptor would
+   * silently try `/refresh-token`, fail, then logout-redirect — exactly
+   * the bug ADR-0012 calls out for anonymous mode. Caller's UI falls
+   * back to a locally-stored default baseCurrency (e.g. 'USD').
    */
   public load(): Observable<UserPreferences | null> {
+    if (!this.auth.authToken) {
+      return of(null);
+    }
     return this.http
       .get<UserPreferences>(`${environment.apiBaseUrl}/me/preferences`)
       .pipe(

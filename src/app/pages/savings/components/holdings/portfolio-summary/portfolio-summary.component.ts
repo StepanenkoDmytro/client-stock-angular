@@ -13,6 +13,7 @@ import { ITag } from '../../../../../domain/tag.domain';
 import { HoldingService } from '../../../service/holding.service';
 import { InstrumentService } from '../../../service/instrument.service';
 import { LivePriceService } from '../../../service/live-price.service';
+import { PortfolioOverviewService } from '../../../service/portfolio-overview.service';
 import { TagsService } from '../../../service/tags.service';
 import { selectHoldingsList } from '../../../store/holdings.selectors';
 import { selectTagsList } from '../../../store/tags.selectors';
@@ -55,6 +56,7 @@ export class PortfolioSummaryComponent implements OnInit {
   private readonly holdings = inject(HoldingService);
   private readonly instruments = inject(InstrumentService);
   private readonly livePrice = inject(LivePriceService);
+  private readonly portfolioOverview = inject(PortfolioOverviewService);
   private readonly tags = inject(TagsService);
 
   private readonly rawHoldings = this.store.selectSignal(selectHoldingsList);
@@ -78,6 +80,30 @@ export class PortfolioSummaryComponent implements OnInit {
     }
     return result;
   });
+
+  /**
+   * Phase 4 (M3 FX integration): backend-aggregated total + breakdown
+   * in the user's `baseCurrency`. When `null` (anonymous, no auth, or
+   * fetch error) the UI falls back to the local client-side aggregate
+   * in {@link #summary}. `SavingsComponent` triggers the refresh on
+   * `ngOnInit`; this component just consumes the cached signal.
+   */
+  public readonly backendOverview = this.portfolioOverview.latest;
+
+  /**
+   * Displayed total — prefer the backend FX-normalised value when
+   * available so the user sees their portfolio in `baseCurrency`.
+   * Fallback to the local sum (mixed currencies, no FX) for anonymous
+   * mode and during the round-trip before the first overview arrives.
+   */
+  public readonly displayTotal = computed<number>(
+    () => this.backendOverview()?.total ?? this.summary().totalValue,
+  );
+
+  /** Display currency code — backend overview's baseCurrency or 'USD' fallback. */
+  public readonly displayCurrency = computed<string>(
+    () => this.backendOverview()?.baseCurrency ?? 'USD',
+  );
 
   public readonly summary = computed(() => {
     const all = this.holdingsView();
@@ -182,6 +208,23 @@ export class PortfolioSummaryComponent implements OnInit {
       minimumFractionDigits: fractionDigits,
       maximumFractionDigits: fractionDigits,
     });
+  }
+
+  /**
+   * Currency-prefix helper. Renders `$` for USD (most common), `€` for
+   * EUR, `£` for GBP; ISO code + space otherwise (e.g. `UAH 12,500`).
+   * Until Phase 7 redesign overhauls currency display globally, this
+   * minimal mapping keeps the dashboard readable in the three target
+   * currencies (`monetization-strategy.md §5` — EU + UK + UA).
+   */
+  public currencyPrefix(currency: string): string {
+    switch (currency) {
+      case 'USD': return '$';
+      case 'EUR': return '€';
+      case 'GBP': return '£';
+      case 'UAH': return '₴';
+      default: return `${currency} `;
+    }
   }
 
   public formatPercent(value: number, fractionDigits = 1): string {

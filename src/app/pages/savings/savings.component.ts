@@ -40,6 +40,7 @@ import { HoldingService } from './service/holding.service';
 import { InstrumentService } from './service/instrument.service';
 import { LivePriceService } from './service/live-price.service';
 import { MarketStatusService } from './service/market-status.service';
+import { PortfolioOverviewService } from './service/portfolio-overview.service';
 import { PositionsService } from './service/positions.service';
 import { TagsService } from './service/tags.service';
 import { UserPreferencesService } from './service/user-preferences.service';
@@ -129,6 +130,7 @@ export class SavingsComponent implements OnInit {
   private readonly tags = inject(TagsService);
   private readonly accounts = inject(AccountsService);
   private readonly userPrefs = inject(UserPreferencesService);
+  private readonly portfolioOverview = inject(PortfolioOverviewService);
   private readonly network = inject(NetworkStatusService);
 
   /**
@@ -318,10 +320,19 @@ export class SavingsComponent implements OnInit {
     this.livePrice.init();
     // Bootstrap user-preferences (baseCurrency etc.). Single fire — the
     // service caches as a signal so subsequent components read straight
-    // from `userPrefs.baseCurrency()` without their own HTTP. Errors
-    // (no auth, network) leave the cached value at null; UI continues
-    // using its local default until a successful login.
+    // from `userPrefs.baseCurrency()` without their own HTTP. Anonymous
+    // and errors (no auth, network) leave the cached value at null; UI
+    // continues using its local default until a successful login.
     this.userPrefs.load()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe();
+
+    // Phase 4: fetch the backend-aggregated overview (FX-normalised total
+    // in baseCurrency + per-class breakdown). PortfolioSummaryComponent
+    // prefers this value when available, otherwise falls back to local
+    // client-side aggregation. Anonymous short-circuits to no-op via the
+    // service's auth gate.
+    this.portfolioOverview.refresh()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe();
 

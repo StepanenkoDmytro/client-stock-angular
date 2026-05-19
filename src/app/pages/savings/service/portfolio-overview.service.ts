@@ -3,6 +3,7 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { Observable, catchError, of, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { PortfolioOverview } from '../../../domain/portfolio-overview.domain';
+import { AuthService } from '../../../service/auth.service';
 
 /**
  * Frontend client for `GET /api/v1/portfolio/overview` (M3 backend MVP).
@@ -22,6 +23,7 @@ import { PortfolioOverview } from '../../../domain/portfolio-overview.domain';
 @Injectable({ providedIn: 'root' })
 export class PortfolioOverviewService {
   private readonly http = inject(HttpClient);
+  private readonly auth = inject(AuthService);
 
   /** Last fetched overview; `null` until first successful {@link refresh}. */
   private readonly _latest = signal<PortfolioOverview | null>(null);
@@ -43,8 +45,18 @@ export class PortfolioOverviewService {
    * Trigger a fresh fetch. Returns the same observable so callers may
    * await completion (e.g. for first-load gating); the cached signal
    * also updates on success.
+   *
+   * Anonymous (no auth token): short-circuit to `null`. The endpoint
+   * is auth-only — without a token the request would 401, trip the
+   * interceptor's silent-refresh chain, and force-redirect to /sign-in.
+   * Anonymous user's `/savings` falls back to client-side aggregation
+   * (single-currency, no FX), which is fine: they have no baseCurrency
+   * preference set anyway until they sign up.
    */
   public refresh(): Observable<PortfolioOverview | null> {
+    if (!this.auth.authToken) {
+      return of(null);
+    }
     this._loading.set(true);
     return this.http
       .get<PortfolioOverview>(`${environment.apiBaseUrl}/portfolio/overview`)

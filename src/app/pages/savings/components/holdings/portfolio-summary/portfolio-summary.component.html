@@ -1,8 +1,11 @@
 <aside class="summary">
-  <!-- Now tier: total value + today's paper P&L + per-class breakdown -->
+  <!-- Now tier: total value + today's paper P&L + per-class breakdown.
+       Total uses backend FX-normalised value when available (Phase 4 M3
+       integration) — currency symbol from user's baseCurrency. Falls back
+       to local mixed-currency sum for anonymous and pre-fetch. -->
   <header class="summary__now-header">
     <span class="summary__caption">PORTFOLIO</span>
-    <span class="summary__total">${{ formatNumber(summary().totalValue) }}</span>
+    <span class="summary__total">{{ currencyPrefix(displayCurrency()) }}{{ formatNumber(displayTotal()) }}</span>
   </header>
 
   <div class="summary__pnl-row">
