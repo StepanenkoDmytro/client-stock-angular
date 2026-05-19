@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterOutlet } from '@angular/router';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NavigationComponent } from './core/UI/components/navigation/navigation.component';
+import { OfflineBannerComponent } from './core/UI/components/offline-banner/offline-banner.component';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -19,6 +20,7 @@ const ANGULAR_MODULES = [
 const UI_MODULES = [
   MatSlideToggleModule,
   NavigationComponent,
+  OfflineBannerComponent,
   MatIconModule,
   MatToolbarModule,
 ];

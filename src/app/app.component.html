@@ -1,4 +1,7 @@
 <section class="pgz-application">
+  @if(!isAuthPage()) {
+    <pgz-offline-banner></pgz-offline-banner>
+  }
   <section class="pgz-application--content"
            [class.pgz-application--auth]="isAuthPage()">
     <router-outlet></router-outlet>
@@ -6,5 +9,5 @@
   @if(!isAuthPage()) {
     <pgz-navigation class="pgz-application--bottom-navigation"></pgz-navigation>
   }
-  
+
 </section>
