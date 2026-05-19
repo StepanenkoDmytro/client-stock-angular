@@ -1,0 +1,39 @@
+<div class="row" [class.row--attention]="isAttention()">
+  <div class="row__icon" [style.background]="iconBgForType()">
+    <span class="row__icon-glyph">{{ iconForType() }}</span>
+  </div>
+
+  <div class="row__info">
+    <p class="row__name">{{ label() }}</p>
+    <p class="row__sub">{{ subtitle() }}</p>
+    <p class="row__status row__status--{{ statusLine().tone }}">
+      <span class="row__dot"></span>
+      <span class="row__status-text">{{ statusLine().text }}</span>
+    </p>
+  </div>
+
+  <div class="row__menu">
+    <button mat-icon-button
+            [matMenuTriggerFor]="actions"
+            aria-label="Account actions"
+            class="row__menu-trigger">
+      <mat-icon>more_horiz</mat-icon>
+    </button>
+    <mat-menu #actions="matMenu">
+      @if (canRetry()) {
+        <button mat-menu-item (click)="onRetry()">
+          <mat-icon>refresh</mat-icon>
+          <span>Retry sync</span>
+        </button>
+      }
+      <button mat-menu-item (click)="onEdit()">
+        <mat-icon>edit</mat-icon>
+        <span>Edit</span>
+      </button>
+      <button mat-menu-item (click)="onDelete()">
+        <mat-icon>delete</mat-icon>
+        <span>Delete</span>
+      </button>
+    </mat-menu>
+  </div>
+</div>

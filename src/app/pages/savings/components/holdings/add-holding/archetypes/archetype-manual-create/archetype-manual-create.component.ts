@@ -21,7 +21,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { environment } from '../../../../../../../../environments/environment';
 import { IAccountV2 } from '../../../../../../../domain/account-v2.domain';
@@ -73,6 +73,13 @@ export class ArchetypeManualCreateComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);
   private readonly accountsService = inject(AccountsService);
+  private readonly router = inject(Router);
+
+  /**
+   * Sentinel matching the "+ Add new account" option in the picker —
+   * see ArchetypeMarketBackedComponent for the rationale.
+   */
+  public readonly ADD_NEW_ACCOUNT_SENTINEL = '__add_new_account__';
 
   @Input({ required: true })
   public set assetClass(value: AssetClass) {
@@ -214,6 +221,14 @@ export class ArchetypeManualCreateComponent implements OnInit {
     // is implicit on next interaction. Simply clear.
     this.createdInstrument.set(null);
     this.emit();
+  }
+
+  /** See ArchetypeMarketBackedComponent.onAccountSelectionChange. */
+  public onAccountSelectionChange(value: string): void {
+    if (value !== this.ADD_NEW_ACCOUNT_SENTINEL) return;
+    const previous = this.accounts()[0]?.id ?? 'manual';
+    this.form.get('accountId')?.setValue(previous, { emitEvent: false });
+    this.router.navigate(['/savings/accounts/add']);
   }
 
   private emit(): void {

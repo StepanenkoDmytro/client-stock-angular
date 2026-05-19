@@ -21,3 +21,14 @@ export const deleteAccount = createAction(
   '[ACCOUNTS] Delete Account',
   (payload: { id: string }) => ({ payload }),
 );
+
+/**
+ * Marks an account's sync attempt outcome. PR-A6 ships this as a STUB —
+ * `AccountsService.retrySync` just bumps {@code lastSyncedAt} + sets
+ * status to `OK` without an actual upstream call. M7+ provider PRs
+ * (IBKR / Bybit / Mono integrations) replace the stub with real sync.
+ */
+export const markAccountSync = createAction(
+  '[ACCOUNTS] Mark Sync',
+  (payload: { id: string; syncedAt: string; status: 'OK' | 'STALE' | 'ERROR' | 'NEVER' }) => ({ payload }),
+);

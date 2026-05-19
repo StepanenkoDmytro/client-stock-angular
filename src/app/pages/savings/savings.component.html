@@ -1,14 +1,10 @@
 <section class="savings">
   <header class="savings__header">
     <h1 class="savings__title">Portfolio</h1>
-    <button type="button"
-            class="savings__hide-pill"
-            [class.active]="hideBalances()"
-            aria-label="Toggle hide balances"
-            disabled
-            matTooltip="Coming soon">
-      Hide $
-    </button>
+    <!-- Hide $ pill removed (PR-A6); slot now hosts the accounts chip.
+         The hide-balances toggle migrates to Profile/Settings in a
+         separate micro-PR per PR-A6 §5 "Hide $ relocation". -->
+    <pgz-accounts-chip class="savings__accounts-chip"></pgz-accounts-chip>
   </header>
 
   <div class="savings__view-toggle">

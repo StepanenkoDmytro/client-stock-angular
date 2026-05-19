@@ -1,0 +1,67 @@
+:host {
+  display: inline-block;
+}
+
+.chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  height: 32px;
+  min-width: 106px;
+  background: var(--pgz-card-bg, #fff);
+  border: 0.5px solid var(--pgz-card-border, #d3d1c7);
+  border-radius: 16px;
+  color: var(--pgz-text-primary, #2c2c2a);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.03);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pgz-text-link, #185fa5);
+    outline-offset: 2px;
+  }
+
+  &__icon {
+    width: 14px;
+    height: 14px;
+    color: var(--pgz-text-muted, #5f5e5a);
+    flex-shrink: 0;
+  }
+
+  &__count {
+    font-weight: 500;
+    color: var(--pgz-text-primary, #2c2c2a);
+  }
+
+  &__label {
+    color: var(--pgz-text-muted, #5f5e5a);
+  }
+
+  /**
+   * Floating notification badge — amber circle with white halo so it
+   * "lifts" off the chip background. Matches the SVG mockup F1:
+   * positioned at top-right outside the chip outline.
+   */
+  &__badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 9px;
+    background: var(--color-warning, #ba7517);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 18px;
+    text-align: center;
+    box-shadow: 0 0 0 2px var(--pgz-bg-page, #f1efe8);
+  }
+}

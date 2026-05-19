@@ -6,6 +6,7 @@ import {
   deleteAccount,
   editAccount,
   loadAccounts,
+  markAccountSync,
 } from './accounts.actions';
 
 export interface IAccountsState {
@@ -45,6 +46,15 @@ export const accountsReducer = createReducer<IAccountsState>(
   on(deleteAccount, (state, action) => ({
     ...state,
     accountsList: state.accountsList.filter((a) => a.id !== action.payload.id),
+  })),
+
+  on(markAccountSync, (state, action) => ({
+    ...state,
+    accountsList: state.accountsList.map((a) =>
+      a.id === action.payload.id
+        ? { ...a, syncStatus: action.payload.status, lastSyncedAt: action.payload.syncedAt }
+        : a,
+    ),
   })),
 
   on(logout, () => initialAccountsState),

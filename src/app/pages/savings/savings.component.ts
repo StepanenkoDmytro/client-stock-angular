@@ -26,6 +26,7 @@ import { ITag } from '../../domain/tag.domain';
 import { ButtonToggleComponent } from '../../core/UI/components/button-toggle/button-toggle.component';
 import { SegmentedToggleComponent } from '../../core/UI/components/segmented-toggle/segmented-toggle.component';
 import { SelectMarketDialogComponent } from './components/select-market-dialog/select-market-dialog.component';
+import { AccountsChipComponent } from './components/accounts/accounts-chip/accounts-chip.component';
 import { HoldingsListComponent } from './components/holdings/holdings-list.component';
 // PR5c: kpi-row and wealth-chart-mini imports removed — they remain in the
 // codebase under `components/holdings/{kpi-row,wealth-chart-mini}/` for the
@@ -85,6 +86,7 @@ const UI_COMPONENTS = [
   PositionCardComponent,
   HoldingsListComponent,
   PortfolioSummaryComponent,
+  AccountsChipComponent,
 ];
 
 const MATERIAL_MODULES = [

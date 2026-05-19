@@ -135,6 +135,18 @@ export class ArchetypeMarketBackedComponent implements OnInit {
   public readonly showCreateInline = signal<boolean>(false);
   public readonly inlinePrefillSymbol = signal<string>('');
 
+  /**
+   * Sentinel value for the "+ Add new account" option inside the
+   * Account `<mat-select>`. Selecting it navigates to the dedicated
+   * AccountFormComponent route instead of treating the literal as an
+   * accountId. Picked an underscored prefix that no real id can match.
+   *
+   * <p>TODO (post-PR-A6): once AccountFormComponent supports
+   * MatBottomSheet entry mode, open it inline here instead of
+   * navigating away — keep the add-holding form state intact.
+   */
+  public readonly ADD_NEW_ACCOUNT_SENTINEL = '__add_new_account__';
+
   /** True when the instrument slot is fixed (edit-mode). */
   public readonly instrumentLocked = computed(
     () => this.readOnlyInstrument !== null
@@ -217,6 +229,23 @@ export class ArchetypeMarketBackedComponent implements OnInit {
 
   public onInstrumentCreateCancelled(): void {
     this.showCreateInline.set(false);
+  }
+
+  /**
+   * Catches the "+ Add new account" sentinel in the account picker
+   * and navigates to AccountFormComponent. Revert the form control
+   * to the previous value first — otherwise the sentinel sticks in
+   * the model and Save dispatches a garbage accountId.
+   *
+   * <p>Real account selections fall through (nothing to do beyond
+   * the FormControl's default writeback).
+   */
+  public onAccountSelectionChange(value: string): void {
+    if (value !== this.ADD_NEW_ACCOUNT_SENTINEL) return;
+    // Reset to whatever the prior selection was (or first real account).
+    const previous = this.accounts()[0]?.id ?? 'manual';
+    this.form.get('accountId')?.setValue(previous, { emitEvent: false });
+    this.router.navigate(['/savings/accounts/add']);
   }
 
   private emit(): void {

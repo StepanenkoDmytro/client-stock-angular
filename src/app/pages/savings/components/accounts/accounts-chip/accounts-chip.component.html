@@ -1,0 +1,23 @@
+<button type="button"
+        class="chip"
+        [class.chip--alert]="staleCount() > 0"
+        (click)="onOpen()"
+        aria-label="Open accounts list">
+  <svg class="chip__icon" viewBox="0 0 16 16" aria-hidden="true">
+    <polygon points="0,7 8,2 16,7" fill="none" stroke="currentColor" stroke-width="1.5"
+             stroke-linejoin="round" stroke-linecap="round"/>
+    <line x1="2" y1="14" x2="2" y2="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="6" y1="14" x2="6" y2="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="10" y1="14" x2="10" y2="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="14" y1="14" x2="14" y2="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="1" y1="14" x2="15" y2="14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>
+  <span class="chip__count">{{ accounts().length }}</span>
+  <span class="chip__label">accounts</span>
+
+  @if (staleCount() > 0) {
+    <span class="chip__badge" [attr.aria-label]="staleCount() + ' accounts need attention'">
+      {{ staleCount() }}
+    </span>
+  }
+</button>

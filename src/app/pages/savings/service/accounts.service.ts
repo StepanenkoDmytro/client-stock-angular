@@ -8,6 +8,7 @@ import {
   deleteAccount,
   editAccount,
   loadAccounts,
+  markAccountSync,
 } from '../store/accounts.actions';
 import { IAccountsState } from '../store/accounts.reducer';
 import {
@@ -135,6 +136,32 @@ export class AccountsService {
     );
   }
 
+  /**
+   * STUB — fake sync retry. Real provider integration (IBKR / Bybit /
+   * Mono / Trezor) lands in M7+ PRs; until then this just stamps
+   * `lastSyncedAt = now` + sets status to OK so the UX flow exists
+   * (user taps ⋯ → Retry → amber dot turns green for 60s).
+   *
+   * <p>The frontend logs a console.warn so anyone debugging knows the
+   * green dot is a fiction. When the real sync ships, this method
+   * becomes a thin wrapper over `POST /api/v1/accounts/{id}/sync`.
+   */
+  retrySync(id: string): void {
+    if (typeof console !== 'undefined' && console.warn) {
+      console.warn(
+        'AccountsService.retrySync: M5 stub — no upstream call. ' +
+          'Real IBKR/Bybit/Mono sync lands in M7+ provider PRs.',
+      );
+    }
+    this.store$.dispatch(
+      markAccountSync({
+        id,
+        syncedAt: new Date().toISOString(),
+        status: 'OK',
+      }),
+    );
+  }
+
   // ---- internal ----
 
   private bootstrap(forceReload = false): void {
@@ -175,9 +202,39 @@ export class AccountsService {
       next: (dtos) => {
         const list = dtos.map(AccountsService.fromApiDto);
         this.store$.dispatch(loadAccounts({ state: { accountsList: list } }));
+        // First-run user: server returned empty list AND we have no
+        // local cache → seed a single MANUAL account so the picker on
+        // /savings/add-holding has at least one option. Per PR-A6 §5
+        // "Bootstrap and seed". The user can rename / delete it later.
+        if (list.length === 0) {
+          this.seedManualAccount();
+        }
       },
       error: () => {
         // Keep cache; ApiErrorInterceptor surfaced the snackbar.
+      },
+    });
+  }
+
+  /**
+   * One-time seed of a default MANUAL account for first-run users.
+   * Posts to the backend so the row gets a real id; the success path
+   * appends to the store via {@link #addAccount}'s tap side effect.
+   * Errors are swallowed — interceptor handles user-facing toast.
+   */
+  private seedManualAccount(): void {
+    this.api.create({
+      accountType: 'MANUAL',
+      accountNumber: 'Manual',
+      // no provider/currency — user picks later
+    }).subscribe({
+      next: (dto) => {
+        const seeded = AccountsService.fromApiDto(dto);
+        this.store$.dispatch(addAccount({ account: seeded }));
+      },
+      error: () => {
+        // Quietly skip — empty accounts list is recoverable: the user
+        // will hit the "Add your first account →" CTA on add-holding.
       },
     });
   }
