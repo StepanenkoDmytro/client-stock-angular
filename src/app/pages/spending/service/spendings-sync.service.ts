@@ -7,7 +7,7 @@ import { editSpending, addMultipleSpendings, addSpending } from '../store/spendi
 import { ISpendingsState } from '../store/spendings.reducer';
 import { HttpClient } from '@angular/common/http';
 import { Store } from '@ngrx/store';
-import { OfflineStorageService } from './offline-storage.service';
+import { OfflineStorageService } from '../../../core/offline-storage/offline-storage.service';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({
@@ -15,6 +15,7 @@ import { environment } from '../../../../environments/environment';
 })
 export class SpendingsSyncService {
   private readonly url: string = `${environment.apiBaseUrl}/profile/`;
+  private static readonly ENTITY_KEY = 'spendings';
 
   constructor(
     private http: HttpClient,
@@ -78,7 +79,7 @@ export class SpendingsSyncService {
         // drains it. 4xx (already gone / never existed) is silently OK —
         // the local record is already removed by the reducer.
         if (this.isTransient(error)) {
-          this.offlineStorage.offlineDeleteSpending(spendingId);
+          this.offlineStorage.enqueueDelete(SpendingsSyncService.ENTITY_KEY, spendingId);
         }
         return EMPTY;
       }),
@@ -86,7 +87,7 @@ export class SpendingsSyncService {
   }
 
   private drainFailedDeletes(): void {
-    const queue = this.offlineStorage.getFailedSpendings();
+    const queue = this.offlineStorage.drainDeletes(SpendingsSyncService.ENTITY_KEY);
     for (const id of queue) {
       this.deleteSpending(id).subscribe();
     }
