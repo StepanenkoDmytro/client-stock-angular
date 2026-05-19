@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, map, catchError, EMPTY, firstValueFrom, tap, of } from 'rxjs';
+import { Observable, map, catchError, EMPTY, firstValueFrom, tap } from 'rxjs';
 import { resetCategories, addCategory } from '../store/spendings.actions';
 import { ISpendingsState } from '../store/spendings.reducer';
 import { HttpClient } from '@angular/common/http';
@@ -19,6 +19,12 @@ export class CategiriesSyncService {
     private store: Store<ISpendingsState>,
   ) { }
 
+  // Phase 3a — `navigator.onLine` guards removed; rely on the global
+  // ApiErrorInterceptor for the snackbar (ADR-0012 §"Виправлення багів"
+  // bullet 1). On failure the category stays in the store with
+  // `isSaved: false` and the next sync re-attempts via
+  // `sendUnsavedCategoriesToServer`.
+
   public sendCategoryToServer(portfolioID: number, category: Category): Observable<Category> {
     const savedCategoryUrl = this.url + portfolioID + '/add-category';
     const categoryDTO = Category.mapToCategoryApi(category);
@@ -28,41 +34,26 @@ export class CategiriesSyncService {
         const newCategory = Category.mapFromCategoryApi(response);
         this.store.dispatch(addCategory({ category: newCategory }));
       }),
-      catchError(error => {
-        console.error('Error occurred while saving categories:', error);
-        return EMPTY;
-      })
+      catchError(() => EMPTY),
     );
   }
 
   public deleteCategory(category: Category): Observable<void> {
-    if(!navigator.onLine) {
-      //method for deletenig without connection
-      return EMPTY;
-    }
-
     const deleteUrl = this.url + 'delete-category/' + category.id;
 
-    return this.http.delete(deleteUrl).pipe(
-      map(() => console.log('success deleting spending')), 
-      catchError(error => of(console.log({ error }))) 
+    return this.http.delete<void>(deleteUrl).pipe(
+      map(() => undefined),
+      catchError(() => EMPTY),
     );
   }
 
   public syncCategoriesListWithServer(categoryState: ISpendingsState, portfolioID: number): Observable<void> {
-    if(!navigator.onLine) {
-      return EMPTY;
-    }
-    
     const loadCategoriesUrl = this.url + 'categories-list/' + portfolioID;
     return this.http.get<any>(loadCategoriesUrl).pipe(
       map(serverCategories => {
         return this.updateStateWithSyncCategory(serverCategories, categoryState, portfolioID);
       }),
-      catchError(error => {
-        console.error('Error occurred while loading categories:', error);
-        return EMPTY;
-      })
+      catchError(() => EMPTY),
     );
   }
   

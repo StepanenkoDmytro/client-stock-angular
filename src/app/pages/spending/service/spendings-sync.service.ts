@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable, tap, catchError, EMPTY, map, of, firstValueFrom } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Observable, tap, catchError, EMPTY, map } from 'rxjs';
 import { Category } from '../../../domain/category.domain';
 import { Spending } from '../model/Spending';
-import { editSpending, addMultipleSpendings, addSpending, deleteSpending } from '../store/spendings.actions';
+import { editSpending, addMultipleSpendings, addSpending } from '../store/spendings.actions';
 import { ISpendingsState } from '../store/spendings.reducer';
 import { HttpClient } from '@angular/common/http';
 import { Store } from '@ngrx/store';
@@ -21,11 +22,13 @@ export class SpendingsSyncService {
     private offlineStorage: OfflineStorageService,
   ) { }
 
-  public sendSpendingToServer(portfolioID: number, spending: Spending, categories: Category[]): Observable<Spending> {
-    if(!navigator.onLine) {
-      return EMPTY;
-    }
+  // Phase 3a — `navigator.onLine` guards removed (ADR-0012 §"Виправлення
+  // багів"). Calls always fire; the global ApiErrorInterceptor surfaces the
+  // snackbar on network / 5xx; local catchError keeps state recoverable so
+  // the next sync pass re-attempts via `sendUnsavedSpendingsToServer` (and
+  // the delete drain below).
 
+  public sendSpendingToServer(portfolioID: number, spending: Spending, categories: Category[]): Observable<Spending> {
     const transformedToApi = Spending.mapToSpendingApi(spending);
 
     const savedSpendingUrl = this.url + portfolioID + '/add-spending';
@@ -33,58 +36,65 @@ export class SpendingsSyncService {
       tap((response: any) => {
         const transformedFromApi = Spending.mapFromSpendingApi(response, categories);
         this.store$.dispatch(editSpending({ spending: transformedFromApi }));
-      }), 
-      catchError(error => {
-        console.error('Error occurred while saving spending:', error);
-        return EMPTY;
-      })
+      }),
+      // Failure leaves the spending in the store with `isSaved: false` —
+      // the next `syncSpendingListWithServer` pass picks it up via
+      // `sendUnsavedSpendingsToServer`. Interceptor already toasted.
+      catchError(() => EMPTY),
     );
   }
 
   public syncSpendingListWithServer(spendingState: ISpendingsState, portfolioID: number, categories: Category[]): Observable<ISpendingsState> {
-    if(!navigator.onLine) {
-      return EMPTY;
-    }
+    // Drain queued offline deletes from previous sessions (Phase 3a:
+    // delete drain activated; was commented-out scaffolding). Fire-and-
+    // forget — each call re-queues itself on transient failure.
+    this.drainFailedDeletes();
 
-    // const failedSpendingsRequests: string[] = this.offlineStorage.getFailedSpendings();
-    // if(failedSpendingsRequests.length > 0) {
-    //   failedSpendingsRequests.forEach(spendingId => this.store$.dispatch(deleteSpending({id: spendingId})));
-    //   console.log('failedSpendingsRequests',failedSpendingsRequests);
-    // }
-    
     const loadSpendingsUrl = this.url + 'spendings-list/' + portfolioID;
     return this.http.get<Spending[]>(loadSpendingsUrl).pipe(
       map(serverSpendings => {
         const clientSpendings = spendingState.spendingsHistory;
         const newSpendingsFromServer = this.filterNewSpendingsFromServer(serverSpendings, clientSpendings, categories);
-        
+
         if (newSpendingsFromServer.length > 0) {
           this.store$.dispatch(addMultipleSpendings({ spendings: newSpendingsFromServer }));
         }
 
         this.sendUnsavedSpendingsToServer(clientSpendings);
-        
-        return spendingState; 
+
+        return spendingState;
       }),
-      catchError(error => {
-        console.error('Error occurred while loading spending:', error);
-        return EMPTY;
-      })
+      catchError(() => EMPTY),
     );
   }
 
   public deleteSpending(spendingId: string): Observable<void> {
-    if(!navigator.onLine) {
-      this.offlineStorage.offlineDeleteSpending(spendingId);
-      return EMPTY;
-    }
-
     const deleteUrl = this.url + 'delete-spending/' + spendingId;
 
-    return this.http.delete(deleteUrl).pipe(
-      map(() => console.log('success deleting spending')), 
-      catchError(error => of(console.log({ error }))) 
+    return this.http.delete<void>(deleteUrl).pipe(
+      map(() => undefined),
+      catchError((error: HttpErrorResponse) => {
+        // Re-queue on transient failure so the next `syncSpendingList` pass
+        // drains it. 4xx (already gone / never existed) is silently OK —
+        // the local record is already removed by the reducer.
+        if (this.isTransient(error)) {
+          this.offlineStorage.offlineDeleteSpending(spendingId);
+        }
+        return EMPTY;
+      }),
     );
+  }
+
+  private drainFailedDeletes(): void {
+    const queue = this.offlineStorage.getFailedSpendings();
+    for (const id of queue) {
+      this.deleteSpending(id).subscribe();
+    }
+  }
+
+  private isTransient(error: HttpErrorResponse): boolean {
+    return error.status === 0 || error.status === 429 ||
+      (error.status >= 500 && error.status < 600);
   }
 
   private filterNewSpendingsFromServer(serverSpendings: Spending[], clientSpendings: Spending[], categories: Category[]): Spending[] {

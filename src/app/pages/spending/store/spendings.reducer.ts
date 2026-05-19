@@ -176,7 +176,12 @@ export const spendingsReducer = createReducer(
   }),
 
   /* Logout */
-  on(logout, () => {
-    return { ...initialSpendingsState };
-  })
+  // Phase 3a fix (ADR-0012 §"Виправлення багів" bullet 5): logout no
+  // longer wipes the store. User reverts to anonymous mode and keeps
+  // their local spendings + categories — same device, same data, just
+  // without cloud sync. Phase 3b adds the signup-merge wizard and
+  // anonymous disclosure on top. Cross-user contamination on a shared
+  // browser is a known follow-up — current scope only covers the
+  // single-user-on-personal-device case.
+  on(logout, (state) => state),
 );
