@@ -80,6 +80,19 @@
   color: var(--pgz-text-secondary);
 }
 
+// Market-backed cards while offline — dimmed + not-allowed cursor.
+// Live tooltip + snackbar (PR5 of live-prices doc §7) tells the user
+// why; the click handler short-circuits without navigation.
+.grid__card--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+
+  &:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
 // Future placeholders — desaturated + dashed border to read as
 // "not yet available" without screaming.
 .grid__cards--future {

@@ -8,9 +8,14 @@ import {
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { PrevRouteComponent } from '../../../../../../core/UI/components/prev-route/prev-route.component';
-import { AssetClass } from '../../../../../../domain/asset-class.domain';
+import { NetworkStatusService } from '../../../../../../core/network/network-status.service';
+import {
+  AssetClass,
+  isMarketBackedAssetClass,
+} from '../../../../../../domain/asset-class.domain';
 import {
   ADD_HOLDING_CLASS_CARDS,
   ASSET_CLASS_SLUGS,
@@ -29,7 +34,7 @@ import {
 @Component({
   selector: 'pgz-add-holding-class-grid',
   standalone: true,
-  imports: [CommonModule, MatIconModule, PrevRouteComponent],
+  imports: [CommonModule, MatIconModule, MatTooltipModule, PrevRouteComponent],
   templateUrl: './add-holding-class-grid.component.html',
   styleUrl: './add-holding-class-grid.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,20 +42,60 @@ import {
 export class AddHoldingClassGridComponent {
   private readonly router = inject(Router);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly network = inject(NetworkStatusService);
 
   /** Active asset classes — picking one navigates to the archetype form. */
   public readonly cards = ADD_HOLDING_CLASS_CARDS;
   /** Disabled placeholders for classes flagged FUTURE in the roadmap. */
   public readonly future = FUTURE_CLASS_CARDS;
 
+  /**
+   * Tooltip / aria-disabled hint for market-backed cards while offline.
+   * Manual classes (CASH / DEPOSIT / REAL_ESTATE / OTHER) keep working
+   * because they don't need the search endpoints (live-prices doc §3
+   * Rule 3).
+   */
+  public static readonly OFFLINE_TOOLTIP =
+    'Adding stocks and crypto requires an internet connection.';
+
   @Output() public classPicked = new EventEmitter<AssetClass>();
+
+  /**
+   * `true` when the user is offline AND the card represents a market-
+   * backed class (STOCK / ETF / CRYPTO / TOKENIZED_STOCK). Used by the
+   * template to dim + disable + tooltip those cards. Pure derivation —
+   * the `NetworkStatusService` signal flips it as connectivity changes,
+   * Angular re-runs change detection, the cards re-render.
+   */
+  public isCardDisabled(assetClass: AssetClass): boolean {
+    return !this.network.online() && isMarketBackedAssetClass(assetClass);
+  }
+
+  public offlineTooltipFor(assetClass: AssetClass): string {
+    return this.isCardDisabled(assetClass)
+      ? AddHoldingClassGridComponent.OFFLINE_TOOLTIP
+      : '';
+  }
 
   /**
    * Default click handler when the component is used as a routed
    * standalone page. Emits {@link classPicked} so a parent can intercept
    * the picked class (and skip navigation in tests / embedded contexts).
+   *
+   * Offline + market-backed → no-op (toast); we'd 5xx out of the
+   * search endpoints anyway and a typo-prone "add anyway" workflow
+   * is a data-quality landmine (live-prices doc §3 Rule 3, "no escape
+   * hatch").
    */
   public onPick(assetClass: AssetClass): void {
+    if (this.isCardDisabled(assetClass)) {
+      this.snackBar.open(
+        AddHoldingClassGridComponent.OFFLINE_TOOLTIP,
+        undefined,
+        { duration: 2500 },
+      );
+      return;
+    }
     this.classPicked.emit(assetClass);
     this.router.navigate(['/savings/add-holding', ASSET_CLASS_SLUGS[assetClass]]);
   }
