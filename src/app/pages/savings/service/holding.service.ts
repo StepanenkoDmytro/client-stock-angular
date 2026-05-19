@@ -65,10 +65,14 @@ export class HoldingService {
    *  v1: original five holdings, one per instrument, all MANUAL account.
    *  v2: PR6 — adds accountKind, lockMeta, openedAt; BTC×3, AAPL×2,
    *      AAPL.X×1 multi-location seed.
+   *  v3: Stats Task 1 — Monobank gets primary USD cash, manual keeps a
+   *      smaller cash dust + the apartment. Ensures every demo account
+   *      has ≥1 holding so the new portfolio-stats widgets (W1/W2/W3)
+   *      render a full distribution out of the box.
    *
    * Goes away when M5 wires real backend data — seed disappears with it.
    */
-  private static readonly SEED_VERSION = 2;
+  private static readonly SEED_VERSION = 3;
 
   private readonly store$ = inject(Store<{ holdings: IHoldingsState }>);
   private readonly instruments = inject(InstrumentService);
@@ -653,15 +657,30 @@ export class HoldingService {
         avgBuyPrice: 45300,
         tags: ['Speculative', 'Trading'],
       },
-      // --- USD cash — single bucket ---
+      // --- USD cash on two accounts ---
+      // Primary checking on Monobank (BANK) — the lion's share. Pre-M3
+      // FX still missing, so we keep it nominally USD; once FxRateService
+      // lands this becomes UAH and the bank chip shows ₴.
+      {
+        symbol: 'USD',
+        accountId: 'acc-monobank',
+        accountName: 'Monobank',
+        accountKind: 'BANK_SAVINGS',
+        quantity: 9895,
+        avgBuyPrice: 1,
+        tags: ['Emergency', 'Fixed income'],
+      },
+      // Manual cash dust — keeps W3 CASH bar split across two accounts
+      // (Monobank ~91% / Manual ~9%) so the cross-tabulation widget has
+      // something more interesting than a single full-width segment.
       {
         symbol: 'USD',
         accountId: MANUAL_ACCOUNT_ID,
         accountName: 'Manual cash',
         accountKind: 'MANUAL',
-        quantity: 5000,
+        quantity: 1000,
         avgBuyPrice: 1,
-        tags: ['Emergency', 'Fixed income'],
+        tags: ['Emergency'],
       },
       // --- Apartment — single manual entry ---
       {

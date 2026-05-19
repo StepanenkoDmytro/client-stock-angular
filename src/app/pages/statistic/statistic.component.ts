@@ -9,6 +9,7 @@ import { SpendingStatisticComponent } from '../spending/components/spending-stat
 import { TotalBalanceComponent } from '../../core/UI/components/total-balance/total-balance.component';
 import { Spending } from '../spending/model/Spending';
 import { SavingsStatisticComponent } from './components/savings-statistic/savings-statistic.component';
+import { PortfolioStatsComponent } from './components/portfolio-stats/portfolio-stats.component';
 
 
 const UI_COMPONENTS = [
@@ -17,7 +18,8 @@ const UI_COMPONENTS = [
   BarComponent,
   SpendingStatisticComponent,
   TotalBalanceComponent,
-  SavingsStatisticComponent
+  SavingsStatisticComponent,
+  PortfolioStatsComponent
 ];
 
 const MATERIAL_MODULES = [

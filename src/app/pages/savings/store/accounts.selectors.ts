@@ -55,3 +55,43 @@ export const selectAccountsWithCount = createSelector(
     return accounts.map((a) => ({ ...a, holdingCount: counts.get(a.id) ?? 0 }));
   },
 );
+
+/**
+ * Same as {@link selectAccountsWithCount} but also computes
+ * {@code totalValueBaseCurrency} — sum of every holding's
+ * {@code quantity × averageBuyPrice} on that account.
+ *
+ * <p>Uses cost basis (not market value) because:
+ * <ul>
+ *   <li>Pure selector — can't read the LivePriceService signal without
+ *       making it impure. Components that want market value can layer
+ *       LivePriceService.getCurrentPrice on top.</li>
+ *   <li>Stable copy for screenshot / story sessions.</li>
+ * </ul>
+ *
+ * <p>Used by Stats Task 1 W2 ("Per-account value breakdown") and W3
+ * ("Per-class account breakdown").
+ */
+export interface IAccountWithStats extends IAccountWithCount {
+  totalValueBaseCurrency: number;
+}
+
+export const selectAccountsWithStats = createSelector(
+  selectAccountsList,
+  selectHoldingsList,
+  (accounts, holdings): IAccountWithStats[] => {
+    const counts = new Map<string, number>();
+    const values = new Map<string, number>();
+    for (const h of holdings as IHolding[]) {
+      if (!h.accountId) continue;
+      counts.set(h.accountId, (counts.get(h.accountId) ?? 0) + 1);
+      const value = (h.quantity ?? 0) * (h.averageBuyPrice ?? 0);
+      values.set(h.accountId, (values.get(h.accountId) ?? 0) + value);
+    }
+    return accounts.map((a) => ({
+      ...a,
+      holdingCount: counts.get(a.id) ?? 0,
+      totalValueBaseCurrency: values.get(a.id) ?? 0,
+    }));
+  },
+);

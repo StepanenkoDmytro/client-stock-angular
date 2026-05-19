@@ -1,0 +1,17 @@
+<section class="acc-chips" aria-labelledby="acc-chips-heading">
+  <h3 id="acc-chips-heading" class="acc-chips__heading">YOUR PROVIDERS</h3>
+
+  @if (hasAny()) {
+    <div class="acc-chips__row">
+      @for (chip of chips(); track chip.type) {
+        <span class="acc-chips__chip">
+          <span class="acc-chips__icon">{{ chip.icon }}</span>
+          <span class="acc-chips__label">{{ chip.label }}</span>
+          <span class="acc-chips__count">{{ chip.count }}</span>
+        </span>
+      }
+    </div>
+  } @else {
+    <p class="acc-chips__empty">No accounts yet — add one from /savings.</p>
+  }
+</section>

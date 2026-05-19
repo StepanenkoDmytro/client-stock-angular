@@ -1,0 +1,120 @@
+:host {
+  display: block;
+}
+
+.cls-bd {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  &__heading {
+    margin: 0;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--pgz-text-muted, #5f5e5a);
+  }
+
+  &__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__section-top {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  &__class-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex: 0 0 8px;
+    align-self: center;
+  }
+
+  &__class-name {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--pgz-text-primary, #2c2c2a);
+  }
+
+  &__class-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--pgz-text-primary, #2c2c2a);
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__bar {
+    display: flex;
+    height: 10px;
+    width: 100%;
+    background: var(--pgz-bar-track-bg, rgba(0, 0, 0, 0.06));
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  &__seg {
+    height: 100%;
+    transition: width 200ms ease;
+  }
+
+  &__seg + &__seg {
+    border-left: 1px solid var(--pgz-card-bg, #fff);
+  }
+
+  &__legend {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--pgz-text-muted, #5f5e5a);
+  }
+
+  &__legend-swatch {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    flex: 0 0 8px;
+  }
+
+  &__legend-label {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--pgz-text-primary, #2c2c2a);
+  }
+
+  &__legend-pct {
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__empty {
+    margin: 0;
+    font-size: 12px;
+    color: var(--pgz-text-muted, #5f5e5a);
+  }
+}

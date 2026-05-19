@@ -1,0 +1,25 @@
+:host {
+  display: block;
+}
+
+.ps {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px 12px 12px;
+
+  &__heading {
+    margin: 0 4px;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--pgz-text-primary, #2c2c2a);
+    letter-spacing: -0.01em;
+  }
+
+  &__card {
+    background: var(--pgz-card-bg, #fff);
+    border: 0.5px solid var(--pgz-card-border, rgba(0, 0, 0, 0.12));
+    border-radius: 12px;
+    padding: 14px 14px 12px;
+  }
+}

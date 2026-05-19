@@ -3,6 +3,7 @@ import { Store, select } from '@ngrx/store';
 import { Observable, filter, map, of, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { IAccountV2 } from '../../../domain/account-v2.domain';
+import { buildDemoAccounts } from '../model/account-defaults.constants';
 import {
   addAccount,
   deleteAccount,
@@ -40,6 +41,22 @@ import {
 @Injectable({ providedIn: 'root' })
 export class AccountsService {
   private static readonly STORAGE_KEY = 'accounts-list';
+  private static readonly SEED_VERSION_KEY = 'accounts-seed-version';
+
+  /**
+   * Bumps every time {@link buildDemoAccounts} changes shape or membership
+   * in a way that would clash with the existing demo-cache. Same idea as
+   * `HoldingService.SEED_VERSION` — mismatch wipes the cached list so
+   * dev users automatically pick up new fixtures instead of staring at
+   * a stale snapshot from yesterday's session.
+   *
+   *  v1: 7 fixtures introduced with Stats Task 1 (acc-ibkr / acc-robinhood /
+   *      acc-bybit-spot / acc-bybit-earn / acc-trezor / acc-monobank / manual).
+   *
+   * Production builds never consult this — the backend is the source of
+   * truth there.
+   */
+  private static readonly SEED_VERSION = 1;
 
   private readonly store$ = inject(Store<{ accounts: IAccountsState }>);
   private readonly api = inject(AccountsApiService);
@@ -166,8 +183,14 @@ export class AccountsService {
 
   private bootstrap(forceReload = false): void {
     const raw = localStorage.getItem(AccountsService.STORAGE_KEY);
+    const cachedVersion = Number(
+      localStorage.getItem(AccountsService.SEED_VERSION_KEY) ?? '0',
+    );
+    const seedOutdated =
+      environment.demoData && cachedVersion !== AccountsService.SEED_VERSION;
+
     let usedCache = false;
-    if (raw) {
+    if (raw && !seedOutdated) {
       try {
         const state = JSON.parse(raw) as IAccountsState;
         this.store$.dispatch(loadAccounts({ state }));
@@ -190,10 +213,22 @@ export class AccountsService {
       return;
     }
 
-    // Demo mode with empty cache — start empty; mock-seed adds inline labels
-    // on holdings directly without needing an Account entity.
+    if (seedOutdated) {
+      // Wipe stale demo cache so the new fixtures take over cleanly —
+      // mirrors the pattern in HoldingService.bootstrap.
+      localStorage.removeItem(AccountsService.STORAGE_KEY);
+    }
+
+    // Demo mode with empty (or wiped) cache — seed the 7 fixtures from
+    // account-defaults.constants. Their ids match the literals used in
+    // HoldingService.seedMockHoldings, so widgets that join holdings ×
+    // accounts (Stats Task 1) have something to render out of the box.
     if (!usedCache) {
-      this.store$.dispatch(loadAccounts({ state: { accountsList: [] } }));
+      this.store$.dispatch(loadAccounts({ state: { accountsList: buildDemoAccounts() } }));
+      localStorage.setItem(
+        AccountsService.SEED_VERSION_KEY,
+        String(AccountsService.SEED_VERSION),
+      );
     }
   }
 

@@ -1,10 +1,11 @@
-<!-- <pgz-total-balance></pgz-total-balance> -->
-  
-  <!-- <pgz-button-toggle [dataUnchecked]="'Spending'" [dataChecked]="'Saving'" (buttonValue)="onChangeFrame($event)"></pgz-button-toggle> -->
-  
-  @if(isSpendingFrame) {
-    <!-- <pgz-spending-statistic></pgz-spending-statistic> -->
-  } @else {
-    <pgz-savings-statistic></pgz-savings-statistic>
-  }
-  
+<!-- Portfolio analytics — Stats Task 1 (account/class breakdown widgets).
+     Sits ABOVE legacy savings-statistic per the task spec default
+     (docs/notes/2026-05-stats-1-account-breakdowns.md §10). Task 2 / 3
+     append their widgets into the same container component. -->
+<pgz-portfolio-stats></pgz-portfolio-stats>
+
+@if(isSpendingFrame) {
+  <!-- <pgz-spending-statistic></pgz-spending-statistic> -->
+} @else {
+  <pgz-savings-statistic></pgz-savings-statistic>
+}

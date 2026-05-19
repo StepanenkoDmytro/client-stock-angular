@@ -1,0 +1,43 @@
+<section class="cls-bd" aria-labelledby="cls-bd-heading">
+  <h3 id="cls-bd-heading" class="cls-bd__heading">EACH CLASS — WHERE IT LIVES</h3>
+
+  @if (hasAny()) {
+    <ul class="cls-bd__list">
+      @for (cls of sections(); track cls.classKey) {
+        <li class="cls-bd__section">
+          <div class="cls-bd__section-top">
+            <span class="cls-bd__class-dot"
+                  [style.background-color]="classColor(cls.classKey)"></span>
+            <span class="cls-bd__class-name">{{ cls.className }}</span>
+            <span class="cls-bd__class-value">{{ formatMoney(cls.totalValue) }}</span>
+          </div>
+
+          <div class="cls-bd__bar">
+            @for (seg of cls.segments; track seg.accountId; let i = $index) {
+              <div class="cls-bd__seg"
+                   [style.width.%]="segmentWidthPct(seg.share)"
+                   [style.background-color]="segmentColor(cls.classKey, i)"
+                   [attr.title]="seg.accountName + ' · ' + formatPct(seg.share)">
+              </div>
+            }
+          </div>
+
+          <ul class="cls-bd__legend">
+            @for (seg of cls.segments; track seg.accountId; let i = $index) {
+              <li class="cls-bd__legend-item">
+                <span class="cls-bd__legend-swatch"
+                      [style.background-color]="segmentColor(cls.classKey, i)"></span>
+                <span class="cls-bd__legend-label">{{ seg.accountName }}</span>
+                <span class="cls-bd__legend-pct">{{ formatPct(seg.share) }}</span>
+              </li>
+            }
+          </ul>
+        </li>
+      }
+    </ul>
+  } @else {
+    <p class="cls-bd__empty">
+      No holdings yet — add one from /savings to see this breakdown.
+    </p>
+  }
+</section>

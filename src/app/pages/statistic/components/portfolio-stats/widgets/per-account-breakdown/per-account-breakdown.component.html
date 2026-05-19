@@ -1,0 +1,43 @@
+<section class="acc-bd" aria-labelledby="acc-bd-heading">
+  <h3 id="acc-bd-heading" class="acc-bd__heading">VALUE BY PROVIDER</h3>
+
+  @if (hasAny()) {
+    <ul class="acc-bd__list">
+      @for (row of rows(); track row.accountId) {
+        <li class="acc-bd__row">
+          <div class="acc-bd__row-top">
+            <span class="acc-bd__name">{{ row.name }}</span>
+            <span class="acc-bd__value">{{ formatMoney(row.value) }}</span>
+          </div>
+          <div class="acc-bd__bar-track">
+            <div class="acc-bd__bar-fill"
+                 [style.width.%]="barWidthPct(row)"></div>
+          </div>
+          <div class="acc-bd__row-meta">
+            <span class="acc-bd__status"
+                  [class.acc-bd__status--ok]="row.sync.tone === 'ok'"
+                  [class.acc-bd__status--warn]="row.sync.tone === 'warn'"
+                  [class.acc-bd__status--manual]="row.sync.tone === 'manual'"
+                  [class.acc-bd__status--never]="row.sync.tone === 'never'">
+              <span class="acc-bd__dot"></span>
+              <span>{{ row.sync.label }}</span>
+            </span>
+            <span class="acc-bd__meta-dot">·</span>
+            <span class="acc-bd__count">
+              {{ row.holdingCount }}
+              holding{{ row.holdingCount === 1 ? '' : 's' }}
+            </span>
+            <span class="acc-bd__pct">{{ formatPct(row.share) }}</span>
+          </div>
+        </li>
+      }
+    </ul>
+
+    <div class="acc-bd__total">
+      <span class="acc-bd__total-label">Total</span>
+      <span class="acc-bd__total-value">{{ formatMoney(total()) }}</span>
+    </div>
+  } @else {
+    <p class="acc-bd__empty">No accounts with holdings yet.</p>
+  }
+</section>
