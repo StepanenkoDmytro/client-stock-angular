@@ -110,11 +110,39 @@ export class AuthService {
   }
 
   public logOut(): void {
-    
+
     this._authToken = '';
     localStorage.removeItem(this.authTokenKey);
 
     this.userService.logout();
+  }
+
+  /**
+   * Silent JWT refresh. Backend `POST /auth/refresh-token` accepts the
+   * old (expired) token in the raw request body and returns
+   * `{user, token}` with a fresh one. Used by the global error
+   * interceptor to retry a 401-failed request once before falling back
+   * to logout+redirect.
+   *
+   * <p>Resolves to the new token string on success, or `null` on
+   * failure (network, 401 from backend meaning the token is too far
+   * gone to refresh). Callers MUST treat `null` as "session is dead".
+   */
+  public refresh(): Observable<string | null> {
+    const current = this.authToken;
+    if (!current) {
+      return of(null);
+    }
+    const url = this.url + 'refresh-token';
+    return this.httpClient.post<IUserApiResponse>(url, current).pipe(
+      switchMap((resp) => {
+        this.userService.saveUser(resp.user);
+        this._authToken = resp.token;
+        localStorage.setItem(this.authTokenKey, this._authToken);
+        return of(this._authToken as string | null);
+      }),
+      catchError(() => of(null)),
+    );
   }
 
   private handleApiError(error: Error): void {

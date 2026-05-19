@@ -96,10 +96,13 @@ export class TagsComponent implements OnInit {
     >(DeleteTagConfirmComponent, { data });
 
     ref.afterDismissed().subscribe((result) => {
-      if (result === 'delete') {
-        this.tagsService.deleteTag(tag.id);
-        this.showSnackbar(`Tag «${tag.name}» deleted`);
-      }
+      if (result !== 'delete') return;
+      this.tagsService.deleteTag(tag.id).subscribe({
+        next: () => this.showSnackbar(`Tag «${tag.name}» deleted`),
+        error: (err) => this.showSnackbar(
+          `Could not delete «${tag.name}»: ${describeDeleteTagError(err)}`,
+        ),
+      });
     });
   }
 
@@ -127,4 +130,17 @@ export class TagsComponent implements OnInit {
       panelClass: 'custom-snackbar',
     });
   }
+}
+
+function describeDeleteTagError(err: unknown): string {
+  if (err && typeof err === 'object') {
+    const e = err as { status?: number; error?: { message?: string } };
+    if (e.status === 0) return 'no network';
+    if (e.status === 404) return 'already deleted';
+    if (e.status === 409) return 'has child tags — delete those first';
+    if (e.status === 403) return 'system tag — cannot delete';
+    if (e.status && e.status >= 500) return 'server error';
+    if (e.error && e.error.message) return e.error.message;
+  }
+  return 'unexpected error';
 }

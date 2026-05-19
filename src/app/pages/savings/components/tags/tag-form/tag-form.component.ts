@@ -209,6 +209,12 @@ export class TagFormComponent {
   public readonly isColorPickerOpen = signal(false);
   public readonly isIconPickerOpen = signal(false);
 
+  /**
+   * True while a REST round-trip is in flight. Disables Save so the user
+   * can't double-submit; the template can render a spinner off this.
+   */
+  public readonly saving = signal(false);
+
   // form.status as a signal that fires on every value/status change.
   private readonly formStatus = toSignal(
     this.form.statusChanges.pipe(startWith(this.form.status)),
@@ -333,13 +339,14 @@ export class TagFormComponent {
   // ---- Save / back ----
 
   public onSave(): void {
-    if (!this.form.valid || this.isSystem()) {
+    if (!this.form.valid || this.isSystem() || this.saving()) {
       return;
     }
     const value = this.form.getRawValue() as TagFormValue;
     const now = new Date().toISOString();
 
     const editing = this.editingTag();
+    this.saving.set(true);
     if (editing) {
       const updated: ITag = {
         ...editing,
@@ -348,8 +355,17 @@ export class TagFormComponent {
         color: value.color,
         icon: value.icon ?? undefined,
       };
-      this.tagsService.editTag(updated);
-      this.showSnackbar(`Tag «${updated.name}» updated`);
+      this.tagsService.editTag(updated).subscribe({
+        next: (saved) => {
+          this.saving.set(false);
+          this.showSnackbar(`Tag «${saved.name}» updated`);
+          this.router.navigate(['/savings/tags']);
+        },
+        error: (err) => {
+          this.saving.set(false);
+          this.showSnackbar(`Could not save: ${describeTagError(err)}`);
+        },
+      });
     } else {
       const created: ITag = {
         id: uuid(),
@@ -360,11 +376,18 @@ export class TagFormComponent {
         system: false,
         createdAt: now,
       };
-      this.tagsService.addTag(created);
-      this.showSnackbar(`Tag «${created.name}» added`);
+      this.tagsService.addTag(created).subscribe({
+        next: (saved) => {
+          this.saving.set(false);
+          this.showSnackbar(`Tag «${saved.name}» added`);
+          this.router.navigate(['/savings/tags']);
+        },
+        error: (err) => {
+          this.saving.set(false);
+          this.showSnackbar(`Could not add: ${describeTagError(err)}`);
+        },
+      });
     }
-
-    this.router.navigate(['/savings/tags']);
   }
 
   public goBack(): void {
@@ -393,4 +416,20 @@ function collectDescendants(tags: ITag[], rootId: string): string[] {
     }
   }
   return result;
+}
+
+/**
+ * Extract a short, human-friendly snackbar message from a tag CRUD
+ * HTTP error. Server validation comes back as 4xx with `{message}`;
+ * network / 5xx fall back to a generic copy.
+ */
+function describeTagError(err: unknown): string {
+  if (err && typeof err === 'object') {
+    const e = err as { status?: number; error?: { message?: string } };
+    if (e.status === 0) return 'no network';
+    if (e.status === 409) return 'a tag with this name already exists';
+    if (e.status && e.status >= 500) return 'server error';
+    if (e.error && e.error.message) return e.error.message;
+  }
+  return 'unexpected error';
 }

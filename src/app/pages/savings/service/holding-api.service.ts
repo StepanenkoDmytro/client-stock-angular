@@ -4,6 +4,18 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
 /**
+ * Wire shape of `IHoldingLockMeta` over HTTP. Discriminated union keyed
+ * by `kind` — mirrors Java {@code HoldingLockMeta} sealed interface +
+ * the frontend {@code IHoldingLockMeta} (`client/src/app/domain/holding.domain.ts`).
+ *
+ * <p>JSON: `{"kind":"STAKING","apr":5.0,"lockEndDate":"2026-06-04","lockPeriod":"30-day lock"}`.
+ */
+export type HoldingLockMetaWire =
+  | { kind: 'STAKING'; apr?: number; lockEndDate?: string; lockPeriod?: string }
+  | { kind: 'TERM_DEPOSIT'; apr?: number; maturityDate: string }
+  | { kind: 'FLEXIBLE'; apr: number };
+
+/**
  * Wire shape returned by `/api/v1/holdings` endpoints. Mirrors
  * server-side `HoldingDto`. Subset for now — the frontend stays on its
  * client-side `IHolding` shape for store state; only fields needed for
@@ -15,7 +27,7 @@ export interface HoldingApiDto {
   accountId: number | null;
   accountName: string | null;
   accountKind: string | null;
-  lockMeta: unknown;
+  lockMeta: HoldingLockMetaWire | null;
   openedAt: string | null;
   quantity: number;
   averageBuyPrice: number;
@@ -33,6 +45,7 @@ export interface HoldingUpdateRequest {
   currency?: string;
   accountId?: number;
   notes?: string;
+  lockMeta?: HoldingLockMetaWire;
 }
 
 /** Body of `POST /api/v1/holdings/{id}/top-up` — both fields required. */
@@ -50,6 +63,7 @@ export interface HoldingCreateRequest {
   openedAt?: string;
   notes?: string;
   accountId?: number;
+  lockMeta?: HoldingLockMetaWire;
 }
 
 /**

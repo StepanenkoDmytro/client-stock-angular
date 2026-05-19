@@ -234,6 +234,11 @@ export class HoldingService {
       currency: h.currency || undefined,
       openedAt: h.openedAt,
       accountId: Number.isFinite(acc) ? acc : undefined,
+      // `IHoldingLockMeta` is structurally identical to `HoldingLockMetaWire`
+      // (same `kind` discriminator + same field names), so a direct cast
+      // is safe — JSON serialization round-trips cleanly via the Java
+      // sealed interface with `@JsonTypeInfo(property = "kind")`.
+      lockMeta: h.lockMeta as HoldingCreateRequest['lockMeta'],
     };
   }
 
@@ -414,9 +419,9 @@ export class HoldingService {
   /**
    * Maps a backend {@link HoldingApiDto} to the frontend {@link IHolding}
    * shape. Account id is stringified to align with the UI's mixed-id
-   * convention (legacy 'manual' string + numeric ids from real accounts);
-   * {@code lockMeta} is dropped — the backend column doesn't exist yet,
-   * so the wire always serialises it as null.
+   * convention (legacy 'manual' string + numeric ids from real accounts).
+   * {@code lockMeta} round-trips as-is (Liquibase 2.0.5 persists it as
+   * JSONB with the {@code kind} discriminator the frontend already uses).
    */
   private static fromApiDto(d: HoldingApiDto): IHolding {
     return {
@@ -430,6 +435,7 @@ export class HoldingService {
       averageBuyPrice: d.averageBuyPrice,
       currency: d.currency ?? '',
       tagIds: d.tagIds ?? [],
+      lockMeta: (d.lockMeta as IHolding['lockMeta'] | null) ?? undefined,
       createdAt: d.createdAt,
       updatedAt: d.updatedAt,
     };
