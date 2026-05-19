@@ -17,4 +17,10 @@ export const environment = {
     production: false,
     /** Base URL up to and including /api/v1 (no trailing slash). */
     apiBaseUrl: 'http://localhost:8000/api/v1',
+    /**
+     * Local dev keeps demo data on so the screens have content out-of-the-box.
+     * Override per-session via DevTools (`(window as any).__demoData = false`)
+     * if you want to test the empty-state flow.
+     */
+    demoData: true,
 };

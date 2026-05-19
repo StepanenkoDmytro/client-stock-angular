@@ -41,6 +41,17 @@ export interface HoldingTopUpRequest {
   addBuyPrice: number;
 }
 
+/** Body of `POST /api/v1/holdings`. */
+export interface HoldingCreateRequest {
+  instrumentId: string;
+  quantity: number;
+  averageBuyPrice: number;
+  currency?: string;
+  openedAt?: string;
+  notes?: string;
+  accountId?: number;
+}
+
 /**
  * Thin REST client for the M2 Holdings API. Owns nothing except HTTP
  * verbs — the broader {@link HoldingService} handles localStorage + store
@@ -55,11 +66,23 @@ export class HoldingApiService {
   private readonly http = inject(HttpClient);
   private readonly url = `${environment.apiBaseUrl}/holdings`;
 
+  list(): Observable<HoldingApiDto[]> {
+    return this.http.get<HoldingApiDto[]>(this.url);
+  }
+
+  create(body: HoldingCreateRequest): Observable<HoldingApiDto> {
+    return this.http.post<HoldingApiDto>(this.url, body);
+  }
+
   update(id: string, body: HoldingUpdateRequest): Observable<HoldingApiDto> {
     return this.http.put<HoldingApiDto>(`${this.url}/${id}`, body);
   }
 
   topUp(id: string, body: HoldingTopUpRequest): Observable<HoldingApiDto> {
     return this.http.post<HoldingApiDto>(`${this.url}/${id}/top-up`, body);
+  }
+
+  delete(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.url}/${id}`);
   }
 }

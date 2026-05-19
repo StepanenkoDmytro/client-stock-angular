@@ -108,7 +108,7 @@ export class AddHoldingComponent implements OnInit {
   });
 
   public readonly archetypeCanSave = computed<boolean>(
-    () => this.archetypeState().valid,
+    () => this.archetypeState().valid && !this.saving(),
   );
 
   /**
@@ -116,6 +116,13 @@ export class AddHoldingComponent implements OnInit {
    * reaches a valid submission. Drives the change-class confirm prompt.
    */
   private readonly hasFormChanges = signal<boolean>(false);
+
+  /**
+   * True while a REST round-trip is in flight. Disables Save / Top-up
+   * buttons and lets the template render a spinner. Pessimistic UX —
+   * the user never sees "saved" until the server has acknowledged.
+   */
+  public readonly saving = signal<boolean>(false);
 
   // ---- Narrowed initialValue accessors (template-friendly) ----
 
@@ -186,14 +193,26 @@ export class AddHoldingComponent implements OnInit {
   public onTopupSubmitted(payload: TopupSubmission): void {
     const existing = this.editing();
     if (!existing) return;
+    const symbol =
+      this.instruments.getById(existing.instrumentId)?.symbol ?? 'Holding';
+    this.saving.set(true);
     this.holdings.topUp(existing.id, {
       addQuantity: payload.addQuantity,
       addBuyPrice: payload.addBuyPrice,
+    }).subscribe({
+      next: () => {
+        this.saving.set(false);
+        this.snackBar.open(`${symbol} topped up`, 'Dismiss', { duration: 3000 });
+        this.router.navigate(['/savings']);
+      },
+      error: (err) => {
+        this.saving.set(false);
+        this.snackBar.open(
+          `Could not top up ${symbol}: ${describeError(err)}`,
+          'Dismiss', { duration: 4000 },
+        );
+      },
     });
-    const symbol =
-      this.instruments.getById(existing.instrumentId)?.symbol ?? 'Holding';
-    this.snackBar.open(`${symbol} topped up`, 'Dismiss', { duration: 3000 });
-    this.router.navigate(['/savings']);
   }
 
   public onCancel(): void {
@@ -204,26 +223,47 @@ export class AddHoldingComponent implements OnInit {
 
   private saveAdd(sub: ArchetypeSubmission): void {
     const holding = this.toHolding(sub);
-    this.holdings.addHolding(holding);
-    this.snackBar.open(`${sub.instrument.symbol} added`, 'Dismiss', {
-      duration: 3000,
+    const symbol = sub.instrument.symbol;
+    this.saving.set(true);
+    this.holdings.addHolding(holding).subscribe({
+      next: () => {
+        this.saving.set(false);
+        this.snackBar.open(`${symbol} added`, 'Dismiss', { duration: 3000 });
+        this.router.navigate(['/savings']);
+      },
+      error: (err) => {
+        this.saving.set(false);
+        this.snackBar.open(
+          `Could not save ${symbol}: ${describeError(err)}`,
+          'Dismiss', { duration: 4000 },
+        );
+      },
     });
-    this.router.navigate(['/savings']);
   }
 
   private saveEdit(sub: ArchetypeSubmission): void {
     const existing = this.editing();
     if (!existing) return;
-
+    const symbol = sub.instrument.symbol;
+    this.saving.set(true);
     this.holdings.update(existing.id, {
       quantity: sub.quantity,
       averageBuyPrice: sub.averageBuyPrice,
       currency: sub.currency,
+    }).subscribe({
+      next: () => {
+        this.saving.set(false);
+        this.snackBar.open(`${symbol} updated`, 'Dismiss', { duration: 3000 });
+        this.router.navigate(['/savings']);
+      },
+      error: (err) => {
+        this.saving.set(false);
+        this.snackBar.open(
+          `Could not update ${symbol}: ${describeError(err)}`,
+          'Dismiss', { duration: 4000 },
+        );
+      },
     });
-
-    const symbol = sub.instrument.symbol;
-    this.snackBar.open(`${symbol} updated`, 'Dismiss', { duration: 3000 });
-    this.router.navigate(['/savings']);
   }
 
   private toHolding(sub: ArchetypeSubmission): IHolding {
@@ -333,4 +373,20 @@ export class AddHoldingComponent implements OnInit {
   public currentCurrency(): string {
     return this.editing()?.currency ?? '';
   }
+}
+
+/**
+ * Extract a short, human-friendly snackbar message from an HTTP error.
+ * Server validation errors come back as 4xx with `{message}`; network /
+ * 5xx falls back to a generic "couldn't reach server" line. Keeps the
+ * snackbar copy short — a long technical detail belongs in the console.
+ */
+function describeError(err: unknown): string {
+  if (err && typeof err === 'object') {
+    const e = err as { status?: number; error?: { message?: string } };
+    if (e.status === 0) return 'no network';
+    if (e.status && e.status >= 500) return 'server error, try again';
+    if (e.error && e.error.message) return e.error.message;
+  }
+  return 'unexpected error';
 }

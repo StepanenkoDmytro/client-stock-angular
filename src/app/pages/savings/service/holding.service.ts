@@ -1,7 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { Observable, filter } from 'rxjs';
+import { Observable, filter, map, tap } from 'rxjs';
 import { v4 as uuid } from 'uuid';
+import { environment } from '../../../../environments/environment';
 import { AccountKind } from '../../../domain/account-kind.domain';
 import { AssetClass } from '../../../domain/asset-class.domain';
 import { IHolding, IHoldingLockMeta } from '../../../domain/holding.domain';
@@ -22,7 +23,9 @@ import {
 } from '../store/holdings.selectors';
 import { selectTagsList } from '../store/tags.selectors';
 import {
+  HoldingApiDto,
   HoldingApiService,
+  HoldingCreateRequest,
   HoldingTopUpRequest,
   HoldingUpdateRequest,
 } from './holding-api.service';
@@ -111,10 +114,21 @@ export class HoldingService {
     return this.store$.pipe(select(selectHoldingsList));
   }
 
-  addHolding(holding: IHolding): void {
+  /**
+   * Demo-only direct store insert. Used by {@link #runSeed} to materialise
+   * mock fixtures. Production callers use {@link #addHolding} (REST-first).
+   */
+  private addHoldingLocal(holding: IHolding): void {
     this.store$.dispatch(addHolding({ holding }));
   }
 
+  /**
+   * Legacy local-only edit. Reducer arithmetic for the optional top-up
+   * formula lives here for backward compat (demo-mode "Reset" flow, any
+   * unmigrated caller). Production write paths go through {@link #update}
+   * and {@link #topUp}, which round-trip the change through the backend
+   * and then dispatch the server-canonical row.
+   */
   editHolding(
     id: string,
     patch: Partial<IHolding>,
@@ -127,37 +141,100 @@ export class HoldingService {
   }
 
   /**
-   * Pure edit — patches non-null fields on the server and mirrors the
-   * change into the local store. Avg-price is NOT recomputed; use
-   * {@link #topUp} for that. Fire-and-forget; HTTP errors are swallowed
-   * for now (local optimism wins until proper effects land).
+   * REST-first create: POST `/api/v1/holdings`, then dispatch the
+   * server-shaped row into the store. Pessimistic UX — no optimistic
+   * insert, so the user never sees a "saved" state that isn't on disk.
+   * Caller subscribes to wire snackbar + navigate on success / error.
+   *
+   * <p>Demo mode (`environment.demoData=true`) short-circuits to a local
+   * dispatch so screenshot / story sessions stay self-contained.
    */
-  update(id: string, body: HoldingUpdateRequest): void {
-    this.store$.dispatch(
-      editHolding({
-        id,
-        addQuantity: 0,
-        addPrice: 0,
-        patch: this.toLocalPatch(body),
-      }),
+  addHolding(holding: IHolding): Observable<IHolding> {
+    if (environment.demoData) {
+      this.addHoldingLocal(holding);
+      return new Observable<IHolding>((sub) => { sub.next(holding); sub.complete(); });
+    }
+    return this.api.create(this.toCreateRequest(holding)).pipe(
+      map(HoldingService.fromApiDto),
+      tap((saved) => this.store$.dispatch(addHolding({ holding: saved }))),
     );
-    this.api.update(id, body).subscribe({ error: () => {} });
   }
 
   /**
-   * Top-up — recomputes weighted-average buy price per ADR-0001 on both
-   * the server and the local store. Fire-and-forget; HTTP errors swallowed.
+   * REST-first pure edit: PUT `/api/v1/holdings/{id}`. Server response
+   * (post-normalisation) is dispatched into the store. Avg-price is NOT
+   * recomputed; use {@link #topUp} for weighted-average updates.
    */
-  topUp(id: string, body: HoldingTopUpRequest): void {
-    this.store$.dispatch(
-      editHolding({
-        id,
-        addQuantity: body.addQuantity,
-        addPrice: body.addBuyPrice,
-        patch: {},
-      }),
+  update(id: string, body: HoldingUpdateRequest): Observable<IHolding> {
+    if (environment.demoData) {
+      this.store$.dispatch(
+        editHolding({ id, addQuantity: 0, addPrice: 0, patch: this.toLocalPatch(body) }),
+      );
+      return this.getLocalById(id);
+    }
+    return this.api.update(id, body).pipe(
+      map(HoldingService.fromApiDto),
+      tap((saved) => this.store$.dispatch(
+        editHolding({ id, addQuantity: 0, addPrice: 0, patch: HoldingService.toPatch(saved) }),
+      )),
     );
-    this.api.topUp(id, body).subscribe({ error: () => {} });
+  }
+
+  /**
+   * REST-first top-up: POST `/api/v1/holdings/{id}/top-up`. Server
+   * recomputes weighted-average per ADR-0001 and returns the new row;
+   * we dispatch the canonical values into the store.
+   */
+  topUp(id: string, body: HoldingTopUpRequest): Observable<IHolding> {
+    if (environment.demoData) {
+      this.store$.dispatch(
+        editHolding({ id, addQuantity: body.addQuantity, addPrice: body.addBuyPrice, patch: {} }),
+      );
+      return this.getLocalById(id);
+    }
+    return this.api.topUp(id, body).pipe(
+      map(HoldingService.fromApiDto),
+      tap((saved) => this.store$.dispatch(
+        editHolding({ id, addQuantity: 0, addPrice: 0, patch: HoldingService.toPatch(saved) }),
+      )),
+    );
+  }
+
+  /**
+   * REST-first delete: DELETE `/api/v1/holdings/{id}`, then drop the row
+   * from the store. Caller subscribes for success / error feedback.
+   */
+  deleteHolding(id: string): Observable<void> {
+    if (environment.demoData) {
+      this.store$.dispatch(deleteHolding({ id }));
+      return new Observable<void>((sub) => { sub.next(); sub.complete(); });
+    }
+    return this.api.delete(id).pipe(
+      tap(() => this.store$.dispatch(deleteHolding({ id }))),
+    );
+  }
+
+  assignTags(holdingId: string, tagIds: string[]): void {
+    this.store$.dispatch(assignTags({ holdingId, tagIds }));
+  }
+
+  // ---- mapping helpers ----
+
+  private toCreateRequest(h: IHolding): HoldingCreateRequest {
+    // UI `accountId` is sometimes a literal string ('manual', 'acc-ibkr')
+    // from the legacy seed, sometimes a numeric DB id stringified by
+    // {@link #fromApiDto}. Only forward numeric ids; the backend
+    // (HoldingApiService.resolveAccount) auto-creates a Manual account
+    // when accountId is missing.
+    const acc = h.accountId !== undefined ? Number(h.accountId) : NaN;
+    return {
+      instrumentId: h.instrumentId,
+      quantity: h.quantity,
+      averageBuyPrice: h.averageBuyPrice,
+      currency: h.currency || undefined,
+      openedAt: h.openedAt,
+      accountId: Number.isFinite(acc) ? acc : undefined,
+    };
   }
 
   private toLocalPatch(body: HoldingUpdateRequest): Partial<IHolding> {
@@ -168,12 +245,26 @@ export class HoldingService {
     return patch;
   }
 
-  deleteHolding(id: string): void {
-    this.store$.dispatch(deleteHolding({ id }));
+  private static toPatch(h: IHolding): Partial<IHolding> {
+    return {
+      quantity: h.quantity,
+      averageBuyPrice: h.averageBuyPrice,
+      currency: h.currency,
+      accountId: h.accountId,
+      accountName: h.accountName,
+      accountKind: h.accountKind,
+      tagIds: h.tagIds,
+      updatedAt: h.updatedAt,
+    };
   }
 
-  assignTags(holdingId: string, tagIds: string[]): void {
-    this.store$.dispatch(assignTags({ holdingId, tagIds }));
+  /** Demo-mode helper: emit the just-dispatched row from the store. */
+  private getLocalById(id: string): Observable<IHolding> {
+    return this.store$.pipe(
+      select(selectHoldingsList),
+      map((list) => list.find((h) => h.id === id)),
+      filter((h): h is IHolding => h !== undefined),
+    );
   }
 
   /**
@@ -217,6 +308,12 @@ export class HoldingService {
   };
 
   resetDemoData(): void {
+    if (!environment.demoData) {
+      // Guard against the "Reset demo data" button being wired up in a
+      // production build by accident — a tester clicking it would wipe
+      // their real saved holdings to repopulate fake AAPL/BTC fixtures.
+      return;
+    }
     localStorage.removeItem(HoldingService.STORAGE_KEY);
     localStorage.removeItem(HoldingService.SEED_VERSION_KEY);
     // Force the instrument cache back to empty so getOrCreate produces
@@ -235,20 +332,29 @@ export class HoldingService {
     );
 
     // Stale seed format from a previous app version → wipe and re-seed.
-    // This keeps dev users on the latest demo fixtures without making
-    // them press "Reset demo data" manually whenever the seed evolves.
-    const seedOutdated = cachedVersion !== HoldingService.SEED_VERSION;
+    // Only applies in demo mode — production keeps whatever's in localStorage
+    // (or empty, which is what real beta testers start from).
+    const seedOutdated =
+      environment.demoData && cachedVersion !== HoldingService.SEED_VERSION;
 
+    let usedCache = false;
     if (raw && !seedOutdated) {
       try {
         const state = JSON.parse(raw) as IHoldingsState;
         if (state.holdingsList && state.holdingsList.length > 0) {
           this.store$.dispatch(loadHoldings({ state }));
-          return;
+          usedCache = true;
+          if (environment.demoData) {
+            // Demo mode — cache hit is the full story, no backend round-trip.
+            return;
+          }
+          // Production — cache shown for instant UX; fall through to
+          // re-hydrate from the backend below.
         }
-        // Empty snapshot — fall through to re-seed (demo phase).
+        // Empty snapshot — fall through to re-seed (demo phase) or
+        // leave an empty store (production beta).
       } catch {
-        // Corrupted — fall through to seed.
+        // Corrupted — fall through to seed (demo) or empty (prod).
       }
     }
     if (forceReload) {
@@ -265,8 +371,68 @@ export class HoldingService {
       this.instruments.reset();
     }
 
-    // Missing, empty, or outdated snapshot — seed demo holdings.
+    // Real beta testers (production build) — backend is the source of truth.
+    // If we haven't already shown a localStorage cache above, push an empty
+    // state so the UI doesn't show stale demo fixtures during the round-trip.
+    if (!environment.demoData) {
+      if (!usedCache) {
+        this.store$.dispatch(
+          loadHoldings({ state: { holdingsList: [] } }),
+        );
+      }
+      this.hydrateFromBackend();
+      return;
+    }
+
+    // Demo / story / screenshot mode — seed the mock fixtures.
     this.runSeed();
+  }
+
+  /**
+   * Pulls the canonical holdings list from `GET /api/v1/holdings` and
+   * replaces the in-memory store. Cache-then-server pattern: callers see
+   * the localStorage snapshot immediately (via {@link #bootstrap}), then
+   * this method overwrites it with the authoritative server state ~1
+   * round-trip later. On network / 5xx errors we keep the cached state —
+   * the global HTTP interceptor (separate file) surfaces the snackbar.
+   */
+  private hydrateFromBackend(): void {
+    this.api.list().subscribe({
+      next: (dtos) => {
+        const list = dtos.map(HoldingService.fromApiDto);
+        this.store$.dispatch(
+          loadHoldings({ state: { holdingsList: list } }),
+        );
+      },
+      error: () => {
+        // Keep whatever localStorage cache already populated the store.
+        // User sees stale data + a global snackbar from the HTTP interceptor.
+      },
+    });
+  }
+
+  /**
+   * Maps a backend {@link HoldingApiDto} to the frontend {@link IHolding}
+   * shape. Account id is stringified to align with the UI's mixed-id
+   * convention (legacy 'manual' string + numeric ids from real accounts);
+   * {@code lockMeta} is dropped — the backend column doesn't exist yet,
+   * so the wire always serialises it as null.
+   */
+  private static fromApiDto(d: HoldingApiDto): IHolding {
+    return {
+      id: d.id,
+      instrumentId: d.instrumentId,
+      accountId: d.accountId != null ? String(d.accountId) : undefined,
+      accountName: d.accountName ?? undefined,
+      accountKind: (d.accountKind as AccountKind | null) ?? undefined,
+      openedAt: d.openedAt ?? undefined,
+      quantity: d.quantity,
+      averageBuyPrice: d.averageBuyPrice,
+      currency: d.currency ?? '',
+      tagIds: d.tagIds ?? [],
+      createdAt: d.createdAt,
+      updatedAt: d.updatedAt,
+    };
   }
 
   /**

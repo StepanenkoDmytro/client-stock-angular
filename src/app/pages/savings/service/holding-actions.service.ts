@@ -63,14 +63,30 @@ export class HoldingActionsService {
     });
 
     ref.afterDismissed().subscribe((result) => {
-      if (result === 'delete') {
-        this.holdings.deleteHolding(holding.id);
-        this.snackBar.open(
-          `${holding.instrument.symbol} deleted`,
-          'Dismiss',
-          { duration: 3000 },
-        );
-      }
+      if (result !== 'delete') return;
+      const symbol = holding.instrument.symbol;
+      this.holdings.deleteHolding(holding.id).subscribe({
+        next: () => {
+          this.snackBar.open(`${symbol} deleted`, 'Dismiss', { duration: 3000 });
+        },
+        error: (err) => {
+          this.snackBar.open(
+            `Could not delete ${symbol}: ${describeDeleteError(err)}`,
+            'Dismiss', { duration: 4000 },
+          );
+        },
+      });
     });
   }
+}
+
+function describeDeleteError(err: unknown): string {
+  if (err && typeof err === 'object') {
+    const e = err as { status?: number; error?: { message?: string } };
+    if (e.status === 0) return 'no network';
+    if (e.status === 404) return 'already deleted';
+    if (e.status && e.status >= 500) return 'server error';
+    if (e.error && e.error.message) return e.error.message;
+  }
+  return 'unexpected error';
 }

@@ -13,4 +13,11 @@ export const environment = {
     production: true,
     /** Base URL up to and including /api/v1 (no trailing slash). */
     apiBaseUrl: 'https://pegazzo.online/money-life-cycle/api/v1',
+    /**
+     * When true, `HoldingService` seeds 9 demo holdings (BTC × 3 locations,
+     * AAPL × 2 brokers, etc.) on a fresh localStorage. Off in production so
+     * real beta testers start from an empty portfolio. Flip to true locally
+     * for screenshot / story sessions only.
+     */
+    demoData: false,
 };

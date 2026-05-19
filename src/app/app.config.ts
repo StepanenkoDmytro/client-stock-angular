@@ -13,6 +13,7 @@ import { assetReducer } from './pages/savings/store/asset.reducer';
 import { holdingsReducer } from './pages/savings/store/holdings.reducer';
 import { tagsReducer } from './pages/savings/store/tags.reducer';
 import { spendingsReducer } from './pages/spending/store/spendings.reducer';
+import { ApiErrorInterceptor } from './core/http/api-error.interceptor';
 import { JwtInterceptor } from './pages/auth/jwt.interceptor';
 import { SpendingsEffects } from './pages/spending/store/spendings.effects';
 import { SyncDataEffects } from './store/sync-data.effects';
@@ -40,5 +41,10 @@ export const appConfig: ApplicationConfig = {
       logOnly: !isDevMode(),
     }),
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    // ApiErrorInterceptor is registered LAST so it sits outermost in the
+    // chain — it observes errors after JwtInterceptor has already attached
+    // the Authorization header, so per-call sites still get the original
+    // failure in their .error() handler for contextual rollback.
+    { provide: HTTP_INTERCEPTORS, useClass: ApiErrorInterceptor, multi: true },
   ],
 };
