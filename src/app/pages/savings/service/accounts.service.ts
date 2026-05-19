@@ -99,12 +99,18 @@ export class AccountsService {
         accountNumber: input.accountNumber,
         provider: input.provider,
         currency: input.currency,
+        jurisdiction: input.jurisdiction,
       };
       this.store$.dispatch(addAccount({ account: local }));
       return of(local);
     }
     return this.api.create(input).pipe(
       map(AccountsService.fromApiDto),
+      // Backend doesn't persist jurisdiction yet — Stats Task 3 Phase 1
+      // is frontend-only. Pin the user's chosen value onto the canonical
+      // server row before dispatching so the widget sees it. Drop this
+      // line once the Liquibase migration lands and the DTO includes it.
+      map((saved) => ({ ...saved, jurisdiction: input.jurisdiction })),
       tap((saved) => this.store$.dispatch(addAccount({ account: saved }))),
     );
   }
@@ -128,12 +134,19 @@ export class AccountsService {
         provider: input.provider ?? current.provider,
         currency: input.currency ?? current.currency,
         syncStatus: input.syncStatus ?? current.syncStatus,
+        jurisdiction: input.jurisdiction !== undefined ? input.jurisdiction : current.jurisdiction,
       };
       this.store$.dispatch(editAccount({ account: patched }));
       return of(patched);
     }
     return this.api.update(id, input).pipe(
       map(AccountsService.fromApiDto),
+      // Same frontend-only jurisdiction pin as in addAccount — preserve
+      // the user's edit until the backend column lands.
+      map((saved) => ({
+        ...saved,
+        jurisdiction: input.jurisdiction !== undefined ? input.jurisdiction : saved.jurisdiction,
+      })),
       tap((saved) => this.store$.dispatch(editAccount({ account: saved }))),
     );
   }
@@ -287,6 +300,7 @@ export class AccountsService {
       lastSyncedAt: d.lastSyncedAt ?? undefined,
       syncStatus: d.syncStatus ?? undefined,
       currency: d.currency ?? undefined,
+      jurisdiction: d.jurisdiction ?? undefined,
     };
   }
 }

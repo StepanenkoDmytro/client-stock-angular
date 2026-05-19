@@ -1,0 +1,42 @@
+@if (hasData()) {
+  @if (breakdown(); as b) {
+    <section class="jur" aria-labelledby="jur-heading">
+      <header class="jur__header">
+        <h3 id="jur-heading" class="jur__heading">BY JURISDICTION</h3>
+        <span class="jur__total">{{ formatMoney(b.totalValue) }}</span>
+      </header>
+
+      <ul class="jur__list">
+        @for (s of b.segments; track trackByIso($index, s)) {
+          <li class="jur__row">
+            <div class="jur__row-top">
+              <span class="jur__name">
+                <span class="jur__flag" aria-hidden="true">{{ s.flag }}</span>
+                {{ s.countryName }}
+              </span>
+              <span class="jur__value">{{ formatMoney(s.value) }}</span>
+            </div>
+            <div class="jur__bar-track">
+              <div class="jur__bar-fill"
+                   [class.jur__bar-fill--unspecified]="s.iso === 'UNSPECIFIED'"
+                   [style.width.%]="barWidth(s.share)"></div>
+            </div>
+            <div class="jur__row-meta">
+              <span class="jur__pct">{{ formatPct(s.share) }}</span>
+              <span class="jur__sep">·</span>
+              <span class="jur__accounts">{{ accountList(s.accountNames) }}</span>
+            </div>
+          </li>
+        }
+      </ul>
+
+      <p class="jur__banner"
+         [class.jur__banner--safe]="bannerLevel() === 'safe' && !b.hasMostlyUnspecified"
+         [class.jur__banner--amber]="bannerLevel() === 'amber'"
+         [class.jur__banner--red]="bannerLevel() === 'red'"
+         [class.jur__banner--info]="b.hasMostlyUnspecified">
+        {{ bannerCopy() }}
+      </p>
+    </section>
+  }
+}

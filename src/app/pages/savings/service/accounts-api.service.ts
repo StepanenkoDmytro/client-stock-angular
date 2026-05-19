@@ -17,6 +17,8 @@ export interface AccountApiDto {
   lastSyncedAt: string | null;
   syncStatus: SyncStatus | null;
   currency: string | null;
+  /** ISO 3166-1 alpha-2. Frontend-only until the backend column lands. */
+  jurisdiction?: string | null;
 }
 
 /** Body of `POST /api/v1/accounts`. */
@@ -25,6 +27,8 @@ export interface AccountCreateRequest {
   accountNumber?: string;
   provider?: string;
   currency?: string;
+  /** ISO 3166-1 alpha-2 (frontend-only field for Stats Task 3). */
+  jurisdiction?: string;
 }
 
 /** Body of `PUT /api/v1/accounts/{id}` — every field optional, server applies non-null. */
@@ -34,6 +38,8 @@ export interface AccountUpdateRequest {
   provider?: string;
   currency?: string;
   syncStatus?: SyncStatus;
+  /** ISO 3166-1 alpha-2 (frontend-only until backend column lands). */
+  jurisdiction?: string;
 }
 
 /**

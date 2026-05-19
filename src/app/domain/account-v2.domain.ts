@@ -31,6 +31,18 @@ export interface IAccountV2 {
   syncStatus?: SyncStatus;
   /** ISO 4217 ("USD", "UAH", "EUR"). */
   currency?: string;
+  /**
+   * Where the provider is regulated, as ISO 3166-1 alpha-2 ("US", "UA",
+   * "DE", …). Optional — drives the Stats Task 3 jurisdiction-
+   * concentration widget. `undefined` puts the account into the
+   * "Unspecified" bucket.
+   *
+   * <p>Frontend-only field for Phase 1 (this PR). Backend Liquibase
+   * migration to add the column is a separate, smaller follow-up
+   * — accounts persist through localStorage today so the field
+   * survives reloads without backend changes.
+   */
+  jurisdiction?: string;
 }
 
 /**

@@ -34,6 +34,10 @@ import {
 import { PrevRouteComponent } from '../../../../../core/UI/components/prev-route/prev-route.component';
 import { NotificationComponent } from '../../../../../core/UI/components/notification/notification.component';
 import { AccountsService } from '../../../service/accounts.service';
+import {
+  JurisdictionLabel,
+  jurisdictionPickerOptions,
+} from '../../../model/jurisdiction.helper';
 import { selectAccountsList } from '../../../store/accounts.selectors';
 
 const MATERIAL_MODULES = [
@@ -83,12 +87,14 @@ export class AccountFormComponent implements OnInit {
 
   public readonly accountTypes = ACCOUNT_TYPES;
   public readonly currencies = COMMON_CURRENCIES;
+  public readonly jurisdictions: ReadonlyArray<JurisdictionLabel> = jurisdictionPickerOptions();
 
   public form: FormGroup = this.fb.group({
     accountType: ['BROKERAGE' as AccountTypeV2, Validators.required],
     accountNumber: [''],
     provider: [''],
     currency: ['USD'],
+    jurisdiction: [''],
   });
 
   /** Edit-mode holding (when route param :id was present). */
@@ -130,6 +136,7 @@ export class AccountFormComponent implements OnInit {
             accountNumber: e.accountNumber ?? '',
             provider: e.provider ?? '',
             currency: e.currency ?? '',
+            jurisdiction: e.jurisdiction ?? '',
           },
           { emitEvent: false },
         );
@@ -149,12 +156,14 @@ export class AccountFormComponent implements OnInit {
       accountNumber: string;
       provider: string;
       currency: string;
+      jurisdiction: string;
     };
     const body = {
       accountType: v.accountType,
       accountNumber: trimToUndefined(v.accountNumber),
       provider: trimToUndefined(v.provider),
       currency: trimToUndefined(v.currency)?.toUpperCase(),
+      jurisdiction: trimToUndefined(v.jurisdiction)?.toUpperCase(),
     };
 
     this.saving.set(true);

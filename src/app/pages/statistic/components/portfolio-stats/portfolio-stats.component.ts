@@ -4,6 +4,7 @@ import { PerAccountBreakdownComponent } from './widgets/per-account-breakdown/pe
 import { PerClassAccountBreakdownComponent } from './widgets/per-class-account-breakdown/per-class-account-breakdown.component';
 import { CounterpartyRiskComponent } from './widgets/counterparty-risk/counterparty-risk.component';
 import { SpofWarningComponent } from './widgets/spof-warning/spof-warning.component';
+import { JurisdictionConcentrationComponent } from './widgets/jurisdiction-concentration/jurisdiction-concentration.component';
 
 /**
  * Container for the portfolio analytics widgets on `/statistic`. Layout
@@ -21,6 +22,7 @@ import { SpofWarningComponent } from './widgets/spof-warning/spof-warning.compon
     PerClassAccountBreakdownComponent,
     SpofWarningComponent,
     CounterpartyRiskComponent,
+    JurisdictionConcentrationComponent,
   ],
   templateUrl: './portfolio-stats.component.html',
   styleUrl: './portfolio-stats.component.scss',
