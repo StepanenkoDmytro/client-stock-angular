@@ -22,6 +22,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { Router, RouterLink } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { environment } from '../../../../../../../../environments/environment';
+import { IAccountV2 } from '../../../../../../../domain/account-v2.domain';
 import { AssetClass } from '../../../../../../../domain/asset-class.domain';
 import { IHoldingLockMeta } from '../../../../../../../domain/holding.domain';
 import { IInstrument } from '../../../../../../../domain/instrument.domain';
@@ -30,6 +34,7 @@ import {
   ArchetypeState,
   ArchetypeSubmission,
 } from '../../../../../model/AddHoldingArchetype';
+import { AccountsService } from '../../../../../service/accounts.service';
 import { HoldingValidator } from '../../../../../validator/HoldingValidator';
 import { CreateInstrumentInlineComponent } from '../../../create-instrument-inline/create-instrument-inline.component';
 import { InstrumentAutocompleteComponent } from '../../../instrument-autocomplete/instrument-autocomplete.component';
@@ -39,6 +44,7 @@ import {
   ADD_HOLDING_ACCOUNTS,
   AccountChoice,
   EARN_ACCOUNT_KINDS,
+  toAccountChoice,
 } from '../../accounts.const';
 
 /**
@@ -52,6 +58,7 @@ import {
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    RouterLink,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
@@ -68,6 +75,8 @@ import {
 export class ArchetypeMarketBackedComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly accountsService = inject(AccountsService);
+  private readonly router = inject(Router);
 
   @Input({ required: true })
   public set assetClass(value: AssetClass) {
@@ -101,7 +110,25 @@ export class ArchetypeMarketBackedComponent implements OnInit {
 
   @Output() public stateChange = new EventEmitter<ArchetypeState>();
 
-  public readonly accounts: ReadonlyArray<AccountChoice> = ADD_HOLDING_ACCOUNTS;
+  /**
+   * Account picker source. Demo mode shows the curated 7-bucket seed;
+   * production reads the user's real accounts from {@link AccountsService}
+   * (populated by `GET /api/v1/accounts`). Empty list → archetype renders
+   * a "Create your first account →" CTA instead of the select.
+   */
+  private readonly _userAccounts = toSignal(this.accountsService.getAll(), {
+    initialValue: [] as IAccountV2[],
+  });
+
+  public readonly accounts = computed<ReadonlyArray<AccountChoice>>(() => {
+    if (environment.demoData) return ADD_HOLDING_ACCOUNTS;
+    return this._userAccounts().map(toAccountChoice);
+  });
+
+  public readonly hasNoAccounts = computed(
+    () => !environment.demoData && this.accounts().length === 0,
+  );
+
   public form!: FormGroup;
 
   public readonly selectedInstrument = signal<IInstrument | null>(null);
@@ -116,7 +143,7 @@ export class ArchetypeMarketBackedComponent implements OnInit {
   /** Drives Earn block visibility — derived from currently chosen account kind. */
   public readonly selectedAccountKind = computed(() => {
     const id = this.form?.get('accountId')?.value;
-    return this.accounts.find((a) => a.id === id)?.kind ?? null;
+    return this.accounts().find((a) => a.id === id)?.kind ?? null;
   });
 
   public readonly showEarn = computed(() => {
@@ -133,11 +160,21 @@ export class ArchetypeMarketBackedComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    // Trigger backend hydration; idempotent if /savings already did it.
+    this.accountsService.init();
+
     const seed = this.initialValue;
+    // Initial account: seed wins (edit mode); else first user account;
+    // else literal 'manual' (demo mode only — production goes through
+    // hasNoAccounts CTA instead of letting the user submit).
+    const initialAccountId =
+      seed?.accountId
+        ?? this.accounts()[0]?.id
+        ?? 'manual';
     this.form = this.fb.group({
       quantity:  [seed?.quantity ?? null, HoldingValidator.quantity(this._assetClass())],
       buyPrice:  [seed?.averageBuyPrice ?? null, HoldingValidator.buyPrice],
-      accountId: [seed?.accountId ?? 'manual', Validators.required],
+      accountId: [initialAccountId, Validators.required],
       lockMeta:  [seed?.lockMeta ?? (null as IHoldingLockMeta | null)],
       tagIds:    [seed?.tagIds ?? ([] as string[])],
     });
@@ -200,7 +237,7 @@ export class ArchetypeMarketBackedComponent implements OnInit {
       lockMeta: IHoldingLockMeta | null;
       tagIds: string[];
     };
-    const account = this.accounts.find((a) => a.id === v.accountId);
+    const account = this.accounts().find((a) => a.id === v.accountId);
     if (!account) return null;
     return {
       instrument: inst,

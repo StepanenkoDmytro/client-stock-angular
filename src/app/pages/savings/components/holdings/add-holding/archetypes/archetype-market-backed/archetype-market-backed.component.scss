@@ -12,6 +12,33 @@
   width: 100%;
 }
 
+.amb__no-accounts {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  margin: 4px 0 8px;
+  background: var(--pgz-bg-soft, rgba(0, 0, 0, 0.04));
+  border-radius: 8px;
+
+  p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--pgz-text-muted, rgba(0, 0, 0, 0.6));
+  }
+}
+
+.amb__no-accounts-cta {
+  color: var(--pgz-text-primary, rgba(0, 0, 0, 0.87));
+  font-weight: 500;
+  text-decoration: none;
+  font-size: 14px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 .amb__row {
   display: flex;
   gap: 12px;

@@ -21,6 +21,10 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { RouterLink } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { environment } from '../../../../../../../../environments/environment';
+import { IAccountV2 } from '../../../../../../../domain/account-v2.domain';
 import { AssetClass } from '../../../../../../../domain/asset-class.domain';
 import { IHoldingLockMeta } from '../../../../../../../domain/holding.domain';
 import { IInstrument } from '../../../../../../../domain/instrument.domain';
@@ -29,6 +33,7 @@ import {
   ArchetypeState,
   ArchetypeSubmission,
 } from '../../../../../model/AddHoldingArchetype';
+import { AccountsService } from '../../../../../service/accounts.service';
 import { HoldingValidator } from '../../../../../validator/HoldingValidator';
 import { InstrumentService } from '../../../../../service/instrument.service';
 import { TagChipsComponent } from '../../../tag-chips/tag-chips.component';
@@ -37,6 +42,7 @@ import {
   ADD_HOLDING_ACCOUNTS,
   AccountChoice,
   EARN_ACCOUNT_KINDS,
+  toAccountChoice,
 } from '../../accounts.const';
 
 interface CurrencyOption {
@@ -80,6 +86,7 @@ const CURRENCIES: ReadonlyArray<CurrencyOption> = [
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    RouterLink,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
@@ -94,6 +101,7 @@ export class ArchetypeSingleAmountComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);
   private readonly instruments = inject(InstrumentService);
+  private readonly accountsService = inject(AccountsService);
 
   @Input({ required: true })
   public set assetClass(value: AssetClass) {
@@ -113,12 +121,25 @@ export class ArchetypeSingleAmountComponent implements OnInit {
   @Output() public stateChange = new EventEmitter<ArchetypeState>();
 
   public readonly currencies = CURRENCIES;
-  public readonly accounts: ReadonlyArray<AccountChoice> = ADD_HOLDING_ACCOUNTS;
+
+  private readonly _userAccounts = toSignal(this.accountsService.getAll(), {
+    initialValue: [] as IAccountV2[],
+  });
+
+  public readonly accounts = computed<ReadonlyArray<AccountChoice>>(() => {
+    if (environment.demoData) return ADD_HOLDING_ACCOUNTS;
+    return this._userAccounts().map(toAccountChoice);
+  });
+
+  public readonly hasNoAccounts = computed(
+    () => !environment.demoData && this.accounts().length === 0,
+  );
+
   public form!: FormGroup;
 
   public readonly selectedAccountKind = computed(() => {
     const id = this.form?.get('accountId')?.value;
-    return this.accounts.find((a) => a.id === id)?.kind ?? null;
+    return this.accounts().find((a) => a.id === id)?.kind ?? null;
   });
 
   public readonly showEarn = computed(() => {
@@ -127,11 +148,17 @@ export class ArchetypeSingleAmountComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    this.accountsService.init();
+
     const seed = this.initialValue;
+    const initialAccountId =
+      seed?.accountId
+        ?? this.accounts()[0]?.id
+        ?? 'manual';
     this.form = this.fb.group({
       currency:  [seed?.currency ?? 'USD', Validators.required],
       amount:    [seed?.amount ?? null, HoldingValidator.quantity(AssetClass.CASH)],
-      accountId: [seed?.accountId ?? 'manual', Validators.required],
+      accountId: [initialAccountId, Validators.required],
       lockMeta:  [seed?.lockMeta ?? (null as IHoldingLockMeta | null)],
       tagIds:    [seed?.tagIds ?? ([] as string[])],
     });
@@ -165,7 +192,7 @@ export class ArchetypeSingleAmountComponent implements OnInit {
       lockMeta: IHoldingLockMeta | null;
       tagIds: string[];
     };
-    const account = this.accounts.find((a) => a.id === v.accountId);
+    const account = this.accounts().find((a) => a.id === v.accountId);
     if (!account) return null;
 
     // Look up or create the cash Instrument keyed by currency. Per ADR-0001
