@@ -7,6 +7,11 @@
     <pgz-accounts-chip class="savings__accounts-chip"></pgz-accounts-chip>
   </header>
 
+  @if (showOfflinePlaceholder()) {
+    <pgz-savings-offline-placeholder
+      (retry)="onOfflineRetry()">
+    </pgz-savings-offline-placeholder>
+  } @else {
   <div class="savings__view-toggle">
     <pgz-segmented-toggle
       [options]="['Classes', 'Holdings']"
@@ -95,5 +100,6 @@
       [showSummary]="false"
       [initialClassFilter]="initialHoldingsClass()">
     </pgz-holdings-list>
+  }
   }
 </section>

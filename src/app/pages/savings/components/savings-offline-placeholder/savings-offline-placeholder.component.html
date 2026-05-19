@@ -1,0 +1,15 @@
+<div class="offline-placeholder">
+  <mat-icon class="offline-placeholder__icon" aria-hidden="true">cloud_off</mat-icon>
+  <h2 class="offline-placeholder__title">No price data available</h2>
+  <p class="offline-placeholder__copy">
+    Connect to the internet to load your portfolio. Other sections still
+    work offline.
+  </p>
+  <button mat-flat-button
+          color="primary"
+          type="button"
+          class="offline-placeholder__retry"
+          (click)="onRetry()">
+    Retry
+  </button>
+</div>

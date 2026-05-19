@@ -33,6 +33,8 @@ import { HoldingsListComponent } from './components/holdings/holdings-list.compo
 // future /analytics screen (M5+) but are no longer rendered on /savings.
 import { PortfolioSummaryComponent } from './components/holdings/portfolio-summary/portfolio-summary.component';
 import { PositionCardComponent } from './components/positions/position-card/position-card.component';
+import { SavingsOfflinePlaceholderComponent } from './components/savings-offline-placeholder/savings-offline-placeholder.component';
+import { NetworkStatusService } from '../../core/network/network-status.service';
 import { AccountsService } from './service/accounts.service';
 import { HoldingService } from './service/holding.service';
 import { InstrumentService } from './service/instrument.service';
@@ -87,6 +89,7 @@ const UI_COMPONENTS = [
   HoldingsListComponent,
   PortfolioSummaryComponent,
   AccountsChipComponent,
+  SavingsOfflinePlaceholderComponent,
 ];
 
 const MATERIAL_MODULES = [
@@ -126,6 +129,28 @@ export class SavingsComponent implements OnInit {
   private readonly tags = inject(TagsService);
   private readonly accounts = inject(AccountsService);
   private readonly userPrefs = inject(UserPreferencesService);
+  private readonly network = inject(NetworkStatusService);
+
+  /**
+   * True when we should hide the whole dashboard and show the blocking
+   * offline placeholder instead — i.e. browser thinks we're offline AND
+   * the live-price cache holds nothing we could render with cost-basis
+   * fallback (live-prices doc §3 Rule 1).
+   */
+  public readonly showOfflinePlaceholder = computed(
+    () => !this.network.online() && this.livePrice.quoteCount() === 0,
+  );
+
+  /**
+   * Retry handler for the offline placeholder. Updates the network signal
+   * from `navigator.onLine` (so the placeholder closes when we're back)
+   * and fires a one-off poll instead of waiting up to 30s for the next
+   * scheduled tick.
+   */
+  public onOfflineRetry(): void {
+    this.network.recheck();
+    this.livePrice.refresh();
+  }
 
   /**
    * View toggle state.
@@ -189,6 +214,12 @@ export class SavingsComponent implements OnInit {
    * Group holdings by AssetClass. Sort classes by total value desc; within
    * each class, sort holdings by their current value desc so the top-5
    * cards represent the user's largest positions.
+   *
+   * P&L follows live-prices doc §3 Rule 2: only the priced subset of each
+   * class contributes to the accordion's % readout — otherwise an unpriced
+   * holding (cost-basis fallback for `currentValue`) would force P&L to 0
+   * and confuse the user. Total value still mixes live + fallback so the
+   * dollar number is whole.
    */
   public readonly classGroups = computed<ClassGroup[]>(() => {
     const all = this.holdingsView();
@@ -201,16 +232,24 @@ export class SavingsComponent implements OnInit {
       h: IHoldingView;
       currentValue: number;
       cost: number;
+      pricedValue: number;
+      pricedCost: number;
     }
     const buckets = new Map<AssetClass, Row[]>();
     for (const h of all) {
-      const currentPrice =
-        this.holdings.getCurrentPrice(h.instrument.symbol) ??
-        h.averageBuyPrice;
-      const currentValue = h.quantity * currentPrice;
+      const live = this.livePrice.getCurrentPrice(h.instrument.id);
+      const effectivePrice = live ?? h.averageBuyPrice;
+      const currentValue = h.quantity * effectivePrice;
       const cost = h.quantity * h.averageBuyPrice;
+      const priced = live !== undefined;
       const list = buckets.get(h.instrument.assetClass) ?? [];
-      list.push({ h, currentValue, cost });
+      list.push({
+        h,
+        currentValue,
+        cost,
+        pricedValue: priced ? currentValue : 0,
+        pricedCost: priced ? cost : 0,
+      });
       buckets.set(h.instrument.assetClass, list);
     }
 
@@ -228,8 +267,10 @@ export class SavingsComponent implements OnInit {
       const holdings = list.map((x) => x.h);
       const totalValue = list.reduce((s, x) => s + x.currentValue, 0);
       const costBasis = list.reduce((s, x) => s + x.cost, 0);
-      const pnl = totalValue - costBasis;
-      const pnlPercent = costBasis > 0 ? (pnl / costBasis) * 100 : 0;
+      const pricedValue = list.reduce((s, x) => s + x.pricedValue, 0);
+      const pricedCost = list.reduce((s, x) => s + x.pricedCost, 0);
+      const pnl = pricedValue - pricedCost;
+      const pnlPercent = pricedCost > 0 ? (pnl / pricedCost) * 100 : 0;
       // PositionsService re-buckets holdings per Instrument so two BTC
       // holdings (cold wallet + earn) collapse into a single Position card.
       const positions = this.positionsSvc.fromHoldings(holdings, priceFor);
