@@ -12,6 +12,7 @@ import { IHoldingView } from '../../../../../domain/holding.domain';
 import { ITag } from '../../../../../domain/tag.domain';
 import { HoldingService } from '../../../service/holding.service';
 import { InstrumentService } from '../../../service/instrument.service';
+import { LivePriceService } from '../../../service/live-price.service';
 import { TagsService } from '../../../service/tags.service';
 import { selectHoldingsList } from '../../../store/holdings.selectors';
 import { selectTagsList } from '../../../store/tags.selectors';
@@ -53,6 +54,7 @@ export class PortfolioSummaryComponent implements OnInit {
   private readonly store = inject(Store);
   private readonly holdings = inject(HoldingService);
   private readonly instruments = inject(InstrumentService);
+  private readonly livePrice = inject(LivePriceService);
   private readonly tags = inject(TagsService);
 
   private readonly rawHoldings = this.store.selectSignal(selectHoldingsList);
@@ -79,24 +81,42 @@ export class PortfolioSummaryComponent implements OnInit {
 
   public readonly summary = computed(() => {
     const all = this.holdingsView();
-    const byClass = new Map<
-      AssetClass,
-      { value: number; costBasis: number }
-    >();
+    /**
+     * Live-prices doc §3 Rule 2:
+     *  - `totalValue` mixes live prices and `averageBuyPrice` fallback so
+     *     the dashboard shows a whole number (some part is "estimate from
+     *     cost basis", silently).
+     *  - `totalPnL` and `totalPnLPercent` only count the portion of the
+     *     portfolio that has a real live price — otherwise unpriced
+     *     holdings would force P&L to read as 0 / -100% and mislead.
+     *  - `pricedValue` and `pricedCostBasis` are the inputs for the P&L
+     *     computation; their delta is the P&L for the priced subset.
+     */
+    interface Bucket {
+      value: number;          // mixed: live or cost-basis fallback
+      costBasis: number;      // sum(quantity × avgBuyPrice) — every holding
+      pricedValue: number;    // sum(quantity × livePrice) — priced subset
+      pricedCostBasis: number; // sum(quantity × avgBuyPrice) — priced subset
+    }
+    const byClass = new Map<AssetClass, Bucket>();
 
     for (const h of all) {
-      const currentPrice =
-        this.holdings.getCurrentPrice(h.instrument.symbol) ??
-        h.averageBuyPrice;
-      const value = h.quantity * currentPrice;
+      const live = this.livePrice.getCurrentPrice(h.instrument.id);
+      const effectivePrice = live ?? h.averageBuyPrice;
+      const value = h.quantity * effectivePrice;
       const cost = h.quantity * h.averageBuyPrice;
+      const priced = live !== undefined;
       const existing = byClass.get(h.instrument.assetClass) ?? {
         value: 0,
         costBasis: 0,
+        pricedValue: 0,
+        pricedCostBasis: 0,
       };
       byClass.set(h.instrument.assetClass, {
         value: existing.value + value,
         costBasis: existing.costBasis + cost,
+        pricedValue: existing.pricedValue + (priced ? value : 0),
+        pricedCostBasis: existing.pricedCostBasis + (priced ? cost : 0),
       });
     }
 
@@ -108,20 +128,31 @@ export class PortfolioSummaryComponent implements OnInit {
       (s, c) => s + c.costBasis,
       0,
     );
-    const totalPnL = totalValue - totalCost;
-    const totalPnLPercent = totalCost > 0 ? (totalPnL / totalCost) * 100 : 0;
+    const pricedValue = Array.from(byClass.values()).reduce(
+      (s, c) => s + c.pricedValue,
+      0,
+    );
+    const pricedCostBasis = Array.from(byClass.values()).reduce(
+      (s, c) => s + c.pricedCostBasis,
+      0,
+    );
+    const totalPnL = pricedValue - pricedCostBasis;
+    const totalPnLPercent =
+      pricedCostBasis > 0 ? (totalPnL / pricedCostBasis) * 100 : 0;
 
     const breakdown: ClassBreakdown[] = Array.from(byClass.entries())
-      .map(([assetClass, { value, costBasis }]) => ({
+      .map(([assetClass, b]) => ({
         assetClass,
         label: this.assetClassLabel(assetClass),
         color: this.assetClassBadgeColor(assetClass),
-        value,
-        costBasis,
-        pnl: value - costBasis,
+        value: b.value,
+        costBasis: b.costBasis,
+        pnl: b.pricedValue - b.pricedCostBasis,
         pnlPercent:
-          costBasis > 0 ? ((value - costBasis) / costBasis) * 100 : 0,
-        share: totalValue > 0 ? value / totalValue : 0,
+          b.pricedCostBasis > 0
+            ? ((b.pricedValue - b.pricedCostBasis) / b.pricedCostBasis) * 100
+            : 0,
+        share: totalValue > 0 ? b.value / totalValue : 0,
       }))
       .sort((a, b) => b.value - a.value);
 
