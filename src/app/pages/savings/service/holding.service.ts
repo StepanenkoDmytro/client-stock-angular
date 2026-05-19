@@ -1,6 +1,7 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { Observable, filter, firstValueFrom, map, tap } from 'rxjs';
+import { EMPTY, Observable, catchError, filter, firstValueFrom, map, tap } from 'rxjs';
 import { v4 as uuid } from 'uuid';
 import { environment } from '../../../../environments/environment';
 import { AccountKind } from '../../../domain/account-kind.domain';
@@ -11,6 +12,8 @@ import {
 import { IHolding, IHoldingLockMeta } from '../../../domain/holding.domain';
 import { IInstrument } from '../../../domain/instrument.domain';
 import { ITag } from '../../../domain/tag.domain';
+import { AuthService } from '../../../service/auth.service';
+import { OfflineStorageService } from '../../../core/offline-storage/offline-storage.service';
 import { MANUAL_ACCOUNT_ID } from '../model/HoldingMapper';
 import {
   addHolding,
@@ -91,11 +94,15 @@ export class HoldingService {
    */
   private static readonly SEED_VERSION = 4;
 
+  private static readonly DELETE_QUEUE_KEY = 'holdings';
+
   private readonly store$ = inject(Store<{ holdings: IHoldingsState }>);
   private readonly instruments = inject(InstrumentService);
   private readonly livePrice = inject(LivePriceService);
   private readonly tags = inject(TagsService);
   private readonly api = inject(HoldingApiService);
+  private readonly auth = inject(AuthService);
+  private readonly offlineStorage = inject(OfflineStorageService);
 
   private isInit = false;
 
@@ -162,77 +169,119 @@ export class HoldingService {
   }
 
   /**
-   * REST-first create: POST `/api/v1/holdings`, then dispatch the
-   * server-shaped row into the store. Pessimistic UX — no optimistic
-   * insert, so the user never sees a "saved" state that isn't on disk.
-   * Caller subscribes to wire snackbar + navigate on success / error.
+   * Create a holding. Three flavours depending on caller context:
    *
-   * <p>Demo mode (`environment.demoData=true`) short-circuits to a local
-   * dispatch so screenshot / story sessions stay self-contained.
+   *  1. **Demo mode** (`environment.demoData=true`) — local dispatch only,
+   *     no API. Screenshot / story sessions stay self-contained.
+   *  2. **Anonymous** (no `authToken`, production build) — local dispatch
+   *     with `isSaved: false`. The signup-merge wizard (Phase 3b PR5)
+   *     scans for these and batch-uploads them after sign-in. Per ADR-0012
+   *     §Anonymous-mode.
+   *  3. **Authenticated** — REST-first: POST `/api/v1/holdings`, dispatch
+   *     the server-shaped row (`isSaved: true`). The local UUID we sent
+   *     is replaced by the server-generated id — UI flickers once,
+   *     acceptable trade-off until backend accepts client UUIDs.
    */
   addHolding(holding: IHolding): Observable<IHolding> {
-    if (environment.demoData) {
-      this.addHoldingLocal(holding);
+    if (environment.demoData || !this.auth.authToken) {
+      this.addHoldingLocal({ ...holding, isSaved: false });
       return new Observable<IHolding>((sub) => { sub.next(holding); sub.complete(); });
     }
     return this.api.create(this.toCreateRequest(holding)).pipe(
       map(HoldingService.fromApiDto),
+      map((saved) => ({ ...saved, isSaved: true })),
       tap((saved) => this.store$.dispatch(addHolding({ holding: saved }))),
     );
   }
 
   /**
-   * REST-first pure edit: PUT `/api/v1/holdings/{id}`. Server response
-   * (post-normalisation) is dispatched into the store. Avg-price is NOT
-   * recomputed; use {@link #topUp} for weighted-average updates.
+   * Pure edit (no avg-price recompute). Local-first: dispatch with
+   * `isSaved: false` immediately so the UI reflects the change without
+   * waiting on the round-trip. If authenticated, fire the PUT in
+   * background; on success dispatch the server-canonical patch with
+   * `isSaved: true`. Anonymous / demo skip the API entirely.
    */
   update(id: string, body: HoldingUpdateRequest): Observable<IHolding> {
-    if (environment.demoData) {
-      this.store$.dispatch(
-        editHolding({ id, addQuantity: 0, addPrice: 0, patch: this.toLocalPatch(body) }),
-      );
+    this.dispatchLocalPatch(id, this.toLocalPatch(body), 0, 0);
+    if (environment.demoData || !this.auth.authToken) {
       return this.getLocalById(id);
     }
     return this.api.update(id, body).pipe(
       map(HoldingService.fromApiDto),
-      tap((saved) => this.store$.dispatch(
-        editHolding({ id, addQuantity: 0, addPrice: 0, patch: HoldingService.toPatch(saved) }),
-      )),
+      tap((saved) => this.dispatchSavedPatch(id, saved)),
     );
   }
 
   /**
-   * REST-first top-up: POST `/api/v1/holdings/{id}/top-up`. Server
-   * recomputes weighted-average per ADR-0001 and returns the new row;
-   * we dispatch the canonical values into the store.
+   * Top-up: avg-buy-price weighted-average recompute. Same local-first
+   * pattern as {@link #update}. The reducer's existing `addQuantity > 0`
+   * branch applies the formula locally; the server's response (also
+   * weighted-avg per ADR-0001) replaces our local result on success so
+   * any rounding drift collapses to the canonical value.
    */
   topUp(id: string, body: HoldingTopUpRequest): Observable<IHolding> {
-    if (environment.demoData) {
-      this.store$.dispatch(
-        editHolding({ id, addQuantity: body.addQuantity, addPrice: body.addBuyPrice, patch: {} }),
-      );
+    this.dispatchLocalPatch(id, {}, body.addQuantity, body.addBuyPrice);
+    if (environment.demoData || !this.auth.authToken) {
       return this.getLocalById(id);
     }
     return this.api.topUp(id, body).pipe(
       map(HoldingService.fromApiDto),
-      tap((saved) => this.store$.dispatch(
-        editHolding({ id, addQuantity: 0, addPrice: 0, patch: HoldingService.toPatch(saved) }),
-      )),
+      tap((saved) => this.dispatchSavedPatch(id, saved)),
     );
   }
 
   /**
-   * REST-first delete: DELETE `/api/v1/holdings/{id}`, then drop the row
-   * from the store. Caller subscribes for success / error feedback.
+   * Delete. Local-first: drop the row from the store immediately.
+   * Authenticated path fires DELETE; on transient failure (network /
+   * 5xx) the id is enqueued via {@link OfflineStorageService} so the
+   * next sync drains it (Phase 3b PR1 generic queue). Anonymous / demo
+   * skip the API; nothing to re-sync since the record is purely local.
    */
   deleteHolding(id: string): Observable<void> {
-    if (environment.demoData) {
-      this.store$.dispatch(deleteHolding({ id }));
+    this.store$.dispatch(deleteHolding({ id }));
+    if (environment.demoData || !this.auth.authToken) {
       return new Observable<void>((sub) => { sub.next(); sub.complete(); });
     }
     return this.api.delete(id).pipe(
-      tap(() => this.store$.dispatch(deleteHolding({ id }))),
+      catchError((err: HttpErrorResponse) => {
+        if (HoldingService.isTransient(err)) {
+          this.offlineStorage.enqueueDelete(HoldingService.DELETE_QUEUE_KEY, id);
+        }
+        return EMPTY;
+      }),
     );
+  }
+
+  private dispatchLocalPatch(
+    id: string,
+    patch: Partial<IHolding>,
+    addQuantity: number,
+    addPrice: number,
+  ): void {
+    this.store$.dispatch(
+      editHolding({
+        id,
+        addQuantity,
+        addPrice,
+        patch: { ...patch, isSaved: false },
+      }),
+    );
+  }
+
+  private dispatchSavedPatch(id: string, saved: IHolding): void {
+    this.store$.dispatch(
+      editHolding({
+        id,
+        addQuantity: 0,
+        addPrice: 0,
+        patch: { ...HoldingService.toPatch(saved), isSaved: true },
+      }),
+    );
+  }
+
+  private static isTransient(error: HttpErrorResponse): boolean {
+    return error.status === 0 || error.status === 429 ||
+      (error.status >= 500 && error.status < 600);
   }
 
   assignTags(holdingId: string, tagIds: string[]): void {
@@ -381,13 +430,22 @@ export class HoldingService {
     // Real beta testers (production build) — backend is the source of truth.
     // If we haven't already shown a localStorage cache above, push an empty
     // state so the UI doesn't show stale demo fixtures during the round-trip.
+    //
+    // Anonymous mode (Phase 3b): if there's no auth token we *don't* hit
+    // the backend — `/holdings` would 401, the interceptor would silently
+    // try `/refresh-token`, also fail, then logout-redirect. For an
+    // anonymous user that's a forced redirect to /sign-in on every visit.
+    // Skip the GET; the local store (already loaded from cache, or empty)
+    // is the source of truth until they sign in.
     if (!environment.demoData) {
       if (!usedCache) {
         this.store$.dispatch(
           loadHoldings({ state: { holdingsList: [] } }),
         );
       }
-      this.hydrateFromBackend();
+      if (this.auth.authToken) {
+        this.hydrateFromBackend();
+      }
       return;
     }
 
@@ -404,9 +462,16 @@ export class HoldingService {
    * the global HTTP interceptor (separate file) surfaces the snackbar.
    */
   private hydrateFromBackend(): void {
+    // Drain any DELETEs that were queued during a prior offline session.
+    // Best-effort — the OfflineStorageService clears the queue on read,
+    // and any re-failure re-enqueues via `deleteHolding`'s catchError.
+    this.drainFailedDeletes();
+
     this.api.list().subscribe({
       next: (dtos) => {
-        const list = dtos.map(HoldingService.fromApiDto);
+        const list = dtos
+          .map(HoldingService.fromApiDto)
+          .map((h) => ({ ...h, isSaved: true }));
         this.store$.dispatch(
           loadHoldings({ state: { holdingsList: list } }),
         );
@@ -416,6 +481,20 @@ export class HoldingService {
         // User sees stale data + a global snackbar from the HTTP interceptor.
       },
     });
+  }
+
+  private drainFailedDeletes(): void {
+    const queue = this.offlineStorage.drainDeletes(HoldingService.DELETE_QUEUE_KEY);
+    for (const id of queue) {
+      this.api.delete(id)
+        .pipe(catchError((err: HttpErrorResponse) => {
+          if (HoldingService.isTransient(err)) {
+            this.offlineStorage.enqueueDelete(HoldingService.DELETE_QUEUE_KEY, id);
+          }
+          return EMPTY;
+        }))
+        .subscribe();
+    }
   }
 
   /**

@@ -108,6 +108,20 @@ export interface IHolding {
   createdAt: string;
   /** ISO-8601 timestamp. */
   updatedAt: string;
+  /**
+   * `true` once the record has been confirmed by the backend (via either
+   * REST round-trip on create / update, or the canonical-state GET on
+   * bootstrap). `false` for records that exist only in the client store
+   * (anonymous mode, offline edit pending sync) — the signup-merge
+   * wizard (Phase 3b PR5) scans for these.
+   *
+   * <p>Optional for backward compatibility with the existing seed and
+   * pre-Phase-3b localStorage snapshots. Undefined is treated as `true`
+   * (canonical) — only the explicit `false` marker triggers re-sync.
+   *
+   * <p>Per ADR-0012 §"Базовий патерн на entity" bullet 2.
+   */
+  isSaved?: boolean;
 }
 
 /**
