@@ -139,6 +139,76 @@
   color: var(--bs-gray-500);
 }
 
+// Phase 3b PR3 — soft anonymous-mode nudge (7-day threshold). Calm tone:
+// no red, no shadow, no icon — sits between header and settings list.
+.anonymous-nudge {
+  margin: 16px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background-color: #fff;
+  border: 1px solid var(--bs-gray-200, #e3e8ee);
+}
+
+.anonymous-nudge__copy {
+  margin: 0 0 12px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--bs-gray-700, #4a5568);
+}
+
+.anonymous-nudge__actions {
+  display: flex;
+  gap: 12px;
+}
+
+.anonymous-nudge__btn {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 10px;
+  border: 1px solid var(--bs-gray-300, #cbd5e1);
+  background-color: #fff;
+  color: var(--bs-gray-700, #4a5568);
+  cursor: pointer;
+}
+
+.anonymous-nudge__btn--primary {
+  background-color: var(--linear-blue, #568CAE);
+  border-color: var(--linear-blue, #568CAE);
+  color: #fff;
+}
+
+// Privacy & data row — calm two-line variant of `.general-item`.
+.privacy-row {
+  align-items: flex-start;
+  padding: 6px 0;
+}
+
+.privacy-row__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.privacy-row__title {
+  margin: 0;
+}
+
+.privacy-row__subline {
+  margin: 0;
+  font-size: 12px;
+  color: var(--bs-gray-600, #6b7280);
+}
+
+.privacy-row__subline--anonymous {
+  color: #b45309;
+}
+
+.privacy-row__subline--authed {
+  color: var(--bs-success, #16a34a);
+}
+
 .arrow-box {
   margin-left: 12px;
   width: 9px;

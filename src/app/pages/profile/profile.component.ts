@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,6 +8,7 @@ import { UserService } from '../../service/user.service';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { IconComponent } from '../../core/UI/components/icon/icon.component';
+import { AnonymousModeService } from '../../core/anonymous-mode/anonymous-mode.service';
 import { SystemComponent } from './components/system/system.component';
 import { IUser, UserMode } from '../../model/User';
 import { PrevRouteComponent } from '../../core/UI/components/prev-route/prev-route.component';
@@ -42,9 +43,19 @@ export class ProfileComponent implements OnInit {
 
   public user: IUser | null = null;
   public userName: string = 'User';
-  public userEmail: string; 
+  public userEmail: string;
   public isConfirmaEmail: boolean = true;
   public isAuthorizedUser: boolean = false;
+
+  /**
+   * Anonymous-mode lifecycle signals. Used by the disclosure section to
+   * show "Anonymous mode — data on this device only" vs "Signed in as
+   * <email> — backed up to cloud", and by the soft nudge banner after 7
+   * days of accumulation (ADR-0012 §"Anonymous mode UX").
+   */
+  private readonly anonymous = inject(AnonymousModeService);
+  public readonly isAnonymous = this.anonymous.isAnonymous;
+  public readonly shouldShowNudge = this.anonymous.shouldShowNudge;
 
   constructor(
     private authService: AuthService,
@@ -89,6 +100,10 @@ export class ProfileComponent implements OnInit {
 
   public logout(): void {
     this.authService.logOut();
+    // Phase 3a fix: logout no longer wipes spending/savings state.
+    // The user reverts to anonymous mode keeping local data —
+    // re-evaluate the disclosure section.
+    this.anonymous.refresh();
   }
 
   public login(): void {
@@ -97,6 +112,10 @@ export class ProfileComponent implements OnInit {
 
   public registration(): void {
     this.router.navigate(['/auth/registration']);
+  }
+
+  public dismissAnonymousNudge(): void {
+    this.anonymous.dismissNudge();
   }
 
   public changeProfileSettings(): void {

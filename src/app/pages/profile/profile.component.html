@@ -1,5 +1,29 @@
 <section>
     <pgz-prev-route [showArrow]="false"><p>Settings</p></pgz-prev-route>
+
+    <!-- Phase 3b PR3: soft anonymous-mode nudge after 7 days of accumulation
+         (ADR-0012 §"Anonymous mode UX"). Calm tone — no modal, no blinking,
+         no urgency copy. User can dismiss; we hold off another 14 days. -->
+    @if (shouldShowNudge()) {
+        <div class="anonymous-nudge" role="status">
+            <p class="anonymous-nudge__copy">
+                Your data is on this device only. Sign up to back it up across devices.
+            </p>
+            <div class="anonymous-nudge__actions">
+                <button type="button"
+                        class="anonymous-nudge__btn anonymous-nudge__btn--primary"
+                        (click)="registration()">
+                    Sign up
+                </button>
+                <button type="button"
+                        class="anonymous-nudge__btn"
+                        (click)="dismissAnonymousNudge()">
+                    Not now
+                </button>
+            </div>
+        </div>
+    }
+
     <section class="profile">
 
         @if(isAuthorizedUser) {
@@ -69,6 +93,27 @@
     </div>
     <pgz-system></pgz-system>
     
+    <!-- Phase 3b PR3: Privacy & data disclosure — always shown, regardless
+         of auth state, per ADR-0012 §"Anonymous mode UX". Tells the user
+         where their data lives in plain language so they can make an
+         informed choice. -->
+    <div class="settings-box">
+        <div class="general-item privacy-row">
+            <div class="privacy-row__text">
+                <p class="privacy-row__title">Privacy &amp; data</p>
+                @if (isAnonymous()) {
+                    <p class="privacy-row__subline privacy-row__subline--anonymous">
+                        Anonymous mode — data on this device only
+                    </p>
+                } @else {
+                    <p class="privacy-row__subline privacy-row__subline--authed">
+                        Signed in — backed up to cloud
+                    </p>
+                }
+            </div>
+        </div>
+    </div>
+
     <div class="settings-box">
         <div class="general-item">
             <p>Export / Import data</p>
