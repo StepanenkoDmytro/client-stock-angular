@@ -26,6 +26,7 @@ import { AssetClass } from '../../../../../../../domain/asset-class.domain';
 import { IHoldingLockMeta } from '../../../../../../../domain/holding.domain';
 import { IInstrument } from '../../../../../../../domain/instrument.domain';
 import {
+  ArchetypeInitialValueMarketBacked,
   ArchetypeState,
   ArchetypeSubmission,
 } from '../../../../../model/AddHoldingArchetype';
@@ -83,6 +84,21 @@ export class ArchetypeMarketBackedComponent implements OnInit {
   }
   private readonly _assetClass = signal<AssetClass>(AssetClass.STOCK);
 
+  /**
+   * Edit-mode seed. When set, the form is pre-filled and
+   * `selectedInstrument` is locked to the supplied instrument. Bound by
+   * the orchestrator on `/savings/edit-holding/:id`. Null in add-mode.
+   */
+  @Input() public initialValue: ArchetypeInitialValueMarketBacked | null = null;
+
+  /**
+   * When supplied, the instrument autocomplete is replaced by a readonly
+   * display — user cannot pick a different one (edit-mode invariant).
+   * Treated independently of `initialValue` so the orchestrator can lock
+   * the instrument without forcing a prefill of every other field.
+   */
+  @Input() public readOnlyInstrument: IInstrument | null = null;
+
   @Output() public stateChange = new EventEmitter<ArchetypeState>();
 
   public readonly accounts: ReadonlyArray<AccountChoice> = ADD_HOLDING_ACCOUNTS;
@@ -91,6 +107,11 @@ export class ArchetypeMarketBackedComponent implements OnInit {
   public readonly selectedInstrument = signal<IInstrument | null>(null);
   public readonly showCreateInline = signal<boolean>(false);
   public readonly inlinePrefillSymbol = signal<string>('');
+
+  /** True when the instrument slot is fixed (edit-mode). */
+  public readonly instrumentLocked = computed(
+    () => this.readOnlyInstrument !== null
+  );
 
   /** Drives Earn block visibility — derived from currently chosen account kind. */
   public readonly selectedAccountKind = computed(() => {
@@ -112,13 +133,20 @@ export class ArchetypeMarketBackedComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    const seed = this.initialValue;
     this.form = this.fb.group({
-      quantity:  [null, HoldingValidator.quantity(this._assetClass())],
-      buyPrice:  [null, HoldingValidator.buyPrice],
-      accountId: ['manual', Validators.required],
-      lockMeta:  [null as IHoldingLockMeta | null],
-      tagIds:    [[] as string[]],
+      quantity:  [seed?.quantity ?? null, HoldingValidator.quantity(this._assetClass())],
+      buyPrice:  [seed?.averageBuyPrice ?? null, HoldingValidator.buyPrice],
+      accountId: [seed?.accountId ?? 'manual', Validators.required],
+      lockMeta:  [seed?.lockMeta ?? (null as IHoldingLockMeta | null)],
+      tagIds:    [seed?.tagIds ?? ([] as string[])],
     });
+
+    if (this.readOnlyInstrument) {
+      this.selectedInstrument.set(this.readOnlyInstrument);
+    } else if (seed) {
+      this.selectedInstrument.set(seed.instrument);
+    }
 
     // Emit state on every relevant change. Use form's combined stream
     // (valueChanges + statusChanges) so the parent's "can save" indicator
@@ -129,6 +157,10 @@ export class ArchetypeMarketBackedComponent implements OnInit {
     this.form.statusChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.emit());
+
+    if (seed || this.readOnlyInstrument) {
+      this.emit();
+    }
   }
 
   public onInstrumentSelected(inst: IInstrument | null): void {

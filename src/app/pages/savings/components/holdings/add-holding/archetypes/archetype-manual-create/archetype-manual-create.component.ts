@@ -25,6 +25,7 @@ import { AssetClass } from '../../../../../../../domain/asset-class.domain';
 import { IHoldingLockMeta } from '../../../../../../../domain/holding.domain';
 import { IInstrument } from '../../../../../../../domain/instrument.domain';
 import {
+  ArchetypeInitialValueManualCreate,
   ArchetypeState,
   ArchetypeSubmission,
 } from '../../../../../model/AddHoldingArchetype';
@@ -87,12 +88,32 @@ export class ArchetypeManualCreateComponent implements OnInit {
   }
   private readonly _assetClass = signal<AssetClass>(AssetClass.REAL_ESTATE);
 
+  /**
+   * Edit-mode seed. When set, the form is pre-filled and the
+   * `createdInstrument` slot is locked to the supplied instrument
+   * (inline create panel is suppressed). Null in add-mode.
+   */
+  @Input() public initialValue: ArchetypeInitialValueManualCreate | null = null;
+
+  /**
+   * When supplied, the inline-create panel is suppressed and this
+   * instrument is treated as fixed (edit-mode invariant). Independent
+   * of `initialValue` so the orchestrator can lock the instrument
+   * without prefilling every other field.
+   */
+  @Input() public readOnlyInstrument: IInstrument | null = null;
+
   @Output() public stateChange = new EventEmitter<ArchetypeState>();
 
   public readonly accounts: ReadonlyArray<AccountChoice> = ADD_HOLDING_ACCOUNTS;
   public form!: FormGroup;
 
   public readonly createdInstrument = signal<IInstrument | null>(null);
+
+  /** True when the instrument slot is fixed (edit-mode). */
+  public readonly instrumentLocked = computed(
+    () => this.readOnlyInstrument !== null || this.initialValue !== null
+  );
 
   public readonly selectedAccountKind = computed(() => {
     const id = this.form?.get('accountId')?.value;
@@ -124,19 +145,25 @@ export class ArchetypeManualCreateComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    const initialQty =
+    const seed = this.initialValue;
+    const defaultQty =
       this._assetClass() === AssetClass.REAL_ESTATE ||
       this._assetClass() === AssetClass.OTHER
         ? 1
         : null;
 
     this.form = this.fb.group({
-      quantity:  [initialQty, HoldingValidator.quantity(this._assetClass())],
-      buyPrice:  [null, HoldingValidator.buyPrice],
-      accountId: ['manual', Validators.required],
-      lockMeta:  [null as IHoldingLockMeta | null],
-      tagIds:    [[] as string[]],
+      quantity:  [seed?.quantity ?? defaultQty, HoldingValidator.quantity(this._assetClass())],
+      buyPrice:  [seed?.averageBuyPrice ?? null, HoldingValidator.buyPrice],
+      accountId: [seed?.accountId ?? 'manual', Validators.required],
+      lockMeta:  [seed?.lockMeta ?? (null as IHoldingLockMeta | null)],
+      tagIds:    [seed?.tagIds ?? ([] as string[])],
     });
+
+    const lockedInstrument = this.readOnlyInstrument ?? seed?.instrument ?? null;
+    if (lockedInstrument) {
+      this.createdInstrument.set(lockedInstrument);
+    }
 
     this.form.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -144,6 +171,10 @@ export class ArchetypeManualCreateComponent implements OnInit {
     this.form.statusChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.emit());
+
+    if (lockedInstrument) {
+      this.emit();
+    }
   }
 
   public onInstrumentCreated(payload: { instrument: IInstrument }): void {

@@ -1,19 +1,29 @@
 <form class="amb" [formGroup]="form">
-  <pgz-instrument-autocomplete
-    [assetClass]="assetClass"
-    [value]="selectedInstrument()"
-    (valueChange)="onInstrumentSelected($event)"
-    (createCustom)="onCreateCustomRequested($event)">
-  </pgz-instrument-autocomplete>
-
-  @if (showCreateInline()) {
-    <pgz-create-instrument-inline
+  @if (instrumentLocked()) {
+    <mat-form-field appearance="outline" class="amb__field">
+      <mat-label>Instrument</mat-label>
+      <input matInput
+             type="text"
+             readonly
+             [value]="(selectedInstrument()?.symbol ?? '') + ' — ' + (selectedInstrument()?.name ?? '')" />
+    </mat-form-field>
+  } @else {
+    <pgz-instrument-autocomplete
       [assetClass]="assetClass"
-      [initialSymbol]="inlinePrefillSymbol()"
-      [initialCurrency]="selectedInstrument()?.currency ?? 'USD'"
-      (created)="onInstrumentCreated($event)"
-      (cancelled)="onInstrumentCreateCancelled()">
-    </pgz-create-instrument-inline>
+      [value]="selectedInstrument()"
+      (valueChange)="onInstrumentSelected($event)"
+      (createCustom)="onCreateCustomRequested($event)">
+    </pgz-instrument-autocomplete>
+
+    @if (showCreateInline()) {
+      <pgz-create-instrument-inline
+        [assetClass]="assetClass"
+        [initialSymbol]="inlinePrefillSymbol()"
+        [initialCurrency]="selectedInstrument()?.currency ?? 'USD'"
+        (created)="onInstrumentCreated($event)"
+        (cancelled)="onInstrumentCreateCancelled()">
+      </pgz-create-instrument-inline>
+    }
   }
 
   <div class="amb__row">

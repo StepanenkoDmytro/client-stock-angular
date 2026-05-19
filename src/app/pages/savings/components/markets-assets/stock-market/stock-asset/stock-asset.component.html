@@ -22,5 +22,9 @@
         <button mat-flat-button class="accept-btn" (click)="saveEdit()">Save me</button>
     </section>
 } @else {
-    <p>Oops, something went wrong</p>
+    <section class="asset asset--empty">
+        <mat-icon class="asset__empty-icon">search_off</mat-icon>
+        <p class="asset__empty-title">No data for this instrument</p>
+        <p class="asset__empty-hint">It may not be in our catalog yet — try a different symbol from search.</p>
+    </section>
 }

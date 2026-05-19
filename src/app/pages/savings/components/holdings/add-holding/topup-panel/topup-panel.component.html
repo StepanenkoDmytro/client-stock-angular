@@ -1,0 +1,54 @@
+<mat-expansion-panel class="tp">
+  <mat-expansion-panel-header>
+    <mat-panel-title>Top up this position</mat-panel-title>
+  </mat-expansion-panel-header>
+
+  <p class="tp__hint">
+    Add quantity bought at a new price. Average buy price recalculates
+    automatically.
+  </p>
+
+  <form class="tp__form" [formGroup]="form" (ngSubmit)="onApply()">
+    <div class="tp__row">
+      <mat-form-field appearance="outline" class="tp__field tp__field--qty">
+        <mat-label>Add quantity</mat-label>
+        <input matInput
+               type="number"
+               formControlName="addQuantity"
+               step="any"
+               autocomplete="off" />
+        @if (form.get('addQuantity')?.touched && form.get('addQuantity')?.invalid) {
+          <mat-error>Must be &gt; 0</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="tp__field tp__field--price">
+        <mat-label>Add buy price</mat-label>
+        <input matInput
+               type="number"
+               formControlName="addBuyPrice"
+               step="any"
+               autocomplete="off" />
+        @if (form.get('addBuyPrice')?.touched && form.get('addBuyPrice')?.invalid) {
+          <mat-error>Must be &gt; 0</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    @if (canSubmit()) {
+      <p class="tp__preview">
+        New: {{ previewQuantity() | number:'1.0-8' }} &#64; avg
+        {{ previewAveragePrice() | number:'1.2-8' }} {{ currency }}
+      </p>
+    }
+
+    <div class="tp__actions">
+      <button mat-flat-button
+              color="primary"
+              type="submit"
+              [disabled]="!canSubmit()">
+        Apply top-up
+      </button>
+    </div>
+  </form>
+</mat-expansion-panel>

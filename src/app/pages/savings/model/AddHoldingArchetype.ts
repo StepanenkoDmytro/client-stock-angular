@@ -4,6 +4,49 @@ import { IHoldingLockMeta } from '../../../domain/holding.domain';
 import { IInstrument } from '../../../domain/instrument.domain';
 
 /**
+ * Edit-mode seed for an archetype form. Orchestrator
+ * (`AddHoldingComponent`) passes this once when bootstrapping
+ * `/savings/edit-holding/:id`; the archetype patches its form +
+ * `selectedInstrument` so the UI mirrors the holding's current state.
+ *
+ * <p>Discriminated by {@link AddHoldingArchetype} — narrow on `kind` to
+ * the per-archetype shape.
+ */
+export interface ArchetypeInitialValueMarketBacked {
+  kind: AddHoldingArchetype.MARKET_BACKED;
+  instrument: IInstrument;
+  quantity: number;
+  averageBuyPrice: number;
+  accountId: string;
+  lockMeta: IHoldingLockMeta | null;
+  tagIds: string[];
+}
+
+export interface ArchetypeInitialValueManualCreate {
+  kind: AddHoldingArchetype.MANUAL_CREATE;
+  instrument: IInstrument;
+  quantity: number;
+  averageBuyPrice: number;
+  accountId: string;
+  lockMeta: IHoldingLockMeta | null;
+  tagIds: string[];
+}
+
+export interface ArchetypeInitialValueSingleAmount {
+  kind: AddHoldingArchetype.SINGLE_AMOUNT;
+  currency: string;
+  amount: number;
+  accountId: string;
+  lockMeta: IHoldingLockMeta | null;
+  tagIds: string[];
+}
+
+export type ArchetypeInitialValue =
+  | ArchetypeInitialValueMarketBacked
+  | ArchetypeInitialValueManualCreate
+  | ArchetypeInitialValueSingleAmount;
+
+/**
  * Payload an archetype component emits via {@code (stateChange)} once its
  * form is valid. Orchestrator (`AddHoldingComponent`) wraps this into a
  * full `IHolding` with id / createdAt / updatedAt and dispatches to

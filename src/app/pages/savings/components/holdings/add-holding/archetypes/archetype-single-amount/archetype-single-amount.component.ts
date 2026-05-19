@@ -25,6 +25,7 @@ import { AssetClass } from '../../../../../../../domain/asset-class.domain';
 import { IHoldingLockMeta } from '../../../../../../../domain/holding.domain';
 import { IInstrument } from '../../../../../../../domain/instrument.domain';
 import {
+  ArchetypeInitialValueSingleAmount,
   ArchetypeState,
   ArchetypeSubmission,
 } from '../../../../../model/AddHoldingArchetype';
@@ -103,6 +104,12 @@ export class ArchetypeSingleAmountComponent implements OnInit {
   }
   private readonly _assetClass = signal<AssetClass>(AssetClass.CASH);
 
+  /**
+   * Edit-mode seed. When set, prefills the currency / amount / account /
+   * tags. Null in add-mode.
+   */
+  @Input() public initialValue: ArchetypeInitialValueSingleAmount | null = null;
+
   @Output() public stateChange = new EventEmitter<ArchetypeState>();
 
   public readonly currencies = CURRENCIES;
@@ -120,12 +127,13 @@ export class ArchetypeSingleAmountComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    const seed = this.initialValue;
     this.form = this.fb.group({
-      currency:  ['USD', Validators.required],
-      amount:    [null, HoldingValidator.quantity(AssetClass.CASH)],
-      accountId: ['manual', Validators.required],
-      lockMeta:  [null as IHoldingLockMeta | null],
-      tagIds:    [[] as string[]],
+      currency:  [seed?.currency ?? 'USD', Validators.required],
+      amount:    [seed?.amount ?? null, HoldingValidator.quantity(AssetClass.CASH)],
+      accountId: [seed?.accountId ?? 'manual', Validators.required],
+      lockMeta:  [seed?.lockMeta ?? (null as IHoldingLockMeta | null)],
+      tagIds:    [seed?.tagIds ?? ([] as string[])],
     });
 
     this.form.valueChanges
@@ -134,6 +142,10 @@ export class ArchetypeSingleAmountComponent implements OnInit {
     this.form.statusChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.emit());
+
+    if (seed) {
+      this.emit();
+    }
   }
 
   private emit(): void {

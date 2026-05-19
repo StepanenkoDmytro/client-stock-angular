@@ -1,13 +1,23 @@
 <form class="amc" [formGroup]="form">
-  <!-- Create-instrument-inline always expanded — manual-only classes
-       can't progress without it (PR5b §5 Archetype 2). -->
-  <pgz-create-instrument-inline
-    [assetClass]="assetClass"
-    [initialSymbol]="''"
-    [initialCurrency]="'USD'"
-    (created)="onInstrumentCreated($event)"
-    (cancelled)="onInstrumentCreateCancelled()">
-  </pgz-create-instrument-inline>
+  @if (instrumentLocked()) {
+    <mat-form-field appearance="outline" class="amc__field">
+      <mat-label>Instrument</mat-label>
+      <input matInput
+             type="text"
+             readonly
+             [value]="(createdInstrument()?.symbol ?? '') + ' — ' + (createdInstrument()?.name ?? '')" />
+    </mat-form-field>
+  } @else {
+    <!-- Create-instrument-inline always expanded — manual-only classes
+         can't progress without it (PR5b §5 Archetype 2). -->
+    <pgz-create-instrument-inline
+      [assetClass]="assetClass"
+      [initialSymbol]="''"
+      [initialCurrency]="'USD'"
+      (created)="onInstrumentCreated($event)"
+      (cancelled)="onInstrumentCreateCancelled()">
+    </pgz-create-instrument-inline>
+  }
 
   @if (createdInstrument()) {
     <div class="amc__row">

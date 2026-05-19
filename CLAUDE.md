@@ -86,6 +86,50 @@ src/app/
 
 ---
 
+## Forms convention
+
+Усі форми — **Reactive Forms + Signals**. Template-driven `[(ngModel)]` —
+тільки для тривіальних "controlled inputs" поза формовою валідацією
+(filter chips, sort sheet тощо). Нові форми пишемо за паттерном:
+
+- **`FormBuilder.group({...})`** у `ngOnInit` (НЕ у конструкторі — `inject()`
+  для DI відбувається до ініціалізації полів, форма потребує валідаторів які
+  можуть залежати від Inputs).
+- **Валідатори** — окремий клас у `pages/<feature>/validator/<X>Validator.ts`
+  (приклади: [HoldingValidator](src/app/pages/savings/validator/HoldingValidator.ts),
+  [TagValidator](src/app/pages/savings/validator/TagValidator.ts)). Статичні
+  методи; повертають `ValidationErrors | null`. Per-class валідатори
+  (наприклад квантова шкала за `AssetClass`) — фабрики що приймають аргумент
+  і повертають `ValidatorFn`.
+- **Помилки в шаблоні** — через `<mat-error>` всередині `mat-form-field`,
+  гарантовано після `form.get('x')?.touched`. Один `<mat-error>` на код помилки.
+- **Submit/feedback** — через `MatSnackBar` (`open(message, 'Dismiss', { duration: 3000 })`).
+  Не показуй alert/confirm для бізнес-фідбеку; `window.confirm` — лише для
+  destructive guard-ів (зміна asset class з dirty form, delete confirm).
+- **Стан валідності** для дочірніх компонентів — через `@Output() stateChange`
+  з payload `{ valid: boolean; submission: T | null }`. Орестратор тримає
+  останній стан у signal і гейтить Save button через `computed`.
+
+### Complex inputs (CVA pattern)
+
+Дочірній компонент що грає роль формового поля (наприклад
+[`AccountEarnBlockComponent`](src/app/pages/savings/components/holdings/add-holding/account-earn-block/account-earn-block.component.ts)
+або [`TagChipsComponent`](src/app/pages/savings/components/holdings/tag-chips/tag-chips.component.ts)) —
+імплементує `ControlValueAccessor`, реєструється через
+`NG_VALUE_ACCESSOR` provider, працює з `formControlName` у батьку.
+Альтернатива — `@Input() value` + `@Output() valueChange` (паттерн
+`InstrumentAutocompleteComponent`) коли поле не повноцінний form-control.
+
+### Edit-mode prefill
+
+Якщо feature має add/edit режими (як AddHoldingComponent) — дочірній
+form-компонент бере `@Input() initialValue: T | null` (discriminated union
+коли архетипів кілька) і виконує prefill у `ngOnInit`. Add-mode behaviour
+**не повинен мінятися** від факту наявності `initialValue` Input — null
+дає чистий старт.
+
+---
+
 ## Сервіси і HTTP
 
 - Кожна feature page має свій сервіс (`<feature>.service.ts`) — обгортка над HttpClient.

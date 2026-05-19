@@ -38,6 +38,22 @@ export class ClassChipBreadcrumbComponent {
 
   @Output() public changeRequested = new EventEmitter<void>();
 
+  /**
+   * Whether the chip is interactive. Default {@code true} — used in
+   * add-mode where tapping the chip returns to the class grid. Set
+   * {@code false} in edit-mode where the class is fixed for the
+   * lifetime of the holding (changing the class would be delete+create);
+   * the "change ▾" affordance and click handler then disappear.
+   */
+  @Input()
+  public set interactive(value: boolean) {
+    this._interactive.set(value);
+  }
+  public get interactive(): boolean {
+    return this._interactive();
+  }
+  private readonly _interactive = signal<boolean>(true);
+
   /** Card metadata for the current class (label, icon, tint). */
   public readonly card = computed(() => {
     const ac = this._assetClass();
@@ -49,6 +65,9 @@ export class ClassChipBreadcrumbComponent {
   public readonly tintVar = computed(() => this.card()?.tintVar ?? '--pgz-card-border');
 
   public onChange(): void {
+    if (!this._interactive()) {
+      return;
+    }
     this.changeRequested.emit();
   }
 }

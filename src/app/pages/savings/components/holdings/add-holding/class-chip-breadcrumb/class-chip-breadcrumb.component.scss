@@ -19,9 +19,19 @@
   cursor: pointer;
   transition: background-color 0.15s ease;
 
-  &:hover {
+  &:hover:not(:disabled) {
     background: color-mix(in srgb, var(--chip-tint) 20%, var(--pgz-card-bg));
   }
+}
+
+// Static variant — edit-mode chip is informational only (class is fixed
+// for the lifetime of an existing holding). Suppress button cursor/hover
+// so it doesn't tempt the user to tap.
+.chip--static {
+  cursor: default;
+  // Native `:disabled` on `<button>` dims contents in some browsers;
+  // counter the dim — the chip is *read-only*, not unavailable.
+  opacity: 1;
 }
 
 .chip__icon-wrap {

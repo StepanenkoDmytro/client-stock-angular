@@ -7,3 +7,35 @@
     }
   }
 }
+
+.asset {
+  &--empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 32px 16px;
+    text-align: center;
+    color: var(--pgz-text-muted, rgba(0, 0, 0, 0.6));
+  }
+
+  &__empty-icon {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+    opacity: 0.5;
+  }
+
+  &__empty-title {
+    margin: 4px 0 0;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--pgz-text-primary, rgba(0, 0, 0, 0.87));
+  }
+
+  &__empty-hint {
+    margin: 0;
+    font-size: 13px;
+    max-width: 280px;
+  }
+}

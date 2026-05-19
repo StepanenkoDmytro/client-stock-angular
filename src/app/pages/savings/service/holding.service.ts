@@ -21,6 +21,11 @@ import {
   selectHoldingsState,
 } from '../store/holdings.selectors';
 import { selectTagsList } from '../store/tags.selectors';
+import {
+  HoldingApiService,
+  HoldingTopUpRequest,
+  HoldingUpdateRequest,
+} from './holding-api.service';
 import { InstrumentService } from './instrument.service';
 import { LivePriceService } from './live-price.service';
 import { TagsService } from './tags.service';
@@ -66,6 +71,7 @@ export class HoldingService {
   private readonly instruments = inject(InstrumentService);
   private readonly livePrice = inject(LivePriceService);
   private readonly tags = inject(TagsService);
+  private readonly api = inject(HoldingApiService);
 
   private isInit = false;
 
@@ -118,6 +124,48 @@ export class HoldingService {
     this.store$.dispatch(
       editHolding({ id, addQuantity, addPrice, patch }),
     );
+  }
+
+  /**
+   * Pure edit — patches non-null fields on the server and mirrors the
+   * change into the local store. Avg-price is NOT recomputed; use
+   * {@link #topUp} for that. Fire-and-forget; HTTP errors are swallowed
+   * for now (local optimism wins until proper effects land).
+   */
+  update(id: string, body: HoldingUpdateRequest): void {
+    this.store$.dispatch(
+      editHolding({
+        id,
+        addQuantity: 0,
+        addPrice: 0,
+        patch: this.toLocalPatch(body),
+      }),
+    );
+    this.api.update(id, body).subscribe({ error: () => {} });
+  }
+
+  /**
+   * Top-up — recomputes weighted-average buy price per ADR-0001 on both
+   * the server and the local store. Fire-and-forget; HTTP errors swallowed.
+   */
+  topUp(id: string, body: HoldingTopUpRequest): void {
+    this.store$.dispatch(
+      editHolding({
+        id,
+        addQuantity: body.addQuantity,
+        addPrice: body.addBuyPrice,
+        patch: {},
+      }),
+    );
+    this.api.topUp(id, body).subscribe({ error: () => {} });
+  }
+
+  private toLocalPatch(body: HoldingUpdateRequest): Partial<IHolding> {
+    const patch: Partial<IHolding> = {};
+    if (body.quantity !== undefined) patch.quantity = body.quantity;
+    if (body.averageBuyPrice !== undefined) patch.averageBuyPrice = body.averageBuyPrice;
+    if (body.currency !== undefined) patch.currency = body.currency;
+    return patch;
   }
 
   deleteHolding(id: string): void {
