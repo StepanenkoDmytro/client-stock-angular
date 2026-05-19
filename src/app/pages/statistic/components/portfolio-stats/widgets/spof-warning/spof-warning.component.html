@@ -1,0 +1,32 @@
+@if (hasExposure()) {
+  @if (exposure(); as e) {
+    <section class="spof" aria-labelledby="spof-heading">
+      <header class="spof__header">
+        <h3 id="spof-heading" class="spof__heading">LARGEST ACCOUNT</h3>
+        <span class="spof__pct"
+              [class.spof__pct--safe]="severity() === 'safe'"
+              [class.spof__pct--medium]="severity() === 'medium'"
+              [class.spof__pct--amber]="severity() === 'amber'"
+              [class.spof__pct--red]="severity() === 'red'">
+          {{ formatPct(e.shareOfPortfolio) }}
+        </span>
+      </header>
+
+      <div class="spof__row">
+        <span class="spof__name">{{ e.accountName }}</span>
+        <span class="spof__value">{{ formatMoney(e.value) }}</span>
+      </div>
+
+      <div class="spof__bar-track">
+        <div class="spof__bar-fill"
+             [class.spof__bar-fill--safe]="severity() === 'safe'"
+             [class.spof__bar-fill--medium]="severity() === 'medium'"
+             [class.spof__bar-fill--amber]="severity() === 'amber'"
+             [class.spof__bar-fill--red]="severity() === 'red'"
+             [style.width.%]="barWidth(e.shareOfPortfolio)"></div>
+      </div>
+
+      <p class="spof__copy">{{ copy() }}</p>
+    </section>
+  }
+}

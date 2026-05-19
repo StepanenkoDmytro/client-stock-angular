@@ -13,7 +13,16 @@
     <pgz-per-class-account-breakdown></pgz-per-class-account-breakdown>
   </div>
 
-  <!-- Stats Task 2 риски (counterparty, SPOF) додасть свої widgets сюди.
-       Stats Task 3 — jurisdiction widget. Контейнер навмисно "тупий":
-       діти підписуються на свої селектори самі. -->
+  <!-- Task 2: risk surfaces. SPOF first (always shown if any account),
+       counterparty mix second (conditional on crypto holdings). Both
+       widgets self-hide when their data isn't relevant — no empty boxes. -->
+  <div class="ps__card">
+    <pgz-spof-warning></pgz-spof-warning>
+  </div>
+
+  <div class="ps__card">
+    <pgz-counterparty-risk></pgz-counterparty-risk>
+  </div>
+
+  <!-- Stats Task 3 — jurisdiction widget — слот після counterparty. -->
 </section>

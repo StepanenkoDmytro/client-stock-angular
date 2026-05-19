@@ -1,0 +1,65 @@
+@if (hasMix(); as _) {
+  @if (mix(); as m) {
+    <section class="cp" aria-labelledby="cp-heading">
+      <header class="cp__header">
+        <h3 id="cp-heading" class="cp__heading">CRYPTO CUSTODY MIX</h3>
+        <span class="cp__total">{{ formatMoney(m.totalValue) }}</span>
+      </header>
+
+      @if (m.selfCustodyValue > 0) {
+        <div class="cp__row">
+          <div class="cp__row-top">
+            <span class="cp__row-label">Self-custody</span>
+            <span class="cp__row-value">
+              {{ formatMoney(m.selfCustodyValue) }} · {{ formatPct(m.selfCustodyRatio) }}
+            </span>
+          </div>
+          <div class="cp__bar-track">
+            <div class="cp__bar-fill cp__bar-fill--self"
+                 [style.width.%]="barWidth(m.selfCustodyRatio)"></div>
+          </div>
+          <p class="cp__row-accounts">{{ accountList(m.selfCustodyAccountNames) }}</p>
+        </div>
+      }
+
+      @if (m.exchangeValue > 0) {
+        <div class="cp__row">
+          <div class="cp__row-top">
+            <span class="cp__row-label">On exchange</span>
+            <span class="cp__row-value">
+              {{ formatMoney(m.exchangeValue) }} · {{ formatPct(m.exchangeRatio) }}
+            </span>
+          </div>
+          <div class="cp__bar-track">
+            <div class="cp__bar-fill cp__bar-fill--exchange"
+                 [style.width.%]="barWidth(m.exchangeRatio)"></div>
+          </div>
+          <p class="cp__row-accounts">{{ accountList(m.exchangeAccountNames) }}</p>
+        </div>
+      }
+
+      @if (m.unknownValue > 0) {
+        <div class="cp__row">
+          <div class="cp__row-top">
+            <span class="cp__row-label">Unknown</span>
+            <span class="cp__row-value">
+              {{ formatMoney(m.unknownValue) }} · {{ formatPct(m.unknownRatio) }}
+            </span>
+          </div>
+          <div class="cp__bar-track">
+            <div class="cp__bar-fill cp__bar-fill--unknown"
+                 [style.width.%]="barWidth(m.unknownRatio)"></div>
+          </div>
+          <p class="cp__row-accounts">Holdings without an account assigned.</p>
+        </div>
+      }
+
+      <p class="cp__banner"
+         [class.cp__banner--low]="bannerLevel() === 'low'"
+         [class.cp__banner--amber]="bannerLevel() === 'amber'"
+         [class.cp__banner--red]="bannerLevel() === 'red'">
+        {{ bannerCopy() }}
+      </p>
+    </section>
+  }
+}
