@@ -145,6 +145,23 @@ export class PositionCardComponent {
   }
   private readonly _showMarketStatus = signal(true);
 
+  /**
+   * Render the class-indicator dot (left of the symbol)? Default `true`
+   * for Holdings flat view where the user needs a per-card class anchor.
+   * Off in the Classes accordion subcard (`savings.component.html`
+   * passes `false`) — the parent class panel already provides the
+   * class identity, repeating the dot inside each subcard is noise.
+   * Per PR5d §4.2 acceptance criteria.
+   */
+  @Input()
+  public set showClassDot(v: boolean) {
+    this._showClassDot.set(v);
+  }
+  public get showClassDot(): boolean {
+    return this._showClassDot();
+  }
+  private readonly _showClassDot = signal(true);
+
   // ---- Local state ----
 
   private readonly _expanded = signal(false);

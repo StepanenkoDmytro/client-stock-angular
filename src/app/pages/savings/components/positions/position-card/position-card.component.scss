@@ -49,19 +49,21 @@
 // shadow, so subcards switch to the cream sub-surface to read as a
 // distinct, slightly-recessed layer — no double shadow, no
 // "white-on-white" loss of contrast.
+//
+// PR5d: 10/12 padding + 10 radius per approved
+// 02-portfolio-dashboard-mobile.svg (KO subcard, lines 411-426).
 .pc--subcard {
   background: var(--pgz-card-bg-sub);
   border-color: var(--pgz-card-border);
   box-shadow: none;
-  // Subcard sits inside an already-elevated accordion panel — tighten
-  // padding so vertical rhythm reads as "row" rather than "duplicated card".
-  padding: 12px 14px;
+  padding: 10px 12px;
+  border-radius: 10px;
 }
 
 // Real-estate compact variant: no row-3 (no PnL, no period, no income).
 // Card collapses to header + subline + optional badge.
 .pc--compact {
-  padding-bottom: 14px;
+  padding-bottom: 12px;
 }
 
 // Class indicator dot — first item on row 1, before symbol. Drives the
@@ -97,12 +99,11 @@
   cursor: pointer;
 }
 
-// Symbol — bumped from the design's 14px to 16px so the card title
-// reads at the same weight as e.g. the portfolio-summary section
-// headings. We trade strict pixel-fidelity for visual parity with the
-// other cards on this screen (user feedback).
+// Symbol — 15px per approved 02 spec (.nm). Previously bumped to 16px;
+// PR5d reverts to design value because the bump made subcards feel
+// "chunky" once 5+ classes stacked on the dashboard.
 .pc__symbol {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
   letter-spacing: 0.2px;
   color: var(--pgz-text-primary);
@@ -204,11 +205,10 @@
 }
 
 // ---- Subline ----
-// 12px (vs design 11px) — keeps the secondary line readable at native
-// mobile size without competing with the 16px symbol above.
+// PR5d: 11px / 4px gap per approved 02 (.sml + design y=46-26-16=4).
 .pc__subline {
-  margin: 6px 0 0;
-  font-size: 12px;
+  margin: 4px 0 0;
+  font-size: 11px;
   color: var(--pgz-text-secondary);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -220,7 +220,7 @@
 .pc__divider {
   border: none;
   border-top: 0.5px dashed var(--pgz-card-border);
-  margin: 12px 0;
+  margin: 10px 0;
 }
 
 // Slightly tighter spacing for the secondary divider that introduces the
@@ -230,13 +230,13 @@
 }
 
 // ---- Lifetime row ----
-// 13px (vs design 12px) — same legibility bump as subline. Inline
-// numbers sit on tabular-nums so currency columns line up cleanly.
+// PR5d: 12px / 10px gap per approved 02 (.med, x-dist 132-105≈10px).
+// Period and income drop to 11px (.sml) below.
 .pc__lifetime {
   display: flex;
   align-items: baseline;
-  gap: 12px;
-  font-size: 13px;
+  gap: 10px;
+  font-size: 12px;
   font-variant-numeric: tabular-nums;
 }
 
@@ -257,13 +257,13 @@
 }
 
 .pc__period {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--pgz-text-muted);
 }
 
 .pc__income {
   margin-left: auto;
-  font-size: 12px;
+  font-size: 11px;
   color: var(--pgz-text-secondary);
 }
 

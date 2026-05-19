@@ -134,15 +134,13 @@
   // Collapsed panel: 348×60 white card. Layout: dot + name + value + pnl% + chevron.
 
   &__class-panel {
-    margin-bottom: 10px;
-    // Class panel is a *real* card (white + shadow). Position subcards
-    // inside switch to the cream sub-surface for contrast — see
-    // `pc--subcard` in position-card.component.scss. Override global
-    // `background: inherit !important` from styles.scss for
-    // non-elevation mat-expansion-panels.
+    // PR5d: dimensions normalised to approved 02-portfolio-dashboard-mobile.svg
+    // (52h cards · 12 radius · 8 gap). Prior values were a +2/+2 readability
+    // bump that made the dashboard feel "chunky".
+    margin-bottom: 8px;
     background: var(--pgz-card-bg) !important;
     border: 0.5px solid var(--pgz-card-border);
-    border-radius: 14px !important;
+    border-radius: 12px !important;
     overflow: hidden;
     box-shadow: var(--pgz-card-shadow) !important;
   }
@@ -174,24 +172,23 @@
   &__class-title-row {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     flex: 1;
     min-width: 0;
   }
 
-  // We bump above the SVG's 14/14/r=5 spec because at native mobile size
-  // the design pill reads as too thin against the surrounding KPI tiles
-  // and summary card (user feedback "сплюснуті"). Numbers chosen to
-  // match the visual weight of `portfolio-summary` / kpi-row values.
+  // PR5d: dot r=5 (10×10) per approved design. Earlier +2 bump made
+  // the indicator feel "blobby"; visual weight is balanced now by the
+  // 15/15/12 type scale below.
   &__class-dot {
-    width: 14px;
-    height: 14px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
     flex-shrink: 0;
   }
 
   &__class-name {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 500;
     color: var(--pgz-text-primary);
     white-space: nowrap;
@@ -204,19 +201,19 @@
     margin: 0;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     flex-shrink: 0;
     font-variant-numeric: tabular-nums;
   }
 
   &__class-value {
-    font-size: 18px;
+    font-size: 15px;
     font-weight: 500;
     color: var(--pgz-text-primary);
   }
 
   &__class-pnl {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 500;
     min-width: 42px;
     text-align: right;

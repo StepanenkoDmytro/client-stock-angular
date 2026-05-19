@@ -11,11 +11,12 @@
        (click)="toggle()"
        (keydown.enter)="toggle()"
        (keydown.space)="toggle(); $event.preventDefault()">
-    <!-- Class dot only on full cards (Holdings flat view). Inside a Classes
-         accordion the class is implied by the parent panel header — see
-         design/savings/02-portfolio-dashboard-mobile.svg (sub-cards in the
-         Stock / Cash panels have no class dot). -->
-    @if (variant !== 'subcard') {
+    <!-- Class dot gated by `showClassDot` (default true). The Classes
+         accordion subcard passes `false` because the parent panel header
+         already supplies the class identity — see PR5d §4.2 and
+         design/savings/02-portfolio-dashboard-mobile.svg (KO subcard
+         lines 411-426 has no dot). -->
+    @if (showClassDot) {
       <span class="pc__class-dot"
             [style.background-color]="classDotColor()"
             [attr.aria-label]="assetClassLabel(position.instrument.assetClass)"></span>
