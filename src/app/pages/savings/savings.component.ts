@@ -239,11 +239,16 @@ export class SavingsComponent implements OnInit {
     }
     const buckets = new Map<AssetClass, Row[]>();
     for (const h of all) {
-      const live = this.livePrice.getCurrentPrice(h.instrument.id);
-      const effectivePrice = live ?? h.averageBuyPrice;
+      // Use `holdings.getCurrentPrice(symbol)` so demo mode picks up the
+      // DEMO_FALLBACK_PRICES table when the backend is unreachable. In
+      // production / anonymous-production this returns the same value
+      // as `livePrice.getCurrentPrice(id)`, so the priced-subset P&L
+      // (live-prices doc §3 Rule 2) still holds.
+      const priceFromService = this.holdings.getCurrentPrice(h.instrument.symbol);
+      const effectivePrice = priceFromService ?? h.averageBuyPrice;
       const currentValue = h.quantity * effectivePrice;
       const cost = h.quantity * h.averageBuyPrice;
-      const priced = live !== undefined;
+      const priced = priceFromService !== undefined;
       const list = buckets.get(h.instrument.assetClass) ?? [];
       list.push({
         h,

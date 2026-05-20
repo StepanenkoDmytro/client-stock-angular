@@ -343,19 +343,51 @@ export class HoldingService {
   }
 
   /**
-   * Current market price for a symbol — thin wrapper over
-   * {@link LivePriceService.getCurrentPriceBySymbol}. Returns `undefined`
-   * when no live quote is available; callers fall back to the holding's
-   * `averageBuyPrice` per live-prices doc §3 Rule 2. The hardcoded
-   * `MOCK_CURRENT_PRICES` table that used to live here was removed in
-   * PR7 of the live-prices cleanup — market-backed seed instruments now
-   * resolve through `searchMarket()` and get real backend quotes, manual
-   * classes (CASH / DEPOSIT / REAL_ESTATE / OTHER) silently fall back
-   * to cost basis with no per-card noise.
+   * Current market price for a symbol. Resolution order:
+   *
+   *   1. {@link LivePriceService} — live quote from backend polling.
+   *   2. {@link HoldingService.DEMO_FALLBACK_PRICES} — **only in demo
+   *      mode** (`environment.demoData=true`). Covers the dev-without-
+   *      backend case so the seeded dashboard still shows realistic
+   *      numbers (BTC ≈ $58k, AAPL ≈ $175) instead of cost basis ≈
+   *      $40k / $156. Production / anonymous-production skip this tier
+   *      and fall through to undefined → cost-basis fallback in UI.
+   *   3. `undefined` — caller decides (typically `?? averageBuyPrice`
+   *      per live-prices doc §3 Rule 2).
+   *
+   * PR7 removed the original `MOCK_CURRENT_PRICES` table assuming PR1's
+   * searchMarket-seed always lands real backend quotes. That assumption
+   * holds with backend running; the demo-mode fallback below restores
+   * the offline-dev experience without polluting production.
    */
   getCurrentPrice(symbol: string): number | undefined {
-    return this.livePrice.getCurrentPriceBySymbol(symbol);
+    const live = this.livePrice.getCurrentPriceBySymbol(symbol);
+    if (live !== undefined) {
+      return live;
+    }
+    if (environment.demoData) {
+      return HoldingService.DEMO_FALLBACK_PRICES[symbol];
+    }
+    return undefined;
   }
+
+  /**
+   * Demo-mode-only price table consulted by {@link #getCurrentPrice}
+   * when the live polling has no value (typical for `npm start` without
+   * `docker compose up stock-archive-server`). Mirrors the symbols in
+   * the seed (`seedMockHoldings`) plus their approximate current market
+   * values so screenshots and story sessions look realistic. Production
+   * builds skip this table — they only see real Alpha Vantage /
+   * CoinGecko quotes or cost-basis fallback.
+   */
+  private static readonly DEMO_FALLBACK_PRICES: Record<string, number> = {
+    AAPL: 175.0,
+    'AAPL.X': 176.0,
+    MSFT: 410.0,
+    BTC: 58000.0,
+    USD: 1.0,
+    'KYIV-APT-1': 110000.0,
+  };
 
   /**
    * Public reset for the holdings-list screen. Wipes the holdings

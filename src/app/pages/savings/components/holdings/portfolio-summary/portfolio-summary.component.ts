@@ -127,11 +127,15 @@ export class PortfolioSummaryComponent implements OnInit {
     const byClass = new Map<AssetClass, Bucket>();
 
     for (const h of all) {
-      const live = this.livePrice.getCurrentPrice(h.instrument.id);
-      const effectivePrice = live ?? h.averageBuyPrice;
+      // Demo-mode parity with `SavingsComponent.classGroups`: route via
+      // `holdings.getCurrentPrice(symbol)` so the dev-no-backend
+      // dashboard sees the DEMO_FALLBACK_PRICES values as "priced".
+      // Production still gets only the LivePriceService quote here.
+      const priceFromService = this.holdings.getCurrentPrice(h.instrument.symbol);
+      const effectivePrice = priceFromService ?? h.averageBuyPrice;
       const value = h.quantity * effectivePrice;
       const cost = h.quantity * h.averageBuyPrice;
-      const priced = live !== undefined;
+      const priced = priceFromService !== undefined;
       const existing = byClass.get(h.instrument.assetClass) ?? {
         value: 0,
         costBasis: 0,
