@@ -1,4 +1,10 @@
-$bottom-navigation-height: 60px;
+// Mirror of `pgz-navigation :host { height }` — the component owns its
+// own size, so this value just reserves the right slot in the app shell.
+// Was 60 px before, but the nav has been 70 px since the design refresh —
+// the 10 px gap silently overflowed the old non-flex layout, then surfaced
+// as a clipped FAB once we switched to flex. Keep this in sync with
+// `navigation.component.scss`.
+$bottom-navigation-height: 70px;
 
 // Phase 2 PR4 offline-banner sits inside `.pgz-application` above the
 // content. The old layout was non-flex with a hardcoded
@@ -29,5 +35,13 @@ $bottom-navigation-height: 60px;
   &--bottom-navigation {
     flex: 0 0 $bottom-navigation-height;
     width: 100%;
+    // FAB has `translateY(-6px)` and visually pokes above the row. The
+    // surrounding flex children paint in DOM order, so without an explicit
+    // stacking context the scroll-area (`--content`) could draw over the
+    // FAB's overflow and swallow taps. `position: relative; z-index: 1`
+    // lifts the whole nav above the content layer so the FAB stays
+    // clickable.
+    position: relative;
+    z-index: 1;
   }
 }
