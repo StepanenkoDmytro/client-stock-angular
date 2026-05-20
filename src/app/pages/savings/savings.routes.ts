@@ -4,6 +4,8 @@ import { CryptoAssetComponent } from "./components/markets-assets/crypto-market/
 import { CryptoMarketComponent } from "./components/markets-assets/crypto-market/crypto-market.component";
 import { StockMarketComponent } from "./components/markets-assets/stock-market/stock-market.component";
 import { StockAssetComponent } from "./components/markets-assets/stock-market/stock-asset/stock-asset.component";
+import { AddHoldingClassGridComponent } from "./components/holdings/add-holding/add-holding-class-grid/add-holding-class-grid.component";
+import { AddHoldingComponent } from "./components/holdings/add-holding/add-holding.component";
 
 
 export const MARKETS: string[] = ['crypto', 'stock'];
@@ -35,21 +37,25 @@ export const SAVINGS_ROUTES: Route[] = [
     },
     {
         // PR5b entry point: class-grid (6 active cards + future placeholders).
+        // Eager-loaded (not `loadComponent`) because Phase 2 promises that
+        // manual-class adds work offline — but a lazy chunk can't be fetched
+        // when `navigator.onLine` is false, so the route would fail to
+        // resolve. Same for `add-holding/:class` and `edit-holding/:id`
+        // below. Costs ~30 KB in the main bundle; PWA service worker
+        // (CC-5) is the proper fix.
         path: 'add-holding',
-        loadComponent: () =>
-            import('./components/holdings/add-holding/add-holding-class-grid/add-holding-class-grid.component')
-                .then(c => c.AddHoldingClassGridComponent),
+        component: AddHoldingClassGridComponent,
     },
     {
         // PR5b form route. `:class` is a lowercase slug from ASSET_CLASS_SLUGS
         // (e.g. `stock`, `real-estate`, `tokenized-stock`). AddHoldingComponent
         // reads it and pre-fills the AssetClass control.
         path: 'add-holding/:class',
-        loadComponent: () => import('./components/holdings/add-holding/add-holding.component').then(c => c.AddHoldingComponent),
+        component: AddHoldingComponent,
     },
     {
         path: 'edit-holding/:id',
-        loadComponent: () => import('./components/holdings/add-holding/add-holding.component').then(c => c.AddHoldingComponent),
+        component: AddHoldingComponent,
     },
     {
         path: 'tags',
