@@ -6,8 +6,11 @@ import {
   EMPTY,
   Subscription,
   catchError,
+  distinctUntilChanged,
   interval,
+  merge,
   of,
+  skip,
   startWith,
   switchMap,
 } from 'rxjs';
@@ -156,11 +159,43 @@ export class LivePriceService {
       return;
     }
     this.hydrateQuotesFromStorage();
-    this.pollSubscription = interval(LivePriceService.POLL_INTERVAL_MS)
-      .pipe(
-        startWith(0),
-        switchMap(() => this.fetchOnce()),
-      )
+
+    // Polling triggers (merged into a single switchMap so the latest one
+    // always wins):
+    //   1. Periodic interval — every 30 s, the normal refresh.
+    //   2. Holdings-list changes — fires immediately whenever the user
+    //      adds / removes a holding OR the async seed Promise lands
+    //      after `init()` (Phase 2 PR1 made the seed async). Without
+    //      this, the very first `fetchOnce()` runs with an empty
+    //      `trackedIds` set (because the store is still empty),
+    //      returns `of([])`, and no `/prices/batch` HTTP fires until
+    //      the next 30 s tick — user looks at the Network tab and
+    //      sees nothing for 30 s.
+    //
+    // `distinctUntilChanged` on the id-set shape avoids redundant fires
+    // when only quantity / avgBuyPrice change (which don't affect which
+    // ids we'd ask the backend about).
+    // `skip(1)` drops the initial synchronous replay from the NgRx store
+    // (BehaviorSubject behaviour). The `interval.startWith(0)` below
+    // already covers the t=0 fetch; without `skip(1)` both triggers fire
+    // synchronously and `switchMap` cancels one mid-flight, which trips
+    // the existing live-price.service.spec.ts `expectOne(...)` assertions.
+    // Subsequent distinct emissions (seed Promise lands, user adds /
+    // removes a holding) still come through.
+    const holdingsChanged$ = this.store.select(selectHoldingsList).pipe(
+      skip(1),
+      distinctUntilChanged(
+        (prev, curr) =>
+          prev.length === curr.length &&
+          prev.every((h, i) => h.id === curr[i].id && h.instrumentId === curr[i].instrumentId),
+      ),
+    );
+
+    this.pollSubscription = merge(
+      interval(LivePriceService.POLL_INTERVAL_MS).pipe(startWith(0)),
+      holdingsChanged$,
+    )
+      .pipe(switchMap(() => this.fetchOnce()))
       .subscribe((quotes) => this.absorb(quotes));
   }
 
