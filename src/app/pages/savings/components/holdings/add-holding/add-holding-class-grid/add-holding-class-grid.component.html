@@ -14,8 +14,6 @@
               [class.grid__card--disabled]="isCardDisabled(c.assetClass)"
               [attr.aria-disabled]="isCardDisabled(c.assetClass) ? 'true' : null"
               [style.--card-tint]="'var(' + c.tintVar + ')'"
-              [matTooltip]="offlineTooltipFor(c.assetClass)"
-              [matTooltipDisabled]="!isCardDisabled(c.assetClass)"
               (click)="onPick(c.assetClass)">
         <mat-icon class="grid__card-icon">{{ c.icon }}</mat-icon>
         <span class="grid__card-label">{{ c.label }}</span>

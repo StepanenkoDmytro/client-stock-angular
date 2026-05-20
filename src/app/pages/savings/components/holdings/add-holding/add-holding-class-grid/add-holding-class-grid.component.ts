@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { PrevRouteComponent } from '../../../../../../core/UI/components/prev-route/prev-route.component';
 import { NetworkStatusService } from '../../../../../../core/network/network-status.service';
@@ -34,7 +33,7 @@ import {
 @Component({
   selector: 'pgz-add-holding-class-grid',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatTooltipModule, PrevRouteComponent],
+  imports: [CommonModule, MatIconModule, PrevRouteComponent],
   templateUrl: './add-holding-class-grid.component.html',
   styleUrl: './add-holding-class-grid.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -50,10 +49,15 @@ export class AddHoldingClassGridComponent {
   public readonly future = FUTURE_CLASS_CARDS;
 
   /**
-   * Tooltip / aria-disabled hint for market-backed cards while offline.
-   * Manual classes (CASH / DEPOSIT / REAL_ESTATE / OTHER) keep working
-   * because they don't need the search endpoints (live-prices doc §3
-   * Rule 3).
+   * Snackbar text shown when a dimmed market-backed card is tapped while
+   * offline. Manual classes (CASH / DEPOSIT / REAL_ESTATE / OTHER) keep
+   * working because they don't need the search endpoints (live-prices
+   * doc §3 Rule 3).
+   *
+   * <p>Originally surfaced through `matTooltip` on the card itself, but
+   * iOS Safari intercepts tap-to-show-tooltip and swallows the click on
+   * the button — non-disabled cards became unresponsive too. Dropped
+   * the tooltip; the snackbar from {@link #onPick} is the only hint now.
    */
   public static readonly OFFLINE_TOOLTIP =
     'Adding stocks and crypto requires an internet connection.';
@@ -69,12 +73,6 @@ export class AddHoldingClassGridComponent {
    */
   public isCardDisabled(assetClass: AssetClass): boolean {
     return !this.network.online() && isMarketBackedAssetClass(assetClass);
-  }
-
-  public offlineTooltipFor(assetClass: AssetClass): string {
-    return this.isCardDisabled(assetClass)
-      ? AddHoldingClassGridComponent.OFFLINE_TOOLTIP
-      : '';
   }
 
   /**
