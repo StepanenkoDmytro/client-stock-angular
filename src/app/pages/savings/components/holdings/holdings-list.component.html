@@ -8,18 +8,15 @@
   }
 
   <section class="hl__body">
-    @if (totalCount() === 0) {
-      <p class="hl__empty">
-        No positions yet. Press <strong>Reset demo data</strong> above to
-        re-seed a few example positions.
-      </p>
-    } @else {
-      @if (showSummary) {
-        <pgz-portfolio-summary></pgz-portfolio-summary>
-      }
+    @if (showSummary && totalCount() > 0) {
+      <pgz-portfolio-summary></pgz-portfolio-summary>
+    }
 
-      <!-- Class chips row (single-select). Reference: design/savings/
-           01-portfolio-dashboard-mobile-holdings.svg lines 46-65. -->
+    <!-- Class chips row (single-select). Reference: design/savings/
+         01-portfolio-dashboard-mobile-holdings.svg lines 46-65.
+         Hidden when there are no holdings — class set is data-driven
+         and an empty chip rail just adds noise. -->
+    @if (totalCount() > 0) {
       <div class="hl__class-chips">
         <button type="button"
                 class="hl__class-chip hl__class-chip--all"
@@ -39,38 +36,49 @@
           </button>
         }
       </div>
+    }
 
-      <!-- Filters button + Sort dropdown row. Reference: same mockup lines 67-81. -->
-      <div class="hl__filter-row">
-        <button type="button"
-                class="hl__filters-btn"
-                [class.active]="selectedTagIds().size > 0"
-                (click)="openFilterSheet()">
-          <mat-icon class="hl__filters-icon">tune</mat-icon>
-          <span class="hl__filters-label">Filters</span>
-          @if (selectedTagIds().size > 0) {
-            <span class="hl__filters-pill">{{ selectedTagIds().size }}</span>
-          }
-        </button>
+    <!-- Filters button + Sort dropdown row. Reference: same mockup lines
+         67-81. Toolbar stays visible across empty state so the controls
+         feel persistent — Filters btn disables itself when there's
+         nothing to filter, Sort is always live (options are static). -->
+    <div class="hl__filter-row">
+      <button type="button"
+              class="hl__filters-btn"
+              [class.active]="selectedTagIds().size > 0"
+              [disabled]="totalCount() === 0"
+              (click)="openFilterSheet()">
+        <mat-icon class="hl__filters-icon">tune</mat-icon>
+        <span class="hl__filters-label">Filters</span>
+        @if (selectedTagIds().size > 0) {
+          <span class="hl__filters-pill">{{ selectedTagIds().size }}</span>
+        }
+      </button>
 
-        <button type="button"
-                class="hl__sort-btn"
-                [matMenuTriggerFor]="sortMenu">
-          <span class="hl__sort-label">Sort:</span>
-          <span class="hl__sort-value">{{ sortLabel() }}</span>
-          <span class="hl__sort-caret">▾</span>
-        </button>
-        <mat-menu #sortMenu="matMenu">
-          @for (opt of sortOptions; track opt.key) {
-            <button mat-menu-item
-                    type="button"
-                    (click)="onSelectSort(opt.key)">
-              {{ opt.label }}
-            </button>
-          }
-        </mat-menu>
-      </div>
+      <button type="button"
+              class="hl__sort-btn"
+              [matMenuTriggerFor]="sortMenu">
+        <span class="hl__sort-label">Sort:</span>
+        <span class="hl__sort-value">{{ sortLabel() }}</span>
+        <span class="hl__sort-caret">▾</span>
+      </button>
+      <mat-menu #sortMenu="matMenu">
+        @for (opt of sortOptions; track opt.key) {
+          <button mat-menu-item
+                  type="button"
+                  (click)="onSelectSort(opt.key)">
+            {{ opt.label }}
+          </button>
+        }
+      </mat-menu>
+    </div>
 
+    @if (totalCount() === 0) {
+      <p class="hl__empty">
+        No positions yet. Press <strong>Reset demo data</strong> above to
+        re-seed a few example positions.
+      </p>
+    } @else {
       <!-- Result row -->
       <div class="hl__result-row">
         @if (hasActiveFilters()) {
