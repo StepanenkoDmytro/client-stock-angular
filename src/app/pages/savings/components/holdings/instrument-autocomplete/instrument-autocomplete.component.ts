@@ -315,10 +315,32 @@ export class InstrumentAutocompleteComponent implements OnChanges {
       return;
     }
     if (typeof val === 'string') {
-      // String value = popular-ticker quick-pick. Material auto-fills
-      // the input with `displayWith(val) = val`, which fires
-      // valueChanges, which feeds the debounced market pipeline. We
-      // don't manually set anything here — just bail.
+      // Popular-ticker quick-pick. Material writes `displayWith(val) = val`
+      // into the input and closes the dropdown — the debounced market
+      // pipeline below still fires, but the user never sees its result
+      // because the panel is shut. They naturally assume the pick is
+      // complete and tap Save, which stays disabled because
+      // `selectedInstrument` is still null.
+      //
+      // Fire searchMarket immediately and auto-select the exact-symbol
+      // match so a single tap on a popular chip becomes a single-tap
+      // pick of the canonical instrument.
+      const ac = this._assetClass();
+      if (!ac) return;
+      this.isLoading.set(true);
+      this.instruments.searchMarket(val, ac, 30).subscribe((res) => {
+        this.isLoading.set(false);
+        const want = val.toUpperCase();
+        const exact = res.results.find((r) => r.symbol.toUpperCase() === want);
+        if (exact) {
+          this._value.set(exact);
+          this.valueChange.emit(exact);
+        }
+        // No exact match (e.g. backend down, popular ticker not in
+        // upstream catalog) — leave the typed text alone; the debounced
+        // pipeline will surface results on the next focus and the user
+        // can pick from there.
+      });
       return;
     }
     this._value.set(val as IInstrument);
