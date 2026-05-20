@@ -73,12 +73,15 @@ export function rightColumnSecondLineFor(
  *
  * <p>Per-class output:
  * <ul>
- *   <li>STOCK / ETF / TOKENIZED_STOCK / CRYPTO single → "{instrument.name}"</li>
+ *   <li>STOCK / ETF / TOKENIZED_STOCK / CRYPTO / CASH single → "{instrument.name}"</li>
  *   <li>multi-holding (any of the above) → "{name} · across N locations"</li>
- *   <li>CASH → "{accountName}" (e.g. "Monobank"), falls back to instrument name</li>
  *   <li>DEPOSIT → "{name}"</li>
- *   <li>REAL_ESTATE → "{name} · owned {period}" (period derived from oldest holding)</li>
+ *   <li>REAL_ESTATE single → "{name} · owned {period}"; multi → "{name} · across N locations"</li>
  *   <li>OTHER → "{name} · Manual entry"</li>
+ *
+ * <p>Account name no longer appears in the subline — the
+ * `<pgz-account-link-chip>` rendered under the subline carries that
+ * info with an icon and (eventually) a click target.</li>
  * </ul>
  */
 export function sublineFor(pos: IPosition): string {
@@ -93,17 +96,18 @@ export function sublineFor(pos: IPosition): string {
     case AssetClass.ETF:
     case AssetClass.TOKENIZED_STOCK:
     case AssetClass.CRYPTO:
+    case AssetClass.CASH:
       return isMulti
         ? `${inst.name} · across ${pos.holdings.length} locations`
         : inst.name;
-
-    case AssetClass.CASH:
-      return pos.holdings[0]?.accountName ?? inst.name;
 
     case AssetClass.DEPOSIT:
       return inst.name;
 
     case AssetClass.REAL_ESTATE: {
+      if (isMulti) {
+        return `${inst.name} · across ${pos.holdings.length} locations`;
+      }
       const period = ownedPeriod(pos.holdings);
       return period ? `${inst.name} · owned ${period}` : inst.name;
     }

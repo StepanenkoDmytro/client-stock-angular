@@ -101,18 +101,25 @@ describe('sublineFor', () => {
     expect(sublineFor(pos)).toBe('Bitcoin · across 3 locations');
   });
 
-  it('CASH → accountName when present', () => {
+  it('CASH single → instrument.name (account info now lives in chip)', () => {
     const pos = position(
       AssetClass.CASH,
       [holding({ accountName: 'Monobank' })],
       { name: 'USD Cash' },
     );
-    expect(sublineFor(pos)).toBe('Monobank');
+    expect(sublineFor(pos)).toBe('USD Cash');
   });
 
-  it('CASH → instrument.name when no accountName', () => {
-    const pos = position(AssetClass.CASH, [holding({})], { name: 'USD Cash' });
-    expect(sublineFor(pos)).toBe('USD Cash');
+  it('CASH multi → name · across N locations', () => {
+    const pos = position(
+      AssetClass.CASH,
+      [
+        holding({ accountName: 'Monobank' }),
+        holding({ accountName: 'Manual cash' }),
+      ],
+      { name: 'USD Cash' },
+    );
+    expect(sublineFor(pos)).toBe('USD Cash · across 2 locations');
   });
 
   it('OTHER → name · Manual entry', () => {
@@ -130,6 +137,15 @@ describe('sublineFor', () => {
       { name: 'Apt in Kyiv' },
     );
     expect(sublineFor(pos)).toMatch(/^Apt in Kyiv · owned 3y/);
+  });
+
+  it('REAL_ESTATE multi → name · across N locations (no owned period)', () => {
+    const pos = position(
+      AssetClass.REAL_ESTATE,
+      [holding({}), holding({})],
+      { name: 'Real estate' },
+    );
+    expect(sublineFor(pos)).toBe('Real estate · across 2 locations');
   });
 });
 
