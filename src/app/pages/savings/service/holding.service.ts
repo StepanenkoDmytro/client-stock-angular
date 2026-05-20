@@ -89,10 +89,18 @@ export class HoldingService {
    *      real Alpha Vantage / CoinGecko quotes. Pre-v4 snapshots reference
    *      client-UUID instruments that the backend doesn't know about, so
    *      we wipe and re-seed.
+   *  v5: PR1 follow-up — searchMarket limit raised 5 → 30 because the
+   *      real Bitcoin (`symbol="BTC"`, `coingeckoId="bitcoin"`) ranks
+   *      ~22nd on CoinGecko search; with limit=5 the seed missed it and
+   *      fell back to a client UUID, so live polling never returned a
+   *      BTC quote. Also dropped the `results[0]` fallback (no exact
+   *      symbol match → keep client UUID + DEMO_FALLBACK_PRICES tier
+   *      instead of a wrong-but-real instrument). Bump forces re-seed
+   *      so v4 client-UUID holdings get refreshed against the catalog.
    *
    * Goes away when M5 wires real backend data — seed disappears with it.
    */
-  private static readonly SEED_VERSION = 4;
+  private static readonly SEED_VERSION = 5;
 
   private static readonly DELETE_QUEUE_KEY = 'holdings';
 
@@ -456,6 +464,12 @@ export class HoldingService {
       // legacy UAH cash instrument doesn't linger in the InstrumentService
       // cache when the new seed only ships USD).
       localStorage.removeItem(HoldingService.STORAGE_KEY);
+      // v5 also drops the seed-instrument cache — pre-v5 entries may
+      // contain wrong-but-real resolutions (e.g. xBTC instead of Bitcoin)
+      // from the old `results[0]` fallback. Costs at most 3 search
+      // requests on the next seed, well within Alpha Vantage's 25/day
+      // quota.
+      localStorage.removeItem(HoldingService.SEED_INSTRUMENTS_KEY);
       this.instruments.reset();
     }
 
@@ -911,15 +925,26 @@ export class HoldingService {
       return undefined;
     }
     try {
+      // limit=30 — CoinGecko search ranking buries the real Bitcoin
+      // (symbol="BTC", coingeckoId="bitcoin") behind ~20 derived tokens
+      // (xBTC, BitcoinZ, BitcoinBam, etc.) so limit=5 missed it entirely
+      // and the seed fell back to a client UUID, breaking live polling.
+      // Alpha Vantage is fine with smaller limits but pays nothing extra
+      // for the bigger window. Quota cost: still 1 search request per
+      // resolved symbol (cached in localStorage, so resets don't burn).
       const res = await firstValueFrom(
-        this.instruments.searchMarket(spec.symbol, spec.assetClass, 5),
+        this.instruments.searchMarket(spec.symbol, spec.assetClass, 30),
       );
-      // Prefer an exact symbol match (Alpha Vantage often returns related
-      // tickers like AAPLU / AAPLW alongside AAPL). Fall back to first
-      // result if the exact symbol isn't there — better a wrong-but-real
-      // instrument than a client-UUID stub for the demo seed.
-      const match =
-        res.results.find((r) => r.symbol === spec.symbol) ?? res.results[0];
+      // Exact symbol match wins (case-insensitive — CoinGecko returns
+      // uppercased symbols, Alpha Vantage too, but normalise anyway).
+      // **No fallback to results[0]** any more: a wrong-but-real
+      // instrument (xBTC instead of Bitcoin) means the backend returns
+      // a real price for the wrong thing, which is worse than no live
+      // price at all. Without an exact match we drop to client-UUID
+      // fallback in the caller, then UI uses DEMO_FALLBACK_PRICES /
+      // averageBuyPrice — at least the displayed number is honest.
+      const want = spec.symbol.toUpperCase();
+      const match = res.results.find((r) => r.symbol.toUpperCase() === want);
       if (match) {
         cache.set(key, match);
         return match;
