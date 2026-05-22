@@ -156,6 +156,32 @@ $light-theme: mat.define-light-theme((
 ));
 
 
+// =====================================================================
+// SEMANTIC DESIGN TOKENS (M5.6 PR1 — design-system foundation)
+// =====================================================================
+// All `--pgz-*`, `--color-*`, `--asset-*` tokens MUST be defined in
+// BOTH .dark-theme AND .light-theme below. Component SCSS should
+// reference these via `var(--pgz-xxx)` — never inline hex.
+//
+// Token groups:
+//   • Surfaces    --pgz-app-bg, --pgz-bg-page, --pgz-card-bg{,-sub},
+//                 --pgz-card-border, --pgz-card-shadow,
+//                 --pgz-border-default, --pgz-divider
+//   • Text        --pgz-text-{primary,secondary,muted}
+//   • Status      --color-{positive,negative,warning}
+//   • Brand       --pgz-accent, --pgz-nav-active-bg
+//   • Tag chips   --pgz-tag-border-default, --pgz-tag-chip-default-bg
+//   • Asset class --asset-{stock,etf,tokenized-stock,crypto,cash,
+//                          deposit,real-estate,other}
+//
+// New in PR1 (2026-05-20):
+//   • --pgz-app-bg        — whole-app background alias of bg-page
+//   • --pgz-border-default — uniform border for non-card surfaces
+//   • --pgz-divider        — thin separator lines (lighter than border)
+//   • --pgz-tag-border-default + --pgz-tag-chip-default-bg — tag defaults
+//   • --asset-etf          — explicit (was fallback to --asset-stock)
+// =====================================================================
+
 .dark-theme {
 
   @include mat.all-component-themes($dark-theme);
@@ -170,32 +196,47 @@ $light-theme: mat.define-light-theme((
   --bs-text: #e9ecef;
   --bs-text-100: #bdbdbd;
 
-  // ---- Semantic tokens (pgz / color-*) ----
+  // ---- Surfaces ----
   // Card surfaces — the white-card visual language used across savings
   // (portfolio summary, class panels, holding cards, filter sections).
+  --pgz-app-bg: #1A1715;
   --pgz-bg-page: #1A1715;
   --pgz-card-bg: #1E1E1E;
   --pgz-card-bg-sub: #262626;
   --pgz-card-border: rgba(255, 255, 255, 0.08);
   --pgz-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --pgz-border-default: rgba(255, 255, 255, 0.12);
+  --pgz-divider: rgba(255, 255, 255, 0.06);
 
-  // Text hierarchy.
+  // ---- Text hierarchy ----
   --pgz-text-primary: var(--bs-text);
   --pgz-text-secondary: var(--bs-text-100);
   --pgz-text-muted: #888888;
 
-  // P&L / status semantics per ux-principles §5.
+  // ---- Status (P&L per ux-principles §5) ----
   --color-positive: #66BB6A;
   --color-negative: #EF5350;
   --color-warning: #FFA726;
 
-  // Brand accent (used for active CTA, primary numbers like Total cost).
+  // ---- Brand accent (active CTA, primary numbers like Total cost) ----
   --pgz-accent: #42A5F5;
   --pgz-nav-active-bg: rgba(66, 165, 245, 0.18);
 
-  // AssetClass palette (dark-theme variant — slightly brighter for contrast
-  // on dark surfaces). Source palette: design/README.md.
+  // ---- Tag chip defaults ----
+  // Used by user-created tags without an explicit color override + the
+  // outline of the tags-icon button. Slightly brighter in dark for
+  // contrast against card surfaces.
+  --pgz-tag-border-default: #8A8A8A;
+  --pgz-tag-chip-default-bg: #5A5A5A;
+
+  // ---- AssetClass palette ----
+  // Dark-theme variant — slightly brighter for contrast on dark
+  // surfaces. Source palette: design/README.md. ETF stays = STOCK
+  // until design assigns a distinct hue — defined explicitly so
+  // components can drop the `var(--asset-etf, var(--asset-stock))`
+  // fallback dance.
   --asset-stock: #5BA5E8;
+  --asset-etf: #5BA5E8;
   --asset-tokenized-stock: #B16ACF;
   --asset-crypto: #9D92E8;
   --asset-cash: #82BC36;
@@ -222,28 +263,47 @@ $light-theme: mat.define-light-theme((
   --bs-text: #000000;
   --bs-text-100: #bdbdbd;
 
-  // ---- Semantic tokens (pgz / color-*) ----
+  // ---- Surfaces ----
   // Values aligned with approved mockup palette in design/README.md.
+  --pgz-app-bg: #F1EFE8;
   --pgz-bg-page: #F1EFE8;
   --pgz-card-bg: #FFFFFF;
   --pgz-card-bg-sub: #FBFAF6;
   --pgz-card-border: #D3D1C7;
   --pgz-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --pgz-border-default: #D3D1C7;
+  --pgz-divider: rgba(0, 0, 0, 0.06);
 
+  // ---- Text hierarchy ----
   --pgz-text-primary: #2C2C2A;
   --pgz-text-secondary: #5F5E5A;
   --pgz-text-muted: #888780;
 
+  // ---- Status ----
   --color-positive: #0F6E56;
   --color-negative: #A32D2D;
   --color-warning: #BA7517;
 
+  // ---- Brand accent ----
   --pgz-accent: #185FA5;
   --pgz-nav-active-bg: #DCE7F4;
 
-  // AssetClass palette (light-theme). Source: design/README.md.
-  // Used by inline `[style.background-color]` bindings as `var(--asset-X)`.
+  // ---- Tag chip defaults ----
+  // Default border + background for user-created tags without an
+  // explicit color override. Pulled from inline hex audit (design-roadmap
+  // §9 «Обговорюється») — values were duplicated across .pgz-btn--option
+  // border + tags-icon button border + add-category chip bg.
+  --pgz-tag-border-default: #6F6F6F;
+  --pgz-tag-chip-default-bg: #908E91;
+
+  // ---- AssetClass palette (light-theme) ----
+  // Source: design/README.md. Used by inline
+  // `[style.background-color]` bindings as `var(--asset-X)`.
+  // ETF = STOCK until design assigns a distinct hue (defined
+  // explicitly so callers can drop the `var(--asset-etf,
+  // var(--asset-stock))` fallback dance).
   --asset-stock: #378ADD;
+  --asset-etf: #378ADD;
   --asset-tokenized-stock: #7B1FA2;
   --asset-crypto: #7F77DD;
   --asset-cash: #639922;

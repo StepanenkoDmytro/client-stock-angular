@@ -12,7 +12,7 @@
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.08em;
-    color: var(--pgz-text-muted, #5f5e5a);
+    color: var(--pgz-text-muted);
   }
 
   &__list {
@@ -40,7 +40,7 @@
   &__name {
     font-size: 14px;
     font-weight: 500;
-    color: var(--pgz-text-primary, #2c2c2a);
+    color: var(--pgz-text-primary);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -49,7 +49,7 @@
   &__value {
     font-size: 14px;
     font-weight: 600;
-    color: var(--pgz-text-primary, #2c2c2a);
+    color: var(--pgz-text-primary);
     font-variant-numeric: tabular-nums;
   }
 
@@ -62,7 +62,7 @@
 
   &__bar-fill {
     height: 100%;
-    background: var(--asset-stock, #3b82f6);
+    background: var(--asset-stock);
     border-radius: 4px;
     transition: width 200ms ease;
   }
@@ -72,7 +72,7 @@
     align-items: center;
     gap: 6px;
     font-size: 11px;
-    color: var(--pgz-text-muted, #5f5e5a);
+    color: var(--pgz-text-muted);
     flex-wrap: wrap;
   }
 
@@ -82,17 +82,17 @@
     gap: 5px;
 
     &--ok {
-      color: var(--color-positive, #0f6e56);
-      .acc-bd__dot { background: var(--color-positive, #0f6e56); }
+      color: var(--color-positive);
+      .acc-bd__dot { background: var(--color-positive); }
     }
     &--warn {
-      color: var(--color-warning, #ba7517);
+      color: var(--color-warning);
       font-weight: 500;
-      .acc-bd__dot { background: var(--color-warning, #ba7517); }
+      .acc-bd__dot { background: var(--color-warning); }
     }
     &--manual .acc-bd__dot,
     &--never .acc-bd__dot {
-      background: #888780;
+      background: var(--pgz-text-muted);
     }
   }
 
@@ -100,12 +100,12 @@
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: #888780;
+    background: var(--pgz-text-muted);
     display: inline-block;
   }
 
   &__meta-dot {
-    color: var(--pgz-text-muted, #5f5e5a);
+    color: var(--pgz-text-muted);
   }
 
   &__pct {
@@ -121,7 +121,7 @@
     border-top: 0.5px solid var(--pgz-card-border, rgba(0, 0, 0, 0.12));
     font-size: 13px;
     font-weight: 600;
-    color: var(--pgz-text-primary, #2c2c2a);
+    color: var(--pgz-text-primary);
   }
 
   &__total-value {
@@ -131,6 +131,6 @@
   &__empty {
     margin: 0;
     font-size: 12px;
-    color: var(--pgz-text-muted, #5f5e5a);
+    color: var(--pgz-text-muted);
   }
 }

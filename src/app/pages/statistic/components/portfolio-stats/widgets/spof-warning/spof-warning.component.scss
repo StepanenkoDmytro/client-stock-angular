@@ -19,7 +19,7 @@
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 1.1px;
-  color: var(--pgz-text-secondary, #6b7280);
+  color: var(--pgz-text-secondary);
 }
 
 .spof__pct {
@@ -36,7 +36,7 @@
   display: flex;
   justify-content: space-between;
   font-size: 13px;
-  color: var(--pgz-text-primary, #2c2c2a);
+  color: var(--pgz-text-primary);
 }
 
 .spof__name {
@@ -65,5 +65,5 @@
   margin: 4px 0 0;
   font-size: 12px;
   line-height: 1.4;
-  color: var(--pgz-text-secondary, #6b7280);
+  color: var(--pgz-text-secondary);
 }

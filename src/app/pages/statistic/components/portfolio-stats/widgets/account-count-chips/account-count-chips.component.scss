@@ -12,7 +12,7 @@
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.08em;
-    color: var(--pgz-text-muted, #5f5e5a);
+    color: var(--pgz-text-muted);
   }
 
   &__row {
@@ -26,11 +26,11 @@
     align-items: center;
     gap: 6px;
     padding: 6px 10px;
-    background: var(--pgz-card-bg, #fff);
+    background: var(--pgz-card-bg);
     border: 0.5px solid var(--pgz-card-border, rgba(0, 0, 0, 0.12));
     border-radius: 999px;
     font-size: 13px;
-    color: var(--pgz-text-primary, #2c2c2a);
+    color: var(--pgz-text-primary);
   }
 
   &__icon {
@@ -48,7 +48,7 @@
     padding: 0 6px;
     border-radius: 999px;
     background: var(--pgz-chip-count-bg, rgba(0, 0, 0, 0.06));
-    color: var(--pgz-text-primary, #2c2c2a);
+    color: var(--pgz-text-primary);
     font-size: 11px;
     font-weight: 600;
     display: inline-flex;
@@ -59,6 +59,6 @@
   &__empty {
     margin: 0;
     font-size: 12px;
-    color: var(--pgz-text-muted, #5f5e5a);
+    color: var(--pgz-text-muted);
   }
 }

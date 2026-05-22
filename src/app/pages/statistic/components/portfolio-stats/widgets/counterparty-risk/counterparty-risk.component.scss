@@ -19,13 +19,13 @@
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 1.1px;
-  color: var(--pgz-text-secondary, #6b7280);
+  color: var(--pgz-text-secondary);
 }
 
 .cp__total {
   font-size: 14px;
   font-weight: 600;
-  color: var(--pgz-text-primary, #2c2c2a);
+  color: var(--pgz-text-primary);
 }
 
 .cp__row {
@@ -38,7 +38,7 @@
   display: flex;
   justify-content: space-between;
   font-size: 13px;
-  color: var(--pgz-text-primary, #2c2c2a);
+  color: var(--pgz-text-primary);
 }
 
 .cp__row-label {
@@ -59,11 +59,11 @@
 }
 
 .cp__bar-fill--self {
-  background: var(--asset-crypto, #f7931a);
+  background: var(--asset-crypto);
 }
 
 .cp__bar-fill--exchange {
-  background: color-mix(in srgb, var(--asset-crypto, #f7931a) 60%, transparent);
+  background: color-mix(in srgb, var(--asset-crypto) 60%, transparent);
 }
 
 .cp__bar-fill--unknown {
@@ -73,7 +73,7 @@
 .cp__row-accounts {
   margin: 0;
   font-size: 11px;
-  color: var(--pgz-text-secondary, #6b7280);
+  color: var(--pgz-text-secondary);
 }
 
 .cp__banner {
