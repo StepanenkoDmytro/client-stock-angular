@@ -12,6 +12,7 @@ import {
 } from '@angular/material/bottom-sheet';
 import { MatButtonModule } from '@angular/material/button';
 import { ITag } from '../../../../../domain/tag.domain';
+import { EmptyStateComponent } from '../../../../../core/UI/components/empty-state/empty-state.component';
 
 export interface HoldingsFilterSheetData {
   /** All tags available for filtering (from holdings join). */
@@ -44,7 +45,7 @@ export interface HoldingsFilterSheetResult {
 @Component({
   selector: 'pgz-holdings-filter-sheet',
   standalone: true,
-  imports: [CommonModule, MatButtonModule],
+  imports: [CommonModule, MatButtonModule, EmptyStateComponent],
   templateUrl: './holdings-filter-sheet.component.html',
   styleUrl: './holdings-filter-sheet.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

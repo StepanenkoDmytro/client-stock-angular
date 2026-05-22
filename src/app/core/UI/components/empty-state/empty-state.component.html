@@ -1,0 +1,12 @@
+<div class="es" [class.es--roomy]="size === 'roomy'">
+  @if (icon) {
+    <span class="es__icon" aria-hidden="true">{{ icon }}</span>
+  }
+  <p class="es__title">{{ title }}</p>
+  @if (hint) {
+    <p class="es__hint">{{ hint }}</p>
+  }
+  <div class="es__cta">
+    <ng-content select="[cta]"></ng-content>
+  </div>
+</div>

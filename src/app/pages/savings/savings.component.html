@@ -36,10 +36,12 @@
     <p class="savings__class-caption">BY ASSET CLASS · LIFETIME</p>
 
     @if (classGroups().length === 0) {
-      <p class="savings__empty">
-        No holdings yet. Switch to <strong>Holdings</strong> and press
-        «Reset demo data» to re-seed.
-      </p>
+      <!-- M5.6 PR4: ad-hoc `.savings__empty` → pgz-empty-state. -->
+      <pgz-empty-state
+        size="roomy"
+        icon="📈"
+        title="No holdings yet"
+        hint="Switch to Holdings and press «Reset demo data» to re-seed."></pgz-empty-state>
     } @else {
       <mat-accordion class="savings__classes" multi>
         @for (group of classGroups(); track group.assetClass) {

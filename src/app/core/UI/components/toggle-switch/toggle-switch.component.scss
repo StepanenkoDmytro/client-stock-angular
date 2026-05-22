@@ -24,19 +24,19 @@
 .toggle-option {
   flex: 1;
   text-align: center;
-  color: #000;
+  color: var(--pgz-text-primary);
 }
 
 .toggle-option.active {
-  color: #000;
+  color: var(--pgz-text-primary);
 }
 
 .toggle-bar {
   position: absolute;
   left: 0;
-  bottom: 0; 
-  height: 4px; 
+  bottom: 0;
+  height: 4px;
   width: 50%;
-  background-color: #8D8D8D; 
+  background-color: var(--pgz-text-muted);
   transition: transform 0.3s ease-in-out;
 }

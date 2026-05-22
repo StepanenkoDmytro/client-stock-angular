@@ -11,14 +11,12 @@
     </button>
 
     @if (accounts().length === 0) {
-      <div class="al__empty">
-        <mat-icon class="al__empty-icon">account_balance_wallet</mat-icon>
-        <p class="al__empty-title">No accounts yet</p>
-        <p class="al__empty-hint">
-          Tap "Add account" to register an IBKR brokerage, Mono bank,
-          Bybit exchange, or your own manual bucket.
-        </p>
-      </div>
+      <!-- M5.6 PR4: ad-hoc `.al__empty` → pgz-empty-state. -->
+      <pgz-empty-state
+        size="roomy"
+        icon="🏦"
+        title="No accounts yet"
+        hint='Tap "Add account" to register an IBKR brokerage, Mono bank, Bybit exchange, or your own manual bucket.'></pgz-empty-state>
     } @else {
       <ul class="al__list">
         @for (a of accounts(); track a.id) {

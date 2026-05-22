@@ -21,7 +21,8 @@
   </div>
 
   @if (availableTags.length === 0) {
-    <p class="sheet__empty">No tags in use yet.</p>
+    <!-- M5.6 PR4: ad-hoc `.sheet__empty` → pgz-empty-state. -->
+    <pgz-empty-state title="No tags in use yet."></pgz-empty-state>
   } @else {
     <div class="sheet__grid">
       @for (tag of availableTags; track tag.id) {

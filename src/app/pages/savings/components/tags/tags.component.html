@@ -13,7 +13,12 @@
     </div>
 
     @if (tagTree().length === 0) {
-      <p class="tags-page__empty">No tags yet.</p>
+      <!-- M5.6 PR4: ad-hoc `.tags-page__empty` → pgz-empty-state. -->
+      <pgz-empty-state
+        size="roomy"
+        icon="🏷️"
+        title="No tags yet"
+        hint='Tap "Add tag" to create your first.'></pgz-empty-state>
     } @else {
       <mat-accordion class="tags-page__accordion" multi>
         @for (root of tagTree(); track root.id) {

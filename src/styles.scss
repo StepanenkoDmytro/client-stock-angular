@@ -229,6 +229,34 @@ $light-theme: mat.define-light-theme((
   --pgz-tag-border-default: #8A8A8A;
   --pgz-tag-chip-default-bg: #5A5A5A;
 
+  // ---- Form controls (M5.6 PR3) ----
+  // Brand-gradient submit button (the global `.pgz-btn--submit-enabled`).
+  // Gradient endpoints are intentionally NOT theme-swapped — the brand
+  // gradient stays identical light + dark per design/README.md.
+  --pgz-btn-grad-start: #243A95;
+  --pgz-btn-grad-end: #547BAD;
+  // Disabled-state background for submit + secondary buttons. Same hex
+  // as --pgz-tag-chip-default-bg but kept separate so future tweaks to
+  // either don't bleed into the other.
+  --pgz-btn-disabled-bg: #5A5A5A;
+  --pgz-btn-disabled-fg: #FFFFFF;
+  // Custom CSS toggle (legacy `.slider` checkbox in styles.scss +
+  // category-spending). Dark theme bumps off-track + knob so they're
+  // visible against the card sub-bg.
+  --pgz-toggle-track-off: #5A5A5A;
+  --pgz-toggle-track-on: #42A5F5;
+  --pgz-toggle-knob: #FFFFFF;
+  // Bottom-nav central "+" FAB. Brand gradient start as background +
+  // white "+" stroke — identical across themes per brand recognition.
+  --pgz-fab-bg: #243A95;
+  --pgz-fab-icon: #FDFEFF;
+
+  // ---- Overlays (M5.6 PR4) ----
+  --pgz-sheet-radius: 20px;
+  --pgz-sheet-bg: var(--pgz-card-bg);
+  --pgz-snackbar-radius: 50px;
+  --pgz-snackbar-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+
   // ---- AssetClass palette ----
   // Dark-theme variant — slightly brighter for contrast on dark
   // surfaces. Source palette: design/README.md. ETF stays = STOCK
@@ -295,6 +323,27 @@ $light-theme: mat.define-light-theme((
   // border + tags-icon button border + add-category chip bg.
   --pgz-tag-border-default: #6F6F6F;
   --pgz-tag-chip-default-bg: #908E91;
+
+  // ---- Form controls (M5.6 PR3) ----
+  // Brand-gradient submit button stays identical across both themes per
+  // design/README.md (brand recognition).
+  --pgz-btn-grad-start: #243A95;
+  --pgz-btn-grad-end: #547BAD;
+  --pgz-btn-disabled-bg: #908E91;
+  --pgz-btn-disabled-fg: #FFFFFF;
+  // Custom CSS toggle (legacy `.slider` checkbox).
+  --pgz-toggle-track-off: #CCCCCC;
+  --pgz-toggle-track-on: #8DB7E3;
+  --pgz-toggle-knob: #FFFFFF;
+  // Bottom-nav central "+" FAB. Stays brand-blue across themes.
+  --pgz-fab-bg: #243A95;
+  --pgz-fab-icon: #FDFEFF;
+
+  // ---- Overlays (M5.6 PR4) ----
+  --pgz-sheet-radius: 20px;
+  --pgz-sheet-bg: var(--pgz-card-bg);
+  --pgz-snackbar-radius: 50px;
+  --pgz-snackbar-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
 
   // ---- AssetClass palette (light-theme) ----
   // Source: design/README.md. Used by inline
@@ -414,17 +463,19 @@ input {
   border-radius: 14px!important;
 
   &--option {
-    border: 1px solid #908E91 !important;
+    border: 1px solid var(--pgz-tag-border-default) !important;
   }
 
   &--submit-enabled {
-    background: var(--linear-blue-dark, linear-gradient(257deg, #243A95 -36.28%, #547BAD 136.28%)) !important;
+    background: linear-gradient(257deg,
+                                var(--pgz-btn-grad-start) -36.28%,
+                                var(--pgz-btn-grad-end) 136.28%) !important;
     color: var(--bs-white) !important;
   }
 
   &--submit-disabled {
-    background-color: #908E91 !important;
-    color: var(--bs-white) !important;
+    background-color: var(--pgz-btn-disabled-bg) !important;
+    color: var(--pgz-btn-disabled-fg) !important;
   }
 }
 
@@ -437,9 +488,8 @@ input {
 
 .custom-snackbar {
   transform: translateY(-60px) !important;
-  border-radius: 50px;
-  
-  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+  border-radius: var(--pgz-snackbar-radius);
+  box-shadow: var(--pgz-snackbar-shadow);
 }
 
 ::ng-deep {
@@ -449,9 +499,10 @@ input {
 }
 
 .mat-bottom-sheet-container {
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
+  border-top-left-radius: var(--pgz-sheet-radius);
+  border-top-right-radius: var(--pgz-sheet-radius);
   min-width: 100%!important;
+  background: var(--pgz-sheet-bg);
 }
 
 /* Material form field-form css */
@@ -567,7 +618,7 @@ input {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: var(--pgz-toggle-track-off);
   border-radius: 34px;
   cursor: pointer;
   transition: 0.4s;
@@ -581,14 +632,14 @@ input {
   width: 20px;
   left: 3px;
   bottom: 3px;
-  background-color: white;
+  background-color: var(--pgz-toggle-knob);
   border-radius: 50%;
   transition: 0.4s;
 }
 
 /* Активний стан (ON) */
 input:checked + .slider {
-  background-color: #8db7e3;
+  background-color: var(--pgz-toggle-track-on);
 }
 
 input:checked + .slider:before {

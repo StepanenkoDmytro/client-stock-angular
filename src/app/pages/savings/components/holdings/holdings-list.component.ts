@@ -21,6 +21,7 @@ import { AssetClass } from '../../../../domain/asset-class.domain';
 import { IHoldingView } from '../../../../domain/holding.domain';
 import { IPosition } from '../../../../domain/position.domain';
 import { ITag } from '../../../../domain/tag.domain';
+import { EmptyStateComponent } from '../../../../core/UI/components/empty-state/empty-state.component';
 import { PageHeaderComponent } from '../../../../core/UI/components/page-header/page-header.component';
 import { PositionCardComponent } from '../positions/position-card/position-card.component';
 import { HoldingService } from '../../service/holding.service';
@@ -67,6 +68,7 @@ const SORT_OPTIONS: SortOption[] = [
     MatButtonModule,
     MatBottomSheetModule,
     MatMenuModule,
+    EmptyStateComponent,
     PageHeaderComponent,
     PositionCardComponent,
     PortfolioSummaryComponent,

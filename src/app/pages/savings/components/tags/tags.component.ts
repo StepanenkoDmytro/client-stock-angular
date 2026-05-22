@@ -20,6 +20,7 @@ import {
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ITag, ITagTree } from '../../../../domain/tag.domain';
+import { EmptyStateComponent } from '../../../../core/UI/components/empty-state/empty-state.component';
 import { PageHeaderComponent } from '../../../../core/UI/components/page-header/page-header.component';
 import { NotificationComponent } from '../../../../core/UI/components/notification/notification.component';
 import { TagsService } from '../../service/tags.service';
@@ -38,7 +39,7 @@ const MATERIAL_MODULES = [
   MatSnackBarModule,
 ];
 
-const UI_COMPONENTS = [PageHeaderComponent];
+const UI_COMPONENTS = [EmptyStateComponent, PageHeaderComponent];
 
 @Component({
   selector: 'pgz-tags',
