@@ -1,0 +1,38 @@
+:host {
+  display: block;
+}
+
+.ph {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 56px;
+  padding: 8px 12px;
+  background: transparent;
+
+  &__back {
+    flex: 0 0 auto;
+    margin-left: -8px; // visually align icon to row edge (button has 8px padding)
+    color: var(--pgz-text-primary);
+  }
+
+  &__title {
+    flex: 1 1 auto;
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--pgz-text-primary);
+    letter-spacing: -0.01em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__action {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}

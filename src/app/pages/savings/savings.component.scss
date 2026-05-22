@@ -13,24 +13,12 @@
   overflow-y: auto;
   background-color: var(--pgz-bg-page);
 
-  // ---- Header (Portfolio · date · Hide-$ pill) ----
-  // Reference: design/savings/00-mobile-shell-baseline.svg lines 23-28.
-
-  &__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 24px 16px 8px;
-    gap: 12px;
-  }
-
-  &__title {
-    margin: 0;
-    font-size: 20px;
-    font-weight: 500;
-    color: var(--pgz-text-primary);
-    font-family: inherit;
-  }
+  // ---- Header (Portfolio · accounts chip) ----
+  // M5.6 PR2: legacy `.savings__header` + `.savings__title` rules
+  // removed — markup now uses `<pgz-page-header>` which owns the
+  // padding, font-size, color tokens. `__hide-pill` rules below stay
+  // as a defensive reference until PR-A6 hide-balances flow lands
+  // (per `savings.component.html` comment about hide-$ pill).
 
   &__hide-pill {
     flex-shrink: 0;

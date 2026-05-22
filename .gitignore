@@ -40,3 +40,14 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# AI coding-tool artifacts (Claude, Cursor, Aider, etc.) — local-only.
+.claude/
+CLAUDE.md
+CLAUDE.local.md
+.claude.json
+.cursor/
+.cursorrules
+.aider*
+AGENTS.md
+GEMINI.md

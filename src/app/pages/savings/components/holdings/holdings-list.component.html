@@ -1,10 +1,11 @@
 <section [class.page]="showHeader" class="hl" [class.hl--embedded]="!showHeader">
   @if (showHeader) {
-    <div (click)="goBack()">
-      <pgz-prev-route>
-        <p>My holdings</p>
-      </pgz-prev-route>
-    </div>
+    <!-- M5.6 PR2: legacy pgz-prev-route → pgz-page-header. `goBack()`
+         keeps the explicit goBack semantic (the legacy onclick handler
+         routed to /savings rather than browser back). -->
+    <pgz-page-header title="My holdings"
+                     [showBack]="true"
+                     (back)="goBack()"></pgz-page-header>
   }
 
   <section class="hl__body">

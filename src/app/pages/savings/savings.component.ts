@@ -24,6 +24,7 @@ import { IHoldingView } from '../../domain/holding.domain';
 import { IPosition } from '../../domain/position.domain';
 import { ITag } from '../../domain/tag.domain';
 import { ButtonToggleComponent } from '../../core/UI/components/button-toggle/button-toggle.component';
+import { PageHeaderComponent } from '../../core/UI/components/page-header/page-header.component';
 import { SegmentedToggleComponent } from '../../core/UI/components/segmented-toggle/segmented-toggle.component';
 import { SelectMarketDialogComponent } from './components/select-market-dialog/select-market-dialog.component';
 import { AccountsChipComponent } from './components/accounts/accounts-chip/accounts-chip.component';
@@ -85,6 +86,7 @@ const VISIBLE_PER_CLASS = 5;
 
 const UI_COMPONENTS = [
   ButtonToggleComponent,
+  PageHeaderComponent,
   SegmentedToggleComponent,
   PositionCardComponent,
   HoldingsListComponent,

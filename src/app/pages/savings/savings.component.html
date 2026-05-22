@@ -1,11 +1,10 @@
 <section class="savings">
-  <header class="savings__header">
-    <h1 class="savings__title">Portfolio</h1>
-    <!-- Hide $ pill removed (PR-A6); slot now hosts the accounts chip.
-         The hide-balances toggle migrates to Profile/Settings in a
-         separate micro-PR per PR-A6 §5 "Hide $ relocation". -->
-    <pgz-accounts-chip class="savings__accounts-chip"></pgz-accounts-chip>
-  </header>
+  <!-- M5.6 PR2: legacy inline header migrated to pgz-page-header. Action
+       slot hosts the accounts chip (was right-aligned via flex in the
+       custom `.savings__header`). -->
+  <pgz-page-header title="Portfolio">
+    <pgz-accounts-chip action></pgz-accounts-chip>
+  </pgz-page-header>
 
   @if (showOfflinePlaceholder()) {
     <pgz-savings-offline-placeholder

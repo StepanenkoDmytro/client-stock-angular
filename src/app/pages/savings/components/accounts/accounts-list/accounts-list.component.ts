@@ -23,7 +23,7 @@ import {
   IAccountV2,
   accountDisplayName,
 } from '../../../../../domain/account-v2.domain';
-import { PrevRouteComponent } from '../../../../../core/UI/components/prev-route/prev-route.component';
+import { PageHeaderComponent } from '../../../../../core/UI/components/page-header/page-header.component';
 import { NotificationComponent } from '../../../../../core/UI/components/notification/notification.component';
 import { AccountsService } from '../../../service/accounts.service';
 import { HoldingService } from '../../../service/holding.service';
@@ -45,7 +45,7 @@ const MATERIAL_MODULES = [
 @Component({
   selector: 'pgz-accounts-list',
   standalone: true,
-  imports: [CommonModule, ...MATERIAL_MODULES, PrevRouteComponent],
+  imports: [CommonModule, ...MATERIAL_MODULES, PageHeaderComponent],
   templateUrl: './accounts-list.component.html',
   styleUrl: './accounts-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

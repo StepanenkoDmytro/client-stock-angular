@@ -11,13 +11,13 @@ import { IconComponent } from '../../core/UI/components/icon/icon.component';
 import { AnonymousModeService } from '../../core/anonymous-mode/anonymous-mode.service';
 import { SystemComponent } from './components/system/system.component';
 import { IUser, UserMode } from '../../model/User';
-import { PrevRouteComponent } from '../../core/UI/components/prev-route/prev-route.component';
+import { PageHeaderComponent } from '../../core/UI/components/page-header/page-header.component';
 
 
 const UI_MODULES = [
   SystemComponent,
   IconComponent,
-  PrevRouteComponent
+  PageHeaderComponent
 ];
 
 const MATERIAL_MODULES = [

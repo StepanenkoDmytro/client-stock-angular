@@ -1,0 +1,17 @@
+<header class="ph">
+  @if (showBack) {
+    <button mat-icon-button
+            type="button"
+            class="ph__back"
+            aria-label="Go back"
+            (click)="onBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+  }
+
+  <h1 class="ph__title">{{ title }}</h1>
+
+  <div class="ph__action">
+    <ng-content select="[action]"></ng-content>
+  </div>
+</header>

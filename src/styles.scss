@@ -324,6 +324,11 @@ body {
   font-family: "Lato", serif;
   font-weight: 400;
   font-style: normal;
+  // M5.6 PR2: default body bg keyed off the design token. Per-theme
+  // overrides (e.g. `.light-theme body` radial-gradient below) still
+  // apply when active — this is the fallback for "no theme class" and
+  // for the dark theme which has no override.
+  background-color: var(--pgz-app-bg);
 }
 
 body::after {

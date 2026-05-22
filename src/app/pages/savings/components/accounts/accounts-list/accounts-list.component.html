@@ -1,9 +1,8 @@
 <section class="page al">
-  <div (click)="goBack()">
-    <pgz-prev-route>
-      <p>Manage accounts</p>
-    </pgz-prev-route>
-  </div>
+  <!-- M5.6 PR2: legacy pgz-prev-route → pgz-page-header. -->
+  <pgz-page-header title="Manage accounts"
+                   [showBack]="true"
+                   (back)="goBack()"></pgz-page-header>
 
   <div class="al__body">
     <button mat-flat-button color="primary" class="al__add" (click)="onAdd()">
