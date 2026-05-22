@@ -14,6 +14,7 @@ import { combineLatest } from 'rxjs';
 import { CategorySpendingComponent } from './components/category-spending/category-spending.component';
 import { Category } from '../../domain/category.domain';
 import { SwipeWrapperComponent } from '../../core/UI/components/swipe-wrapper/swipe-wrapper.component';
+import { PageHeaderComponent } from '../../core/UI/components/page-header/page-header.component';
 import { AddTriggerService } from '../../service/helpers/add-trigger.service';
 
 
@@ -23,6 +24,7 @@ const UI_COMPONENTS = [
   CategorySpendingComponent,
   HistorySpendingComponent,
   ButtonToggleComponent,
+  PageHeaderComponent,
   SwipeWrapperComponent
 ];
 

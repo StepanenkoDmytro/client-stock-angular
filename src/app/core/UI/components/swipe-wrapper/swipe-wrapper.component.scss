@@ -17,6 +17,9 @@
   flex: 0 0 100%; 
 }
 
+// M5.6 PR5c: tokenized + corrected polarity. Was `#858585` inactive
+// and `#D9D9D9` active — design Frame 1 actually has dark dot for
+// the active page and a light-border dot for the inactive ones.
 .dots-container {
   display: flex;
   justify-content: center;
@@ -27,11 +30,11 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background-color: #858585;
+    background-color: var(--pgz-card-border);
     transition: background-color 0.3s;
 
     &.active {
-      background-color: #D9D9D9; 
+      background-color: var(--pgz-text-primary);
     }
   }
 }

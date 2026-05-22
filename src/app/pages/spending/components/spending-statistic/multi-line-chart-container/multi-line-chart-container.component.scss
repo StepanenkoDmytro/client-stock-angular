@@ -1,3 +1,15 @@
+// M5.6 PR5c (design Frame 3): wrap the multi-line chart in a white
+// card so it sits on the page bg consistently with the period card +
+// per-category stat-cards below it. Was a bare `<div>` inheriting
+// whatever surface the page provided.
 :host {
   display: block;
+
+  > div {
+    background: var(--pgz-card-bg);
+    border: 0.5px solid var(--pgz-card-border);
+    border-radius: 16px;
+    padding: 12px;
+    margin: 12px 16px;
+  }
 }

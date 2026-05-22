@@ -16,7 +16,7 @@ import { ArrowBackComponent } from '../../../../../core/UI/components/arrow-back
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Spending } from '../../../model/Spending';
 import { DeleteCategoryDialogComponent } from '../delete-category-dialog/delete-category-dialog.component';
-import { PrevRouteComponent } from '../../../../../core/UI/components/prev-route/prev-route.component';
+import { PageHeaderComponent } from '../../../../../core/UI/components/page-header/page-header.component';
 import { NotificationComponent } from '../../../../../core/UI/components/notification/notification.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MoneyDirective } from '../../../../../directive/money.directive';
@@ -29,7 +29,7 @@ const UI_MODULES = [
   IconComponent,
   IconsPickerComponent,
   FormFieldComponent,
-  PrevRouteComponent,
+  PageHeaderComponent,
   MoneyDirective,
   ColorPickerComponent,
   FormInputComponent

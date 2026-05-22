@@ -1,11 +1,18 @@
+// M5.6 PR5c (design/spending/01-spending-mobile-redesign.svg Frame 2):
+// white-surface history panel with token-aligned spacing + day-group
+// section headers ("TODAY · 22 MAY" etc) rendered upper-case muted.
+
 :host {
   display: block;
-  height: 100%;
-  width: 90%;
-  margin: auto;
-  border-radius: 20px;
-  background-color: #fff;
+  width: calc(100% - 32px);
+  margin: 12px auto 0;
+  border-radius: 16px;
+  background: var(--pgz-card-bg);
+  border: 0.5px solid var(--pgz-card-border);
+  box-shadow: var(--pgz-card-shadow);
+  overflow: hidden;
 }
+
 .close-button-option {
   position: absolute;
   bottom: 0;
@@ -13,24 +20,23 @@
 }
 
 .close-button-container {
-  position: absolute; 
-  bottom: 0; 
-  left: 0; 
-  right: 0; 
-  background-color: white; 
-  border-top: 1px solid #e0e0e0; 
-  display: flex; 
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--pgz-card-bg);
+  border-top: 0.5px solid var(--pgz-divider);
+  display: flex;
 }
 
 .close-button {
   width: 100%;
-  border-top: 1px solid #e0e0e0;
-  background-color: var(--bs-gray-200);
+  border-top: 0.5px solid var(--pgz-divider);
+  background: var(--pgz-card-bg-sub);
 }
 
 .spendings-history {
-  padding: 8px; 
-  height: 100%;
+  padding: 12px 14px 24px;
 
   &--filters {
     display: flex;
@@ -42,22 +48,44 @@
     font-size: 18px;
   }
 
+  // Calendar icon-only button — design Frame 2 places it on the right
+  // of the filter-row, opens /spending/calendar full page.
   &--calendar {
-    display: flex;
-    justify-content: end;
-    margin-right: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: 0.5px solid var(--pgz-card-border);
+    background: var(--pgz-card-bg);
+    color: var(--pgz-text-primary);
     text-decoration: none;
-    color: black;
+    margin-left: auto;
   }
 
   &--list {
-    text-align: center;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 8px;
   }
 
+  // Day-group section header ("TODAY · 22 MAY", "MON · 19 MAY").
+  // Upper-case + tracked + muted per design Frame 2.
   &--list-item {
-    font-size: 12px;
-    text-align: center;
-    margin-top: 8px;
+    margin: 14px 4px 6px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--pgz-text-muted);
+    text-align: left;
+  }
+
+  &--list-item:first-of-type {
+    margin-top: 4px;
   }
 
   .calendar-btn {

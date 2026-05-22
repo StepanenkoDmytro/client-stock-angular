@@ -20,7 +20,7 @@ import { ArrowBackComponent } from '../../../../core/UI/components/arrow-back/ar
 import { AcceptBtnComponent } from '../../../../core/UI/components/accept-btn/accept-btn.component';
 import { CategorySelectorComponent } from './category-select/category-select.component';
 import { FormFieldComponent } from '../../../../core/UI/components/form-field/form-field.component';
-import { PrevRouteComponent } from '../../../../core/UI/components/prev-route/prev-route.component';
+import { PageHeaderComponent } from '../../../../core/UI/components/page-header/page-header.component';
 import { NotificationComponent } from '../../../../core/UI/components/notification/notification.component';
 import { IconComponent } from "../../../../core/UI/components/icon/icon.component";
 import { FormInputComponent } from '../../../../core/UI/components/form-input/form-input.component';
@@ -31,7 +31,7 @@ const UI_MODULES = [
   CategorySelectorComponent,
   FormFieldComponent,
   FormInputComponent,
-  PrevRouteComponent
+  PageHeaderComponent
 ];
 
 const MATERIAL_MODULES = [

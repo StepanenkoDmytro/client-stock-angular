@@ -1,7 +1,12 @@
+// M5.6 PR5c: explicit page-bg token so this surface mirrors the
+// savings host (`:host { background-color: var(--pgz-bg-page) }`).
+// Was relying on body bg inheritance which read crisp on some
+// renderers but slightly washed-out on others — explicit token wins.
 :host {
     display: flex;
     flex-direction: column;
     height: 100%;
+    background-color: var(--pgz-bg-page);
 }
 
 .spending {
@@ -11,4 +16,5 @@
     align-items: center;
     overflow-y: scroll;
     overflow-x: hidden;
+    background-color: var(--pgz-bg-page);
 }

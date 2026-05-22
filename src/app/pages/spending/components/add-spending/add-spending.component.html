@@ -1,14 +1,9 @@
 <section class="page">
-    <div (click)="prevRoute()">
-        <pgz-prev-route>
-            
-            @if(editSpending) {
-                <p>Edit spending</p>
-            } @else {
-                <p>Add spending</p>
-            }
-        </pgz-prev-route>
-    </div>
+    <!-- M5.6 PR5 (design Frame 5): legacy pgz-prev-route → pgz-page-header. -->
+    <pgz-page-header
+        [title]="editSpending ? 'Edit spending' : 'Add spending'"
+        [showBack]="true"
+        (back)="prevRoute()"></pgz-page-header>
     <section class="add-spending">
         <div class="add-spending--input">
             <input class="add-spending--amount-input" type="number" inputmode="numeric" placeholder="0"[(ngModel)]="costOfProduct" pgzMoney>

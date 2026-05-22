@@ -1,13 +1,8 @@
-<div (click)="prevRoute()">
-    <pgz-prev-route>
-        
-        @if(editCategory) {
-            <p>Edit category</p>
-        } @else {
-            <p>Add category</p>
-        }
-    </pgz-prev-route>
-</div>
+<!-- M5.6 PR5 (design Frame 4): legacy pgz-prev-route → pgz-page-header. -->
+<pgz-page-header
+    [title]="editCategory ? 'Edit category' : 'Add category'"
+    [showBack]="true"
+    (back)="prevRoute()"></pgz-page-header>
 <section class="add-edit-category page">
     <pgz-form-input>
         <label style="margin-top: 32px;">Name category</label>
@@ -64,8 +59,7 @@
 
     <div class="add-edit-category--actions">
         <button mat-flat-button
-                type="submit" class="pgz-btn pgz-btn--option montserrat" 
-                style="color: #BB4545;"
+                type="submit" class="pgz-btn pgz-btn--option pgz-btn--danger-text montserrat"
                 (click)="onDeleteCategory()">
         {{ 'Delete Category' }}
         </button>

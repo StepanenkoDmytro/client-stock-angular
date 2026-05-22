@@ -257,6 +257,13 @@ $light-theme: mat.define-light-theme((
   --pgz-snackbar-radius: 50px;
   --pgz-snackbar-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 
+  // ---- Danger-text alias (M5.6 PR5) ----
+  // Inline `style="color: #BB4545"` on delete buttons used a 3rd reddish
+  // hex distinct from --color-negative (#EF5350 dark, #A32D2D light).
+  // Alias keeps "destructive action label" semantic without forcing
+  // callers to remember which negative variant.
+  --pgz-danger-text: var(--color-negative);
+
   // ---- AssetClass palette ----
   // Dark-theme variant — slightly brighter for contrast on dark
   // surfaces. Source palette: design/README.md. ETF stays = STOCK
@@ -345,6 +352,9 @@ $light-theme: mat.define-light-theme((
   --pgz-snackbar-radius: 50px;
   --pgz-snackbar-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
 
+  // ---- Danger-text alias (M5.6 PR5) ----
+  --pgz-danger-text: var(--color-negative);
+
   // ---- AssetClass palette (light-theme) ----
   // Source: design/README.md. Used by inline
   // `[style.background-color]` bindings as `var(--asset-X)`.
@@ -360,10 +370,13 @@ $light-theme: mat.define-light-theme((
   --asset-real-estate: #BA7517;
   --asset-other: #616161;
 
-  body {
-    background: radial-gradient(63.8% 235.47% at 50% 50%, #407DA4 0%, #C6D8E3 100%);
-  }
-
+  // M5.6 PR5b: light-theme body no longer paints a radial blue gradient —
+  // it now inherits `var(--pgz-app-bg)` from the global `body` rule below
+  // (cream #F1EFE8 per design/spending/01-spending-mobile-redesign.svg
+  // and savings reference). The decorative `.pgz-application::before` /
+  // `body::after` floating-shapes layer remains as accent. To restore
+  // the old gradient temporarily wrap the page in a class and set bg
+  // explicitly — but production design has dropped it.
 }
 
 html, body { height: 100%; }
@@ -380,23 +393,14 @@ body {
   background-color: var(--pgz-app-bg);
 }
 
-body::after {
-  content: "";
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background-image: url('assets/img/cubs.png');
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center 100px;
-}
-
-body.hide-after::after {
-  display: none;
-}
+// M5.6 PR5c: decorative `cubs.png` floating-shapes layer removed
+// entirely. Approved mockups (design/savings + design/spending) show
+// a clean cream surface without them; keeping rules even as an
+// opt-in invites accidental re-enablement. Asset file
+// `src/assets/img/cubs.png` left on disk for now — the bundle just
+// no longer references it. Legacy `body.hide-after` toggle in
+// auth-container is now a no-op (the class targets a selector that
+// no longer exists) and was removed alongside this change.
 
 
 ul {
@@ -420,8 +424,14 @@ input {
   font-style: normal;
 }
 
+// M5.6 PR5c: legacy global `.page` overlay class used by ~11 secondary
+// surfaces (tags, accounts list/form, add holding/spending/category,
+// settings sub-screens, spending statistic). Was hardcoded `#fff` which
+// made every routed-to page render white — design wants the same cream
+// `--pgz-bg-page` as the app shell so screens feel like part of one
+// surface rather than white modal overlays.
 .page {
-  background-color: #fff;
+  background-color: var(--pgz-bg-page);
   position: absolute;
   left: 0;
   width: 100%;
@@ -476,6 +486,13 @@ input {
   &--submit-disabled {
     background-color: var(--pgz-btn-disabled-bg) !important;
     color: var(--pgz-btn-disabled-fg) !important;
+  }
+
+  // Destructive variant — keeps the outlined `--option` shape but
+  // colors text red. Used on "Delete category", "Delete tag" etc.
+  // (M5.6 PR5: extracted from inline `style="color: #BB4545"`.)
+  &--danger-text {
+    color: var(--pgz-danger-text) !important;
   }
 }
 

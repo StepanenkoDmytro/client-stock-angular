@@ -1,6 +1,11 @@
 <div class="spending">
+  <!-- M5.6 PR5 (design/spending/01-spending-mobile-redesign.svg Frame 1+2):
+       top-level pgz-page-header above the swipe wrapper. Top-level page,
+       so no back arrow — bottom nav is the navigation surface. -->
+  <pgz-page-header title="Spending"></pgz-page-header>
+
   <pgz-total-balance-spending></pgz-total-balance-spending>
 
   <pgz-swipe-wrapper [cards]="swipeComponents" [isVisibleDots]="true"></pgz-swipe-wrapper>
-  
+
 </div>

@@ -14,12 +14,14 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import { DateFormatPipe } from '../../../../pipe/date-format.pipe';
 import { combineLatest } from 'rxjs';
 import { SpendingsService } from '../../../../service/spendings.service';
+import { EmptyStateComponent } from '../../../../core/UI/components/empty-state/empty-state.component';
 import { FilterWrapperComponent } from '../../../../core/UI/components/filter-wrapper/filter-wrapper.component';
 import { IconComponent } from '../../../../core/UI/components/icon/icon.component';
 
 
 const UI_COMPONENTS = [
   HistorySpendingCardComponent,
+  EmptyStateComponent,
   FilterWrapperComponent,
   IconComponent
 ];
@@ -121,6 +123,29 @@ export class HistorySpendingComponent implements OnInit {
     this.isAllCategoriesChecked = this.selectedCategories.length === this.categories.length;
     this.spendingsGroupedByDate = this.groupSpendingsByDate([...this.spendings]);
     this.cdr.detectChanges();
+  }
+
+  /**
+   * Friendly day-group label for the History list per M5.6 PR5 design
+   * (design/spending/01-spending-mobile-redesign.svg Frame 2):
+   *   today     → "TODAY · 22 MAY"
+   *   yesterday → "YESTERDAY · 21 MAY"
+   *   earlier   → "MON · 19 MAY"
+   *
+   * <p>`dateKey` arrives in `"D MMMM YYYY"` shape (e.g. "22 May 2026")
+   * from {@link #groupSpendingsByDate}; reparse via moment for the
+   * relative comparison + final formatting.
+   */
+  public formatDayLabel(dateKey: string): string {
+    const m = moment(dateKey, 'D MMMM YYYY');
+    if (!m.isValid()) return dateKey;
+    const today = moment().startOf('day');
+    const yest = today.clone().subtract(1, 'day');
+    const day = m.clone().startOf('day');
+    const dateSuffix = m.format('D MMM').toUpperCase();
+    if (day.isSame(today)) return `TODAY · ${dateSuffix}`;
+    if (day.isSame(yest))  return `YESTERDAY · ${dateSuffix}`;
+    return `${m.format('ddd').toUpperCase()} · ${dateSuffix}`;
   }
 
   private groupSpendingsByDate(spendings: Spending[]): Map<string, Spending[]> {

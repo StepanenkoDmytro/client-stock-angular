@@ -1,14 +1,24 @@
+// M5.6 PR5c (design Frame 3): white card surface mirroring the
+// multi-line container so swapping Multiline ↔ Pie tabs keeps the
+// same chrome.
 :host {
   display: block;
 }
 
 .chart {
   display: flex;
-  padding-top: 5px;
+  padding: 12px;
+  margin: 12px 16px;
   gap: 10px;
+  background: var(--pgz-card-bg);
+  border: 0.5px solid var(--pgz-card-border);
+  border-radius: 16px;
 
   &--single {
-    margin: auto;
+    justify-content: center;
+  }
+
+  &--single pgz-pie-chart {
     width: 210px;
   }
 }

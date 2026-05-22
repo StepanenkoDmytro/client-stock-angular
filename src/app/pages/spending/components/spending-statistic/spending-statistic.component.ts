@@ -15,6 +15,7 @@ import { ArrowBackComponent } from "../../../../core/UI/components/arrow-back/ar
 import { BarComponent } from "../../../../core/UI/components/charts/bar/bar.component";
 import { DonutComponent } from "../../../../core/UI/components/charts/donut/donut.component";
 import { MultiLineComponent } from "../../../../core/UI/components/charts/multi-line/multi-line.component";
+import { EmptyStateComponent } from "../../../../core/UI/components/empty-state/empty-state.component";
 import { FilterWrapperComponent } from "../../../../core/UI/components/filter-wrapper/filter-wrapper.component";
 import { IconComponent } from "../../../../core/UI/components/icon/icon.component";
 import { ToggleSwitchComponent } from "../../../../core/UI/components/toggle-switch/toggle-switch.component";
@@ -22,7 +23,7 @@ import { Category } from "../../../../domain/category.domain";
 import { DateFormatPipe } from "../../../../pipe/date-format.pipe";
 import { SpendingCategoryHelperService } from "../../../../service/helpers/spending-category-helper.service";
 import { SpendingsService } from "../../../../service/spendings.service";
-import { PrevRouteComponent } from "../../../../core/UI/components/prev-route/prev-route.component";
+import { PageHeaderComponent } from "../../../../core/UI/components/page-header/page-header.component";
 import { RangeForm, ICategoryStatistic, initializeFormGroup } from "../../../statistic/model/SpendindStatistic";
 import { StatisticStateService } from "../../../statistic/service/statistic-state.service";
 import { Spending } from "../../model/Spending";
@@ -36,6 +37,7 @@ import { SpendingStatisticCardComponent } from "./spending-statistic-card/spendi
 const UI_COMPONENTS = [
   DonutComponent,
   BarComponent,
+  EmptyStateComponent,
   HistorySpendingCardComponent,
   IconComponent,
   MultiLineComponent,
@@ -43,7 +45,7 @@ const UI_COMPONENTS = [
   PieChartContainerComponent,
   SpendingStatisticCardComponent,
   RangeControllerComponent,
-  PrevRouteComponent,
+  PageHeaderComponent,
   ToggleSwitchComponent,
   FilterWrapperComponent,
   ArrowBackComponent

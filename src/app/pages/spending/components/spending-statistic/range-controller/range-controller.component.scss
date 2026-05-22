@@ -23,14 +23,19 @@
     font-weight: 400;
   }
 
+  // M5.6 PR5c (design Frame 3): white card surface, token-aligned —
+  // was `var(--bs-gray-300)` Bootstrap gray. Inner pickers render
+  // their own cream sub-card on top.
   &--control {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    background-color: var(--bs-gray-300);
-    border-radius: 10px;
-    padding-top: 8px;
+    background: var(--pgz-card-bg);
+    border: 0.5px solid var(--pgz-card-border);
+    border-radius: 16px;
+    padding: 14px;
+    gap: 10px;
   }
 
   &--compare {

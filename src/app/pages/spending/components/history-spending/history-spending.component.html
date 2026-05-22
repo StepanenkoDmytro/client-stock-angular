@@ -1,6 +1,6 @@
 <div class="spendings-history">
-    
-    <pgz-filter-wrapper 
+
+    <pgz-filter-wrapper
         [items]="categoriesForFilter"
         [selectedIds]="selectedCategoriesSet"
         (selectedIdsChange)="updateSelectedCategories($event)"
@@ -13,7 +13,9 @@
     <ng-template #statisticTemplate>
         <section class="spendings-history--list">
             @for(dateSpending of spendingsGroupedByDate.keys(); track dateSpending) {
-                <p class="spendings-history--list-item">{{ dateSpending }}</p>
+                <!-- M5.6 PR5: friendly day label per design Frame 2
+                     ("TODAY · 22 MAY" / "YESTERDAY · 21 MAY" / "MON · 19 MAY"). -->
+                <p class="spendings-history--list-item">{{ formatDayLabel(dateSpending) }}</p>
 
                 @for(spending of spendingsGroupedByDate.get(dateSpending); track spending) {
                     <pgz-history-spending-card  [spending]="spending"></pgz-history-spending-card>
@@ -21,7 +23,11 @@
             }
 
             @if(spendingsGroupedByDate.size === 0) {
-                <p>Empty list</p>
+                <!-- M5.6 PR5: plain "Empty list" → pgz-empty-state. -->
+                <pgz-empty-state
+                    size="roomy"
+                    title="No spendings yet"
+                    hint='Tap the + button below to log your first.'></pgz-empty-state>
             }
         </section>
     </ng-template>

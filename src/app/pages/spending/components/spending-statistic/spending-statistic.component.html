@@ -1,15 +1,10 @@
 <main class="spending-statistic page">
 
-  <div (click)="prevRoute()">
-    <pgz-prev-route>
-      
-      @if(currCategory && currCategory.parent) {
-        <p>{{currCategory.title}} statistic</p>
-      } @else {
-        <p>Statistic</p>
-      }
-    </pgz-prev-route>
-  </div>
+  <!-- M5.6 PR5 (design Frame 3): legacy pgz-prev-route → pgz-page-header. -->
+  <pgz-page-header
+    [title]="(currCategory && currCategory.parent) ? (currCategory.title + ' statistic') : 'Statistic'"
+    [showBack]="true"
+    (back)="prevRoute()"></pgz-page-header>
 
   <pgz-toggle-switch style="margin-top: 18px;" [checked]="'multiline'" [unchecked]="'pie'" (buttonValue)="chartTypeChange($event)"></pgz-toggle-switch>
 
@@ -58,7 +53,12 @@
           (clickCard)="onCardClick($event)" >
         </pgz-spending-statistic-card>
     } @empty {
-      <p style="text-align: center;">You don't have any spendings</p>
+      <!-- M5.6 PR5: inline-styled plain text → pgz-empty-state. -->
+      <pgz-empty-state
+        size="roomy"
+        icon="📊"
+        title="You don't have any spendings"
+        hint="Log some spending and the breakdown will show up here."></pgz-empty-state>
     }
     </section>
   </ng-template>
