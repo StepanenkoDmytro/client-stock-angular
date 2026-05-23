@@ -1,0 +1,41 @@
+<div class="demo-actions">
+  <div class="demo-actions__icon" aria-hidden="true">
+    <mat-icon>{{ data.mode === 'active' ? 'delete_sweep' : 'restore' }}</mat-icon>
+  </div>
+
+  <h3 class="demo-actions__title">
+    @if (data.mode === 'active') {
+      Remove all demo data?
+    } @else {
+      Restore demo data?
+    }
+  </h3>
+
+  <p class="demo-actions__message">
+    @if (data.mode === 'active') {
+      Only items marked as demo are removed. Your real holdings stay.
+    } @else {
+      Loads illustrative holdings, accounts and tags so you can explore.
+      You can clear them again any time.
+    }
+  </p>
+
+  @if (data.summary) {
+    <p class="demo-actions__summary">{{ data.summary }}</p>
+  }
+
+  <div class="demo-actions__buttons">
+    <button mat-stroked-button
+            class="demo-actions__btn"
+            (click)="onCancel()">Cancel</button>
+    @if (data.mode === 'active') {
+      <button mat-flat-button
+              class="demo-actions__btn demo-actions__btn--destructive"
+              (click)="onPrimary()">Clear demo data</button>
+    } @else {
+      <button mat-flat-button
+              class="demo-actions__btn demo-actions__btn--primary"
+              (click)="onPrimary()">Restore demo data</button>
+    }
+  </div>
+</div>

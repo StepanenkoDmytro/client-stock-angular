@@ -1,0 +1,14 @@
+@if (isDemoActive()) {
+  <aside class="demo-banner" role="status">
+    <span class="demo-banner__icon" aria-hidden="true">ⓘ</span>
+    <span class="demo-banner__text">
+      <span class="demo-banner__lede">Demo data</span>
+      — these are examples
+    </span>
+    <button type="button"
+            class="demo-banner__cta"
+            (click)="onClear()">
+      Clear demo →
+    </button>
+  </aside>
+}

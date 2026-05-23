@@ -1,0 +1,39 @@
+<section class="cold-start">
+  <p class="cold-start__greeting">Hi 👋</p>
+  <h1 class="cold-start__title">Start tracking your savings</h1>
+  <p class="cold-start__sub">
+    Choose what to add first — you can always add more later
+  </p>
+
+  <div class="cold-start__grid">
+    @for (card of cards; track card.assetClass) {
+      <button type="button"
+              class="cold-start__card"
+              [class.cold-start__card--disabled]="isCardDisabled(card.assetClass)"
+              [attr.aria-disabled]="isCardDisabled(card.assetClass) ? 'true' : null"
+              [style.--card-tint]="'var(' + card.tintVar + ')'"
+              (click)="onPickClass(card.assetClass)">
+        <mat-icon class="cold-start__card-icon">{{ card.icon }}</mat-icon>
+        <span class="cold-start__card-label">{{ card.label }}</span>
+        <span class="cold-start__card-sub">{{ card.subtitle }}</span>
+      </button>
+    }
+  </div>
+
+  @if (showDemoLink) {
+    <div class="cold-start__divider" aria-hidden="true">
+      <span class="cold-start__divider-line"></span>
+      <span class="cold-start__divider-text">or</span>
+      <span class="cold-start__divider-line"></span>
+    </div>
+
+    <button type="button"
+            class="cold-start__demo-link"
+            (click)="onTryDemo()">
+      ↗ Try with demo data
+    </button>
+    <p class="cold-start__demo-hint">
+      Clearly labeled · one-click reset
+    </p>
+  }
+</section>

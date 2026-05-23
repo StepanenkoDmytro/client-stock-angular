@@ -10,6 +10,18 @@
     <pgz-savings-offline-placeholder
       (retry)="onOfflineRetry()">
     </pgz-savings-offline-placeholder>
+  } @else if (tier() === 'T1_FIRST_VISIT' || tier() === 'T1_LIGHT') {
+    <!-- T1 cold-start hero per
+         `docs/notes/2026-05-savings-empty-states-ladder.md` §5.1 + frame F1
+         of `design/savings/07-empty-states.svg`. Replaces the
+         PortfolioSummary + view-toggle + class-accordion stack entirely
+         when the user has zero distinct asset classes. The «Try with
+         demo data» link is surfaced only on the very first visit
+         (T1_FIRST_VISIT). T1_LIGHT (post-wipe) hides it — the user
+         already opted out once, restore lives in Profile (PR5). -->
+    <pgz-empty-state-cold-start
+      [showDemoLink]="tier() === 'T1_FIRST_VISIT'">
+    </pgz-empty-state-cold-start>
   } @else {
   <div class="savings__view-toggle">
     <pgz-segmented-toggle
@@ -36,12 +48,23 @@
     <p class="savings__class-caption">BY ASSET CLASS · LIFETIME</p>
 
     @if (classGroups().length === 0) {
-      <!-- M5.6 PR4: ad-hoc `.savings__empty` → pgz-empty-state. -->
+      <!-- M5.6 PR4: ad-hoc `.savings__empty` → pgz-empty-state.
+           PR6 close-out: stale «Reset demo data» hint replaced with
+           env-gated copy + anonymous Sign-in CTA. -->
       <pgz-empty-state
         size="roomy"
         icon="📈"
         title="No holdings yet"
-        hint="Switch to Holdings and press «Reset demo data» to re-seed."></pgz-empty-state>
+        [hint]="emptyHoldingsHint">
+        @if (showSignInCta()) {
+          <button cta
+                  type="button"
+                  class="savings__signin-cta"
+                  (click)="goToSignIn()">
+            Sign in to sync across devices
+          </button>
+        }
+      </pgz-empty-state>
     } @else {
       <mat-accordion class="savings__classes" multi>
         @for (group of classGroups(); track group.assetClass) {
@@ -94,6 +117,19 @@
           </mat-expansion-panel>
         }
       </mat-accordion>
+
+      <!-- T2 Discovery row (§5.3 frame F2) — sits BELOW the Classes
+           accordion per the mockup. Lives inside the @else so it
+           renders only when classGroups > 0 (T2 implies 1–2 classes,
+           never zero); auto-hides at T3 (distinct ≥ 3) via the tier
+           guard, or after the user taps ✕ Hide (forever-dismiss via
+           UserPreferences). Co-locating with the accordion also
+           sidesteps an Angular control-flow ordering quirk where two
+           sibling @if blocks at the same level can render out of
+           template order. -->
+      @if (tier() === 'T2' && !discoveryRowHidden()) {
+        <pgz-discovery-row></pgz-discovery-row>
+      }
     }
   } @else {
     <pgz-holdings-list

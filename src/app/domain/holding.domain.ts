@@ -122,6 +122,20 @@ export interface IHolding {
    * <p>Per ADR-0012 §"Базовий патерн на entity" bullet 2.
    */
   isSaved?: boolean;
+  /**
+   * `true` for rows materialised by `DemoDataService.seed()` — illustrative
+   * fixtures the user opted in to via the «Try with demo data» link or the
+   * Profile «Restore demo» action. `DemoDataService.clear()` removes only
+   * rows with this flag, leaving real entities (added via the normal flow)
+   * untouched.
+   *
+   * <p>Optional / undefined is treated as `false` (real). Persists through
+   * localStorage so demo rows survive a reload but never reach the
+   * backend — per ADR-0012, demo entities live only on the client.
+   *
+   * <p>Per `docs/notes/2026-05-savings-empty-states-ladder.md` §4.2.
+   */
+  isDemo?: boolean;
 }
 
 /**

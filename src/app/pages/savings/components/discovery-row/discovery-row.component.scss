@@ -1,0 +1,112 @@
+:host {
+  display: block;
+}
+
+// ----------------------------------------------------------------------
+// Discovery row — sits below the Classes accordion in T2 per
+// `design/savings/07-empty-states.svg` frame F2. Soft affordance, not
+// FOMO: outline-only chips on the cream app-bg, no fills, no count
+// badges. Hides as soon as the user adds a 3rd class (T3) or explicitly
+// taps ✕ Hide (forever-dismiss preference per task §5.3).
+// ----------------------------------------------------------------------
+
+.discovery {
+  padding: 16px;
+  // Dashed top divider mirrors the SVG separator that distinguishes the
+  // discovery affordance from the "real" portfolio above it.
+  border-top: 1px dashed var(--pgz-card-border);
+  margin-top: 8px;
+}
+
+.discovery__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.discovery__caption {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--pgz-text-muted);
+}
+
+.discovery__hide {
+  padding: 4px 10px;
+  background: transparent;
+  border: 0.5px solid var(--pgz-card-border);
+  border-radius: 11px;
+  color: var(--pgz-text-muted);
+  font-size: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  line-height: 1;
+
+  &:hover {
+    color: var(--pgz-text-secondary);
+    border-color: var(--pgz-text-muted);
+  }
+}
+
+// ----------------------------------------------------------------------
+// Chip rail — outline rounded buttons, emoji-icon + label. Per SVG F2
+// the chips wrap to a new line on overflow rather than scrolling
+// horizontally — keeps the rail predictable on narrow viewports.
+// ----------------------------------------------------------------------
+
+.discovery__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.discovery__chip {
+  --chip-tint: var(--pgz-card-border);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px 6px 8px;
+  background: var(--pgz-card-bg);
+  border: 0.5px solid var(--pgz-card-border);
+  border-radius: 17px;
+  color: var(--pgz-text-primary);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  min-height: 34px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--pgz-card-shadow);
+    border-color: var(--chip-tint);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.discovery__chip-icon {
+  // Small tinted icon — matches the cold-start card icon language at a
+  // chip-friendly 18px scale.
+  width: 18px;
+  height: 18px;
+  font-size: 14px;
+  line-height: 18px;
+  text-align: center;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--chip-tint) 22%, transparent);
+  color: var(--chip-tint);
+}
+
+.discovery__chip-label {
+  text-transform: capitalize;
+  color: var(--pgz-text-primary);
+}

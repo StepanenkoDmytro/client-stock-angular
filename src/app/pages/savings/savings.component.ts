@@ -9,6 +9,8 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../environments/environment';
+import { AnonymousModeService } from '../../core/anonymous-mode/anonymous-mode.service';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
@@ -27,8 +29,11 @@ import { ButtonToggleComponent } from '../../core/UI/components/button-toggle/bu
 import { EmptyStateComponent } from '../../core/UI/components/empty-state/empty-state.component';
 import { PageHeaderComponent } from '../../core/UI/components/page-header/page-header.component';
 import { SegmentedToggleComponent } from '../../core/UI/components/segmented-toggle/segmented-toggle.component';
+import { SavingsTierService } from '../../core/state/savings-tier.service';
 import { SelectMarketDialogComponent } from './components/select-market-dialog/select-market-dialog.component';
 import { AccountsChipComponent } from './components/accounts/accounts-chip/accounts-chip.component';
+import { DiscoveryRowComponent } from './components/discovery-row/discovery-row.component';
+import { EmptyStateColdStartComponent } from './components/empty-state-cold-start/empty-state-cold-start.component';
 import { HoldingsListComponent } from './components/holdings/holdings-list.component';
 // PR5c: kpi-row and wealth-chart-mini imports removed — they remain in the
 // codebase under `components/holdings/{kpi-row,wealth-chart-mini}/` for the
@@ -88,6 +93,8 @@ const VISIBLE_PER_CLASS = 5;
 const UI_COMPONENTS = [
   ButtonToggleComponent,
   EmptyStateComponent,
+  EmptyStateColdStartComponent,
+  DiscoveryRowComponent,
   PageHeaderComponent,
   SegmentedToggleComponent,
   PositionCardComponent,
@@ -136,6 +143,44 @@ export class SavingsComponent implements OnInit {
   private readonly userPrefs = inject(UserPreferencesService);
   private readonly portfolioOverview = inject(PortfolioOverviewService);
   private readonly network = inject(NetworkStatusService);
+  private readonly savingsTier = inject(SavingsTierService);
+  private readonly anonymous = inject(AnonymousModeService);
+
+  /**
+   * Demo-mode build flag. Drives the empty-state hint copy (PR6 §6
+   * close-out): demo builds nudge towards «Try with demo data»; prod
+   * builds keep the line clean and surface a Sign in CTA when the user
+   * is anonymous.
+   */
+  public readonly demoEnabled: boolean = environment.demoData === true;
+
+  /**
+   * Sign-in CTA visibility — anonymous prod users only. Demo builds
+   * hide it because the «Try with demo data» path is the primary
+   * affordance (the user can sign in later from Profile).
+   */
+  public readonly showSignInCta = computed(
+    () => !this.demoEnabled && this.anonymous.isAnonymous(),
+  );
+
+  /**
+   * Empty-state hint copy per task §6 PR6.
+   * - demo build → «Add your first holding from + below, or try demo data»
+   * - prod build → «Add your first holding from + below»
+   */
+  public readonly emptyHoldingsHint: string = this.demoEnabled
+    ? 'Add your first holding from + below, or try demo data'
+    : 'Add your first holding from + below';
+
+  /**
+   * Current savings empty-states ladder tier. Drives the empty-state
+   * hero / Discovery row / dashboard branches in the template. Per
+   * `docs/notes/2026-05-savings-empty-states-ladder.md` §4.1.
+   */
+  public readonly tier = this.savingsTier.tier;
+
+  /** Forever-dismiss flag for the T2 Discovery row (per task §5.3). */
+  public readonly discoveryRowHidden = this.userPrefs.discoveryRowHidden;
 
   /**
    * True when we should hide the whole dashboard and show the blocking
@@ -314,8 +359,9 @@ export class SavingsComponent implements OnInit {
 
   ngOnInit(): void {
     // Bootstrap all three feature services. Order matters: tags first
-    // (so HoldingService.seedMockHoldings can read system tag IDs by name),
-    // then instruments, then holdings.
+    // (so DemoDataService.seed() — invoked later, opt-in — can read
+    // system tag IDs by name when materialising demo holdings), then
+    // instruments, then holdings.
     this.tags.init();
     this.accounts.init();
     this.instruments.init();
@@ -394,6 +440,11 @@ export class SavingsComponent implements OnInit {
 
   public openAccountsManage(): void {
     this.router.navigate(['/savings/accounts']);
+  }
+
+  /** Empty-state CTA for anonymous prod users (PR6). */
+  public goToSignIn(): void {
+    this.router.navigate(['/auth']);
   }
 
   // ---- Legacy FAB-driven Add flow (until PR5 ships the new Add Holding form) ----

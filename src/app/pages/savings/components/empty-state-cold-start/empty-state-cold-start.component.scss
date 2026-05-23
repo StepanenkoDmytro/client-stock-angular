@@ -1,0 +1,174 @@
+:host {
+  display: block;
+}
+
+// ----------------------------------------------------------------------
+// Layout — centred hero card per `design/savings/07-empty-states.svg` F1.
+// Sits on top of the cream app-bg the parent SavingsComponent renders,
+// padded 16px on the sides so the cards align with the rest of /savings.
+// ----------------------------------------------------------------------
+
+.cold-start {
+  padding: 24px 16px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+// Greeting "Hi 👋" — small lead-in above the H1 (SVG F1 left-anchored
+// at 14px). Left-aligned mirrors the SavingsComponent header anchor.
+.cold-start__greeting {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--pgz-text-secondary);
+}
+
+.cold-start__title {
+  margin: 0 0 8px;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--pgz-text-primary);
+}
+
+.cold-start__sub {
+  margin: 0 0 24px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--pgz-text-secondary);
+}
+
+// ----------------------------------------------------------------------
+// 6-card Action Grid — 2 columns × 3 rows on phone widths (resolves
+// task §8 Q8 — 2×3 vertical layout, not 3×2, so cards stay readable
+// at 360w iPhone SE without shrinking to 90w). Same card style as
+// `AddHoldingClassGridComponent` so the visual language stays
+// consistent between the cold-start hero and the Add Holding form
+// entry point (task §6 PR3 Q1 — duplicate inline until a third
+// caller appears, then extract to core/UI).
+// ----------------------------------------------------------------------
+
+.cold-start__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.cold-start__card {
+  --card-tint: var(--pgz-card-border);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  min-height: 110px;
+  padding: 14px;
+  background: var(--pgz-card-bg);
+  border: 0.5px solid var(--pgz-card-border);
+  border-radius: 14px;
+  color: var(--pgz-text-primary);
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--pgz-card-shadow);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.cold-start__card-icon {
+  width: 36px;
+  height: 36px;
+  font-size: 22px;
+  line-height: 36px;
+  text-align: center;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--card-tint) 18%, transparent);
+  color: var(--card-tint);
+  margin-bottom: 6px;
+}
+
+.cold-start__card-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--pgz-text-primary);
+}
+
+.cold-start__card-sub {
+  font-size: 11px;
+  color: var(--pgz-text-secondary);
+}
+
+// Market-backed cards while offline — same dim + not-allowed treatment
+// the Add Holding grid uses. The click handler short-circuits with a
+// snackbar (no escape hatch per live-prices doc §3 Rule 3).
+.cold-start__card--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+
+  &:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+// ----------------------------------------------------------------------
+// OR divider — only rendered on T1_FIRST_VISIT (showDemoLink=true).
+// Two thin horizontal rules flanking a muted "or" label, 32px vertical
+// rhythm per SVG F1.
+// ----------------------------------------------------------------------
+
+.cold-start__divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 32px 0 24px;
+}
+
+.cold-start__divider-line {
+  flex: 1 1 auto;
+  height: 1px;
+  background: var(--pgz-card-border);
+}
+
+.cold-start__divider-text {
+  flex: 0 0 auto;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--pgz-text-muted);
+  letter-spacing: 0.5px;
+}
+
+// «↗ Try with demo data» — text-link styled as a centred button.
+// Per task §4.2 + SVG F1 demo-link copy: instant seed, no bottom-sheet
+// confirm (Q2 resolution — second confirm is bloat).
+.cold-start__demo-link {
+  display: block;
+  margin: 0 auto;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  color: var(--pgz-accent);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.cold-start__demo-hint {
+  margin: 4px 0 0;
+  text-align: center;
+  font-size: 10px;
+  color: var(--pgz-text-muted);
+}

@@ -1,9 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Signal, computed, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
@@ -11,6 +13,12 @@ import { AuthService } from '../../service/auth.service';
 import { UserService } from '../../service/user.service';
 import { IconComponent } from '../../core/UI/components/icon/icon.component';
 import { AnonymousModeService } from '../../core/anonymous-mode/anonymous-mode.service';
+import { DemoDataService } from '../../core/services/demo-data.service';
+import {
+  DemoActionsSheetComponent,
+  DemoActionsSheetData,
+  DemoActionsSheetResult,
+} from '../savings/components/demo-banner/demo-actions-sheet.component';
 import { SystemComponent } from './components/system/system.component';
 import { IUser, UserMode } from '../../model/User';
 import { PageHeaderComponent } from '../../core/UI/components/page-header/page-header.component';
@@ -75,6 +83,22 @@ export class ProfileComponent implements OnInit {
   private readonly anonymous = inject(AnonymousModeService);
   public readonly isAnonymous = this.anonymous.isAnonymous;
   public readonly shouldShowNudge = this.anonymous.shouldShowNudge;
+
+  /**
+   * Demo-data lifecycle exposure for the new «Demo data» settings row
+   * (PR5). Status badge text is computed reactively so the row label
+   * updates after Clear / Restore without a manual `markForCheck`.
+   */
+  private readonly demoData = inject(DemoDataService);
+  private readonly bottomSheet = inject(MatBottomSheet);
+  private readonly snackBar = inject(MatSnackBar);
+
+  public readonly isDemoActive = this.demoData.isDemoActive;
+  public readonly demoStatusValue: Signal<string> = computed(() =>
+    this.demoData.isDemoActive()
+      ? `Active · ${this.demoData.demoItemsCount()} items`
+      : 'Cleared',
+  );
 
   constructor(
     private authService: AuthService,
@@ -165,6 +189,43 @@ export class ProfileComponent implements OnInit {
   public exportImport(): void {
     // Hook reserved for the Export/Import flow; routing target lands in
     // a separate PR. For now the row is interactive but no-op.
+  }
+
+  /**
+   * Open the demo-data actions sheet. Active → «Clear demo data»;
+   * Cleared → «Restore demo data». Per task §6 PR5 (no chaining with
+   * the eventual Privacy & data section redesign — that row will
+   * migrate later via §6 PR5 Q3).
+   */
+  public async onDemoDataAction(): Promise<void> {
+    const active = this.isDemoActive();
+    const data: DemoActionsSheetData = {
+      mode: active ? 'active' : 'cleared',
+      summary: active
+        ? `${this.demoData.demoItemsCount()} demo items will be removed`
+        : '10 holdings · 7 accounts · 12 system tags',
+    };
+    const ref = this.bottomSheet.open<
+      DemoActionsSheetComponent,
+      DemoActionsSheetData,
+      DemoActionsSheetResult
+    >(DemoActionsSheetComponent, { data });
+    const result = await firstValueFrom(ref.afterDismissed());
+    if (result === 'clear') {
+      await this.demoData.clear();
+      this.snackBar.open(
+        'Demo data cleared · Real holdings kept',
+        undefined,
+        { duration: 2500 },
+      );
+    } else if (result === 'restore') {
+      await this.demoData.restore();
+      this.snackBar.open(
+        'Demo data restored',
+        undefined,
+        { duration: 2500 },
+      );
+    }
   }
 
   public resendConfirmation(): void {

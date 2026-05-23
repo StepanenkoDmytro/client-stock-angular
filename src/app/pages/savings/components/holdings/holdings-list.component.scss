@@ -231,3 +231,22 @@
   flex-direction: column;
   gap: 10px;
 }
+
+// PR6 — anonymous Sign-in CTA injected into the empty-state slot.
+// Mirrors `.savings__signin-cta` so both surfaces feel identical.
+.hl__signin-cta {
+  margin-top: 8px;
+  padding: 8px 16px;
+  background: transparent;
+  border: 0.5px solid var(--pgz-card-border);
+  border-radius: 14px;
+  color: var(--pgz-accent);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+
+  &:hover {
+    border-color: var(--pgz-accent);
+  }
+}

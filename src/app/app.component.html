@@ -1,5 +1,10 @@
 <section class="pgz-application">
   @if(!isAuthPage()) {
+    <!-- Persistent demo-data banner (PR5). Sticky-top, conditional
+         on any isDemo:true entity existing across the holdings /
+         accounts / tags stores. Sits ABOVE the offline banner so
+         the user sees it first when they have demo data loaded. -->
+    <pgz-demo-banner></pgz-demo-banner>
     <pgz-offline-banner></pgz-offline-banner>
   }
   <section class="pgz-application--content"

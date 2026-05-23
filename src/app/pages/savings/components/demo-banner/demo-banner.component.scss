@@ -1,0 +1,57 @@
+:host {
+  display: block;
+}
+
+// Persistent amber banner per `design/savings/07-empty-states.svg` F3.
+// Uses the existing `--color-warning` token (light: #BA7517, dark:
+// #FFA726) at 12% opacity so it reads as a soft attention surface
+// rather than an error. Full-width edge-to-edge — no horizontal
+// padding on .pgz-application so the strip looks continuous with the
+// status bar above on iOS.
+.demo-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: color-mix(in srgb, var(--color-warning) 14%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-warning) 32%, transparent);
+  min-height: 40px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.demo-banner__icon {
+  font-size: 14px;
+  color: var(--color-warning);
+  line-height: 1;
+}
+
+.demo-banner__text {
+  flex: 1 1 auto;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--pgz-text-primary);
+  line-height: 1.3;
+}
+
+.demo-banner__lede {
+  font-weight: 600;
+}
+
+.demo-banner__cta {
+  flex: 0 0 auto;
+  background: transparent;
+  border: none;
+  padding: 4px 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pgz-accent);
+  cursor: pointer;
+  font-family: inherit;
+  line-height: 1.2;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

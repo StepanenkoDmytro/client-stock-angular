@@ -3,7 +3,6 @@ import { Store, select } from '@ngrx/store';
 import { Observable, filter, map, of, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { ITag } from '../../../domain/tag.domain';
-import { createSystemTags } from '../model/system-tags.constants';
 import {
   addTag,
   deleteTag,
@@ -33,8 +32,12 @@ import {
  *       the server-shaped row into the store on success; on error the
  *       caller's subscribe handler shows a contextual snackbar.</li>
  *   <li><b>Demo mode</b> (`environment.demoData=true`) — short-circuits
- *       to a local store + 12 system tags seed so screenshot / story
- *       sessions stay self-contained.</li>
+ *       to a local store. No bootstrap seed of the 12 system tags — they
+ *       now land only when the user opts in via {@code DemoDataService.seed()}
+ *       (per task §4.3: system tags belong to the demo bucket, surface
+ *       through «Try with demo data» or Profile «Restore demo»). Until
+ *       then the tag store is empty and the tag-chip-row in Add Holding
+ *       (PR6) renders an inline «Create your first tag →» CTA.</li>
  * </ul>
  */
 @Injectable({ providedIn: 'root' })
@@ -129,9 +132,10 @@ export class TagsService {
   // ---- internal ----
 
   /**
-   * Seeds the store: localStorage cache shown instantly, then re-
-   * hydrated from `GET /api/v1/tags` in production. Demo mode seeds
-   * the 12 system tags on first launch when no snapshot exists.
+   * Bootstraps the store: localStorage cache shown instantly, then
+   * re-hydrated from `GET /api/v1/tags` in production. Demo mode just
+   * loads the cache (if any) and stops — system tags are no longer
+   * auto-seeded; the user opts in through {@link DemoDataService#seed}.
    */
   private bootstrap(forceReload = false): void {
     const raw = localStorage.getItem(TagsService.STORAGE_KEY);
@@ -143,7 +147,7 @@ export class TagsService {
         usedCache = true;
         if (environment.demoData) return;
       } catch {
-        // Corrupted snapshot — fall through.
+        // Corrupted snapshot — fall through to empty store / backend hydrate.
       }
     }
 
@@ -159,9 +163,12 @@ export class TagsService {
       return;
     }
 
-    // Demo: seed system tags when localStorage was empty.
-    const seeded: ITagsState = { tagsList: createSystemTags() };
-    this.store$.dispatch(loadTags({ state: seeded }));
+    // Demo mode with no cache — leave the store empty. Per task §4.3
+    // system tags belong to the demo bucket and seed only via
+    // DemoDataService.seed() once the user opts in.
+    if (!usedCache) {
+      this.store$.dispatch(loadTags({ state: { tagsList: [] } }));
+    }
   }
 
   /**

@@ -4,12 +4,14 @@ import { Router, RouterOutlet } from '@angular/router';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NavigationComponent } from './core/UI/components/navigation/navigation.component';
 import { OfflineBannerComponent } from './core/UI/components/offline-banner/offline-banner.component';
+import { DemoBannerComponent } from './pages/savings/components/demo-banner/demo-banner.component';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { DarkLightModeService } from './service/dark-light-mode.service';
 import { UserService } from './service/user.service';
 import { CUSTOM_ICONS } from './domain/icons.domain';
+import { SavingsTierService } from './core/state/savings-tier.service';
 
 
 const ANGULAR_MODULES = [
@@ -21,6 +23,7 @@ const UI_MODULES = [
   MatSlideToggleModule,
   NavigationComponent,
   OfflineBannerComponent,
+  DemoBannerComponent,
   MatIconModule,
   MatToolbarModule,
 ];
@@ -35,6 +38,9 @@ const UI_MODULES = [
   imports: [...ANGULAR_MODULES, ...UI_MODULES],
 })
 export class AppComponent implements OnInit {
+  // PR5: persistent demo banner mounted at app shell so it surfaces
+  // on every page when isDemoActive() is true. Banner gated by the
+  // same `!isAuthPage()` block as the offline banner.
   public title: string = 'PEGAZZO';
 
   private CUSTOM_SVG_ICONS = [
@@ -67,6 +73,7 @@ export class AppComponent implements OnInit {
     private darkLightModeService: DarkLightModeService,
     private userService: UserService,
     private router: Router,
+    private savingsTier: SavingsTierService,
   ) {
     this.CUSTOM_SVG_ICONS.forEach(icon => {
       this.iconRegistry.addSvgIcon(icon.name, this.sanitizer.bypassSecurityTrustResourceUrl(icon.url));
@@ -88,6 +95,14 @@ export class AppComponent implements OnInit {
     }
 
     this.userService.init();
+
+    // Persist the first-visit marker so subsequent app boots route the
+    // user through T1_LIGHT / T2 / T3 instead of T1_FIRST_VISIT.
+    // SavingsTierService snapshot was already captured at injection time
+    // above, so flipping the LS key here doesn't yank the «Try with demo
+    // data» hero from the user mid-session. Per
+    // `docs/notes/2026-05-savings-empty-states-ladder.md` §6 PR2.
+    this.savingsTier.markInstalled();
   }
 
   public isAuthPage(): boolean {

@@ -75,12 +75,23 @@
     </div>
 
     @if (totalCount() === 0) {
-      <!-- M5.6 PR4: ad-hoc `.hl__empty` → pgz-empty-state. -->
+      <!-- M5.6 PR4 → pgz-empty-state. PR6 close-out: stale «Reset demo
+           data» hint replaced with env-gated copy + anonymous Sign-in
+           CTA. -->
       <pgz-empty-state
         size="roomy"
         icon="📈"
         title="No positions yet"
-        hint="Press «Reset demo data» above to re-seed a few example positions."></pgz-empty-state>
+        [hint]="emptyHoldingsHint">
+        @if (showSignInCta()) {
+          <button cta
+                  type="button"
+                  class="hl__signin-cta"
+                  (click)="goToSignIn()">
+            Sign in to sync across devices
+          </button>
+        }
+      </pgz-empty-state>
     } @else {
       <!-- Result row -->
       <div class="hl__result-row">

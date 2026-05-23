@@ -21,6 +21,15 @@ export interface ITag {
   system: boolean;
   /** ISO-8601 timestamp. */
   createdAt: string;
+  /**
+   * `true` for tags materialised by `DemoDataService.seed()`. Per task
+   * §4.3, system tags are part of the demo bucket — they get seeded with
+   * `isDemo: true` alongside demo holdings/accounts and disappear together
+   * when the user clears the demo. User-created tags (`system: false`)
+   * stay `isDemo: false` so `clear()` never touches them.
+   * Per `docs/notes/2026-05-savings-empty-states-ladder.md` §4.3.
+   */
+  isDemo?: boolean;
 }
 
 /**

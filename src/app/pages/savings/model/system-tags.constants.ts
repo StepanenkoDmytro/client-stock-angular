@@ -10,12 +10,12 @@ import { ITag } from '../../../domain/tag.domain';
  *   Income type   → Fixed income / Dividend / Growth
  *   Purpose       → Pension / Emergency / Trading
  *
- * These are seeded into the tags store on first launch (when no `'tags-list'`
- * key exists in localStorage). Each invocation of `createSystemTags()`
- * produces fresh UUIDs, so the seeded IDs are stable post-bootstrap (lives
- * in localStorage) but differ across devices/browsers until backend sync
- * (M5) replaces them with canonical UUID constants from the backend
- * (ADR-0007 §152).
+ * These materialise into the tags store only when the user opts in to
+ * demo data via `DemoDataService.seed()` (per task §4.3 — system tags
+ * belong to the demo bucket). Each invocation produces fresh UUIDs, so
+ * the seeded IDs are stable for the lifetime of the demo (localStorage)
+ * but differ across devices / restores until backend sync (M5) replaces
+ * them with canonical UUID constants (ADR-0007 §152).
  *
  * Names match the ADR exactly (English). Localization (Ukrainian) is a
  * future i18n task — not in scope for this iteration.
@@ -59,8 +59,9 @@ const SYSTEM_TAG_SPECS: SystemTagSpec[] = [
 
 /**
  * Produces 12 system tags (3 roots + 9 leaves) with freshly generated UUIDs
- * and matching `createdAt` timestamps. Used by `TagsService.init()` on the
- * very first launch.
+ * and matching `createdAt` timestamps. Used by `DemoDataService.seed()`
+ * (wrapped via `createDemoSystemTags()` in `core/data/demo-fixtures.ts`
+ * to stamp `isDemo: true` on every row).
  */
 export function createSystemTags(): ITag[] {
   const now = new Date().toISOString();

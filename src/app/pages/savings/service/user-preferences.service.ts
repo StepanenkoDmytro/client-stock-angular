@@ -25,6 +25,52 @@ export class UserPreferencesService {
   );
 
   /**
+   * Local-only savings preferences bag. Frontend-only until the backend
+   * `UserPreferencesDto` gets the matching columns (mirrors the
+   * `IAccountV2.jurisdiction` pattern). Persists through `localStorage`
+   * for anonymous and authenticated users alike — anonymous-mode
+   * promotion (ADR-0012 signup-merge) reads the same key.
+   */
+  private static readonly LOCAL_PREFS_KEY = 'savings-prefs';
+
+  private readonly _discoveryRowHidden = signal<boolean>(
+    UserPreferencesService.readLocalPrefs().discoveryRowHidden === true,
+  );
+
+  /**
+   * `true` once the user dismissed the T2 Discovery row via the ✕ Hide
+   * button. Forever-dismiss per task §5.3 / design-roadmap §18 —
+   * persists across reloads, never auto-resurfaces.
+   */
+  public readonly discoveryRowHidden = this._discoveryRowHidden.asReadonly();
+
+  public setDiscoveryRowHidden(hidden: boolean): void {
+    this._discoveryRowHidden.set(hidden);
+    UserPreferencesService.writeLocalPrefs({ discoveryRowHidden: hidden });
+  }
+
+  private static readLocalPrefs(): { discoveryRowHidden?: boolean } {
+    try {
+      const raw = localStorage.getItem(UserPreferencesService.LOCAL_PREFS_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch {
+      return {};
+    }
+  }
+
+  private static writeLocalPrefs(prefs: { discoveryRowHidden?: boolean }): void {
+    try {
+      localStorage.setItem(
+        UserPreferencesService.LOCAL_PREFS_KEY,
+        JSON.stringify(prefs),
+      );
+    } catch {
+      // Storage quota / private mode — non-critical; in-memory signal
+      // still drives the current session.
+    }
+  }
+
+  /**
    * Idempotent fetch — issue once per session typically (from a top-level
    * component). Returns an observable for first-load awaiters; the
    * cached signal also updates.

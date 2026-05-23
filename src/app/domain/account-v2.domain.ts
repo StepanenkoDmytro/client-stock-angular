@@ -43,6 +43,13 @@ export interface IAccountV2 {
    * survives reloads without backend changes.
    */
   jurisdiction?: string;
+  /**
+   * `true` for rows materialised by `DemoDataService.seed()`. Same semantics
+   * as `IHolding.isDemo` — opt-in fixtures the user can wipe via
+   * `DemoDataService.clear()` without touching real accounts they added.
+   * Per `docs/notes/2026-05-savings-empty-states-ladder.md` §4.2.
+   */
+  isDemo?: boolean;
 }
 
 /**

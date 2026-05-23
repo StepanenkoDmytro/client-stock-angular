@@ -2,12 +2,13 @@ import { IAccountV2 } from '../../../domain/account-v2.domain';
 
 /**
  * Demo-mode account fixtures matching the holding seed in
- * `HoldingService.seedMockHoldings` — same {@code id} strings appear on
- * `IHolding.accountId`. Loaded into the store by {@link AccountsService}
- * when running with `environment.demoData === true` and the localStorage
- * cache is empty. Production builds NEVER consume this list (the backend
- * is the source of truth — `seedManualAccount` ships a single MANUAL row
- * on first signup instead).
+ * `core/data/demo-fixtures.ts` (`DEMO_HOLDING_SPECS`) — same {@code id}
+ * strings appear on `IHolding.accountId`. Materialised into the store by
+ * `DemoDataService.seed()` when the user opts in to demo data (wrapped
+ * by `buildDemoAccountsWithFlag()` so each row carries `isDemo: true`).
+ * Production builds NEVER consume this list — the backend is the source
+ * of truth there, and `seedManualAccount` ships a single MANUAL row on
+ * first signup instead.
  *
  * <p>Mix chosen to cover all five {@link AccountTypeV2} buckets PLUS at
  * least one STALE row so the header chip's notification badge and the

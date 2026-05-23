@@ -99,6 +99,14 @@
                           (action)="exportImport()"></pgz-settings-row>
     </pgz-settings-card>
 
+    <!-- PR5: Demo data lifecycle entry. Migrates into the Privacy &
+         data section once the redesign lands (per task §6 PR5). -->
+    <pgz-settings-card>
+        <pgz-settings-row label="Demo data"
+                          [value]="demoStatusValue()"
+                          (action)="onDemoDataAction()"></pgz-settings-row>
+    </pgz-settings-card>
+
     <pgz-settings-card [disabled]="true">
         <pgz-settings-row label="Write to us" [muted]="true"></pgz-settings-row>
         <pgz-settings-row label="Rate the app" [muted]="true"></pgz-settings-row>

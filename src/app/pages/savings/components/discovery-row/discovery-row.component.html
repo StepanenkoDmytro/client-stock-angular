@@ -1,0 +1,23 @@
+<section class="discovery">
+  <header class="discovery__header">
+    <h2 class="discovery__caption">TRACK MORE TYPES?</h2>
+    <button type="button"
+            class="discovery__hide"
+            (click)="onHide()"
+            aria-label="Hide discovery row">
+      ✕ Hide
+    </button>
+  </header>
+
+  <div class="discovery__chips">
+    @for (chip of chips(); track chip.assetClass) {
+      <button type="button"
+              class="discovery__chip"
+              [style.--chip-tint]="'var(' + chip.tintVar + ')'"
+              (click)="onPickClass(chip.assetClass)">
+        <mat-icon class="discovery__chip-icon">{{ chip.icon }}</mat-icon>
+        <span class="discovery__chip-label">+ {{ chip.label }}</span>
+      </button>
+    }
+  </div>
+</section>

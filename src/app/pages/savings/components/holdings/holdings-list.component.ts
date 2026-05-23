@@ -1,4 +1,6 @@
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../../../environments/environment';
+import { AnonymousModeService } from '../../../../core/anonymous-mode/anonymous-mode.service';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -99,6 +101,16 @@ export class HoldingsListComponent implements OnInit {
   private readonly positionsSvc = inject(PositionsService);
   private readonly tags = inject(TagsService);
   private readonly bottomSheet = inject(MatBottomSheet);
+  private readonly anonymous = inject(AnonymousModeService);
+
+  /** Demo-mode build flag — same gating as SavingsComponent (PR6). */
+  public readonly demoEnabled: boolean = environment.demoData === true;
+  public readonly showSignInCta = computed(
+    () => !this.demoEnabled && this.anonymous.isAnonymous(),
+  );
+  public readonly emptyHoldingsHint: string = this.demoEnabled
+    ? 'Add your first holding from + below, or try demo data'
+    : 'Add your first holding from + below';
 
   private readonly rawHoldings = this.store.selectSignal(selectHoldingsList);
   private readonly rawTags = this.store.selectSignal(selectTagsList);
@@ -297,6 +309,11 @@ export class HoldingsListComponent implements OnInit {
 
   public goBack(): void {
     this.router.navigate(['/savings']);
+  }
+
+  /** Empty-state CTA for anonymous prod users (PR6). */
+  public goToSignIn(): void {
+    this.router.navigate(['/auth']);
   }
 
   public resetDemo(): void {

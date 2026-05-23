@@ -3,7 +3,6 @@ import { Store, select } from '@ngrx/store';
 import { Observable, filter, map, of, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { IAccountV2 } from '../../../domain/account-v2.domain';
-import { buildDemoAccounts } from '../model/account-defaults.constants';
 import {
   addAccount,
   deleteAccount,
@@ -34,29 +33,16 @@ import {
  *       the server-shaped row on success; caller's subscribe handler
  *       shows a contextual snackbar on error.</li>
  *   <li><b>Demo mode</b> (`environment.demoData=true`) — short-circuits
- *       to a local store. No seed list — the holdings demo seed inlines
- *       its own per-account labels.</li>
+ *       to a local store. No bootstrap seed — demo accounts land in the
+ *       store only when the user opts in via {@code DemoDataService.seed()}
+ *       («Try with demo data» link / Profile «Restore demo»). Per
+ *       `docs/notes/2026-05-savings-empty-states-ladder.md` §6 PR1
+ *       (closes bug B2: post-wipe `SEED_VERSION` auto-restore).</li>
  * </ul>
  */
 @Injectable({ providedIn: 'root' })
 export class AccountsService {
   private static readonly STORAGE_KEY = 'accounts-list';
-  private static readonly SEED_VERSION_KEY = 'accounts-seed-version';
-
-  /**
-   * Bumps every time {@link buildDemoAccounts} changes shape or membership
-   * in a way that would clash with the existing demo-cache. Same idea as
-   * `HoldingService.SEED_VERSION` — mismatch wipes the cached list so
-   * dev users automatically pick up new fixtures instead of staring at
-   * a stale snapshot from yesterday's session.
-   *
-   *  v1: 7 fixtures introduced with Stats Task 1 (acc-ibkr / acc-robinhood /
-   *      acc-bybit-spot / acc-bybit-earn / acc-trezor / acc-monobank / manual).
-   *
-   * Production builds never consult this — the backend is the source of
-   * truth there.
-   */
-  private static readonly SEED_VERSION = 1;
 
   private readonly store$ = inject(Store<{ accounts: IAccountsState }>);
   private readonly api = inject(AccountsApiService);
@@ -196,21 +182,16 @@ export class AccountsService {
 
   private bootstrap(forceReload = false): void {
     const raw = localStorage.getItem(AccountsService.STORAGE_KEY);
-    const cachedVersion = Number(
-      localStorage.getItem(AccountsService.SEED_VERSION_KEY) ?? '0',
-    );
-    const seedOutdated =
-      environment.demoData && cachedVersion !== AccountsService.SEED_VERSION;
 
     let usedCache = false;
-    if (raw && !seedOutdated) {
+    if (raw) {
       try {
         const state = JSON.parse(raw) as IAccountsState;
         this.store$.dispatch(loadAccounts({ state }));
         usedCache = true;
         if (environment.demoData) return;
       } catch {
-        // Corrupted snapshot — fall through.
+        // Corrupted snapshot — fall through to empty store / backend hydrate.
       }
     }
 
@@ -226,22 +207,14 @@ export class AccountsService {
       return;
     }
 
-    if (seedOutdated) {
-      // Wipe stale demo cache so the new fixtures take over cleanly —
-      // mirrors the pattern in HoldingService.bootstrap.
-      localStorage.removeItem(AccountsService.STORAGE_KEY);
-    }
-
-    // Demo mode with empty (or wiped) cache — seed the 7 fixtures from
-    // account-defaults.constants. Their ids match the literals used in
-    // HoldingService.seedMockHoldings, so widgets that join holdings ×
-    // accounts (Stats Task 1) have something to render out of the box.
+    // Demo mode with no cache — leave the store empty. Pre-PR1 we would
+    // restore the 7 fixtures here on every wipe via a SEED_VERSION
+    // mismatch; that path conflicted with the user's intent when they
+    // ran `localStorage.clear()` to actually empty the store (bug B2,
+    // closed by this PR). Demo accounts now appear only when the user
+    // explicitly opts in via {@code DemoDataService.seed()}.
     if (!usedCache) {
-      this.store$.dispatch(loadAccounts({ state: { accountsList: buildDemoAccounts() } }));
-      localStorage.setItem(
-        AccountsService.SEED_VERSION_KEY,
-        String(AccountsService.SEED_VERSION),
-      );
+      this.store$.dispatch(loadAccounts({ state: { accountsList: [] } }));
     }
   }
 
