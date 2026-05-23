@@ -1,11 +1,558 @@
-<!-- Portfolio analytics — Stats Task 1 (account/class breakdown widgets).
-     Sits ABOVE legacy savings-statistic per the task spec default
-     (docs/notes/2026-05-stats-1-account-breakdowns.md §10). Task 2 / 3
-     append their widgets into the same container component. -->
-<pgz-portfolio-stats></pgz-portfolio-stats>
+<section class="st" aria-label="Statistics">
+  <!-- Page header. "Updated Xh ago" stays as a placeholder copy until
+       we wire a real "last sync" signal — same pattern Savings header
+       uses today (see savings/components/holdings/portfolio-summary). -->
+  <header class="st__header">
+    <h1 class="st__title">Statistics</h1>
+    <span class="st__updated" aria-hidden="true">Updated just now</span>
+  </header>
 
-@if(isSpendingFrame) {
-  <!-- <pgz-spending-statistic></pgz-spending-statistic> -->
-} @else {
-  <pgz-savings-statistic></pgz-savings-statistic>
-}
+  <!-- Sticky anchor nav. Buttons (not <a> hash-links) — we manage scroll
+       with smooth behaviour ourselves to avoid the URL bar growing a
+       fragment on every tap. role="tablist" approximates the semantic
+       even though the sections live on one scrollable page. -->
+  <nav class="st__anchors" role="tablist" aria-label="Statistics sections">
+    @for (anchor of anchors; track anchor.id) {
+      <button
+        type="button"
+        role="tab"
+        class="st__anchor"
+        [class.st__anchor--active]="activeSection() === anchor.id"
+        [attr.aria-selected]="activeSection() === anchor.id"
+        [attr.aria-controls]="anchor.id"
+        (click)="scrollTo(anchor.id)">
+        {{ anchor.label }}
+        <span class="st__anchor-underline" aria-hidden="true"></span>
+      </button>
+    }
+  </nav>
+
+  <!-- ====== Section 1 · Performance ====== -->
+  <!-- DEMO: every card in this section is hardcoded per mockup §07
+       (design/analytics/07-statistics-performance-mobile.svg). Numbers
+       match Figma side-by-side. Replace with real data once: cost-
+       basis-with-FX-at-buy-date lands (Hero), price-history endpoint
+       ships (Period toggle), CashFlow / IAccountV2.yieldApr arrive
+       (Income), per-instrument gain ranking lands (Top movers). -->
+  <article
+    #sectionEl
+    id="performance"
+    class="st__section"
+    role="tabpanel"
+    aria-labelledby="performance-caption">
+    <p id="performance-caption" class="st__caption">
+      PERFORMANCE · HOW YOUR PORTFOLIO EARNS
+    </p>
+
+    <!-- Hero: REAL RETURN · +$18,400 (07 §HERO). Big positive number
+         on the left, breakdown (Nominal / Inflation / Real) on the
+         right. The "≈ 4 months of expenses" sub-line is a relatable
+         framing — not "+9.2%", but "what does that feel like". -->
+    <div class="st__card pf-hero">
+      <div class="pf-hero__left">
+        <p class="pf-hero__caption">YOU'RE UP IN REAL TERMS</p>
+        <p class="pf-hero__big">+$18,400</p>
+        <p class="pf-hero__sub">≈ 4 months of your living expenses</p>
+      </div>
+      <div class="pf-hero__right">
+        <div class="pf-hero__row">
+          <span class="pf-hero__row-label">Nominal</span>
+          <span class="pf-hero__row-value pf-hero__row-value--pos">+$25,200</span>
+        </div>
+        <div class="pf-hero__row">
+          <span class="pf-hero__row-label">Inflation</span>
+          <span class="pf-hero__row-value pf-hero__row-value--neg">−$6,800</span>
+        </div>
+        <div class="pf-hero__row pf-hero__row--total">
+          <span class="pf-hero__row-label">Real</span>
+          <span class="pf-hero__row-value pf-hero__row-value--pos">+$18,400</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Period toggle — 6 segments, 1Y active. Non-interactive in
+         this PR; once /portfolio/history ships, this binds to a
+         real signal that swaps the Hero number. -->
+    <div class="pf-period" role="tablist" aria-label="Time period">
+      @for (p of ['1M','3M','1Y','3Y','5Y','All']; track p) {
+        <button
+          type="button"
+          role="tab"
+          class="pf-period__seg"
+          [class.pf-period__seg--active]="p === '1Y'"
+          [attr.aria-selected]="p === '1Y'"
+          disabled>
+          {{ p }}
+        </button>
+      }
+    </div>
+
+    <!-- WHERE GAINS CAME FROM — donut + 4-row legend. Donut arcs
+         are pre-computed for 44/30/18/8 splits using SVG circle
+         dash-offset (simpler than authoring 4 arc paths). Centre
+         shows total gain. -->
+    <div class="st__card pf-source">
+      <p class="pf-source__caption">WHERE GAINS CAME FROM</p>
+      <div class="pf-source__body">
+        <svg
+          class="pf-source__donut"
+          viewBox="0 0 132 132"
+          aria-label="$25,200 total gain by source">
+          <!-- Circumference = 2π × 30 = 188.5. We use stroke-dasharray
+               "X 188.5" to draw an X-long arc, and rotate each ring
+               -90° so the first segment starts at top. -->
+          <g transform="rotate(-90 66 66)">
+            <!-- Real estate 44% → 82.94 -->
+            <circle cx="66" cy="66" r="30"
+                    fill="none" stroke="#BA7517" stroke-width="22"
+                    stroke-dasharray="82.94 188.5"
+                    stroke-dashoffset="0"/>
+            <!-- Crypto 30% → 56.55, offset by -82.94 -->
+            <circle cx="66" cy="66" r="30"
+                    fill="none" stroke="#7F77DD" stroke-width="22"
+                    stroke-dasharray="56.55 188.5"
+                    stroke-dashoffset="-82.94"/>
+            <!-- Stock 18% → 33.93, offset by -(82.94 + 56.55) -->
+            <circle cx="66" cy="66" r="30"
+                    fill="none" stroke="#378ADD" stroke-width="22"
+                    stroke-dasharray="33.93 188.5"
+                    stroke-dashoffset="-139.49"/>
+            <!-- Interest 8% → 15.08, offset by -(82.94 + 56.55 + 33.93) -->
+            <circle cx="66" cy="66" r="30"
+                    fill="none" stroke="#639922" stroke-width="22"
+                    stroke-dasharray="15.08 188.5"
+                    stroke-dashoffset="-173.42"/>
+          </g>
+          <text x="66" y="62" text-anchor="middle" class="pf-source__donut-total">
+            $25.2k
+          </text>
+          <text x="66" y="76" text-anchor="middle" class="pf-source__donut-sub">
+            total gain
+          </text>
+        </svg>
+        <ul class="pf-source__legend">
+          <li class="pf-source__legend-row">
+            <span class="pf-source__dot" style="background:#BA7517"></span>
+            <span class="pf-source__name">Real estate</span>
+            <span class="pf-source__value">+$11,000</span>
+            <span class="pf-source__share">44%</span>
+          </li>
+          <li class="pf-source__legend-row">
+            <span class="pf-source__dot" style="background:#7F77DD"></span>
+            <span class="pf-source__name">Crypto growth</span>
+            <span class="pf-source__value">+$7,500</span>
+            <span class="pf-source__share">30%</span>
+          </li>
+          <li class="pf-source__legend-row">
+            <span class="pf-source__dot" style="background:#378ADD"></span>
+            <span class="pf-source__name">Stock + divs</span>
+            <span class="pf-source__value">+$4,500</span>
+            <span class="pf-source__share">18%</span>
+          </li>
+          <li class="pf-source__legend-row">
+            <span class="pf-source__dot" style="background:#639922"></span>
+            <span class="pf-source__name">Interest</span>
+            <span class="pf-source__value">+$2,200</span>
+            <span class="pf-source__share">8%</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- TOP MOVERS · 1Y — 2 rows: best + worst (07 §TOP MOVERS). -->
+    <div class="st__card pf-movers">
+      <p class="pf-movers__caption">TOP MOVERS · 1Y</p>
+      <div class="pf-movers__row">
+        <span class="pf-movers__label">▲ Best</span>
+        <span class="pf-movers__name">AAPL</span>
+        <span class="pf-movers__pct pf-movers__pct--pos">+34%</span>
+        <span class="pf-movers__amt">+$1,840</span>
+      </div>
+      <div class="pf-movers__row">
+        <span class="pf-movers__label">▼ Worst</span>
+        <span class="pf-movers__name">Apt#2</span>
+        <span class="pf-movers__pct pf-movers__pct--neg">−2%</span>
+        <span class="pf-movers__amt">−$1,200</span>
+      </div>
+    </div>
+
+    <!-- INCOME · YEAR TO DATE — merged dividends + platform yields
+         (07 §INCOME). Row 1 is tappable in the mockup ("View
+         schedule →"); here it shows a chevron — schedule screen
+         (mockup §10) lands once DIVIDEND data exists. -->
+    <div class="st__card pf-income">
+      <p class="pf-income__caption">INCOME · YEAR TO DATE</p>
+      <button
+        type="button"
+        class="pf-income__row pf-income__row--tappable"
+        (click)="openDividendSchedule()">
+        <span class="pf-income__name">💰 Dividends · YTD</span>
+        <span class="pf-income__value pf-income__value--pos">$320 ›</span>
+      </button>
+      <p class="pf-income__sub">5 holdings · 4 events · monthly schedule</p>
+      <div class="pf-income__divider"></div>
+      <div class="pf-income__row">
+        <span class="pf-income__name">🏦 Mono deposit · UAH</span>
+        <span class="pf-income__value pf-income__value--pos">12.0%</span>
+      </div>
+      <p class="pf-income__sub">+€550/yr on €4,600</p>
+      <div class="pf-income__divider"></div>
+      <div class="pf-income__row">
+        <span class="pf-income__name">⚡ Bybit Earn · USDT</span>
+        <span class="pf-income__value pf-income__value--pos">5.2%</span>
+      </div>
+      <p class="pf-income__sub">+$416/yr on $8,000 · 30d lock</p>
+      <div class="pf-income__divider"></div>
+      <div class="pf-income__row">
+        <span class="pf-income__name">📈 IBKR cash idle · USD</span>
+        <span class="pf-income__value pf-income__value--warn">0%</span>
+      </div>
+      <p class="pf-income__sub pf-income__sub--warn">
+        missing ~$140/yr at typical broker yield
+      </p>
+    </div>
+  </article>
+
+  <!-- ====== Section 2 · Risk ====== -->
+  <article
+    #sectionEl
+    id="risk"
+    class="st__section"
+    role="tabpanel"
+    aria-labelledby="risk-caption">
+    <p id="risk-caption" class="st__caption">
+      RISK · WHAT TO KEEP AN EYE ON
+    </p>
+
+    <!-- DEMO: Risk section per mockup §08 v3. The earlier 4-widget
+         layout from §04 (SPOF + Concentration + Jurisdiction +
+         Currency exposure) was explicitly retired by the designer
+         (§08 v3 «Removed per user feedback»). v3 keeps 3 cards:
+         Volatility profile (with per-class breakdown + Stress test
+         drill-down), Custody mix (with trend sparkline), Data
+         freshness (stale manual valuations). -->
+
+    <!-- VOLATILITY PROFILE — donut + tier legend + per-class table
+         + Stress test link. Donut split 20% Low / 72% Medium / 8%
+         High, total $204k centred. -->
+    <div class="st__card rk-vol">
+      <p class="rk-vol__caption">VOLATILITY PROFILE</p>
+      <div class="rk-vol__top">
+        <svg class="rk-vol__donut" viewBox="0 0 132 132"
+             aria-label="$204k by volatility tier">
+          <g transform="rotate(-90 66 66)">
+            <!-- Low 20% → 37.70 dash -->
+            <circle cx="66" cy="66" r="30"
+                    fill="none" stroke="#639922" stroke-width="22"
+                    stroke-dasharray="37.70 188.5"
+                    stroke-dashoffset="0"/>
+            <!-- Medium 72% → 135.72, offset -37.70 -->
+            <circle cx="66" cy="66" r="30"
+                    fill="none" stroke="#BA7517" stroke-width="22"
+                    stroke-dasharray="135.72 188.5"
+                    stroke-dashoffset="-37.70"/>
+            <!-- High 8% → 15.08, offset -(37.70+135.72) -->
+            <circle cx="66" cy="66" r="30"
+                    fill="none" stroke="#A32D2D" stroke-width="22"
+                    stroke-dasharray="15.08 188.5"
+                    stroke-dashoffset="-173.42"/>
+          </g>
+          <text x="66" y="64" text-anchor="middle" class="rk-vol__donut-total">
+            $204k
+          </text>
+          <text x="66" y="78" text-anchor="middle" class="rk-vol__donut-sub">
+            total
+          </text>
+        </svg>
+        <ul class="rk-vol__legend">
+          <li class="rk-vol__legend-row">
+            <span class="rk-vol__chip" style="background:#639922"></span>
+            <span class="rk-vol__name">Low</span>
+            <span class="rk-vol__pct">20%</span>
+            <span class="rk-vol__amount">$41k</span>
+          </li>
+          <li class="rk-vol__legend-row">
+            <span class="rk-vol__chip" style="background:#BA7517"></span>
+            <span class="rk-vol__name">Medium</span>
+            <span class="rk-vol__pct">72%</span>
+            <span class="rk-vol__amount">$147k</span>
+          </li>
+          <li class="rk-vol__legend-row">
+            <span class="rk-vol__chip" style="background:#A32D2D"></span>
+            <span class="rk-vol__name">High</span>
+            <span class="rk-vol__pct">8%</span>
+            <span class="rk-vol__amount">$17k</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="rk-vol__divider"></div>
+      <p class="rk-vol__subcaption">PER CLASS</p>
+
+      <div class="rk-vol__class-row">
+        <span class="rk-vol__class-name">🏠 Real estate</span>
+        <div class="rk-vol__tier-track">
+          <div class="rk-vol__tier-fill" style="width:100%;background:#BA7517"></div>
+        </div>
+        <span class="rk-vol__tier-label">Medium</span>
+        <span class="rk-vol__class-pct">54%</span>
+      </div>
+      <div class="rk-vol__class-row">
+        <span class="rk-vol__class-name">📈 Stock/ETF</span>
+        <div class="rk-vol__tier-track">
+          <div class="rk-vol__tier-fill" style="width:100%;background:#BA7517"></div>
+        </div>
+        <span class="rk-vol__tier-label">Medium</span>
+        <span class="rk-vol__class-pct">18%</span>
+      </div>
+      <div class="rk-vol__class-row">
+        <span class="rk-vol__class-name">⚡ Crypto</span>
+        <div class="rk-vol__tier-track">
+          <!-- mixed split: 31% Low + 69% High -->
+          <div class="rk-vol__tier-fill" style="width:31%;background:#639922"></div>
+          <div class="rk-vol__tier-fill" style="width:69%;background:#A32D2D"></div>
+        </div>
+        <span class="rk-vol__tier-label">Mixed</span>
+        <span class="rk-vol__class-pct">13%</span>
+      </div>
+      <div class="rk-vol__class-row">
+        <span class="rk-vol__class-name">🏦 Deposits</span>
+        <div class="rk-vol__tier-track">
+          <div class="rk-vol__tier-fill" style="width:100%;background:#639922"></div>
+        </div>
+        <span class="rk-vol__tier-label">Low</span>
+        <span class="rk-vol__class-pct">13%</span>
+      </div>
+      <div class="rk-vol__class-row">
+        <span class="rk-vol__class-name">💵 Cash</span>
+        <div class="rk-vol__tier-track">
+          <div class="rk-vol__tier-fill" style="width:100%;background:#639922"></div>
+        </div>
+        <span class="rk-vol__tier-label">Low</span>
+        <span class="rk-vol__class-pct">2%</span>
+      </div>
+
+      <div class="rk-vol__divider"></div>
+      <div class="rk-vol__footer">
+        <span class="rk-vol__hint">
+          Diversified portfolios typically keep high-risk under 20%.
+        </span>
+        <button type="button" class="rk-vol__stress-link"
+                (click)="openStressTest()">
+          Stress test →
+        </button>
+      </div>
+    </div>
+
+    <!-- CRYPTO CUSTODY MIX — same content as before plus a tiny
+         trend sparkline in the top-right corner showing exchange-
+         share dropped from 85% (cold-wallet migration in progress). -->
+    <div class="st__card rk-cu">
+      <header class="rk-cu__header">
+        <p class="rk-cu__caption">CRYPTO CUSTODY MIX</p>
+        <span class="rk-cu__trend" aria-label="Exchange share down from 85%">
+          <svg viewBox="0 0 48 12" class="rk-cu__spark">
+            <polyline points="0,3 8,4 16,5 24,5 32,6 40,6"
+                      stroke="#0F6E56" stroke-width="1.5" fill="none"/>
+          </svg>
+          <span class="rk-cu__trend-text">↓ from 85%</span>
+        </span>
+      </header>
+      <div class="rk-cu__bar">
+        <div class="rk-cu__seg" style="width:77%;background:#BA7517"></div>
+        <div class="rk-cu__seg" style="width:23%;background:#3D8270"></div>
+      </div>
+      <div class="rk-cu__legend">
+        <span class="rk-cu__item">
+          <span class="rk-cu__chip" style="background:#BA7517"></span>
+          Bybit (exchange) <strong>77%</strong>
+        </span>
+        <span class="rk-cu__item">
+          <span class="rk-cu__chip" style="background:#3D8270"></span>
+          Trezor (cold) <strong>23%</strong>
+        </span>
+      </div>
+      <p class="rk-cu__copy">
+        Long-term crypto is typically held 40%+ on cold/self-custody.
+      </p>
+    </div>
+
+    <!-- DATA FRESHNESS — stale manual valuations widget. Threshold
+         hardcoded at 6 months per §08 v3 open question; «Update →»
+         opens inline-edit on the holding (not wired in demo). -->
+    <div class="st__card rk-df">
+      <p class="rk-df__caption">DATA FRESHNESS</p>
+      <div class="rk-df__row">
+        <span class="rk-df__name">🏠 Apt Kyiv</span>
+        <span class="rk-df__chip">⚠ stale 14mo</span>
+      </div>
+      <p class="rk-df__sub">Last updated Mar 2025 · $110,000</p>
+      <div class="rk-df__divider"></div>
+      <div class="rk-df__footer">
+        <span class="rk-df__hint">
+          Industry: revalue real estate every 6-12 months.
+        </span>
+        <button type="button" class="rk-df__update-link" disabled>
+          Update →
+        </button>
+      </div>
+    </div>
+  </article>
+
+  <!-- ====== Section 3 · Goals ====== -->
+  <!-- DEMO: every card here is hardcoded per mockup §09
+       (design/analytics/09-statistics-goals-mobile.svg). Replace
+       once /api/v1/goals + /projections/* ship (Phase 8 / M5.7) —
+       hero target, saving rate, goals list, gap-analysis, forward
+       projection and what-if all bind to real data then. -->
+  <article
+    #sectionEl
+    id="goals"
+    class="st__section"
+    role="tabpanel"
+    aria-labelledby="goals-caption">
+    <p id="goals-caption" class="st__caption">
+      GOALS · WHERE YOUR CAPITAL IS HEADING
+    </p>
+
+    <!-- Hero: AT YOUR CURRENT PACE → 🏠 Apartment Kyiv · Feb 2029 -->
+    <div class="st__card gl-hero">
+      <p class="gl-hero__caption">AT YOUR CURRENT PACE</p>
+      <p class="gl-hero__big">🏠 Apartment Kyiv · Feb 2029</p>
+      <p class="gl-hero__sub">2.6 years out at €640/mo · 6% realistic return</p>
+    </div>
+
+    <!-- Saving rate header — single number + ⓘ how detected -->
+    <div class="st__card gl-saving">
+      <p class="gl-saving__caption">YOU SAVE ON AVERAGE</p>
+      <div class="gl-saving__row">
+        <span class="gl-saving__amount">~€640/mo</span>
+        <button type="button" class="gl-saving__info" disabled>
+          ⓘ how detected
+        </button>
+      </div>
+    </div>
+
+    <!-- YOUR GOALS — list. Add CTA top-right; progress bars accent
+         blue for in-flight, green for completed. -->
+    <div class="st__card gl-list">
+      <header class="gl-list__header">
+        <p class="gl-list__caption">YOUR GOALS</p>
+        <button type="button" class="gl-list__add" disabled>+ Add</button>
+      </header>
+
+      <div class="gl-list__item">
+        <div class="gl-list__top">
+          <span class="gl-list__name">🏠 Apartment Kyiv</span>
+          <span class="gl-list__pct">60%</span>
+        </div>
+        <div class="gl-list__bar-track">
+          <div class="gl-list__bar-fill" style="width: 60%"></div>
+        </div>
+        <div class="gl-list__bottom">
+          <span class="gl-list__progress">€36,000 of €60,000</span>
+          <span class="gl-list__eta">Feb 2029 at pace</span>
+        </div>
+      </div>
+
+      <div class="gl-list__divider"></div>
+
+      <div class="gl-list__item">
+        <div class="gl-list__top">
+          <span class="gl-list__name">🛡 Emergency fund</span>
+          <span class="gl-list__pct gl-list__pct--done">✓ 100%</span>
+        </div>
+        <div class="gl-list__bar-track">
+          <div class="gl-list__bar-fill gl-list__bar-fill--done"
+               style="width: 100%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GAP TO GOAL · APARTMENT KYIV — adaptive widget (visible
+         here because the demo state has the user behind pace). -->
+    <div class="st__card gl-gap">
+      <p class="gl-gap__caption">GAP TO GOAL · APARTMENT KYIV</p>
+      <div class="gl-gap__row">
+        <span class="gl-gap__label">Need to save</span>
+        <span class="gl-gap__value">€800/mo</span>
+        <span class="gl-gap__hint">to reach by Feb 2028</span>
+      </div>
+      <div class="gl-gap__row">
+        <span class="gl-gap__label">Currently</span>
+        <span class="gl-gap__value">€640/mo</span>
+      </div>
+      <div class="gl-gap__divider"></div>
+      <div class="gl-gap__row gl-gap__row--short">
+        <span class="gl-gap__label gl-gap__label--warn">Short by</span>
+        <span class="gl-gap__value gl-gap__value--warn">€160/mo</span>
+        <span class="gl-gap__hint">→ Feb 2029 at pace</span>
+      </div>
+    </div>
+
+    <!-- FORWARD PROJECTION · 10 YEARS — 3 scenarios on one chart.
+         Coordinates copied from mockup §09 SVG (y-flipped because
+         our SVG origin is top-left). End-of-line labels mirror the
+         mockup. -->
+    <div class="st__card gl-proj">
+      <p class="gl-proj__caption">FORWARD PROJECTION · 10 YEARS</p>
+      <svg class="gl-proj__chart" viewBox="0 0 320 130"
+           aria-label="10-year forward projection, 3 scenarios">
+        <!-- y-axis tick labels -->
+        <text x="28" y="14" text-anchor="end" class="gl-proj__axis">$600k</text>
+        <text x="28" y="50" text-anchor="end" class="gl-proj__axis">$400k</text>
+        <text x="28" y="86" text-anchor="end" class="gl-proj__axis">$200k</text>
+        <!-- grid -->
+        <line x1="34" y1="14" x2="240" y2="14" stroke="#F1EFE8" stroke-width="0.5"/>
+        <line x1="34" y1="50" x2="240" y2="50" stroke="#F1EFE8" stroke-width="0.5"/>
+        <line x1="34" y1="86" x2="240" y2="86" stroke="#F1EFE8" stroke-width="0.5"/>
+        <!-- 3 projection lines (8% green, 6% blue, 4% grey dashed) -->
+        <polyline
+          points="34,90 60,80 86,70 112,60 138,50 164,40 190,30 216,20 240,10"
+          fill="none" stroke="#0F6E56" stroke-width="2"/>
+        <polyline
+          points="34,90 60,85 86,78 112,70 138,60 164,50 190,40 216,32 240,24"
+          fill="none" stroke="#185FA5" stroke-width="2"/>
+        <polyline
+          points="34,90 60,87 86,82 112,76 138,70 164,62 190,54 216,46 240,40"
+          fill="none" stroke="#888780" stroke-width="2" stroke-dasharray="3 2"/>
+        <!-- goal line €60k -->
+        <line x1="34" y1="78" x2="240" y2="78"
+              stroke="#BA7517" stroke-width="1" stroke-dasharray="2 2"/>
+        <text x="244" y="81" class="gl-proj__axis" fill="#BA7517">€60k goal</text>
+        <!-- x-axis -->
+        <line x1="34" y1="96" x2="240" y2="96" stroke="#D3D1C7"/>
+        <text x="34" y="110" class="gl-proj__axis">2026</text>
+        <text x="137" y="110" text-anchor="middle" class="gl-proj__axis">2031</text>
+        <text x="240" y="110" text-anchor="end" class="gl-proj__axis">2036</text>
+        <!-- end-of-line labels -->
+        <text x="244" y="13" class="gl-proj__end gl-proj__end--pos">8% $560k</text>
+        <text x="244" y="27" class="gl-proj__end gl-proj__end--blue">6% $470k</text>
+        <text x="244" y="43" class="gl-proj__end gl-proj__end--muted">4% $390k</text>
+      </svg>
+      <p class="gl-proj__footer">
+        3 scenarios · long-term equity returns · inflation toggle ⓘ
+      </p>
+    </div>
+
+    <!-- WHAT IF I SAVE MORE? — slider mock (non-interactive). Thumb
+         frozen at +€200/mo per mockup §09 §What-if. -->
+    <div class="st__card gl-whatif">
+      <p class="gl-whatif__caption">WHAT IF I SAVE MORE?</p>
+      <div class="gl-whatif__slider" aria-hidden="true">
+        <div class="gl-whatif__track"></div>
+        <div class="gl-whatif__track-fill"></div>
+        <div class="gl-whatif__thumb"></div>
+        <div class="gl-whatif__thumb-label">+€200/mo</div>
+      </div>
+      <div class="gl-whatif__legend">
+        <span>+€0</span>
+        <span>+€500/mo</span>
+      </div>
+      <p class="gl-whatif__result">
+        Apartment reached
+        <span class="gl-whatif__delta">10 months earlier</span>
+      </p>
+    </div>
+  </article>
+</section>

@@ -1,60 +1,1072 @@
+/* /statistic — 3-section dashboard shell.
+ *
+ * Reference: design/analytics/04-statistics-3-sections-mobile.svg
+ *  • Sticky anchor nav at top of the scroll container.
+ *  • Section caption (small-caps grey) above each section's cards.
+ *  • Card == surface, 16px radius, 1px border, sits on the page bg
+ *    (`--pgz-app-bg` — #F1EFE8 in light, #1A1715 in dark).
+ *
+ * All colours come from the `--pgz-*` / `--color-*` token system
+ * (styles.scss). No inline hex anywhere — overrides happen via theme
+ * tokens, not by editing this file.
+ */
 :host {
   display: block;
-  // height: 100%;
+  background: var(--pgz-app-bg);
+  min-height: 100%;
 }
 
-.header-stock {
+.st {
   display: flex;
-  justify-content: space-between;
-}
+  flex-direction: column;
+  padding: 0 0 24px;
 
-.scroll-list {
-  overflow-y: scroll;
-}
-
-.donut {
-  display: block;
-  margin: auto;
-}
-
-.btn {
-  background: rgba(38, 166, 153, 0.763);
-  border: none;
-  margin-top: 5px;
-}
-
-.btn p {
-  color: var(--black-color);
-}
-
-.bar {
-  display: block;
-  margin: 10px;
-}
-
-.statistic {
-  &--year {
-    overflow-y: scroll;
-    height: 30vh;
+  &__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 16px 20px 4px;
   }
 
-  &--month {
-    .mat-expansion-panel-header-description {
-        flex-grow: 0;
-    }
-  } 
-}
+  &__title {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--pgz-text-primary);
+    letter-spacing: -0.01em;
+  }
 
-.icon-wrapper {
-    border: 2px solid var(--accept-color);
-    border-radius: 50%;
+  &__updated {
+    font-size: 10px;
+    color: var(--pgz-text-muted);
+  }
+
+  /* Sticky anchor row. Sticks under the OS status bar / app header.
+     backdrop-filter blur is intentional — keeps content underneath
+     legible without a hard opaque bar that fights with the page bg. */
+  &__anchors {
+    position: sticky;
+    top: 0;
+    z-index: 5;
     display: flex;
-    justify-content: center;
-    transform: scale(0.7);
+    gap: 24px;
+    padding: 10px 20px;
+    background: color-mix(in srgb, var(--pgz-app-bg) 88%, transparent);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-bottom: 0.5px solid var(--pgz-divider);
+  }
 
-    &--icon {
-        color:var(--accept-color);
+  &__anchor {
+    position: relative;
+    background: none;
+    border: 0;
+    padding: 4px 0 6px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--pgz-text-muted);
+    cursor: pointer;
+    transition: color 120ms ease;
+
+    &:focus-visible {
+      outline: 2px solid var(--pgz-accent);
+      outline-offset: 2px;
+      border-radius: 4px;
     }
+
+    &--active {
+      color: var(--pgz-text-primary);
+      font-weight: 600;
+
+      .st__anchor-underline {
+        opacity: 1;
+        transform: scaleX(1);
+      }
+    }
+  }
+
+  &__anchor-underline {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: var(--pgz-text-primary);
+    border-radius: 1px;
+    opacity: 0;
+    transform: scaleX(0.3);
+    transform-origin: center;
+    transition:
+      opacity 140ms ease,
+      transform 140ms ease;
+  }
+
+  /* Each section is a vertical stack of cards. scroll-margin-top keeps
+     the section caption visible (not occluded by the sticky nav) when
+     the user taps an anchor — without this the caption hides behind
+     the nav row on smooth-scroll landing. */
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px 16px 8px;
+    scroll-margin-top: 64px;
+  }
+
+  &__caption {
+    margin: 0 4px 4px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--pgz-text-muted);
+    text-transform: uppercase;
+  }
+
+  &__card {
+    background: var(--pgz-card-bg);
+    border: 0.5px solid var(--pgz-card-border);
+    border-radius: 16px;
+    padding: 14px;
+
+    /* Risk widgets bring their own headers / spacing — zero the host's
+       built-in margin around the slot so we don't double-pad. */
+    > :first-child {
+      margin-top: 0;
+    }
+    > :last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  /* Inline placeholder used by Performance + Куди я йду until their
+     real widgets ship. Intentionally calm — reads as "in progress",
+     not "broken". */
+  &__placeholder {
+    background: var(--pgz-card-bg-sub);
+    border: 0.5px dashed var(--pgz-border-default);
+    border-radius: 16px;
+    padding: 20px 16px;
+    text-align: center;
+  }
+
+  &__placeholder-title {
+    margin: 0 0 6px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--pgz-text-secondary);
+  }
+
+  &__placeholder-copy {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--pgz-text-muted);
+
+    code {
+      font-family: inherit;
+      padding: 1px 5px;
+      border-radius: 4px;
+      background: var(--pgz-card-bg);
+      color: var(--pgz-text-secondary);
+      font-size: 11px;
+    }
+  }
 }
 
+/* ============================================================
+   Risk section — hardcoded demo cards (mockup §08 v3)
+   ============================================================ */
 
+%rk-cap {
+  margin: 0 0 10px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--pgz-text-muted);
+}
+
+/* --- Volatility profile (donut + per-class table + stress link) --- */
+
+.rk-vol {
+  &__caption {
+    @extend %rk-cap;
+  }
+
+  &__top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  &__donut {
+    width: 110px;
+    height: 110px;
+    flex: 0 0 auto;
+  }
+
+  &__donut-total {
+    font-size: 11px;
+    font-weight: 700;
+    fill: var(--pgz-text-primary);
+  }
+
+  &__donut-sub {
+    font-size: 8px;
+    fill: var(--pgz-text-muted);
+  }
+
+  &__legend {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__legend-row {
+    display: grid;
+    grid-template-columns: 12px 1fr auto auto;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 11px;
+  }
+
+  &__chip {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+  }
+
+  &__name {
+    color: var(--pgz-text-primary);
+    font-weight: 500;
+  }
+
+  &__pct {
+    color: var(--pgz-text-primary);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__amount {
+    color: var(--pgz-text-muted);
+    font-size: 9px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__divider {
+    height: 0.5px;
+    background: var(--pgz-divider);
+    margin: 12px 0 8px;
+  }
+
+  &__subcaption {
+    @extend %rk-cap;
+    margin-bottom: 8px;
+  }
+
+  &__class-row {
+    display: grid;
+    grid-template-columns: 1fr 64px auto auto;
+    align-items: center;
+    gap: 10px;
+    padding: 3px 0;
+    font-size: 12px;
+  }
+
+  &__class-name {
+    color: var(--pgz-text-primary);
+  }
+
+  &__tier-track {
+    display: flex;
+    width: 60px;
+    height: 6px;
+    background: var(--pgz-card-bg-sub);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  &__tier-fill {
+    height: 100%;
+  }
+
+  &__tier-label {
+    font-size: 10px;
+    color: var(--pgz-text-secondary);
+  }
+
+  &__class-pct {
+    color: var(--pgz-text-primary);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    font-size: 11px;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  &__hint {
+    font-size: 10.5px;
+    color: var(--pgz-text-secondary);
+    line-height: 1.4;
+  }
+
+  &__stress-link {
+    background: none;
+    border: 0;
+    padding: 0;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--pgz-accent);
+    cursor: pointer;
+    flex: 0 0 auto;
+    white-space: nowrap;
+
+    &:focus-visible {
+      outline: 2px solid var(--pgz-accent);
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+  }
+}
+
+/* --- Crypto custody mix (with trend sparkline) --- */
+
+.rk-cu {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+
+  &__caption {
+    @extend %rk-cap;
+    margin: 0;
+  }
+
+  &__trend {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 9px;
+    color: var(--color-positive);
+  }
+
+  &__spark {
+    width: 40px;
+    height: 10px;
+  }
+
+  &__trend-text {
+    font-weight: 500;
+  }
+
+  &__bar {
+    display: flex;
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    background: var(--pgz-card-bg-sub);
+    margin-bottom: 10px;
+  }
+
+  &__seg {
+    height: 100%;
+  }
+
+  &__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 22px;
+    margin-bottom: 8px;
+    font-size: 11px;
+    color: var(--pgz-text-primary);
+  }
+
+  &__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  &__chip {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+  }
+
+  &__copy {
+    margin: 4px 0 0;
+    font-size: 10.5px;
+    color: var(--pgz-text-secondary);
+  }
+}
+
+/* --- Data freshness (stale manual valuations) --- */
+
+.rk-df {
+  &__caption {
+    @extend %rk-cap;
+  }
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 13px;
+  }
+
+  &__name {
+    color: var(--pgz-text-primary);
+    font-weight: 500;
+  }
+
+  &__chip {
+    color: var(--color-warning);
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  &__sub {
+    margin: 2px 0 0;
+    font-size: 10px;
+    color: var(--pgz-text-muted);
+  }
+
+  &__divider {
+    height: 0.5px;
+    background: var(--pgz-divider);
+    margin: 10px 0;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  &__hint {
+    font-size: 10.5px;
+    color: var(--pgz-text-secondary);
+    line-height: 1.4;
+  }
+
+  &__update-link {
+    background: none;
+    border: 0;
+    padding: 0;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--pgz-accent);
+    cursor: not-allowed;
+    white-space: nowrap;
+  }
+}
+
+/* ============================================================
+   Performance section — hardcoded demo cards (mockup §07)
+   ============================================================ */
+
+%cap-label {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--pgz-text-muted);
+  text-transform: uppercase;
+}
+
+.pf-hero {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+
+  &__left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__caption {
+    @extend %cap-label;
+  }
+
+  &__big {
+    margin: 4px 0 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--color-positive);
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__sub {
+    margin: 2px 0 0;
+    font-size: 11px;
+    color: var(--pgz-text-secondary);
+  }
+
+  &__right {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 130px;
+    justify-content: flex-end;
+  }
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 11px;
+
+    &--total {
+      margin-top: 4px;
+      padding-top: 4px;
+      border-top: 0.5px solid var(--pgz-divider);
+      font-weight: 600;
+
+      .pf-hero__row-label {
+        color: var(--pgz-text-primary);
+      }
+    }
+  }
+
+  &__row-label {
+    color: var(--pgz-text-muted);
+  }
+
+  &__row-value {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+
+    &--pos {
+      color: var(--color-positive);
+    }
+    &--neg {
+      color: var(--color-negative);
+    }
+  }
+}
+
+.pf-period {
+  display: flex;
+  margin: 0 4px;
+  border-radius: 12px;
+  background: var(--pgz-card-bg-sub);
+  border: 0.5px solid var(--pgz-card-border);
+  overflow: hidden;
+
+  &__seg {
+    flex: 1;
+    background: none;
+    border: 0;
+    padding: 10px 0;
+    font-family: inherit;
+    font-size: 12px;
+    color: var(--pgz-text-muted);
+    cursor: not-allowed;
+
+    &--active {
+      background: var(--pgz-text-primary);
+      color: var(--pgz-card-bg);
+      font-weight: 600;
+    }
+  }
+}
+
+.pf-source {
+  &__caption {
+    @extend %cap-label;
+    margin-bottom: 10px;
+  }
+
+  &__body {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  &__donut {
+    width: 110px;
+    height: 110px;
+    flex: 0 0 auto;
+  }
+
+  &__donut-total {
+    font-size: 13px;
+    font-weight: 700;
+    fill: var(--pgz-text-primary);
+  }
+
+  &__donut-sub {
+    font-size: 9px;
+    fill: var(--pgz-text-muted);
+  }
+
+  &__legend {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__legend-row {
+    display: grid;
+    grid-template-columns: 12px 1fr auto auto;
+    align-items: baseline;
+    gap: 6px;
+    font-size: 11px;
+  }
+
+  &__dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+  }
+
+  &__name {
+    color: var(--pgz-text-primary);
+  }
+
+  &__value {
+    color: var(--color-positive);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__share {
+    color: var(--pgz-text-muted);
+    font-size: 9px;
+    margin-left: 4px;
+  }
+}
+
+.pf-movers {
+  &__caption {
+    @extend %cap-label;
+    margin-bottom: 10px;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: 56px 1fr auto auto;
+    align-items: baseline;
+    gap: 8px;
+    padding: 4px 0;
+    font-size: 12px;
+  }
+
+  &__label {
+    color: var(--pgz-text-muted);
+    font-size: 11px;
+  }
+
+  &__name {
+    color: var(--pgz-text-primary);
+    font-weight: 600;
+    font-size: 13px;
+  }
+
+  &__pct {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+
+    &--pos {
+      color: var(--color-positive);
+    }
+    &--neg {
+      color: var(--color-negative);
+    }
+  }
+
+  &__amt {
+    color: var(--pgz-text-muted);
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.pf-income {
+  &__caption {
+    @extend %cap-label;
+    margin-bottom: 10px;
+  }
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 12px;
+
+    &--tappable {
+      width: 100%;
+      background: none;
+      border: 0;
+      padding: 0;
+      font-family: inherit;
+      cursor: pointer;
+      text-align: left;
+
+      &:focus-visible {
+        outline: 2px solid var(--pgz-accent);
+        outline-offset: 4px;
+        border-radius: 4px;
+      }
+    }
+  }
+
+  &__name {
+    color: var(--pgz-text-primary);
+  }
+
+  &__value {
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+
+    &--pos {
+      color: var(--color-positive);
+    }
+    &--warn {
+      color: var(--color-warning);
+    }
+  }
+
+  &__sub {
+    margin: 2px 0 0;
+    font-size: 10px;
+    color: var(--pgz-text-muted);
+
+    &--warn {
+      color: var(--color-warning);
+    }
+  }
+
+  &__divider {
+    height: 0.5px;
+    background: var(--pgz-divider);
+    margin: 10px 0;
+  }
+}
+
+/* ============================================================
+   Goals section — hardcoded demo cards (mockup §09)
+   ============================================================ */
+
+.gl-hero {
+  &__caption {
+    @extend %cap-label;
+  }
+
+  &__big {
+    margin: 8px 0 4px;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--pgz-text-primary);
+  }
+
+  &__sub {
+    margin: 0;
+    font-size: 11px;
+    color: var(--pgz-text-secondary);
+  }
+}
+
+.gl-saving {
+  &__caption {
+    @extend %cap-label;
+  }
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 6px;
+  }
+
+  &__amount {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--pgz-text-primary);
+  }
+
+  &__info {
+    background: none;
+    border: 0;
+    padding: 0;
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--pgz-accent);
+    cursor: not-allowed;
+  }
+}
+
+.gl-list {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+  }
+
+  &__caption {
+    @extend %cap-label;
+    margin: 0;
+  }
+
+  &__add {
+    background: none;
+    border: 0;
+    padding: 0;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--pgz-accent);
+    cursor: not-allowed;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  &__name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--pgz-text-primary);
+  }
+
+  &__pct {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--pgz-text-primary);
+
+    &--done {
+      color: var(--color-positive);
+    }
+  }
+
+  &__bar-track {
+    height: 6px;
+    background: var(--pgz-card-bg-sub);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  &__bar-fill {
+    height: 100%;
+    background: var(--pgz-accent);
+    border-radius: 3px;
+
+    &--done {
+      background: var(--color-positive);
+    }
+  }
+
+  &__bottom {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+  }
+
+  &__progress {
+    color: var(--pgz-text-muted);
+  }
+
+  &__eta {
+    color: var(--pgz-text-secondary);
+  }
+
+  &__divider {
+    height: 0.5px;
+    background: var(--pgz-divider);
+    margin: 12px 0;
+  }
+}
+
+.gl-gap {
+  &__caption {
+    @extend %cap-label;
+    margin-bottom: 8px;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    align-items: baseline;
+    gap: 16px;
+    padding: 3px 0;
+    font-size: 11px;
+  }
+
+  &__label {
+    color: var(--pgz-text-muted);
+
+    &--warn {
+      color: var(--color-warning);
+      font-weight: 600;
+    }
+  }
+
+  &__value {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--pgz-text-primary);
+    font-variant-numeric: tabular-nums;
+
+    &--warn {
+      color: var(--color-warning);
+    }
+  }
+
+  &__hint {
+    color: var(--pgz-text-muted);
+    font-size: 10px;
+  }
+
+  &__divider {
+    height: 0.5px;
+    background: var(--pgz-divider);
+    margin: 8px 0;
+  }
+}
+
+.gl-proj {
+  &__caption {
+    @extend %cap-label;
+    margin-bottom: 10px;
+  }
+
+  &__chart {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  &__axis {
+    font-size: 9px;
+    fill: var(--pgz-text-muted);
+  }
+
+  &__end {
+    font-size: 9px;
+    font-weight: 600;
+
+    &--pos {
+      fill: var(--color-positive);
+    }
+    &--blue {
+      fill: var(--pgz-accent);
+    }
+    &--muted {
+      fill: var(--pgz-text-muted);
+    }
+  }
+
+  &__footer {
+    margin: 6px 0 0;
+    font-size: 9px;
+    color: var(--pgz-text-muted);
+  }
+}
+
+.gl-whatif {
+  &__caption {
+    @extend %cap-label;
+    margin-bottom: 10px;
+  }
+
+  &__slider {
+    position: relative;
+    height: 36px;
+    margin: 0 4px;
+  }
+
+  &__track {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 14px;
+    height: 2px;
+    background: var(--pgz-card-border);
+    border-radius: 1px;
+  }
+
+  &__track-fill {
+    /* 120 / 308 ≈ 39% — matches mockup thumb position */
+    position: absolute;
+    left: 0;
+    width: 39%;
+    top: 14px;
+    height: 2px;
+    background: var(--pgz-accent);
+    border-radius: 1px;
+  }
+
+  &__thumb {
+    position: absolute;
+    left: 39%;
+    top: 6px;
+    width: 18px;
+    height: 18px;
+    margin-left: -9px;
+    border-radius: 50%;
+    background: var(--pgz-card-bg);
+    border: 2px solid var(--pgz-accent);
+  }
+
+  &__thumb-label {
+    position: absolute;
+    left: 39%;
+    top: 28px;
+    transform: translateX(-50%);
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--pgz-accent);
+  }
+
+  &__legend {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 4px;
+    font-size: 10px;
+    color: var(--pgz-text-muted);
+  }
+
+  &__result {
+    margin: 12px 0 0;
+    font-size: 11px;
+    color: var(--pgz-text-secondary);
+  }
+
+  &__delta {
+    font-weight: 600;
+    color: var(--color-positive);
+  }
+}

@@ -1,0 +1,53 @@
+@if (hasMultipleCurrencies()) {
+  <section class="cx" aria-labelledby="cx-heading">
+    <header class="cx__header">
+      <h3 id="cx-heading" class="cx__heading">CURRENCY EXPOSURE</h3>
+    </header>
+
+    <!-- Stacked bar. One <div> per row with width = share×100% (min 2%),
+         background coloured per currency. flex layout so segments stay
+         flush without rounding gaps. Border-radius lives only on the
+         outer track. -->
+    <div class="cx__bar-track">
+      @for (row of rows(); track trackByCurrency($index, row)) {
+        <div
+          class="cx__bar-segment"
+          [style.width.%]="segmentWidth(row.share)"
+          [style.background]="colorFor(row.currency)"
+          [attr.aria-label]="labelFor(row.currency) + ' ' + formatPct(row.share)"></div>
+      }
+    </div>
+
+    <!-- Legend rows. Each mirrors the corresponding bar segment colour
+         via a dot, then code/label, share and (when meaningful) native
+         amount. Mixed-currency bucket shows a blank right cell because
+         its underlying classes use different units. -->
+    <ul class="cx__legend">
+      @for (row of rows(); track trackByCurrency($index, row)) {
+        <li class="cx__legend-row">
+          <span class="cx__legend-left">
+            <span
+              class="cx__dot"
+              [style.background]="colorFor(row.currency)"
+              aria-hidden="true"></span>
+            <span class="cx__code">{{ labelFor(row.currency) }}</span>
+            <span class="cx__share">{{ formatPct(row.share) }}</span>
+          </span>
+          @if (formatNative(row); as native) {
+            <span class="cx__native">{{ native }}</span>
+          }
+        </li>
+      }
+    </ul>
+
+    <!-- Footer: base currency + FX provenance. Literal "ECB" tracks
+         the FrankfurterFxRateProvider (M3 backend). Update this copy
+         if we ever swap the upstream. -->
+    <p class="cx__footer">
+      Base currency: {{ overview()!.baseCurrency }} · FX rate from ECB
+      @if (overview()!.stale) {
+        · <span class="cx__stale">data may be stale</span>
+      }
+    </p>
+  </section>
+}

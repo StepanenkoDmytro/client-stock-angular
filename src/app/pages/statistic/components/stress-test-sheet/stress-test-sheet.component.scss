@@ -1,0 +1,116 @@
+:host {
+  display: block;
+  background: var(--pgz-sheet-bg, var(--pgz-card-bg));
+}
+
+.sts {
+  padding: 16px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--pgz-text-primary);
+  }
+
+  &__close {
+    background: none;
+    border: 0;
+    padding: 4px 8px;
+    font-size: 16px;
+    color: var(--pgz-text-muted);
+    cursor: pointer;
+  }
+
+  &__sub {
+    margin: -4px 0 0;
+    font-size: 11px;
+    color: var(--pgz-text-secondary);
+  }
+
+  &__rows {
+    list-style: none;
+    margin: 4px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 8px 0;
+    font-size: 13px;
+    border-bottom: 0.5px solid var(--pgz-divider);
+  }
+
+  &__row-name {
+    color: var(--pgz-text-primary);
+    font-weight: 500;
+  }
+
+  &__row-amt {
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+
+    &--neg {
+      color: var(--color-negative);
+    }
+    &--warn {
+      color: var(--color-warning);
+    }
+  }
+
+  &__total {
+    padding-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  &__total-label {
+    font-size: 11px;
+    color: var(--pgz-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+  }
+
+  &__total-amt {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--color-negative);
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__total-pct {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-negative);
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__footer {
+    margin: 6px 0 0;
+    font-size: 10.5px;
+    color: var(--pgz-text-muted);
+    line-height: 1.5;
+  }
+}

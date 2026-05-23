@@ -1,0 +1,43 @@
+<section class="sts" aria-labelledby="sts-title">
+  <header class="sts__header">
+    <h2 id="sts-title" class="sts__title">Stress test</h2>
+    <button type="button" class="sts__close" (click)="close()" aria-label="Close">
+      ✕
+    </button>
+  </header>
+
+  <p class="sts__sub">
+    What happens if today's markets stress-test your portfolio
+  </p>
+
+  <ul class="sts__rows">
+    <li class="sts__row">
+      <span class="sts__row-name">⚡ Crypto −50%</span>
+      <span class="sts__row-amt sts__row-amt--neg">−$13,050</span>
+    </li>
+    <li class="sts__row">
+      <span class="sts__row-name">📈 Stocks −30%</span>
+      <span class="sts__row-amt sts__row-amt--warn">−$11,040</span>
+    </li>
+    <li class="sts__row">
+      <span class="sts__row-name">🏠 Real estate −20%</span>
+      <span class="sts__row-amt sts__row-amt--warn">−$22,000</span>
+    </li>
+  </ul>
+
+  <div class="sts__total">
+    <div class="sts__total-row">
+      <span class="sts__total-label">Total impact</span>
+      <span class="sts__total-amt">−$46,090</span>
+    </div>
+    <div class="sts__total-row">
+      <span class="sts__total-label">As share of portfolio</span>
+      <span class="sts__total-pct">−22.5%</span>
+    </div>
+  </div>
+
+  <p class="sts__footer">
+    Conservative shock scenarios — long-term holders typically ride
+    these out without selling. Manual rebalancing is your call.
+  </p>
+</section>

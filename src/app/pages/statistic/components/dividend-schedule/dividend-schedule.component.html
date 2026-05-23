@@ -1,0 +1,184 @@
+<section class="ds" aria-label="Dividend schedule">
+  <header class="ds__header">
+    <button type="button" class="ds__back" (click)="back()" aria-label="Back">
+      ←
+    </button>
+    <h1 class="ds__title">Dividend schedule</h1>
+  </header>
+
+  <!-- Year tabs. Horizontal-scrollable per mockup. Demo: 2026 active. -->
+  <nav class="ds__years" role="tablist" aria-label="Year">
+    @for (y of years; track y) {
+      <button
+        type="button"
+        role="tab"
+        class="ds__year"
+        [class.ds__year--active]="activeYear() === y"
+        [attr.aria-selected]="activeYear() === y"
+        (click)="setYear(y)">
+        {{ y }}
+      </button>
+    }
+  </nav>
+
+  <!-- Total summary card. Demo year = 2026: $320 received, $40
+       expected in Dec, $360 forecast. -->
+  <div class="ds__card ds__total">
+    <p class="ds__total-cap">TOTAL IN {{ activeYear() }}</p>
+    <div class="ds__total-main">
+      <span class="ds__total-big">$320</span>
+      <span class="ds__total-sub">received · 4 events</span>
+    </div>
+    <p class="ds__total-expect">+ $40 expected in Dec</p>
+    <div class="ds__total-forecast">
+      <span class="ds__total-forecast-label">Forecast year</span>
+      <span class="ds__total-forecast-amt">$360</span>
+    </div>
+  </div>
+
+  <!-- Payout schedule bar chart. Hardcoded per mockup: F=60, M=90,
+       A=90, N=80, D=40 (expected). -->
+  <div class="ds__card ds__chart-card">
+    <div class="ds__chart-header">
+      <p class="ds__chart-cap">PAYOUT SCHEDULE</p>
+      <div class="ds__legend">
+        <span class="ds__legend-item">
+          <span class="ds__legend-chip ds__legend-chip--received"></span>
+          Received
+        </span>
+        <span class="ds__legend-item">
+          <span class="ds__legend-chip ds__legend-chip--expected"></span>
+          Expected
+        </span>
+      </div>
+    </div>
+
+    <svg class="ds__chart" viewBox="0 0 320 156"
+         aria-label="Monthly dividend payout 2026">
+      <!-- y-axis labels -->
+      <text x="30" y="14" text-anchor="end" class="ds__axis">$100</text>
+      <text x="30" y="44" text-anchor="end" class="ds__axis">$75</text>
+      <text x="30" y="74" text-anchor="end" class="ds__axis">$50</text>
+      <text x="30" y="104" text-anchor="end" class="ds__axis">$25</text>
+      <text x="30" y="132" text-anchor="end" class="ds__axis">$0</text>
+      <!-- grid lines -->
+      <line x1="36" y1="11" x2="324" y2="11" stroke="#F1EFE8"/>
+      <line x1="36" y1="41" x2="324" y2="41" stroke="#F1EFE8"/>
+      <line x1="36" y1="71" x2="324" y2="71" stroke="#F1EFE8"/>
+      <line x1="36" y1="101" x2="324" y2="101" stroke="#F1EFE8"/>
+      <line x1="36" y1="131" x2="324" y2="131" stroke="#D3D1C7"/>
+      <!-- 12 monthly bars: slot=24, bar=16 each. Feb=$60 → h=72,
+           May=$90 → h=108, Aug=$90 → h=108, Nov=$80 → h=96,
+           Dec=$40 expected → h=48 lighter colour. Origin y=131
+           (baseline). -->
+      <rect x="64"  y="59"  width="16" height="72"  fill="#185FA5"/>
+      <rect x="136" y="23"  width="16" height="108" fill="#185FA5"/>
+      <rect x="208" y="23"  width="16" height="108" fill="#185FA5"/>
+      <rect x="280" y="35"  width="16" height="96"  fill="#185FA5"/>
+      <rect x="304" y="83"  width="16" height="48"  fill="#B6CFEA"/>
+      <!-- x-axis month letters. Months with bars get a bolder colour. -->
+      <text x="48"  y="146" text-anchor="middle" class="ds__axis">J</text>
+      <text x="72"  y="146" text-anchor="middle" class="ds__axis ds__axis--strong">F</text>
+      <text x="96"  y="146" text-anchor="middle" class="ds__axis">M</text>
+      <text x="120" y="146" text-anchor="middle" class="ds__axis">A</text>
+      <text x="144" y="146" text-anchor="middle" class="ds__axis ds__axis--strong">M</text>
+      <text x="168" y="146" text-anchor="middle" class="ds__axis">J</text>
+      <text x="192" y="146" text-anchor="middle" class="ds__axis">J</text>
+      <text x="216" y="146" text-anchor="middle" class="ds__axis ds__axis--strong">A</text>
+      <text x="240" y="146" text-anchor="middle" class="ds__axis">S</text>
+      <text x="264" y="146" text-anchor="middle" class="ds__axis">O</text>
+      <text x="288" y="146" text-anchor="middle" class="ds__axis ds__axis--strong">N</text>
+      <text x="312" y="146" text-anchor="middle" class="ds__axis">D</text>
+    </svg>
+  </div>
+
+  <!-- By month list. Expandable. February expanded by default. -->
+  <div class="ds__card ds__months">
+    <p class="ds__months-cap">BY MONTH</p>
+
+    <button
+      type="button"
+      class="ds__month"
+      [class.ds__month--open]="isExpanded('feb')"
+      (click)="toggle('feb')"
+      [attr.aria-expanded]="isExpanded('feb')">
+      <span class="ds__month-name">February 2026</span>
+      <span class="ds__month-amt">$60</span>
+      <span class="ds__month-chev" aria-hidden="true">
+        {{ isExpanded('feb') ? '⌃' : '⌄' }}
+      </span>
+    </button>
+    @if (isExpanded('feb')) {
+      <ul class="ds__events">
+        <li class="ds__event">
+          <span class="ds__event-name">AAPL · Q1 ex-div Feb 15</span>
+          <span class="ds__event-amt">$35</span>
+        </li>
+        <li class="ds__event">
+          <span class="ds__event-name">VTI · Q1 ex-div Feb 22</span>
+          <span class="ds__event-amt">$25</span>
+        </li>
+      </ul>
+    }
+    <div class="ds__divider"></div>
+
+    <button
+      type="button"
+      class="ds__month"
+      [class.ds__month--open]="isExpanded('may')"
+      (click)="toggle('may')"
+      [attr.aria-expanded]="isExpanded('may')">
+      <span class="ds__month-name">May 2026</span>
+      <span class="ds__month-count">3 holdings</span>
+      <span class="ds__month-amt">$90</span>
+      <span class="ds__month-chev" aria-hidden="true">
+        {{ isExpanded('may') ? '⌃' : '⌄' }}
+      </span>
+    </button>
+    <div class="ds__divider"></div>
+
+    <button
+      type="button"
+      class="ds__month"
+      [class.ds__month--open]="isExpanded('aug')"
+      (click)="toggle('aug')"
+      [attr.aria-expanded]="isExpanded('aug')">
+      <span class="ds__month-name">August 2026</span>
+      <span class="ds__month-count">3 holdings</span>
+      <span class="ds__month-amt">$90</span>
+      <span class="ds__month-chev" aria-hidden="true">
+        {{ isExpanded('aug') ? '⌃' : '⌄' }}
+      </span>
+    </button>
+    <div class="ds__divider"></div>
+
+    <button
+      type="button"
+      class="ds__month"
+      [class.ds__month--open]="isExpanded('nov')"
+      (click)="toggle('nov')"
+      [attr.aria-expanded]="isExpanded('nov')">
+      <span class="ds__month-name">November 2026</span>
+      <span class="ds__month-count">3 holdings</span>
+      <span class="ds__month-amt">$80</span>
+      <span class="ds__month-chev" aria-hidden="true">
+        {{ isExpanded('nov') ? '⌃' : '⌄' }}
+      </span>
+    </button>
+    <div class="ds__divider"></div>
+
+    <button
+      type="button"
+      class="ds__month ds__month--forecast"
+      [class.ds__month--open]="isExpanded('dec')"
+      (click)="toggle('dec')"
+      [attr.aria-expanded]="isExpanded('dec')">
+      <span class="ds__month-name">December 2026</span>
+      <span class="ds__month-chip">Expected</span>
+      <span class="ds__month-amt">$40</span>
+      <span class="ds__month-chev" aria-hidden="true">
+        {{ isExpanded('dec') ? '⌃' : '⌄' }}
+      </span>
+    </button>
+  </div>
+</section>
