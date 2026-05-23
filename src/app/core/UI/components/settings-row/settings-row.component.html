@@ -1,0 +1,13 @@
+<span class="sr__label">{{ label }}</span>
+
+@if (value != null && value !== '') {
+  <span class="sr__value">{{ value }}</span>
+}
+
+@if (disabled) {
+  <span class="sr__pill">SOON</span>
+} @else if (showChevron && !muted) {
+  <span class="sr__chevron" aria-hidden="true">&rsaquo;</span>
+} @else if (showChevron && muted) {
+  <span class="sr__chevron sr__chevron--muted" aria-hidden="true">&rsaquo;</span>
+}

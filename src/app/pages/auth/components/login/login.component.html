@@ -1,52 +1,59 @@
-<section class="auth-form-container">
-  <form class="auth-form"
-        [formGroup]="form">
-    <mat-form-field class="auth-form--field" appearance="outline">
-      <mat-label>{{ 'Email:' }}</mat-label>
-      <input [formControl]="emailCtrl" type="email" matInput (blur)="checkEmailValidity()">
-    </mat-form-field>
+<section class="login-form">
+  <p class="auth-subtitle">Welcome back</p>
 
-    <mat-form-field class="auth-form--field" appearance="outline">
-      <mat-label>{{ 'Password:' }}</mat-label>
-      <input [formControl]="passwordCtrl" [type]="passwordHide ? 'password' : 'text'" matInput (blur)="checkPasswordValidity()">
-      <button mat-icon-button matSuffix (click)="passwordHide = !passwordHide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="passwordHide">
-        <mat-icon>{{passwordHide ? 'visibility_off' : 'visibility'}}</mat-icon>
-      </button>
-    </mat-form-field>
+  <section class="auth-card">
+    <form class="auth-form" [formGroup]="form">
+      <mat-form-field class="auth-form--field" appearance="outline">
+        <mat-label>Email</mat-label>
+        <input [formControl]="emailCtrl" type="email" matInput (blur)="checkEmailValidity()">
+      </mat-form-field>
 
-    <div class="auth-form--forget-password">
-      <a [routerLink]="'../forget-password'" class="auth-form--text-link">Forget your password?</a>
-    </div>
+      <mat-form-field class="auth-form--field" appearance="outline">
+        <mat-label>Password</mat-label>
+        <input [formControl]="passwordCtrl"
+               [type]="passwordHide ? 'password' : 'text'"
+               matInput
+               (blur)="checkPasswordValidity()">
+        <button mat-icon-button matSuffix
+                type="button"
+                (click)="passwordHide = !passwordHide"
+                [attr.aria-label]="passwordHide ? 'Show password' : 'Hide password'"
+                [attr.aria-pressed]="!passwordHide">
+          <mat-icon>{{ passwordHide ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
 
-    <div class="auth-form--errors">
-      @if(loginError) {
-        <p class="auth-form--error">{{ loginError }}</p>
-      }
+      <div class="auth-form--forget-password">
+        <a [routerLink]="'../forget-password'" class="auth-form--text-link">Forget your password?</a>
+      </div>
 
-      @if(showEmailError) {
-        <p class="auth-form--error">Invalid email format</p>
-      }
+      <div class="auth-form--errors">
+        @if (loginError) {
+          <p class="auth-form--error">{{ loginError }}</p>
+        }
+        @if (showEmailError) {
+          <p class="auth-form--error">Invalid email format</p>
+        }
+        @if (showPasswordError) {
+          <p class="auth-form--error">Password can not be empty</p>
+        }
+      </div>
+    </form>
+  </section>
 
-      @if(showPasswordError) {
-        <p class="auth-form--error">Password can not be empty</p>
-      }
-    </div>
+  <button mat-flat-button
+          type="submit"
+          class="pgz-btn auth-btn--submit montserrat"
+          [class.pgz-btn--submit-enabled]="!form.invalid"
+          [class.pgz-btn--submit-disabled]="form.invalid"
+          (click)="login()">Log In</button>
 
+  <div class="auth-divider"><span>or</span></div>
 
-  </form>
-  <div class="auth-out-from">
-    <button mat-flat-button
-            [class.pgz-btn--submit-enabled]="!form.invalid"
-            [class.pgz-btn--submit-disabled]="form.invalid"
-            type="submit" class="auth-btn--submit montserrat" 
-            (click)="login()">
-      {{ 'Log In' }}
-    </button>
+  <pgz-google-btn (googleResponse)="loginWithGoogle($event)"></pgz-google-btn>
 
-    <pgz-google-btn style="margin-top: 24px; margin-bottom: 16px;" (googleResponse)="loginWithGoogle($event)"></pgz-google-btn>
-
-    <div class="auth-form--link">
-      <p>Don’t have an account? <a [routerLink]="'../registration'" class="auth-form--text-link">Register now</a></p>
-    </div>
-  </div>
+  <p class="auth-footer-link">
+    Don't have an account?
+    <a [routerLink]="'../registration'">Register now</a>
+  </p>
 </section>

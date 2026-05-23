@@ -1,0 +1,16 @@
+:host {
+  display: block;
+  margin: 0 16px 12px;
+  background: var(--pgz-card-bg);
+  border: 0.5px solid var(--pgz-card-border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+:host(.is-disabled) {
+  opacity: 0.85;
+}
+
+::ng-deep pgz-settings-row + pgz-settings-row {
+  border-top: 0.5px dashed var(--pgz-divider);
+}

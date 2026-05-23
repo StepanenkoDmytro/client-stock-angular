@@ -1,28 +1,39 @@
-<p class="title-auth">{{ 'Enter recovery code' }}</p>
-<p class="auth-text">We send a code to <b>{{userEmail}}</b></p>
-<div class="recovery-code-container">
-    <!-- <form (ngSubmit)="onSubmit()"> -->
-        <div class="code-inputs">
-            @for(digit of codeDigits; track digit; let i = $index) {
-                <input
-                    type="number" maxlength="1"  name="digit{{i}}"
-                    class="code-input"
-                    [ngClass]="{'code-input--filled': codeDigits[i] !== ''}"
-                    [(ngModel)]="codeDigits[i]" 
-                    (input)="onDigitInput($event, i)" 
-                    (keydown.backspace)="onBackspace($event, i)"
-                    #inputElement>
-            }
-        </div>
-    <!-- </form> -->
-</div>
-<p class="auth-text">Didn't receive the email? <a class="auth-form--text-link" (click)="resendCodeToEmail()">Click here</a></p>
+<section class="recovery-form">
+  <p class="auth-subtitle">Enter recovery code</p>
+  <p class="recovery-form__hint">We sent a code to <b>{{ userEmail }}</b></p>
 
-<button mat-flat-button 
-        class="auth-btn"
-        [class.auth-btn--submit-enabled]="isCodeComplete()"
-        [disabled]="!isCodeComplete()"
-        (click)="onSubmit()"
-        >
-    {{ 'Submit' }}
-</button>
+  <section class="auth-card recovery-form__card">
+    <div class="recovery-form__inputs">
+      @for(digit of codeDigits; track i; let i = $index) {
+        <input
+          type="text"
+          inputmode="numeric"
+          maxlength="1"
+          name="digit{{i}}"
+          class="recovery-form__digit"
+          [class.is-filled]="codeDigits[i] !== ''"
+          [(ngModel)]="codeDigits[i]"
+          (input)="onDigitInput($event, i)"
+          (keydown.backspace)="onBackspace($event, i)"
+          #inputElement>
+      }
+    </div>
+
+    @if (errorMessage) {
+      <p class="auth-form--error">{{ errorMessage }}</p>
+    }
+  </section>
+
+  <p class="auth-footer-link">
+    Didn't receive the email?
+    <a (click)="resendCodeToEmail()">Resend code</a>
+  </p>
+
+  <button mat-flat-button
+          type="submit"
+          class="pgz-btn auth-btn--submit montserrat"
+          [class.pgz-btn--submit-enabled]="isCodeComplete()"
+          [class.pgz-btn--submit-disabled]="!isCodeComplete()"
+          [disabled]="!isCodeComplete()"
+          (click)="onSubmit()">Verify</button>
+</section>

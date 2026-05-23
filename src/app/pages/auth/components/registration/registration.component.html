@@ -1,56 +1,76 @@
-<section class="auth-form-container">
-  <form class="auth-form"
-        [formGroup]="form">
-    <mat-form-field class="auth-form--field" appearance="outline">
-      <mat-label>{{ 'Email:' }}</mat-label>
-      <input [formControl]="emailCtrl" type="email" matInput  (blur)="checkEmailValidity()">
-    </mat-form-field>
+<section class="registration-form">
+  <p class="auth-subtitle">Create your account</p>
 
-    <mat-form-field class="auth-form--field" appearance="outline">
-      <mat-label>{{ 'Password:' }}</mat-label>
-      <input [formControl]="passwordCtrl" [type]="passwordHide ? 'password' : 'text'" matInput (blur)="checkPasswordValidity()">
-      <button mat-icon-button matSuffix (click)="passwordHide = !passwordHide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="passwordHide">
-        <mat-icon>{{passwordHide ? 'visibility_off' : 'visibility'}}</mat-icon>
-      </button>
-    </mat-form-field>
+  <section class="auth-card">
+    <form class="auth-form" [formGroup]="form">
+      <mat-form-field class="auth-form--field" appearance="outline">
+        <mat-label>Email</mat-label>
+        <input [formControl]="emailCtrl" type="email" matInput (blur)="checkEmailValidity()">
+      </mat-form-field>
 
-    <mat-form-field class="auth-form--field" appearance="outline">
-      <mat-label>{{ 'Repeat password:' }}</mat-label>
-      <input [formControl]="repeatPasswordCtrl" [type]="repeatPasswordHide ? 'password' : 'text'" matInput (blur)="checkPasswordValidity()">
-      <button mat-icon-button matSuffix (click)="repeatPasswordHide = !repeatPasswordHide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="repeatPasswordHide">
-        <mat-icon>{{repeatPasswordHide ? 'visibility_off' : 'visibility'}}</mat-icon>
-      </button>
-    </mat-form-field>
-    <div class="auth-form--errors">
-      @if(invalidPasswordErrorMessage) {
-        <p class="auth-form--error">{{ invalidPasswordErrorMessage }}</p>
-      }
+      <mat-form-field class="auth-form--field" appearance="outline">
+        <mat-label>Password</mat-label>
+        <input [formControl]="passwordCtrl"
+               [type]="passwordHide ? 'password' : 'text'"
+               matInput
+               (blur)="checkPasswordValidity()">
+        <button mat-icon-button matSuffix
+                type="button"
+                (click)="passwordHide = !passwordHide"
+                [attr.aria-label]="passwordHide ? 'Show password' : 'Hide password'"
+                [attr.aria-pressed]="!passwordHide">
+          <mat-icon>{{ passwordHide ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
 
-      @if(showEmailError) {
-        <p class="auth-form--error">Invalid email format</p>
-      }
+      <mat-form-field class="auth-form--field" appearance="outline">
+        <mat-label>Repeat password</mat-label>
+        <input [formControl]="repeatPasswordCtrl"
+               [type]="repeatPasswordHide ? 'password' : 'text'"
+               matInput
+               (blur)="checkPasswordValidity()">
+        <button mat-icon-button matSuffix
+                type="button"
+                (click)="repeatPasswordHide = !repeatPasswordHide"
+                [attr.aria-label]="repeatPasswordHide ? 'Show password' : 'Hide password'"
+                [attr.aria-pressed]="!repeatPasswordHide">
+          <mat-icon>{{ repeatPasswordHide ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
 
-      @if(showPasswordError) {
-        <p class="auth-form--error">Password can not be empty</p>
-      }
-    </div>
+      <div class="auth-form--errors">
+        @if (invalidPasswordErrorMessage) {
+          <p class="auth-form--error">{{ invalidPasswordErrorMessage }}</p>
+        }
+        @if (showEmailError) {
+          <p class="auth-form--error">Invalid email format</p>
+        }
+        @if (showPasswordError) {
+          <p class="auth-form--error">Password can not be empty</p>
+        }
+      </div>
+    </form>
 
-    
-  </form>
+    <p class="auth-hint">Minimum 8 chars · 1 number</p>
+    <p class="auth-terms">
+      By signing up you agree to
+      <a href="#">Terms</a> · <a href="#">Privacy</a>
+    </p>
+  </section>
 
-  <div class="auth-out-from">
-    <button mat-flat-button
-            [class.pgz-btn--submit-enabled]="!form.invalid"
-            [class.pgz-btn--submit-disabled]="form.invalid"
-            type="submit" class="auth-btn--submit montserrat" 
-            (click)="handleSubmit()">
-        {{ 'Sign Up' }}
-    </button>
+  <button mat-flat-button
+          type="submit"
+          class="pgz-btn auth-btn--submit montserrat"
+          [class.pgz-btn--submit-enabled]="!form.invalid"
+          [class.pgz-btn--submit-disabled]="form.invalid"
+          (click)="handleSubmit()">Sign Up</button>
 
-    <pgz-google-btn style="margin-top: 24px; margin-bottom: 16px;" (googleResponse)="loginWithGoogle($event)"></pgz-google-btn>
+  <div class="auth-divider"><span>or</span></div>
 
-    <div class="auth-form--link">
-      <p>I have account <a [routerLink]="'../login'" class="auth-form--text-link">Login</a></p>
-    </div>
-  </div>
+  <pgz-google-btn (googleResponse)="loginWithGoogle($event)"></pgz-google-btn>
+
+  <p class="auth-footer-link">
+    I have account
+    <a [routerLink]="'../login'">Login</a>
+  </p>
 </section>

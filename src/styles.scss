@@ -264,6 +264,15 @@ $light-theme: mat.define-light-theme((
   // callers to remember which negative variant.
   --pgz-danger-text: var(--color-negative);
 
+  // ---- Anonymous-mode tone (M5.6 PR6 — ADR-0012) ----
+  // Amber palette used by the anonymous nudge banner and the Privacy &
+  // data row subline. Same hex across both themes per "anonymous tone
+  // is a calibrated signal, not a theme-dependent surface" decision.
+  --pgz-anon-bg: #FFF4DC;
+  --pgz-anon-border: #E8C170;
+  --pgz-anon-text: #8B6A1C;
+  --pgz-anon-text-soft: #A38449;
+
   // ---- AssetClass palette ----
   // Dark-theme variant — slightly brighter for contrast on dark
   // surfaces. Source palette: design/README.md. ETF stays = STOCK
@@ -354,6 +363,15 @@ $light-theme: mat.define-light-theme((
 
   // ---- Danger-text alias (M5.6 PR5) ----
   --pgz-danger-text: var(--color-negative);
+
+  // ---- Anonymous-mode tone (M5.6 PR6 — ADR-0012) ----
+  // Amber palette used by the anonymous nudge banner and the Privacy &
+  // data row subline. Same hex across both themes — anonymous tone is
+  // a calibrated signal, not a theme-dependent surface.
+  --pgz-anon-bg: #FFF4DC;
+  --pgz-anon-border: #E8C170;
+  --pgz-anon-text: #8B6A1C;
+  --pgz-anon-text-soft: #A38449;
 
   // ---- AssetClass palette (light-theme) ----
   // Source: design/README.md. Used by inline

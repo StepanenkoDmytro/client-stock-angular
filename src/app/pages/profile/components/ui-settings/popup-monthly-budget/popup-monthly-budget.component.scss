@@ -1,13 +1,26 @@
 :host {
   display: block;
+  background: var(--pgz-sheet-bg);
+  border-radius: var(--pgz-sheet-radius);
+  overflow: hidden;
 }
 
 .input-budget {
   padding: 20px;
   display: flex;
   flex-direction: column;
+  gap: 16px;
 }
 
 .input-budget button {
   margin-left: auto;
+  appearance: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px 22px;
+  border-radius: 22px;
+  background: var(--pgz-fab-bg);
+  color: var(--pgz-fab-icon);
+  font-size: 14px;
+  font-weight: 600;
 }

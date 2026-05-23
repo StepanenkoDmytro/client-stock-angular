@@ -1,8 +1,197 @@
 :host {
   display: block;
+  min-height: 100%;
+  background: var(--pgz-app-bg);
 }
 
-.profile-settings-container {
-  margin-top: 32px;
-  margin-inline: 16px;
+.profile-settings {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 24px;
+}
+
+// ---- Avatar block --------------------------------------------------------
+
+.ps-avatar {
+  position: relative;
+  margin: 4px 16px 12px;
+  padding: 14px 16px;
+  background: var(--pgz-card-bg);
+  border: 0.5px solid var(--pgz-card-border);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  &__circle {
+    flex: 0 0 auto;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--pgz-nav-active-bg);
+    color: var(--pgz-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  &__text {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--pgz-text-primary);
+  }
+
+  &__sub {
+    margin: 0;
+    font-size: 10.5px;
+    color: var(--pgz-text-muted);
+  }
+
+  &__pill {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 30px;
+    height: 16px;
+    padding: 0 6px;
+    background: var(--pgz-card-bg-sub);
+    border: 0.5px solid var(--pgz-card-border);
+    border-radius: 8px;
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--pgz-text-muted);
+  }
+}
+
+// ---- Form card -----------------------------------------------------------
+
+.ps-form {
+  margin: 0 16px 16px;
+  padding: 8px;
+  background: var(--pgz-card-bg);
+  border: 0.5px solid var(--pgz-card-border);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ps-field {
+  padding: 8px 10px 10px;
+  background: var(--pgz-card-bg-sub);
+  border: 0.5px solid var(--pgz-card-border);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  &--clickable {
+    cursor: pointer;
+  }
+
+  &__label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--pgz-text-muted);
+    text-transform: uppercase;
+  }
+
+  &__control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &--row {
+      justify-content: space-between;
+    }
+  }
+
+  &__input {
+    flex: 1 1 auto;
+    appearance: none;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 0;
+    font: inherit;
+    font-size: 14px;
+    color: var(--pgz-text-primary);
+    line-height: 1.2;
+
+    &::placeholder {
+      color: var(--pgz-text-muted);
+    }
+  }
+
+  &__value {
+    flex: 1 1 auto;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--pgz-text-primary);
+  }
+
+  &__chevron {
+    flex: 0 0 auto;
+    font-size: 18px;
+    color: var(--pgz-text-secondary);
+    line-height: 1;
+  }
+
+  &__confirmed {
+    flex: 0 0 auto;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--color-positive);
+    color: var(--pgz-card-bg);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+// ---- Submit / Cancel / helper -------------------------------------------
+
+.ps-submit {
+  margin: 8px 16px 0;
+  width: calc(100% - 32px);
+  height: 52px !important;
+  border-radius: 26px !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+}
+
+.ps-cancel {
+  margin: 14px auto 4px;
+  appearance: none;
+  background: transparent;
+  border: none;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--pgz-text-secondary);
+  cursor: pointer;
+  align-self: center;
+}
+
+.ps-helper {
+  margin: 10px 24px 0;
+  font-size: 10px;
+  font-style: italic;
+  color: var(--pgz-text-muted);
+  text-align: center;
 }

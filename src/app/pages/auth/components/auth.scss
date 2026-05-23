@@ -1,85 +1,146 @@
-.title-auth {
-    display: flex;
-    justify-content: center;
-    margin: 60px auto 80px auto;
-    font-size: 30px;
+// Shared auth shell styles (M5.6 PR7).
+// Single form-card pattern used by Login / Registration / Forget password /
+// Recovery / Change password — keeps each child component .scss minimal.
+
+.auth-subtitle {
+  margin: 0 0 16px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--pgz-text-muted);
 }
 
-.auth-form-container {
-  margin-top: 32px;
+.auth-card {
+  background: var(--pgz-card-bg);
+  border: 0.5px solid var(--pgz-card-border);
+  border-radius: 16px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  height: 100%;
-}
-
-.auth-out-from {
-  margin-top: auto;
-  margin-bottom: 40px;
 }
 
 .auth-form {
-  width: 100%;
-  font-size: 16px;
   display: flex;
   flex-direction: column;
+  width: 100%;
 
   &--field {
     width: 100%;
   }
 
+  // Material outline overrides — white surface on cream app-bg,
+  // border switches to brand accent on focus.
+  ::ng-deep .mat-mdc-form-field {
+    --mdc-outlined-text-field-outline-color: var(--pgz-card-border);
+    --mdc-outlined-text-field-hover-outline-color: var(--pgz-text-secondary);
+    --mdc-outlined-text-field-focus-outline-color: var(--pgz-accent);
+    --mdc-outlined-text-field-label-text-color: var(--pgz-text-secondary);
+    --mdc-outlined-text-field-input-text-color: var(--pgz-text-primary);
+    --mdc-outlined-text-field-caret-color: var(--pgz-accent);
+    background: var(--pgz-card-bg);
+    border-radius: 10px;
+  }
+
   &--forget-password {
     display: flex;
     justify-content: flex-end;
+    margin-top: -4px;
   }
 
   &--link {
+    margin-top: 18px;
     display: flex;
     justify-content: center;
-    font-size: 18px;
+    font-size: 12px;
+    color: var(--pgz-text-primary);
   }
 
   &--errors {
-    min-height: 80px;
+    min-height: 40px;
     display: flex;
     flex-direction: column;
+    margin-top: 4px;
   }
 
   &--error {
-    margin-top: 10px;
+    margin: 4px 0 0;
     align-self: center;
-    color: var(--bs-danger);
+    color: var(--color-negative);
+    font-size: 11px;
     font-weight: 500;
+    text-align: center;
   }
 
   &--text-link {
-    color: var(--bs-success);
-    font-weight: 500;
+    color: var(--pgz-accent);
+    font-weight: 600;
     text-decoration: none;
   }
 }
 
-.auth-btn {
-  margin-top: auto;
-  margin-bottom: 50px;
+// Submit button — full-width pill matching the Save pattern on Spending Add.
+.auth-btn--submit {
   width: 100%;
-  height: 50px;
+  height: 52px;
+  border-radius: 26px;
+  font-size: 15px;
+  font-weight: 700;
+}
 
-  &--submit {
-    width: 100%;
-    height: 42px;
-    font-size: 16px;
-    font-weight: 600;
-    border-radius: 14px;
+// "or" divider with two flanking rules
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0 14px;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1 1 auto;
+    height: 1px;
+    background: var(--pgz-card-border);
+  }
+
+  span {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--pgz-text-muted);
+    letter-spacing: 0.5px;
   }
 }
 
-.auth-text {
-  font-size: 16px;
-  font-weight: 300;
+// Footer cross-link (Login ↔ Register / Login ↔ Forget password)
+.auth-footer-link {
+  margin-top: 18px;
   text-align: center;
-  margin-top: 10px;
+  font-size: 12px;
+  color: var(--pgz-text-primary);
+
+  a {
+    color: var(--pgz-accent);
+    font-weight: 600;
+    text-decoration: none;
+  }
 }
 
-.social-login {
-    margin-bottom: auto;
+// Registration password hint + terms text
+.auth-hint {
+  margin: 8px 0 0;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--pgz-text-secondary);
+}
+
+.auth-terms {
+  margin: 6px 0 0;
+  text-align: center;
+  font-size: 10px;
+  color: var(--pgz-text-muted);
+
+  a {
+    color: var(--pgz-accent);
+    font-weight: 500;
+    text-decoration: none;
+  }
 }

@@ -1,50 +1,49 @@
 :host {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  width: 100%;
 }
 
-.recovery-code-container {
+.recovery-form {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding: 20px 0;
-  border-radius: 8px;
   width: 100%;
 
-  h2 {
-    margin-bottom: 20px;
-    color: #333;
+  &__hint {
+    margin: 0 0 16px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--pgz-text-secondary);
   }
 
-  .code-inputs {
+  &__card {
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__inputs {
     display: flex;
     justify-content: space-between;
+    gap: 8px;
     width: 100%;
   }
 
-  .code-input {
-    width: 50px;
-    height: 70px;
+  &__digit {
+    flex: 1 1 0;
+    height: 56px;
     text-align: center;
-    font-size: 35px;
-    border: 2px solid var(--bs-gray-300);
-    border-radius: 4px;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--pgz-text-primary);
+    background: var(--pgz-card-bg-sub);
+    border: 1px solid var(--pgz-card-border);
+    border-radius: 10px;
     outline: none;
-    transition: border-color 0.3s ease-in-out;
+    transition: border-color 0.2s ease;
 
-    &--filled,
+    &.is-filled,
     &:focus {
-      border-color: var(--bs-success);
+      border-color: var(--pgz-accent);
     }
-  }
-
-  button {
-    margin-top: 20px;
-  }
-
-  .error-message {
-    color: red;
-    margin-top: 10px;
   }
 }

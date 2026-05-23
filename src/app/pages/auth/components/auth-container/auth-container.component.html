@@ -1,13 +1,16 @@
-<div style="margin-right: auto;" [routerLink]="'/profile'">
-    <pgz-arrow-back></pgz-arrow-back>
-</div>
-<div class="auth-logo-container">
-    <div class="auth-logo">
-        <div class="logo"></div>
+<section class="auth-shell">
+    <div class="auth-shell__back" [routerLink]="'/profile'">
+        <pgz-arrow-back [useBlackColor]="true"></pgz-arrow-back>
     </div>
-    <p>Money Cycle</p>
-</div>
-<section class="auth-container">
-    <router-outlet></router-outlet>
+
+    <div class="auth-shell__hero">
+        <div class="auth-shell__logo">
+            <div class="auth-shell__logo-img" aria-hidden="true"></div>
+        </div>
+        <p class="auth-shell__wordmark">Money Cycle</p>
+    </div>
+
+    <section class="auth-shell__outlet">
+        <router-outlet></router-outlet>
+    </section>
 </section>
-  

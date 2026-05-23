@@ -1,22 +1,21 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { PrevRouteComponent } from '../../../../core/UI/components/prev-route/prev-route.component';
 import { Router } from '@angular/router';
-import { MonthlyBudget, TotalBalanceService } from '../../../../core/UI/components/total-balance/total-balance.service';
-import { FormsModule } from '@angular/forms';
-import { AcceptBtnComponent } from '../../../../core/UI/components/accept-btn/accept-btn.component';
-import { MoneyDirective } from '../../../../directive/money.directive';
-import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
-import { FormFieldComponent } from '../../../../core/UI/components/form-field/form-field.component';
-import { FormInputComponent } from '../../../../core/UI/components/form-input/form-input.component';
+import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+
+import { MonthlyBudget, TotalBalanceService } from '../../../../core/UI/components/total-balance/total-balance.service';
+import { MoneyDirective } from '../../../../directive/money.directive';
+import { PageHeaderComponent } from '../../../../core/UI/components/page-header/page-header.component';
 
 @Component({
   selector: 'pgz-monthly-budget',
   standalone: true,
-  imports: [CommonModule, PrevRouteComponent, FormFieldComponent, FormInputComponent, FormsModule, AcceptBtnComponent, MoneyDirective, MatInputModule],
+  imports: [CommonModule, FormsModule, MatInputModule, MatButtonModule, MoneyDirective, PageHeaderComponent],
   templateUrl: './monthly-budget.component.html',
-  styleUrls: ['./monthly-budget.component.scss', '../settings.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrl: './monthly-budget.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MonthlyBudgetComponent implements OnInit {
   public isMonthlyBudgetEnabled: boolean = false;
@@ -25,7 +24,7 @@ export class MonthlyBudgetComponent implements OnInit {
 
   constructor(
     private totalBalanceService: TotalBalanceService,
-    private router: Router
+    private router: Router,
   ) { }
 
   public toggleBudget(): void {
@@ -36,22 +35,18 @@ export class MonthlyBudgetComponent implements OnInit {
     this.totalBalanceService.getMonthlyBudget().subscribe(budget => {
       this.isMonthlyBudgetEnabled = budget.isEnabled;
       this.monthlyBudget = budget.amount;
-    })
+    });
   }
 
   public save(): void {
-    this.changeMonthlyBudget();
+    const budgetData: MonthlyBudget = {
+      amount: this.monthlyBudget,
+      isEnabled: this.isMonthlyBudgetEnabled,
+    };
+    this.totalBalanceService.saveMonthlyBudget(budgetData);
   }
 
   public prevRoute(): void {
     this.router.navigate(['/profile']);
-  }
-
-  public changeMonthlyBudget(): void {
-    const budgetData: MonthlyBudget = {
-      amount: this.monthlyBudget,
-      isEnabled: this.isMonthlyBudgetEnabled
-    };
-    this.totalBalanceService.saveMonthlyBudget(budgetData);
   }
 }

@@ -1,42 +1,50 @@
-<section class="page settings-page">
-    <div (click)="prevRoute()">
-        <pgz-prev-route>
-            <p>Monthly budget</p>
-        </pgz-prev-route>
-    </div>
-    
-    <div class="settings-container">
-        
-        <div class="settings-fields settings-fields--box" style="display: flex; justify-content: space-between;">
-            <label class="toggle-text"><span>Місячний бюджет</span></label>
-            <label class="toggle-button">
-                <input type="checkbox" [ngModel]="isMonthlyBudgetEnabled" (change)="toggleBudget()">
-                <span class="slider"></span>
+<section class="monthly-budget page">
+    <pgz-page-header title="Monthly budget" [showBack]="true" (back)="prevRoute()"></pgz-page-header>
+
+    <section class="mb-card">
+        <div class="mb-row">
+            <span class="mb-row__label">Monthly budget</span>
+            <label class="mb-row__toggle">
+                <input type="checkbox"
+                       [checked]="isMonthlyBudgetEnabled"
+                       (change)="toggleBudget()"/>
+                <span class="mb-row__slider" aria-hidden="true"></span>
             </label>
         </div>
-        
-        @if(isMonthlyBudgetEnabled) {
-        <div class="settings-fields">
-            <pgz-form-input>
-                <label>Сума бюджету</label>
-                <input matInput type="text" inputmode="numeric" class="line" placeholder="0" [(ngModel)]="monthlyBudget" pgzMoney>
-                <span matTextSuffix>$</span>
-            </pgz-form-input>
-        </div>
 
-        <div class="settings-fields">
-            <pgz-form-input>
-                <label>Дата оновлення</label>
-                <input
-                    type="number"
-                    [ngModel]="updateDay"
-                    placeholder="01"/>
-            </pgz-form-input>
-        </div>
+        @if (isMonthlyBudgetEnabled) {
+            <div class="mb-field">
+                <span class="mb-field__label">BUDGET AMOUNT</span>
+                <div class="mb-field__control">
+                    <input matInput
+                           type="text"
+                           inputmode="numeric"
+                           placeholder="0"
+                           class="mb-field__input"
+                           [(ngModel)]="monthlyBudget"
+                           pgzMoney/>
+                    <span class="mb-field__suffix">$</span>
+                </div>
+            </div>
+
+            <div class="mb-field">
+                <span class="mb-field__label">RESET DAY</span>
+                <div class="mb-field__control">
+                    <input type="number"
+                           min="1"
+                           max="28"
+                           placeholder="01"
+                           class="mb-field__input"
+                           [ngModel]="updateDay"/>
+                </div>
+            </div>
         }
-    </div>
-    
-    <div class="choise-btn" (click)="save()">
-        <pgz-accept-btn [active]="true"></pgz-accept-btn>
-    </div>
+    </section>
+
+    <button mat-flat-button
+            type="button"
+            class="pgz-btn mb-submit montserrat pgz-btn--submit-enabled"
+            (click)="save()">Save</button>
+
+    <button type="button" class="mb-cancel" (click)="prevRoute()">Cancel</button>
 </section>

@@ -1,24 +1,40 @@
 :host {
   display: block;
+  background: var(--pgz-sheet-bg);
+  border-radius: var(--pgz-sheet-radius);
+  overflow: hidden;
 }
 
 .setting-list {
   display: flex;
   flex-direction: column;
-  padding: 20px 50px;
+  padding: 8px 0;
+  list-style: none;
+  margin: 0;
 
   &--item {
     display: flex;
-  }
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    cursor: pointer;
+    gap: 12px;
 
-  &--item:not(:last-child) {
-    margin-bottom: 10px;
+    &:not(:last-child) {
+      border-bottom: 0.5px solid var(--pgz-divider);
+    }
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.025);
+    }
   }
 
   &--item p {
-    text-align: center;
+    margin: 0;
+    flex: 1 1 auto;
     text-transform: capitalize;
-    font-size: 20px;
-    margin-right: 15px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--pgz-text-primary);
   }
 }

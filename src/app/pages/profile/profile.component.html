@@ -1,107 +1,83 @@
-<section>
+<section class="profile-page">
     <!-- M5.6 PR2: legacy pgz-prev-route → pgz-page-header. Profile is a
          top-level page (no back button needed; bottom nav is the navigation
          surface). -->
     <pgz-page-header title="Settings"></pgz-page-header>
 
-    <!-- Phase 3b PR3: soft anonymous-mode nudge after 7 days of accumulation
-         (ADR-0012 §"Anonymous mode UX"). Calm tone — no modal, no blinking,
-         no urgency copy. User can dismiss; we hold off another 14 days. -->
+    <!-- M5.6 PR6: soft anonymous-mode nudge after 7 days of accumulation
+         (ADR-0012 §"Anonymous mode UX"). Restyled to amber tone via
+         dedicated pgz-anonymous-nudge component. -->
     @if (shouldShowNudge()) {
-        <div class="anonymous-nudge" role="status">
-            <p class="anonymous-nudge__copy">
-                Your data is on this device only. Sign up to back it up across devices.
-            </p>
-            <div class="anonymous-nudge__actions">
-                <button type="button"
-                        class="anonymous-nudge__btn anonymous-nudge__btn--primary"
-                        (click)="registration()">
-                    Sign up
-                </button>
-                <button type="button"
-                        class="anonymous-nudge__btn"
-                        (click)="dismissAnonymousNudge()">
-                    Not now
-                </button>
-            </div>
-        </div>
+        <pgz-anonymous-nudge
+            (signUp)="registration()"
+            (dismiss)="dismissAnonymousNudge()">
+        </pgz-anonymous-nudge>
     }
 
-    <section class="profile">
-
-        @if(isAuthorizedUser) {
-            <div class="profile-header--authorized">
-                <p class="profile-header--authorized-name">{{userName}}</p>
-                <div class="profile-header--exit" (click)="logout()">
-                    <p style="align-self: baseline;">Exit</p>
-                    <pgz-icon class="profile-header--edit" [name]="'logout'"></pgz-icon>
-                </div>
+    <!-- Identity card — two variants @if. Anonymous: SIGNED IN AS label +
+         Login/Register buttons. Authorized: avatar + name + email +
+         Confirmed/Not confirmed badge + Exit text-link. -->
+    @if (isAuthorizedUser) {
+        <section class="identity-card">
+            <div class="identity-card__avatar" aria-hidden="true">
+                {{ avatarInitial }}
             </div>
-            <div class="d-flex justify-space-between">
-                <div>
-                    <p>{{ userEmail }}</p>
-                    @if(!isConfirmaEmail) {
-                        <div style="display: flex; align-items: center;">
-                            <pgz-icon class="profile-header--icon" class="profile--edit" [name]="'custom_priority'"></pgz-icon>
-                            <p style="margin-left: 8px; font-size: 14px; color: #5A5A5A;">Email not confirm</p>
-                        </div>
-                    }
-                </div>
-                
-                @if(!isConfirmaEmail) {
-                    <div class="profile-header--unauthorized__btn montserrat">Confirm</div>
+            <div class="identity-card__body">
+                <p class="identity-card__name">{{ userName }}</p>
+                <p class="identity-card__email">{{ userEmail }}</p>
+                @if (isConfirmaEmail) {
+                    <div class="identity-card__badge identity-card__badge--ok">
+                        <span class="identity-card__badge-dot" aria-hidden="true">
+                            <svg viewBox="0 0 12 12" width="12" height="12">
+                                <path d="M3 6 L5 8 L9 4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        <span class="identity-card__badge-text">Confirmed</span>
+                    </div>
                 } @else {
-                    <div class="d-flex ms-auto" style="align-items: center;">
-                        <pgz-icon class="profile-header--icon" style="color: green" class="profile--edit" [name]="'check'"></pgz-icon>
-                        <p style="margin-left: 8px; font-size: 14px; color: #5A5A5A;">Confirmed</p>
+                    <div class="identity-card__badge identity-card__badge--warn">
+                        <span class="identity-card__badge-dot" aria-hidden="true"></span>
+                        <span class="identity-card__badge-text">Email not confirmed</span>
+                        <button type="button"
+                                class="identity-card__badge-action"
+                                (click)="resendConfirmation()">Resend</button>
                     </div>
                 }
             </div>
-        } @else {
-            <div class="profile-header--unauthorized">
-                <div class="profile-header--unauthorized__warning">
-                    <pgz-icon class="profile--edit profile-header--icon" [name]="'custom_priority'"></pgz-icon>
-                    <p>Log in to save data</p>
-                </div>
-                <div class="profile-header--unauthorized__btns">
-                    <div class="profile-header--unauthorized__btn montserrat" (click)="login()">Login</div>
-                    <div class="profile-header--unauthorized__btn montserrat" (click)="registration()">Registration</div>
-                </div>
+            <button type="button"
+                    class="identity-card__exit"
+                    (click)="logout()">Exit &rsaquo;</button>
+        </section>
+    } @else {
+        <section class="identity-card identity-card--anonymous">
+            <p class="identity-card__caption">SIGNED IN AS</p>
+            <p class="identity-card__anon-name">Anonymous &middot; on this device</p>
+            <div class="identity-card__actions">
+                <button type="button"
+                        class="identity-card__btn identity-card__btn--outline"
+                        (click)="login()">Login</button>
+                <button type="button"
+                        class="identity-card__btn identity-card__btn--filled"
+                        (click)="registration()">Register</button>
             </div>
-        }
-    </section>
-    
-    <div class="settings-box">
-        <div class="general-item" (click)="changeProfileSettings()">
-            <p>Profile settings</p>
-            <div class="general-item--value">
-                <div class="arrow-box">
-                    <div class="arrow-up"></div>
-                    <div class="arrow-down"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+        </section>
+    }
 
-    <div class="settings-box">
-        <div class="general-item" (click)="changeMonthlyBudget()">
-            <p>Monthly budget</p>
-            <div class="general-item--value">
-                <div class="arrow-box">
-                    <div class="arrow-up"></div>
-                    <div class="arrow-down"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Group: Profile settings + Monthly budget (single card, 2 rows) -->
+    <pgz-settings-card>
+        <pgz-settings-row label="Profile settings"
+                          (action)="changeProfileSettings()"></pgz-settings-row>
+        <pgz-settings-row label="Monthly budget"
+                          [value]="monthlyBudgetValue"
+                          (action)="changeMonthlyBudget()"></pgz-settings-row>
+    </pgz-settings-card>
+
+    <!-- Group: System (Security / Language / Theme) -->
     <pgz-system></pgz-system>
-    
-    <!-- Phase 3b PR3: Privacy & data disclosure — always shown, regardless
-         of auth state, per ADR-0012 §"Anonymous mode UX". Tells the user
-         where their data lives in plain language so they can make an
-         informed choice. -->
-    <div class="settings-box">
-        <div class="general-item privacy-row">
+
+    <!-- Privacy & data — calm row with mode-aware subline (ADR-0012). -->
+    <pgz-settings-card>
+        <div class="privacy-row" role="button" tabindex="0">
             <div class="privacy-row__text">
                 <p class="privacy-row__title">Privacy &amp; data</p>
                 @if (isAnonymous()) {
@@ -114,61 +90,33 @@
                     </p>
                 }
             </div>
+            <span class="privacy-row__chevron" aria-hidden="true">&rsaquo;</span>
         </div>
-    </div>
+    </pgz-settings-card>
 
-    <div class="settings-box">
-        <div class="general-item">
-            <p>Export / Import data</p>
-            <div class="general-item--value">
-                <div class="arrow-box">
-                    <div class="arrow-up"></div>
-                    <div class="arrow-down"></div>
-                </div>
-            </div>
+    <pgz-settings-card>
+        <pgz-settings-row label="Export / Import data"
+                          (action)="exportImport()"></pgz-settings-row>
+    </pgz-settings-card>
+
+    <pgz-settings-card [disabled]="true">
+        <pgz-settings-row label="Write to us" [muted]="true"></pgz-settings-row>
+        <pgz-settings-row label="Rate the app" [muted]="true"></pgz-settings-row>
+        <pgz-settings-row label="Subscription / Donate" [muted]="true"></pgz-settings-row>
+    </pgz-settings-card>
+
+    @if (isAuthorizedUser) {
+        <button type="button"
+                class="profile-page__delete pgz-btn pgz-btn--danger-text"
+                (click)="onDeleteProfile()">Delete profile</button>
+    }
+
+    @if (isDevBuild) {
+        <div class="profile-page__dev-toggle">
+            <mat-slide-toggle [(ngModel)]="isStageMode" (ngModelChange)="onToggleChange()">
+                {{ isStageMode ? 'Stage Mode' : 'Dev Mode' }}
+            </mat-slide-toggle>
+            <p class="profile-page__dev-caption">DEV ONLY · build flag, not in production</p>
         </div>
-    </div>
-
-    <div class="settings-box disabled">
-        <div class="general-item">
-            <p>Write to us</p>
-            <div class="general-item--value">
-                <div class="arrow-box">
-                    <div class="arrow-up"></div>
-                    <div class="arrow-down"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="general-item">
-            <p>Rate the app</p>
-            <div class="general-item--value">
-                <div class="arrow-box">
-                    <div class="arrow-up"></div>
-                    <div class="arrow-down"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="general-item">
-            <p>Subscription / Donate</p>
-            <div class="general-item--value">
-                <div class="arrow-box">
-                    <div class="arrow-up"></div>
-                    <div class="arrow-down"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    @if(isAuthorizedUser) {
-        <p class="profile--delete">Delete profile</p>
     }
 </section>
-<div style="margin-left: 20px;">
-    <mat-slide-toggle [(ngModel)]="isStageMode" (ngModelChange)="onToggleChange()">
-        {{ isStageMode ? 'Stage Mode' : 'Dev Mode' }}
-    </mat-slide-toggle>
-
-</div>

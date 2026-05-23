@@ -1,35 +1,67 @@
-<section class="page settings-page">
-    <div (click)="prevRoute()">
-        <pgz-prev-route>
-            <p>Profile settings</p>
-        </pgz-prev-route>
-    </div>
+<section class="profile-settings page">
+    <pgz-page-header title="Profile settings" [showBack]="true" (back)="prevRoute()"></pgz-page-header>
 
-    <div class="settings-container">
-        <div class="settings-fields">
-            <pgz-form-input>
-                <label>Name</label>
-                <input matInput type="text" class="line" placeholder="Enter your name">
-            </pgz-form-input>
+    <!-- Avatar (read-only in MVP; tap-to-change ships in M5.7+). -->
+    <section class="ps-avatar">
+        <div class="ps-avatar__circle" aria-hidden="true">{{ avatarInitial }}</div>
+        <div class="ps-avatar__text">
+            <p class="ps-avatar__title">Profile photo</p>
+            <p class="ps-avatar__sub">Coming soon</p>
         </div>
+        <span class="ps-avatar__pill">SOON</span>
+    </section>
 
-        <div class="settings-fields">
-            <pgz-form-input>
-                <label>Email</label>
-                <input matInput type="text" class="line" placeholder="Enter email">
-            </pgz-form-input>
-        </div>
-
-        <div class="settings-box settings-fields" (click)="changeCurrency()">
-            <div class="d-flex">
-                <p>Currency</p>
-                <div class="general-item--value">
-                    <div class="arrow-box">
-                        <div class="arrow-up"></div>
-                        <div class="arrow-down"></div>
-                    </div>
-                </div>
+    <!-- Form card: NAME / EMAIL / CURRENCY stacked with dashed dividers. -->
+    <section class="ps-form" [formGroup]="form">
+        <div class="ps-field">
+            <span class="ps-field__label">NAME</span>
+            <div class="ps-field__control">
+                <input matInput
+                       type="text"
+                       formControlName="name"
+                       autocomplete="name"
+                       placeholder="Enter your name"
+                       class="ps-field__input"/>
             </div>
         </div>
-    </div>
+
+        <div class="ps-field">
+            <span class="ps-field__label">EMAIL</span>
+            <div class="ps-field__control">
+                <input matInput
+                       type="email"
+                       formControlName="email"
+                       autocomplete="email"
+                       placeholder="Enter email"
+                       class="ps-field__input"/>
+                @if (isEmailConfirmed) {
+                    <span class="ps-field__confirmed" aria-label="Email confirmed">
+                        <svg viewBox="0 0 12 12" width="12" height="12">
+                            <path d="M3 6 L5 8 L9 4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                }
+            </div>
+        </div>
+
+        <div class="ps-field ps-field--clickable" role="button" tabindex="0" (click)="changeCurrency()">
+            <span class="ps-field__label">BASE CURRENCY</span>
+            <div class="ps-field__control ps-field__control--row">
+                <span class="ps-field__value">{{ currencyLabel }}</span>
+                <span class="ps-field__chevron" aria-hidden="true">&rsaquo;</span>
+            </div>
+        </div>
+    </section>
+
+    <button mat-flat-button
+            type="button"
+            class="pgz-btn ps-submit montserrat"
+            [class.pgz-btn--submit-enabled]="canSave"
+            [class.pgz-btn--submit-disabled]="!canSave"
+            [disabled]="!canSave"
+            (click)="save()">Save</button>
+
+    <button type="button" class="ps-cancel" (click)="prevRoute()">Cancel</button>
+
+    <p class="ps-helper">Currency change re-converts all amounts via FX feed.</p>
 </section>

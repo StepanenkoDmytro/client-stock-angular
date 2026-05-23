@@ -1,47 +1,63 @@
 :host {
   display: block;
+  background: var(--pgz-sheet-bg);
+  border-radius: var(--pgz-sheet-radius);
+  overflow: hidden;
 }
 
 .unsaved-data {
   &--warning {
     display: flex;
-    margin: 0;
-    padding: 10px 0;
-    background-color: var(--bs-warning);
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    background: var(--pgz-anon-bg);
+    color: var(--pgz-anon-text);
+
+    h3 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 600;
+    }
   }
 
   &--message {
-    font-size: 18px;
-    padding: 25px 15px;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--pgz-text-primary);
+    padding: 18px 18px 4px;
   }
 
   &--actions {
     display: flex;
     justify-content: flex-end;
-    padding: 10px;
+    gap: 8px;
+    padding: 14px 18px 18px;
   }
 
   &--btn {
+    appearance: none;
     border: none;
+    cursor: pointer;
     border-radius: 10px;
-    padding: 5px 20px;
-    font-size: 20px;
-    font-weight: 400;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
   }
 }
 
 .save {
-  background-color: var(--bs-success);
-  color: var(--bs-light);
+  background: var(--pgz-fab-bg);
+  color: var(--pgz-fab-icon);
 }
 
 .delete {
-  margin-left: 10px;
-  background-color: var(--bs-gray-400);
-  color: var(--bs-black);
+  background: transparent;
+  color: var(--pgz-danger-text);
 }
 
 .user-storage {
-  font-size: 20px;
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--pgz-accent);
 }
