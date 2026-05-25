@@ -4,7 +4,7 @@ import moment from 'moment';
 import { ISpendingsState } from '../pages/spending/store/spendings.reducer';
 import { Store, select } from '@ngrx/store';
 import { spendingsHistorySelector, spendingsFeatureSelector, categoriesSpendindSelector } from '../pages/spending/store/spendings.selectors';
-import { addCategory, addSpending, deleteCategory, deleteSpending, editSpending, loadCategories, loadSpending } from '../pages/spending/store/spendings.actions';
+import { addCategory, addSpending, deleteCategory, deleteSpending, editCategory, editSpending, loadCategories, loadSpending } from '../pages/spending/store/spendings.actions';
 import { Spending } from '../pages/spending/model/Spending';
 import { Category } from '../domain/category.domain';
 
@@ -109,15 +109,14 @@ export class SpendingsService {
   }
 
   public async editCategory(updatedCategory: Category): Promise<void> {
-    const existingCategory = await this.findCategoryById(updatedCategory.id);
-
-    if(existingCategory.parent != updatedCategory.parent) {
-      const spendingsByCategory: Spending[] = await firstValueFrom(this.getSpendingsByCategory(existingCategory));
-      this.replaceCategoryInSpendings(updatedCategory, spendingsByCategory);
-    }
-
-    this.deleteCategory(existingCategory);
-    this.addCategory(updatedCategory);
+    // Single atomic dispatch: the reducer lifts the category from its
+    // current spot in the tree, inserts under the new parent, and
+    // re-points all referencing spendings — all in one state update.
+    // The matching effect upserts via POST /add-category (server's
+    // Portfolio.addCategory replaces by id, no delete needed). This
+    // replaces the older delete-then-add chain that race-conditioned
+    // its two HTTP calls in `mergeMap` and could lose the row.
+    this.store$.dispatch(editCategory({ category: updatedCategory }));
   }
 
   public async deleteCategory(category: Category): Promise<void> {

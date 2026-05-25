@@ -38,6 +38,38 @@ export class CategiriesSyncService {
     );
   }
 
+  /**
+   * Batch insert for Excel/CSV import (per task §3.2). One POST → server
+   * persists atomically. Dispatches `addCategory` per saved category so
+   * the store gets `isSaved: true` for each.
+   */
+  public sendCategoriesBatchToServer(portfolioID: number, categories: Category[]): Observable<Category[]> {
+    const batchUrl = this.url + portfolioID + '/categories/batch';
+    const payload = categories.map(c => Category.mapToCategoryApi(c));
+
+    return this.http.post<any[]>(batchUrl, payload).pipe(
+      map(response => response.map(api => Category.mapFromCategoryApi(api))),
+      tap(savedCategories => {
+        savedCategories.forEach(category => {
+          this.store.dispatch(addCategory({ category }));
+        });
+      }),
+      catchError(() => EMPTY),
+    );
+  }
+
+  /**
+   * Atomic server-side merge (task §2.6). Re-points spendings,
+   * relocates children, deletes source — all in one transaction.
+   */
+  public mergeCategoryOnServer(portfolioID: number, sourceId: string, targetId: string): Observable<void> {
+    const mergeUrl = this.url + portfolioID + '/merge-category/' + sourceId + '?into=' + encodeURIComponent(targetId);
+    return this.http.post<void>(mergeUrl, null).pipe(
+      map(() => undefined),
+      catchError(() => EMPTY),
+    );
+  }
+
   public deleteCategory(category: Category): Observable<void> {
     const deleteUrl = this.url + 'delete-category/' + category.id;
 

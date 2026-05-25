@@ -1,0 +1,34 @@
+<section class="move-sheet">
+    <header class="move-sheet__header">
+        <p class="move-sheet__caption">Move «{{ data.source.title }}» into…</p>
+    </header>
+
+    @if (data.canMakeTopLevel) {
+        <button type="button"
+                class="move-sheet__item move-sheet__item--root"
+                (click)="makeTopLevel()">
+            <span class="move-sheet__title">{{ data.root.title }} (top level)</span>
+            <span class="move-sheet__hint">No parent — direct under root</span>
+        </button>
+    }
+
+    @if (data.candidates.length === 0) {
+        <p class="move-sheet__empty">No valid targets — every other category is either «{{ data.source.title }}» itself or one of its descendants.</p>
+    }
+
+    <ul class="move-sheet__list">
+        @for (target of data.candidates; track target.category.id) {
+            <li>
+                <button type="button"
+                        class="move-sheet__item"
+                        [style.padding-left.px]="12 + target.depth * 16"
+                        (click)="pick(target.category)">
+                    <span class="move-sheet__title">{{ target.category.title }}</span>
+                    <span class="move-sheet__hint">{{ target.ancestorsPath }}</span>
+                </button>
+            </li>
+        }
+    </ul>
+
+    <button type="button" class="move-sheet__cancel" (click)="cancel()">Cancel</button>
+</section>

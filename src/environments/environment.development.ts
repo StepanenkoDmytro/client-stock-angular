@@ -23,4 +23,6 @@ export const environment = {
      * if you want to test the empty-state flow.
      */
     demoData: true,
+    /** See production environment.ts for usage notes. */
+    importTemplateGsheetUrl: '',
 };

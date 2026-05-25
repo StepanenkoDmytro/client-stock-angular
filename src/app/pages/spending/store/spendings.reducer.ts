@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { addSpending, editSpending, deleteSpending, loadSpending, addMultipleSpendings, deleteSpendingWithoutApiCall, addCategory, loadCategories, resetCategories, deleteCategory } from "./spendings.actions";
+import { addSpending, editSpending, deleteSpending, loadSpending, addMultipleSpendings, deleteSpendingWithoutApiCall, addCategory, editCategory, loadCategories, resetCategories, deleteCategory } from "./spendings.actions";
 import { Spending } from "../model/Spending";
 import { logout } from "../../../store/user.actions";
 import { Category } from "../../../domain/category.domain";
@@ -76,6 +76,25 @@ const updateCategoryChildren = ( category: Category, children: Category[]): Cate
     ...category,
     children
   } as Category;
+}
+
+/**
+ * Recursively walk the tree, dropping any node with `targetId` from its
+ * parent's children. Returns the original list when no removal happens,
+ * a fresh list (immutable update) otherwise. Used by `editCategory` to
+ * atomically lift a node from its current parent before re-inserting
+ * under a new one — avoids the delete-then-add race that previously
+ * caused move operations to silently drop categories.
+ */
+const removeCategoryFromTree = (categories: Category[], targetId: string): Category[] => {
+  return categories.map(category => {
+    if (category.children.length === 0) {
+      return category;
+    }
+    const filtered = category.children.filter(child => child.id !== targetId);
+    const cleanedChildren = removeCategoryFromTree(filtered, targetId);
+    return updateCategoryChildren(category, cleanedChildren);
+  });
 }
 
 export const spendingsReducer = createReducer(
@@ -159,6 +178,45 @@ export const spendingsReducer = createReducer(
       ...state,
       idIncrement: state.idIncrement + 1,
       categorySpendings: newCategorySpendingsState,
+    };
+  }),
+  /**
+   * Atomic edit (rename + reparent in a single dispatch). Previously the
+   * UI did `deleteCategory` + `addCategory` to fake an edit, which raced
+   * the two HTTP calls in `mergeMap` and could lose the row server-side.
+   * Now the reducer:
+   *  1. Lifts the existing category from wherever it sits in the tree.
+   *  2. Inserts the updated category under its new parent (or as root
+   *     replacement if `parent` is null) — children are preserved by
+   *     `addCategoryToParent` so non-leaf edits don't drop descendants.
+   *  3. Re-points every spending that referenced the old category so
+   *     downstream views (Spending tab, totals, history) reflect the
+   *     new title / icon / color immediately.
+   */
+  on(editCategory, (state, action) => {
+    const updated = action.payload.category;
+    const cleared = removeCategoryFromTree(state.categorySpendings, updated.id);
+    const newCategorySpendings = addCategoryToParent(cleared, updated);
+
+    const newSpendingsHistory = state.spendingsHistory.map(spending => {
+      if (spending.category && spending.category.id === updated.id) {
+        return new Spending(
+          spending.isSaved,
+          updated,
+          spending.comment,
+          spending.cost,
+          spending.date,
+          spending.id,
+        );
+      }
+      return spending;
+    });
+
+    return {
+      ...state,
+      idIncrement: state.idIncrement + 1,
+      categorySpendings: newCategorySpendings,
+      spendingsHistory: newSpendingsHistory,
     };
   }),
   on(loadCategories, (state, action) => {

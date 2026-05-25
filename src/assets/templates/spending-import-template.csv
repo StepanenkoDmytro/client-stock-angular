@@ -1,0 +1,19 @@
+Date,Type,Category,Amount,Comment
+2026-05-01,Income,Salary,50000,May salary
+2026-05-02,Expense,Food,350.50,Groceries at ATB
+2026-05-03,Expense,Car,200,Fuel for Volkswagen
+2026-05-04,Expense,Food > Restaurants,520,Lunch with team — Restaurants auto-created under Food
+2026-05-05,Expense,Health,80,Pharmacy
+2026-05-06,Expense,Food > Restaurants > Italian,650,3-level path — Italian auto-created under Restaurants
+2026-05-07,Expense,Coffee,45,NEW flat category — top-level under Spending
+2026-05-08,Expense,Subscriptions > Netflix,250,2-level — Subscriptions and Netflix both auto-created
+2026-05-09,Expense,House,2500,Monthly rent
+2026-05-10,Expense,Clothes,800,New shoes
+2026-05-12,Expense,Food,520,Weekly groceries
+2026-05-14,Expense,Gift,1200,Birthday present
+2026-05-15,Income,Freelance,5000,NEW Income category — created under Income root
+2026-05-18,Expense,Food > Restaurants,180,Lunch out
+2026-05-20,Expense,Car,1500,Insurance
+2026-05-22,Expense,Other,90,Phone bill
+2026-05-25,Expense,Drink,45,Coffee with colleague
+2026-05-28,Expense,Pet,300,Cat food + litter

@@ -1,0 +1,446 @@
+:host {
+  display: block;
+  background: var(--pgz-app-bg);
+}
+
+.import {
+  display: flex;
+  flex-direction: column;
+  // Leave room for the fixed bottom navigation (Savings/Spending/Stats/
+  // Profile FAB rail). The import sheet stacks many inputs/buttons, so
+  // we give it more breathing room than the static profile pages.
+  padding-bottom: 120px;
+}
+
+.import-card {
+  margin: 4px 16px 12px;
+  padding: 16px;
+  background: var(--pgz-card-bg);
+  border: 0.5px solid var(--pgz-card-border);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  &--center {
+    align-items: center;
+    text-align: center;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--pgz-text-primary);
+  }
+
+  &__steps {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--pgz-text-secondary);
+    font-size: 13px;
+    line-height: 1.5;
+
+    li {
+      margin-bottom: 4px;
+    }
+  }
+
+  &__filename {
+    margin: 0;
+    font-size: 12px;
+    color: var(--pgz-text-muted);
+    word-break: break-all;
+  }
+}
+
+.import-btn {
+  appearance: none;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 0 16px;
+  transition: background-color 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  &--outline {
+    background: transparent;
+    color: var(--pgz-text-primary);
+    border: 1px solid var(--pgz-card-border);
+  }
+
+  &--filled {
+    background: var(--pgz-fab-bg);
+    color: var(--pgz-fab-icon);
+    border: 1px solid var(--pgz-fab-bg);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+
+.import-schema {
+  padding: 10px 12px;
+  background: var(--pgz-card-bg-sub);
+  border-radius: 12px;
+
+  // The summary is the only content when collapsed; gap kicks in only
+  // when expanded so a fresh page-load stays compact.
+  &[open] {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--pgz-text-muted);
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &::before {
+      content: '▸';
+      display: inline-block;
+      margin-right: 6px;
+      transition: transform 0.15s ease;
+      font-size: 9px;
+    }
+  }
+
+  &[open] &__title::before {
+    transform: rotate(90deg);
+  }
+
+  &__table {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--pgz-card-border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: minmax(96px, 1.1fr) minmax(0, 1.6fr) minmax(0, 1.4fr);
+    gap: 8px;
+    padding: 8px 10px;
+    background: var(--pgz-card-bg);
+    font-size: 11.5px;
+    line-height: 1.4;
+    color: var(--pgz-text-primary);
+
+    > span {
+      min-width: 0;
+      word-wrap: break-word;
+    }
+
+    &--head {
+      background: var(--pgz-card-bg-sub);
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--pgz-text-muted);
+    }
+
+    strong {
+      font-weight: 600;
+    }
+
+    code {
+      background: var(--pgz-card-bg-sub);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 11px;
+      // On narrow viewports («Food > Restaurants» is the worst offender)
+      // we'd rather wrap inside the chip than clip the example out of
+      // the card. `anywhere` lets the browser pick the break point even
+      // mid-word if needed.
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  &__req {
+    margin-left: 4px;
+    color: var(--color-warning, #c44);
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 1;
+  }
+
+  &__opt {
+    display: block;
+    margin-top: 2px;
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    color: var(--pgz-text-muted);
+  }
+
+  &__note {
+    margin: 4px 0 0;
+    font-size: 11px;
+    line-height: 1.45;
+    color: var(--pgz-text-muted);
+
+    code {
+      background: var(--pgz-card-bg);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 10.5px;
+    }
+  }
+}
+
+.import-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 4px 0;
+  color: var(--pgz-text-muted);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  &::before, &::after {
+    content: '';
+    flex: 1 1 auto;
+    height: 0.5px;
+    background: var(--pgz-card-border);
+  }
+}
+
+.import-url {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  &__label {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    color: var(--pgz-text-muted);
+    text-transform: uppercase;
+  }
+
+  &__input {
+    appearance: none;
+    background: var(--pgz-card-bg-sub);
+    border: 1px solid var(--pgz-card-border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font: inherit;
+    font-size: 12.5px;
+    color: var(--pgz-text-primary);
+    outline: none;
+
+    &:focus {
+      border-color: var(--pgz-accent);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+    }
+  }
+
+  &__hint {
+    margin: 0;
+    font-size: 10.5px;
+    line-height: 1.4;
+    color: var(--pgz-text-muted);
+  }
+}
+
+.import-error {
+  margin: 0;
+  padding: 8px 12px;
+  background: rgba(220, 80, 80, 0.08);
+  border-radius: 8px;
+  color: var(--color-warning, #c44);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.import-hint {
+  margin: 4px 0 0;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--pgz-text-muted);
+
+  code {
+    background: var(--pgz-card-bg-sub);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+  }
+}
+
+.import-counts {
+  display: flex;
+  gap: 12px;
+
+  &__item {
+    flex: 1 1 0;
+    padding: 12px;
+    border-radius: 12px;
+    background: var(--pgz-card-bg-sub);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &--ok {
+      color: var(--color-positive);
+    }
+
+    &--bad {
+      color: var(--color-warning);
+    }
+  }
+
+  &__num {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  &__label {
+    margin-top: 4px;
+    font-size: 10.5px;
+    font-weight: 500;
+    color: var(--pgz-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+}
+
+.import-list {
+  margin: 0;
+  padding: 12px;
+  background: var(--pgz-card-bg-sub);
+  border-radius: 10px;
+
+  &--muted {
+    opacity: 0.75;
+  }
+
+  &--invalid {
+    background: rgba(220, 80, 80, 0.06);
+  }
+
+  &--editable .import-list__items {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  &__title {
+    margin: 0 0 4px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--pgz-text-muted);
+  }
+
+  &__hint {
+    margin: 0 0 8px;
+    font-size: 10.5px;
+    line-height: 1.4;
+    color: var(--pgz-text-muted);
+  }
+
+  &__items {
+    margin: 0;
+    padding-left: 16px;
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--pgz-text-primary);
+
+    li {
+      margin-bottom: 2px;
+    }
+  }
+
+  &__row {
+    margin-bottom: 4px;
+  }
+
+  &__edit {
+    appearance: none;
+    background: var(--pgz-card-bg);
+    border: 1px solid var(--pgz-card-border);
+    border-radius: 8px;
+    width: 100%;
+    text-align: left;
+    padding: 8px 10px;
+    cursor: pointer;
+    font: inherit;
+    font-size: 12px;
+    color: var(--pgz-text-primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: border-color 0.15s ease;
+
+    &:hover, &:focus-visible {
+      border-color: var(--pgz-accent);
+      outline: none;
+    }
+  }
+
+  &__path {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  &__edit-hint {
+    flex: 0 0 auto;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    color: var(--pgz-accent);
+    text-transform: uppercase;
+  }
+}
+
+.import-actions {
+  display: flex;
+  gap: 12px;
+
+  .import-btn {
+    flex: 1 1 0;
+  }
+}
+
+.import-status {
+  margin: 0;
+  font-size: 14px;
+  color: var(--pgz-text-secondary);
+
+  &--ok {
+    color: var(--pgz-text-primary);
+    font-weight: 600;
+  }
+}

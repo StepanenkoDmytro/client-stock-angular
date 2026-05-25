@@ -1,0 +1,54 @@
+<section class="edit-sheet">
+    <header class="edit-sheet__header">
+        <p class="edit-sheet__caption">Edit «{{ data.source.title }}»</p>
+    </header>
+
+    <div class="edit-sheet__field">
+        <label class="edit-sheet__label" for="edit-name">Name</label>
+        <input id="edit-name"
+               type="text"
+               class="edit-sheet__input"
+               [(ngModel)]="name"
+               (keydown.enter)="save()"
+               autocomplete="off"/>
+    </div>
+
+    <div class="edit-sheet__parent">
+        <p class="edit-sheet__label">Parent</p>
+
+        <button type="button"
+                class="edit-sheet__item edit-sheet__item--root"
+                [class.edit-sheet__item--selected]="isSelectedRoot()"
+                (click)="pickRoot()">
+            <span class="edit-sheet__title">{{ data.root.title }} (top level)</span>
+            <span class="edit-sheet__hint">No parent — direct under root</span>
+        </button>
+
+        @if (data.candidates.length === 0) {
+            <p class="edit-sheet__empty">No other categories under «{{ data.root.title }}» yet.</p>
+        }
+
+        <ul class="edit-sheet__list">
+            @for (target of data.candidates; track target.category.id) {
+                <li>
+                    <button type="button"
+                            class="edit-sheet__item"
+                            [class.edit-sheet__item--selected]="isSelected(target.category)"
+                            [style.padding-left.px]="12 + target.depth * 16"
+                            (click)="pickCategory(target.category)">
+                        <span class="edit-sheet__title">{{ target.category.title }}</span>
+                        <span class="edit-sheet__hint">{{ target.ancestorsPath }}</span>
+                    </button>
+                </li>
+            }
+        </ul>
+    </div>
+
+    <div class="edit-sheet__actions">
+        <button type="button" class="edit-sheet__btn" (click)="cancel()">Cancel</button>
+        <button type="button"
+                class="edit-sheet__btn edit-sheet__btn--primary"
+                [disabled]="!canSave()"
+                (click)="save()">Save</button>
+    </div>
+</section>

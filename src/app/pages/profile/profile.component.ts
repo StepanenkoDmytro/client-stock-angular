@@ -187,8 +187,7 @@ export class ProfileComponent implements OnInit {
   }
 
   public exportImport(): void {
-    // Hook reserved for the Export/Import flow; routing target lands in
-    // a separate PR. For now the row is interactive but no-op.
+    this.router.navigate(['/profile/export-import']);
   }
 
   /**

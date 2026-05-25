@@ -1,0 +1,78 @@
+<section class="organize page">
+    <pgz-page-header title="Organize categories"
+                     [showBack]="true"
+                     (back)="prevRoute()"></pgz-page-header>
+
+    <div class="organize-toolbar">
+        <button type="button"
+                class="organize-toolbar__btn"
+                [class.organize-toolbar__btn--active]="selectMode"
+                (click)="toggleSelectMode()">
+            {{ selectMode ? 'Exit select' : 'Multi-select' }}
+        </button>
+        @if (selectMode) {
+            <span class="organize-toolbar__count">{{ selectedIds.size }} selected</span>
+        }
+    </div>
+
+    @for (group of groups; track group.root.id) {
+        <section class="organize-section">
+            <header class="organize-section__header">
+                <h3 class="organize-section__title">{{ group.root.title }}</h3>
+                <span class="organize-section__count">{{ group.rows.length }} categories</span>
+            </header>
+
+            @if (group.rows.length === 0) {
+                <p class="organize-section__empty">No categories yet.</p>
+            }
+
+            <ul class="organize-list">
+                @for (row of group.rows; track row.category.id) {
+                    <li class="organize-row"
+                        [style.padding-left.px]="12 + row.depth * 18"
+                        [class.organize-row--child]="row.depth > 0"
+                        [class.organize-row--selected]="selectMode && isSelected(row.category.id)">
+
+                        @if (selectMode) {
+                            <label class="organize-row__check">
+                                <input type="checkbox"
+                                       [checked]="isSelected(row.category.id)"
+                                       (change)="toggleSelect(row)"/>
+                                <span class="organize-row__title">{{ row.category.title }}</span>
+                                @if (row.isNew) {
+                                    <span class="organize-row__badge">NEW</span>
+                                }
+                            </label>
+                        } @else {
+                            <button type="button"
+                                    class="organize-row__label"
+                                    (click)="openEditSheet(row)">
+                                <span class="organize-row__title">{{ row.category.title }}</span>
+                                @if (row.isNew) {
+                                    <span class="organize-row__badge">NEW</span>
+                                }
+                            </button>
+                            <button type="button"
+                                    class="organize-row__action"
+                                    aria-label="Edit name and parent"
+                                    (click)="openEditSheet(row)">Edit</button>
+                            <button type="button"
+                                    class="organize-row__action"
+                                    aria-label="Merge category"
+                                    (click)="mergeInto(row)">Merge</button>
+                        }
+                    </li>
+                }
+            </ul>
+        </section>
+    }
+
+    @if (selectMode && selectedIds.size > 0) {
+        <div class="organize-bulkbar">
+            <button type="button" class="organize-bulkbar__btn" (click)="bulkMove()">Move {{ selectedIds.size }}…</button>
+            <button type="button" class="organize-bulkbar__btn organize-bulkbar__btn--primary" (click)="bulkMerge()">Merge {{ selectedIds.size }}…</button>
+        </div>
+    } @else {
+        <button type="button" class="organize-done" (click)="dismissBadges()">Done</button>
+    }
+</section>

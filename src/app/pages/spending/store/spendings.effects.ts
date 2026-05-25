@@ -3,7 +3,7 @@ import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { EMPTY } from 'rxjs';
 import { filter, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { Category } from '../../../domain/category.domain';
-import { addCategory, addSpending, deleteCategory, deleteSpending, editSpending, loadCategories, loadSpending } from './spendings.actions';
+import { addCategory, addSpending, deleteCategory, deleteSpending, editCategory, editSpending, loadCategories, loadSpending } from './spendings.actions';
 import { AuthService } from '../../../service/auth.service';
 import { Store } from '@ngrx/store';
 import { selectPortfolioID } from '../../../store/user.selectors';
@@ -80,6 +80,23 @@ export class SpendingsEffects {
     ofType(addCategory),
     filter(() => !!this.authService.authToken),
     filter(({ payload }) => !payload.category.isSaved),
+    withLatestFrom(this.store$.select(selectPortfolioID)),
+    mergeMap(([action, portfolioID]) => {
+      return this.categoriesSyncService.sendCategoryToServer(portfolioID, action.payload.category);
+    })
+  ), { dispatch: false });
+
+  /**
+   * Atomic rename + reparent. Leans on the server's `/add-category`
+   * endpoint, which `Portfolio.addCategory` already treats as an upsert
+   * (replace-by-id) — so the same POST that creates new categories also
+   * updates existing ones in place, no delete needed. This is the path
+   * that replaced the racy delete-then-add chain in
+   * `SpendingsService.editCategory`.
+   */
+  editCategory$ = createEffect(() => this.actions$.pipe(
+    ofType(editCategory),
+    filter(() => !!this.authService.authToken),
     withLatestFrom(this.store$.select(selectPortfolioID)),
     mergeMap(([action, portfolioID]) => {
       return this.categoriesSyncService.sendCategoryToServer(portfolioID, action.payload.category);

@@ -20,4 +20,14 @@ export const environment = {
      * for screenshot / story sessions only.
      */
     demoData: false,
+    /**
+     * Public Google Sheets template that opens with «Make a copy» (URL
+     * suffix `/copy`). Used by the Spending Excel/CSV import flow
+     * (task §3.3 option B). Leave empty to hide the «Open in Google
+     * Sheets» button — the CSV download still works. To enable, create
+     * a sheet in Drive, set sharing to «Anyone with the link — Viewer»,
+     * then paste the URL here in the form:
+     *   https://docs.google.com/spreadsheets/d/{ID}/copy
+     */
+    importTemplateGsheetUrl: '',
 };

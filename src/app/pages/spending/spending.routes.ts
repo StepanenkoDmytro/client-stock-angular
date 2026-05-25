@@ -4,6 +4,7 @@ import { AddSpendingComponent } from './components/add-spending/add-spending.com
 import { AddCategoryComponent } from './components/category-spending/add-category/add-category.component';
 import { SpendingStatisticComponent } from './components/spending-statistic/spending-statistic.component';
 import { CategorySpendingComponent } from './components/category-spending/category-spending.component';
+import { OrganizeCategoriesComponent } from './components/organize-categories/organize-categories.component';
 
 
 export const SPENDING_ROUTES: Route[] = [
@@ -25,10 +26,14 @@ export const SPENDING_ROUTES: Route[] = [
   },
   {
     path: 'statistic/:id',
-    component: SpendingStatisticComponent, 
+    component: SpendingStatisticComponent,
   },
-  { 
-    path: 'category/:id', 
+  {
+    path: 'category/:id',
     component: CategorySpendingComponent,
-}
+  },
+  {
+    path: 'organize-categories',
+    component: OrganizeCategoriesComponent,
+  },
 ];

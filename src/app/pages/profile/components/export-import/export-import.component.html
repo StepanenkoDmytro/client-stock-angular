@@ -1,0 +1,19 @@
+<section class="export-import page">
+    <pgz-page-header title="Export / Import data"
+                     [showBack]="true"
+                     (back)="prevRoute()"></pgz-page-header>
+
+    <p class="export-import__section-label">Excel / CSV</p>
+
+    <pgz-settings-card>
+        <pgz-settings-row label="Import spendings from Excel"
+                          (action)="importSpendings()"></pgz-settings-row>
+    </pgz-settings-card>
+
+    <p class="export-import__section-label">Coming soon</p>
+
+    <pgz-settings-card [disabled]="true">
+        <pgz-settings-row label="Export my data (CSV / JSON)" [muted]="true"></pgz-settings-row>
+        <pgz-settings-row label="Import holdings from CSV" [muted]="true"></pgz-settings-row>
+    </pgz-settings-card>
+</section>

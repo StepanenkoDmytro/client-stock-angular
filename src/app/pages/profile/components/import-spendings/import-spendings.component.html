@@ -1,0 +1,231 @@
+<section class="import page">
+    <pgz-page-header [title]="stage === 'done' ? 'Import complete' : 'Import spendings'"
+                     [showBack]="true"
+                     (back)="prevRoute()"></pgz-page-header>
+
+    @if (stage === 'instructions') {
+        <article class="import-card">
+            <h3 class="import-card__title">Bring your data in</h3>
+            <ol class="import-card__steps">
+                <li>Download our template, or arrange your sheet with the columns below.</li>
+                <li>Fill your transactions in Excel, Numbers, or Google Sheets.</li>
+                <li>Save as <strong>.csv</strong>, <strong>.xlsx</strong> or <strong>.xls</strong> and upload it — or paste the share link.</li>
+            </ol>
+
+            <details class="import-schema">
+                <summary class="import-schema__title">Required columns &mdash; tap to expand</summary>
+                <div class="import-schema__table" role="table" aria-label="Spending import columns">
+                    <div class="import-schema__row import-schema__row--head" role="row">
+                        <span role="columnheader">Column</span>
+                        <span role="columnheader">Format</span>
+                        <span role="columnheader">Example</span>
+                    </div>
+
+                    <div class="import-schema__row" role="row">
+                        <span role="cell">
+                            <strong>Date</strong>
+                            <span class="import-schema__req" aria-label="required">*</span>
+                        </span>
+                        <span role="cell">YYYY-MM-DD or Excel-native date</span>
+                        <span role="cell"><code>2026-05-01</code></span>
+                    </div>
+
+                    <div class="import-schema__row" role="row">
+                        <span role="cell">
+                            <strong>Type</strong>
+                            <span class="import-schema__req" aria-label="required">*</span>
+                        </span>
+                        <span role="cell"><code>Income</code> or <code>Expense</code> (case-insensitive)</span>
+                        <span role="cell"><code>Expense</code></span>
+                    </div>
+
+                    <div class="import-schema__row" role="row">
+                        <span role="cell">
+                            <strong>Category</strong>
+                            <span class="import-schema__req" aria-label="required">*</span>
+                        </span>
+                        <span role="cell">single name, or path with <code>&gt;</code> separator</span>
+                        <span role="cell"><code>Food</code> · <code>Food &gt; Restaurants</code></span>
+                    </div>
+
+                    <div class="import-schema__row" role="row">
+                        <span role="cell">
+                            <strong>Amount</strong>
+                            <span class="import-schema__req" aria-label="required">*</span>
+                        </span>
+                        <span role="cell">positive number (sign defined by Type)</span>
+                        <span role="cell"><code>350.50</code></span>
+                    </div>
+
+                    <div class="import-schema__row" role="row">
+                        <span role="cell">
+                            <strong>Comment</strong>
+                            <span class="import-schema__opt">optional</span>
+                        </span>
+                        <span role="cell">free text, up to 200 chars</span>
+                        <span role="cell"><code>Groceries at ATB</code></span>
+                    </div>
+                </div>
+                <p class="import-schema__note">
+                    Row 1 is the header (these exact names). Data starts on row 2.
+                    Missing categories — or any level of <code>A &gt; B &gt; C</code> path
+                    — are created automatically. Up to 1000 rows per file.
+                </p>
+            </details>
+
+            <div class="import-url">
+                <label class="import-url__label" for="gsheet-url">Paste a Google Sheets share link</label>
+                <input id="gsheet-url"
+                       type="url"
+                       class="import-url__input"
+                       placeholder="https://docs.google.com/spreadsheets/d/.../edit"
+                       [(ngModel)]="gsheetUrlInput"
+                       [disabled]="fetchingFromUrl"
+                       (keydown.enter)="importFromUrl()"/>
+                <button type="button"
+                        class="import-btn import-btn--filled"
+                        [disabled]="!gsheetUrlInput || fetchingFromUrl"
+                        (click)="importFromUrl()">
+                    {{ fetchingFromUrl ? 'Fetching…' : 'Import from URL' }}
+                </button>
+                <p class="import-url__hint">
+                    The sheet must be shared as «Anyone with the link — Viewer».
+                </p>
+                @if (errorMessage) {
+                    <p class="import-error">{{ errorMessage }}</p>
+                }
+            </div>
+
+            <div class="import-divider"><span>or upload a file</span></div>
+
+            <a class="import-btn import-btn--outline"
+               [href]="templateHref"
+               download>Download CSV template</a>
+
+            @if (gsheetUrl) {
+                <a class="import-btn import-btn--outline"
+                   [href]="gsheetUrl"
+                   target="_blank"
+                   rel="noopener">Open template in Google Sheets</a>
+            }
+
+            <label class="import-btn import-btn--outline">
+                Choose file from device
+                <input type="file"
+                       accept=".csv,.xlsx,.xls,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+                       hidden
+                       (change)="onFilePicked($event)"/>
+            </label>
+
+            <p class="import-hint">
+                Categories from your file are matched against existing ones.
+                Anything new (single name or a <code>Food &gt; Restaurants</code>
+                path) is created automatically. You can reorganize categories
+                later via Profile &rsaquo; Spending &rsaquo; Organize categories.
+            </p>
+        </article>
+    }
+
+    @if (stage === 'review' && plan) {
+        <article class="import-card">
+            <p class="import-card__filename">{{ fileName }}</p>
+
+            <div class="import-counts">
+                <div class="import-counts__item import-counts__item--ok">
+                    <span class="import-counts__num">{{ plan.valid.length }}</span>
+                    <span class="import-counts__label">valid rows</span>
+                </div>
+                @if (plan.invalid.length > 0) {
+                    <div class="import-counts__item import-counts__item--bad">
+                        <span class="import-counts__num">{{ plan.invalid.length }}</span>
+                        <span class="import-counts__label">skipped</span>
+                    </div>
+                }
+            </div>
+
+            @if (plan.newCategories.length > 0) {
+                <section class="import-list import-list--editable">
+                    <h4 class="import-list__title">Categories that will be created</h4>
+                    <p class="import-list__hint">
+                        Tap a category to rename it or pick a different parent —
+                        nothing is saved until you press Import.
+                    </p>
+                    <ul class="import-list__items">
+                        @for (cat of plan.newCategories; track cat.id) {
+                            <li class="import-list__row">
+                                <button type="button"
+                                        class="import-list__edit"
+                                        (click)="editPlanCategory(cat)">
+                                    <span class="import-list__path">{{ ancestorsPath(cat) }}</span>
+                                    <span class="import-list__edit-hint">Edit</span>
+                                </button>
+                            </li>
+                        }
+                    </ul>
+                </section>
+            }
+
+            @if (plan.reusedCategories.length > 0) {
+                <section class="import-list import-list--muted">
+                    <h4 class="import-list__title">Reused existing categories</h4>
+                    <ul class="import-list__items">
+                        @for (cat of plan.reusedCategories; track cat.id) {
+                            <li>{{ ancestorsPath(cat) }}</li>
+                        }
+                    </ul>
+                </section>
+            }
+
+            @if (plan.invalid.length > 0) {
+                <section class="import-list import-list--invalid">
+                    <h4 class="import-list__title">Skipped rows</h4>
+                    <ul class="import-list__items">
+                        @for (row of plan.invalid; track row.rowNum) {
+                            <li>
+                                @if (row.rowNum > 0) {
+                                    <span class="import-list__row">Row {{ row.rowNum }}</span>
+                                }
+                                <span>{{ row.reason }}</span>
+                            </li>
+                        }
+                    </ul>
+                </section>
+            }
+
+            <div class="import-actions">
+                <button type="button"
+                        class="import-btn import-btn--outline"
+                        (click)="backToInstructions()">Cancel</button>
+                <button type="button"
+                        class="import-btn import-btn--filled"
+                        [disabled]="plan.valid.length === 0"
+                        (click)="confirmImport()">Import {{ plan.valid.length }} rows</button>
+            </div>
+        </article>
+    }
+
+    @if (stage === 'importing') {
+        <article class="import-card import-card--center">
+            <p class="import-status">Importing… this may take a few seconds.</p>
+        </article>
+    }
+
+    @if (stage === 'done') {
+        <article class="import-card import-card--center">
+            <p class="import-status import-status--ok">
+                {{ importedSpendings }} spendings imported
+                @if (createdCategories > 0) {
+                    · {{ createdCategories }} categories created
+                }
+            </p>
+            <div class="import-actions">
+                <button type="button"
+                        class="import-btn import-btn--outline"
+                        (click)="goToOrganize()">Organize</button>
+                <button type="button"
+                        class="import-btn import-btn--filled"
+                        (click)="goToSpending()">View in Spending</button>
+            </div>
+        </article>
+    }
+</section>

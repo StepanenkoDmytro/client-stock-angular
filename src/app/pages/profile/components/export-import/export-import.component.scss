@@ -1,0 +1,21 @@
+:host {
+  display: block;
+  min-height: 100%;
+  background: var(--pgz-app-bg);
+}
+
+.export-import {
+  display: flex;
+  flex-direction: column;
+  // Bottom nav clearance — see import-spendings.component.scss note.
+  padding-bottom: 96px;
+
+  &__section-label {
+    margin: 16px 16px 6px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--pgz-text-muted);
+    text-transform: uppercase;
+  }
+}

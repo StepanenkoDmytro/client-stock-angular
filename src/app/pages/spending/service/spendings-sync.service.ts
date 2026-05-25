@@ -69,6 +69,26 @@ export class SpendingsSyncService {
     );
   }
 
+  /**
+   * Batch insert for Excel/CSV import (per task §3.2). One POST → server
+   * persists atomically via JPA cascade. On success dispatches
+   * `addMultipleSpendings` so the store reflects saved=true.
+   */
+  public sendSpendingsBatchToServer(portfolioID: number, spendings: Spending[], categories: Category[]): Observable<Spending[]> {
+    const batchUrl = this.url + portfolioID + '/spendings/batch';
+    const payload = spendings.map(s => Spending.mapToSpendingApi(s));
+
+    return this.http.post<any[]>(batchUrl, payload).pipe(
+      map(response => response.map(api => Spending.mapFromSpendingApi(api, categories))),
+      tap(savedSpendings => {
+        if (savedSpendings.length > 0) {
+          this.store$.dispatch(addMultipleSpendings({ spendings: savedSpendings }));
+        }
+      }),
+      catchError(() => EMPTY),
+    );
+  }
+
   public deleteSpending(spendingId: string): Observable<void> {
     const deleteUrl = this.url + 'delete-spending/' + spendingId;
 
