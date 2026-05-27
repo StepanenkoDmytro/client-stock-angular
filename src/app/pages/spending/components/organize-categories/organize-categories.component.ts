@@ -214,6 +214,7 @@ export class OrganizeCategoriesComponent implements OnInit, OnDestroy {
         spending.cost,
         spending.date,
         spending.id,
+        spending.currency,
       );
       this.store.dispatch(editSpending({ spending: repointed }));
     }
@@ -335,7 +336,7 @@ export class OrganizeCategoriesComponent implements OnInit, OnDestroy {
       const affected = await this.findSpendingsByCategoryId(row.category.id);
       await firstValueFrom(this.categoriesSync.mergeCategoryOnServer(portfolioID, row.category.id, target.id));
       for (const spending of affected) {
-        const repointed = new Spending(true, target, spending.comment, spending.cost, spending.date, spending.id);
+        const repointed = new Spending(true, target, spending.comment, spending.cost, spending.date, spending.id, spending.currency);
         this.store.dispatch(editSpending({ spending: repointed }));
       }
       for (const child of row.category.children) {

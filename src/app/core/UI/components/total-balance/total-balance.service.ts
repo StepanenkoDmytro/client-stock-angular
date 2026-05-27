@@ -1,6 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { SpendingsService } from '../../../../service/spendings.service';
-import { BehaviorSubject, Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable, map, switchMap } from 'rxjs';
+import { FxRateService } from '../../../../service/fx-rate.service';
+import { UserPreferencesService } from '../../../../pages/savings/service/user-preferences.service';
+import { DEFAULT_SPENDING_CURRENCY } from '../../../../pages/spending/model/Spending';
 
 export interface MonthlyBudget {
   amount: number;
@@ -18,12 +21,15 @@ export class TotalBalanceService {
     isEnabled: false,
   });
 
+  private readonly fxRate = inject(FxRateService);
+  private readonly userPrefs = inject(UserPreferencesService);
+
   constructor(
     private spendingsService: SpendingsService
   ) { }
 
   public getMonthlyBudget(): Observable<MonthlyBudget> {
-    
+
     const budgetStoredData = localStorage.getItem(this.budgetLocalStorageKey);
     if (budgetStoredData) {
       const parsedBudget: MonthlyBudget = JSON.parse(budgetStoredData);
@@ -37,13 +43,32 @@ export class TotalBalanceService {
     this.monthlyBudget$.next(budget);
   }
 
+  /**
+   * Sum of all current-month spendings, converted into the user's
+   * baseCurrency via the FX cache (ADR-0002 §Spendings). Triggers a
+   * batch preload of all distinct currencies present in the month —
+   * subsequent renders are cache hits.
+   */
   public getSpentByMonth(): Observable<number> {
     return this.spendingsService.loadByCurrentMonth().pipe(
-      map(spendingList => 
-        spendingList
-          .map(spend => spend.cost)
-          .reduce((accumulator, cost) => accumulator + cost, 0)
-      )
+      switchMap(spendingList => {
+        const base = this.userPrefs.baseCurrency() ?? DEFAULT_SPENDING_CURRENCY;
+        const currencies = Array.from(new Set(
+          spendingList.map(s => s.currency).filter((c): c is string => !!c),
+        ));
+        return this.fxRate.preload(base, currencies).pipe(
+          map(() => spendingList.reduce((sum, s) => {
+            const native = s.currency ?? base;
+            // Spot-rate aggregation (no `at`): we preload once per session
+            // under the "today" key, then sum at that snapshot. Per-date
+            // historical FX is a future refinement, not needed for monthly
+            // / category totals where the user wants "what would this cost
+            // in baseCurrency right now".
+            const converted = this.fxRate.convertSync(s.cost, native, base);
+            return sum + (converted ?? s.cost);
+          }, 0)),
+        );
+      }),
     );
   }
 }

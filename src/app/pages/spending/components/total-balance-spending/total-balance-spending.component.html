@@ -9,7 +9,7 @@
                 @if(spentByMonth > 0) {
                     -
                 }
-                {{ spentByMonth | moneyFormat}}$
+                {{ spentByMonth | moneyFormat}}{{ userPrefs.baseCurrency() | pgzCurrencySymbol }}
             </p>
         </div>
         

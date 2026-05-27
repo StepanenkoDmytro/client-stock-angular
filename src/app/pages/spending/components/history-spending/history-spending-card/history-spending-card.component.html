@@ -9,7 +9,7 @@
       </div>
 
       <div class="spending--info">
-        <p class="text spending--cost">{{ spending.cost }}<span  style="margin-left: 4px;">$</span></p>
+        <p class="text spending--cost">{{ spending.cost | moneyFormat }}<span  style="margin-left: 4px;">{{ spending.currency | pgzCurrencySymbol }}</span></p>
       </div>
 
       <!-- <div class=""> -->

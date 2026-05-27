@@ -7,6 +7,7 @@ export interface ISpending {
     comment: string;
     cost: number;
     date: Date;
+    currency: string;
 }
 
 export interface ICategorizedSpendings {

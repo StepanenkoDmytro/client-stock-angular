@@ -680,3 +680,14 @@ input:checked + .slider {
 input:checked + .slider:before {
   transform: translateX(24px);
 }
+
+
+/* Spending add-form: currency dropdown panel.
+   mat-select без mat-form-field-обгортки за замовчуванням приймає ширину триггера,
+   тому 3-літерні коди ("USD", "EUR" тощо) обрізаються. Глобальний override —
+   панель overlay рендериться поза компонентом, тому :ng-deep всередині компонента не діє. */
+.cdk-overlay-pane:has(.add-spending--currency-panel),
+.add-spending--currency-panel.mat-mdc-select-panel {
+  min-width: 140px !important;
+}
+

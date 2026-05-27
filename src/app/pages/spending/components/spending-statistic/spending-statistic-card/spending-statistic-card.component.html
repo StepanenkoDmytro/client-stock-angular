@@ -14,7 +14,7 @@
 
         <div class="spending-stat-card--right-block">
             @if(!isCompareMode) {
-                <p>{{_data.value}}<span  style="margin-left: 4px;">$</span></p>
+                <p>{{_data.value | moneyFormat}}<span  style="margin-left: 4px;">{{ userPrefs.baseCurrency() | pgzCurrencySymbol }}</span></p>
             }
 
             <button class="spending-stat-card--btn btn" (click)="onClickCard()">
@@ -32,7 +32,7 @@
                         class="color-bar"
                         [ngStyle]="{ 'background-color': chartsColors['Primary'] }">
                     </div>
-                    <p class="spending-stat-card-value--compare-mode__value">{{_data.value}}<span  style="margin-left: 4px;">$</span></p>
+                    <p class="spending-stat-card-value--compare-mode__value">{{_data.value | moneyFormat}}<span  style="margin-left: 4px;">{{ userPrefs.baseCurrency() | pgzCurrencySymbol }}</span></p>
                 </div>
 
                 <div class="spending-stat-card-value--compare-mode">
@@ -41,7 +41,7 @@
                         class="color-bar"
                         [ngStyle]="{ 'background-color': chartsColors['Comparative'] }">
                     </div>
-                    <p class="spending-stat-card-value--compare-mode__value">{{_compareData.value}}<span  style="margin-left: 4px;">$</span></p>
+                    <p class="spending-stat-card-value--compare-mode__value">{{_compareData.value | moneyFormat}}<span  style="margin-left: 4px;">{{ userPrefs.baseCurrency() | pgzCurrencySymbol }}</span></p>
                 </div>
             
             </div>

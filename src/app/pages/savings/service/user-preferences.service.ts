@@ -19,9 +19,14 @@ export class UserPreferencesService {
   private readonly _current = signal<UserPreferences | null>(null);
   public readonly current = this._current.asReadonly();
 
-  /** Convenience: baseCurrency or `null` if not yet loaded. */
+  /**
+   * baseCurrency resolution: server value (when authenticated and loaded)
+   * takes precedence; otherwise we fall back to the locally-persisted
+   * preference so anonymous users can change their display currency too
+   * (ADR-0012 anonymous mode). `null` only when neither source has it.
+   */
   public readonly baseCurrency = computed<string | null>(
-    () => this._current()?.baseCurrency ?? null,
+    () => this._current()?.baseCurrency ?? this._localBaseCurrency() ?? null,
   );
 
   /**
@@ -38,6 +43,15 @@ export class UserPreferencesService {
   );
 
   /**
+   * Locally-stored baseCurrency for anonymous mode (and a hot-cache for
+   * authenticated users, so reloads don't flash the default before the
+   * `/me/preferences` round-trip lands).
+   */
+  private readonly _localBaseCurrency = signal<string | null>(
+    UserPreferencesService.readLocalPrefs().baseCurrency ?? null,
+  );
+
+  /**
    * `true` once the user dismissed the T2 Discovery row via the ✕ Hide
    * button. Forever-dismiss per task §5.3 / design-roadmap §18 —
    * persists across reloads, never auto-resurfaces.
@@ -49,7 +63,7 @@ export class UserPreferencesService {
     UserPreferencesService.writeLocalPrefs({ discoveryRowHidden: hidden });
   }
 
-  private static readLocalPrefs(): { discoveryRowHidden?: boolean } {
+  private static readLocalPrefs(): { discoveryRowHidden?: boolean; baseCurrency?: string } {
     try {
       const raw = localStorage.getItem(UserPreferencesService.LOCAL_PREFS_KEY);
       return raw ? JSON.parse(raw) : {};
@@ -58,11 +72,14 @@ export class UserPreferencesService {
     }
   }
 
-  private static writeLocalPrefs(prefs: { discoveryRowHidden?: boolean }): void {
+  private static writeLocalPrefs(patch: { discoveryRowHidden?: boolean; baseCurrency?: string }): void {
     try {
+      // Read-merge-write: never blow away keys we don't know about.
+      const current = UserPreferencesService.readLocalPrefs();
+      const next = { ...current, ...patch };
       localStorage.setItem(
         UserPreferencesService.LOCAL_PREFS_KEY,
-        JSON.stringify(prefs),
+        JSON.stringify(next),
       );
     } catch {
       // Storage quota / private mode — non-critical; in-memory signal
@@ -88,7 +105,16 @@ export class UserPreferencesService {
     return this.http
       .get<UserPreferences>(`${environment.apiBaseUrl}/me/preferences`)
       .pipe(
-        tap((prefs) => this._current.set(prefs)),
+        tap((prefs) => {
+          this._current.set(prefs);
+          // Mirror the server value into localStorage so subsequent
+          // reloads have a hot copy before /me/preferences round-trips.
+          if (prefs?.baseCurrency) {
+            const code = prefs.baseCurrency.toUpperCase();
+            this._localBaseCurrency.set(code);
+            UserPreferencesService.writeLocalPrefs({ baseCurrency: code });
+          }
+        }),
         catchError((err: HttpErrorResponse) => {
           if (typeof console !== 'undefined') {
             console.debug('UserPreferencesService.load failed', err.status);
@@ -99,18 +125,38 @@ export class UserPreferencesService {
   }
 
   /**
-   * Update baseCurrency and persist. Backend whitelist validates — 400
-   * propagates as an error so the caller can show a Material snackbar.
-   * On success, the cached signal updates with the server-canonicalised
-   * value (uppercased).
+   * Update baseCurrency and persist. Anonymous users (no JWT) skip the
+   * server round-trip and store the value in localStorage only — the
+   * computed {@link baseCurrency} falls back to the local copy when
+   * `_current` is null, so the UI still reacts.
+   *
+   * Authenticated users persist on both sides: backend whitelist
+   * validates (400 propagates as a `null` emission so callers can show
+   * a Material snackbar) and the local cache is updated with the
+   * server-canonicalised (uppercased) code so reloads don't flash the
+   * default before `/me/preferences` lands.
    */
   public setBaseCurrency(currency: string): Observable<UserPreferences | null> {
+    const normalised = currency.trim().toUpperCase();
+    if (!this.auth.authToken) {
+      // Anonymous mode: localStorage is the source of truth.
+      this._localBaseCurrency.set(normalised);
+      UserPreferencesService.writeLocalPrefs({ baseCurrency: normalised });
+      return of({ baseCurrency: normalised });
+    }
     return this.http
       .put<UserPreferences>(`${environment.apiBaseUrl}/me/preferences`, {
-        baseCurrency: currency,
+        baseCurrency: normalised,
       })
       .pipe(
-        tap((prefs) => this._current.set(prefs)),
+        tap((prefs) => {
+          this._current.set(prefs);
+          if (prefs?.baseCurrency) {
+            const code = prefs.baseCurrency.toUpperCase();
+            this._localBaseCurrency.set(code);
+            UserPreferencesService.writeLocalPrefs({ baseCurrency: code });
+          }
+        }),
         catchError((err: HttpErrorResponse) => {
           if (typeof console !== 'undefined') {
             console.debug('UserPreferencesService.setBaseCurrency failed', err.status);

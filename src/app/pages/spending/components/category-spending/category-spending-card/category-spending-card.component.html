@@ -16,8 +16,8 @@
             @if(data.value > 0) {
                 -
             }
-            {{data.value}}
-            <span style="margin-left: 4px;">$</span>
+            {{data.value | moneyFormat}}
+            <span style="margin-left: 4px;">{{ userPrefs.baseCurrency() | pgzCurrencySymbol }}</span>
         </p>
         @if(data.category.title !== 'Other') {
             <div (click)="onCardClick()">

@@ -99,7 +99,7 @@ export class SpendingsService {
 
   public replaceCategoryInSpendings(newCategory: Category, spendings: Spending[]): void {
     spendings
-      .map(spending => new Spending(false, newCategory, spending.comment, spending.cost, spending.date, spending.id))
+      .map(spending => new Spending(false, newCategory, spending.comment, spending.cost, spending.date, spending.id, spending.currency))
       .forEach(spending => this.editSpending(spending));
   }
 

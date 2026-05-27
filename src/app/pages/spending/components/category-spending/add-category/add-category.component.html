@@ -53,7 +53,7 @@
     @if(isLimitCategoryEnebled) {
         <pgz-form-input>
             <input class="add-edit-category--name" type="number" inputmode="numeric" placeholder="0" [(ngModel)]="limitOfCaregory" pgzMoney>
-            <span class="add-spending--currency">$</span>
+            <span class="add-spending--currency">{{ userPrefs.baseCurrency() | pgzCurrencySymbol }}</span>
         </pgz-form-input>
     }
 

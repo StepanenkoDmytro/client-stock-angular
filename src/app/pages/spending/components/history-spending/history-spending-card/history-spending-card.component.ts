@@ -6,12 +6,14 @@ import { EditStateService } from '../../../service/edit-state.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Spending } from '../../../model/Spending';
 import { CommonModule } from '@angular/common';
+import { CurrencySymbolPipe } from '../../../../../pipe/currency-symbol.pipe';
+import { MoneyPipe } from '../../../../../pipe/money.pipe';
 
 
 @Component({
   selector: 'pgz-history-spending-card',
   standalone: true,
-  imports: [MatIconModule, MatMenuModule, IconComponent, CommonModule],
+  imports: [MatIconModule, MatMenuModule, IconComponent, CommonModule, CurrencySymbolPipe, MoneyPipe],
   templateUrl: './history-spending-card.component.html',
   styleUrl: './history-spending-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

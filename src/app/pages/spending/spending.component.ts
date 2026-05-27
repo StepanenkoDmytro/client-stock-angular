@@ -9,13 +9,15 @@ import { SpendingsService } from '../../service/spendings.service';
 import { MatIconModule } from '@angular/material/icon';
 import { Route, Router, RouterModule } from '@angular/router';
 import { TotalBalanceSpendingComponent } from './components/total-balance-spending/total-balance-spending.component';
-import { Spending } from './model/Spending';
-import { combineLatest } from 'rxjs';
+import { DEFAULT_SPENDING_CURRENCY, Spending } from './model/Spending';
+import { combineLatest, switchMap, take } from 'rxjs';
 import { CategorySpendingComponent } from './components/category-spending/category-spending.component';
 import { Category } from '../../domain/category.domain';
 import { SwipeWrapperComponent } from '../../core/UI/components/swipe-wrapper/swipe-wrapper.component';
 import { PageHeaderComponent } from '../../core/UI/components/page-header/page-header.component';
 import { AddTriggerService } from '../../service/helpers/add-trigger.service';
+import { FxRateService } from '../../service/fx-rate.service';
+import { UserPreferencesService } from '../savings/service/user-preferences.service';
 
 
 const UI_COMPONENTS = [
@@ -56,6 +58,8 @@ export class SpendingComponent implements OnInit {
   public swipeComponents: any[] = [];
 
   private readonly destroyRef = inject(DestroyRef);
+  private readonly fxRate = inject(FxRateService);
+  private readonly userPrefs = inject(UserPreferencesService);
 
   constructor(
     private spendingsService: SpendingsService,
@@ -70,6 +74,23 @@ export class SpendingComponent implements OnInit {
       CategorySpendingComponent,
       HistorySpendingComponent
     ];
+
+    // Preload FX rates for every currency present in this user's spendings,
+    // so downstream sync aggregators (TotalBalanceService, SpendingCategoryHelper)
+    // can resolve conversions without I/O.
+    this.spendingsService.getAllSpendings()
+      .pipe(
+        take(1),
+        switchMap(spendings => {
+          const base = this.userPrefs.baseCurrency() ?? DEFAULT_SPENDING_CURRENCY;
+          const currencies = Array.from(new Set(
+            spendings.map(s => s.currency).filter((c): c is string => !!c),
+          ));
+          return this.fxRate.preload(base, currencies);
+        }),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe();
 
     this.spendingsService.getSpentByDay()
       .pipe(takeUntilDestroyed(this.destroyRef))

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { IconComponent } from '../../../../../core/UI/components/icon/icon.component';
 import { ICategoryStatistic } from '../../../../statistic/model/SpendindStatistic';
 import { Category } from '../../../../../domain/category.domain';
@@ -9,6 +9,9 @@ import { EditStateService } from '../../../service/edit-state.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ArrowBackComponent } from '../../../../../core/UI/components/arrow-back/arrow-back.component';
+import { CurrencySymbolPipe } from '../../../../../pipe/currency-symbol.pipe';
+import { MoneyPipe } from '../../../../../pipe/money.pipe';
+import { UserPreferencesService } from '../../../../savings/service/user-preferences.service';
 
 const UI_MODULES = [
   IconComponent,
@@ -16,8 +19,8 @@ const UI_MODULES = [
 ];
 
 const MATERIAL_MODULES = [
-  MatExpansionModule, 
-  MatIconModule, 
+  MatExpansionModule,
+  MatIconModule,
   MatMenuModule,
   CommonModule
 ];
@@ -25,7 +28,7 @@ const MATERIAL_MODULES = [
 @Component({
   selector: 'pgz-category-spending-card',
   standalone: true,
-  imports: [...UI_MODULES, ...MATERIAL_MODULES],
+  imports: [...UI_MODULES, ...MATERIAL_MODULES, CurrencySymbolPipe, MoneyPipe],
   templateUrl: './category-spending-card.component.html',
   styleUrl: './category-spending-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -36,6 +39,8 @@ export class CategorySpendingCardComponent implements OnInit {
 
   public dataChildrens: ICategoryStatistic[];
   public panelOpenState: boolean = false;
+
+  public readonly userPrefs = inject(UserPreferencesService);
 
   constructor(
     private router: Router,

@@ -1,22 +1,44 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Category } from '../../domain/category.domain';
 import { SimpleDataModel } from '../../domain/d3.domain';
-import { Spending } from '../../pages/spending/model/Spending';
+import { DEFAULT_SPENDING_CURRENCY, Spending } from '../../pages/spending/model/Spending';
 import { ICategoryStatistic } from '../../pages/statistic/model/SpendindStatistic';
 import { SpendingsService } from '../spendings.service';
 import { firstValueFrom } from 'rxjs';
 import { IDonutData } from '../../core/UI/components/charts/donut/donut.component';
 import { IMultiLineData } from '../../core/UI/components/charts/multi-line/multi-line.component';
 import moment from 'moment';
+import { FxRateService } from '../fx-rate.service';
+import { UserPreferencesService } from '../../pages/savings/service/user-preferences.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SpendingCategoryHelperService {
 
+  private readonly fxRate = inject(FxRateService);
+  private readonly userPrefs = inject(UserPreferencesService);
+
   constructor(
     private spendingService: SpendingsService
   ) { }
+
+  /**
+   * Convert a spending's amount into the user's baseCurrency via the
+   * client-side FX cache (ADR-0002 §Spendings). Falls back to raw `cost`
+   * if the rate isn't cached — caller-side preload() should populate it
+   * before aggregations run, but we never block on the network here.
+   */
+  private costInBase(spending: Spending): number {
+    const base = this.userPrefs.baseCurrency() ?? DEFAULT_SPENDING_CURRENCY;
+    const native = spending.currency ?? base;
+    // Spot-rate (no `at`): aggregates show "what would this cost in
+    // baseCurrency right now". Per-transaction-date historical FX is a
+    // future refinement (would require preloading rates for each distinct
+    // spending date).
+    const converted = this.fxRate.convertSync(spending.cost, native, base);
+    return converted ?? spending.cost;
+  }
 
   public mapCategoryStatisticToChartData(categoryData: ICategoryStatistic[]): IDonutData {
     const totalCostByRange = categoryData
@@ -43,13 +65,13 @@ export class SpendingCategoryHelperService {
       
       const groupedSpendings: Map<string, number> = new Map();
       spendingsByCategory.forEach(spending => {
-        
         const dayGroup = new Date(spending.date).toDateString();
+        const amount = this.costInBase(spending);
         if(!groupedSpendings.has(dayGroup)) {
-          groupedSpendings.set(dayGroup, spending.cost);
+          groupedSpendings.set(dayGroup, amount);
         } else {
           const currValue = groupedSpendings.get(dayGroup);
-          groupedSpendings.set(dayGroup, currValue + spending.cost);
+          groupedSpendings.set(dayGroup, currValue + amount);
         }
       });
       
@@ -98,10 +120,27 @@ export class SpendingCategoryHelperService {
   }
 
   public async calculateCategoryStatistic(spendings: Spending[], category: Category | null = null): Promise<ICategoryStatistic[]> {
+    await this.ensureFxLoaded(spendings);
     const categoriesList = await firstValueFrom(this.spendingService.getAllCategories());
     const spendingCategoriesList = categoriesList.find(category => category.title === 'Spending').children;
 
     return spendingCategoriesList.map(category => this.calculateCategoryStatisticRecursive(category, spendings));
+  }
+
+  /**
+   * Awaits the FX cache so synchronous {@link costInBase} reduces resolve
+   * conversions instead of falling back to raw cost. Call this from any
+   * async entry point that aggregates spendings. Sync entry points
+   * (`calculateCategoryStatisticByCategory`) require the caller to have
+   * primed the cache themselves — currently done in
+   * {@code SpendingComponent.ngOnInit} for the main page.
+   */
+  public async ensureFxLoaded(spendings: Spending[]): Promise<void> {
+    const base = this.userPrefs.baseCurrency() ?? DEFAULT_SPENDING_CURRENCY;
+    const currencies = Array.from(new Set(
+      spendings.map(s => s.currency).filter((c): c is string => !!c),
+    ));
+    await firstValueFrom(this.fxRate.preload(base, currencies));
   }
 
   public calculateCategoryStatisticByCategory(spendings: Spending[], category: Category): ICategoryStatistic[] {
@@ -109,7 +148,7 @@ export class SpendingCategoryHelperService {
     const spendingCategoriesList = category.children;
     const otherCategoryValue = spendings
       .filter(spending => spending.category.title === category.title)
-      .map(spending => spending.cost)
+      .map(spending => this.costInBase(spending))
       .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
     
     let otherCategory = category.children.find(child => child.title === category.title);
@@ -149,7 +188,7 @@ export class SpendingCategoryHelperService {
 
   private calculateCategoryStatisticRecursive(category: Category, spendings: Spending[]): ICategoryStatistic {
     const spendingsByCategory = spendings.filter(spending => spending.category.id === category.id);
-    const costByCategory = spendingsByCategory.reduce((accumulator, spending) => accumulator + spending.cost, 0);
+    const costByCategory = spendingsByCategory.reduce((accumulator, spending) => accumulator + this.costInBase(spending), 0);
 
     const childrenStatistics = category.children 
       ? category.children.map(childCategory => 

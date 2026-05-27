@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { Category } from '../../../../../domain/category.domain';
@@ -23,6 +23,8 @@ import { MoneyDirective } from '../../../../../directive/money.directive';
 import { ColorPickerComponent } from '../../../../../core/UI/components/color-picker/color-picker.component';
 import { FormInputComponent } from '../../../../../core/UI/components/form-input/form-input.component';
 import { IconsPickerComponent } from "../../../../../core/UI/components/icons-picker/icons-picker.component";
+import { CurrencySymbolPipe } from '../../../../../pipe/currency-symbol.pipe';
+import { UserPreferencesService } from '../../../../savings/service/user-preferences.service';
 
 
 const UI_MODULES = [
@@ -50,7 +52,7 @@ const MATERIAL_MODULES = [
 @Component({
   selector: 'pgz-add-category',
   standalone: true,
-  imports: [...UI_MODULES, ...MATERIAL_MODULES, RouterModule, ArrowBackComponent, IconsPickerComponent],
+  imports: [...UI_MODULES, ...MATERIAL_MODULES, RouterModule, ArrowBackComponent, IconsPickerComponent, CurrencySymbolPipe],
   templateUrl: './add-category.component.html',
   styleUrl: './add-category.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -73,6 +75,8 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
 
   public editCategory: Category;
   private rootPage: string = '/spending/category';
+
+  public readonly userPrefs = inject(UserPreferencesService);
 
   constructor(
     private spendingService: SpendingsService,

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,7 +13,10 @@ import { Category } from '../../../../domain/category.domain';
 import { Router } from '@angular/router';
 import { EditStateService } from '../../service/edit-state.service';
 import { HttpClientModule } from '@angular/common/http';
-import { Spending } from '../../model/Spending';
+import { DEFAULT_SPENDING_CURRENCY, Spending } from '../../model/Spending';
+import { SUPPORTED_BASE_CURRENCIES } from '../../../../domain/user-preferences.domain';
+import { UserPreferencesService } from '../../../savings/service/user-preferences.service';
+import { currencySymbol } from '../../../../core/UI/util/currency-symbol';
 import { MoneyDirective } from '../../../../directive/money.directive';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ArrowBackComponent } from '../../../../core/UI/components/arrow-back/arrow-back.component';
@@ -61,8 +64,14 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
   public commentOfProduct: string = '';
   public costOfProduct: string = '';
   public date: Date = moment().toDate();
+  public selectedCurrency: string = DEFAULT_SPENDING_CURRENCY;
+
+  public readonly supportedCurrencies = SUPPORTED_BASE_CURRENCIES;
+  public readonly currencySymbol = currencySymbol;
 
   public editSpending: Spending = null;
+
+  private readonly userPrefs = inject(UserPreferencesService);
 
   constructor(
     private spendingsService: SpendingsService,
@@ -92,6 +101,9 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
       this.commentOfProduct = this.editSpending.comment;
       this.costOfProduct = this.editSpending.cost.toString();
       this.date = this.editSpending.date;
+      this.selectedCurrency = this.editSpending.currency ?? DEFAULT_SPENDING_CURRENCY;
+    } else {
+      this.selectedCurrency = this.userPrefs.baseCurrency() ?? DEFAULT_SPENDING_CURRENCY;
     }
   }
 
@@ -144,7 +156,8 @@ export class AddSpendingComponent implements OnInit, OnDestroy {
       this.commentOfProduct,
       costOfProduct,
       this.date,
-      id
+      id,
+      this.selectedCurrency,
     );
   }
 

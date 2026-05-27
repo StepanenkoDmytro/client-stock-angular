@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { MoneyPipe } from '../../../../pipe/money.pipe';
 import { TotalBalanceService } from '../../../../core/UI/components/total-balance/total-balance.service';
 import { combineLatest } from 'rxjs';
@@ -13,6 +13,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { IconComponent } from '../../../../core/UI/components/icon/icon.component';
 import { Router, RouterModule } from '@angular/router';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { CurrencySymbolPipe } from '../../../../pipe/currency-symbol.pipe';
+import { UserPreferencesService } from '../../../savings/service/user-preferences.service';
 
 const MATERIAL_MODULES = [
   MatExpansionModule,
@@ -29,7 +31,7 @@ const MATERIAL_MODULES = [
 @Component({
   selector: 'pgz-total-balance-spending',
   standalone: true,
-  imports: [IconComponent, ...MATERIAL_MODULES, MoneyPipe, RouterModule],
+  imports: [IconComponent, ...MATERIAL_MODULES, MoneyPipe, RouterModule, CurrencySymbolPipe],
   templateUrl: './total-balance-spending.component.html',
   styleUrl: './total-balance-spending.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -38,6 +40,8 @@ export class TotalBalanceSpendingComponent implements OnInit {
   public spentByMonth: number = 0;
   public isMonthlyBudgetEnabled: boolean = false;
   public monthlyBudget: number = 0;
+
+  public readonly userPrefs = inject(UserPreferencesService);
 
   constructor(
     private totalBalanceService: TotalBalanceService,

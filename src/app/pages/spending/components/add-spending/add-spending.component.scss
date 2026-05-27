@@ -70,11 +70,27 @@
   &--currency {
     margin-left: 5px;
     color: #938E8E;
+    font-size: inherit;
+    line-height: 1;
+    cursor: pointer;
+    min-width: 0;
+    width: auto;
+
+    // Strip mat-form-field-less <mat-select> default vertical padding so it
+    // sits flush with the amount input baseline.
+    ::ng-deep .mat-mdc-select-trigger {
+      padding: 0;
+    }
+
+    ::ng-deep .mat-mdc-select-arrow-wrapper {
+      transform: scale(0.8);
+    }
   }
 }
+
 .add-spending--amount-input:focus ~ .add-spending--currency,
 .add-spending--amount-input:not(:placeholder-shown) ~ .add-spending--currency {
-  color: #000; 
+  color: #000;
 }
 
 .no-category {

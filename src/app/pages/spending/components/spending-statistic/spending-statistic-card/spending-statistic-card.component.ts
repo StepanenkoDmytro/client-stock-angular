@@ -1,15 +1,18 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { IconComponent } from '../../../../../core/UI/components/icon/icon.component';
 import { ICategoryStatistic } from '../../../../statistic/model/SpendindStatistic';
 import { Category } from '../../../../../domain/category.domain';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import moment from 'moment';
+import { CurrencySymbolPipe } from '../../../../../pipe/currency-symbol.pipe';
+import { MoneyPipe } from '../../../../../pipe/money.pipe';
+import { UserPreferencesService } from '../../../../savings/service/user-preferences.service';
 
 @Component({
   selector: 'pgz-spending-statistic-card',
   standalone: true,
-  imports: [IconComponent, CommonModule, MatIconModule],
+  imports: [IconComponent, CommonModule, MatIconModule, CurrencySymbolPipe, MoneyPipe],
   templateUrl: './spending-statistic-card.component.html',
   styleUrl: './spending-statistic-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -40,6 +43,8 @@ export class SpendingStatisticCardComponent {
 
   public _data: ICategoryStatistic;
   public _compareData: ICategoryStatistic;
+
+  public readonly userPrefs = inject(UserPreferencesService);
 
   public onClickCard(): void {
     this.clickCard.emit(this._data.category);

@@ -15,8 +15,10 @@ import { InstrumentService } from '../../../service/instrument.service';
 import { LivePriceService } from '../../../service/live-price.service';
 import { PortfolioOverviewService } from '../../../service/portfolio-overview.service';
 import { TagsService } from '../../../service/tags.service';
+import { UserPreferencesService } from '../../../service/user-preferences.service';
 import { selectHoldingsList } from '../../../store/holdings.selectors';
 import { selectTagsList } from '../../../store/tags.selectors';
+import { FxRateService } from '../../../../../service/fx-rate.service';
 
 interface ClassBreakdown {
   assetClass: AssetClass;
@@ -58,6 +60,8 @@ export class PortfolioSummaryComponent implements OnInit {
   private readonly livePrice = inject(LivePriceService);
   private readonly portfolioOverview = inject(PortfolioOverviewService);
   private readonly tags = inject(TagsService);
+  private readonly userPrefs = inject(UserPreferencesService);
+  private readonly fxRate = inject(FxRateService);
 
   private readonly rawHoldings = this.store.selectSignal(selectHoldingsList);
   private readonly rawTags = this.store.selectSignal(selectTagsList);
@@ -100,13 +104,33 @@ export class PortfolioSummaryComponent implements OnInit {
     () => this.backendOverview()?.total ?? this.summary().totalValue,
   );
 
-  /** Display currency code — backend overview's baseCurrency or 'USD' fallback. */
+  /**
+   * Display currency code. Order: backend FX-normalised overview (when
+   * authenticated and loaded) → user's preference (covers anonymous mode
+   * via localStorage fallback in {@link UserPreferencesService}) → `'USD'`.
+   */
   public readonly displayCurrency = computed<string>(
-    () => this.backendOverview()?.baseCurrency ?? 'USD',
+    () =>
+      this.backendOverview()?.baseCurrency
+      ?? this.userPrefs.baseCurrency()
+      ?? 'USD',
   );
 
   public readonly summary = computed(() => {
     const all = this.holdingsView();
+    // FX-normalise every value/cost into the user's baseCurrency.
+    // For anonymous mode `userPrefs.baseCurrency()` reads from localStorage
+    // (M3b anonymous-mode signal fallback); for authenticated users it
+    // mirrors the server preference. When a rate isn't cached yet
+    // (`convertSync` returns null — first render before preload lands),
+    // we fall back to the raw native amount so the UI doesn't blank.
+    const base = this.userPrefs.baseCurrency() ?? 'USD';
+    const fxValue = (amount: number, from: string): number => {
+      const code = (from || base).toUpperCase();
+      if (code === base) return amount;
+      const converted = this.fxRate.convertSync(amount, code, base);
+      return converted ?? amount;
+    };
     /**
      * Live-prices doc §3 Rule 2:
      *  - `totalValue` mixes live prices and `averageBuyPrice` fallback so
@@ -133,8 +157,12 @@ export class PortfolioSummaryComponent implements OnInit {
       // Production still gets only the LivePriceService quote here.
       const priceFromService = this.holdings.getCurrentPrice(h.instrument.symbol);
       const effectivePrice = priceFromService ?? h.averageBuyPrice;
-      const value = h.quantity * effectivePrice;
-      const cost = h.quantity * h.averageBuyPrice;
+      const nativeValue = h.quantity * effectivePrice;
+      const nativeCost = h.quantity * h.averageBuyPrice;
+      // Convert per-holding so a multi-currency class (e.g. CASH with
+      // USD + UAH + EUR sub-positions) sums correctly in the base.
+      const value = fxValue(nativeValue, h.instrument.currency);
+      const cost = fxValue(nativeCost, h.instrument.currency);
       const priced = priceFromService !== undefined;
       const existing = byClass.get(h.instrument.assetClass) ?? {
         value: 0,
@@ -142,6 +170,8 @@ export class PortfolioSummaryComponent implements OnInit {
         pricedValue: 0,
         pricedCostBasis: 0,
       };
+      // value/cost already FX-converted via fxValue() above, so pricedValue
+      // / pricedCostBasis carry the same base-currency scale.
       byClass.set(h.instrument.assetClass, {
         value: existing.value + value,
         costBasis: existing.costBasis + cost,
@@ -199,6 +229,25 @@ export class PortfolioSummaryComponent implements OnInit {
     this.tags.init();
     this.instruments.init();
     this.holdings.init();
+    this.preloadFx();
+  }
+
+  /**
+   * Preloads spot rates for every distinct instrument currency held by
+   * the user, so the {@link summary} computed (which runs synchronously)
+   * can resolve conversions instead of falling back to raw amounts.
+   * Re-runs whenever holdings/instruments change because new currencies
+   * may have been introduced.
+   */
+  private preloadFx(): void {
+    const base = this.userPrefs.baseCurrency() ?? 'USD';
+    const currencies = Array.from(
+      new Set(this.holdingsView().map(h => h.instrument.currency).filter((c): c is string => !!c)),
+    );
+    if (currencies.length === 0) {
+      return;
+    }
+    this.fxRate.preload(base, currencies).subscribe();
   }
 
   // ---- helpers ----

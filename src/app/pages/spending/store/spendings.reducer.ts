@@ -207,6 +207,7 @@ export const spendingsReducer = createReducer(
           spending.cost,
           spending.date,
           spending.id,
+          spending.currency,
         );
       }
       return spending;

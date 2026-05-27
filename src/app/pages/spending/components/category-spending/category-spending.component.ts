@@ -1,14 +1,16 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { Category } from '../../../../domain/category.domain';
 import { CategorySpendingCardComponent } from './category-spending-card/category-spending-card.component';
 import { ICategoryStatistic } from '../../../statistic/model/SpendindStatistic';
-import { Spending } from '../../model/Spending';
+import { DEFAULT_SPENDING_CURRENCY, Spending } from '../../model/Spending';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { SpendingCategoryHelperService } from '../../../../service/helpers/spending-category-helper.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DeleteCategoryDialogComponent } from './delete-category-dialog/delete-category-dialog.component';
 import { SpendingsService } from '../../../../service/spendings.service';
-import { combineLatest, firstValueFrom } from 'rxjs';
+import { combineLatest, firstValueFrom, switchMap } from 'rxjs';
+import { FxRateService } from '../../../../service/fx-rate.service';
+import { UserPreferencesService } from '../../../savings/service/user-preferences.service';
 import { AddBtnComponent } from '../../../../core/UI/components/add-btn/add-btn.component';
 import { CommonModule } from '@angular/common';
 import { StatisticStateService } from '../../../statistic/service/statistic-state.service';
@@ -43,6 +45,9 @@ export class CategorySpendingComponent implements OnInit {
 
   public spendingCategories: ICategoryStatistic[];
 
+  private readonly fxRate = inject(FxRateService);
+  private readonly userPrefs = inject(UserPreferencesService);
+
   constructor(
     private route: ActivatedRoute,
     private spendingsService: SpendingsService,
@@ -59,7 +64,20 @@ export class CategorySpendingComponent implements OnInit {
       this.route.paramMap,
       this.spendingsService.loadByCurrentMonth(),
       this.spendingsService.getAllCategories()
-    ]).subscribe( async ([paramMap, spendings, categories]) => {
+    ]).pipe(
+      // Ensure FX cache is populated BEFORE the helper runs its sync
+      // reduce — otherwise the first emission aggregates with empty
+      // cache → fallback on raw cost (mixes currencies as raw numbers).
+      switchMap(([paramMap, spendings, categories]) => {
+        const base = this.userPrefs.baseCurrency() ?? DEFAULT_SPENDING_CURRENCY;
+        const currencies = Array.from(new Set(
+          spendings.map(s => s.currency).filter((c): c is string => !!c),
+        ));
+        return this.fxRate.preload(base, currencies).pipe(
+          switchMap(() => Promise.resolve([paramMap, spendings, categories] as const)),
+        );
+      }),
+    ).subscribe( async ([paramMap, spendings, categories]) => {
 
       const categoryId = paramMap.get('id');
       
