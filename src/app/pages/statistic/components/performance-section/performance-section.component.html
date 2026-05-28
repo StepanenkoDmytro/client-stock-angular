@@ -1,0 +1,153 @@
+@if (hasData()) {
+  <!-- Performance summary — three real-data blocks merged into a single
+       card with hairline dividers: all-time nominal P&L, gain-by-class
+       donut, and top movers. -->
+  <div class="card pf-summary">
+    <!-- Period selector — sits above the P&L figure (mockup §07) and
+         drives the WHOLE card. Only "All" is live (all-time P&L from cost
+         basis); selecting a window period flips the body to an honest
+         "coming soon" (needs portfolio history, Wave 2) rather than
+         faking a period return. -->
+    <div class="pf-period" role="group" aria-label="Time period">
+      @for (p of periods; track p) {
+        <button
+          type="button"
+          class="pf-period__seg"
+          [class.pf-period__seg--active]="p === selectedPeriod()"
+          [attr.aria-pressed]="p === selectedPeriod()"
+          (click)="selectPeriod(p)">
+          {{ p }}
+        </button>
+      }
+    </div>
+
+    @if (isAllTime()) {
+      <!-- Nominal all-time P&L (real data, baseCurrency). -->
+      <div class="pf-hero">
+        <p class="pf-hero__caption">NOMINAL P&amp;L · ALL TIME</p>
+        <p
+          class="pf-hero__big"
+          [class.pf-hero__big--neg]="gainBySource().totalGain < 0">
+          {{ displayCurrency() | pgzCurrencySymbol }}{{ formatSigned(gainBySource().totalGain) }}
+        </p>
+        <p class="pf-hero__sub">
+          Inflation-adjusted real return coming soon
+        </p>
+      </div>
+
+    <!-- WHERE GAINS CAME FROM — per-class gain donut + legend. Donut arc
+         geometry computed from the positive-gain shares. -->
+    @if (gainBySource().hasGains) {
+      <div class="pf-summary__divider"></div>
+      <div class="pf-source">
+        <p class="pf-source__caption">WHERE GAINS CAME FROM</p>
+        <div class="pf-source__body">
+          <svg
+            class="pf-source__donut"
+            viewBox="0 0 132 132"
+            role="img"
+            aria-label="Gain by asset class">
+            <g transform="rotate(-90 66 66)">
+              @for (arc of donutArcs(); track $index) {
+                <circle
+                  cx="66"
+                  cy="66"
+                  r="30"
+                  fill="none"
+                  stroke-width="22"
+                  [style.stroke]="arc.colorVar"
+                  [attr.stroke-dasharray]="arc.dash + ' ' + circumference"
+                  [attr.stroke-dashoffset]="arc.offset"></circle>
+              }
+            </g>
+            <text x="66" y="62" text-anchor="middle" class="pf-source__donut-total">
+              {{ displayCurrency() | pgzCurrencySymbol }}{{ formatCompact(gainBySource().positiveTotal) }}
+            </text>
+            <text x="66" y="76" text-anchor="middle" class="pf-source__donut-sub">
+              total gain
+            </text>
+          </svg>
+          <ul class="pf-source__legend">
+            @for (seg of gainBySource().segments; track seg.assetClass) {
+              <li class="pf-source__legend-row">
+                <span class="pf-source__dot" [style.background]="seg.colorVar"></span>
+                <span class="pf-source__name">{{ seg.label }}</span>
+                <span class="pf-source__value">
+                  {{ displayCurrency() | pgzCurrencySymbol }}{{ formatSigned(seg.gain) }}
+                </span>
+                <span class="pf-source__share">{{ formatShare(seg.share) }}</span>
+              </li>
+            }
+          </ul>
+        </div>
+      </div>
+    }
+
+    <!-- TOP MOVERS — best / worst position by lifetime P&L %. -->
+    @if (bestMover(); as best) {
+      <div class="pf-summary__divider"></div>
+      <div class="pf-movers">
+        <p class="pf-movers__caption">TOP MOVERS</p>
+        <div class="pf-movers__row">
+          <span class="pf-movers__label">▲ Best</span>
+          <span class="pf-movers__name">{{ best.symbol }}</span>
+          <span
+            class="pf-movers__pct"
+            [class.pf-movers__pct--pos]="best.pct >= 0"
+            [class.pf-movers__pct--neg]="best.pct < 0">{{ formatPct(best.pct) }}</span>
+          <span class="pf-movers__amt">
+            {{ displayCurrency() | pgzCurrencySymbol }}{{ formatSigned(best.amount) }}
+          </span>
+        </div>
+        @if (worstMover(); as worst) {
+          <div class="pf-movers__row">
+            <span class="pf-movers__label">▼ Worst</span>
+            <span class="pf-movers__name">{{ worst.symbol }}</span>
+            <span
+              class="pf-movers__pct"
+              [class.pf-movers__pct--pos]="worst.pct >= 0"
+              [class.pf-movers__pct--neg]="worst.pct < 0">{{ formatPct(worst.pct) }}</span>
+            <span class="pf-movers__amt">
+              {{ displayCurrency() | pgzCurrencySymbol }}{{ formatSigned(worst.amount) }}
+            </span>
+          </div>
+        }
+      </div>
+    }
+    } @else {
+      <!-- Window period selected — no portfolio history yet, so the whole
+           card body switches to a coming-soon state. We never fabricate a
+           period return. -->
+      <div class="pf-window-soon">
+        <p class="pf-hero__caption">NOMINAL P&amp;L · {{ selectedPeriod() }}</p>
+        <p class="pf-window-soon__value">Coming soon</p>
+        <p class="pf-window-soon__sub">
+          Returns over a set period need portfolio history — available
+          after a few months of tracking. Tap <strong>All</strong> for
+          your lifetime figure.
+        </p>
+      </div>
+    }
+  </div>
+
+  <!-- INCOME — dividend & interest payment tracking needs payment
+       history (backend, Wave 2 Block F). Honest placeholder per stats
+       plan Q2 Variant A: card chrome + "coming soon", no fake numbers. -->
+  <div class="card pf-soon" aria-disabled="true">
+    <p class="pf-soon__caption">
+      <span class="pf-soon__dot" aria-hidden="true"></span>
+      INCOME · DIVIDENDS &amp; INTEREST
+    </p>
+    <p class="pf-soon__value">Coming soon</p>
+    <p class="pf-soon__sub">
+      Dividend &amp; interest income tracking arrives with payment history.
+    </p>
+  </div>
+} @else {
+  <pgz-empty-state
+    size="roomy"
+    icon="📈"
+    title="No performance data yet"
+    hint="Add holdings to see your gains and top movers.">
+  </pgz-empty-state>
+}

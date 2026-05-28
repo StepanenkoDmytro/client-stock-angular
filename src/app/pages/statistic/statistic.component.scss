@@ -123,6 +123,44 @@
     text-transform: uppercase;
   }
 
+  /* Preview / not-yet-live section. Used on sections that still render
+     hardcoded sample data (Risk, Goals) — the cards are dimmed, drained
+     of colour and made non-interactive so the demo numbers can't be
+     mistaken for the user's real figures. The caption + preview note stay
+     at full opacity so the "Sample data" flag remains legible. */
+  &__section--preview {
+    .st__card {
+      opacity: 0.55;
+      filter: grayscale(0.55);
+      pointer-events: none;
+      user-select: none;
+    }
+  }
+
+  &__preview-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    align-self: flex-start;
+    margin: 0 4px;
+    padding: 3px 9px;
+    border: 1px dashed var(--pgz-border-default);
+    border-radius: 999px;
+    background: var(--pgz-card-bg-sub);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    color: var(--pgz-text-secondary);
+  }
+
+  &__preview-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-warning);
+    flex: 0 0 auto;
+  }
+
   &__card {
     background: var(--pgz-card-bg);
     border: 0.5px solid var(--pgz-card-border);
@@ -479,7 +517,11 @@
 }
 
 /* ============================================================
-   Performance section — hardcoded demo cards (mockup §07)
+   Shared caption label
+   ------------------------------------------------------------
+   The Performance cards live in `pgz-stats-performance-section`
+   (data-driven, self-contained styles). `%cap-label` stays here —
+   the Goals demo section below still @extends it.
    ============================================================ */
 
 %cap-label {
@@ -489,282 +531,6 @@
   letter-spacing: 0.5px;
   color: var(--pgz-text-muted);
   text-transform: uppercase;
-}
-
-.pf-hero {
-  display: flex;
-  gap: 16px;
-  padding: 16px;
-
-  &__left {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  &__caption {
-    @extend %cap-label;
-  }
-
-  &__big {
-    margin: 4px 0 0;
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--color-positive);
-    font-variant-numeric: tabular-nums;
-  }
-
-  &__sub {
-    margin: 2px 0 0;
-    font-size: 11px;
-    color: var(--pgz-text-secondary);
-  }
-
-  &__right {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    min-width: 130px;
-    justify-content: flex-end;
-  }
-
-  &__row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    font-size: 11px;
-
-    &--total {
-      margin-top: 4px;
-      padding-top: 4px;
-      border-top: 0.5px solid var(--pgz-divider);
-      font-weight: 600;
-
-      .pf-hero__row-label {
-        color: var(--pgz-text-primary);
-      }
-    }
-  }
-
-  &__row-label {
-    color: var(--pgz-text-muted);
-  }
-
-  &__row-value {
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-
-    &--pos {
-      color: var(--color-positive);
-    }
-    &--neg {
-      color: var(--color-negative);
-    }
-  }
-}
-
-.pf-period {
-  display: flex;
-  margin: 0 4px;
-  border-radius: 12px;
-  background: var(--pgz-card-bg-sub);
-  border: 0.5px solid var(--pgz-card-border);
-  overflow: hidden;
-
-  &__seg {
-    flex: 1;
-    background: none;
-    border: 0;
-    padding: 10px 0;
-    font-family: inherit;
-    font-size: 12px;
-    color: var(--pgz-text-muted);
-    cursor: not-allowed;
-
-    &--active {
-      background: var(--pgz-text-primary);
-      color: var(--pgz-card-bg);
-      font-weight: 600;
-    }
-  }
-}
-
-.pf-source {
-  &__caption {
-    @extend %cap-label;
-    margin-bottom: 10px;
-  }
-
-  &__body {
-    display: flex;
-    gap: 16px;
-    align-items: center;
-  }
-
-  &__donut {
-    width: 110px;
-    height: 110px;
-    flex: 0 0 auto;
-  }
-
-  &__donut-total {
-    font-size: 13px;
-    font-weight: 700;
-    fill: var(--pgz-text-primary);
-  }
-
-  &__donut-sub {
-    font-size: 9px;
-    fill: var(--pgz-text-muted);
-  }
-
-  &__legend {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  &__legend-row {
-    display: grid;
-    grid-template-columns: 12px 1fr auto auto;
-    align-items: baseline;
-    gap: 6px;
-    font-size: 11px;
-  }
-
-  &__dot {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-  }
-
-  &__name {
-    color: var(--pgz-text-primary);
-  }
-
-  &__value {
-    color: var(--color-positive);
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-  }
-
-  &__share {
-    color: var(--pgz-text-muted);
-    font-size: 9px;
-    margin-left: 4px;
-  }
-}
-
-.pf-movers {
-  &__caption {
-    @extend %cap-label;
-    margin-bottom: 10px;
-  }
-
-  &__row {
-    display: grid;
-    grid-template-columns: 56px 1fr auto auto;
-    align-items: baseline;
-    gap: 8px;
-    padding: 4px 0;
-    font-size: 12px;
-  }
-
-  &__label {
-    color: var(--pgz-text-muted);
-    font-size: 11px;
-  }
-
-  &__name {
-    color: var(--pgz-text-primary);
-    font-weight: 600;
-    font-size: 13px;
-  }
-
-  &__pct {
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-
-    &--pos {
-      color: var(--color-positive);
-    }
-    &--neg {
-      color: var(--color-negative);
-    }
-  }
-
-  &__amt {
-    color: var(--pgz-text-muted);
-    font-size: 11px;
-    font-variant-numeric: tabular-nums;
-  }
-}
-
-.pf-income {
-  &__caption {
-    @extend %cap-label;
-    margin-bottom: 10px;
-  }
-
-  &__row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    font-size: 12px;
-
-    &--tappable {
-      width: 100%;
-      background: none;
-      border: 0;
-      padding: 0;
-      font-family: inherit;
-      cursor: pointer;
-      text-align: left;
-
-      &:focus-visible {
-        outline: 2px solid var(--pgz-accent);
-        outline-offset: 4px;
-        border-radius: 4px;
-      }
-    }
-  }
-
-  &__name {
-    color: var(--pgz-text-primary);
-  }
-
-  &__value {
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-
-    &--pos {
-      color: var(--color-positive);
-    }
-    &--warn {
-      color: var(--color-warning);
-    }
-  }
-
-  &__sub {
-    margin: 2px 0 0;
-    font-size: 10px;
-    color: var(--pgz-text-muted);
-
-    &--warn {
-      color: var(--color-warning);
-    }
-  }
-
-  &__divider {
-    height: 0.5px;
-    background: var(--pgz-divider);
-    margin: 10px 0;
-  }
 }
 
 /* ============================================================
