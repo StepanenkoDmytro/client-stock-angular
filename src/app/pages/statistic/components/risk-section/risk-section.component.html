@@ -1,0 +1,116 @@
+@if (hasData()) {
+  <!-- VOLATILITY PROFILE — value split by risk tier (donut + legend) and
+       a per-class breakdown. Structural proxy, not statistical vol. -->
+  <div class="card vol">
+    <p class="vol__caption">VOLATILITY PROFILE</p>
+
+    <div class="vol__top">
+      <svg
+        class="vol__donut"
+        viewBox="0 0 132 132"
+        role="img"
+        aria-label="Portfolio value by volatility tier">
+        <g transform="rotate(-90 66 66)">
+          @for (arc of donutArcs(); track $index) {
+            <circle
+              cx="66"
+              cy="66"
+              r="30"
+              fill="none"
+              stroke-width="22"
+              [style.stroke]="arc.colorVar"
+              [attr.stroke-dasharray]="arc.dash + ' ' + circumference"
+              [attr.stroke-dashoffset]="arc.offset"></circle>
+          }
+        </g>
+        <text x="66" y="64" text-anchor="middle" class="vol__donut-total">
+          {{ displayCurrency() | pgzCurrencySymbol }}{{ formatCompact(volatility().total) }}
+        </text>
+        <text x="66" y="78" text-anchor="middle" class="vol__donut-sub">total</text>
+      </svg>
+
+      <ul class="vol__legend">
+        <li class="vol__legend-row">
+          <span class="vol__chip" [style.background]="tierColors.low"></span>
+          <span class="vol__name">Low</span>
+          <span class="vol__pct">{{ formatShare(volatility().lowShare) }}</span>
+          <span class="vol__amount">
+            {{ displayCurrency() | pgzCurrencySymbol }}{{ formatCompact(volatility().low) }}
+          </span>
+        </li>
+        <li class="vol__legend-row">
+          <span class="vol__chip" [style.background]="tierColors.medium"></span>
+          <span class="vol__name">Medium</span>
+          <span class="vol__pct">{{ formatShare(volatility().mediumShare) }}</span>
+          <span class="vol__amount">
+            {{ displayCurrency() | pgzCurrencySymbol }}{{ formatCompact(volatility().medium) }}
+          </span>
+        </li>
+        <li class="vol__legend-row">
+          <span class="vol__chip" [style.background]="tierColors.high"></span>
+          <span class="vol__name">High</span>
+          <span class="vol__pct">{{ formatShare(volatility().highShare) }}</span>
+          <span class="vol__amount">
+            {{ displayCurrency() | pgzCurrencySymbol }}{{ formatCompact(volatility().high) }}
+          </span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="vol__divider"></div>
+    <p class="vol__subcaption">PER CLASS</p>
+
+    @for (row of volatility().classes; track row.assetClass) {
+      <div class="vol__class-row">
+        <span class="vol__class-name">{{ row.label }}</span>
+        <div class="vol__tier-track">
+          @for (seg of classBarSegments(row); track $index) {
+            <div
+              class="vol__tier-fill"
+              [style.width.%]="seg.fraction * 100"
+              [style.background]="seg.colorVar"></div>
+          }
+        </div>
+        <span class="vol__tier-label">{{ row.tierLabel }}</span>
+        <span class="vol__class-pct">{{ formatShare(row.share) }}</span>
+      </div>
+    }
+
+    <div class="vol__divider"></div>
+    <div class="vol__footer">
+      <span class="vol__hint">
+        Diversified portfolios typically keep high-risk under 20%.
+      </span>
+      <button
+        type="button"
+        class="vol__stress-link"
+        (click)="openStressTest()">
+        Stress test →
+      </button>
+    </div>
+  </div>
+
+  <!-- CRYPTO CUSTODY MIX — reuses the shipped widget (Phase 5). It renders
+       nothing without crypto, so we gate the card wrapper on hasCrypto. -->
+  @if (hasCrypto()) {
+    <div class="card">
+      <pgz-counterparty-risk></pgz-counterparty-risk>
+    </div>
+  }
+
+  <!-- DATA FRESHNESS — needs a lastValuationDate backend column (Wave 2
+       Block D). Honest disabled placeholder, not faked. -->
+  <div class="card rk-soon" aria-disabled="true">
+    <p class="rk-soon__caption">
+      <span class="rk-soon__dot" aria-hidden="true"></span>
+      DATA FRESHNESS
+    </p>
+    <p class="rk-soon__value">Coming soon</p>
+    <p class="rk-soon__sub">
+      Flags manual valuations (real estate, alt-assets) you haven't
+      refreshed in a while — needs valuation-date tracking.
+    </p>
+  </div>
+} @else {
+  <p class="rk-empty">Add holdings to see your risk breakdown.</p>
+}

@@ -15,6 +15,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
 import { StressTestSheetComponent } from './components/stress-test-sheet/stress-test-sheet.component';
 import { PerformanceSectionComponent } from './components/performance-section/performance-section.component';
+import { RiskSectionComponent } from './components/risk-section/risk-section.component';
 // Risk-section widgets (SPOF, custody, jurisdiction, currency exposure)
 // stay on disk under components/portfolio-stats/widgets/ but are NOT
 // imported here — the demo state of /statistic uses hardcoded inline
@@ -57,7 +58,7 @@ interface AnchorOption {
 @Component({
   selector: 'pgz-statistic',
   standalone: true,
-  imports: [PerformanceSectionComponent],
+  imports: [PerformanceSectionComponent, RiskSectionComponent],
   templateUrl: './statistic.component.html',
   styleUrl: './statistic.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
