@@ -80,7 +80,7 @@
               </mat-panel-title>
               <mat-panel-description class="savings__class-desc">
                 <span class="savings__class-value">
-                  ${{ formatNumber(group.totalValue) }}
+                  {{ displayCurrency() | pgzCurrencySymbol }}{{ formatNumber(group.totalValue) }}
                 </span>
                 @if (group.pnl !== 0 && group.costBasis > 0) {
                   <span class="savings__class-pnl"

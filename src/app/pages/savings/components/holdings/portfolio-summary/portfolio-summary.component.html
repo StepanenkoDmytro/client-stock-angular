@@ -5,14 +5,14 @@
        to local mixed-currency sum for anonymous and pre-fetch. -->
   <header class="summary__now-header">
     <span class="summary__caption">PORTFOLIO</span>
-    <span class="summary__total">{{ currencyPrefix(displayCurrency()) }}{{ formatNumber(displayTotal()) }}</span>
+    <span class="summary__total">{{ displayCurrency() | pgzCurrencySymbol }}{{ formatNumber(displayTotal()) }}</span>
   </header>
 
   <div class="summary__pnl-row">
     <span class="summary__pnl"
           [class.positive]="summary().totalPnL > 0"
           [class.negative]="summary().totalPnL < 0">
-      {{ summary().totalPnL >= 0 ? '+' : '−' }}${{ formatNumber(abs(summary().totalPnL)) }}
+      {{ summary().totalPnL >= 0 ? '+' : '−' }}{{ displayCurrency() | pgzCurrencySymbol }}{{ formatNumber(abs(summary().totalPnL)) }}
       ({{ summary().totalPnL >= 0 ? '+' : '−' }}{{ formatPercent(abs(summary().totalPnLPercent)) }})
       today
     </span>
@@ -36,7 +36,7 @@
           <span class="summary__legend-dot"
                 [style.background-color]="slice.color"></span>
           <span class="summary__legend-name">{{ slice.label }}</span>
-          <span class="summary__legend-value">${{ formatNumber(slice.value) }}</span>
+          <span class="summary__legend-value">{{ displayCurrency() | pgzCurrencySymbol }}{{ formatNumber(slice.value) }}</span>
         </div>
       }
     </div>

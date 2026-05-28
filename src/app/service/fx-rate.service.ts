@@ -122,6 +122,26 @@ export class FxRateService {
   }
 
   /**
+   * Display-oriented conversion for template / computed code paths.
+   * Converts {@code amount} from {@code from} into {@code base}, returning
+   * the raw {@code amount} unchanged when the rate isn't cached yet (a
+   * {@link preload} is still in flight) so the UI never blanks. A
+   * missing/empty {@code from} is treated as already in {@code base} (no
+   * conversion). Because it routes through {@link convertSync} → the
+   * {@code _cache} signal, Angular `computed`s that call it re-run when a
+   * preload populates new rates.
+   */
+  public toBase(amount: number, from: string | null | undefined, base: string): number {
+    const f = (from || base).toUpperCase();
+    const b = base.toUpperCase();
+    if (f === b) {
+      return amount;
+    }
+    const converted = this.convertSync(amount, f, b);
+    return converted ?? amount;
+  }
+
+  /**
    * Rate for {@code from → to}, looking up either direction of the pair.
    * If the cache only has {@code to → from}, returns its inverse.
    * {@code null} when neither direction is cached.

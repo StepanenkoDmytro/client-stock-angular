@@ -15,7 +15,7 @@
     }
     <span class="pr__value"
           [class.pr__value--flash-up]="flashDirection() === 'up'"
-          [class.pr__value--flash-down]="flashDirection() === 'down'">${{ formatNumber(value) }}</span>
+          [class.pr__value--flash-down]="flashDirection() === 'down'">{{ displayCurrency() | pgzCurrencySymbol }}{{ formatNumber(displayValue()) }}</span>
     <button mat-icon-button
             type="button"
             class="pr__more"

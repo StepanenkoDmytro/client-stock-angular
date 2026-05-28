@@ -52,6 +52,9 @@ import { PositionsService } from './service/positions.service';
 import { TagsService } from './service/tags.service';
 import { UserPreferencesService } from './service/user-preferences.service';
 import { AddTriggerService } from '../../service/helpers/add-trigger.service';
+import { FxRateService } from '../../service/fx-rate.service';
+import { CurrencySymbolPipe } from '../../pipe/currency-symbol.pipe';
+import { SUPPORTED_BASE_CURRENCIES } from '../../domain/user-preferences.domain';
 import { selectHoldingsList } from './store/holdings.selectors';
 import { selectTagsList } from './store/tags.selectors';
 
@@ -120,6 +123,7 @@ const MATERIAL_MODULES = [
   imports: [
     CommonModule,
     RouterModule,
+    CurrencySymbolPipe,
     ...UI_COMPONENTS,
     ...MATERIAL_MODULES,
   ],
@@ -141,6 +145,7 @@ export class SavingsComponent implements OnInit {
   private readonly tags = inject(TagsService);
   private readonly accounts = inject(AccountsService);
   private readonly userPrefs = inject(UserPreferencesService);
+  private readonly fxRate = inject(FxRateService);
   private readonly portfolioOverview = inject(PortfolioOverviewService);
   private readonly network = inject(NetworkStatusService);
   private readonly savingsTier = inject(SavingsTierService);
@@ -272,11 +277,28 @@ export class SavingsComponent implements OnInit {
    * and confuse the user. Total value still mixes live + fallback so the
    * dollar number is whole.
    */
+  /**
+   * Display currency for all aggregate amounts on this screen — the
+   * user's baseCurrency (server preference for authenticated users,
+   * localStorage fallback for anonymous mode), `'USD'` as last resort.
+   * Class-group totals below are FX-normalised into this currency.
+   */
+  public readonly displayCurrency = computed<string>(
+    () => this.userPrefs.baseCurrency() ?? 'USD',
+  );
+
   public readonly classGroups = computed<ClassGroup[]>(() => {
     const all = this.holdingsView();
     if (all.length === 0) {
       return [];
     }
+
+    // FX-normalise every per-holding value/cost into the user's
+    // baseCurrency so a class that mixes currencies (e.g. CASH with USD +
+    // UAH + EUR sub-positions) sums correctly in the accordion header.
+    // `toBase` falls back to the raw native amount while a preload is in
+    // flight, so the first render never blanks.
+    const base = this.userPrefs.baseCurrency() ?? 'USD';
 
     // Bucket holdings by AssetClass with per-holding current + cost values.
     interface Row {
@@ -295,8 +317,16 @@ export class SavingsComponent implements OnInit {
       // (live-prices doc §3 Rule 2) still holds.
       const priceFromService = this.holdings.getCurrentPrice(h.instrument.symbol);
       const effectivePrice = priceFromService ?? h.averageBuyPrice;
-      const currentValue = h.quantity * effectivePrice;
-      const cost = h.quantity * h.averageBuyPrice;
+      const currentValue = this.fxRate.toBase(
+        h.quantity * effectivePrice,
+        h.instrument.currency,
+        base,
+      );
+      const cost = this.fxRate.toBase(
+        h.quantity * h.averageBuyPrice,
+        h.instrument.currency,
+        base,
+      );
       const priced = priceFromService !== undefined;
       const list = buckets.get(h.instrument.assetClass) ?? [];
       list.push({
@@ -379,6 +409,18 @@ export class SavingsComponent implements OnInit {
     // and errors (no auth, network) leave the cached value at null; UI
     // continues using its local default until a successful login.
     this.userPrefs.load()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe();
+
+    // Preload FX spot rates so the synchronous `classGroups` /
+    // PortfolioSummary computeds can normalise mixed-currency holdings
+    // into baseCurrency. We preload the full supported set (≤8 pairs,
+    // cached for the session) rather than only held currencies: holdings
+    // load asynchronously, so deriving currencies here would usually be
+    // empty on the first tick. No auth required — `/fx-rates` is permitAll
+    // so anonymous mode converts too.
+    const fxBase = this.userPrefs.baseCurrency() ?? 'USD';
+    this.fxRate.preload(fxBase, [...SUPPORTED_BASE_CURRENCIES])
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe();
 

@@ -22,9 +22,12 @@ import { HoldingActionsService } from '../../../service/holding-actions.service'
 import { HoldingService } from '../../../service/holding.service';
 import { LivePriceService } from '../../../service/live-price.service';
 import { MarketStatusService } from '../../../service/market-status.service';
+import { UserPreferencesService } from '../../../service/user-preferences.service';
 import { MarketStatusBadgeComponent } from '../../market-status-badge/market-status-badge.component';
 import { PositionRowComponent } from '../position-row/position-row.component';
 import { AccountLinkChipComponent } from '../../accounts/account-link-chip/account-link-chip.component';
+import { FxRateService } from '../../../../../service/fx-rate.service';
+import { CurrencySymbolPipe } from '../../../../../pipe/currency-symbol.pipe';
 import { IncomeLine, incomeLineFor } from './income-line.helper';
 
 /**
@@ -61,6 +64,7 @@ import { IncomeLine, incomeLineFor } from './income-line.helper';
     MarketStatusBadgeComponent,
     PositionRowComponent,
     AccountLinkChipComponent,
+    CurrencySymbolPipe,
   ],
   templateUrl: './position-card.component.html',
   styleUrl: './position-card.component.scss',
@@ -72,6 +76,8 @@ export class PositionCardComponent {
   private readonly actions = inject(HoldingActionsService);
   private readonly holdings = inject(HoldingService);
   private readonly livePrice = inject(LivePriceService);
+  private readonly fxRate = inject(FxRateService);
+  private readonly userPrefs = inject(UserPreferencesService);
 
   // ---- Inputs ----
 
@@ -244,6 +250,36 @@ export class PositionCardComponent {
   public readonly classDotColor = computed<string>(() => {
     const ac = this._position().instrument?.assetClass ?? AssetClass.OTHER;
     return this.assetClassBadgeColor(ac);
+  });
+
+  /**
+   * User's display (base) currency. A Position is per-Instrument, so it
+   * carries a single native `instrument.currency`; the value/P&L cells
+   * below convert from that into this base so the whole `/savings` screen
+   * reads in one currency regardless of where the asset is quoted.
+   */
+  public readonly displayCurrency = computed<string>(
+    () => this.userPrefs.baseCurrency() ?? 'USD',
+  );
+
+  /** `totalValue` FX-normalised into {@link displayCurrency}. */
+  public readonly displayValue = computed<number>(() => {
+    const pos = this._position();
+    return this.fxRate.toBase(
+      pos.totalValue ?? 0,
+      pos.instrument?.currency,
+      this.displayCurrency(),
+    );
+  });
+
+  /** `paperPnL` FX-normalised into {@link displayCurrency}. */
+  public readonly displayPnl = computed<number>(() => {
+    const pos = this._position();
+    return this.fxRate.toBase(
+      pos.paperPnL ?? 0,
+      pos.instrument?.currency,
+      this.displayCurrency(),
+    );
   });
 
   /**

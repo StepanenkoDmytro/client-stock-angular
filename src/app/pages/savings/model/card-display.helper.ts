@@ -35,12 +35,15 @@ export function rightColumnSecondLineFor(
     case AssetClass.STOCK:
     case AssetClass.ETF:
     case AssetClass.TOKENIZED_STOCK: {
+      // Per-unit market price stays in the instrument's native quote
+      // currency (an asset trades in one currency); only aggregate values
+      // are FX-normalised to baseCurrency elsewhere.
       const price = priceFor(inst.symbol) ?? pos.weightedAvgPrice;
-      return `${formatShares(pos.totalQuantity)} sh × $${formatMoney(price, 2)}`;
+      return `${formatShares(pos.totalQuantity)} sh × ${currencySymbolOf(inst.currency)}${formatMoney(price, 2)}`;
     }
     case AssetClass.CRYPTO: {
       const price = priceFor(inst.symbol) ?? pos.weightedAvgPrice;
-      return `${formatCrypto(pos.totalQuantity)} ${inst.symbol} × $${formatMoney(price, 0)}`;
+      return `${formatCrypto(pos.totalQuantity)} ${inst.symbol} × ${currencySymbolOf(inst.currency)}${formatMoney(price, 0)}`;
     }
     case AssetClass.CASH: {
       const symbol = currencySymbolOf(inst.currency);

@@ -37,7 +37,7 @@
     <div class="pc__value-stack">
       <span class="pc__value"
             [class.pc__value--flash-up]="flashDirection() === 'up'"
-            [class.pc__value--flash-down]="flashDirection() === 'down'">${{ formatNumber(position.totalValue) }}</span>
+            [class.pc__value--flash-down]="flashDirection() === 'down'">{{ displayCurrency() | pgzCurrencySymbol }}{{ formatNumber(displayValue()) }}</span>
       @if (secondLine()) {
         <span class="pc__value-second">{{ secondLine() }}</span>
       }
@@ -92,7 +92,7 @@
         <span class="pc__pnl"
               [class.positive]="position.paperPnL > 0"
               [class.negative]="position.paperPnL < 0">
-          {{ pnlSign() }}${{ formatNumber(abs(position.paperPnL)) }}
+          {{ pnlSign() }}{{ displayCurrency() | pgzCurrencySymbol }}{{ formatNumber(abs(displayPnl())) }}
           ({{ pnlSign() }}{{ formatPercent(abs(position.paperPnLPct * 100), 1) }})
         </span>
       } @else {

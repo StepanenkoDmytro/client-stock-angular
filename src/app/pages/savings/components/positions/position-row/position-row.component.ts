@@ -23,7 +23,11 @@ import {
 } from '../../../const/account-kind.const';
 import { HoldingActionsService } from '../../../service/holding-actions.service';
 import { LivePriceService } from '../../../service/live-price.service';
+import { UserPreferencesService } from '../../../service/user-preferences.service';
 import { AccountLinkChipComponent } from '../../accounts/account-link-chip/account-link-chip.component';
+import { FxRateService } from '../../../../../service/fx-rate.service';
+import { CurrencySymbolPipe } from '../../../../../pipe/currency-symbol.pipe';
+import { currencySymbol } from '../../../../../core/UI/util/currency-symbol';
 
 /**
  * One per-Account row inside an expanded `pgz-position-card`.
@@ -49,6 +53,7 @@ import { AccountLinkChipComponent } from '../../accounts/account-link-chip/accou
     MatIconModule,
     MatMenuModule,
     AccountLinkChipComponent,
+    CurrencySymbolPipe,
   ],
   templateUrl: './position-row.component.html',
   styleUrl: './position-row.component.scss',
@@ -57,6 +62,8 @@ import { AccountLinkChipComponent } from '../../accounts/account-link-chip/accou
 export class PositionRowComponent {
   private readonly actions = inject(HoldingActionsService);
   private readonly livePrice = inject(LivePriceService);
+  private readonly fxRate = inject(FxRateService);
+  private readonly userPrefs = inject(UserPreferencesService);
 
   // ---- Inputs ----
 
@@ -70,10 +77,11 @@ export class PositionRowComponent {
   private readonly _holding = signal<IHoldingView>({} as IHoldingView);
 
   /**
-   * Current value in user's base currency (quantity × current price),
-   * pre-computed by parent `pgz-position-card`. We don't recompute it
-   * here to keep the row pure and avoid double price lookups when many
-   * rows render at once.
+   * Current value in the holding's *native* currency (quantity × current
+   * price), pre-computed by parent `pgz-position-card`. We don't recompute
+   * the price here to keep the row light and avoid double price lookups
+   * when many rows render at once — but we do FX-normalise it into the
+   * user's baseCurrency for display (see {@link displayValue}).
    */
   @Input({ required: true })
   public set value(v: number) {
@@ -85,6 +93,23 @@ export class PositionRowComponent {
   private readonly _value = signal<number>(0);
 
   // ---- Derived ----
+
+  /** User's display (base) currency — server pref or anonymous fallback. */
+  public readonly displayCurrency = computed<string>(
+    () => this.userPrefs.baseCurrency() ?? 'USD',
+  );
+
+  /** Row {@link value} FX-normalised from the holding's native currency
+   *  into {@link displayCurrency}. Falls back to the raw amount while a
+   *  preload is in flight. */
+  public readonly displayValue = computed<number>(() => {
+    const h = this._holding();
+    return this.fxRate.toBase(
+      this._value(),
+      h.instrument?.currency,
+      this.displayCurrency(),
+    );
+  });
 
   /** Account-kind flag (icon / label / colour) for the leading glyph. */
   public readonly flag = computed<AccountKindFlag>(() => {
@@ -182,9 +207,10 @@ export class PositionRowComponent {
       case AssetClass.CRYPTO:
         return `${formatCrypto(h.quantity)} ${inst.symbol}`;
       case AssetClass.CASH:
-        return `$${formatShares(h.quantity)}`;
       case AssetClass.DEPOSIT:
-        return `$${formatShares(h.quantity)}`;
+        // Cash / deposit quantity IS the native amount — keep its own
+        // currency glyph (not the base) so "₴5,000" reads honestly.
+        return `${currencySymbol(inst.currency)}${formatShares(h.quantity)}`;
       case AssetClass.REAL_ESTATE:
         return h.quantity === 1
           ? '1 unit'

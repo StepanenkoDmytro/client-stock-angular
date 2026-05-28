@@ -19,6 +19,8 @@ import { UserPreferencesService } from '../../../service/user-preferences.servic
 import { selectHoldingsList } from '../../../store/holdings.selectors';
 import { selectTagsList } from '../../../store/tags.selectors';
 import { FxRateService } from '../../../../../service/fx-rate.service';
+import { CurrencySymbolPipe } from '../../../../../pipe/currency-symbol.pipe';
+import { SUPPORTED_BASE_CURRENCIES } from '../../../../../domain/user-preferences.domain';
 
 interface ClassBreakdown {
   assetClass: AssetClass;
@@ -48,7 +50,7 @@ interface ClassBreakdown {
 @Component({
   selector: 'pgz-portfolio-summary',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CurrencySymbolPipe],
   templateUrl: './portfolio-summary.component.html',
   styleUrl: './portfolio-summary.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -125,12 +127,6 @@ export class PortfolioSummaryComponent implements OnInit {
     // (`convertSync` returns null — first render before preload lands),
     // we fall back to the raw native amount so the UI doesn't blank.
     const base = this.userPrefs.baseCurrency() ?? 'USD';
-    const fxValue = (amount: number, from: string): number => {
-      const code = (from || base).toUpperCase();
-      if (code === base) return amount;
-      const converted = this.fxRate.convertSync(amount, code, base);
-      return converted ?? amount;
-    };
     /**
      * Live-prices doc §3 Rule 2:
      *  - `totalValue` mixes live prices and `averageBuyPrice` fallback so
@@ -161,8 +157,8 @@ export class PortfolioSummaryComponent implements OnInit {
       const nativeCost = h.quantity * h.averageBuyPrice;
       // Convert per-holding so a multi-currency class (e.g. CASH with
       // USD + UAH + EUR sub-positions) sums correctly in the base.
-      const value = fxValue(nativeValue, h.instrument.currency);
-      const cost = fxValue(nativeCost, h.instrument.currency);
+      const value = this.fxRate.toBase(nativeValue, h.instrument.currency, base);
+      const cost = this.fxRate.toBase(nativeCost, h.instrument.currency, base);
       const priced = priceFromService !== undefined;
       const existing = byClass.get(h.instrument.assetClass) ?? {
         value: 0,
@@ -233,21 +229,17 @@ export class PortfolioSummaryComponent implements OnInit {
   }
 
   /**
-   * Preloads spot rates for every distinct instrument currency held by
-   * the user, so the {@link summary} computed (which runs synchronously)
-   * can resolve conversions instead of falling back to raw amounts.
-   * Re-runs whenever holdings/instruments change because new currencies
-   * may have been introduced.
+   * Preloads spot rates so the {@link summary} computed (which runs
+   * synchronously) can resolve conversions instead of falling back to raw
+   * amounts. We preload the full {@link SUPPORTED_BASE_CURRENCIES} set
+   * against the base rather than only currencies currently held: holdings
+   * load asynchronously, so reading `holdingsView()` here would often be
+   * empty on the first tick and the preload would no-op. One small batch
+   * request (≤8 pairs, cached for the session) sidesteps that race.
    */
   private preloadFx(): void {
     const base = this.userPrefs.baseCurrency() ?? 'USD';
-    const currencies = Array.from(
-      new Set(this.holdingsView().map(h => h.instrument.currency).filter((c): c is string => !!c)),
-    );
-    if (currencies.length === 0) {
-      return;
-    }
-    this.fxRate.preload(base, currencies).subscribe();
+    this.fxRate.preload(base, [...SUPPORTED_BASE_CURRENCIES]).subscribe();
   }
 
   // ---- helpers ----
@@ -261,23 +253,6 @@ export class PortfolioSummaryComponent implements OnInit {
       minimumFractionDigits: fractionDigits,
       maximumFractionDigits: fractionDigits,
     });
-  }
-
-  /**
-   * Currency-prefix helper. Renders `$` for USD (most common), `€` for
-   * EUR, `£` for GBP; ISO code + space otherwise (e.g. `UAH 12,500`).
-   * Until Phase 7 redesign overhauls currency display globally, this
-   * minimal mapping keeps the dashboard readable in the three target
-   * currencies (`monetization-strategy.md §5` — EU + UK + UA).
-   */
-  public currencyPrefix(currency: string): string {
-    switch (currency) {
-      case 'USD': return '$';
-      case 'EUR': return '€';
-      case 'GBP': return '£';
-      case 'UAH': return '₴';
-      default: return `${currency} `;
-    }
   }
 
   public formatPercent(value: number, fractionDigits = 1): string {
