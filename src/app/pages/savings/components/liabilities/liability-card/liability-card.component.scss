@@ -1,0 +1,87 @@
+/* Liability card (ADR-0009 · mockup savings/09). Slate, no class dots,
+ * paydown instead of gain. Local slate token until promoted to global. */
+
+:host {
+  display: block;
+  --liability-slate: #6e7a88;
+  --liability-band: #bfc8d2;
+}
+
+.lc {
+  background: var(--pgz-card-bg);
+  border: 0.5px solid var(--pgz-card-border);
+  border-left: 3px solid var(--liability-slate);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.lc__head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.lc__name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pgz-text-primary);
+}
+
+.lc__goal-badge {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--liability-slate);
+  border: 1px solid var(--liability-band);
+  border-radius: 999px;
+  padding: 1px 6px;
+}
+
+.lc__amount {
+  margin-left: auto;
+  font-size: 15px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--liability-slate);
+}
+
+.lc__more {
+  margin: -8px -8px -8px 0;
+  flex: 0 0 auto;
+}
+
+.lc__subline {
+  margin: 4px 0 8px;
+  font-size: 11px;
+  color: var(--pgz-text-muted);
+}
+
+.lc__bar-track {
+  height: 6px;
+  background: var(--pgz-card-bg-sub);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.lc__bar-fill {
+  height: 100%;
+  background: var(--liability-slate);
+  border-radius: 3px;
+}
+
+.lc__bottom {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 6px;
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.lc__progress-label {
+  color: var(--pgz-text-muted);
+}
+
+.lc__pct {
+  color: var(--pgz-text-secondary);
+  font-weight: 600;
+}

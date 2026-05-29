@@ -1,8 +1,10 @@
 import { AccountKind } from '../../domain/account-kind.domain';
 import { IAccountV2 } from '../../domain/account-v2.domain';
 import { AssetClass } from '../../domain/asset-class.domain';
+import { IGoal } from '../../domain/goals.domain';
 import { IHoldingLockMeta } from '../../domain/holding.domain';
 import { IInstrument } from '../../domain/instrument.domain';
+import { ILiability } from '../../domain/liability.domain';
 import { ITag } from '../../domain/tag.domain';
 import { MANUAL_ACCOUNT_ID } from '../../pages/savings/model/HoldingMapper';
 import { buildDemoAccounts } from '../../pages/savings/model/account-defaults.constants';
@@ -119,11 +121,29 @@ export const DEMO_INSTRUMENT_SPECS: DemoInstrumentSpec[] = [
     metadata: { kind: AssetClass.CRYPTO, coinId: 'bitcoin' },
   },
   {
+    // Stablecoin — gives the Crypto class a Low-tier slice so the
+    // Volatility profile renders the "Mixed" split (analytics §08).
+    symbol: 'USDT',
+    assetClass: AssetClass.CRYPTO,
+    name: 'Tether USD',
+    currency: 'USD',
+    metadata: { kind: AssetClass.CRYPTO, coinId: 'tether' },
+  },
+  {
     symbol: 'USD',
     assetClass: AssetClass.CASH,
     name: 'USD Cash',
     currency: 'USD',
     metadata: { kind: AssetClass.CASH, currency: 'USD' },
+  },
+  {
+    // Native-UAH cash — exercises FX normalisation + currency exposure
+    // (multi-currency analytics). Held at Monobank in ₴.
+    symbol: 'UAH',
+    assetClass: AssetClass.CASH,
+    name: 'UAH Cash',
+    currency: 'UAH',
+    metadata: { kind: AssetClass.CASH, currency: 'UAH' },
   },
   {
     symbol: 'KYIV-APT-1',
@@ -212,6 +232,17 @@ export const DEMO_HOLDING_SPECS: DemoHoldingSpec[] = [
     tags: ['Speculative', 'Trading'],
   },
   {
+    // Stablecoin on Bybit Earn → Crypto class gets a Low-tier slice
+    // (Mixed volatility) + adds to the exchange side of custody mix.
+    symbol: 'USDT',
+    accountId: 'acc-bybit-earn',
+    accountName: 'Bybit Earn',
+    accountKind: 'EXCHANGE_EARN',
+    quantity: 4000,
+    avgBuyPrice: 1,
+    tags: ['Fixed income'],
+  },
+  {
     symbol: 'USD',
     accountId: 'acc-monobank',
     accountName: 'Monobank',
@@ -219,6 +250,16 @@ export const DEMO_HOLDING_SPECS: DemoHoldingSpec[] = [
     quantity: 9895,
     avgBuyPrice: 1,
     tags: ['Emergency', 'Fixed income'],
+  },
+  {
+    // Native-UAH cash → currency exposure + FX normalisation in aggregates.
+    symbol: 'UAH',
+    accountId: 'acc-monobank',
+    accountName: 'Monobank',
+    accountKind: 'BANK_SAVINGS',
+    quantity: 50000,
+    avgBuyPrice: 1,
+    tags: ['Emergency'],
   },
   {
     symbol: 'USD',
@@ -252,7 +293,9 @@ export const DEMO_FALLBACK_PRICES: Record<string, number> = {
   'AAPL.X': 176.0,
   MSFT: 410.0,
   BTC: 58000.0,
+  USDT: 1.0,
   USD: 1.0,
+  UAH: 1.0,
   'KYIV-APT-1': 110000.0,
 };
 
@@ -274,4 +317,99 @@ export function buildDemoAccountsWithFlag(): IAccountV2[] {
  */
 export function createDemoSystemTags(): ITag[] {
   return createSystemTags().map((t) => ({ ...t, isDemo: true }));
+}
+
+/**
+ * Demo liabilities (ADR-0009 · plan L4) — minimal set that lights up the
+ * net-worth headline, the Liabilities band, and the debt-payoff goals:
+ *  - one term mortgage (USD) and one term auto loan (USD) → debt-payoff
+ *    goals with a freedom date on the projection;
+ *  - one revolving credit card (native ₴) → utilisation, no goal.
+ * High ids (9xxx) keep them out of the way of user-created ones; `isDemo`
+ * lets {@link DemoDataService.clear} drop them.
+ */
+export function buildDemoLiabilities(): ILiability[] {
+  return [
+    {
+      id: 9001,
+      type: 'MORTGAGE',
+      lender: 'Mortgage · Apt #1',
+      principalBalance: 40000,
+      originalAmount: 52000,
+      currency: 'USD',
+      interestRate: 7.2,
+      rateType: 'FIXED',
+      startDate: '2021-03-01',
+      endDate: '2034-03-01',
+      isDemo: true,
+    },
+    {
+      id: 9002,
+      type: 'AUTO_LOAN',
+      lender: 'VW Golf',
+      principalBalance: 8000,
+      originalAmount: 15000,
+      currency: 'USD',
+      interestRate: 4.9,
+      rateType: 'FIXED',
+      startDate: '2023-06-01',
+      endDate: '2028-06-01',
+      isDemo: true,
+    },
+    {
+      id: 9003,
+      type: 'CREDIT_CARD',
+      lender: 'Monobank',
+      principalBalance: 45000,
+      originalAmount: 180000,
+      currency: 'UAH',
+      interestRate: 0,
+      rateType: 'VARIABLE',
+      isDemo: true,
+    },
+  ];
+}
+
+/**
+ * Demo goals — two active savings goals (one dated → ETA + projection
+ * goal-line) plus one completed, archived goal so the Statistics → Goals
+ * **Archived** group isn't empty out of the box (mockup analytics/16, the
+ * /goals page was removed 2026-05-29). `share` on the active rows is a
+ * fraction of the gross portfolio earmarked, so progress reads plausibly
+ * against the demo holdings (~48% / ~100%).
+ *
+ * The archived row uses the legacy absolute-amount `share` convention
+ * (`share === finishSum` ⇒ 100 %); it's excluded from the stats projection
+ * (`archived`), so the fraction-vs-amount `share` ambiguity is moot here —
+ * full unification of the `share` unit is tracked separately.
+ */
+export function buildDemoGoals(): IGoal[] {
+  return [
+    {
+      id: 9001,
+      name: 'Apartment Kyiv',
+      finishSum: 60000,
+      share: 0.18,
+      status: 'active',
+      approximateDate: new Date('2029-02-01'),
+      isDemo: true,
+    },
+    {
+      id: 9002,
+      name: 'Emergency fund',
+      finishSum: 6000,
+      share: 0.05,
+      status: 'active',
+      isDemo: true,
+    },
+    {
+      id: 9003,
+      name: 'New MacBook',
+      finishSum: 2500,
+      share: 2500,
+      status: 'success',
+      archived: true,
+      isDemo: true,
+    },
+  ];
 }

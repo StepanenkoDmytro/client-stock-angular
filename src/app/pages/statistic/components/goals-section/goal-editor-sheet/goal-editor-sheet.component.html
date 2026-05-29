@@ -1,0 +1,63 @@
+<div class="ge">
+  <h3 class="ge__title">{{ isEdit ? 'Edit goal' : 'New goal' }}</h3>
+
+  <mat-form-field appearance="outline" class="ge__field">
+    <mat-label>Name</mat-label>
+    <input
+      matInput
+      type="text"
+      placeholder="e.g. Apartment Kyiv"
+      [(ngModel)]="name" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="ge__field">
+    <mat-label>Target sum</mat-label>
+    <input
+      matInput
+      type="number"
+      inputmode="numeric"
+      placeholder="0"
+      [(ngModel)]="finishSum" />
+    <span matTextSuffix>{{ data.currency | pgzCurrencySymbol }}</span>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="ge__field">
+    <mat-label>Type</mat-label>
+    <mat-select [(ngModel)]="status">
+      @for (s of statuses; track s.value) {
+        <mat-option [value]="s.value">{{ s.name }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  @if (status === 'progress') {
+    <mat-form-field appearance="outline" class="ge__field">
+      <mat-label>Share of portfolio</mat-label>
+      <input
+        matInput
+        type="number"
+        inputmode="decimal"
+        step="0.05"
+        placeholder="0.5 = 50%"
+        [(ngModel)]="share" />
+      <mat-hint>Fraction of your portfolio earmarked for this goal (0–1).</mat-hint>
+    </mat-form-field>
+  }
+
+  <mat-form-field appearance="outline" class="ge__field">
+    <mat-label>Target date (optional)</mat-label>
+    <input matInput type="month" [(ngModel)]="targetMonth" />
+  </mat-form-field>
+
+  <div class="ge__actions">
+    <button mat-button type="button" (click)="cancel()">Cancel</button>
+    <button
+      mat-flat-button
+      color="primary"
+      type="button"
+      [disabled]="!canSave()"
+      (click)="save()">
+      {{ isEdit ? 'Save' : 'Add goal' }}
+    </button>
+  </div>
+</div>

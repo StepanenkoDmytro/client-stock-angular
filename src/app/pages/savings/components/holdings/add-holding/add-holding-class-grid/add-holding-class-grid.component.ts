@@ -104,6 +104,15 @@ export class AddHoldingClassGridComponent {
     });
   }
 
+  /**
+   * Liability is a separate trackable-kind (ADR-0009 / ADR-0013), not an
+   * AssetClass — but it's added from the same grid (the grid is just a
+   * "what are you adding?" router). Routes to the existing liability form.
+   */
+  public onPickLiability(): void {
+    this.router.navigate(['/savings/add-liability']);
+  }
+
   public goBack(): void {
     this.router.navigate(['/savings']);
   }

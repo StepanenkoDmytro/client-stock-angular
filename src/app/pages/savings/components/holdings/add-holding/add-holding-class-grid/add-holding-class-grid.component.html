@@ -5,7 +5,7 @@
     </pgz-prev-route>
   </div>
 
-  <p class="grid__caption">WHAT KIND OF ASSET?</p>
+  <p class="grid__caption">WHAT ARE YOU ADDING?</p>
 
   <div class="grid__cards">
     @for (c of cards; track c.assetClass) {
@@ -20,6 +20,17 @@
         <span class="grid__card-sub">{{ c.subtitle }}</span>
       </button>
     }
+
+    <!-- Liability kind (ADR-0009 / ADR-0013) — same grid, different kind.
+         Slate-tinted, full-width; routes to the existing add-liability form. -->
+    <button type="button"
+            class="grid__card grid__card--liability"
+            [style.--card-tint]="'var(--pgz-liability-slate)'"
+            (click)="onPickLiability()">
+      <mat-icon class="grid__card-icon">credit_card</mat-icon>
+      <span class="grid__card-label">Mortgage &amp; loans</span>
+      <span class="grid__card-sub">debt · what you owe</span>
+    </button>
   </div>
 
   <p class="grid__future-caption">FUTURE CLASSES</p>

@@ -1,0 +1,388 @@
+/* Goals section (mockup §09) — data-driven. Self-contained styles
+ * (view-encapsulated). Card chrome mirrors `.st__card`; colours from
+ * `--pgz-*` / `--color-*` tokens. No inline hex. */
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  /* Liability slate (ADR-0009) — deliberately not red (anti-shaming) nor
+     amber (that's real estate). Local token until promoted to styles.scss
+     when more liability surfaces (savings cards / equity-bridge) land. */
+  --liability-slate: #6e7a88;
+}
+
+.card {
+  background: var(--pgz-card-bg);
+  border: 0.5px solid var(--pgz-card-border);
+  border-radius: 16px;
+  padding: 14px;
+}
+
+%cap {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--pgz-text-muted);
+  text-transform: uppercase;
+}
+
+/* --- Hero --- */
+.gl-hero {
+  &__caption {
+    @extend %cap;
+  }
+
+  &__big {
+    margin: 8px 0 4px;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--pgz-text-primary);
+  }
+
+  &__sub {
+    margin: 0;
+    font-size: 11px;
+    line-height: 1.4;
+    color: var(--pgz-text-secondary);
+  }
+}
+
+/* --- Monthly contribution (what-if slider) --- */
+.gl-contrib {
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+
+  &__caption {
+    @extend %cap;
+  }
+
+  &__value {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--pgz-text-primary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__slider {
+    width: 100%;
+    margin: 0;
+    accent-color: var(--pgz-accent);
+    cursor: pointer;
+  }
+
+  &__legend {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2px;
+    font-size: 10px;
+    color: var(--pgz-text-muted);
+  }
+
+  // Time-impact line — "🎯 {goal} reached N earlier". The delta is the
+  // win, so it carries the positive accent; the rest stays secondary.
+  &__impact {
+    margin: 10px 0 0;
+    font-size: 12px;
+    color: var(--pgz-text-secondary);
+
+    strong {
+      color: var(--color-positive);
+      font-weight: 600;
+    }
+
+    &--muted {
+      color: var(--pgz-text-muted);
+    }
+  }
+
+  &__impact-eta {
+    color: var(--pgz-text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__note {
+    margin: 8px 0 0;
+    font-size: 10.5px;
+    color: var(--pgz-text-muted);
+  }
+}
+
+/* --- Gap analysis (adaptive, amber) --- */
+.gl-gap {
+  &__caption {
+    @extend %cap;
+    margin-bottom: 8px;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    align-items: baseline;
+    gap: 12px;
+    padding: 3px 0;
+    font-size: 11px;
+  }
+
+  &__label {
+    color: var(--pgz-text-muted);
+
+    &--warn {
+      color: var(--color-warning);
+      font-weight: 600;
+    }
+  }
+
+  &__value {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--pgz-text-primary);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+
+    &--warn {
+      color: var(--color-warning);
+    }
+  }
+
+  &__hint {
+    color: var(--pgz-text-muted);
+    font-size: 10px;
+  }
+
+  &__divider {
+    height: 0.5px;
+    background: var(--pgz-divider);
+    margin: 8px 0;
+  }
+}
+
+/* --- Forward projection chart --- */
+.gl-proj {
+  &__caption {
+    @extend %cap;
+    margin-bottom: 10px;
+  }
+
+  &__chart {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  &__end {
+    font-size: 8.5px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Debt freedom-date marker (ADR-0009 §14). */
+  &__freedom-line {
+    stroke: var(--liability-slate);
+    stroke-width: 1;
+  }
+
+  &__freedom {
+    font-size: 8px;
+    font-weight: 600;
+    fill: var(--liability-slate);
+  }
+
+  &__scenarios {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    margin-top: 8px;
+  }
+
+  &__scenario {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--pgz-text-secondary);
+  }
+
+  &__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+  }
+
+  &__footer {
+    margin: 8px 0 0;
+    font-size: 10px;
+    color: var(--pgz-text-muted);
+  }
+}
+
+/* --- Goals list --- */
+.gl-list {
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+  }
+
+  &__caption {
+    @extend %cap;
+  }
+
+  // «+ Add» (header) and «+ Add a goal» (empty fallback) — text accent link.
+  &__add {
+    background: none;
+    border: 0;
+    padding: 0;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--pgz-accent);
+    cursor: pointer;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__name {
+    flex: 1;
+    min-width: 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--pgz-text-primary);
+  }
+
+  // Per-row ⋯ menu — default Material icon-button pulled tight into the row
+  // (same trick as `.lc__more` on liability cards).
+  &__menu {
+    flex: 0 0 auto;
+    margin: -8px -8px -8px 0;
+    color: var(--pgz-text-muted);
+  }
+
+  // Collapsed «Archived (N)» group toggle.
+  &__archived-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    background: none;
+    border: 0;
+    padding: 4px 0;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--pgz-text-muted);
+    cursor: pointer;
+  }
+
+  &__chevron {
+    font-size: 13px;
+    color: var(--pgz-text-muted);
+  }
+
+  // Archived rows are de-emphasised (mockup analytics/16 frame 2).
+  &__item--archived {
+    margin-top: 10px;
+    opacity: 0.85;
+
+    .gl-list__name {
+      color: var(--pgz-text-secondary);
+    }
+  }
+
+  &__pct {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--pgz-text-primary);
+    font-variant-numeric: tabular-nums;
+
+    &--done {
+      color: var(--color-positive);
+    }
+  }
+
+  &__bar-track {
+    height: 6px;
+    background: var(--pgz-card-bg-sub);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  &__bar-fill {
+    height: 100%;
+    background: var(--pgz-accent);
+    border-radius: 3px;
+
+    &--done {
+      background: var(--color-positive);
+    }
+
+    /* Debt-payoff goal — slate, never accent/green (ADR-0009 §14). */
+    &--debt {
+      background: var(--liability-slate);
+    }
+
+    /* Archived goal — muted, no accent/green (it's history). */
+    &--archived {
+      background: var(--pgz-text-muted);
+    }
+  }
+
+  &__bottom {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 10px;
+  }
+
+  &__progress {
+    color: var(--pgz-text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__eta {
+    color: var(--pgz-text-secondary);
+    white-space: nowrap;
+  }
+
+  &__divider {
+    height: 0.5px;
+    background: var(--pgz-divider);
+    margin: 12px 0;
+  }
+
+  &__empty {
+    margin: 0;
+    font-size: 12px;
+    color: var(--pgz-text-muted);
+  }
+}
+
+/* --- Empty (no holdings, no goals) --- */
+.gl-empty {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+  margin: 4px 4px 0;
+
+  &__text {
+    margin: 0;
+    font-size: 12px;
+    color: var(--pgz-text-muted);
+  }
+}

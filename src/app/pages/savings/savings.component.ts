@@ -7,7 +7,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../environments/environment';
 import { AnonymousModeService } from '../../core/anonymous-mode/anonymous-mode.service';
@@ -53,8 +53,11 @@ import { TagsService } from './service/tags.service';
 import { UserPreferencesService } from './service/user-preferences.service';
 import { AddTriggerService } from '../../service/helpers/add-trigger.service';
 import { FxRateService } from '../../service/fx-rate.service';
+import { LiabilitiesService } from '../../service/liabilities.service';
+import { ILiability } from '../../domain/liability.domain';
 import { CurrencySymbolPipe } from '../../pipe/currency-symbol.pipe';
 import { SUPPORTED_BASE_CURRENCIES } from '../../domain/user-preferences.domain';
+import { LiabilityCardComponent } from './components/liabilities/liability-card/liability-card.component';
 import { selectHoldingsList } from './store/holdings.selectors';
 import { selectTagsList } from './store/tags.selectors';
 
@@ -105,6 +108,7 @@ const UI_COMPONENTS = [
   PortfolioSummaryComponent,
   AccountsChipComponent,
   SavingsOfflinePlaceholderComponent,
+  LiabilityCardComponent,
 ];
 
 const MATERIAL_MODULES = [
@@ -146,6 +150,7 @@ export class SavingsComponent implements OnInit {
   private readonly accounts = inject(AccountsService);
   private readonly userPrefs = inject(UserPreferencesService);
   private readonly fxRate = inject(FxRateService);
+  private readonly liabilitiesService = inject(LiabilitiesService);
   private readonly portfolioOverview = inject(PortfolioOverviewService);
   private readonly network = inject(NetworkStatusService);
   private readonly savingsTier = inject(SavingsTierService);
@@ -285,6 +290,25 @@ export class SavingsComponent implements OnInit {
    */
   public readonly displayCurrency = computed<string>(
     () => this.userPrefs.baseCurrency() ?? 'USD',
+  );
+
+  /** Liabilities (ADR-0009 · L4) — localStorage-backed, anonymous-safe.
+   *  Rendered as a standalone band below the class accordion. */
+  public readonly liabilities = toSignal(this.liabilitiesService.getAll(), {
+    initialValue: [] as ILiability[],
+  });
+
+  /** Total outstanding debt in base currency — drives the band header. */
+  public readonly liabilitiesTotal = computed<number>(() => {
+    const base = this.displayCurrency();
+    return this.liabilities().reduce(
+      (sum, l) => sum + this.fxRate.toBase(l.principalBalance ?? 0, l.currency, base),
+      0,
+    );
+  });
+
+  public readonly hasLiabilities = computed<boolean>(
+    () => this.liabilities().length > 0,
   );
 
   public readonly classGroups = computed<ClassGroup[]>(() => {
@@ -482,6 +506,11 @@ export class SavingsComponent implements OnInit {
 
   public openAccountsManage(): void {
     this.router.navigate(['/savings/accounts']);
+  }
+
+  /** Add-Liability entry (ADR-0009 · L4). */
+  public addLiability(): void {
+    this.router.navigate(['/savings/add-liability']);
   }
 
   /** Empty-state CTA for anonymous prod users (PR6). */

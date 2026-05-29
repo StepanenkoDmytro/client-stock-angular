@@ -5,7 +5,6 @@ export enum AppRoutes {
  CALENDAR = 'spending/calendar',
  SAVINGS = 'savings',
  STATISTIC = 'statistic',
- GOALS = 'goals',
  PROFILE = 'profile',
  AUTH = 'auth',
 }
@@ -16,7 +15,8 @@ export const routes: Routes = [
   { path: AppRoutes.SPENDING, loadChildren: () => import('./pages/spending/spending.routes').then(c => c.SPENDING_ROUTES) },
   { path: AppRoutes.SAVINGS, loadChildren: () => import('./pages/savings/savings.routes').then(c => c.SAVINGS_ROUTES) },
   { path: AppRoutes.STATISTIC, loadChildren: () => import('./pages/statistic/statistic.routes').then(c => c.STATISTIC_ROUTES) },
-  { path: AppRoutes.GOALS, loadChildren: () => import('./pages/goals/goals.routes').then(c => c.GOALS_ROUTES) },
+  // /goals page removed 2026-05-29 (decision: goals managed in Statistics →
+  // Goals, mockup analytics/16). See docs/notes/2026-05-goal-card-redesign-task.md.
   { path: AppRoutes.CALENDAR, loadComponent: () => import('./pages/spending/components/calendar-spending/calendar-spending.component').then(c => c.CalendarSpendingComponent) },
   // { path: AppRoutes.PROFILE, loadComponent: () => import('./pages/profile/profile.component').then(c => c.ProfileComponent) },
   { path: AppRoutes.PROFILE, loadChildren: () => import('./pages/profile/profile.routes').then(c => c.PROFILE_ROUTES) },

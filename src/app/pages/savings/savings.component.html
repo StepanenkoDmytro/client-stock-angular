@@ -68,7 +68,8 @@
     } @else {
       <mat-accordion class="savings__classes" multi>
         @for (group of classGroups(); track group.assetClass) {
-          <mat-expansion-panel class="savings__class-panel">
+          <mat-expansion-panel class="savings__class-panel"
+                               [style.border-left-color]="group.color">
             <mat-expansion-panel-header
               class="savings__class-panel-header"
               collapsedHeight="52px"
@@ -131,6 +132,31 @@
         <pgz-discovery-row></pgz-discovery-row>
       }
     }
+
+    <!-- Liabilities band (ADR-0009 · L4, mockup savings/09). Standalone
+         debts; collateral-nested mortgages move into their position card
+         in a follow-up (L4c). Shows only when the user has debt. -->
+    @if (hasLiabilities()) {
+      <section class="savings__liabilities" aria-label="Liabilities">
+        <div class="savings__liabilities-header">
+          <span class="savings__class-caption">LIABILITIES</span>
+          <span class="savings__liabilities-total">
+            {{ displayCurrency() | pgzCurrencySymbol }}{{ formatNumber(liabilitiesTotal()) }}
+            · {{ liabilities().length }} active
+          </span>
+        </div>
+        <div class="savings__liabilities-list">
+          @for (l of liabilities(); track l.id) {
+            <pgz-liability-card [liability]="l"></pgz-liability-card>
+          }
+        </div>
+      </section>
+    }
+
+    <!-- Add-Liability entry moved into the add-savings grid as a kind tile
+         (add-holding-class-grid · ADR-0013). Reached via the "+" FAB →
+         "Mortgage & loans" tile. The standalone link was removed 2026-05-29. -->
+
   } @else {
     <pgz-holdings-list
       [showHeader]="false"

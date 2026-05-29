@@ -113,6 +113,53 @@
     line-height: 1.5;
   }
 
+  // ---- Liabilities band (ADR-0009 · L4, mockup savings/09) ----
+  &__liabilities {
+    display: flex;
+    flex-direction: column;
+    padding: 0 16px 24px;
+  }
+
+  &__liabilities-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 8px 0 8px;
+  }
+
+  &__liabilities-total {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--pgz-text-secondary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__liabilities-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__add-liability {
+    align-self: flex-start;
+    margin: 4px 16px 24px;
+    padding: 8px 14px;
+    background: none;
+    border: 0.5px dashed var(--pgz-card-border);
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--pgz-text-secondary);
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid var(--pgz-accent);
+      outline-offset: 2px;
+    }
+  }
+
   &__classes {
     display: block;
     padding: 0 16px 24px;
@@ -128,14 +175,21 @@
     margin-bottom: 8px;
     background: var(--pgz-card-bg) !important;
     border: 0.5px solid var(--pgz-card-border);
+    // Class-colour left accent — mirrors the liability-card treatment so every
+    // /savings card reads as one family (asset = class colour, debt = slate).
+    // Colour is bound inline per panel (`[style.border-left-color]`); only the
+    // width/style live here. The header padding below is trimmed by the same
+    // ~3px so the dot/name stay vertically aligned with the other cards.
+    border-left-width: 3px !important;
     border-radius: 12px !important;
     overflow: hidden;
     box-shadow: var(--pgz-card-shadow) !important;
   }
 
-  // Header padding: more breathing room than the cramped default.
+  // Header padding: more breathing room than the cramped default. Left side
+  // trimmed to 13px so 13 + 3px accent ≈ the 16px content offset siblings use.
   ::ng-deep .savings__class-panel-header {
-    padding: 0 16px !important;
+    padding: 0 16px 0 13px !important;
   }
 
   // Material gives `mat-panel-description` flex:2 by default which squashes

@@ -62,165 +62,21 @@
   </article>
 
   <!-- ====== Section 3 · Goals ====== -->
-  <!-- DEMO: every card here is hardcoded per mockup §09
-       (design/analytics/09-statistics-goals-mobile.svg). Replace
-       once /api/v1/goals + /projections/* ship (Phase 8 / M5.7) —
-       hero target, saving rate, goals list, gap-analysis, forward
-       projection and what-if all bind to real data then. -->
+  <!-- Data-driven (frontend-only, anonymous-safe): pgz-stats-goals-section
+       projects the user's current portfolio value forward across 3 return
+       scenarios + a user-set monthly contribution (what-if), and reads
+       goals from the localStorage GoalsService. Auto-detecting a saving
+       rate needs income / net-worth history (Wave 2) → surfaced as a
+       manual control. Mockup: design/analytics/09-statistics-goals-mobile.svg. -->
   <article
     #sectionEl
     id="goals"
-    class="st__section st__section--preview"
+    class="st__section"
     role="tabpanel"
     aria-labelledby="goals-caption">
     <p id="goals-caption" class="st__caption">
       GOALS · WHERE YOUR CAPITAL IS HEADING
     </p>
-    <!-- Whole Goals section is still hardcoded demo (mockup §09). Flag it
-         clearly so the sample numbers don't read as the user's real data. -->
-    <p class="st__preview-note" role="note">
-      <span class="st__preview-dot" aria-hidden="true"></span>
-      Sample data — preview only, not your real numbers
-    </p>
-
-    <!-- Hero: AT YOUR CURRENT PACE → 🏠 Apartment Kyiv · Feb 2029 -->
-    <div class="st__card gl-hero">
-      <p class="gl-hero__caption">AT YOUR CURRENT PACE</p>
-      <p class="gl-hero__big">🏠 Apartment Kyiv · Feb 2029</p>
-      <p class="gl-hero__sub">2.6 years out at €640/mo · 6% realistic return</p>
-    </div>
-
-    <!-- Saving rate header — single number + ⓘ how detected -->
-    <div class="st__card gl-saving">
-      <p class="gl-saving__caption">YOU SAVE ON AVERAGE</p>
-      <div class="gl-saving__row">
-        <span class="gl-saving__amount">~€640/mo</span>
-        <button type="button" class="gl-saving__info" disabled>
-          ⓘ how detected
-        </button>
-      </div>
-    </div>
-
-    <!-- YOUR GOALS — list. Add CTA top-right; progress bars accent
-         blue for in-flight, green for completed. -->
-    <div class="st__card gl-list">
-      <header class="gl-list__header">
-        <p class="gl-list__caption">YOUR GOALS</p>
-        <button type="button" class="gl-list__add" disabled>+ Add</button>
-      </header>
-
-      <div class="gl-list__item">
-        <div class="gl-list__top">
-          <span class="gl-list__name">🏠 Apartment Kyiv</span>
-          <span class="gl-list__pct">60%</span>
-        </div>
-        <div class="gl-list__bar-track">
-          <div class="gl-list__bar-fill" style="width: 60%"></div>
-        </div>
-        <div class="gl-list__bottom">
-          <span class="gl-list__progress">€36,000 of €60,000</span>
-          <span class="gl-list__eta">Feb 2029 at pace</span>
-        </div>
-      </div>
-
-      <div class="gl-list__divider"></div>
-
-      <div class="gl-list__item">
-        <div class="gl-list__top">
-          <span class="gl-list__name">🛡 Emergency fund</span>
-          <span class="gl-list__pct gl-list__pct--done">✓ 100%</span>
-        </div>
-        <div class="gl-list__bar-track">
-          <div class="gl-list__bar-fill gl-list__bar-fill--done"
-               style="width: 100%"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- GAP TO GOAL · APARTMENT KYIV — adaptive widget (visible
-         here because the demo state has the user behind pace). -->
-    <div class="st__card gl-gap">
-      <p class="gl-gap__caption">GAP TO GOAL · APARTMENT KYIV</p>
-      <div class="gl-gap__row">
-        <span class="gl-gap__label">Need to save</span>
-        <span class="gl-gap__value">€800/mo</span>
-        <span class="gl-gap__hint">to reach by Feb 2028</span>
-      </div>
-      <div class="gl-gap__row">
-        <span class="gl-gap__label">Currently</span>
-        <span class="gl-gap__value">€640/mo</span>
-      </div>
-      <div class="gl-gap__divider"></div>
-      <div class="gl-gap__row gl-gap__row--short">
-        <span class="gl-gap__label gl-gap__label--warn">Short by</span>
-        <span class="gl-gap__value gl-gap__value--warn">€160/mo</span>
-        <span class="gl-gap__hint">→ Feb 2029 at pace</span>
-      </div>
-    </div>
-
-    <!-- FORWARD PROJECTION · 10 YEARS — 3 scenarios on one chart.
-         Coordinates copied from mockup §09 SVG (y-flipped because
-         our SVG origin is top-left). End-of-line labels mirror the
-         mockup. -->
-    <div class="st__card gl-proj">
-      <p class="gl-proj__caption">FORWARD PROJECTION · 10 YEARS</p>
-      <svg class="gl-proj__chart" viewBox="0 0 320 130"
-           aria-label="10-year forward projection, 3 scenarios">
-        <!-- y-axis tick labels -->
-        <text x="28" y="14" text-anchor="end" class="gl-proj__axis">$600k</text>
-        <text x="28" y="50" text-anchor="end" class="gl-proj__axis">$400k</text>
-        <text x="28" y="86" text-anchor="end" class="gl-proj__axis">$200k</text>
-        <!-- grid -->
-        <line x1="34" y1="14" x2="240" y2="14" stroke="#F1EFE8" stroke-width="0.5"/>
-        <line x1="34" y1="50" x2="240" y2="50" stroke="#F1EFE8" stroke-width="0.5"/>
-        <line x1="34" y1="86" x2="240" y2="86" stroke="#F1EFE8" stroke-width="0.5"/>
-        <!-- 3 projection lines (8% green, 6% blue, 4% grey dashed) -->
-        <polyline
-          points="34,90 60,80 86,70 112,60 138,50 164,40 190,30 216,20 240,10"
-          fill="none" stroke="#0F6E56" stroke-width="2"/>
-        <polyline
-          points="34,90 60,85 86,78 112,70 138,60 164,50 190,40 216,32 240,24"
-          fill="none" stroke="#185FA5" stroke-width="2"/>
-        <polyline
-          points="34,90 60,87 86,82 112,76 138,70 164,62 190,54 216,46 240,40"
-          fill="none" stroke="#888780" stroke-width="2" stroke-dasharray="3 2"/>
-        <!-- goal line €60k -->
-        <line x1="34" y1="78" x2="240" y2="78"
-              stroke="#BA7517" stroke-width="1" stroke-dasharray="2 2"/>
-        <text x="244" y="81" class="gl-proj__axis" fill="#BA7517">€60k goal</text>
-        <!-- x-axis -->
-        <line x1="34" y1="96" x2="240" y2="96" stroke="#D3D1C7"/>
-        <text x="34" y="110" class="gl-proj__axis">2026</text>
-        <text x="137" y="110" text-anchor="middle" class="gl-proj__axis">2031</text>
-        <text x="240" y="110" text-anchor="end" class="gl-proj__axis">2036</text>
-        <!-- end-of-line labels -->
-        <text x="244" y="13" class="gl-proj__end gl-proj__end--pos">8% $560k</text>
-        <text x="244" y="27" class="gl-proj__end gl-proj__end--blue">6% $470k</text>
-        <text x="244" y="43" class="gl-proj__end gl-proj__end--muted">4% $390k</text>
-      </svg>
-      <p class="gl-proj__footer">
-        3 scenarios · long-term equity returns · inflation toggle ⓘ
-      </p>
-    </div>
-
-    <!-- WHAT IF I SAVE MORE? — slider mock (non-interactive). Thumb
-         frozen at +€200/mo per mockup §09 §What-if. -->
-    <div class="st__card gl-whatif">
-      <p class="gl-whatif__caption">WHAT IF I SAVE MORE?</p>
-      <div class="gl-whatif__slider" aria-hidden="true">
-        <div class="gl-whatif__track"></div>
-        <div class="gl-whatif__track-fill"></div>
-        <div class="gl-whatif__thumb"></div>
-        <div class="gl-whatif__thumb-label">+€200/mo</div>
-      </div>
-      <div class="gl-whatif__legend">
-        <span>+€0</span>
-        <span>+€500/mo</span>
-      </div>
-      <p class="gl-whatif__result">
-        Apartment reached
-        <span class="gl-whatif__delta">10 months earlier</span>
-      </p>
-    </div>
+    <pgz-stats-goals-section></pgz-stats-goals-section>
   </article>
 </section>

@@ -93,6 +93,15 @@
   }
 }
 
+// Liability kind tile (ADR-0009 / ADR-0013). Lives in the SAME grid as the
+// asset classes (one "what are you adding?" list), but reads as a distinct
+// kind: slate left-accent + full-width row under the asset cards. The slate
+// icon tint comes from the inline `--card-tint: var(--pgz-liability-slate)`.
+.grid__card--liability {
+  grid-column: 1 / -1;
+  border-left: 3px solid var(--pgz-liability-slate);
+}
+
 // Future placeholders — desaturated + dashed border to read as
 // "not yet available" without screaming.
 .grid__cards--future {

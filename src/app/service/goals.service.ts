@@ -36,14 +36,66 @@ export class GoalsService {
       goal.id = this.getLastId();
     }
 
-    this.historyGoalsSubject.push(goal);
+    // Emit a fresh array (not the mutated reference) so `toSignal`
+    // consumers — which compare with Object.is — pick up the change. The
+    // legacy /goals page copies on subscribe regardless, so this is safe.
+    this.historyGoalsSubject = [...this.historyGoalsSubject, goal];
     localStorage.setItem(this.localStorageKey, JSON.stringify(this.historyGoalsSubject));
     this.$historyGoals.next(this.historyGoalsSubject);
   }
 
   public deleteGoal(goal: IGoal): void {
-    const indexToRemove = this.historyGoalsSubject.indexOf(goal);
-    this.historyGoalsSubject.splice(indexToRemove, 1);
+    this.historyGoalsSubject = this.historyGoalsSubject.filter(
+      (g) => !(g === goal || (goal.id != null && g.id === goal.id)),
+    );
+    localStorage.setItem(this.localStorageKey, JSON.stringify(this.historyGoalsSubject));
+    this.$historyGoals.next(this.historyGoalsSubject);
+  }
+
+  /**
+   * Replace an existing goal in place (matched by reference or id). Used by
+   * the Statistics → Goals editor (A14, mockup analytics/16) for Edit. Emits
+   * a fresh array so signal / OnPush consumers react. Falls back to {@link
+   * addGoal} when the goal has no id and isn't already in the list.
+   */
+  public updateGoal(goal: IGoal): void {
+    const exists = this.historyGoalsSubject.some(
+      (g) => g === goal || (goal.id != null && g.id === goal.id),
+    );
+    if (!exists) {
+      this.addGoal(goal);
+      return;
+    }
+    this.historyGoalsSubject = this.historyGoalsSubject.map((g) =>
+      g === goal || (goal.id != null && g.id === goal.id) ? { ...goal } : g,
+    );
+    localStorage.setItem(this.localStorageKey, JSON.stringify(this.historyGoalsSubject));
+    this.$historyGoals.next(this.historyGoalsSubject);
+  }
+
+  /**
+   * Move a goal to / from History (archive). Emits a fresh array so signal /
+   * OnPush consumers pick up the change (the other mutators reuse the same
+   * reference, which is why callers copy on subscribe).
+   */
+  public setArchived(goal: IGoal, archived: boolean): void {
+    this.historyGoalsSubject = this.historyGoalsSubject.map((g) =>
+      g === goal || (goal.id != null && g.id === goal.id)
+        ? { ...g, archived }
+        : g,
+    );
+    localStorage.setItem(this.localStorageKey, JSON.stringify(this.historyGoalsSubject));
+    this.$historyGoals.next(this.historyGoalsSubject);
+  }
+
+  /** Current snapshot — used by the demo lifecycle to merge real + demo. */
+  public snapshot(): IGoal[] {
+    return this.historyGoalsSubject;
+  }
+
+  /** Replace the whole list (demo seed / clear). */
+  public replaceAll(goals: IGoal[]): void {
+    this.historyGoalsSubject = [...goals];
     localStorage.setItem(this.localStorageKey, JSON.stringify(this.historyGoalsSubject));
     this.$historyGoals.next(this.historyGoalsSubject);
   }

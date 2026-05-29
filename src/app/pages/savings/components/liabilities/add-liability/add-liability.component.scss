@@ -1,0 +1,39 @@
+:host {
+  display: block;
+  background: var(--pgz-app-bg);
+  min-height: 100%;
+}
+
+.add-liability {
+  padding: 0 0 32px;
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 16px 0;
+
+    mat-form-field {
+      width: 100%;
+    }
+  }
+
+  &__row {
+    display: flex;
+    gap: 12px;
+
+    mat-form-field {
+      flex: 1 1 auto;
+    }
+  }
+
+  &__currency {
+    flex: 0 0 104px !important;
+  }
+
+  &__save {
+    margin-top: 12px;
+    height: 48px;
+    font-weight: 600;
+  }
+}

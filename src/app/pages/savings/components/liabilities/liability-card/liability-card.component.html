@@ -1,0 +1,43 @@
+<div class="lc">
+  <div class="lc__head">
+    <span class="lc__name">{{ name() }}</span>
+    @if (!isRevolving()) {
+      <span class="lc__goal-badge">🎯 goal</span>
+    }
+    <span class="lc__amount">
+      −{{ currency() | pgzCurrencySymbol }}{{ formatMoney(balance()) }}
+    </span>
+    <button mat-icon-button
+            type="button"
+            class="lc__more"
+            aria-label="Liability actions"
+            [matMenuTriggerFor]="menu">
+      <mat-icon>more_horiz</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item type="button" (click)="onDelete()">
+        <mat-icon>delete_outline</mat-icon>
+        <span>Delete</span>
+      </button>
+    </mat-menu>
+  </div>
+
+  <p class="lc__subline">{{ subline() }}</p>
+
+  <div class="lc__bar-track">
+    <div class="lc__bar-fill" [style.width.%]="progress() * 100"></div>
+  </div>
+
+  <div class="lc__bottom">
+    <span class="lc__progress-label">
+      @if (isRevolving()) {
+        used {{ currency() | pgzCurrencySymbol }}{{ formatMoney(balance()) }}
+        of {{ currency() | pgzCurrencySymbol }}{{ formatMoney(original()) }}
+      } @else {
+        paid down {{ currency() | pgzCurrencySymbol }}{{ formatMoney(paidDown()) }}
+        of {{ currency() | pgzCurrencySymbol }}{{ formatMoney(original()) }}
+      }
+    </span>
+    <span class="lc__pct">{{ formatPct(progress()) }}</span>
+  </div>
+</div>

@@ -5,11 +5,22 @@ import {
   OnInit,
   computed,
   inject,
+  signal,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
 import { AssetClass } from '../../../../../domain/asset-class.domain';
 import { IHoldingView } from '../../../../../domain/holding.domain';
+import {
+  ILiability,
+  liabilityTypeLabel,
+} from '../../../../../domain/liability.domain';
 import { ITag } from '../../../../../domain/tag.domain';
+import { LiabilitiesService } from '../../../../../service/liabilities.service';
+import {
+  NetWorthBreakdown,
+  computeNetWorth,
+} from '../../../model/net-worth.helper';
 import { HoldingService } from '../../../service/holding.service';
 import { InstrumentService } from '../../../service/instrument.service';
 import { LivePriceService } from '../../../service/live-price.service';
@@ -64,9 +75,22 @@ export class PortfolioSummaryComponent implements OnInit {
   private readonly tags = inject(TagsService);
   private readonly userPrefs = inject(UserPreferencesService);
   private readonly fxRate = inject(FxRateService);
+  private readonly liabilitiesService = inject(LiabilitiesService);
 
   private readonly rawHoldings = this.store.selectSignal(selectHoldingsList);
   private readonly rawTags = this.store.selectSignal(selectTagsList);
+
+  private readonly liabilities = toSignal(this.liabilitiesService.getAll(), {
+    initialValue: [] as ILiability[],
+  });
+
+  /** Expand/collapse for the net-worth breakdown (mockup savings/08). */
+  private readonly _nwExpanded = signal<boolean>(false);
+  public readonly nwExpanded = this._nwExpanded.asReadonly();
+
+  public toggleNwExpanded(): void {
+    this._nwExpanded.update((v) => !v);
+  }
 
   private readonly holdingsView = computed<IHoldingView[]>(() => {
     const instrMap = this.instruments.instruments();
@@ -117,6 +141,40 @@ export class PortfolioSummaryComponent implements OnInit {
       ?? this.userPrefs.baseCurrency()
       ?? 'USD',
   );
+
+  /**
+   * Net worth = displayed assets − liabilities (ADR-0009 · L3). Liabilities
+   * come from the localStorage `LiabilitiesService` (anonymous-safe).
+   * `hasDebt` flips the headline to net worth; debt-free portfolios are
+   * unchanged (zero-cost).
+   */
+  public readonly netWorth = computed<NetWorthBreakdown>(() => {
+    const base = this.displayCurrency();
+    return computeNetWorth(this.displayTotal(), this.liabilities(), (amount, cur) =>
+      this.fxRate.toBase(amount, cur, base),
+    );
+  });
+
+  /** Headline number — net worth when there's debt, else the asset total. */
+  public readonly headlineValue = computed<number>(() => {
+    const nw = this.netWorth();
+    return nw.hasDebt ? nw.netWorth : nw.assetsTotal;
+  });
+
+  /** Per-debt rows for the expanded breakdown (base currency). */
+  public readonly debtRows = computed<
+    { key: string; name: string; amount: number }[]
+  >(() => {
+    const base = this.displayCurrency();
+    return this.liabilities()
+      .map((l) => ({
+        key: `debt-${l.id ?? l.type}`,
+        name: l.lender || l.notes || liabilityTypeLabel(l.type),
+        amount: this.fxRate.toBase(l.principalBalance ?? 0, l.currency, base),
+      }))
+      .filter((d) => d.amount > 0)
+      .sort((a, b) => b.amount - a.amount);
+  });
 
   public readonly summary = computed(() => {
     const all = this.holdingsView();

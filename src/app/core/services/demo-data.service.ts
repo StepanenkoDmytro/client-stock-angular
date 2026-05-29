@@ -12,6 +12,8 @@ import { IHolding } from '../../domain/holding.domain';
 import { IInstrument } from '../../domain/instrument.domain';
 import { ITag } from '../../domain/tag.domain';
 import { InstrumentService } from '../../pages/savings/service/instrument.service';
+import { GoalsService } from '../../service/goals.service';
+import { LiabilitiesService } from '../../service/liabilities.service';
 import { loadAccounts } from '../../pages/savings/store/accounts.actions';
 import { selectAccountsList } from '../../pages/savings/store/accounts.selectors';
 import { loadHoldings } from '../../pages/savings/store/holdings.actions';
@@ -23,6 +25,8 @@ import {
   DEMO_INSTRUMENT_SPECS,
   DemoInstrumentSpec,
   buildDemoAccountsWithFlag,
+  buildDemoGoals,
+  buildDemoLiabilities,
   createDemoSystemTags,
 } from '../data/demo-fixtures';
 
@@ -81,6 +85,8 @@ export class DemoDataService {
 
   private readonly store$ = inject(Store);
   private readonly instruments = inject(InstrumentService);
+  private readonly goalsService = inject(GoalsService);
+  private readonly liabilitiesService = inject(LiabilitiesService);
 
   private readonly demoHoldingsCount = toSignal(
     this.store$.pipe(
@@ -165,6 +171,18 @@ export class DemoDataService {
     this.store$.dispatch(
       loadHoldings({ state: { holdingsList: [...realHoldings, ...demoHoldings] } }),
     );
+
+    // Liabilities + goals live in localStorage services (not NgRx), so we
+    // merge real (non-demo) rows with the demo set. Lights up the net-worth
+    // headline, Liabilities band and debt-payoff goals (ADR-0009).
+    this.liabilitiesService.replaceAll([
+      ...this.liabilitiesService.snapshot().filter((l) => l.isDemo !== true),
+      ...buildDemoLiabilities(),
+    ]);
+    this.goalsService.replaceAll([
+      ...this.goalsService.snapshot().filter((g) => g.isDemo !== true),
+      ...buildDemoGoals(),
+    ]);
   }
 
   /**
@@ -194,6 +212,12 @@ export class DemoDataService {
           tagsList: this.snapshotTags().filter((t) => t.isDemo !== true),
         },
       }),
+    );
+    this.liabilitiesService.replaceAll(
+      this.liabilitiesService.snapshot().filter((l) => l.isDemo !== true),
+    );
+    this.goalsService.replaceAll(
+      this.goalsService.snapshot().filter((g) => g.isDemo !== true),
     );
   }
 

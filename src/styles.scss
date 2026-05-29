@@ -222,6 +222,11 @@ $light-theme: mat.define-light-theme((
   --pgz-accent: #42A5F5;
   --pgz-nav-active-bg: rgba(66, 165, 245, 0.18);
 
+  // ---- Liability tone (ADR-0009 · ADR-0013 trackable-kind) ----
+  // Slate accent for the Liability kind (cards, add-grid tile, bands).
+  // Same hex across themes — a calibrated "not an asset, not alarm" signal.
+  --pgz-liability-slate: #6E7A88;
+
   // ---- Tag chip defaults ----
   // Used by user-created tags without an explicit color override + the
   // outline of the tags-icon button. Slightly brighter in dark for
@@ -331,6 +336,9 @@ $light-theme: mat.define-light-theme((
   // ---- Brand accent ----
   --pgz-accent: #185FA5;
   --pgz-nav-active-bg: #DCE7F4;
+
+  // ---- Liability tone (ADR-0009 · ADR-0013 trackable-kind) ----
+  --pgz-liability-slate: #6E7A88;
 
   // ---- Tag chip defaults ----
   // Default border + background for user-created tags without an

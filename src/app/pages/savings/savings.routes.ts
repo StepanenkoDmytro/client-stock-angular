@@ -6,6 +6,7 @@ import { StockMarketComponent } from "./components/markets-assets/stock-market/s
 import { StockAssetComponent } from "./components/markets-assets/stock-market/stock-asset/stock-asset.component";
 import { AddHoldingClassGridComponent } from "./components/holdings/add-holding/add-holding-class-grid/add-holding-class-grid.component";
 import { AddHoldingComponent } from "./components/holdings/add-holding/add-holding.component";
+import { AddLiabilityComponent } from "./components/liabilities/add-liability/add-liability.component";
 
 
 export const MARKETS: string[] = ['crypto', 'stock'];
@@ -56,6 +57,12 @@ export const SAVINGS_ROUTES: Route[] = [
     {
         path: 'edit-holding/:id',
         component: AddHoldingComponent,
+    },
+    {
+        // Eager-loaded (offline rationale, same as add-holding): liabilities
+        // are localStorage/anonymous, must work without network.
+        path: 'add-liability',
+        component: AddLiabilityComponent,
     },
     {
         path: 'tags',

@@ -1,0 +1,316 @@
+@if (hasPortfolio() || hasGoals()) {
+  <!-- Hero — closest-goal ETA, or projected value when no goals yet. -->
+  <div class="card gl-hero">
+    @if (closestGoal(); as cg) {
+      <p class="gl-hero__caption">AT YOUR CURRENT PACE</p>
+      @if (cg.isDebt) {
+        <p class="gl-hero__big">
+          {{ cg.icon }} {{ cg.name }}{{ cg.dateLabel ? ' · debt-free ' + cg.dateLabel : '' }}
+        </p>
+        <p class="gl-hero__sub">
+          {{ displayCurrency() | pgzCurrencySymbol }}{{ formatMoney(cg.leftAmount) }} left · {{ cg.rate }}% rate
+        </p>
+      } @else {
+        <p class="gl-hero__big">
+          🎯 {{ cg.name }}{{ cg.dateLabel ? ' · ' + cg.dateLabel : '' }}
+        </p>
+        <p class="gl-hero__sub">
+          @if (closestEtaMonths() !== null) {
+            ≈ {{ etaLabel(closestEtaMonths()) }} away at
+            {{ displayCurrency() | pgzCurrencySymbol }}{{ formatMoney(contribution()) }}/mo · 6% realistic
+          } @else {
+            Set a monthly contribution below to see when you'll reach it
+          }
+        </p>
+      }
+    } @else {
+      <p class="gl-hero__caption">PROJECTED IN {{ projectionYears }} YEARS</p>
+      <p class="gl-hero__big">
+        {{ displayCurrency() | pgzCurrencySymbol }}{{ formatMoney(projectedRealistic()) }}
+      </p>
+      <p class="gl-hero__sub">
+        at {{ displayCurrency() | pgzCurrencySymbol }}{{ formatMoney(contribution()) }}/mo · 6% realistic return
+      </p>
+    }
+  </div>
+
+  <!-- Monthly contribution — the what-if control that drives everything.
+       Auto-detect (income / net-worth delta) is a Wave 2 follow-up. -->
+  <div class="card gl-contrib">
+    <div class="gl-contrib__head">
+      <p class="gl-contrib__caption">MONTHLY CONTRIBUTION</p>
+      <span class="gl-contrib__value">
+        {{ displayCurrency() | pgzCurrencySymbol }}{{ formatMoney(contribution()) }}/mo
+      </span>
+    </div>
+    <input
+      type="range"
+      class="gl-contrib__slider"
+      min="0"
+      [max]="contributionMax"
+      [step]="contributionStep"
+      [value]="contribution()"
+      (input)="setContribution($event)"
+      aria-label="Monthly contribution" />
+    <div class="gl-contrib__legend">
+      <span>{{ displayCurrency() | pgzCurrencySymbol }}0</span>
+      <span>{{ displayCurrency() | pgzCurrencySymbol }}{{ formatMoney(contributionMax) }}</span>
+    </div>
+    <!-- Time impact — how much sooner the closest savings goal is reached as
+         the slider moves (mockup §09 "Apartment reached 10 months earlier"). -->
+    @if (closestSavingsGoal(); as sg) {
+      @if (monthsEarlier() !== null) {
+        <p class="gl-contrib__impact">
+          🎯 {{ sg.name }} reached
+          <strong>{{ earlierLabel(monthsEarlier()) }}</strong>
+          @if (currentSavingsEtaMonths() !== null) {
+            <span class="gl-contrib__impact-eta">
+              · ≈ {{ etaLabel(currentSavingsEtaMonths()) }} away
+            </span>
+          }
+        </p>
+      } @else {
+        <p class="gl-contrib__impact gl-contrib__impact--muted">
+          Drag to see how much sooner you'd reach {{ sg.name }}
+        </p>
+      }
+    }
+    <p class="gl-contrib__note">
+      Auto-detecting your saving rate from activity is coming soon.
+    </p>
+  </div>
+
+  <!-- Gap analysis — adaptive: only when behind the closest dated goal. -->
+  @if (gap(); as g) {
+    <div class="card gl-gap">
+      <p class="gl-gap__caption">GAP TO GOAL · {{ g.goalName | uppercase }}</p>
+      <div class="gl-gap__row">
+        <span class="gl-gap__label">Need to save</span>
+        <span class="gl-gap__value">
+          {{ displayCurrency() | pgzCurrencySymbol }}{{ formatMoney(g.required) }}/mo
+        </span>
+        <span class="gl-gap__hint">to reach by {{ g.dateLabel }}</span>
+      </div>
+      <div class="gl-gap__row">
+        <span class="gl-gap__label">Currently</span>
+        <span class="gl-gap__value">
+          {{ displayCurrency() | pgzCurrencySymbol }}{{ formatMoney(g.current) }}/mo
+        </span>
+      </div>
+      <div class="gl-gap__divider"></div>
+      <div class="gl-gap__row gl-gap__row--short">
+        <span class="gl-gap__label gl-gap__label--warn">Short by</span>
+        <span class="gl-gap__value gl-gap__value--warn">
+          {{ displayCurrency() | pgzCurrencySymbol }}{{ formatMoney(g.shortBy) }}/mo
+        </span>
+      </div>
+    </div>
+  }
+
+  <!-- Forward / net-worth projection — 3 scenarios from current base +
+       contribution. Caption switches to "net worth" when there's debt. -->
+  <div class="card gl-proj">
+    <p class="gl-proj__caption">
+      {{ hasDebt() ? 'NET WORTH' : 'FORWARD' }} PROJECTION · {{ projectionYears }} YEARS
+    </p>
+    <svg
+      class="gl-proj__chart"
+      viewBox="0 0 320 150"
+      role="img"
+      aria-label="Forward projection across 3 return scenarios">
+      @for (line of chart().lines; track line.key) {
+        <polyline
+          [attr.points]="line.points"
+          fill="none"
+          stroke-width="2"
+          [style.stroke]="line.colorVar"
+          [attr.stroke-dasharray]="line.key === 'conservative' ? '3 2' : null"></polyline>
+      }
+      @if (chart().goalY !== null) {
+        <line
+          x1="40"
+          x2="300"
+          [attr.y1]="chart().goalY"
+          [attr.y2]="chart().goalY"
+          stroke="var(--color-warning)"
+          stroke-width="1"
+          stroke-dasharray="2 2"></line>
+      }
+      @if (chart().freedomX !== null) {
+        <!-- Debt freedom-date marker (ADR-0009 §14) — vertical slate line. -->
+        <line
+          [attr.x1]="chart().freedomX"
+          [attr.x2]="chart().freedomX"
+          y1="12"
+          y2="112"
+          class="gl-proj__freedom-line"
+          stroke-dasharray="2 2"></line>
+        <text
+          [attr.x]="chart().freedomX"
+          y="9"
+          text-anchor="middle"
+          class="gl-proj__freedom">🏦 {{ chart().freedomLabel }}</text>
+      }
+      @for (line of chart().lines; track line.key) {
+        <text
+          x="302"
+          [attr.y]="line.endY + 3"
+          class="gl-proj__end"
+          [style.fill]="line.colorVar">
+          {{ displayCurrency() | pgzCurrencySymbol }}{{ formatCompact(line.endValue) }}
+        </text>
+      }
+    </svg>
+    <div class="gl-proj__scenarios">
+      @for (line of chart().lines; track line.key) {
+        <span class="gl-proj__scenario">
+          <span class="gl-proj__dot" [style.background]="line.colorVar"></span>
+          {{ line.label }}
+        </span>
+      }
+    </div>
+    <p class="gl-proj__footer">
+      Starting from your current {{ hasDebt() ? 'net worth' : 'value' }}
+      {{ displayCurrency() | pgzCurrencySymbol }}{{ formatCompact(projectionBase()) }}
+      · long-term return assumptions
+    </p>
+  </div>
+
+  <!-- Goals list — the single goal-management home (mockup analytics/16,
+       /goals page deprecated 2026-05-29). Per-row ⋯ → Edit / Archive /
+       Delete; archived goals fold into a collapsed «Archived (N)» group. -->
+  <div class="card gl-list">
+    <div class="gl-list__head">
+      <p class="gl-list__caption">YOUR GOALS</p>
+      <button type="button" class="gl-list__add" (click)="onAddGoal()">
+        + Add
+      </button>
+    </div>
+
+    @if (hasGoals()) {
+      @for (row of allRows(); track row.key; let last = $last) {
+        <div class="gl-list__item">
+          <div class="gl-list__top">
+            <span class="gl-list__name">{{ row.icon ? row.icon + ' ' : '' }}{{ row.name }}</span>
+            <span class="gl-list__pct" [class.gl-list__pct--done]="row.done">
+              {{ row.done ? '✓ ' : '' }}{{ formatPct(row.progress) }}
+            </span>
+            <!-- Debt rows are auto-derived from liabilities — no goal menu
+                 (managed on /savings). Only savings goals are editable. -->
+            @if (row.goal) {
+              <button
+                mat-icon-button
+                type="button"
+                class="gl-list__menu"
+                aria-label="Goal actions"
+                [matMenuTriggerFor]="rowMenu">
+                <mat-icon>more_horiz</mat-icon>
+              </button>
+              <mat-menu #rowMenu="matMenu">
+                <button mat-menu-item type="button" (click)="onEditGoal(row)">
+                  <mat-icon>edit</mat-icon>
+                  <span>Edit</span>
+                </button>
+                <button mat-menu-item type="button" (click)="onArchiveGoal(row)">
+                  <mat-icon>archive</mat-icon>
+                  <span>Archive</span>
+                </button>
+                <button mat-menu-item type="button" (click)="onDeleteGoal(row)">
+                  <mat-icon>delete_outline</mat-icon>
+                  <span>Delete</span>
+                </button>
+              </mat-menu>
+            }
+          </div>
+          <div class="gl-list__bar-track">
+            <div
+              class="gl-list__bar-fill"
+              [class.gl-list__bar-fill--done]="row.done"
+              [class.gl-list__bar-fill--debt]="row.isDebt"
+              [style.width.%]="row.progress * 100"></div>
+          </div>
+          <div class="gl-list__bottom">
+            <span class="gl-list__progress">
+              @if (row.isDebt) {
+                {{ displayCurrency() | pgzCurrencySymbol }}{{ formatMoney(row.leftAmount) }} left
+              } @else {
+                {{ displayCurrency() | pgzCurrencySymbol }}{{ formatMoney(row.saved) }}
+                of {{ displayCurrency() | pgzCurrencySymbol }}{{ formatMoney(row.target) }}
+              }
+            </span>
+            @if (row.dateLabel) {
+              <span class="gl-list__eta">{{ row.dateLabel }} at pace</span>
+            }
+          </div>
+        </div>
+        @if (!last) {
+          <div class="gl-list__divider"></div>
+        }
+      }
+    } @else {
+      <p class="gl-list__empty">
+        No goals yet — tap + Add to create one.
+      </p>
+    }
+
+    <!-- Collapsed «Archived (N)» group — replaces the old Goals|History
+         toggle (mockup analytics/16 frame 2). Savings-only; archived row
+         ⋯ → Restore / Delete. -->
+    @if (archivedCount() > 0) {
+      <div class="gl-list__divider"></div>
+      <button
+        type="button"
+        class="gl-list__archived-toggle"
+        [attr.aria-expanded]="showArchived()"
+        (click)="toggleArchived()">
+        <span>📦 Archived · {{ archivedCount() }}</span>
+        <span class="gl-list__chevron">{{ showArchived() ? '⌄' : '›' }}</span>
+      </button>
+
+      @if (showArchived()) {
+        @for (row of archivedRows(); track row.key) {
+          <div class="gl-list__item gl-list__item--archived">
+            <div class="gl-list__top">
+              <span class="gl-list__name">{{ row.name }}</span>
+              <span class="gl-list__pct">
+                {{ row.done ? '✓ ' : '' }}{{ formatPct(row.progress) }}
+              </span>
+              <button
+                mat-icon-button
+                type="button"
+                class="gl-list__menu"
+                aria-label="Archived goal actions"
+                [matMenuTriggerFor]="archMenu">
+                <mat-icon>more_horiz</mat-icon>
+              </button>
+              <mat-menu #archMenu="matMenu">
+                <button mat-menu-item type="button" (click)="onRestoreGoal(row)">
+                  <mat-icon>unarchive</mat-icon>
+                  <span>Restore</span>
+                </button>
+                <button mat-menu-item type="button" (click)="onDeleteGoal(row)">
+                  <mat-icon>delete_outline</mat-icon>
+                  <span>Delete</span>
+                </button>
+              </mat-menu>
+            </div>
+            <div class="gl-list__bar-track">
+              <div
+                class="gl-list__bar-fill gl-list__bar-fill--archived"
+                [style.width.%]="row.progress * 100"></div>
+            </div>
+          </div>
+        }
+      }
+    }
+  </div>
+} @else {
+  <div class="gl-empty">
+    <p class="gl-empty__text">
+      Add holdings or a goal to project where your capital is heading.
+    </p>
+    <button type="button" class="gl-list__add" (click)="onAddGoal()">
+      + Add a goal
+    </button>
+  </div>
+}

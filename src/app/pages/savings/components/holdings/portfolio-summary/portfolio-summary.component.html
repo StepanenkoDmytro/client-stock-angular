@@ -4,9 +4,54 @@
        integration) — currency symbol from user's baseCurrency. Falls back
        to local mixed-currency sum for anonymous and pre-fetch. -->
   <header class="summary__now-header">
-    <span class="summary__caption">PORTFOLIO</span>
-    <span class="summary__total">{{ displayCurrency() | pgzCurrencySymbol }}{{ formatNumber(displayTotal()) }}</span>
+    <span class="summary__caption">{{ netWorth().hasDebt ? 'NET WORTH' : 'PORTFOLIO' }}</span>
+    <span class="summary__total">{{ displayCurrency() | pgzCurrencySymbol }}{{ formatNumber(headlineValue()) }}</span>
   </header>
+
+  <!-- L3 (ADR-0009): when there's debt, the headline is net worth — show
+       the "assets − liabilities" basis + an expandable breakdown. Debt-free
+       portfolios skip this block entirely (nothing changes). -->
+  @if (netWorth().hasDebt) {
+    <button type="button"
+            class="summary__nw-toggle"
+            [attr.aria-expanded]="nwExpanded()"
+            (click)="toggleNwExpanded()">
+      <span class="summary__nw-basis">
+        assets {{ displayCurrency() | pgzCurrencySymbol }}{{ formatNumber(netWorth().assetsTotal) }}
+        − liabilities {{ displayCurrency() | pgzCurrencySymbol }}{{ formatNumber(netWorth().liabilitiesTotal) }}
+      </span>
+      <span class="summary__nw-expand">{{ nwExpanded() ? 'collapse ▴' : 'expand ▾' }}</span>
+    </button>
+
+    @if (nwExpanded()) {
+      <div class="summary__nw-breakdown">
+        <div class="summary__nw-line">
+          <span class="summary__nw-cap">ASSETS</span>
+          <span class="summary__nw-amt">{{ displayCurrency() | pgzCurrencySymbol }}{{ formatNumber(netWorth().assetsTotal) }}</span>
+        </div>
+        <div class="summary__nw-divider"></div>
+        <div class="summary__nw-line">
+          <span class="summary__nw-cap">LIABILITIES</span>
+          <span class="summary__nw-amt summary__nw-amt--debt">−{{ displayCurrency() | pgzCurrencySymbol }}{{ formatNumber(netWorth().liabilitiesTotal) }}</span>
+        </div>
+        @for (d of debtRows(); track d.key) {
+          <div class="summary__nw-debt-row">
+            <span class="summary__nw-debt-dot"></span>
+            <span class="summary__nw-debt-name">{{ d.name }}</span>
+            <span class="summary__nw-debt-amt">−{{ displayCurrency() | pgzCurrencySymbol }}{{ formatNumber(d.amount) }}</span>
+          </div>
+        }
+        <div class="summary__nw-divider summary__nw-divider--strong"></div>
+        <div class="summary__nw-line">
+          <span class="summary__nw-cap summary__nw-cap--total">Net worth</span>
+          <span class="summary__nw-amt summary__nw-amt--total">{{ displayCurrency() | pgzCurrencySymbol }}{{ formatNumber(netWorth().netWorth) }}</span>
+        </div>
+        <p class="summary__nw-note">
+          Liabilities only reduce the total — your class allocation stays intact.
+        </p>
+      </div>
+    }
+  }
 
   <div class="summary__pnl-row">
     <span class="summary__pnl"

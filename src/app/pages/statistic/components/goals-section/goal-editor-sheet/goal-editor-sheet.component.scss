@@ -1,0 +1,26 @@
+/* Goal editor bottom-sheet (A14, mockup analytics/16). Mirrors the spacing
+ * language of the other form sheets; colours from `--pgz-*` tokens. */
+
+.ge {
+  display: flex;
+  flex-direction: column;
+  padding: 4px 4px 8px;
+
+  &__title {
+    margin: 0 0 12px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--pgz-text-primary);
+  }
+
+  &__field {
+    width: 100%;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 4px;
+  }
+}
