@@ -190,14 +190,28 @@
     padding: 0 16px 24px;
   }
 
+  // Strategies is conceptually "one more card" in the BY CLASS list, not a
+  // separate section — but it lives in its own accordion block. When it
+  // directly follows the asset-class accordion, the preceding block's 24px
+  // bottom padding (on top of the last panel's 10px margin) pushed Strategies
+  // 34px down, breaking the 10px inter-card rhythm. Pull it back up by that
+  // 24px so the gap reads as one continuous list. The adjacent-sibling guard
+  // means this only fires in that arrangement; in the empty-state /
+  // discovery-row layouts (where a different element precedes) it no-ops.
+  &__classes:not(.savings__strategies) + &__strategies {
+    margin-top: -24px;
+  }
+
   // Reference: design/savings/01-portfolio-dashboard-mobile.svg lines 135-210.
   // Collapsed panel: 348×60 white card. Layout: dot + name + value + pnl% + chevron.
 
   &__class-panel {
     // PR5d: dimensions normalised to approved 02-portfolio-dashboard-mobile.svg
-    // (52h cards · 12 radius · 8 gap). Prior values were a +2/+2 readability
-    // bump that made the dashboard feel "chunky".
-    margin-bottom: 8px;
+    // (52h cards · 12 radius). Prior values were a +2/+2 readability bump that
+    // made the dashboard feel "chunky".
+    // CSS-fidelity pass (C2, savings/15): 8 → 10px inter-card gap for an airier
+    // stack matching 15-portfolio-dashboard-mobile.svg.
+    margin-bottom: 10px;
     background: var(--pgz-card-bg) !important;
     border: 0.5px solid var(--pgz-card-border);
     // Class-colour left accent — mirrors the liability-card treatment so every
@@ -211,9 +225,20 @@
     box-shadow: var(--pgz-card-shadow) !important;
   }
 
-  // Header padding: more breathing room than the cramped default. Left side
-  // trimmed to 13px so 13 + 3px accent ≈ the 16px content offset siblings use.
-  ::ng-deep .savings__class-panel-header {
+  // Header sizing + padding. Two things at play:
+  //  1. C1 (savings/15): a global rule in `styles.scss`
+  //     — `.mat-expansion-panel-header { height: inherit !important }` —
+  //     clobbers Material's `collapsedHeight="52px"` inline style, collapsing
+  //     every header to its ~22px content height (cramped, zero vertical
+  //     breathing room). We restore the approved 52px card height with a
+  //     higher-specificity selector (`.savings__class-panel
+  //     .savings__class-panel-header` = (0,2,0) beats the global (0,1,0));
+  //     Material's default `align-items:center` then vertically centres the row.
+  //  2. Left padding trimmed to 13px so 13 + 3px accent ≈ the 16px content
+  //     offset siblings use.
+  ::ng-deep .savings__class-panel .savings__class-panel-header {
+    height: 52px !important;
+    min-height: 52px !important;
     padding: 0 16px 0 13px !important;
   }
 

@@ -7,7 +7,13 @@
   align-items: stretch;
   gap: 10px;
   width: 100%;
-  padding: 12px 12px 12px 14px;
+  // CSS-fidelity pass (C3, savings/15): compress vertical rhythm 105 → ~80px.
+  // Width / radius / bg / 14·17 type scale unchanged. The bloat was a loose
+  // global 20px line-height on the text rows (≈1.8× for 11px text); trimmed
+  // padding here + tighter divider margin + per-row line-height (on `__sub`
+  // and `__foot` below, which carry no `font` shorthand to fight) bring the
+  // row to the approved height.
+  padding: 8px 12px 8px 14px;
   border: 0.5px solid var(--pgz-card-border);
   border-radius: 10px;
   background: var(--pgz-card-bg-sub);
@@ -67,11 +73,12 @@
   &__sub {
     margin-top: 2px;
     font-size: 11px;
+    line-height: 1.3; // C3: trims the loose global 20px line-height (savings/15)
     color: var(--pgz-text-secondary);
   }
 
   &__divider {
-    margin: 8px 0;
+    margin: 5px 0;
     border-top: 0.5px dashed var(--pgz-card-border);
   }
 
@@ -80,6 +87,7 @@
     align-items: center;
     gap: 16px;
     font-size: 11px;
+    line-height: 1.3; // C3: trims the loose global 20px line-height (savings/15)
   }
 
   &__apy {
