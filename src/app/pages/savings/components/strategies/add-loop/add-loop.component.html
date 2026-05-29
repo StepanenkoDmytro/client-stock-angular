@@ -1,0 +1,186 @@
+<section class="add-loop">
+  <pgz-page-header [title]="isEdit ? 'Edit strategy' : 'Add a strategy'"
+                   [showBack]="true"
+                   (back)="prevRoute()">
+  </pgz-page-header>
+
+  <div class="add-loop__type-chip">🔁 Strategy · Looping</div>
+
+  <div class="add-loop__layout">
+    <form class="add-loop__form" [formGroup]="form" (ngSubmit)="save()">
+      <!-- IDENTITY -->
+      <p class="add-loop__group">IDENTITY</p>
+      <div class="add-loop__row">
+        <mat-form-field appearance="outline">
+          <mat-label>Protocol</mat-label>
+          <mat-select formControlName="protocol">
+            @for (p of protocols; track p) {
+              <mat-option [value]="p">{{ p }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Chain</mat-label>
+          <mat-select formControlName="chain">
+            @for (c of chains; track c) {
+              <mat-option [value]="c">{{ c }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="add-loop__row">
+        <mat-form-field appearance="outline">
+          <mat-label>Collateral asset</mat-label>
+          <input matInput formControlName="collateralAsset" placeholder="e.g. wstETH" />
+          @if (form.get('collateralAsset')?.touched && form.get('collateralAsset')?.invalid) {
+            <mat-error>Required</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Debt asset</mat-label>
+          <input matInput formControlName="debtAsset" placeholder="e.g. ETH" />
+          @if (form.get('debtAsset')?.touched && form.get('debtAsset')?.invalid) {
+            <mat-error>Required</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="add-loop__emode-row">
+        <mat-slide-toggle formControlName="eMode" color="primary">
+          Correlated (e-mode)
+        </mat-slide-toggle>
+        <mat-icon class="add-loop__info"
+                  [matTooltip]="emodeTooltip"
+                  matTooltipPosition="above"
+                  aria-label="What correlated means">info_outline</mat-icon>
+      </div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Opened on</mat-label>
+        <input matInput type="date" formControlName="openedAt" />
+        <mat-hint>Profit accrues from this date.</mat-hint>
+        @if (form.get('openedAt')?.touched && form.get('openedAt')?.hasError('futureDate')) {
+          <mat-error>Can’t be in the future</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- SIZE -->
+      <p class="add-loop__group">SIZE · WHAT YOU PUT IN / BORROWED</p>
+      <div class="add-loop__row">
+        <mat-form-field appearance="outline">
+          <mat-label>Your capital</mat-label>
+          <input matInput type="number" formControlName="initialCapital" min="0" />
+          @if (form.get('initialCapital')?.touched && form.get('initialCapital')?.invalid) {
+            <mat-error>Required</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Loop rounds (opt)</mat-label>
+          <input matInput type="number" formControlName="loopRounds" min="0" />
+        </mat-form-field>
+      </div>
+
+      <div class="add-loop__row">
+        <mat-form-field appearance="outline">
+          <mat-label>Collateral (exposure)</mat-label>
+          <input matInput type="number" formControlName="totalCollateral" min="0" />
+          @if (form.get('totalCollateral')?.touched && form.get('totalCollateral')?.invalid) {
+            <mat-error>Required</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="add-loop__currency">
+          <mat-label>Currency</mat-label>
+          <mat-select formControlName="currency">
+            @for (c of currencies; track c) {
+              <mat-option [value]="c">{{ c }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Debt (borrowed)</mat-label>
+        <input matInput type="number" formControlName="totalDebt" min="0" />
+        <mat-hint>Must be less than collateral (equity = collateral − debt).</mat-hint>
+        @if (form.get('totalDebt')?.touched && form.get('totalDebt')?.invalid) {
+          <mat-error>Required</mat-error>
+        }
+        @if (form.hasError('equityNotPositive') && form.get('totalDebt')?.touched) {
+          <mat-error>Debt must be below collateral</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- YIELD -->
+      <p class="add-loop__group">YIELD</p>
+      <div class="add-loop__row">
+        <mat-form-field appearance="outline">
+          <mat-label>Supply APY % (stake)</mat-label>
+          <input matInput type="number" formControlName="supplyApy" min="0" step="0.1" />
+          @if (form.get('supplyApy')?.touched && form.get('supplyApy')?.invalid) {
+            <mat-error>Required</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Borrow APY % (cost)</mat-label>
+          <input matInput type="number" formControlName="borrowApy" min="0" step="0.1" />
+          @if (form.get('borrowApy')?.touched && form.get('borrowApy')?.invalid) {
+            <mat-error>Required</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <!-- RISK -->
+      <div class="add-loop__group-row">
+        <p class="add-loop__group">RISK</p>
+        @if (presetActive) {
+          <span class="add-loop__preset-pill">auto from protocol</span>
+        }
+      </div>
+      <div class="add-loop__row">
+        <mat-form-field appearance="outline">
+          <mat-label>Liq. threshold %</mat-label>
+          <input matInput type="number" formControlName="liquidationThreshold" min="0" max="100" step="0.5" />
+          @if (form.get('liquidationThreshold')?.touched && form.get('liquidationThreshold')?.hasError('required')) {
+            <mat-error>Required</mat-error>
+          }
+          @if (form.get('liquidationThreshold')?.hasError('liqThresholdRange')) {
+            <mat-error>Must be 0–100%</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Liq. penalty %</mat-label>
+          <input matInput type="number" formControlName="liquidationPenalty" min="0" max="100" step="0.5" />
+        </mat-form-field>
+      </div>
+      <p class="add-loop__hint">
+        Presets from protocol · e-mode (~1% e-mode / 5–8% volatile). Override anytime.
+      </p>
+
+      <button mat-flat-button
+              color="primary"
+              type="submit"
+              class="add-loop__save">
+        {{ isEdit ? 'Save changes' : 'Save strategy' }}
+      </button>
+      <button mat-button
+              type="button"
+              class="add-loop__cancel"
+              (click)="prevRoute()">
+        Cancel
+      </button>
+    </form>
+
+    <!-- LIVE PREVIEW — same B-card as Holdings, recomputed as you type -->
+    <aside class="add-loop__preview">
+      <p class="add-loop__preview-cap">LIVE PREVIEW · UPDATES AS YOU TYPE</p>
+      @if (draft(); as d) {
+        <pgz-loop-card [loop]="d" [currency]="displayCurrency()"></pgz-loop-card>
+      }
+      <p class="add-loop__preview-note">
+        Every figure is derived — equity · leverage · net APY · health · payout
+        · profit. You typed none of them.
+      </p>
+    </aside>
+  </div>
+</section>

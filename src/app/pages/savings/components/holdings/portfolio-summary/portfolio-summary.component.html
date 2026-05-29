@@ -63,9 +63,13 @@
     </span>
   </div>
 
-  @if (summary().breakdown.length > 0) {
+  @if (allocation().length > 0) {
+    <!-- Allocation bar/legend includes a Strategies slice (loop net equity,
+         indigo) when the user has looping positions — ADR-0013, mockup
+         savings/15. Leverage never inflates the pie: the slice is net
+         equity, not gross collateral. -->
     <div class="summary__bar">
-      @for (slice of summary().breakdown; track slice.assetClass) {
+      @for (slice of allocation(); track slice.key) {
         <div class="summary__slice"
              [style.background-color]="slice.color"
              [style.flex-grow]="slice.share"
@@ -76,7 +80,7 @@
     <!-- PR5c: % column removed — lifetime% lives only on the class
          accordion header now. Legend keeps the per-class dot + name + $. -->
     <div class="summary__legend">
-      @for (slice of summary().breakdown; track slice.assetClass) {
+      @for (slice of allocation(); track slice.key) {
         <div class="summary__legend-row">
           <span class="summary__legend-dot"
                 [style.background-color]="slice.color"></span>

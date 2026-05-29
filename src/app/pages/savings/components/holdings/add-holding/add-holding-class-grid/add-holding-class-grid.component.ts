@@ -113,6 +113,14 @@ export class AddHoldingClassGridComponent {
     this.router.navigate(['/savings/add-liability']);
   }
 
+  /**
+   * Looping (Strategy) is a composite trackable-kind (ADR-0013) — added from
+   * the same grid. Routes to the add-loop form (mockup savings/17).
+   */
+  public onPickLoop(): void {
+    this.router.navigate(['/savings/add-loop']);
+  }
+
   public goBack(): void {
     this.router.navigate(['/savings']);
   }

@@ -31,6 +31,17 @@
       <span class="grid__card-label">Mortgage &amp; loans</span>
       <span class="grid__card-sub">debt · what you owe</span>
     </button>
+
+    <!-- Looping / Strategy kind (ADR-0013, composite) — indigo, full-width;
+         routes to the add-loop form (mockup savings/17). -->
+    <button type="button"
+            class="grid__card grid__card--loop"
+            [style.--card-tint]="'var(--strategy-loop)'"
+            (click)="onPickLoop()">
+      <mat-icon class="grid__card-icon">autorenew</mat-icon>
+      <span class="grid__card-label">Strategy · Looping</span>
+      <span class="grid__card-sub">DeFi leverage loop</span>
+    </button>
   </div>
 
   <p class="grid__future-caption">FUTURE CLASSES</p>

@@ -15,8 +15,13 @@ import {
   ILiability,
   liabilityTypeLabel,
 } from '../../../../../domain/liability.domain';
+import {
+  ILoopPosition,
+  loopEquityNow,
+} from '../../../../../domain/loop-position.domain';
 import { ITag } from '../../../../../domain/tag.domain';
 import { LiabilitiesService } from '../../../../../service/liabilities.service';
+import { LoopingService } from '../../../../../service/looping.service';
 import {
   NetWorthBreakdown,
   computeNetWorth,
@@ -41,6 +46,19 @@ interface ClassBreakdown {
   costBasis: number;
   pnl: number;
   pnlPercent: number;
+  share: number;
+}
+
+/**
+ * One slice of the allocation bar / legend. Asset classes plus a synthetic
+ * "Strategies" slice (loop net equity, ADR-0013) — leverage never inflates
+ * the pie because the slice is net equity, not gross collateral.
+ */
+interface AllocationSlice {
+  key: string;
+  label: string;
+  color: string;
+  value: number;
   share: number;
 }
 
@@ -76,12 +94,33 @@ export class PortfolioSummaryComponent implements OnInit {
   private readonly userPrefs = inject(UserPreferencesService);
   private readonly fxRate = inject(FxRateService);
   private readonly liabilitiesService = inject(LiabilitiesService);
+  private readonly loopingService = inject(LoopingService);
 
   private readonly rawHoldings = this.store.selectSignal(selectHoldingsList);
   private readonly rawTags = this.store.selectSignal(selectTagsList);
 
   private readonly liabilities = toSignal(this.liabilitiesService.getAll(), {
     initialValue: [] as ILiability[],
+  });
+
+  /** Looping positions (ADR-0013) — localStorage-backed, anonymous-safe. */
+  private readonly loops = toSignal(this.loopingService.getAll(), {
+    initialValue: [] as ILoopPosition[],
+  });
+
+  /**
+   * Net equity of all loops in base currency (Σ `loopEquityNow`). Added to
+   * owned assets for net worth and shown as the Strategies allocation slice.
+   * Equity (collateral − debt + accrued), NOT gross collateral — so leverage
+   * never double-counts against spot Crypto or the Liabilities band.
+   */
+  public readonly strategiesEquity = computed<number>(() => {
+    const base = this.displayCurrency();
+    const now = new Date();
+    return this.loops().reduce(
+      (sum, l) => sum + this.fxRate.toBase(loopEquityNow(l, now), l.currency, base),
+      0,
+    );
   });
 
   /** Expand/collapse for the net-worth breakdown (mockup savings/08). */
@@ -150,15 +189,50 @@ export class PortfolioSummaryComponent implements OnInit {
    */
   public readonly netWorth = computed<NetWorthBreakdown>(() => {
     const base = this.displayCurrency();
-    return computeNetWorth(this.displayTotal(), this.liabilities(), (amount, cur) =>
+    // Owned assets = spot holdings + loop net equity (Strategies). Loops
+    // contribute their equity to net worth (ADR-0013); the backend overview
+    // doesn't know about anonymous loops, so we always add it client-side.
+    const assets = this.displayTotal() + this.strategiesEquity();
+    return computeNetWorth(assets, this.liabilities(), (amount, cur) =>
       this.fxRate.toBase(amount, cur, base),
     );
   });
 
-  /** Headline number — net worth when there's debt, else the asset total. */
+  /**
+   * Headline number — net worth when there's debt, else the (strategy-
+   * inclusive) asset total. `assetsTotal` already folds in loop equity.
+   */
   public readonly headlineValue = computed<number>(() => {
     const nw = this.netWorth();
     return nw.hasDebt ? nw.netWorth : nw.assetsTotal;
+  });
+
+  /**
+   * Allocation slices for the bar + legend: asset classes (from holdings)
+   * plus a Strategies slice (loop net equity) when any loop exists. Shares
+   * are recomputed against the combined owned total so the bar sums to 100%.
+   */
+  public readonly allocation = computed<AllocationSlice[]>(() => {
+    const strat = this.strategiesEquity();
+    const classSlices = this.summary().breakdown;
+    const combined = this.summary().totalValue + Math.max(0, strat);
+    const slices: AllocationSlice[] = classSlices.map((s) => ({
+      key: String(s.assetClass),
+      label: s.label,
+      color: s.color,
+      value: s.value,
+      share: combined > 0 ? s.value / combined : 0,
+    }));
+    if (strat > 0) {
+      slices.push({
+        key: 'strategies',
+        label: 'Strategies',
+        color: 'var(--strategy-loop)',
+        value: strat,
+        share: combined > 0 ? strat / combined : 0,
+      });
+    }
+    return slices.sort((a, b) => b.value - a.value);
   });
 
   /** Per-debt rows for the expanded breakdown (base currency). */

@@ -55,6 +55,13 @@ import { AddTriggerService } from '../../service/helpers/add-trigger.service';
 import { FxRateService } from '../../service/fx-rate.service';
 import { LiabilitiesService } from '../../service/liabilities.service';
 import { ILiability } from '../../domain/liability.domain';
+import { LoopingService } from '../../service/looping.service';
+import {
+  ILoopPosition,
+  loopEquityNow,
+  loopNetPnl,
+} from '../../domain/loop-position.domain';
+import { LoopRowComponent } from './components/strategies/loop-row/loop-row.component';
 import { CurrencySymbolPipe } from '../../pipe/currency-symbol.pipe';
 import { SUPPORTED_BASE_CURRENCIES } from '../../domain/user-preferences.domain';
 import { LiabilityCardComponent } from './components/liabilities/liability-card/liability-card.component';
@@ -109,6 +116,7 @@ const UI_COMPONENTS = [
   AccountsChipComponent,
   SavingsOfflinePlaceholderComponent,
   LiabilityCardComponent,
+  LoopRowComponent,
 ];
 
 const MATERIAL_MODULES = [
@@ -151,6 +159,7 @@ export class SavingsComponent implements OnInit {
   private readonly userPrefs = inject(UserPreferencesService);
   private readonly fxRate = inject(FxRateService);
   private readonly liabilitiesService = inject(LiabilitiesService);
+  private readonly loopingService = inject(LoopingService);
   private readonly portfolioOverview = inject(PortfolioOverviewService);
   private readonly network = inject(NetworkStatusService);
   private readonly savingsTier = inject(SavingsTierService);
@@ -310,6 +319,52 @@ export class SavingsComponent implements OnInit {
   public readonly hasLiabilities = computed<boolean>(
     () => this.liabilities().length > 0,
   );
+
+  /**
+   * Collapse state for the Liabilities band. The header (total + count)
+   * stays visible; only the per-debt card list collapses. Starts expanded
+   * to preserve the prior always-open behaviour.
+   */
+  public readonly liabilitiesExpanded = signal(true);
+
+  public toggleLiabilities(): void {
+    this.liabilitiesExpanded.update((open) => !open);
+  }
+
+  /** Looping positions (ADR-0013) — the Strategies class (mockup savings/15). */
+  public readonly loops = toSignal(this.loopingService.getAll(), {
+    initialValue: [] as ILoopPosition[],
+  });
+
+  public readonly hasStrategies = computed<boolean>(
+    () => this.loops().length > 0,
+  );
+
+  /** Indigo accent for the Strategies class row (matches allocation slice). */
+  public readonly strategyColor = 'var(--strategy-loop)';
+
+  /** Total loop net equity in base currency — drives the accordion header. */
+  public readonly strategiesEquity = computed<number>(() => {
+    const base = this.displayCurrency();
+    const now = new Date();
+    return this.loops().reduce(
+      (sum, l) => sum + this.fxRate.toBase(loopEquityNow(l, now), l.currency, base),
+      0,
+    );
+  });
+
+  /** Aggregate net PnL across loops as a % of total deployed capital. */
+  public readonly strategiesPnlPercent = computed<number>(() => {
+    const base = this.displayCurrency();
+    const now = new Date();
+    let pnl = 0;
+    let capital = 0;
+    for (const l of this.loops()) {
+      pnl += this.fxRate.toBase(loopNetPnl(l, now), l.currency, base);
+      capital += this.fxRate.toBase(l.initialCapital ?? 0, l.currency, base);
+    }
+    return capital > 0 ? (pnl / capital) * 100 : 0;
+  });
 
   public readonly classGroups = computed<ClassGroup[]>(() => {
     const all = this.holdingsView();
@@ -511,6 +566,11 @@ export class SavingsComponent implements OnInit {
   /** Add-Liability entry (ADR-0009 · L4). */
   public addLiability(): void {
     this.router.navigate(['/savings/add-liability']);
+  }
+
+  /** Open the Holdings loop detail (B-card, mockup savings/14). */
+  public openLoop(loop: ILoopPosition): void {
+    this.router.navigate(['/savings/loop', loop.id]);
   }
 
   /** Empty-state CTA for anonymous prod users (PR6). */

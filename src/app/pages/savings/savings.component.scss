@@ -128,11 +128,36 @@
     margin: 8px 0 8px;
   }
 
+  // Total + chevron group — a single click target on the header's right.
+  &__liabilities-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 0 2px 4px;
+    margin: -2px 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: inherit;
+    font: inherit;
+  }
+
   &__liabilities-total {
     font-size: 12px;
     font-weight: 600;
     color: var(--pgz-text-secondary);
     font-variant-numeric: tabular-nums;
+  }
+
+  &__liabilities-chevron {
+    flex: 0 0 auto;
+    color: var(--pgz-text-muted);
+    transition: transform 0.18s ease;
+
+    // Collapsed = chevron points down (default). Open = points up.
+    &--open {
+      transform: rotate(180deg);
+    }
   }
 
   &__liabilities-list {

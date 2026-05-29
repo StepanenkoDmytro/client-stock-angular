@@ -1,0 +1,39 @@
+<section class="loop-detail">
+  <pgz-page-header title="Loop detail"
+                   [showBack]="true"
+                   (back)="prevRoute()">
+    <button action
+            mat-icon-button
+            class="loop-detail__menu-btn"
+            [hidden]="!loop()"
+            [matMenuTriggerFor]="menu"
+            aria-label="Loop actions">
+      <mat-icon>more_horiz</mat-icon>
+    </button>
+  </pgz-page-header>
+
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="onEdit()">
+      <mat-icon>edit</mat-icon>
+      <span>Edit</span>
+    </button>
+    <button mat-menu-item (click)="onDelete()">
+      <mat-icon>delete</mat-icon>
+      <span>Delete</span>
+    </button>
+  </mat-menu>
+
+  @if (loop(); as l) {
+    <pgz-loop-card [loop]="l" [currency]="displayCurrency()"></pgz-loop-card>
+
+    <p class="loop-detail__readonly">
+      Read-only — MoneyCircle tracks health &amp; liquidation buffer but never
+      borrows, closes or rebalances.
+    </p>
+  } @else {
+    <div class="loop-detail__missing">
+      <p>This loop position isn’t available.</p>
+      <button type="button" (click)="prevRoute()">← Back to portfolio</button>
+    </div>
+  }
+</section>

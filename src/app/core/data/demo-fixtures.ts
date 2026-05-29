@@ -5,6 +5,7 @@ import { IGoal } from '../../domain/goals.domain';
 import { IHoldingLockMeta } from '../../domain/holding.domain';
 import { IInstrument } from '../../domain/instrument.domain';
 import { ILiability } from '../../domain/liability.domain';
+import { ILoopPosition } from '../../domain/loop-position.domain';
 import { ITag } from '../../domain/tag.domain';
 import { MANUAL_ACCOUNT_ID } from '../../pages/savings/model/HoldingMapper';
 import { buildDemoAccounts } from '../../pages/savings/model/account-defaults.constants';
@@ -409,6 +410,86 @@ export function buildDemoGoals(): IGoal[] {
       share: 2500,
       status: 'success',
       archived: true,
+      isDemo: true,
+    },
+  ];
+}
+
+/** ISO date `months` ago from now — keeps demo accrual fresh on every seed. */
+function monthsAgoIso(months: number): string {
+  const d = new Date();
+  d.setMonth(d.getMonth() - months);
+  return d.toISOString();
+}
+
+/**
+ * Demo looping (leverage) positions — the "Strategies" class on the
+ * debt-aware dashboard (mockup `savings/15`) plus the canonical worked
+ * example (`savings/16`). All amounts are stored snapshots in USD; net APY
+ * and accrued profit are derived client-side from `openedAt`, so the loop
+ * cards work fully anonymous / offline (ADR-0012, `docs/instruments/looping.md`).
+ *
+ * Health-factor spread is intentional so the Risk view shows variety:
+ *  - wstETH/ETH (Aave eMode) → HF ≈ 1.42 amber, net APY +6.3%
+ *  - USDe/USDC (Morpho stables) → HF ≈ 1.83 green, net APY +9%
+ *  - JLP/USDC (Kamino, the worked example) → HF 1.20 amber, net APY +37%,
+ *    opened 2 months ago → accrued ≈ +$185, equity now ≈ $3,185.
+ */
+export function buildDemoLoops(): ILoopPosition[] {
+  return [
+    {
+      id: 9101,
+      protocol: 'Aave v3',
+      chain: 'Ethereum',
+      collateralAsset: 'wstETH',
+      debtAsset: 'ETH',
+      eMode: true,
+      loopRounds: 3,
+      openedAt: monthsAgoIso(2),
+      totalCollateral: 30000,
+      totalDebt: 20000,
+      currency: 'USD',
+      initialCapital: 9800,
+      supplyApy: 3.9,
+      borrowApy: 2.7,
+      liquidationThreshold: 95,
+      maxLtv: 90,
+      isDemo: true,
+    },
+    {
+      id: 9102,
+      protocol: 'Morpho',
+      chain: 'Ethereum',
+      collateralAsset: 'USDe',
+      debtAsset: 'USDC',
+      loopRounds: 2,
+      openedAt: monthsAgoIso(4),
+      totalCollateral: 7000,
+      totalDebt: 3500,
+      currency: 'USD',
+      initialCapital: 3400,
+      supplyApy: 8,
+      borrowApy: 7,
+      liquidationThreshold: 91.5,
+      maxLtv: 86,
+      isDemo: true,
+    },
+    {
+      id: 9103,
+      protocol: 'Kamino',
+      chain: 'Solana',
+      collateralAsset: 'JLP',
+      debtAsset: 'USDC',
+      loopRounds: 3,
+      openedAt: monthsAgoIso(2),
+      totalCollateral: 9000,
+      totalDebt: 6000,
+      currency: 'USD',
+      initialCapital: 3000,
+      supplyApy: 15,
+      borrowApy: 4,
+      liquidationThreshold: 80,
+      maxLtv: 72,
       isDemo: true,
     },
   ];

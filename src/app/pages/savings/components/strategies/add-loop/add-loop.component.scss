@@ -1,0 +1,131 @@
+:host {
+  display: block;
+  background: var(--pgz-app-bg);
+  min-height: 100%;
+}
+
+.add-loop {
+  padding: 0 0 32px;
+
+  &__type-chip {
+    display: inline-block;
+    margin: 8px 16px 4px;
+    padding: 6px 12px;
+    border-radius: 15px;
+    background: color-mix(in srgb, var(--strategy-loop) 16%, transparent);
+    color: var(--strategy-loop);
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  &__layout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    padding: 0 16px;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1 1 300px;
+    min-width: 0;
+
+    mat-form-field {
+      width: 100%;
+    }
+  }
+
+  &__group {
+    margin: 12px 0 4px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--strategy-loop);
+  }
+
+  &__group-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__preset-pill {
+    padding: 2px 8px;
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--strategy-loop) 16%, transparent);
+    color: var(--strategy-loop);
+    font-size: 9px;
+    font-weight: 600;
+  }
+
+  &__row {
+    display: flex;
+    gap: 12px;
+
+    mat-form-field {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+  }
+
+  &__currency {
+    flex: 0 0 104px !important;
+  }
+
+  &__emode-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0 10px;
+  }
+
+  &__info {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: var(--pgz-text-muted);
+    cursor: help;
+  }
+
+  &__hint {
+    margin: 2px 0 0;
+    font-size: 10px;
+    color: var(--pgz-text-muted);
+  }
+
+  &__save {
+    margin-top: 16px;
+    height: 48px;
+    font-weight: 600;
+  }
+
+  &__cancel {
+    margin-top: 4px;
+  }
+
+  // ---- live preview column ----
+  &__preview {
+    flex: 1 1 300px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 8px;
+  }
+
+  &__preview-cap {
+    margin: 4px 0 0;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    color: var(--strategy-loop);
+  }
+
+  &__preview-note {
+    margin: 0;
+    font-size: 11px;
+    color: var(--pgz-text-muted);
+  }
+}

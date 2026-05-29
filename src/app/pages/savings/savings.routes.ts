@@ -7,6 +7,7 @@ import { StockAssetComponent } from "./components/markets-assets/stock-market/st
 import { AddHoldingClassGridComponent } from "./components/holdings/add-holding/add-holding-class-grid/add-holding-class-grid.component";
 import { AddHoldingComponent } from "./components/holdings/add-holding/add-holding.component";
 import { AddLiabilityComponent } from "./components/liabilities/add-liability/add-liability.component";
+import { AddLoopComponent } from "./components/strategies/add-loop/add-loop.component";
 
 
 export const MARKETS: string[] = ['crypto', 'stock'];
@@ -63,6 +64,22 @@ export const SAVINGS_ROUTES: Route[] = [
         // are localStorage/anonymous, must work without network.
         path: 'add-liability',
         component: AddLiabilityComponent,
+    },
+    {
+        // Add / edit a looping (Strategy) position — eager-loaded, same
+        // offline rationale (localStorage/anonymous). Mockup savings/17.
+        path: 'add-loop',
+        component: AddLoopComponent,
+    },
+    {
+        path: 'add-loop/:id',
+        component: AddLoopComponent,
+    },
+    {
+        // Loop (leverage strategy) detail — B-card (mockup savings/14).
+        // Read-only; reached by tapping a Strategies row on the dashboard.
+        path: 'loop/:id',
+        loadComponent: () => import('./components/strategies/loop-detail/loop-detail.component').then(c => c.LoopDetailComponent),
     },
     {
         path: 'tags',

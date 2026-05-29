@@ -133,6 +133,52 @@
       }
     }
 
+    <!-- Strategies class (ADR-0013, mockup savings/15). A first-class
+         accordion row among the asset classes — NOT a band. Expanded it
+         lists the loop instruments (A-style rows leading with net equity +
+         health dot + net APY). Its allocation slice = net equity, so
+         leverage never inflates the pie. Shown only when the user has
+         looping positions. -->
+    @if (hasStrategies()) {
+      <mat-accordion class="savings__classes savings__strategies" multi>
+        <mat-expansion-panel class="savings__class-panel"
+                             [style.border-left-color]="strategyColor">
+          <mat-expansion-panel-header
+            class="savings__class-panel-header"
+            collapsedHeight="52px"
+            expandedHeight="52px">
+            <mat-panel-title class="savings__class-title-row">
+              <span class="savings__class-dot"
+                    [style.background-color]="strategyColor"></span>
+              <span class="savings__class-name">Strategies</span>
+            </mat-panel-title>
+            <mat-panel-description class="savings__class-desc">
+              <span class="savings__class-value">
+                {{ displayCurrency() | pgzCurrencySymbol }}{{ formatNumber(strategiesEquity()) }}
+              </span>
+              @if (strategiesPnlPercent() !== 0) {
+                <span class="savings__class-pnl"
+                      [class.positive]="strategiesPnlPercent() > 0"
+                      [class.negative]="strategiesPnlPercent() < 0">
+                  {{ strategiesPnlPercent() > 0 ? '+' : '−' }}{{ formatPercent(abs(strategiesPnlPercent()), 0) }}
+                </span>
+              } @else {
+                <span class="savings__class-pnl savings__class-pnl--muted">—</span>
+              }
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <div class="savings__class-cards savings__strategies-cards">
+            @for (loop of loops(); track loop.id) {
+              <pgz-loop-row [loop]="loop"
+                            [currency]="displayCurrency()"
+                            (open)="openLoop($event)"></pgz-loop-row>
+            }
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    }
+
     <!-- Liabilities band (ADR-0009 · L4, mockup savings/09). Standalone
          debts; collateral-nested mortgages move into their position card
          in a follow-up (L4c). Shows only when the user has debt. -->
@@ -140,16 +186,33 @@
       <section class="savings__liabilities" aria-label="Liabilities">
         <div class="savings__liabilities-header">
           <span class="savings__class-caption">LIABILITIES</span>
-          <span class="savings__liabilities-total">
-            {{ displayCurrency() | pgzCurrencySymbol }}{{ formatNumber(liabilitiesTotal()) }}
-            · {{ liabilities().length }} active
-          </span>
+          <!-- Total + count stay visible when collapsed; the chevron right
+               after the numbers toggles the card list. -->
+          <button type="button"
+                  class="savings__liabilities-toggle"
+                  [attr.aria-expanded]="liabilitiesExpanded()"
+                  aria-label="Toggle liabilities list"
+                  (click)="toggleLiabilities()">
+            <span class="savings__liabilities-total">
+              {{ displayCurrency() | pgzCurrencySymbol }}{{ formatNumber(liabilitiesTotal()) }}
+              · {{ liabilities().length }} active
+            </span>
+            <svg class="savings__liabilities-chevron"
+                 [class.savings__liabilities-chevron--open]="liabilitiesExpanded()"
+                 width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M4 6 L8 10 L12 6"
+                    stroke="currentColor" stroke-width="2" fill="none"
+                    stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </button>
         </div>
-        <div class="savings__liabilities-list">
-          @for (l of liabilities(); track l.id) {
-            <pgz-liability-card [liability]="l"></pgz-liability-card>
-          }
-        </div>
+        @if (liabilitiesExpanded()) {
+          <div class="savings__liabilities-list">
+            @for (l of liabilities(); track l.id) {
+              <pgz-liability-card [liability]="l"></pgz-liability-card>
+            }
+          </div>
+        }
       </section>
     }
 

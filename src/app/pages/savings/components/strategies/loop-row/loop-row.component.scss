@@ -1,0 +1,126 @@
+:host {
+  display: block;
+}
+
+.loop-row {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 12px 12px 14px;
+  border: 0.5px solid var(--pgz-card-border);
+  border-radius: 10px;
+  background: var(--pgz-card-bg-sub);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: var(--pgz-text-primary);
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background: var(--pgz-card-bg);
+  }
+
+  // Standalone band variant (savings/14): solid card + indigo left rail.
+  &--card {
+    background: var(--pgz-card-bg);
+    border-radius: 12px;
+    border-left: 3px solid var(--strategy-loop);
+  }
+
+  &__icon {
+    font-size: 15px;
+    line-height: 1.4;
+    flex: 0 0 auto;
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  &__top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  &__name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--pgz-text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__equity {
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--pgz-text-primary);
+    flex: 0 0 auto;
+  }
+
+  &__sub {
+    margin-top: 2px;
+    font-size: 11px;
+    color: var(--pgz-text-secondary);
+  }
+
+  &__divider {
+    margin: 8px 0;
+    border-top: 0.5px dashed var(--pgz-card-border);
+  }
+
+  &__foot {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 11px;
+  }
+
+  &__apy {
+    font-weight: 500;
+
+    &.positive {
+      color: var(--color-positive);
+    }
+    &.negative {
+      color: var(--color-negative);
+    }
+  }
+
+  &__health {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--pgz-text-secondary);
+  }
+
+  &__health-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+
+    &--green {
+      background: var(--color-positive);
+    }
+    &--amber {
+      background: var(--color-warning);
+    }
+    &--red {
+      background: var(--color-negative);
+    }
+  }
+
+  &__chevron {
+    align-self: center;
+    font-size: 18px;
+    color: var(--pgz-text-muted);
+    flex: 0 0 auto;
+  }
+}

@@ -1,0 +1,81 @@
+<article class="loop-card">
+  <!-- title -->
+  <header class="loop-card__head">
+    <span class="loop-card__icon" aria-hidden="true">🔁</span>
+    <span class="loop-card__title">
+      <span class="loop-card__name">{{ name }}</span>
+      <span class="loop-card__sub">{{ subtitle }}</span>
+    </span>
+  </header>
+
+  <div class="loop-card__divider"></div>
+
+  <!-- hero: Net APY (how the strategy performs) -->
+  <p class="loop-card__cap">NET APY</p>
+  <p class="loop-card__hero"
+     [class.positive]="netApy >= 0"
+     [class.negative]="netApy < 0">{{ formatPercent(netApy) }}</p>
+  <p class="loop-card__hero-sub">
+    on {{ currency | pgzCurrencySymbol }}{{ formatNumber(equityNow) }} equity
+    · {{ leverage.toFixed(1) }}× leverage
+  </p>
+
+  <div class="loop-card__divider"></div>
+
+  <!-- KPI grid 2×2 -->
+  <div class="loop-card__grid">
+    <div class="loop-card__kpi">
+      <span class="loop-card__kpi-cap">NET VALUE</span>
+      <span class="loop-card__kpi-val">
+        {{ currency | pgzCurrencySymbol }}{{ formatNumber(equityNow) }}
+        <span class="loop-card__kpi-delta"
+              [class.positive]="netPnlPercent >= 0"
+              [class.negative]="netPnlPercent < 0">{{ formatPercent(netPnlPercent) }}</span>
+      </span>
+    </div>
+
+    <div class="loop-card__kpi">
+      <span class="loop-card__kpi-cap">LEVERAGE</span>
+      <span class="loop-card__kpi-val">{{ leverage.toFixed(1) }}×</span>
+    </div>
+
+    <div class="loop-card__kpi">
+      <span class="loop-card__kpi-cap">HEALTH FACTOR</span>
+      <span class="loop-card__kpi-val loop-card__kpi-val--health">
+        <span class="loop-card__health-dot"
+              [class.loop-card__health-dot--green]="tone === 'green'"
+              [class.loop-card__health-dot--amber]="tone === 'amber'"
+              [class.loop-card__health-dot--red]="tone === 'red' || tone === 'liquidated'"></span>
+        <span [class.positive]="tone === 'green'"
+              [class.warn]="tone === 'amber'"
+              [class.negative]="tone === 'red' || tone === 'liquidated'">{{ healthLabel }}</span>
+        <span class="loop-card__health-note">{{ toneLabel }}</span>
+      </span>
+    </div>
+
+    <div class="loop-card__kpi">
+      <span class="loop-card__kpi-cap">LTV · LIQ AT</span>
+      <span class="loop-card__kpi-val">
+        {{ formatNumber(ltvPercent) }}%
+        <span class="loop-card__kpi-note">/ {{ formatNumber(liqThreshold) }}%</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- two-leg strip -->
+  <div class="loop-card__legs">
+    {{ collateralAsset }} {{ currency | pgzCurrencySymbol }}{{ formatCompact(collateralAmount) }}
+    &#160;↻&#160;
+    {{ debtAsset }} −{{ currency | pgzCurrencySymbol }}{{ formatCompact(debtAmount) }} borrow
+  </div>
+
+  <div class="loop-card__divider"></div>
+
+  <!-- exit vs liquidation -->
+  <p class="loop-card__exit">
+    Exit yourself →
+    <span class="positive">{{ currency | pgzCurrencySymbol }}{{ formatNumber(exitValue) }}</span>
+    · liquidation →
+    <span class="negative">≈ {{ currency | pgzCurrencySymbol }}{{ formatNumber(liquidationPayout) }}</span>
+  </p>
+</article>

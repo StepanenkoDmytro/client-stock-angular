@@ -1,3 +1,16 @@
+<!-- LEVERAGE STRATEGIES — liquidation risk leads (a loop can be force-
+     closed). One risk-gauge C-card per loop (mockup savings/12 C). Shown
+     independently of holdings; anonymous-safe. -->
+@if (hasLoops()) {
+  <p class="rk-loops-caption">LEVERAGE STRATEGIES · LIQUIDATION RISK</p>
+  @for (loop of loops(); track loop.id) {
+    <div class="card">
+      <pgz-loop-risk-card [loop]="loop"
+                          [currency]="displayCurrency()"></pgz-loop-risk-card>
+    </div>
+  }
+}
+
 @if (hasData()) {
   <!-- VOLATILITY PROFILE — value split by risk tier (donut + legend) and
        a per-class breakdown. Structural proxy, not statistical vol. -->

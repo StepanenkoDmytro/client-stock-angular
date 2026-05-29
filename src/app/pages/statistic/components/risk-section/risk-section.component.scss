@@ -24,6 +24,13 @@
   color: var(--pgz-text-muted);
 }
 
+/* Section caption above the leverage-strategy risk cards. Relies on the
+ * :host flex gap for spacing, so no bottom margin. */
+.rk-loops-caption {
+  @extend %cap;
+  margin: 0;
+}
+
 /* --- Volatility profile --- */
 .vol {
   &__caption {

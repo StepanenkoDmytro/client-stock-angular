@@ -7,16 +7,19 @@ import {
   computed,
   inject,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Store } from '@ngrx/store';
 import { AssetClass } from '../../../../domain/asset-class.domain';
 import { IHoldingView } from '../../../../domain/holding.domain';
+import { ILoopPosition } from '../../../../domain/loop-position.domain';
 import { IPosition } from '../../../../domain/position.domain';
 import { ITag } from '../../../../domain/tag.domain';
 import { SUPPORTED_BASE_CURRENCIES } from '../../../../domain/user-preferences.domain';
 import { CurrencySymbolPipe } from '../../../../pipe/currency-symbol.pipe';
 import { FxRateService } from '../../../../service/fx-rate.service';
+import { LoopingService } from '../../../../service/looping.service';
+import { LoopRiskCardComponent } from './loop-risk-card/loop-risk-card.component';
 import { AccountsService } from '../../../savings/service/accounts.service';
 import { HoldingService } from '../../../savings/service/holding.service';
 import { InstrumentService } from '../../../savings/service/instrument.service';
@@ -58,7 +61,12 @@ interface DonutArc {
 @Component({
   selector: 'pgz-stats-risk-section',
   standalone: true,
-  imports: [CommonModule, CurrencySymbolPipe, CounterpartyRiskComponent],
+  imports: [
+    CommonModule,
+    CurrencySymbolPipe,
+    CounterpartyRiskComponent,
+    LoopRiskCardComponent,
+  ],
   templateUrl: './risk-section.component.html',
   styleUrl: './risk-section.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -84,8 +92,16 @@ export class RiskSectionComponent implements OnInit {
   private readonly userPrefs = inject(UserPreferencesService);
   private readonly bottomSheet = inject(MatBottomSheet);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly loopingService = inject(LoopingService);
 
   private readonly rawHoldings = this.store.selectSignal(selectHoldingsList);
+
+  /** Looping positions — the risk-gauge C-cards (mockup savings/12 C). */
+  public readonly loops = toSignal(this.loopingService.getAll(), {
+    initialValue: [] as ILoopPosition[],
+  });
+
+  public readonly hasLoops = computed<boolean>(() => this.loops().length > 0);
 
   private readonly holdingsView = computed<IHoldingView[]>(() => {
     const instrMap = this.instruments.instruments();

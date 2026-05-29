@@ -102,6 +102,14 @@
   border-left: 3px solid var(--pgz-liability-slate);
 }
 
+// Looping / Strategy kind tile (ADR-0013, composite). Same grid, distinct
+// kind: indigo left-accent + full-width row. Tint from the inline
+// `--card-tint: var(--strategy-loop)`.
+.grid__card--loop {
+  grid-column: 1 / -1;
+  border-left: 3px solid var(--strategy-loop);
+}
+
 // Future placeholders — desaturated + dashed border to read as
 // "not yet available" without screaming.
 .grid__cards--future {

@@ -292,6 +292,9 @@ $light-theme: mat.define-light-theme((
   --asset-deposit: #8B6F5D;
   --asset-real-estate: #D69440;
   --asset-other: #888888;
+  // Strategies (looping / composite kinds) — ADR-0013 indigo accent.
+  // Lighter than the light-theme #4F5BD5 for dark-surface contrast.
+  --strategy-loop: #8A92E8;
 
   body {
     // background-color: $pgz-dark-background;
@@ -395,6 +398,9 @@ $light-theme: mat.define-light-theme((
   --asset-deposit: #5D4037;
   --asset-real-estate: #BA7517;
   --asset-other: #616161;
+  // Strategies (looping / composite kinds) — ADR-0013 indigo accent
+  // (matches design/savings/12–16 loop accent #4F5BD5).
+  --strategy-loop: #4F5BD5;
 
   // M5.6 PR5b: light-theme body no longer paints a radial blue gradient —
   // it now inherits `var(--pgz-app-bg)` from the global `body` rule below

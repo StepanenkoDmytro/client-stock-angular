@@ -14,6 +14,7 @@ import { ITag } from '../../domain/tag.domain';
 import { InstrumentService } from '../../pages/savings/service/instrument.service';
 import { GoalsService } from '../../service/goals.service';
 import { LiabilitiesService } from '../../service/liabilities.service';
+import { LoopingService } from '../../service/looping.service';
 import { loadAccounts } from '../../pages/savings/store/accounts.actions';
 import { selectAccountsList } from '../../pages/savings/store/accounts.selectors';
 import { loadHoldings } from '../../pages/savings/store/holdings.actions';
@@ -27,6 +28,7 @@ import {
   buildDemoAccountsWithFlag,
   buildDemoGoals,
   buildDemoLiabilities,
+  buildDemoLoops,
   createDemoSystemTags,
 } from '../data/demo-fixtures';
 
@@ -87,6 +89,7 @@ export class DemoDataService {
   private readonly instruments = inject(InstrumentService);
   private readonly goalsService = inject(GoalsService);
   private readonly liabilitiesService = inject(LiabilitiesService);
+  private readonly loopingService = inject(LoopingService);
 
   private readonly demoHoldingsCount = toSignal(
     this.store$.pipe(
@@ -183,6 +186,12 @@ export class DemoDataService {
       ...this.goalsService.snapshot().filter((g) => g.isDemo !== true),
       ...buildDemoGoals(),
     ]);
+    // Looping (leverage) positions — the Strategies class on the dashboard
+    // and the loop risk cards (ADR-0013, docs/instruments/looping.md).
+    this.loopingService.replaceAll([
+      ...this.loopingService.snapshot().filter((l) => l.isDemo !== true),
+      ...buildDemoLoops(),
+    ]);
   }
 
   /**
@@ -218,6 +227,9 @@ export class DemoDataService {
     );
     this.goalsService.replaceAll(
       this.goalsService.snapshot().filter((g) => g.isDemo !== true),
+    );
+    this.loopingService.replaceAll(
+      this.loopingService.snapshot().filter((l) => l.isDemo !== true),
     );
   }
 
