@@ -1,14 +1,19 @@
-<!-- LEVERAGE STRATEGIES — liquidation risk leads (a loop can be force-
-     closed). One risk-gauge C-card per loop (mockup savings/12 C). Shown
-     independently of holdings; anonymous-safe. -->
+<!-- STRATEGIES RISK — ONE aggregated summary across all loops (mockup
+     savings/18, LP12): posture = weakest health, aggregate liquidation
+     downside, blended leverage / weighted APY / worst buffer / borrowed, a
+     weakest-first ranked list (tap a row → that loop's detail) and a
+     by-protocol counterparty split. Replaces the per-loop C-card stack; the
+     gauge C-card (savings/12 C) is now a drill-in. Anonymous-safe, shown
+     independently of holdings. -->
 @if (hasLoops()) {
-  <p class="rk-loops-caption">LEVERAGE STRATEGIES · LIQUIDATION RISK</p>
-  @for (loop of loops(); track loop.id) {
-    <div class="card">
-      <pgz-loop-risk-card [loop]="loop"
-                          [currency]="displayCurrency()"></pgz-loop-risk-card>
-    </div>
-  }
+  <div class="rk-loops-head">
+    <p class="rk-loops-caption">STRATEGIES RISK</p>
+    <span class="rk-loops-count">{{ loops().length }} loop{{ loops().length === 1 ? '' : 's' }}</span>
+  </div>
+  <div class="card">
+    <pgz-loop-risk-summary [loops]="loops()"
+                           [currency]="displayCurrency()"></pgz-loop-risk-summary>
+  </div>
 }
 
 @if (hasData()) {

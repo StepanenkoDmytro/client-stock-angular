@@ -295,6 +295,10 @@ $light-theme: mat.define-light-theme((
   // Strategies (looping / composite kinds) — ADR-0013 indigo accent.
   // Lighter than the light-theme #4F5BD5 for dark-surface contrast.
   --strategy-loop: #8A92E8;
+  // Label colour for the filled indigo strategy CTA (e.g. "Save strategy").
+  // The button stays `--strategy-loop` in BOTH themes, so its label is white
+  // in both — theme-independent on purpose (keeps component SCSS hex-free).
+  --pgz-on-strategy: #ffffff;
 
   body {
     // background-color: $pgz-dark-background;
@@ -401,6 +405,8 @@ $light-theme: mat.define-light-theme((
   // Strategies (looping / composite kinds) — ADR-0013 indigo accent
   // (matches design/savings/12–16 loop accent #4F5BD5).
   --strategy-loop: #4F5BD5;
+  // White label on the indigo strategy CTA (see dark block for rationale).
+  --pgz-on-strategy: #ffffff;
 
   // M5.6 PR5b: light-theme body no longer paints a radial blue gradient —
   // it now inherits `var(--pgz-app-bg)` from the global `body` rule below

@@ -24,11 +24,24 @@
   color: var(--pgz-text-muted);
 }
 
-/* Section caption above the leverage-strategy risk cards. Relies on the
- * :host flex gap for spacing, so no bottom margin. */
+/* Head row above the Strategies-risk summary card: caption + loop count.
+ * Relies on the :host flex gap for vertical spacing, so no bottom margin. */
+.rk-loops-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
 .rk-loops-caption {
   @extend %cap;
   margin: 0;
+}
+
+.rk-loops-count {
+  flex: 0 0 auto;
+  font-size: 11px;
+  color: var(--pgz-text-secondary);
 }
 
 /* --- Volatility profile --- */

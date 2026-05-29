@@ -1,0 +1,105 @@
+<article class="lrs">
+  <!-- header: 🔁 Strategies · equity · blended leverage · posture chip -->
+  <header class="lrs__head">
+    <span class="lrs__icon" aria-hidden="true">🔁</span>
+    <span class="lrs__title">
+      <span class="lrs__name">Strategies</span>
+      <span class="lrs__sub">
+        {{ currency | pgzCurrencySymbol }}{{ formatNumber(summary.totalEquity) }} equity ·
+        {{ summary.blendedLeverage.toFixed(1) }}× blended leverage
+      </span>
+    </span>
+    <span class="lrs__posture" [ngClass]="toneClass(summary.postureTone)">
+      <span class="lrs__posture-dot" [ngClass]="toneClass(summary.postureTone)"></span>
+      {{ postureLabel }}
+    </span>
+  </header>
+
+  <div class="lrs__divider"></div>
+
+  <!-- liquidation-downside hero -->
+  <p class="lrs__cap">IF ALL FORCE-LIQUIDATED → YOU KEEP</p>
+  <p class="lrs__hero-row">
+    <span class="lrs__hero warn">≈ {{ currency | pgzCurrencySymbol }}{{ formatNumber(summary.totalLiquidationPayout) }}</span>
+    <span class="lrs__hero-of">of {{ currency | pgzCurrencySymbol }}{{ formatNumber(summary.totalEquity) }} equity</span>
+  </p>
+
+  <div class="lrs__bar"
+       role="img"
+       [attr.aria-label]="formatNumber(summary.lostPct * 100) + '% of equity lost on forced liquidation'">
+    <span class="lrs__bar-kept" [style.width.%]="summary.keptPct * 100"></span>
+  </div>
+  <p class="lrs__note">≈ {{ formatNumber(summary.lostPct * 100) }}% of equity gone on forced liquidation</p>
+  <p class="lrs__exit">
+    Exit any time → ≈ {{ currency | pgzCurrencySymbol }}{{ formatNumber(summary.totalEquity) }} (your equity)
+  </p>
+
+  <div class="lrs__divider"></div>
+
+  <!-- KPI grid 2×2 -->
+  <div class="lrs__kpis">
+    <div class="lrs__kpi">
+      <span class="lrs__cap">LOWEST HEALTH</span>
+      <span class="lrs__kpi-val">
+        <span class="lrs__dot" [ngClass]="toneClass(summary.postureTone)"></span>
+        <span [ngClass]="toneClass(summary.postureTone)">{{ formatHf(summary.lowestHealthFactor) }}</span>
+        @if (weakest) {
+          <span class="lrs__kpi-note">{{ weakest.collateralAsset }} loop</span>
+        }
+      </span>
+    </div>
+    <div class="lrs__kpi">
+      <span class="lrs__cap">WORST BUFFER</span>
+      <span class="lrs__kpi-val warn">−{{ formatNumber(summary.worstBufferPercent) }}%</span>
+    </div>
+    <div class="lrs__kpi">
+      <span class="lrs__cap">BLENDED NET APY</span>
+      <span class="lrs__kpi-val"
+            [class.pos]="summary.weightedNetApy >= 0"
+            [class.neg]="summary.weightedNetApy < 0">{{ formatPercent(summary.weightedNetApy) }}</span>
+    </div>
+    <div class="lrs__kpi">
+      <span class="lrs__cap">TOTAL BORROWED</span>
+      <span class="lrs__kpi-val debt">{{ currency | pgzCurrencySymbol }}{{ formatCompact(summary.totalBorrowed) }}</span>
+    </div>
+  </div>
+
+  <div class="lrs__divider"></div>
+
+  <!-- ranked weakest-first list — tap a row → that loop's detail -->
+  <p class="lrs__cap">BY HEALTH · WEAKEST FIRST</p>
+  <div class="lrs__rows">
+    @for (row of summary.rows; track row.id) {
+      <button type="button" class="lrs__row" (click)="openLoop(row)">
+        <span class="lrs__row-top">
+          <span class="lrs__row-name">{{ row.collateralAsset }} / {{ row.debtAsset }}</span>
+          <span class="lrs__row-equity">{{ currency | pgzCurrencySymbol }}{{ formatNumber(row.equity) }}</span>
+        </span>
+        <span class="lrs__row-bot">
+          <span class="lrs__row-proto">{{ row.protocol }}</span>
+          <span class="lrs__dot" [ngClass]="toneClass(row.tone)"></span>
+          <span class="lrs__row-hf" [ngClass]="toneClass(row.tone)">HF {{ formatHf(row.healthFactor) }}</span>
+          <span class="lrs__row-buffer">· buffer −{{ formatNumber(row.bufferPercent) }}%</span>
+          <span class="lrs__row-chevron" aria-hidden="true">›</span>
+        </span>
+      </button>
+    }
+  </div>
+
+  <div class="lrs__divider"></div>
+
+  <!-- by-protocol counterparty split -->
+  <p class="lrs__cap">BY PROTOCOL · COUNTERPARTY</p>
+  <div class="lrs__proto-bar">
+    @for (p of summary.byProtocol; track p.protocol; let i = $index) {
+      <span class="lrs__proto-seg"
+            [style.width.%]="p.share * 100"
+            [style.background]="protocolShade(i)"></span>
+    }
+  </div>
+  <p class="lrs__proto-legend">
+    @for (p of summary.byProtocol; track p.protocol; let last = $last) {
+      <span class="lrs__proto-item">{{ p.protocol }} {{ formatShare(p.share) }}</span>@if (!last) {<span class="lrs__proto-sep"> · </span>}
+    }
+  </p>
+</article>

@@ -19,7 +19,7 @@ import { SUPPORTED_BASE_CURRENCIES } from '../../../../domain/user-preferences.d
 import { CurrencySymbolPipe } from '../../../../pipe/currency-symbol.pipe';
 import { FxRateService } from '../../../../service/fx-rate.service';
 import { LoopingService } from '../../../../service/looping.service';
-import { LoopRiskCardComponent } from './loop-risk-card/loop-risk-card.component';
+import { LoopRiskSummaryComponent } from './loop-risk-summary/loop-risk-summary.component';
 import { AccountsService } from '../../../savings/service/accounts.service';
 import { HoldingService } from '../../../savings/service/holding.service';
 import { InstrumentService } from '../../../savings/service/instrument.service';
@@ -65,7 +65,7 @@ interface DonutArc {
     CommonModule,
     CurrencySymbolPipe,
     CounterpartyRiskComponent,
-    LoopRiskCardComponent,
+    LoopRiskSummaryComponent,
   ],
   templateUrl: './risk-section.component.html',
   styleUrl: './risk-section.component.scss',
@@ -96,7 +96,11 @@ export class RiskSectionComponent implements OnInit {
 
   private readonly rawHoldings = this.store.selectSignal(selectHoldingsList);
 
-  /** Looping positions — the risk-gauge C-cards (mockup savings/12 C). */
+  /**
+   * Looping positions — feed the aggregated Strategies-risk SUMMARY card
+   * (mockup savings/18, LP12). The per-loop gauge C-card (savings/12 C) is now
+   * a drill-in reached by tapping a row in the summary, not a default stack.
+   */
   public readonly loops = toSignal(this.loopingService.getAll(), {
     initialValue: [] as ILoopPosition[],
   });

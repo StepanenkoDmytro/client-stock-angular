@@ -103,10 +103,11 @@
     // The app's Material `primary` palette is bright mint (#00ffcc) — wrong
     // for a primary CTA. Recolour just this button to the navy/indigo brand
     // action (matches the FAB + mockup savings/17 #3D49C0) via the MDC
-    // filled-button tokens, white label for contrast.
+    // filled-button tokens, white label for contrast. Label colour comes from
+    // the theme token `--pgz-on-strategy` (always white) — no inline hex (§3).
     --mdc-filled-button-container-color: var(--strategy-loop) !important;
-    --mdc-filled-button-label-text-color: #ffffff !important;
-    color: #ffffff;
+    --mdc-filled-button-label-text-color: var(--pgz-on-strategy) !important;
+    color: var(--pgz-on-strategy);
   }
 
   &__cancel {

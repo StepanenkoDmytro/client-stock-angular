@@ -230,10 +230,14 @@
   //     — `.mat-expansion-panel-header { height: inherit !important }` —
   //     clobbers Material's `collapsedHeight="52px"` inline style, collapsing
   //     every header to its ~22px content height (cramped, zero vertical
-  //     breathing room). We restore the approved 52px card height with a
-  //     higher-specificity selector (`.savings__class-panel
-  //     .savings__class-panel-header` = (0,2,0) beats the global (0,1,0));
-  //     Material's default `align-items:center` then vertically centres the row.
+  //     breathing room). We restore the approved 52px card height. Both rules
+  //     are `!important`, so they compete in the important layer where higher
+  //     specificity wins: our `!important` declarations on the (0,2,0)
+  //     selector (`.savings__class-panel .savings__class-panel-header`) beat
+  //     the global `!important` (0,1,0). NB the `!important` is required — a
+  //     plain `height:52px` here, however specific, loses to `inherit
+  //     !important`. Material's default `align-items:center` then vertically
+  //     centres the row.
   //  2. Left padding trimmed to 13px so 13 + 3px accent ≈ the 16px content
   //     offset siblings use.
   ::ng-deep .savings__class-panel .savings__class-panel-header {

@@ -1,0 +1,309 @@
+:host {
+  display: block;
+}
+
+.lrs {
+  display: block;
+  font-variant-numeric: tabular-nums;
+
+  // ---- tone colour utilities (bound via toneClass: pos / warn / neg) ----
+  .pos {
+    color: var(--color-positive);
+  }
+  .warn {
+    color: var(--color-warning);
+  }
+  .neg {
+    color: var(--color-negative);
+  }
+  .debt {
+    color: var(--pgz-liability-slate, var(--pgz-text-secondary));
+  }
+
+  &__divider {
+    margin: 12px 0;
+    border-top: 0.5px dashed var(--pgz-card-border);
+  }
+
+  &__cap {
+    margin: 0;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--pgz-text-secondary);
+  }
+
+  // ---- header ----
+  &__head {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  &__icon {
+    font-size: 16px;
+    line-height: 1.3;
+  }
+
+  &__title {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  &__name {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: var(--pgz-text-primary);
+  }
+
+  &__sub {
+    margin-top: 2px;
+    font-size: 11px;
+    line-height: 1.3;
+    color: var(--pgz-text-secondary);
+  }
+
+  // posture chip — tinted background per tone, solid dot + label
+  &__posture {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex: 0 0 auto;
+    padding: 3px 10px;
+    border-radius: 11px;
+    font-size: 11px;
+    font-weight: 600;
+
+    &.pos {
+      background: color-mix(in srgb, var(--color-positive) 15%, transparent);
+    }
+    &.warn {
+      background: color-mix(in srgb, var(--color-warning) 16%, transparent);
+    }
+    &.neg {
+      background: color-mix(in srgb, var(--color-negative) 15%, transparent);
+    }
+  }
+
+  &__posture-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+
+    &.pos {
+      background: var(--color-positive);
+    }
+    &.warn {
+      background: var(--color-warning);
+    }
+    &.neg {
+      background: var(--color-negative);
+    }
+  }
+
+  // ---- liquidation-downside hero ----
+  &__hero-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin: 8px 0 0;
+  }
+
+  &__hero {
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.1;
+  }
+
+  &__hero-of {
+    font-size: 11px;
+    color: var(--pgz-text-secondary);
+  }
+
+  &__bar {
+    position: relative;
+    margin-top: 10px;
+    height: 8px;
+    border-radius: 4px;
+    background: var(--pgz-card-bg-sub);
+    overflow: hidden;
+  }
+
+  &__bar-kept {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    border-radius: 4px;
+    background: var(--color-warning);
+  }
+
+  &__note {
+    margin: 8px 0 0;
+    font-size: 11px;
+    color: var(--pgz-text-muted);
+  }
+
+  &__exit {
+    margin: 4px 0 0;
+    font-size: 11px;
+    color: var(--pgz-text-secondary);
+  }
+
+  // ---- KPI grid 2×2 ----
+  &__kpis {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 16px;
+  }
+
+  &__kpi {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  &__kpi-val {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: var(--pgz-text-primary);
+  }
+
+  &__kpi-note {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--pgz-text-muted);
+  }
+
+  // ---- shared tone dot ----
+  &__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+
+    &.pos {
+      background: var(--color-positive);
+    }
+    &.warn {
+      background: var(--color-warning);
+    }
+    &.neg {
+      background: var(--color-negative);
+    }
+  }
+
+  // ---- ranked weakest-first list (each row drills in) ----
+  &__rows {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__row {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    width: 100%;
+    padding: 9px 0;
+    border: none;
+    background: none;
+    text-align: left;
+    font: inherit;
+    color: var(--pgz-text-primary);
+    cursor: pointer;
+
+    & + & {
+      border-top: 0.5px dashed var(--pgz-card-border);
+    }
+
+    &:hover {
+      background: var(--pgz-card-bg-sub);
+    }
+  }
+
+  &__row-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  &__row-name {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: var(--pgz-text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__row-equity {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: var(--pgz-text-primary);
+    flex: 0 0 auto;
+  }
+
+  &__row-bot {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    line-height: 1.3;
+    color: var(--pgz-text-secondary);
+  }
+
+  &__row-proto {
+    color: var(--pgz-text-secondary);
+  }
+
+  &__row-hf {
+    font-weight: 500;
+  }
+
+  &__row-buffer {
+    color: var(--pgz-text-muted);
+  }
+
+  &__row-chevron {
+    margin-left: auto;
+    font-size: 16px;
+    color: var(--pgz-text-muted);
+  }
+
+  // ---- by-protocol counterparty split ----
+  &__proto-bar {
+    display: flex;
+    gap: 2px;
+    margin-top: 10px;
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  &__proto-seg {
+    height: 100%;
+    min-width: 2px;
+  }
+
+  &__proto-legend {
+    margin: 10px 0 0;
+    font-size: 11px;
+    color: var(--pgz-text-secondary);
+  }
+
+  &__proto-sep {
+    color: var(--pgz-text-muted);
+  }
+}
