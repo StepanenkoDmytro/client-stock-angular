@@ -23,7 +23,7 @@
     <span class="lrc__liq-note">liquidates &lt; 1.00</span>
   </div>
 
-  <!-- zoned gauge: red 1.0-1.3 | amber 1.3-1.8 | green 1.8-3.0 -->
+  <!-- zoned gauge (aligned to LOOP_HF_TONE_THRESHOLDS): red 1.0-1.2 | amber 1.2-1.8 | green 1.8-3.0 -->
   <div class="lrc__gauge">
     <span class="lrc__gauge-zone lrc__gauge-zone--red"></span>
     <span class="lrc__gauge-zone lrc__gauge-zone--amber"></span>
@@ -53,30 +53,40 @@
 
   <div class="lrc__divider"></div>
 
-  <!-- compact strip -->
-  <div class="lrc__strip">
-    <div class="lrc__metric">
-      <span class="lrc__metric-cap">EQUITY</span>
-      <span class="lrc__metric-val">{{ currency | pgzCurrencySymbol }}{{ formatNumber(equityNow) }}</span>
+  @if (isLiquidated) {
+    <!-- Already force-closed: no live yield — show realized outcome. -->
+    <p class="lrc__exit">
+      Position liquidated → recovered
+      <span class="negative">≈ {{ currency | pgzCurrencySymbol }}{{ formatNumber(recovered) }}</span>
+      · realized
+      <span class="negative">{{ realizedLoss < 0 ? '−' : '+' }}{{ currency | pgzCurrencySymbol }}{{ formatNumber(abs(realizedLoss)) }} ({{ formatPercent(realizedLossPercent) }})</span>
+    </p>
+  } @else {
+    <!-- compact strip -->
+    <div class="lrc__strip">
+      <div class="lrc__metric">
+        <span class="lrc__metric-cap">EQUITY</span>
+        <span class="lrc__metric-val">{{ currency | pgzCurrencySymbol }}{{ formatNumber(equityNow) }}</span>
+      </div>
+      <div class="lrc__metric">
+        <span class="lrc__metric-cap">NET APY</span>
+        <span class="lrc__metric-val"
+              [class.positive]="netApy >= 0"
+              [class.negative]="netApy < 0">{{ formatPercent(netApy) }}</span>
+      </div>
+      <div class="lrc__metric">
+        <span class="lrc__metric-cap">PnL</span>
+        <span class="lrc__metric-val"
+              [class.positive]="netPnl >= 0"
+              [class.negative]="netPnl < 0">{{ netPnl >= 0 ? '+' : '−' }}{{ currency | pgzCurrencySymbol }}{{ formatNumber(abs(netPnl)) }}</span>
+      </div>
     </div>
-    <div class="lrc__metric">
-      <span class="lrc__metric-cap">NET APY</span>
-      <span class="lrc__metric-val"
-            [class.positive]="netApy >= 0"
-            [class.negative]="netApy < 0">{{ formatPercent(netApy) }}</span>
-    </div>
-    <div class="lrc__metric">
-      <span class="lrc__metric-cap">PnL</span>
-      <span class="lrc__metric-val"
-            [class.positive]="netPnl >= 0"
-            [class.negative]="netPnl < 0">{{ netPnl >= 0 ? '+' : '−' }}{{ currency | pgzCurrencySymbol }}{{ formatNumber(abs(netPnl)) }}</span>
-    </div>
-  </div>
 
-  <p class="lrc__exit">
-    If liquidated → keep
-    <span class="negative">≈ {{ currency | pgzCurrencySymbol }}{{ formatNumber(liquidationPayout) }}</span>
-    · exit yourself →
-    <span class="positive">≈ {{ currency | pgzCurrencySymbol }}{{ formatNumber(exitValue) }}</span>
-  </p>
+    <p class="lrc__exit">
+      If liquidated → keep
+      <span class="negative">≈ {{ currency | pgzCurrencySymbol }}{{ formatNumber(liquidationPayout) }}</span>
+      · exit yourself →
+      <span class="positive">≈ {{ currency | pgzCurrencySymbol }}{{ formatNumber(exitValue) }}</span>
+    </p>
+  }
 </article>

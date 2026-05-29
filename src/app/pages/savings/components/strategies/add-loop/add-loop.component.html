@@ -157,8 +157,9 @@
         Presets from protocol · e-mode (~1% e-mode / 5–8% volatile). Override anytime.
       </p>
 
+      <!-- No color="primary" — the app's Material primary is bright mint;
+           we recolour to the navy/indigo brand via MDC tokens in SCSS. -->
       <button mat-flat-button
-              color="primary"
               type="submit"
               class="add-loop__save">
         {{ isEdit ? 'Save changes' : 'Save strategy' }}

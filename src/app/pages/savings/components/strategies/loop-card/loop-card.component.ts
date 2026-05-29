@@ -9,7 +9,6 @@ import {
   ILoopPosition,
   LoopRiskTone,
   loopDisplayName,
-  loopEquity,
   loopEquityNow,
   loopHealthFactor,
   loopLeverage,
@@ -98,6 +97,37 @@ export class LoopCardComponent {
     return loopRiskTone(this.healthFactor);
   }
 
+  /**
+   * `true` when HF < 1 — the loop is already force-closed (looping.md §6).
+   * Drives the "closed + realized loss" layout instead of the live one.
+   */
+  get isLiquidated(): boolean {
+    return this.tone === 'liquidated';
+  }
+
+  /** Residual recovered after a forced close (= liquidation payout). */
+  get recovered(): number {
+    return this.liquidationPayout;
+  }
+
+  private get capitalBase(): number {
+    return this.toBase(this.loop.initialCapital ?? 0);
+  }
+
+  /** Realized loss after liquidation: recovered − capital (negative). */
+  get realizedLoss(): number {
+    return this.recovered - this.capitalBase;
+  }
+
+  get realizedLossPercent(): number {
+    const cap = this.capitalBase;
+    return cap > 0 ? (this.realizedLoss / cap) * 100 : 0;
+  }
+
+  abs(n: number): number {
+    return Math.abs(n);
+  }
+
   get toneLabel(): string {
     switch (this.tone) {
       case 'green':
@@ -127,9 +157,14 @@ export class LoopCardComponent {
     return this.loop.debtAsset || 'debt';
   }
 
-  /** Voluntary exit ≈ current equity (snapshot, excludes unbanked accrual). */
+  /**
+   * Voluntary exit ≈ current equity NOW (collateral − debt + accrued) — what
+   * you'd walk away with if you closed the loop yourself. Must match the
+   * card's NET VALUE / equity figure (looping.md §6), so it uses
+   * `loopEquityNow`, not the pre-accrual snapshot.
+   */
   get exitValue(): number {
-    return this.toBase(loopEquity(this.loop));
+    return this.equityNow;
   }
 
   /** Forced-liquidation residual — a crumb vs the voluntary exit. */

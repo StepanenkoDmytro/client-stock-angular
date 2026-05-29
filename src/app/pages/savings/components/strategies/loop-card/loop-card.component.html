@@ -10,6 +10,31 @@
 
   <div class="loop-card__divider"></div>
 
+  @if (isLiquidated) {
+    <!-- Closed: HF < 1 means the position was force-closed — show realized
+         loss, not live yield (looping.md §6). -->
+    <p class="loop-card__cap">STRATEGY CLOSED</p>
+    <p class="loop-card__hero loop-card__hero--liquidated">Liquidated</p>
+    <p class="loop-card__hero-sub">
+      Force-closed at health factor &lt; 1.00 — no longer live.
+    </p>
+
+    <div class="loop-card__divider"></div>
+
+    <div class="loop-card__grid">
+      <div class="loop-card__kpi">
+        <span class="loop-card__kpi-cap">RECOVERED</span>
+        <span class="loop-card__kpi-val">{{ currency | pgzCurrencySymbol }}{{ formatNumber(recovered) }}</span>
+      </div>
+      <div class="loop-card__kpi">
+        <span class="loop-card__kpi-cap">REALIZED</span>
+        <span class="loop-card__kpi-val negative">
+          {{ realizedLoss < 0 ? '−' : '+' }}{{ currency | pgzCurrencySymbol }}{{ formatNumber(abs(realizedLoss)) }}
+          <span class="loop-card__kpi-delta negative">{{ formatPercent(realizedLossPercent) }}</span>
+        </span>
+      </div>
+    </div>
+  } @else {
   <!-- hero: Net APY (how the strategy performs) -->
   <p class="loop-card__cap">NET APY</p>
   <p class="loop-card__hero"
@@ -78,4 +103,5 @@
     · liquidation →
     <span class="negative">≈ {{ currency | pgzCurrencySymbol }}{{ formatNumber(liquidationPayout) }}</span>
   </p>
+  }
 </article>

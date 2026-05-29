@@ -9,7 +9,6 @@ import {
   ILoopPosition,
   LoopRiskTone,
   loopDisplayName,
-  loopEquity,
   loopEquityNow,
   loopHealthFactor,
   loopLeverage,
@@ -76,6 +75,26 @@ export class LoopRiskCardComponent {
     return loopRiskTone(this.healthFactor);
   }
 
+  /** HF < 1 → already force-closed (looping.md §6). */
+  get isLiquidated(): boolean {
+    return this.tone === 'liquidated';
+  }
+
+  /** Residual recovered after a forced close (= liquidation payout). */
+  get recovered(): number {
+    return this.liquidationPayout;
+  }
+
+  /** Realized loss after liquidation: recovered − capital (negative). */
+  get realizedLoss(): number {
+    return this.recovered - this.toBase(this.loop.initialCapital ?? 0);
+  }
+
+  get realizedLossPercent(): number {
+    const cap = this.toBase(this.loop.initialCapital ?? 0);
+    return cap > 0 ? (this.realizedLoss / cap) * 100 : 0;
+  }
+
   /** Marker position along the 1.0..3.0 gauge as a 0..100 percent. */
   get gaugeMarkerPct(): number {
     const hf = this.healthFactor;
@@ -118,8 +137,12 @@ export class LoopRiskCardComponent {
     return this.toBase(loopNetPnl(this.loop, new Date()));
   }
 
+  /**
+   * Voluntary exit ≈ current equity NOW (incl. accrued) — must match the
+   * card's EQUITY figure (looping.md §6), so it uses `loopEquityNow`.
+   */
   get exitValue(): number {
-    return this.toBase(loopEquity(this.loop));
+    return this.equityNow;
   }
 
   get liquidationPayout(): number {

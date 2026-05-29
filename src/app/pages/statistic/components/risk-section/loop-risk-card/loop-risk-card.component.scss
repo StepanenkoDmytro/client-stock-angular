@@ -97,12 +97,14 @@
     height: 100%;
     border-radius: 5px;
 
+    // Zone widths aligned to LOOP_HF_TONE_THRESHOLDS on the 1.0..3.0 gauge:
+    // red 1.0–1.2 = 10%, amber 1.2–1.8 = 30%, green 1.8–3.0 = 60%.
     &--red {
-      flex: 0 0 15%;
+      flex: 0 0 10%;
       background: var(--color-negative);
     }
     &--amber {
-      flex: 0 0 25%;
+      flex: 0 0 30%;
       background: var(--color-warning);
     }
     &--green {

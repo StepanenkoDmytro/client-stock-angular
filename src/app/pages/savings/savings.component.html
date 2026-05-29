@@ -45,7 +45,9 @@
          components/holdings/{kpi-row,wealth-chart-mini}/) and will be
          used on the future /analytics screen in M5+. -->
 
-    <p class="savings__class-caption">BY ASSET CLASS · LIFETIME</p>
+    <!-- "BY CLASS" (not "BY ASSET CLASS") — Strategies is a composite kind,
+         not an asset class (ADR-0013, mockup savings/15). -->
+    <p class="savings__class-caption">BY CLASS · LIFETIME</p>
 
     @if (classGroups().length === 0) {
       <!-- M5.6 PR4: ad-hoc `.savings__empty` → pgz-empty-state.

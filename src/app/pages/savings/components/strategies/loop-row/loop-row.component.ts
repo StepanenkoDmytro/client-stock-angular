@@ -14,6 +14,7 @@ import {
   loopEquityNow,
   loopHealthFactor,
   loopLeverage,
+  loopLiquidationPayout,
   loopNetApy,
   loopRiskTone,
 } from '../../../../../domain/loop-position.domain';
@@ -61,12 +62,31 @@ export class LoopRowComponent {
     return parts.join(' · ');
   }
 
+  private toBase(amount: number): number {
+    return this.fxRate.toBase(amount, this.loop.currency, this.currency);
+  }
+
   get equityNow(): number {
-    return this.fxRate.toBase(
-      loopEquityNow(this.loop, new Date()),
-      this.loop.currency,
-      this.currency,
-    );
+    return this.toBase(loopEquityNow(this.loop, new Date()));
+  }
+
+  /** HF < 1 → already force-closed (looping.md §6). */
+  get isLiquidated(): boolean {
+    return this.tone === 'liquidated';
+  }
+
+  /** Headline value: live equity, or the recovered residual once liquidated. */
+  get displayValue(): number {
+    return this.isLiquidated
+      ? this.toBase(loopLiquidationPayout(this.loop))
+      : this.equityNow;
+  }
+
+  /** Realized loss % after liquidation (recovered vs capital). */
+  get realizedLossPercent(): number {
+    const cap = this.toBase(this.loop.initialCapital ?? 0);
+    if (cap <= 0) return 0;
+    return ((this.toBase(loopLiquidationPayout(this.loop)) - cap) / cap) * 100;
   }
 
   get netApy(): number {

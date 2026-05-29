@@ -7,25 +7,32 @@
   <span class="loop-row__main">
     <span class="loop-row__top">
       <span class="loop-row__name">{{ name }}</span>
-      <span class="loop-row__equity">{{ currency | pgzCurrencySymbol }}{{ formatNumber(equityNow) }}</span>
+      <span class="loop-row__equity">{{ currency | pgzCurrencySymbol }}{{ formatNumber(displayValue) }}</span>
     </span>
     <span class="loop-row__sub">{{ subtitle }}</span>
 
     <span class="loop-row__divider"></span>
 
     <span class="loop-row__foot">
-      <span class="loop-row__apy"
-            [class.positive]="netApy >= 0"
-            [class.negative]="netApy < 0">
-        {{ formatPercent(netApy) }} net APY
-      </span>
-      <span class="loop-row__health">
-        <span class="loop-row__health-dot"
-              [class.loop-row__health-dot--green]="tone === 'green'"
-              [class.loop-row__health-dot--amber]="tone === 'amber'"
-              [class.loop-row__health-dot--red]="tone === 'red' || tone === 'liquidated'"></span>
-        <span class="loop-row__health-label">health {{ healthLabel }}</span>
-      </span>
+      @if (isLiquidated) {
+        <span class="loop-row__health">
+          <span class="loop-row__health-dot loop-row__health-dot--red"></span>
+          <span class="loop-row__apy negative">Liquidated · {{ formatPercent(realizedLossPercent) }}</span>
+        </span>
+      } @else {
+        <span class="loop-row__apy"
+              [class.positive]="netApy >= 0"
+              [class.negative]="netApy < 0">
+          {{ formatPercent(netApy) }} net APY
+        </span>
+        <span class="loop-row__health">
+          <span class="loop-row__health-dot"
+                [class.loop-row__health-dot--green]="tone === 'green'"
+                [class.loop-row__health-dot--amber]="tone === 'amber'"
+                [class.loop-row__health-dot--red]="tone === 'red'"></span>
+          <span class="loop-row__health-label">health {{ healthLabel }}</span>
+        </span>
+      }
     </span>
   </span>
 

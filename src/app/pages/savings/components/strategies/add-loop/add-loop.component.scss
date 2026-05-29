@@ -71,7 +71,8 @@
   }
 
   &__currency {
-    flex: 0 0 104px !important;
+    // Wide enough that the floated "Currency" label notch isn't clipped.
+    flex: 0 0 140px !important;
   }
 
   &__emode-row {
@@ -99,6 +100,13 @@
     margin-top: 16px;
     height: 48px;
     font-weight: 600;
+    // The app's Material `primary` palette is bright mint (#00ffcc) — wrong
+    // for a primary CTA. Recolour just this button to the navy/indigo brand
+    // action (matches the FAB + mockup savings/17 #3D49C0) via the MDC
+    // filled-button tokens, white label for contrast.
+    --mdc-filled-button-container-color: var(--strategy-loop) !important;
+    --mdc-filled-button-label-text-color: #ffffff !important;
+    color: #ffffff;
   }
 
   &__cancel {
